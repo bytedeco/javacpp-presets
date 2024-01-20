@@ -23,18 +23,9 @@ public class AdagradParamState extends OptimizerCloneableAdagradParamState {
     static { Loader.load(); }
     /** Default native constructor. */
     public AdagradParamState() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AdagradParamState(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdagradParamState(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public AdagradParamState position(long position) {
-        return (AdagradParamState)super.position(position);
-    }
-    @Override public AdagradParamState getPointer(long i) {
-        return new AdagradParamState((Pointer)this).offsetAddress(i);
-    }
+    @UniquePtr @Name("std::make_unique<torch::optim::AdagradParamState>") private native void allocate();
 
   public native @ByRef @NoException(true) Tensor sum();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer step();

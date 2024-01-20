@@ -170,6 +170,10 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("tflite::impl::Interpreter::typed_output_tensor<double>").javaNames("typed_output_tensor_double"))
                .put(new Info("tflite::impl::Interpreter::typed_output_tensor<bool>").javaNames("typed_output_tensor_bool"))
                .put(new Info("tflite::impl::Interpreter::typed_output_tensor<TfLiteFloat16>").javaNames("typed_input_tensor_float16"))
+
+                // Classes passed to some native functions as unique_ptr and that can be allocated Java-side
+               .put(new Info("tflite::impl::Interpreter::Interpreter").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::impl::Interpreter>\")"))
+               .put(new Info("tflite::Subgraph::Subgraph").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::Subgraph>\")"))
         ;
     }
 }

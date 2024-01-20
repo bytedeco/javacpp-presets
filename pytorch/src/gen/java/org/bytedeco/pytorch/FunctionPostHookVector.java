@@ -31,7 +31,7 @@ public class FunctionPostHookVector extends Pointer {
 
     public FunctionPostHook front() { return get(0); }
     public FunctionPostHook back() { return get(size() - 1); }
-    @Index(function = "at") public native @UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPostHook>&&"}) FunctionPostHook get(@Cast("size_t") long i);
+    @Index(function = "at") public native @UniquePtr FunctionPostHook get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -41,7 +41,7 @@ public class FunctionPostHookVector extends Pointer {
 
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator *") @UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPostHook>&&"}) FunctionPostHook get();
+        public native @Name("operator *") @UniquePtr @Const FunctionPostHook get();
     }
 }
 

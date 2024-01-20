@@ -34,13 +34,13 @@ public class OptimizerParamGroup extends Pointer {
   private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params);
   public OptimizerParamGroup(
         @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params,
-        @UniquePtr OptimizerOptions options) { super((Pointer)null); allocate(params, options); }
+        @UniquePtr @ByVal OptimizerOptions options) { super((Pointer)null); allocate(params, options); }
   private native void allocate(
         @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params,
-        @UniquePtr OptimizerOptions options);
+        @UniquePtr @ByVal OptimizerOptions options);
 
   public native @Cast("bool") boolean has_options();
   public native @ByRef OptimizerOptions options();
-  public native void set_options(@UniquePtr OptimizerOptions options);
+  public native void set_options(@UniquePtr @ByVal OptimizerOptions options);
   public native @ByRef TensorVector params();
 }

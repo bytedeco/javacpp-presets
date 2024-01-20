@@ -108,7 +108,7 @@ public class TensorIteratorBase extends MetaBase {
 
   /** Splits this TensorIterator into two iterators. Together they iterate over
    *  the entire operation. Used by {@code with_32bit_indexing()}. */
-  public native @UniquePtr TensorIterator split(int dim);
+  public native @UniquePtr @ByVal TensorIterator split(int dim);
 
   /** Returns the dimension with the largest extent: (size[dim]-1) * stride[dim] */
   public native int get_dim_to_split();

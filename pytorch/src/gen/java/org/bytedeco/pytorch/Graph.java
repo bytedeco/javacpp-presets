@@ -230,6 +230,6 @@ public class Graph extends Pointer {
   public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
 
   public native @SharedPtr("torch::jit::Graph") @ByVal Graph copy();
-  public native @UniquePtr Graph copyUnique();
+  public native @UniquePtr @ByVal Graph copyUnique();
   public native void remapTypes(@Const @ByRef TypeMapper type_map);
 }

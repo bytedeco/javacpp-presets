@@ -26,7 +26,7 @@ public class IStreamAdapter extends ReadAdapterInterface {
   
   
   public IStreamAdapter(@Cast("std::istream*") Pointer istream) { super((Pointer)null); allocate(istream); }
-  private native void allocate(@Cast("std::istream*") Pointer istream);
+  @UniquePtr @Name("std::make_unique<caffe2::serialize::IStreamAdapter>") private native void allocate(@Cast("std::istream*") Pointer istream);
   public native @Cast("size_t") long size();
   public native @Cast("size_t") long read(@Cast("uint64_t") long pos, Pointer buf, @Cast("size_t") long n, @Cast("const char*") BytePointer what/*=""*/);
   public native @Cast("size_t") long read(@Cast("uint64_t") long pos, Pointer buf, @Cast("size_t") long n);

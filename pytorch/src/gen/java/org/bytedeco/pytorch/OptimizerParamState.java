@@ -24,20 +24,11 @@ public class OptimizerParamState extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public OptimizerParamState() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public OptimizerParamState(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OptimizerParamState(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public OptimizerParamState position(long position) {
-        return (OptimizerParamState)super.position(position);
-    }
-    @Override public OptimizerParamState getPointer(long i) {
-        return new OptimizerParamState((Pointer)this).offsetAddress(i);
-    }
+    @UniquePtr @Name("std::make_unique<torch::optim::OptimizerParamState>") private native void allocate();
 
-  public native @UniquePtr OptimizerParamState clone();
+  public native @UniquePtr @ByVal OptimizerParamState clone();
   
   
 }

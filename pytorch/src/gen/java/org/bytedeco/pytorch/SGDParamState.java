@@ -23,18 +23,9 @@ public class SGDParamState extends OptimizerCloneableSGDParamState {
     static { Loader.load(); }
     /** Default native constructor. */
     public SGDParamState() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SGDParamState(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SGDParamState(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public SGDParamState position(long position) {
-        return (SGDParamState)super.position(position);
-    }
-    @Override public SGDParamState getPointer(long i) {
-        return new SGDParamState((Pointer)this).offsetAddress(i);
-    }
+    @UniquePtr @Name("std::make_unique<torch::optim::SGDParamState>") private native void allocate();
 
   public native @ByRef @NoException(true) Tensor momentum_buffer();
   

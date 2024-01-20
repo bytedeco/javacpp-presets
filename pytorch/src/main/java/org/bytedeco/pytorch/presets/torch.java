@@ -347,10 +347,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::ClassType").purify().pointerTypes("ClassType")) // Issue #669
             .put(new Info("c10::EnumType").purify().pointerTypes("EnumType")) // Issue #669
             .put(new Info("c10::NamedType").purify().pointerTypes("NamedType")) // Issue #669
-            // See comments in PR#668 about a const-agnostic adapter
-            .put(new Info("std::unique_ptr<c10::FunctionSchema>").annotations("@UniquePtr")
-                                                                 .valueTypes("@Cast({\"\", \"std::unique_ptr<c10::FunctionSchema>&&\"}) FunctionSchema")
-                                                                 .pointerTypes("FunctionSchema"))
             .put(new Info("c10::MaybeOwned<at::Tensor>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::Tensor>&&\"}) @StdMove TensorMaybeOwned").pointerTypes("TensorMaybeOwned"))
             .put(new Info("c10::MaybeOwned<at::TensorBase>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::TensorBase>&&\"}) @StdMove TensorBaseMaybeOwned").pointerTypes("TensorBaseMaybeOwned"))
             .put(new Info("at::InferExpandGeometryResult<at::DimVector>").pointerTypes("DimVectorInferExpandGeometryResult"))
@@ -636,7 +632,7 @@ public class torch implements LoadEnabled, InfoMapper {
                 "std::vector<std::unique_ptr<torch::autograd::FunctionPostHook> >").pointerTypes("FunctionPostHookVector").define())
             .put(new Info("const std::vector<torch::jit::Def>", "std::vector<torch::jit::Def>").pointerTypes("DefVector").define())
             .put(new Info("const std::vector<torch::jit::Property>", "std::vector<torch::jit::Property>").pointerTypes("PropertyVector").define())
-            .put(new Info("const std::vector<torch::optim::OptimizerParamGroup>", "std::vector<torch::optim::OptimizerParamGroup>").pointerTypes("OptimizerParamGroupVector").define())
+            .put(new Info("const std::vector<torch::optim::OptimizerParamGroup>", "std::vector<torch::optim::OptimizerParamGroup>").pointerTypes("OptimizerParamGroupVector").define()) // OptimizerParamGroup::operator= erased
             .put(new Info("std::vector<torch::jit::Function*>").pointerTypes("FunctionVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::jit::Graph> >").pointerTypes("GraphVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::jit::Operator> >").pointerTypes("OperatorVector").define())
@@ -1700,31 +1696,6 @@ public class torch implements LoadEnabled, InfoMapper {
         mapModule(infoMap, "TransformerDecoder");
         mapModule(infoMap, "Transformer");
 
-        infoMap.put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::AdagradOptions>",
-                   "torch::optim::OptimizerCloneableOptions<AdagradOptions>").pointerTypes("OptimizerCloneableAdagradOptions"))
-               .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::AdagradParamState>",
-                   "torch::optim::OptimizerCloneableParamState<AdagradParamState>").pointerTypes("OptimizerCloneableAdagradParamState"))
-               .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::AdamOptions>",
-                   "torch::optim::OptimizerCloneableOptions<AdamOptions>").pointerTypes("OptimizerCloneableAdamOptions"))
-               .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::AdamParamState>",
-                   "torch::optim::OptimizerCloneableParamState<AdamParamState>").pointerTypes("OptimizerCloneableAdamParamState"))
-               .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::AdamWOptions>",
-                   "torch::optim::OptimizerCloneableOptions<AdamWOptions>").pointerTypes("OptimizerCloneableAdamWOptions"))
-               .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::AdamWParamState>",
-                   "torch::optim::OptimizerCloneableParamState<AdamWParamState>").pointerTypes("OptimizerCloneableAdamWParamState"))
-               .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::LBFGSOptions>",
-                   "torch::optim::OptimizerCloneableOptions<LBFGSOptions>").pointerTypes("OptimizerCloneableLBFGSOptions"))
-               .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::LBFGSParamState>",
-                   "torch::optim::OptimizerCloneableParamState<LBFGSParamState>").pointerTypes("OptimizerCloneableLBFGSParamState"))
-               .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::RMSpropOptions>",
-                   "torch::optim::OptimizerCloneableOptions<RMSpropOptions>").pointerTypes("OptimizerCloneableRMSpropOptions"))
-               .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::RMSpropParamState>",
-                   "torch::optim::OptimizerCloneableParamState<RMSpropParamState>").pointerTypes("OptimizerCloneableRMSpropParamState"))
-               .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::SGDOptions>",
-                   "torch::optim::OptimizerCloneableOptions<SGDOptions>").pointerTypes("OptimizerCloneableSGDOptions"))
-               .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::SGDParamState>",
-                   "torch::optim::OptimizerCloneableParamState<SGDParamState>").pointerTypes("OptimizerCloneableSGDParamState"))
-        ;
 
         //// AnyModule, AnyValue and Sequential
         infoMap
@@ -1787,7 +1758,6 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("torch::jit::Resolver"),
             new PointerInfo("c10::ClassType"),
             new PointerInfo("c10::TensorType").otherCppNames("c10::TensorTypePtr", "at::TensorTypePtr", "torch::TensorTypePtr"),
-            new PointerInfo("torch::autograd::FunctionPreHook"),
             new PointerInfo("torch::nn::Module"),
             new PointerInfo("const at::functorch::FuncTorchTLSBase"),
             new PointerInfo("const torch::jit::CompilationUnit"),
@@ -1798,16 +1768,43 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// @UniquePtr
+        for (String opt: new String[] { "Adagrad", "Adam", "AdamW", "LBFGS", "RMSprop", "SGD" }) {
+            infoMap
+                .put(new Info("torch::optim::" + opt + "Options", "torch::optim::" + opt + "ParamState")) // Help qualification
+                .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::" + opt + "Options>").pointerTypes("OptimizerCloneable" + opt + "Options"))
+                .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::" + opt + "ParamState>").pointerTypes("OptimizerCloneable" + opt + "ParamState"))
+                ;
+            new PointerInfo("torch::optim::" + opt + "Options").makeUnique(infoMap);
+            new PointerInfo("torch::optim::OptimizerCloneableParamState<torch::optim::" + opt + "ParamState>").javaBaseName("OptimizerCloneable" + opt + "AdagradParamState").makeUnique(infoMap);
+            new PointerInfo("torch::optim::OptimizerCloneableOptions<torch::optim::" + opt + "Options>").javaBaseName("OptimizerCloneable" + opt + "Options").makeUnique(infoMap);
+            new PointerInfo("torch::optim::" + opt + "Options").makeUnique(infoMap);
+            new PointerInfo("torch::optim::" + opt + "ParamState").makeUnique(infoMap);
+        }
+        for (PointerInfo pi : new PointerInfo[]{
+            new PointerInfo("torch::optim::OptimizerOptions"),
+            new PointerInfo("torch::optim::OptimizerParamState"),
+            new PointerInfo("torch::autograd::AutogradMeta"),
+            new PointerInfo("torch::jit::GraphAttr"),
+            new PointerInfo("torch::jit::Graph"),
+            new PointerInfo("c10::NamedTensorMeta"),
+            new PointerInfo("c10::FunctionSchema"),
+            new PointerInfo("c10::SafePyObject"),
+            new PointerInfo("at::CPUGeneratorImpl"),
+            new PointerInfo("at::TensorIterator"),
+            new PointerInfo("caffe2::serialize::IStreamAdapter"),
+            new PointerInfo("torch::autograd::FunctionPreHook"),
+            new PointerInfo("torch::autograd::FunctionPostHook"),
+            // Other classes passed as unique ptr ar abstract, so not instantiated from Java:
+            // ReadAdapterInterface, PostAccumulateGradHook, FunctionPreHook, FunctionPostHook, FuncTorchTLSBase, AutogradMetaInterface,
+            // GeneratorImpl, OpRegistrationListener, AttributeValue
+        }) {
+            pi.makeUnique(infoMap);
+        }
         infoMap
-            .put(new Info("std::unique_ptr<torch::autograd::FunctionPreHook>").annotations("@UniquePtr")
-                                                                              .valueTypes("@Cast({\"\", \"std::unique_ptr<torch::autograd::FunctionPreHook>&&\"}) FunctionPreHook")
-                                                                              .pointerTypes("FunctionPreHook"))
-            .put(new Info("std::unique_ptr<torch::autograd::FunctionPostHook>").annotations("@UniquePtr")
-                                                                               .valueTypes("@Cast({\"\", \"std::unique_ptr<torch::autograd::FunctionPostHook>&&\"}) FunctionPostHook")
-                                                                               .pointerTypes("FunctionPostHook"))
-            .put(new Info("std::unique_ptr<torch::jit::AttributeValue>", "Ptr").annotations("@UniquePtr").pointerTypes("AttributeValue"))
+            .put(new Info("std::unique_ptr<torch::jit::AttributeValue>", "torch::jit::GraphAttr::Ptr").annotations("@UniquePtr").pointerTypes("AttributeValue")) // Ptr is really defined in AttributeValue (superclass of GraphAttr). But Parser doesn't find it.
+            .put(new Info("torch::autograd::AutogradMeta::post_acc_grad_hooks_").annotations("@UniquePtr", "@Cast({\"\", \"\", \"std::unique_ptr<torch::autograd::PostAccumulateGradHook>&&\"})")) // See JavaCPP Issue #717
         ;
-        infoMap.put(new Info("torch::autograd::AutogradMeta::post_acc_grad_hooks_").annotations("@UniquePtr", "@Cast({\"\", \"\", \"std::unique_ptr<torch::autograd::PostAccumulateGradHook>&&\"})")); // See JavaCPP Issue #717
+
 
         /* TODO: see how to map these, if needed and meant to be part of API */
         infoMap.put(new Info("c10::MaybeOwnedTraitsGenericImpl<std::shared_ptr<at::Tensor> >::assignBorrow",
@@ -2395,7 +2392,7 @@ public class torch implements LoadEnabled, InfoMapper {
                 + "public native @ByVal Tensor step();\n"));
 
 
-        // Abstract classes because parent class is abstract, and not detected as such by Parser.
+        // Abstract classes not detected as such by Parser (eg because parent class is abstract).
         String[] abstracts = new String[]{
             "torch::nn::InstanceNormImpl<1,torch::nn::InstanceNorm1dImpl>",
             "torch::nn::InstanceNormImpl<2,torch::nn::InstanceNorm2dImpl>",
@@ -2408,7 +2405,10 @@ public class torch implements LoadEnabled, InfoMapper {
         for (String a : abstracts) {
             infoMap.getFirst(a, false).purify();
         }
-        infoMap.put(new Info("at::TensorIteratorBase").purify());
+        infoMap.put(new Info(
+            "at::TensorIteratorBase",
+            "c10::NamedTensorMetaInterface"
+        ).purify());
 
 
         //// Function pointers
@@ -2712,6 +2712,18 @@ public class torch implements LoadEnabled, InfoMapper {
             String n = argumentNames[0].substring(argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
             String n2 = n.equals("torch::nn::Module") ? "JavaCPP_torch_0003a_0003ann_0003a_0003aModule" : n;
             infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr", "@Name(\"std::make_shared<" + n2 + ">\")"));
+        }
+
+        void makeUnique(InfoMap infoMap) {
+            // The default info in infoMap is not enough for classes that are elements for containers like vector<unique_ptr<...>>
+            String[] cppNames = new String[argumentNames.length + otherCppNames.length];
+            int i = 0;
+            for (String n : argumentNames) cppNames[i++] = template("std::unique_ptr", n);
+            for (String n : otherCppNames) cppNames[i++] = n;
+            infoMap.put(new Info(cppNames).annotations("@UniquePtr").pointerTypes(javaBaseName));
+
+            String n = argumentNames[0].substring(argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
+            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@UniquePtr", "@Name(\"std::make_unique<" + n + ">\")"));
         }
     }
 
