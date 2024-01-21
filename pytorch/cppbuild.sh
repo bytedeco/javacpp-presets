@@ -57,6 +57,10 @@ git submodule foreach --recursive 'git reset --hard'
 #patch -Np1 < ../../../pytorch.patch
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
+# local cross-compilation requires x86_64 cpython
+if [ "$ARCH" = "x86_64" ] && [ "$PLATFORM" = "macosx-arm64" ]; then
+  CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/macosx-x86_64/"
+fi
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
 
@@ -122,9 +126,10 @@ case $PLATFORM in
     macosx-arm64)
         export CC="clang"
         export CXX="clang++"
-        export CMAKE_OSX_ARCHITECTURES=arm64 # enables cross-compilation
+        export CMAKE_OSX_ARCHITECTURES=arm64 # enable cross-compilation on a x86_64 host machine
         export USE_MKLDNN=OFF
-        export CMAKE_OSX_DEPLOYMENT_TARGET=11.00
+        export USE_QNNPACK=OFF # not compatible with arm64 as of PyTorch 2.1.2
+        export CMAKE_OSX_DEPLOYMENT_TARGET=11.00 # minimum needed for arm64 support
         ;;
     windows-x86_64)
         if which ccache.exe; then
