@@ -28,6 +28,9 @@ public class CalibrateDebevec extends CalibrateCRF {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CalibrateDebevec(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CalibrateDebevec(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::CalibrateDebevec*>") void allocate(Algorithm pointer);
 
     public native float getLambda();
     public native void setLambda(float lambda);

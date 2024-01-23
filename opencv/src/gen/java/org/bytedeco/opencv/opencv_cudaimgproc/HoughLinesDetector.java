@@ -36,6 +36,11 @@ public class HoughLinesDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HoughLinesDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HoughLinesDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::HoughLinesDetector*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(HoughLinesDetector pointer);
 
     /** \brief Finds lines in a binary image using the classical Hough transform.
     <p>

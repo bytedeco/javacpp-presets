@@ -62,7 +62,7 @@ public class nvcomp extends org.bytedeco.cuda.presets.nvcomp {
 
 public static final int NVCOMP_MAJOR_VERSION = 3;
 public static final int NVCOMP_MINOR_VERSION = 0;
-public static final int NVCOMP_PATCH_VERSION = 3;
+public static final int NVCOMP_PATCH_VERSION = 5;
 
 /* Supported datatypes */
 /** enum nvcompType_t */

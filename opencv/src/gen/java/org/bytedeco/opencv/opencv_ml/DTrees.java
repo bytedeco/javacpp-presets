@@ -33,6 +33,9 @@ public class DTrees extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DTrees(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DTrees(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::DTrees*>") void allocate(Algorithm pointer);
 
     /** Predict options */
     /** enum cv::ml::DTrees::Flags */

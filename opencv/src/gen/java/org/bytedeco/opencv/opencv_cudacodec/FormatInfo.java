@@ -43,6 +43,7 @@ public class FormatInfo extends Pointer {
     public native @Cast("cv::cudacodec::Codec") int codec(); public native FormatInfo codec(int setter);
     public native @Cast("cv::cudacodec::ChromaFormat") int chromaFormat(); public native FormatInfo chromaFormat(int setter);
     public native int nBitDepthMinus8(); public native FormatInfo nBitDepthMinus8(int setter);
+    public native int nBitDepthChromaMinus8(); public native FormatInfo nBitDepthChromaMinus8(int setter);
     /** Coded sequence width in pixels. */
     public native int ulWidth(); public native FormatInfo ulWidth(int setter);
     /** Coded sequence height in pixels. */
@@ -66,4 +67,12 @@ public class FormatInfo extends Pointer {
     public native @ByRef Rect srcRoi(); public native FormatInfo srcRoi(Rect setter);
     /** Region of interest in the output frame containing the decoded frame. */
     public native @ByRef Rect targetRoi(); public native FormatInfo targetRoi(Rect setter);
+    /** Output value indicating if the black level, luma and chroma of the source are represented using the full or limited range (AKA TV or "analogue" range) of values as defined in Annex E of the ITU-T Specification.  Internally the conversion from NV12 to BGR obeys ITU 709. */
+    public native @Cast("bool") boolean videoFullRangeFlag(); public native FormatInfo videoFullRangeFlag(boolean setter);
+    /** Flag requesting histogram output if supported. Exception will be thrown when requested but not supported. */
+    public native @Cast("bool") boolean enableHistogram(); public native FormatInfo enableHistogram(boolean setter);
+    /** Bit depth of histogram bins if histogram output is requested and supported. */
+    public native int nCounterBitDepth(); public native FormatInfo nCounterBitDepth(int setter);
+    /** Max number of histogram bins if histogram output is requested and supported. */
+    public native int nMaxHistogramBins(); public native FormatInfo nMaxHistogramBins(int setter);
 }

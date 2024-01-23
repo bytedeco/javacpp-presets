@@ -15,26 +15,29 @@ import org.bytedeco.opencv.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
-  // namespace dai
 
-// Specialization of std::hash for Node::Connection
-@Name("std::hash<dai::Node::Connection>") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ConnectionHash extends Pointer {
+
+/**
+ * MessageDemux does not have any properties to set
+ */
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class MessageDemuxProperties extends MessageDemuxPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
-    public ConnectionHash() { super((Pointer)null); allocate(); }
+    public MessageDemuxProperties() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ConnectionHash(long size) { super((Pointer)null); allocateArray(size); }
+    public MessageDemuxProperties(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ConnectionHash(Pointer p) { super(p); }
+    public MessageDemuxProperties(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public ConnectionHash position(long position) {
-        return (ConnectionHash)super.position(position);
+    @Override public MessageDemuxProperties position(long position) {
+        return (MessageDemuxProperties)super.position(position);
     }
-    @Override public ConnectionHash getPointer(long i) {
-        return new ConnectionHash((Pointer)this).offsetAddress(i);
+    @Override public MessageDemuxProperties getPointer(long i) {
+        return new MessageDemuxProperties((Pointer)this).offsetAddress(i);
     }
 
-    public native @Cast("std::size_t") @Name("operator ()") long apply(@Const @ByRef Node.Connection obj);
+    // Needed for serialization
+    public native @Cast("char") byte dummy(); public native MessageDemuxProperties dummy(byte setter);
 }

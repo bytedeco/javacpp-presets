@@ -27,6 +27,9 @@ public class MergeRobertson extends MergeExposures {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeRobertson(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MergeRobertson(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::MergeRobertson*>") void allocate(Algorithm pointer);
 
     public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);

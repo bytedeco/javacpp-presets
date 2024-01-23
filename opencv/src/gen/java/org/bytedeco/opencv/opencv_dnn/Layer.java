@@ -36,6 +36,11 @@ public class Layer extends Algorithm {
         @Override public Layer getPointer(long i) {
             return new Layer((Pointer)this).offsetAddress(i);
         }
+        /** Downcast constructor. */
+        public Layer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+        @Namespace private native @Name("static_cast<cv::dnn::Layer*>") void allocate(Algorithm pointer);
+        @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+        @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(Layer pointer);
     
 
         /** List of learned parameters must be stored here to allow read them by using Net::getParam(). */

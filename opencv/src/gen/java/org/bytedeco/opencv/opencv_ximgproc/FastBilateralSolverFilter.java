@@ -46,7 +46,9 @@ public class FastBilateralSolverFilter extends Algorithm {
     public FastBilateralSolverFilter(Pointer p) { super(p); }
     /** Downcast constructor. */
     public FastBilateralSolverFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::FastBilateralSolverFilter*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::FastBilateralSolverFilter*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(FastBilateralSolverFilter pointer);
 
     /** \brief Apply smoothing operation to the source image.
     <p>

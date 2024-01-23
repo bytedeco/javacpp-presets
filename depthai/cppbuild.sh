@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DEPTHAI_VERSION=2.23.0
+DEPTHAI_VERSION=2.24.0
 LIBUSB_VERSION=1.0.22
 download https://github.com/luxonis/depthai-core/releases/download/v$DEPTHAI_VERSION/depthai-core-v$DEPTHAI_VERSION.tar.gz depthai-core-v$DEPTHAI_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
@@ -131,14 +131,14 @@ case $PLATFORM in
         export CC="cl.exe"
         export CXX="cl.exe"
         sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON -DOpenCV_DIR=$OPENCV_PATH .
         "$CMAKE" --build . --config Release --target install -j $MAKEJ
         ;;
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
         sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON -DOpenCV_DIR=$OPENCV_PATH .
         "$CMAKE" --build . --config Release --target install -j $MAKEJ
         ;;
     *)

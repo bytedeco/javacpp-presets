@@ -28,6 +28,9 @@ public class NormalBayesClassifier extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NormalBayesClassifier(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public NormalBayesClassifier(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::NormalBayesClassifier*>") void allocate(Algorithm pointer);
 
     /** \brief Predicts the response for sample(s).
     <p>

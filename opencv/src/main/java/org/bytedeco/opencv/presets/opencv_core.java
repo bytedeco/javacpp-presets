@@ -57,9 +57,10 @@ import org.bytedeco.openblas.presets.*;
             "<opencv2/core/utility.hpp>", "<opencv2/core/utils/instrumentation.hpp>", "<opencv2/core/utils/tls.hpp>",
             "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.408", "opencv_imgproc@.408"},
+            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.409", "opencv_imgproc@.409"},
+            exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake", "python"}, linkresource = "lib",
-            preload = {"opencv_cudev@.408"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
+            preload = {"opencv_cudev@.409"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
@@ -68,7 +69,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core481", "opencv_imgproc481"}, preload = {"opencv_cudev481"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core490", "opencv_imgproc490"}, preload = {"opencv_cudev490"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -417,7 +418,45 @@ public class opencv_core implements LoadEnabled, InfoMapper {
 
                .put(new Info("std::function<void(const cv::Range&)>").pointerTypes("Functor"))
                .put(new Info("cv::Ptr").skip().annotations("@Ptr"))
-               .put(new Info("cv::String").skip().annotations("@Str").valueTypes("BytePointer", "String"));
+               .put(new Info("cv::String").skip().annotations("@Str").valueTypes("BytePointer", "String"))
+
+               .put(new Info("cv::Algorithm").upcast())
+
+               .put(new Info("cv::read<int>", "cv::read<float>", "cv::read<double>").define())
+               .put(new Info("cv::read<int>(const cv::FileNode&, cv::Complex<int>&, const cv::Complex<int>&)").skip())
+               .put(new Info("cv::read<_Tp,std>(const cv::FileNode&, _Tp&, const _Tp&)").skip()) // Really template<typename _Tp, typename std::enable_if< std::is_enum<_Tp>::value >::type* = nullptr> read(...)
+
+               // Without this info, Algorithm.read() gets mapped to cv::read
+               .put(new Info("cv::Algorithm::read"));
+
+        for (String c : new String[] {"int", "float", "double", "cv::String"}) {
+            infoMap.put(new Info("cv::write<" + c + ">(cv::FileStorage&, const _Tp&)",
+                                 "cv::write<" + c + ">(cv::FileStorage&, const " + c + "&)").define());
+        }
+
+        for (String c : new String[] {"cv::Point_", "cv::Point3_", "cv::Size_", "cv::Complex", "cv::Rect_", "cv::Scalar_"}) {
+            for (String t : new String[] {"int", "float", "double"}) {
+                if (c.equals("cv::Complex") && t.equals("int")) {
+                    continue;
+                }
+                infoMap.put(new Info("cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const cv::String&, const _Tp&)",
+                                     "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const cv::String&, const " + c + "<" + t + ">&)",
+                                     "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const _Tp&)",
+                                     "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const " + c + "<" + t + ">&)").define());
+            }
+        }
+
+        for (String c : infoMap.keySet().toArray(new String[0])) {
+            if (c.startsWith("std::vector<")) {
+                c = c.substring(12, c.length() - 1);
+                infoMap.put(new Info("cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const std::vector<_Tp>&)",
+                                     "cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const " + c + "&)",
+                                     "cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const cv::String&, const std::vector<_Tp>&)",
+                                     "cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const cv::String&, const " + c + "&)",
+                                     "cv::read<" + c + (c.endsWith(">") ? " " : "") + ">(const cv::FileNode&, std::vector<_Tp>&, const std::vector<_Tp>&)",
+                                     "cv::read<" + c + (c.endsWith(">") ? " " : "") + ">(const cv::FileNode&, " + c + "&, const " + c + "&)").define());
+            }
+        }
     }
 
     public static class Functor extends FunctionPointer {

@@ -45,6 +45,11 @@ public class RetinaFastToneMapping extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RetinaFastToneMapping(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RetinaFastToneMapping(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::bioinspired::RetinaFastToneMapping*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(RetinaFastToneMapping pointer);
 
 
     /** \brief applies a luminance correction (initially High Dynamic Range (HDR) tone mapping)

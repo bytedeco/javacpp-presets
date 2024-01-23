@@ -36,6 +36,9 @@ public class TonemapDurand extends Tonemap {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapDurand(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TonemapDurand(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::xphoto::TonemapDurand*>") void allocate(Algorithm pointer);
 
 
     public native float getSaturation();

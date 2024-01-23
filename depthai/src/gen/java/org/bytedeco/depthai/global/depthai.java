@@ -136,6 +136,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../ByteUARTMap.java
 
 
+// Targeting ../StringRawGroupMessageMap.java
+
+
 // Targeting ../StringTensorInfoMap.java
 
 
@@ -313,7 +316,7 @@ public static final int
 
 
 
-public static native void getMonotonicTimestamp(XLinkTimespec ts);
+
 
 // #ifdef __cplusplus
 // #endif
@@ -677,6 +680,21 @@ public static native void getMonotonicTimestamp(XLinkTimespec ts);
 
 
   // namespace dai
+
+// Parsed from depthai-shared/common/ConnectionInterface.hpp
+
+// #pragma once
+// #include <cstdint>
+@Namespace("dai") public enum ConnectionInterface { USB(0), ETHERNET(1), WIFI(2);
+
+    public final int value;
+    private ConnectionInterface(int v) { this.value = v; }
+    private ConnectionInterface(ConnectionInterface e) { this.value = e.value; }
+    public ConnectionInterface intern() { for (ConnectionInterface e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+  // namespace dai
+
 
 // Parsed from depthai-shared/common/CpuUsage.hpp
 
@@ -1120,23 +1138,25 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 @Namespace("dai") public enum DatatypeEnum {
     Buffer(0),
     ImgFrame(1),
-    NNData(2),
-    ImageManipConfig(3),
-    CameraControl(4),
-    ImgDetections(5),
-    SpatialImgDetections(6),
-    SystemInformation(7),
-    SpatialLocationCalculatorConfig(8),
-    SpatialLocationCalculatorData(9),
-    EdgeDetectorConfig(10),
-    AprilTagConfig(11),
-    AprilTags(12),
-    Tracklets(13),
-    IMUData(14),
-    StereoDepthConfig(15),
-    FeatureTrackerConfig(16),
-    ToFConfig(17),
-    TrackedFeatures(18);
+    EncodedFrame(2),
+    NNData(3),
+    ImageManipConfig(4),
+    CameraControl(5),
+    ImgDetections(6),
+    SpatialImgDetections(7),
+    SystemInformation(8),
+    SpatialLocationCalculatorConfig(9),
+    SpatialLocationCalculatorData(10),
+    EdgeDetectorConfig(11),
+    AprilTagConfig(12),
+    AprilTags(13),
+    Tracklets(14),
+    IMUData(15),
+    StereoDepthConfig(16),
+    FeatureTrackerConfig(17),
+    ToFConfig(18),
+    TrackedFeatures(19),
+    MessageGroup(20);
 
     public final int value;
     private DatatypeEnum(int v) { this.value = v; }
@@ -1336,6 +1356,26 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/common/Size2f.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawImageManipConfig.java
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/datatype/RawMessageGroup.hpp
+
+// #pragma once
+
+// #include <cstdint>
+
+// #include "depthai-shared/datatype/DatatypeEnum.hpp"
+// #include "depthai-shared/datatype/RawBuffer.hpp"
+// Targeting ../RawGroupMessage.java
+
+
+
+
+// Targeting ../RawMessageGroup.java
 
 
 
@@ -1676,6 +1716,9 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 // Targeting ../ImageManipPropertiesSerializable.java
 
 
+// Targeting ../MessageDemuxPropertiesSerializable.java
+
+
 // Targeting ../EdgeDetectorPropertiesSerializable.java
 
 
@@ -1704,6 +1747,9 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 
 
 // Targeting ../StereoDepthPropertiesSerializable.java
+
+
+// Targeting ../SyncPropertiesSerializable.java
 
 
 // Targeting ../SystemLoggerPropertiesSerializable.java
@@ -1987,6 +2033,20 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
   // namespace dai
 
 
+// Parsed from depthai-shared/properties/MessageDemuxProperties.hpp
+
+// #pragma once
+
+// #include "depthai-shared/properties/Properties.hpp"
+// Targeting ../MessageDemuxProperties.java
+
+
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai-shared/properties/MonoCameraProperties.hpp
 
 // #pragma once
@@ -2195,6 +2255,20 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 // #include "depthai-shared/datatype/RawStereoDepthConfig.hpp"
 // #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../StereoDepthProperties.java
+
+
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/properties/SyncProperties.hpp
+
+// #pragma once
+
+// #include "depthai-shared/properties/Properties.hpp"
+// Targeting ../SyncProperties.java
 
 
 
@@ -2639,6 +2713,24 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
   // namespace dai
 
 
+// Parsed from depthai/pipeline/datatype/MessageGroup.hpp
+
+// #pragma once
+
+// #include <chrono>
+// #include <memory>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "depthai-shared/datatype/RawMessageGroup.hpp"
+// #include "depthai/pipeline/datatype/Buffer.hpp"
+// Targeting ../MessageGroup.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai/pipeline/datatype/NNData.hpp
 
 // #pragma once
@@ -2843,6 +2935,9 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // Targeting ../ImageManipPropertiesNode.java
 
 
+// Targeting ../MessageDemuxPropertiesNode.java
+
+
 // Targeting ../EdgeDetectorPropertiesNode.java
 
 
@@ -2880,6 +2975,9 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 
 
 // Targeting ../StereoDepthPropertiesNode.java
+
+
+// Targeting ../SyncPropertiesNode.java
 
 
 // Targeting ../SystemLoggerPropertiesNode.java
@@ -2954,6 +3052,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "node/FeatureTracker.hpp"
 // #include "node/IMU.hpp"
 // #include "node/ImageManip.hpp"
+// #include "node/MessageDemux.hpp"
 // #include "node/MonoCamera.hpp"
 // #include "node/NeuralNetwork.hpp"
 // #include "node/ObjectTracker.hpp"
@@ -2963,12 +3062,14 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "node/SpatialDetectionNetwork.hpp"
 // #include "node/SpatialLocationCalculator.hpp"
 // #include "node/StereoDepth.hpp"
+// #include "node/Sync.hpp"
 // #include "node/SystemLogger.hpp"
 // #include "node/ToF.hpp"
 // #include "node/VideoEncoder.hpp"
 // #include "node/Warp.hpp"
 // #include "node/XLinkIn.hpp"
 // #include "node/XLinkOut.hpp"
+
 
 // Parsed from depthai/pipeline/datatypes.hpp
 
@@ -2986,6 +3087,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "datatype/ImageManipConfig.hpp"
 // #include "datatype/ImgDetections.hpp"
 // #include "datatype/ImgFrame.hpp"
+// #include "datatype/MessageGroup.hpp"
 // #include "datatype/NNData.hpp"
 // #include "datatype/SpatialImgDetections.hpp"
 // #include "datatype/SpatialLocationCalculatorConfig.hpp"
@@ -3095,6 +3197,20 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // shared
 // #include <depthai-shared/properties/ImageManipProperties.hpp>
 // Targeting ../ImageManip.java
+
+
+
+  // namespace node
+  // namespace dai
+
+
+// Parsed from depthai/pipeline/node/MessageDemux.hpp
+
+// #pragma once
+
+// #include "depthai-shared/properties/MessageDemuxProperties.hpp"
+// #include "depthai/pipeline/Node.hpp"
+// Targeting ../MessageDemux.java
 
 
 
@@ -3305,6 +3421,22 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "depthai-shared/properties/StereoDepthProperties.hpp"
 // #include "depthai/pipeline/datatype/StereoDepthConfig.hpp"
 // Targeting ../StereoDepth.java
+
+
+
+  // namespace node
+  // namespace dai
+
+
+// Parsed from depthai/pipeline/node/Sync.hpp
+
+// #pragma once
+
+// #include <chrono>
+
+// #include "depthai-shared/properties/SyncProperties.hpp"
+// #include "depthai/pipeline/Node.hpp"
+// Targeting ../Sync.java
 
 
 
@@ -3663,6 +3795,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 
 // shared
 // #include "depthai-shared/common/ChipTemperature.hpp"
+// #include "depthai-shared/common/ConnectionInterface.hpp"
 // #include "depthai-shared/common/CpuUsage.hpp"
 // #include "depthai-shared/common/MemoryInfo.hpp"
 // #include "depthai-shared/datatype/RawIMUData.hpp"

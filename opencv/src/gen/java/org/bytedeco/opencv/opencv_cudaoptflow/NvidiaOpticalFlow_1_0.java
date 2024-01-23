@@ -62,6 +62,9 @@ public class NvidiaOpticalFlow_1_0 extends NvidiaHWOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NvidiaOpticalFlow_1_0(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public NvidiaOpticalFlow_1_0(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::NvidiaOpticalFlow_1_0*>") void allocate(Algorithm pointer);
 
     /**
     * Supported optical flow performance levels.

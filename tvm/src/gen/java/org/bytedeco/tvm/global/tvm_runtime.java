@@ -676,18 +676,12 @@ public static final int
 //       return Name;
 //     }
 //   }
-// Targeting ../is_pod.java
 
+/** \cond Doxygen_Suppress */
+// declare special traits when C++11 is not available
+// #if DMLC_USE_CXX11 == 0
 
-// Targeting ../is_integral.java
-
-
-// Targeting ../is_floating_point.java
-
-
-// Targeting ../type_name_helper.java
-
-
+// #endif
 /** \endcond */
   // namespace dmlc
 // #endif  // DMLC_TYPE_TRAITS_H_
@@ -2759,9 +2753,6 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #include <dmlc/serializer.h>
 // #include <tvm/runtime/c_runtime_api.h>
 // #include <tvm/runtime/ndarray.h>
-// Targeting ../Handler.java
-
-
 
   // namespace serializer
   // namespace dmlc
@@ -3170,9 +3161,8 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
  */
 
 // handle case of function.
-// Targeting ../Type2Str.java
 
-
+// handle case of function ptr.
 
 /**
  * \brief Template class to remove const, pointer and reference of original type.
@@ -3189,9 +3179,6 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 // Targeting ../TVMArgsSetter.java
 
 
-
-
-// Targeting ../typed_packed_call_dispatcher.java
 
 
   // namespace detail
@@ -3230,9 +3217,8 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
 
 
-// Targeting ../PackedFuncValueConverter.java
 
-
+// specializations of PackedFuncValueConverter
 
 
 

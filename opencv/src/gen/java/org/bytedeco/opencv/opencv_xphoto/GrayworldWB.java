@@ -46,6 +46,9 @@ public class GrayworldWB extends WhiteBalancer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GrayworldWB(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GrayworldWB(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::xphoto::GrayworldWB*>") void allocate(Algorithm pointer);
 
     /** \brief Maximum saturation for a pixel to be included in the
         gray-world assumption

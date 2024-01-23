@@ -28,6 +28,9 @@ public class SimpleWB extends WhiteBalancer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimpleWB(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SimpleWB(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::xphoto::SimpleWB*>") void allocate(Algorithm pointer);
 
     /** \brief Input image range minimum value
     @see setInputMin */

@@ -40,7 +40,7 @@ public class FarnebackOpticalFlow extends DenseOpticalFlow {
     public FarnebackOpticalFlow(Pointer p) { super(p); }
     /** Downcast constructor. */
     public FarnebackOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::FarnebackOpticalFlow*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::FarnebackOpticalFlow*>") void allocate(Algorithm pointer);
 
     public native int getNumLevels();
     public native void setNumLevels(int numLevels);

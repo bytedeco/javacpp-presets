@@ -28,6 +28,9 @@ public class Boost extends DTrees {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Boost(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Boost(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::Boost*>") void allocate(Algorithm pointer);
 
     /** Type of the boosting algorithm.
     See Boost::Types. Default value is Boost::REAL. */

@@ -30,6 +30,9 @@ public class AverageHash extends ImgHashBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AverageHash(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AverageHash(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::img_hash::AverageHash*>") void allocate(Algorithm pointer);
 
     public static native @Ptr AverageHash create();
 }

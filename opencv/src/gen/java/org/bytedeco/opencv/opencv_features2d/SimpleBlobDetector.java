@@ -60,6 +60,9 @@ public class SimpleBlobDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimpleBlobDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SimpleBlobDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::SimpleBlobDetector*>") void allocate(Algorithm pointer);
 
   @NoOffset public static class Params extends Pointer {
       static { Loader.load(); }

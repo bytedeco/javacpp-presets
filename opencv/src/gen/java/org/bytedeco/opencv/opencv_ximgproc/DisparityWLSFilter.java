@@ -43,7 +43,7 @@ public class DisparityWLSFilter extends DisparityFilter {
     public DisparityWLSFilter(Pointer p) { super(p); }
     /** Downcast constructor. */
     public DisparityWLSFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::DisparityWLSFilter*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::DisparityWLSFilter*>") void allocate(Algorithm pointer);
 
     /** filter parameters */
 

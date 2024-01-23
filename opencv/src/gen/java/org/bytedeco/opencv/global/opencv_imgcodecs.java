@@ -140,15 +140,15 @@ public static final int
        /** For PPM, PGM, or PBM, it can be a binary format flag, 0 or 1. Default value is 1. */
        IMWRITE_PXM_BINARY          = 32,
        /** override EXR storage type (FLOAT (FP32) is default) */
-       IMWRITE_EXR_TYPE            = (3 << 4) + 0, /* 48 */
+       IMWRITE_EXR_TYPE            = (3 << 4) + 0,
        /** override EXR compression type (ZIP_COMPRESSION = 3 is default) */
-       IMWRITE_EXR_COMPRESSION     = (3 << 4) + 1, /* 49 */
+       IMWRITE_EXR_COMPRESSION     = (3 << 4) + 1,
        /** override EXR DWA compression level (45 is default) */
-       IMWRITE_EXR_DWA_COMPRESSION_LEVEL = (3 << 4) + 2, /* 50 */
+       IMWRITE_EXR_DWA_COMPRESSION_LEVEL = (3 << 4) + 2,
        /** For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used. */
        IMWRITE_WEBP_QUALITY        = 64,
        /** specify HDR compression */
-       IMWRITE_HDR_COMPRESSION     = (5 << 4) + 0, /* 80 */
+       IMWRITE_HDR_COMPRESSION     = (5 << 4) + 0,
        /** For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format */
        IMWRITE_PAM_TUPLETYPE       = 128,
        /** For TIFF, use to specify which DPI resolution unit to set; see libtiff documentation for valid values */
@@ -464,8 +464,8 @@ See cv::imread for the list of supported formats and flags description.
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal GpuMat buf, int flags );
 
 /** \overload
-@param buf
-@param flags
+@param buf Input array or vector of bytes.
+@param flags The same flags as in cv::imread, see cv::ImreadModes.
 @param dst The optional output placeholder for the decoded matrix. It can save the image
 reallocations when the function is called repeatedly for images of the same size.
 */
@@ -484,9 +484,13 @@ See cv::imreadmulti for the list of supported formats and flags description.
 @param buf Input array or vector of bytes.
 @param flags The same flags as in cv::imread, see cv::ImreadModes.
 @param mats A vector of Mat objects holding each page, if more than one.
+@param range A continuous selection of pages.
 */
+@Namespace("cv") public static native @Cast("bool") boolean imdecodemulti(@ByVal Mat buf, int flags, @ByRef MatVector mats, @Const @ByRef(nullValue = "cv::Range::all()") Range range);
 @Namespace("cv") public static native @Cast("bool") boolean imdecodemulti(@ByVal Mat buf, int flags, @ByRef MatVector mats);
+@Namespace("cv") public static native @Cast("bool") boolean imdecodemulti(@ByVal UMat buf, int flags, @ByRef MatVector mats, @Const @ByRef(nullValue = "cv::Range::all()") Range range);
 @Namespace("cv") public static native @Cast("bool") boolean imdecodemulti(@ByVal UMat buf, int flags, @ByRef MatVector mats);
+@Namespace("cv") public static native @Cast("bool") boolean imdecodemulti(@ByVal GpuMat buf, int flags, @ByRef MatVector mats, @Const @ByRef(nullValue = "cv::Range::all()") Range range);
 @Namespace("cv") public static native @Cast("bool") boolean imdecodemulti(@ByVal GpuMat buf, int flags, @ByRef MatVector mats);
 
 /** \brief Encodes an image into a memory buffer.

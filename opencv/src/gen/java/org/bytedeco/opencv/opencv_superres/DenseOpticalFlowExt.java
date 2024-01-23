@@ -48,7 +48,9 @@ public class DenseOpticalFlowExt extends Algorithm {
             public DenseOpticalFlowExt(Pointer p) { super(p); }
             /** Downcast constructor. */
             public DenseOpticalFlowExt(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-            @Namespace private native @Name("dynamic_cast<cv::superres::DenseOpticalFlowExt*>") void allocate(Algorithm pointer);
+            @Namespace private native @Name("static_cast<cv::superres::DenseOpticalFlowExt*>") void allocate(Algorithm pointer);
+            @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+            @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(DenseOpticalFlowExt pointer);
         
             public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat flow2);
             public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1);

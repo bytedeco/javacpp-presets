@@ -22,6 +22,11 @@ public class LookUpTable extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LookUpTable(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LookUpTable(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::LookUpTable*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(LookUpTable pointer);
 
     /** \brief Transforms the source matrix into the destination matrix using the given look-up table:
     dst(I) = lut(src(I)) .

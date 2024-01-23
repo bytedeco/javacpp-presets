@@ -47,10 +47,10 @@
 #include "c10/util/Float8_e4m3fn-inl.h"
 #include "c10/util/Float8_e4m3fn.h"
 #include "c10/util/complex_math.h"
-#include "c10/util/Half.h" // Moved before complex.h because it overrides complex<Half>
-#include "c10/util/Half-inl.h"
 #include "c10/util/complex_utils.h"
 #include "c10/util/complex.h"
+#include "c10/util/Half-inl.h"
+#include "c10/util/Half.h"
 #include "c10/util/Float8_e5m2-inl.h"
 #include "c10/util/Float8_e5m2.h"
 #include "c10/util/bits.h"

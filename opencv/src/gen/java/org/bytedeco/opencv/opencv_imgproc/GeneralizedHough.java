@@ -22,6 +22,11 @@ public class GeneralizedHough extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHough(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GeneralizedHough(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::GeneralizedHough*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(GeneralizedHough pointer);
 
     /** set template to search */
     public native void setTemplate(@ByVal Mat templ, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter);

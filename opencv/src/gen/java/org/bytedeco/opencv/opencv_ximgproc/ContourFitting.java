@@ -55,7 +55,9 @@ public class ContourFitting extends Algorithm {
         }
         /** Downcast constructor. */
         public ContourFitting(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-        @Namespace private native @Name("dynamic_cast<cv::ximgproc::ContourFitting*>") void allocate(Algorithm pointer);
+        @Namespace private native @Name("static_cast<cv::ximgproc::ContourFitting*>") void allocate(Algorithm pointer);
+        @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+        @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(ContourFitting pointer);
     
         /** \brief Fit two closed curves using fourier descriptors. More details in \cite PersoonFu1977 and \cite BergerRaghunathan1998
         <p>

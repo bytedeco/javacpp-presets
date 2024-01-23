@@ -46,16 +46,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               preload = {"mkl_core@.2", "iomp5", "libiomp5md", "mkl_gnu_thread@.2", "mkl_intel_lp64@.2", "mkl_intel_thread@.2",
                          "mkl_def@.2", "mkl_mc@.2", "mkl_mc3@.2", "mkl_p4@.2", "mkl_p4m@.2", "mkl_p4m3@.2", "mkl_avx@.2", "mkl_avx2@.2", "mkl_avx512@.2", "mkl_avx512_mic@.2",
                          "mkl_vml_def@.2", "mkl_vml_ia@.2", "mkl_vml_mc@.2", "mkl_vml_mc2@.2", "mkl_vml_mc3@.2", "mkl_vml_p4@.2", "mkl_vml_p4m@.2", "mkl_vml_p4m2@.2", "mkl_vml_p4m3@.2",
-                         "mkl_vml_avx@.2", "mkl_vml_avx2@.2", "mkl_vml_avx512@.2", "mkl_vml_avx512_mic@.2", "mkl_vml_cmpt@.2"}, resource = {"include", "lib"}),
-    @Platform(value = "linux-x86",    linkpath = {"/opt/intel/oneapi/mkl/latest/lib/ia32/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/"}),
-    @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/oneapi/mkl/latest/lib/intel64/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/"}),
+                         "mkl_vml_avx@.2", "mkl_vml_avx2@.2", "mkl_vml_avx512@.2", "mkl_vml_avx512_mic@.2", "mkl_vml_cmpt@.2"}, resource = {"include"}),
+    @Platform(value = "linux-x86",    linkpath = {"/opt/intel/oneapi/mkl/latest/lib32/", "/opt/intel/oneapi/compiler/latest/lib32/"}),
+    @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/lib/"}),
     @Platform(value = "windows",     includepath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/include/"),
-    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/lib/ia32/",
-                                     preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/ia32/",
-                                                    "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/ia32_win/compiler/"}),
-    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/lib/intel64/",
-                                     preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/intel64/",
-                                                    "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/intel64_win/compiler/"}) })
+    @Platform(value = "windows-x86",    linkpath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/lib32/",
+                                     preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/bin32/",
+                                                    "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin32/"}),
+    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/lib/",
+                                     preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/bin/",
+                                                    "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin/"}) })
 @NoException
 public class mkl_rt implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "mkl"); }
@@ -89,6 +89,11 @@ public class mkl_rt implements InfoMapper {
                              "mkl_dc_gemm", "mkl_dc_syrk", "mkl_dc_trsm", "mkl_dc_axpy", "mkl_dc_dot", "MKL_DC_DOT_CONVERT",
                              "mkl_dc_getrf", "mkl_dc_lapacke_getrf_convert", "mkl_dc_getri", "mkl_dc_lapacke_getri_convert", "mkl_dc_getrs", "mkl_dc_lapacke_getrs_convert",
                              "__inline", "MKL_DIRECT_CALL_INIT_FLAG", "mkl_jit_create_dgemm", "mkl_jit_create_sgemm", "mkl_jit_create_cgemm", "mkl_jit_create_zgemm").cppTypes().annotations())
+
+               .put(new Info("_mkl_api").cppText("#define _mkl_api(rtype,name,arg)"))
+               .put(new Info("_MKL_API").cppText("#define _MKL_API(rtype,name,arg)"))
+               .put(new Info("_mkl_vml_api").cppText("#define _mkl_vml_api(rtype,name,arg)"))
+               .put(new Info("_MKL_VML_API").cppText("#define _MKL_VML_API(rtype,name,arg)"))
 
                .put(new Info("MKL_DEPRECATED").cppText("#define MKL_DEPRECATED deprecated").cppTypes())
                .put(new Info("MKL_DEPRECATED_C").cppText("#define MKL_DEPRECATED_C deprecated").cppTypes())
@@ -127,7 +132,7 @@ public class mkl_rt implements InfoMapper {
 
                .put(new Info("DFTI_DESCRIPTOR_DM_HANDLE").valueTypes("_DFTI_DESCRIPTOR_DM").pointerTypes("@ByPtrPtr _DFTI_DESCRIPTOR_DM"))
 
-               .put(new Info("mklfreetls", "MKLFREETLS", "MKLFreeTls",
+               .put(new Info("mklfreetls", "MKLFREETLS", "MKLFreeTls", "MKLFreeTls_64",
                              "mkl_sparse_c_create_vector", "mkl_sparse_d_create_vector", "mkl_sparse_s_create_vector", "mkl_sparse_z_create_vector",
                              "mkl_sparse_c_export_vector", "mkl_sparse_d_export_vector", "mkl_sparse_s_export_vector", "mkl_sparse_z_export_vector",
                              "mkl_sparse_destroy_vector", "mkl_sparse_c_spmspvd", "mkl_sparse_d_spmspvd", "mkl_sparse_s_spmspvd", "mkl_sparse_z_spmspvd",
