@@ -86,7 +86,7 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
-CPYTHON_PATH=CPYTHON_HOST_PATH
+CPYTHON_PATH="$CPYTHON_HOST_PATH"
 if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
