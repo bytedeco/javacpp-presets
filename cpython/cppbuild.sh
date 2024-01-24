@@ -24,6 +24,9 @@ patch -Np1 --binary < ../../../cpython-windows.patch
 
 case $PLATFORM in
     linux-armhf)
+        # armhf builds are no longer guaranteed to succeed.
+        # If they are needed, look at the configure command for arm64
+        # and try any options that are missing from here
         HOST_ARCH="$(uname -m)"
         CROSSCOMPILE=1
         if [[ $HOST_ARCH == *"arm"* ]]
@@ -49,12 +52,16 @@ case $PLATFORM in
         make install_sw
         make distclean
         cd ../Python-$CPYTHON_VERSION
-        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host
+        # ac_cv_buggy_getaddrinfo=no disables the runtime ./configure checks for ipv6 support
+        # Without it, the build fails because it can't detect ipv6 on the host. Needed on both host and cross-compiled builds
+        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host ac_cv_buggy_getaddrinfo=no
         make -j $MAKEJ
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+        # ac_cv_file__dev_ptmx=yes and ac_cv_file__dev_ptc=no are required for cross-compilation as stated by the configure script,
+        # but little information is known about them
+        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no
         make -j $MAKEJ
         make install
         ;;
@@ -70,12 +77,22 @@ case $PLATFORM in
         make install_sw
         make distclean
         cd ../Python-$CPYTHON_VERSION
-        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host
+        # ac_cv_buggy_getaddrinfo=no disables the runtime ./configure checks for ipv6 support
+        # Without it, the build fails because it can't detect ipv6 on the host. Needed on both host and cross-compiled builds
+        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host ac_cv_buggy_getaddrinfo=no
         make -j $MAKEJ
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+        # ac_cv_file__dev_ptmx=yes and ac_cv_file__dev_ptc=no are required for cross-compilation as stated by the configure script,
+        # but little information is known about them.
+        # /dev/ptmx is the pseudoterminal master file, reading from it generates a new file descriptor
+        # to use with a corresponding /dev/pts/ pseudoterminal
+        # See man 4 ptmx
+        # No information on /dev/ptc could be found.
+        # The above configure options specify whether the corresponding device files
+        # are expected to be found on the target machine.
+        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no
         make -j $MAKEJ
         make install
         ;;
