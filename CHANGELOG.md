@@ -1,4 +1,5 @@
 
+ * Introduce `macosx-arm64` builds for PyTorch ([pull #1463](https://github.com/bytedeco/javacpp-presets/pull/1463))
  * Enable Vulkan GPU acceleration for FFmpeg ([pull #1460](https://github.com/bytedeco/javacpp-presets/pull/1460))
  * Include `timeapi.h` for system API of Windows ([pull #1447](https://github.com/bytedeco/javacpp-presets/pull/1447))
  * Add Android and Windows builds to presets for DepthAI ([pull #1441](https://github.com/bytedeco/javacpp-presets/pull/1441))
