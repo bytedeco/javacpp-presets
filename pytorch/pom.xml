@@ -24,12 +24,6 @@
       <artifactId>openblas</artifactId>
       <version>0.3.26-${project.parent.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>numpy</artifactId>
-      <version>1.26.3-${project.parent.version}</version>
-      <optional>true</optional>
-    </dependency>
   </dependencies>
 
   <build>
@@ -53,6 +47,12 @@
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
             <version>1.26.3-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cpython</artifactId>
+            <version>3.12.1-${project.parent.version}</version>
+            <classifier>${os.name}-${os.arch}</classifier>
           </dependency>
         </dependencies>
         <configuration>
@@ -136,46 +136,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!-- cross-compilation profile for macosx-arm64 builds on macosx-x86_64 CI machines -->
-  <profiles>
-    <profile>
-      <id>pytorch-cross-compile</id>
-      <activation>
-        <property>
-          <name>javacpp.platform</name>
-          <value>macosx-arm64</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacpp</artifactId>
-            <dependencies>
-              <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>cpython</artifactId>
-                <version>3.12.1-${project.parent.version}</version>
-                <classifier>${os.name}-${os.arch}</classifier>
-              </dependency>
-              <!-- we need to exclude target cpython until we have a macosx-arm64 build -->
-              <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>numpy-platform</artifactId>
-                <version>1.26.3-${project.parent.version}</version>
-                <exclusions>
-                  <exclusion>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>cpython</artifactId>
-                  </exclusion>
-                </exclusions>
-              </dependency>
-            </dependencies>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>

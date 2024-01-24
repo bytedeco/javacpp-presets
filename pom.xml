@@ -1466,8 +1466,8 @@
         <module>libpostal</module>
         <module>libraw</module>
         <module>leptonica</module>
-        <module>pytorch</module>
         <module>tesseract</module>
+        <module>pytorch</module>
         <module>sentencepiece</module>
       </modules>
       <properties>

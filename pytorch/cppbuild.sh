@@ -86,41 +86,33 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
-export PYTHONNOUSERSITE=1
-
-TOOLS="setuptools==67.6.1 pyyaml==6.0.1 typing_extensions==4.8.0"
-
-if [[ $PLATFORM == $PLATFORM_HOST ]]; then
-    if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
-        # setup.py won't pick up the right libgfortran.so without this
-        export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-        export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
-        export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
-        export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
-        export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
-        export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
-        chmod +x "$PYTHON_BIN_PATH"
-    elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
-        CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
-        OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
-        NUMPY_PATH=$(cygpath $NUMPY_PATH)
-        export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
-        export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python.exe"
-        export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
-        export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
-        export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/site-packages/"
-        export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
-    fi
-    export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
-    mkdir -p "$PYTHON_INSTALL_PATH"
-
-    export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
-    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS
-else # cross-compile
-    export PYTHON_BIN_PATH="$CPYTHON_HOST_PATH/bin/python3.12"
-    chmod +x $PYTHON_BIN_PATH
-    $PYTHON_BIN_PATH -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.12/" $TOOLS
+CPYTHON_PATH=CPYTHON_HOST_PATH
+if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
+    # setup.py won't pick up the right libgfortran.so without this
+    export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
+    chmod +x "$PYTHON_BIN_PATH"
+elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
+    CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
+    OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
+    NUMPY_PATH=$(cygpath $NUMPY_PATH)
+    export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python.exe"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
+export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
+mkdir -p "$PYTHON_INSTALL_PATH"
+
+export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
+export PYTHONNOUSERSITE=1
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.1 typing_extensions==4.8.0
 
 case $PLATFORM in
     linux-x86)
@@ -131,10 +123,6 @@ case $PLATFORM in
         export CC="gcc -m64"
         export CXX="g++ -m64"
         ;;
-    macosx-x86_64)
-        export CC="clang"
-        export CXX="clang++"
-        ;;
     macosx-arm64)
         export CC="clang"
         export CXX="clang++"
@@ -142,6 +130,10 @@ case $PLATFORM in
         export USE_MKLDNN=OFF
         export USE_QNNPACK=OFF # not compatible with arm64 as of PyTorch 2.1.2
         export CMAKE_OSX_DEPLOYMENT_TARGET=11.00 # minimum needed for arm64 support
+        ;;
+    macosx-x86_64)
+        export CC="clang"
+        export CXX="clang++"
         ;;
     windows-x86_64)
         if which ccache.exe; then
