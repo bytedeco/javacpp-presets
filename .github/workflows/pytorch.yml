@@ -32,6 +32,10 @@ jobs:
           path: /home/runner/.ccache
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
         timeout-minutes: 350
+  macosx-arm64:
+    runs-on: macos-11
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
     runs-on: macos-11
 #    strategy:
@@ -61,7 +65,7 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
         timeout-minutes: 350
   redeploy:
-    needs: [linux-x86_64, macosx-x86_64, windows-x86_64]
+    needs: [linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86_64]
     runs-on: ubuntu-20.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

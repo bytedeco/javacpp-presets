@@ -24,12 +24,6 @@
       <artifactId>openblas</artifactId>
       <version>0.3.26-${project.parent.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>numpy</artifactId>
-      <version>1.26.3-${project.parent.version}</version>
-      <optional>true</optional>
-    </dependency>
   </dependencies>
 
   <build>
@@ -53,6 +47,12 @@
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
             <version>1.26.3-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cpython</artifactId>
+            <version>3.12.1-${project.parent.version}</version>
+            <classifier>${os.name}-${os.arch}</classifier>
           </dependency>
         </dependencies>
         <configuration>
@@ -91,6 +91,8 @@
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
+            <!-- add host cpython for running setup.py when cross-compiling -->
+            <buildResource>/org/bytedeco/cpython/${os.name}-${os.arch}/</buildResource>
             <buildResource>/org/bytedeco/mkldnn/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
           </buildResources>
