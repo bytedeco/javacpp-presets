@@ -39,7 +39,7 @@ $ mvn compile exec:java exec.args="en.wiki.bpe.vs10000.model"
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.sentencepiece</groupId>
     <artifactId>sentencepiece-example</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.10</version>
     <properties>
         <exec.mainClass>SentencePieceExample</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -49,7 +49,7 @@ $ mvn compile exec:java exec.args="en.wiki.bpe.vs10000.model"
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>sentencepiece-platform</artifactId>
-            <version>0.1.99-1.5.10-SNAPSHOT</version>
+            <version>0.1.99-1.5.10</version>
         </dependency>
     </dependencies>
     <build>

@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.depthai</groupId>
     <artifactId>examples</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.10</version>
     <properties>
         <exec.mainClass>CameraPreviewExample</exec.mainClass>
     </properties>
@@ -46,12 +46,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>depthai-platform</artifactId>
-            <version>2.24.0-1.5.10-SNAPSHOT</version>
+            <version>2.24.0-1.5.10</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.9.0-1.5.10-SNAPSHOT</version>
+            <version>4.9.0-1.5.10</version>
         </dependency>
     </dependencies>
     <build>
