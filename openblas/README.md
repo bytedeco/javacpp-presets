@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.openblas</groupId>
     <artifactId>openblas</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.10</version>
     <properties>
         <exec.mainClass>ExampleDGELSrowmajor</exec.mainClass>
     </properties>
@@ -50,7 +50,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.26-1.5.10-SNAPSHOT</version>
+            <version>0.3.26-1.5.10</version>
         </dependency>
     </dependencies>
     <build>

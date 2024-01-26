@@ -81,7 +81,10 @@ public class ffi implements InfoMapper {
                .put(new Info("__attribute__((deprecated))").annotations("@Deprecated"))
                .put(new Info("FFI_FIRST_ABI", "FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL",
                              "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL",
-                             "FFI_LAST_ABI", "FFI_DEFAULT_ABI").skip())
+                             "FFI_LAST_ABI", "FFI_DEFAULT_ABI", "FFI_TYPE_UINT128",
+                             "FFI_SYSV_TYPE_SMALL_STRUCT", "FFI_V2_TYPE_VECTOR",
+                             "FFI_V2_TYPE_VECTOR_HOMOG", "FFI_V2_TYPE_FLOAT_HOMOG",
+                             "FFI_V2_TYPE_DOUBLE_HOMOG", "FFI_V2_TYPE_SMALL_STRUCT").skip())
         ;
     }
 

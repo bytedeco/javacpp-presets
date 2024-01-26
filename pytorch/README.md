@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.pytorch</groupId>
     <artifactId>simplemnist</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.10</version>
     <properties>
         <exec.mainClass>SimpleMNIST</exec.mainClass>
     </properties>
@@ -48,28 +48,28 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform</artifactId>
-            <version>2.1.2-1.5.10-SNAPSHOT</version>
+            <version>2.1.2-1.5.10</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform-gpu</artifactId>
-            <version>2.1.2-1.5.10-SNAPSHOT</version>
+            <version>2.1.2-1.5.10</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.3-8.9-1.5.10-SNAPSHOT</version>
+            <version>12.3-8.9-1.5.10</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2024.0-1.5.10-SNAPSHOT</version>
+            <version>2024.0-1.5.10</version>
         </dependency>
     </dependencies>
     <build>

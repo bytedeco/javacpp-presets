@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 NASM_VERSION=2.14
-ZLIB=zlib-1.3
+ZLIB=zlib-1.3.1
 GIFLIB=giflib-5.2.1
 LIBJPEG=libjpeg-turbo-3.0.1
 LIBPNG=libpng-1.6.40 # warning: libpng16 doesn't work on CentOS 6 for some reason
