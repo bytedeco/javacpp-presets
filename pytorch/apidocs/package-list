@@ -1,3 +1,5 @@
 org.bytedeco.pytorch
+org.bytedeco.pytorch.cuda
+org.bytedeco.pytorch.functions
 org.bytedeco.pytorch.global
 org.bytedeco.pytorch.presets

@@ -2,7 +2,6 @@ org.bytedeco.opencv
 org.bytedeco.opencv.global
 org.bytedeco.opencv.helper
 org.bytedeco.opencv.opencv_aruco
-org.bytedeco.opencv.opencv_barcode
 org.bytedeco.opencv.opencv_bgsegm
 org.bytedeco.opencv.opencv_bioinspired
 org.bytedeco.opencv.opencv_calib3d
@@ -50,12 +49,12 @@ org.bytedeco.opencv.opencv_xphoto
 org.bytedeco.opencv.presets
 org.opencv.android
 org.opencv.aruco
-org.opencv.barcode
 org.opencv.bgsegm
 org.opencv.bioinspired
 org.opencv.calib3d
 org.opencv.core
 org.opencv.dnn
+org.opencv.dnn_superres
 org.opencv.face
 org.opencv.features2d
 org.opencv.highgui

@@ -1,3 +1,4 @@
 org.bytedeco.tritonserver.global
 org.bytedeco.tritonserver.presets
+org.bytedeco.tritonserver.tritondevelopertoolsserver
 org.bytedeco.tritonserver.tritonserver

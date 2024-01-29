@@ -1,4 +1,5 @@
 ai.onnxruntime
+ai.onnxruntime.platform
 ai.onnxruntime.providers
 org.bytedeco.onnxruntime
 org.bytedeco.onnxruntime.global
