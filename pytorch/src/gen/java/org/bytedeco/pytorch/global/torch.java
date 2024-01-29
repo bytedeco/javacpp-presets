@@ -65087,33 +65087,6 @@ apis for specific fusers.
  // namespace torch
 
 
-// Parsed from torch/csrc/api/include/torch/data/transforms/stack.h
-
-// #pragma once
-
-// #include <torch/data/example.h>
-// #include <torch/data/transforms/collate.h>
-// #include <torch/types.h>
-
-// #include <utility>
-// #include <vector>
-// Targeting ../ExampleStack.java
-
-
-// Targeting ../TensorExampleStack.java
-
-
-
-/** A {@code Collation} for {@code Example<Tensor, Tensor>} types that stacks all data
- *  tensors into one tensor, and all target (label) tensors into one tensor. */
-
-/** A {@code Collation} for {@code Example<Tensor, NoTarget>} types that stacks all data
- *  tensors into one tensor. */
- // namespace transforms
- // namespace data
- // namespace torch
-
-
 // Parsed from torch/csrc/api/include/torch/data/transforms/tensor.h
 
 // #pragma once

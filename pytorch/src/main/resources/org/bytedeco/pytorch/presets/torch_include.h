@@ -5,7 +5,7 @@
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
 //   (ATen/ops/*_native.h ATen/ops/*_meta.h ATen/ops/*_ops.h)
-// - ATen/ops/_*
+// - ATen/ops/_* (internal, API can change)
 // - and some exceptions commented below
 #include "torch/csrc/utils/python_stub.h"
 #include "c10/macros/cmake_macros.h"
@@ -1273,7 +1273,7 @@
 #include "torch/csrc/api/include/torch/data/transforms/base.h"
 #include "torch/csrc/api/include/torch/data/transforms/lambda.h"
 #include "torch/csrc/api/include/torch/data/transforms/collate.h"
-#include "torch/csrc/api/include/torch/data/transforms/stack.h"
+// #include "torch/csrc/api/include/torch/data/transforms/stack.h" // See ExampleStack explicit definition
 #include "torch/csrc/api/include/torch/data/transforms/tensor.h"
 #include "torch/csrc/api/include/torch/data/transforms.h"
 #include "torch/csrc/api/include/torch/data.h"

@@ -1307,10 +1307,8 @@ public class torch implements LoadEnabled, InfoMapper {
                     template("torch::data::transforms::BatchTransform", template("std::vector", example), example),
                     template("torch::data::transforms::Collation", example)
                 ).pointerTypes(p + "ExampleCollation"))
-                // The Stack primary template is empty. Constructors are defined in template specializations.
-                // So the generated Java classes are @Opaque and have no constructors.
-                // We might need to force the generation of constructors somehow.
-                .put(new Info(template("torch::data::transforms::Stack", example)).pointerTypes(p + "ExampleStack").base(p + "ExampleCollation"))
+                // See explicit definition of ExampleStack and TensorExampleStack.
+                .put(new Info(template("torch::data::transforms::Stack", example)).pointerTypes(p + "ExampleStack"))
                 .put(new Info(chunkDataReader).pointerTypes("Chunk" + p + "DataReader").virtualize())
                 .put(new Info(
                     template("torch::data::datasets::ChunkDataset", mangledChunkDataReader, "torch::data::samplers::RandomSampler", "torch::data::samplers::RandomSampler")
