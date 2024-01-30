@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.11-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy-platform</artifactId>
-  <version>1.26.2-${project.parent.version}</version>
+  <version>1.26.3-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for NumPy</name>
 
   <properties>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.25-${project.parent.version}</version>
+      <version>0.3.26-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -41,12 +41,12 @@
 <!--      <version>${project.version}</version>-->
 <!--      <classifier>${javacpp.platform.linux-armhf}</classifier>-->
 <!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>${project.groupId}</groupId>-->
-<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
-<!--      <version>${project.version}</version>-->
-<!--      <classifier>${javacpp.platform.linux-arm64}</classifier>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>${project.groupId}</groupId>-->
 <!--      <artifactId>${javacpp.moduleId}</artifactId>-->
@@ -141,7 +141,7 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf;
-//                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;

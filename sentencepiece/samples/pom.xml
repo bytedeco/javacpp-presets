@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.sentencepiece</groupId>
     <artifactId>sentencepiece-example</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.11-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SentencePieceExample</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>sentencepiece-platform</artifactId>
-            <version>0.1.99-1.5.10-SNAPSHOT</version>
+            <version>0.1.99-1.5.11-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

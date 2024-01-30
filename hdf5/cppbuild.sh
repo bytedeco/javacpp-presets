@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ZLIB=zlib-1.3
+ZLIB=zlib-1.3.1
 HDF5_VERSION=1.14.3
 AEC_VERSION=1.1.2
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz

@@ -56,6 +56,7 @@ git submodule foreach --recursive 'git reset --hard'
 # https://github.com/pytorch/pytorch/pull/66219
 #patch -Np1 < ../../../pytorch.patch
 
+CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
@@ -65,7 +66,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
         if [[ $(find "$P" -name Python.h) ]]; then
-            CPYTHON_PATH="$P"
+            if [[ "$(basename $P)" == "$PLATFORM_HOST" ]]; then
+                CPYTHON_HOST_PATH="$P"
+            fi
+            if [[ "$(basename $P)" == "$PLATFORM" ]]; then
+                CPYTHON_PATH="$P"
+            fi
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
         elif [[ -f "$P/python/numpy/core/include/numpy/numpyconfig.h" ]]; then
@@ -75,10 +81,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
+CPYTHON_HOST_PATH="${CPYTHON_HOST_PATH//\\//}"
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
+CPYTHON_PATH="$CPYTHON_HOST_PATH"
 if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
@@ -115,7 +123,15 @@ case $PLATFORM in
         export CC="gcc -m64"
         export CXX="g++ -m64"
         ;;
-    macosx-*)
+    macosx-arm64)
+        export CC="clang"
+        export CXX="clang++"
+        export CMAKE_OSX_ARCHITECTURES=arm64 # enable cross-compilation on a x86_64 host machine
+        export USE_MKLDNN=OFF
+        export USE_QNNPACK=OFF # not compatible with arm64 as of PyTorch 2.1.2
+        export CMAKE_OSX_DEPLOYMENT_TARGET=11.00 # minimum needed for arm64 support
+        ;;
+    macosx-x86_64)
         export CC="clang"
         export CXX="clang++"
         ;;

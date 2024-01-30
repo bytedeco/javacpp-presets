@@ -67,10 +67,10 @@ import org.bytedeco.opencv.presets.*;
     value = {
         @Platform(preload = {"opencv_cuda@.409", "opencv_cudaarithm@.409", "opencv_cudafilters@.409", "opencv_cudaimgproc@.409",
                              "opencv_cudacodec@.409", "opencv_cudaobjdetect@.409", "opencv_cudabgsegm@.409", "opencv_cudastereo@.409",
-                             "opencv_cudaoptflow@.409", "opencv_cudawarping@.409", "opencv_cudalegacy@.409"}),
+                             "opencv_cudafeatures2d@.409", "opencv_cudaoptflow@.409", "opencv_cudawarping@.409", "opencv_cudalegacy@.409"}),
         @Platform(value = "windows", preload = {"opencv_cuda490", "opencv_cudaarithm490", "opencv_cudafilters490", "opencv_cudaimgproc490",
                              "opencv_cudacodec490", "opencv_cudaobjdetect490", "opencv_cudabgsegm490", "opencv_cudastereo490",
-                             "opencv_cudaoptflow490", "opencv_cudawarping490", "opencv_cudalegacy490"}),
+                             "opencv_cudafeatures2d490", "opencv_cudaoptflow490", "opencv_cudawarping490", "opencv_cudalegacy490"}),
     }
 )
 public class opencv_python3 {

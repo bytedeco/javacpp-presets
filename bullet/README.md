@@ -55,7 +55,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.bullet</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.9</version>
+    <version>1.5.10</version>
     <properties>
         <exec.mainClass>SimpleBox</exec.mainClass>
     </properties>
@@ -63,7 +63,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>bullet-platform</artifactId>
-            <version>3.25-1.5.9</version>
+            <version>3.25-1.5.10</version>
         </dependency>
     </dependencies>
     <build>

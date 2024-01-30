@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnx</groupId>
     <artifactId>loadmodel</artifactId>
-    <version>1.5.10-SNAPSHOT</version>
+    <version>1.5.10</version>
     <properties>
         <exec.mainClass>LoadModel</exec.mainClass>
     </properties>
@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.15.0-1.5.10-SNAPSHOT</version>
+            <version>1.15.0-1.5.10</version>
         </dependency>
     </dependencies>
     <build>

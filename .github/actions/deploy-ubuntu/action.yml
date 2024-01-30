@@ -31,7 +31,7 @@ runs:
           export ARCH=arm64
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-3-local-12.3.1_545.23.08-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-12-3-local-12.3.2_545.23.08-1.aarch64.rpm
           export CUDNN=8.9.7.29-1.cuda12.2.aarch64
           export NCCL=2.19.3-1+cuda12.3.aarch64
           export NVCOMP=nvcomp_3.0.5_SBSA_12.x
@@ -40,7 +40,7 @@ runs:
           export ARCH=ppc64el
           export ARCH_CUDA=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-3-local-12.3.1_545.23.08-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-12-3-local-12.3.2_545.23.08-1.ppc64le.rpm
           export CUDNN=8.9.7.29-1.cuda12.2.ppc64le
           export NCCL=2.19.3-1+cuda12.3.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]]; then
@@ -50,7 +50,7 @@ runs:
           export ARCH=amd64
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-3-local-12.3.1_545.23.08-1.x86_64.rpm
+          export CUDA=cuda-repo-rhel8-12-3-local-12.3.2_545.23.08-1.x86_64.rpm
           export CUDNN=8.9.7.29-1.cuda12.2.x86_64
           export NCCL=2.19.3-1+cuda12.3.x86_64
           export NVCOMP=nvcomp_3.0.5_x86_64_12.x
@@ -98,7 +98,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install gcc-multilib g++-multilib gfortran-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev
+        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -118,6 +118,17 @@ runs:
         $SUDO ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 
         $SUDO python3 -m pip install gdown || $SUDO python3 -m pip install gdown
+
+        # install vulkan sdk
+        echo Installing Vulkan-SDK
+        if [[ "$CODENAME" == "jammy" ]]; then
+          curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
+          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-jammy.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list
+        else
+          curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO apt-key add -
+          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-focal.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-focal.list
+        fi
+        $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk
 
         if [[ -n ${USERLAND_BUILDME:-} ]]; then
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
@@ -140,7 +151,7 @@ runs:
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.2/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-devel-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-$NCCL.rpm
@@ -200,14 +211,16 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
+          # python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
+          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz
           $SUDO tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          # python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz
           $SUDO tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi

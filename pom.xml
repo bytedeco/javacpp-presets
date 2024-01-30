@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.10-SNAPSHOT</version>
+  <version>1.5.11-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -1467,6 +1467,7 @@
         <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>pytorch</module>
         <module>sentencepiece</module>
       </modules>
       <properties>
