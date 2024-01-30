@@ -390,7 +390,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.2</version>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <id>properties</id>
@@ -412,7 +412,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.6.0</version>
         <configuration>
           <attach>false</attach>
           <descriptors>
