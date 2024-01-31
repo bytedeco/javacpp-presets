@@ -315,6 +315,12 @@ public class JitNode extends Pointer {
         @ByVal(nullValue = "at::ArrayRef<c10::Symbol>{}") SymbolVector const_inputs);
   public native @Cast("bool") boolean matches(
         String signature_literal);
+  public native @Cast("bool") boolean matches(
+        @Cast("const char*") BytePointer signature_literal,
+        @ByVal(nullValue = "at::ArrayRef<c10::Symbol>{}") SymbolVector const_inputs);
+  public native @Cast("bool") boolean matches(
+        String signature_literal,
+        @ByVal(nullValue = "at::ArrayRef<c10::Symbol>{}") SymbolArrayRef const_inputs);
 
   public native @Cast("bool") boolean isMemberOf(@Const @ByRef OperatorSet os);
 

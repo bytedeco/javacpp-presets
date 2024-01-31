@@ -2606,11 +2606,17 @@ public class torch implements LoadEnabled, InfoMapper {
                                           elementValueType.equals("int") || elementValueType.equals("long") ||
                                           elementValueType.equals("float") || elementValueType.equals("double");
 
-            String[] pt = new String[otherPointerTypes.length + (variadicPointerType ? 2 : 1)];
+            int numPt = otherPointerTypes.length + (variadicPointerType ? 2 : 1);
+            String[] pt = new String[numPt * numPt]; // List numPt times to help generating all possible combinations
+            // when a method takes other arguments having multiple pointerTypes
             pt[0] = baseJavaName + "ArrayRef";
             System.arraycopy(otherPointerTypes, 0, pt, 1, otherPointerTypes.length);
             if (variadicPointerType)
                 pt[otherPointerTypes.length + 1] = "@Cast({\"" + elementTypes[0] + "*\", \"" + cppNames[0] + "\", \"std::vector<" + elementTypes[0] + ">&\"}) @StdVector(\"" + elementTypes[0] + "\") " + elementValueType + "...";
+            for (int i = 1; i < numPt; i++) {
+                pt[i * numPt] = pt[i * numPt - 1];
+                System.arraycopy(pt, (i - 1) * numPt, pt, i * numPt + 1, numPt - 1);
+            }
             Info info = new Info(cppNames).pointerTypes(pt);
             if (baseJavaName.contains("@Cast")) info.cast();
             infoMap.put(info);
