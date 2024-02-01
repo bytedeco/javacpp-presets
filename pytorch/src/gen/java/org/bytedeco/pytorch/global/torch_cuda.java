@@ -977,7 +977,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // not counted as a word boundary, so you would otherwise have to list each
 // of these functions.
 
-@Namespace("c10::cuda::CUDACachingAllocator") @MemberGetter public static native @Cast("const size_t") long kLargeBuffer();
+
 // Targeting ../cuda/Stat.java
 
 
@@ -1247,6 +1247,18 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace cuda
  // namespace c10
+
+
+// Parsed from torch/csrc/inductor/aoti_model_container_runner_cuda.h
+
+// #pragma once
+
+// #include <torch/csrc/inductor/aoti_model_container_runner.h>
+// Targeting ../cuda/AOTIModelContainerRunnerCuda.java
+
+
+
+ // namespace torch::inductor
 
 
 }

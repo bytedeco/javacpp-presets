@@ -79702,6 +79702,28 @@ public static final String TORCH_VERSION =
  // namespace torch
 
 
+// Parsed from torch/csrc/inductor/aoti_model_container_runner.h
+
+// #if !defined(C10_MOBILE) && !defined(ANDROID)
+// #pragma once
+
+// #include <ATen/Tensor.h>
+// #include <torch/csrc/inductor/aoti_runtime/interface.h>
+// Targeting ../DynamicLibrary.java
+
+
+
+// Targeting ../AOTIModelContainerRunner.java
+
+
+// Targeting ../AOTIModelContainerRunnerCpu.java
+
+
+
+ // namespace torch::inductor
+// #endif
+
+
 // Parsed from datasets.h
 
 /*

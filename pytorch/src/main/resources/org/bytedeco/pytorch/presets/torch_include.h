@@ -1,6 +1,7 @@
 // All files included by
 // #include <torch/torch.h>
 // #include <torch/script.h>
+// #include <torch/csrc/inductor/aoti_model_container_runner.h>
 // as listed by g++ -H torch/torch.h torch/script.h
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
@@ -1423,5 +1424,8 @@
 #include "torch/csrc/jit/frontend/versioned_symbols.h"
 #include "torch/csrc/jit/frontend/tree_views.h"
 #include "torch/csrc/jit/serialization/pickle.h"
+// #include "torch/csrc/inductor/aoti_torch/c/shim.h" // model.so API, not part of libtorch API
+// #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
+#include "torch/csrc/inductor/aoti_model_container_runner.h"
 
 #include "datasets.h"

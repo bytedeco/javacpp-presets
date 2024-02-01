@@ -40,6 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
                 "c10/cuda/CUDAGuard.h",
+                "torch/csrc/inductor/aoti_model_container_runner_cuda.h",
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
@@ -156,6 +157,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "c10::cuda::c10_retrieve_device_side_assertion_info").skip())
 
             .put(new Info("c10::cuda::CUDACachingAllocator::CheckpointDelta").immutable()) // at::DataPtr is not constructible
+
+            .put(new Info("c10::cuda::CUDACachingAllocator::kLargeBuffer").skip()) // Triggers UnsatisfiedLinkException as of 2.2.0
 
             .put(new Info(
                 "at::native::Descriptor<cudnnActivationStruct,cudnnCreateActivationDescriptor&,cudnnDestroyActivationDescriptor&>",

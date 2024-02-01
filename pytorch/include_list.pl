@@ -52,7 +52,7 @@ sub go {
 
 chdir "cppbuild/linux-x86_64-gpu/pytorch/torch/include";
 
-go('torch/csrc/api/include/torch/torch.h', 'torch/script.h');
+go('torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_model_container_runner.h');
 
 print <<EOF;
 
@@ -62,4 +62,4 @@ print <<EOF;
 // c10/cuda/CUDAGuard.h
 EOF
 
-go('ATen/cudnn/Descriptors.h', 'ATen/cudnn/Types.h', 'c10/cuda/CUDAGuard.h', '-I/opt/cuda/targets/x86_64-linux/include/');
+go('ATen/cudnn/Descriptors.h', 'ATen/cudnn/Types.h', 'c10/cuda/CUDAGuard.h', '-I/opt/cuda/targets/x86_64-linux/include/', 'torch/csrc/inductor/aoti_model_container_runner_cuda.h');

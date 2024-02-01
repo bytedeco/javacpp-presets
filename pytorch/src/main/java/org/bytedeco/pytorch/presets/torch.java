@@ -61,6 +61,7 @@ import org.bytedeco.openblas.presets.openblas;
             include = {
                 "torch/torch.h",
                 "torch/script.h",
+                "torch/csrc/inductor/aoti_model_container_runner.h",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
@@ -1784,7 +1785,7 @@ public class torch implements LoadEnabled, InfoMapper {
         }
 
 
-        //// @UniquePtr
+        //// Classes handled with @UniquePtr
         for (String opt: new String[] { "Adagrad", "Adam", "AdamW", "LBFGS", "RMSprop", "SGD" }) {
             infoMap
                 .put(new Info("torch::optim::" + opt + "Options", "torch::optim::" + opt + "ParamState")) // Help qualification
@@ -1917,7 +1918,13 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::GraphFunction::_set_initial_executor_execution_mode", "torch::jit::GraphFunction::_set_ignore_amp",
             "c10::detail::_str",
             "torch::jit::kJitOnlyOperatorTags",
-            "c10::IValue::Tag" // 2.2.0 make IValue::tag public, while IValue::Tag is supposed to be private. Bug ? Check if fixed in next release
+            "c10::IValue::Tag", // 2.2.0 make IValue::tag public, while IValue::Tag is supposed to be private. Bug ? Check if fixed in next release
+
+            // Optional args of AOTModelContainerRun.run. Opaque types without apparent use in 2.2.0.
+            "AOTInductorStreamOpaque",
+            "AOTInductorStreamHandle",
+            "AOTIProxyExecutorOpaque",
+            "AOTIProxyExecutorHandle"
         ).skip());
 
 
