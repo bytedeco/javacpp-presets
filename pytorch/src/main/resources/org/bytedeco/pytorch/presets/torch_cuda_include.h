@@ -4,6 +4,7 @@
 // ATen/cudnn/Descriptors.h
 // ATen/cudnn/Types.h
 // c10/cuda/CUDAGuard.h
+#include "ATen/cuda/CUDAContextLight.h"
 #include "c10/cuda/CUDAStream.h"
 #include "ATen/cuda/CUDAContext.h"
 #include "c10/core/impl/GPUTrace.h"
@@ -19,6 +20,7 @@
 #include "ATen/cudnn/Utils.h"
 #include "ATen/cudnn/Handle.h"
 #include "c10/cuda/CUDAGraphsC10Utils.h"
+#include "c10/util/ApproximateClock.h"
 #include "c10/cuda/CUDACachingAllocator.h",
 #include "c10/cuda/impl/CUDAGuardImpl.h"
 #include "ATen/cudnn/Descriptors.h"

@@ -75,7 +75,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.cuda.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Error;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
@@ -108,6 +108,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray").cast().pointerTypes("Stat"))
 
             //// Function pointers
+            .put(new Info("std::function<void(const c10::cuda::CUDACachingAllocator::TraceEntry&)").pointerTypes("AllocatorTraceTracker"))
+            .put(new Info("std::function<void(int64_t,int64_t,int64_t,int64_t)").pointerTypes("OutOfMemoryObserver"))
+
             // Function pointer returning shared_ptr don't compile on windows
             // "D:\a\javacpp-presets\javacpp-presets\pytorch\target\native\org\bytedeco\pytorch\windows-x86_64\jnitorch.cpp(98904): error C2526: 'JavaCPP_org_bytedeco_pytorch_functions_GatheredContextSupplier_allocate_callback': C linkage function cannot return C++ class 'std::shared_ptr<c10::GatheredContext>'"
             //.put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
@@ -137,6 +140,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<c10::DeviceIndex>").pointerTypes("ByteOptional"))
             .put(new Info("c10::IntArrayRef", "at::IntArrayRef").pointerTypes("LongArrayRef"))
             .put(new Info("std::vector<at::DataPtr>").pointerTypes("DataPtrVector"))
+            .put(new Info("c10::Allocator").pointerTypes("Allocator"))
+            .put(new Info("CUDAContextLight.h").linePatterns("struct Allocator;").skip()) // Prevent regeneration of Allocator class in cuda package
 
             .put(new Info("c10::DeviceIndex").valueTypes("byte"))
             .put(new Info("c10::StreamId").valueTypes("long"))
