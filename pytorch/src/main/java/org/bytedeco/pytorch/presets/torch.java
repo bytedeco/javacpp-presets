@@ -250,6 +250,7 @@ public class torch implements LoadEnabled, InfoMapper {
                 "alignas", "COMPLEX_INTEGER_OP_TEMPLATE_CONDITION", "C10_DEVICE_HOST_FUNCTION", "FORCE_INLINE_APPLE",
                 "ERROR_UNSUPPORTED_CAST", "LEGACY_CONTIGUOUS_MEMORY_FORMAT", "GFLAGS_DLL_DEFINE_FLAG", "GFLAGS_DLL_DECLARE_FLAG",
                 "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__",
+                "__inline__",
                 "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
                 "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT",
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__",

@@ -433,6 +433,203 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #define C10_CUDA_BUILD_SHARED_LIBS
 
 
+// Parsed from c10/cuda/CUDAMiscFunctions.h
+
+// #pragma once
+// this file is to avoid circular dependency between CUDAFunctions.h and
+// CUDAExceptions.h
+
+// #include <c10/cuda/CUDAMacros.h>
+
+// #include <mutex>
+@Namespace("c10::cuda") public static native @NoException(true) @Cast("const char*") BytePointer get_cuda_check_suffix();
+ // namespace cuda
+ // namespace c10
+
+
+// Parsed from c10/cuda/CUDAException.h
+
+// #pragma once
+
+// #include <c10/cuda/CUDADeviceAssertionHost.h>
+// #include <c10/cuda/CUDAMacros.h>
+// #include <c10/cuda/CUDAMiscFunctions.h>
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/irange.h>
+// #include <cuda.h>
+// Targeting ../cuda/CUDAError.java
+
+
+ // namespace c10
+
+// #define C10_CUDA_CHECK(EXPR)
+//   do {
+//     const cudaError_t __err = EXPR;
+//     c10::cuda::c10_cuda_check_implementation(
+//         static_cast<int32_t>(__err),
+//         __FILE__,
+//         __func__, /* Line number data type not well-defined between \
+//                      compilers, so we perform an explicit cast */
+//         static_cast<uint32_t>(__LINE__),
+//         true);
+//   } while (0)
+
+// #define C10_CUDA_CHECK_WARN(EXPR)
+//   do {
+//     const cudaError_t __err = EXPR;
+//     if (C10_UNLIKELY(__err != cudaSuccess)) {
+//       auto error_unused C10_UNUSED = cudaGetLastError();
+//       (void)error_unused;
+//       TORCH_WARN("CUDA warning: ", cudaGetErrorString(__err));
+//     }
+//   } while (0)
+
+// Indicates that a CUDA error is handled in a non-standard way
+// #define C10_CUDA_ERROR_HANDLED(EXPR) EXPR
+
+// Intentionally ignore a CUDA error
+// #define C10_CUDA_IGNORE_ERROR(EXPR)
+//   do {
+//     const cudaError_t __err = EXPR;
+//     if (C10_UNLIKELY(__err != cudaSuccess)) {
+//       cudaError_t error_unused C10_UNUSED = cudaGetLastError();
+//       (void)error_unused;
+//     }
+//   } while (0)
+
+// Clear the last CUDA error
+// #define C10_CUDA_CLEAR_ERROR()
+//   do {
+//     cudaError_t error_unused C10_UNUSED = cudaGetLastError();
+//     (void)error_unused;
+//   } while (0)
+
+// This should be used directly after every kernel launch to ensure
+// the launch happened correctly and provide an early, close-to-source
+// diagnostic if it didn't.
+// #define C10_CUDA_KERNEL_LAUNCH_CHECK() C10_CUDA_CHECK(cudaGetLastError())
+
+/** Launches a CUDA kernel appending to it all the information need to handle
+ *  device-side assertion failures. Checks that the launch was successful. */
+// #define TORCH_DSA_KERNEL_LAUNCH(
+//     kernel, blocks, threads, shared_mem, stream, ...)
+//   do {
+//     auto& launch_registry =
+//         c10::cuda::CUDAKernelLaunchRegistry::get_singleton_ref();
+//     kernel<<<blocks, threads, shared_mem, stream>>>(
+//         __VA_ARGS__,
+//         launch_registry.get_uvm_assertions_ptr_for_current_device(),
+//         launch_registry.insert(
+//             __FILE__, __FUNCTION__, __LINE__, #kernel, stream.id()));
+//     C10_CUDA_KERNEL_LAUNCH_CHECK();
+//   } while (0)
+
+/** In the event of a CUDA failure, formats a nice error message about that
+ *  failure and also checks for device-side assertion failures */
+@Namespace("c10::cuda") public static native void c10_cuda_check_implementation(
+    int err,
+    @Cast("const char*") BytePointer filename,
+    @Cast("const char*") BytePointer function_name,
+    int line_number,
+    @Cast("const bool") boolean include_device_assertions);
+@Namespace("c10::cuda") public static native void c10_cuda_check_implementation(
+    int err,
+    String filename,
+    String function_name,
+    int line_number,
+    @Cast("const bool") boolean include_device_assertions);
+
+ // namespace cuda
+ // namespace c10
+
+
+// Parsed from c10/cuda/CUDAFunctions.h
+
+// #pragma once
+
+// This header provides C++ wrappers around commonly used CUDA API functions.
+// The benefit of using C++ here is that we can raise an exception in the
+// event of an error, rather than explicitly pass around error codes.  This
+// leads to more natural APIs.
+//
+// The naming convention used here matches the naming convention of torch.cuda
+
+// #include <c10/core/Device.h>
+// #include <c10/core/impl/GPUTrace.h>
+// #include <c10/cuda/CUDAException.h>
+// #include <c10/cuda/CUDAMacros.h>
+// #include <cuda_runtime_api.h>
+
+// NB: In the past, we were inconsistent about whether or not this reported
+// an error if there were driver problems are not.  Based on experience
+// interacting with users, it seems that people basically ~never want this
+// function to fail; it should just return zero if things are not working.
+// Oblige them.
+// It still might log a warning for user first time it's invoked
+@Namespace("c10::cuda") public static native @NoException(true) byte device_count();
+
+// Version of device_count that throws is no devices are detected
+@Namespace("c10::cuda") public static native byte device_count_ensure_non_zero();
+
+@Namespace("c10::cuda") public static native byte current_device();
+
+@Namespace("c10::cuda") public static native void set_device(byte device);
+
+@Namespace("c10::cuda") public static native void device_synchronize();
+
+@Namespace("c10::cuda") public static native void warn_or_error_on_sync();
+
+// Raw CUDA device management functions
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDeviceCount(IntPointer dev_count);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDeviceCount(IntBuffer dev_count);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDeviceCount(int[] dev_count);
+
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(IntPointer device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(IntBuffer device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(int[] device);
+
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int SetDevice(int device);
+
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int MaybeSetDevice(int device);
+
+@Namespace("c10::cuda") public static native int ExchangeDevice(int device);
+
+@Namespace("c10::cuda") public static native int MaybeExchangeDevice(int device);
+
+@Namespace("c10::cuda") public static native void SetTargetDevice();
+
+@Namespace("c10::cuda") public enum SyncDebugMode { L_DISABLED(0), L_WARN(1), L_ERROR(2);
+
+    public final int value;
+    private SyncDebugMode(int v) { this.value = v; }
+    private SyncDebugMode(SyncDebugMode e) { this.value = e.value; }
+    public SyncDebugMode intern() { for (SyncDebugMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../cuda/WarningState.java
+
+
+
+@Namespace("c10::cuda") public static native @ByRef WarningState warning_state();
+// the subsequent functions are defined in the header because for performance
+// reasons we want them to be inline
+@Namespace("c10::cuda") public static native void memcpy_and_sync(
+    Pointer dst,
+    @Const Pointer src,
+    @Cast("int64_t") long nbytes,
+    @Cast("cudaMemcpyKind") int kind,
+    @Cast("cudaStream_t") Pointer stream);
+
+@Namespace("c10::cuda") public static native void stream_synchronize(@Cast("cudaStream_t") Pointer stream);
+
+@Namespace("c10::cuda") public static native @Cast("bool") boolean hasPrimaryContext(byte device_index);
+@Namespace("c10::cuda") public static native @ByVal ByteOptional getDeviceIndexWithPrimaryContext();
+
+ // namespace cuda
+ // namespace c10
+
+
 // Parsed from ATen/cuda/Exceptions.h
 
 // #pragma once

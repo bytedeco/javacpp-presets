@@ -147,7 +147,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("c10::StreamId").valueTypes("long"))
             .put(new Info("c10::cuda::CaptureStatus").valueTypes("int").cast().skip()) // Enum doesn't parse
             .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
-            .put(new Info("c10::CuDNNError").purify())
+            .put(new Info("c10::CuDNNError", "c10::CUDAError").purify())
             .put(new Info("c10::impl::GPUTrace::gpuTraceState").skip())
             .put(new Info("at::native::RNNDescriptor::dropout_desc_").skip())
             .put(new Info("at::native::operator <<(std::ostream&, at::native::TensorDescriptor&)",
@@ -183,7 +183,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info( // Enums
                 "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t",
                 "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudaStreamCaptureMode", "cudnnDataType_t", "cudnnNanPropagation_t",
-                "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t", "cudaError_t"
+                "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t", "cudaError_t",
+                "cudaMemcpyKind"
             ).valueTypes("int").cast())
         ;
 

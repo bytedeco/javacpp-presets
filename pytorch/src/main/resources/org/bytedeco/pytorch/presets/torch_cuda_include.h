@@ -11,9 +11,9 @@
 #include "c10/cuda/CUDADeviceAssertionHost.h"
 #include "c10/cuda/CUDAMacros.h"
 #include "c10/cuda/impl/cuda_cmake_macros.h"
-// #include "c10/cuda/CUDAMiscFunctions.h", // Parsing error
-// #include "c10/cuda/CUDAException.h", // Parsing error
-// #include "c10/cuda/CUDAFunctions.h", // Parsing error
+#include "c10/cuda/CUDAMiscFunctions.h",
+#include "c10/cuda/CUDAException.h",
+#include "c10/cuda/CUDAFunctions.h",
 #include "ATen/cuda/Exceptions.h"
 #include "ATen/cudnn/cudnn-wrapper.h"
 #include "ATen/cuda/ATenCUDAGeneral.h"
