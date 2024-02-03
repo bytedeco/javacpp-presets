@@ -2358,8 +2358,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::ClassDef::create",
             "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code
             "torch::profiler::impl::getNvtxStr",
-            "c10::merge_primitive" // templated function with some specializations. Will have to figure what
-            // instances to create if needed.
+            "torch::profiler::impl::shapeToStr",
+            "c10::merge_primitive" // templated function with some specializations. Will have to figure what instances to create if needed.
         ).skip());
 
         //// Aliases necessary because of Parser limited namespace resolution

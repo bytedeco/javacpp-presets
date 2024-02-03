@@ -68327,7 +68327,7 @@ body of your function, only data pointers.
     @StdString String op_name,
     @Const @ByRef StringIValueMap extra_args);
 
-@Namespace("torch::profiler::impl") public static native @StdString BytePointer shapeToStr(@Cast("const std::vector<int64_t>*") @ByRef LongVector shape);
+
 
  // namespace impl
  // namespace profiler

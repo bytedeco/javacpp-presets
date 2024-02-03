@@ -54,7 +54,7 @@ git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
 # Fix version of this submodule to allow compilation on windows.
-# Probably could be remove when we upgrade to next version of PyTorch.
+# Probably could be removed when we upgrade to next version of PyTorch.
 (cd third_party/pocketfft; git checkout 9d3ab05a7fffbc71a492bc6a17be034e83e8f0fe)
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
