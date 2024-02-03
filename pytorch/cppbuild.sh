@@ -53,6 +53,10 @@ git checkout v$PYTORCH_VERSION
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
+# Fix version of this submodule for tag v2.2.0. Or won't compile on windows.
+# Probably could be remove when upgrading PyTorch
+(cd third_party/pocketfft; git checkout 9d3ab05a7fffbc71a492bc6a17be034e83e8f0fe)
+
 # https://github.com/pytorch/pytorch/pull/66219
 #patch -Np1 < ../../../pytorch.patch
 
