@@ -53,12 +53,9 @@ git checkout v$PYTORCH_VERSION
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
-# Fix version of this submodule for tag v2.2.0. Or won't compile on windows.
-# Probably could be remove when upgrading PyTorch
+# Fix version of this submodule to allow compilation on windows.
+# Probably could be remove when we upgrade to next version of PyTorch.
 (cd third_party/pocketfft; git checkout 9d3ab05a7fffbc71a492bc6a17be034e83e8f0fe)
-
-# https://github.com/pytorch/pytorch/pull/66219
-#patch -Np1 < ../../../pytorch.patch
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
@@ -169,24 +166,11 @@ sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
 
-# work around some compiler bugs
-sedinplace 's/!defined(__INTEL_COMPILER))/!defined(__INTEL_COMPILER) \&\& (__GNUC__ < 11))/g' third_party/XNNPACK/src/xnnpack/intrinsics-polyfill.h
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
-sedinplace 's/typedef c10::variant/public: typedef c10::variant/g' ./torch/csrc/api/include/torch/nn/options/upsampling.h
-sedinplace 's/std::copysign/copysignf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/std::trunc/truncf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/std::floor/floorf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/std::ceil/ceilf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/round(/roundf(/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/floor(/floorf(/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/ceil(/ceilf(/g' aten/src/ATen/native/cuda/*.cu
-sedinplace '/#include <thrust\/device_vector.h>/a\
-#include <thrust\/host_vector.h>\
-' caffe2/utils/math_gpu.cu
 
 # allow setting the build directory and passing CUDA options
 sedinplace "s/BUILD_DIR = .build./BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
-sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
+sedinplace 's/var.startswith(("BUILD_", "USE_", "CMAKE_"))/var.startswith(("BUILD_", "USE_", "CMAKE_", "CUDA_"))/g' tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
 sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
