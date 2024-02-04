@@ -79724,6 +79724,18 @@ public static final String TORCH_VERSION =
 // #endif
 
 
+// Parsed from torch/csrc/inductor/aoti_model_container_runner_cuda.h
+
+// #pragma once
+
+// #include <torch/csrc/inductor/aoti_model_container_runner.h>
+// Targeting ../AOTIModelContainerRunnerCuda.java
+
+
+
+ // namespace torch::inductor
+
+
 // Parsed from datasets.h
 
 /*

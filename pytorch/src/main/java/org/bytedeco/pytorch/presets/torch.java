@@ -61,7 +61,7 @@ import org.bytedeco.openblas.presets.openblas;
             include = {
                 "torch/torch.h",
                 "torch/script.h",
-                "torch/csrc/inductor/aoti_model_container_runner.h",
+                "torch/csrc/inductor/aoti_model_container_runner_cuda.h",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
