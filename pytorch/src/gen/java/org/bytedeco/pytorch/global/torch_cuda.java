@@ -1249,4 +1249,16 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
  // namespace c10
 
 
+// Parsed from torch/csrc/inductor/aoti_model_container_runner_cuda.h
+
+// #pragma once
+
+// #include <torch/csrc/inductor/aoti_model_container_runner.h>
+// Targeting ../cuda/AOTIModelContainerRunnerCuda.java
+
+
+
+ // namespace torch::inductor
+
+
 }

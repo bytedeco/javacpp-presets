@@ -27,3 +27,4 @@
 #include "ATen/cudnn/Descriptors.h"
 #include "ATen/cudnn/Types.h"
 #include "c10/cuda/CUDAGuard.h"
+#include "torch/csrc/inductor/aoti_model_container_runner_cuda.h"

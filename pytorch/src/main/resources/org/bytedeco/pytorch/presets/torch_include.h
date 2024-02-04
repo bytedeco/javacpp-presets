@@ -1427,8 +1427,5 @@
 // #include "torch/csrc/inductor/aoti_torch/c/shim.h" // model.so API, not part of libtorch API
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
 #include "torch/csrc/inductor/aoti_model_container_runner.h"
-// Not in torch_cuda_include because doesn't need cuda includes or linkage
-// + protected field AOTIModelContainerRunner::model_so is not exported, so won't link on windows
-#include "torch/csrc/inductor/aoti_model_container_runner_cuda.h"
 
 #include "datasets.h"
