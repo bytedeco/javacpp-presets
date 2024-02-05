@@ -69,7 +69,6 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/csrc/jit/frontend/resolver.h",
                 "torch/csrc/jit/frontend/tree_views.h",
                 "torch/csrc/jit/serialization/storage_context.h",
-                "ATen/DynamicLibrary.h",
 
                 "datasets.h",
                 "pytorch_adapters.h"

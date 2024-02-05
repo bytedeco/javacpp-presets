@@ -44,7 +44,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
-                "ATen/DynamicLibrary.h",
             },
             link = { "cudart", "cusparse" },
             linkpath = {
