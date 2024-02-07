@@ -37,9 +37,6 @@ public class L1LossImpl extends L1LossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L1LossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public L1LossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::L1LossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public L1LossImpl(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::L1LossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_);

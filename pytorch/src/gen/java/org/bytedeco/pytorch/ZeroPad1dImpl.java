@@ -31,8 +31,5 @@ public class ZeroPad1dImpl extends ZeroPad1dImplBase {
     private native void allocate(@Const @ByRef ZeroPad1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ZeroPad1dImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ZeroPad1dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ZeroPad1dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 }

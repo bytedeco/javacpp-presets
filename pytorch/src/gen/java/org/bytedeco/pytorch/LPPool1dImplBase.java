@@ -26,9 +26,6 @@ public class LPPool1dImplBase extends LPPool1dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LPPool1dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LPPool1dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::LPPoolImpl<1,torch::nn::LPPool1dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LPPool1dImplBase(double norm_type, @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size) { super((Pointer)null); allocate(norm_type, kernel_size); }
   private native void allocate(double norm_type, @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);

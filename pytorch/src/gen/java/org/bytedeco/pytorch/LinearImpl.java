@@ -36,9 +36,6 @@ public class LinearImpl extends LinearImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LinearImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LinearImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::LinearImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LinearImpl(@Cast("int64_t") long in_features, @Cast("int64_t") long out_features) { super((Pointer)null); allocate(in_features, out_features); }
   @SharedPtr @Name("std::make_shared<torch::nn::LinearImpl>") private native void allocate(@Cast("int64_t") long in_features, @Cast("int64_t") long out_features);

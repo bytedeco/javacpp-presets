@@ -22,9 +22,6 @@ public class MaxPool2dImplBase extends MaxPool2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxPool2dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public MaxPool2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::MaxPoolImpl<2,torch::nn::MaxPool2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MaxPool2dImplBase(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);

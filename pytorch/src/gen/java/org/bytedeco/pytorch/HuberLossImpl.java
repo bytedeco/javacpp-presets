@@ -38,9 +38,6 @@ public class HuberLossImpl extends HuberLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HuberLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public HuberLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::HuberLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HuberLossImpl(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::HuberLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_);

@@ -36,9 +36,6 @@ public class SoftminImpl extends SoftminImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftminImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public SoftminImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::SoftminImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SoftminImpl(@Cast("int64_t") long dim) { super((Pointer)null); allocate(dim); }
   @SharedPtr @Name("std::make_shared<torch::nn::SoftminImpl>") private native void allocate(@Cast("int64_t") long dim);

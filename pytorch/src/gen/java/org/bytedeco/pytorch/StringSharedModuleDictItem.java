@@ -25,9 +25,9 @@ public class StringSharedModuleDictItem extends Pointer {
     public StringSharedModuleDictItem(Pointer p) { super(p); }
 
   /** Constructs a new item. */
-  public StringSharedModuleDictItem(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module value) { super((Pointer)null); allocate(key, value.asModule()); }
+  public StringSharedModuleDictItem(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module value) { super((Pointer)null); allocate(key, value); }
   private native void allocate(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module value);
-  public StringSharedModuleDictItem(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module value) { super((Pointer)null); allocate(key, value.asModule()); }
+  public StringSharedModuleDictItem(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module value) { super((Pointer)null); allocate(key, value); }
   private native void allocate(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module value);
 
   /** Returns a reference to the value. */

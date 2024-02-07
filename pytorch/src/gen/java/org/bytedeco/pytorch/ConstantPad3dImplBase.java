@@ -22,9 +22,6 @@ public class ConstantPad3dImplBase extends ConstantPad3dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstantPad3dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ConstantPad3dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ConstantPadImpl<3,torch::nn::ConstantPad3dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ConstantPad3dImplBase(@ByVal @Cast("torch::ExpandingArray<3*2>*") LongPointer padding, double value) { super((Pointer)null); allocate(padding, value); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<3*2>*") LongPointer padding, double value);

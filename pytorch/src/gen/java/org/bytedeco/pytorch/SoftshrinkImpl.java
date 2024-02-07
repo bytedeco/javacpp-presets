@@ -36,9 +36,6 @@ public class SoftshrinkImpl extends SoftshrinkImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftshrinkImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public SoftshrinkImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::SoftshrinkImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SoftshrinkImpl(@Const @ByRef(nullValue = "torch::nn::SoftshrinkOptions{}") SoftshrinkOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::SoftshrinkImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::SoftshrinkOptions{}") SoftshrinkOptions options_);

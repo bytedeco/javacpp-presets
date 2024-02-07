@@ -36,9 +36,6 @@ public class SELUImpl extends SELUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SELUImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public SELUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::SELUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SELUImpl(@Const @ByRef(nullValue = "torch::nn::SELUOptions{}") SELUOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::SELUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::SELUOptions{}") SELUOptions options_);

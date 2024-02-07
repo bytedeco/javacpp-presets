@@ -35,9 +35,6 @@ public class FoldImpl extends FoldImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FoldImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public FoldImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::FoldImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public FoldImpl(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer output_size, @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(output_size, kernel_size); }
   @SharedPtr @Name("std::make_shared<torch::nn::FoldImpl>") private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer output_size, @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);

@@ -43,9 +43,6 @@ public class LPPool2dImpl extends LPPool2dImplBase {
     private native void allocate(@Const @ByRef LPPool2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LPPool2dImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LPPool2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::LPPool2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

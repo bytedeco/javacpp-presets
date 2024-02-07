@@ -22,9 +22,6 @@ public class InstanceNorm3dImplBase extends InstanceNorm3dImplBaseBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InstanceNorm3dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public InstanceNorm3dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::InstanceNormImpl<3,torch::nn::InstanceNorm3dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

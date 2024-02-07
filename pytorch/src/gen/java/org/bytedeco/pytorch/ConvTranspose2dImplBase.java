@@ -26,9 +26,6 @@ public class ConvTranspose2dImplBase extends ConvTranspose2dImplBaseBase {
     private native void allocate(@ByVal DetailConv2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvTranspose2dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ConvTranspose2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ConvTransposeNdImpl<2,torch::nn::ConvTranspose2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   /** Pretty prints the {@code ConvTranspose{1,2,3}d} module into the given {@code stream}. */

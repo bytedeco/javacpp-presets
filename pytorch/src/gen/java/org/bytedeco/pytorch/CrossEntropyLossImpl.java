@@ -39,9 +39,6 @@ public class CrossEntropyLossImpl extends CrossEntropyLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CrossEntropyLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public CrossEntropyLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::CrossEntropyLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CrossEntropyLossImpl(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::CrossEntropyLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_);

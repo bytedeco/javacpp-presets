@@ -39,9 +39,6 @@ public class HingeEmbeddingLossImpl extends HingeEmbeddingLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HingeEmbeddingLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public HingeEmbeddingLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::HingeEmbeddingLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HingeEmbeddingLossImpl(@ByVal(nullValue = "torch::nn::HingeEmbeddingLossOptions{}") HingeEmbeddingLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::HingeEmbeddingLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::HingeEmbeddingLossOptions{}") HingeEmbeddingLossOptions options_);

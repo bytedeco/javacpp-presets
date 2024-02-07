@@ -31,9 +31,6 @@ public class TanhshrinkImpl extends TanhshrinkImplCloneable {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TanhshrinkImpl(Pointer p) { super(p); }
     @SharedPtr @Name("std::make_shared<torch::nn::TanhshrinkImpl>") private native void allocate();
-    /** Downcast constructor. */
-    public TanhshrinkImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::TanhshrinkImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

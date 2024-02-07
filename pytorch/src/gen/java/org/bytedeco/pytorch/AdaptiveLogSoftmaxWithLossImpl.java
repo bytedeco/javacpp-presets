@@ -41,9 +41,6 @@ public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossIm
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveLogSoftmaxWithLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public AdaptiveLogSoftmaxWithLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::AdaptiveLogSoftmaxWithLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public AdaptiveLogSoftmaxWithLossImpl(
         @Cast("int64_t") long in_features,

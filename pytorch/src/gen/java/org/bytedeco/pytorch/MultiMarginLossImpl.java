@@ -40,9 +40,6 @@ public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiMarginLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public MultiMarginLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::MultiMarginLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MultiMarginLossImpl(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::MultiMarginLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);

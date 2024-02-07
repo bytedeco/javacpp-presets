@@ -37,9 +37,6 @@ public class CTCLossImpl extends CTCLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CTCLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public CTCLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::CTCLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CTCLossImpl(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::CTCLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_);

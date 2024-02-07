@@ -22,9 +22,6 @@ public class ConstantPad2dImplBase extends ConstantPad2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstantPad2dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ConstantPad2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ConstantPadImpl<2,torch::nn::ConstantPad2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ConstantPad2dImplBase(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding, double value) { super((Pointer)null); allocate(padding, value); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding, double value);

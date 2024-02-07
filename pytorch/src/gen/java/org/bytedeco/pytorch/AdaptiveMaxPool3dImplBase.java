@@ -22,9 +22,6 @@ public class AdaptiveMaxPool3dImplBase extends AdaptiveMaxPool3dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveMaxPool3dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public AdaptiveMaxPool3dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::AdaptiveMaxPoolImpl<3,torch::ExpandingArrayWithOptionalElem<3>,torch::nn::AdaptiveMaxPool3dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public AdaptiveMaxPool3dImplBase(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);

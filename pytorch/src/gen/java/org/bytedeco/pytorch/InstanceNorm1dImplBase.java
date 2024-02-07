@@ -24,9 +24,6 @@ public class InstanceNorm1dImplBase extends InstanceNorm1dImplBaseBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InstanceNorm1dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public InstanceNorm1dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::InstanceNormImpl<1,torch::nn::InstanceNorm1dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

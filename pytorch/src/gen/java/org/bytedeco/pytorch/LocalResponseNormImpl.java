@@ -40,9 +40,6 @@ public class LocalResponseNormImpl extends LocalResponseNormImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LocalResponseNormImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LocalResponseNormImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::LocalResponseNormImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LocalResponseNormImpl(@Cast("int64_t") long size) { super((Pointer)null); allocate(size); }
   @SharedPtr @Name("std::make_shared<torch::nn::LocalResponseNormImpl>") private native void allocate(@Cast("int64_t") long size);

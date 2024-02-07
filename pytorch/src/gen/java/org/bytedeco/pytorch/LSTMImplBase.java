@@ -22,9 +22,6 @@ public class LSTMImplBase extends LSTMImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LSTMImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LSTMImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::detail::RNNImplBase<torch::nn::LSTMImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LSTMImplBase(@Const @ByRef RNNOptionsBase options_) { super((Pointer)null); allocate(options_); }
   private native void allocate(@Const @ByRef RNNOptionsBase options_);

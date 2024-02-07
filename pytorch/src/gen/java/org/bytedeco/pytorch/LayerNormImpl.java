@@ -38,9 +38,6 @@ public class LayerNormImpl extends LayerNormImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LayerNormImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LayerNormImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::LayerNormImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LayerNormImpl(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape) { super((Pointer)null); allocate(normalized_shape); }
   @SharedPtr @Name("std::make_shared<torch::nn::LayerNormImpl>") private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape);

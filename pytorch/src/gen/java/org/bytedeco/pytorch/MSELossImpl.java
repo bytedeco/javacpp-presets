@@ -37,9 +37,6 @@ public class MSELossImpl extends MSELossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSELossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public MSELossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::MSELossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MSELossImpl(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::MSELossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_);

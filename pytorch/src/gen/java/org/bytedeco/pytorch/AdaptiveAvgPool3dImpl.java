@@ -44,9 +44,6 @@ public class AdaptiveAvgPool3dImpl extends AdaptiveAvgPool3dImplBase {
           @Const @ByRef AdaptiveAvgPool3dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveAvgPool3dImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public AdaptiveAvgPool3dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::AdaptiveAvgPool3dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

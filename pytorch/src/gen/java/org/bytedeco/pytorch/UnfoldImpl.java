@@ -36,9 +36,6 @@ public class UnfoldImpl extends UnfoldImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UnfoldImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public UnfoldImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::UnfoldImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public UnfoldImpl(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
   @SharedPtr @Name("std::make_shared<torch::nn::UnfoldImpl>") private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);

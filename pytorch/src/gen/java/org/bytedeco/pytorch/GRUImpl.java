@@ -37,9 +37,6 @@ public class GRUImpl extends GRUImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GRUImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public GRUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::GRUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public GRUImpl(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(input_size, hidden_size); }
   @SharedPtr @Name("std::make_shared<torch::nn::GRUImpl>") private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);

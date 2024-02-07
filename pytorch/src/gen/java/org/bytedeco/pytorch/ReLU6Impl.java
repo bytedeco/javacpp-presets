@@ -36,9 +36,6 @@ public class ReLU6Impl extends ReLU6ImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReLU6Impl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ReLU6Impl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ReLU6Impl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ReLU6Impl(@Const @ByRef(nullValue = "torch::nn::ReLU6Options{}") ReLU6Options options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::ReLU6Impl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::ReLU6Options{}") ReLU6Options options_);

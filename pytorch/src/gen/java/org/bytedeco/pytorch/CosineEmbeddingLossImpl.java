@@ -41,9 +41,6 @@ public class CosineEmbeddingLossImpl extends CosineEmbeddingLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CosineEmbeddingLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public CosineEmbeddingLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::CosineEmbeddingLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CosineEmbeddingLossImpl(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::CosineEmbeddingLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_);

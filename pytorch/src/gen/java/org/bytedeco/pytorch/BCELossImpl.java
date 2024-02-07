@@ -37,9 +37,6 @@ public class BCELossImpl extends BCELossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BCELossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public BCELossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::BCELossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public BCELossImpl(@ByVal(nullValue = "torch::nn::BCELossOptions{}") BCELossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::BCELossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::BCELossOptions{}") BCELossOptions options_);

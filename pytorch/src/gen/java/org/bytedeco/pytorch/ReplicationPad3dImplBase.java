@@ -22,9 +22,6 @@ public class ReplicationPad3dImplBase extends ReplicationPad3dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReplicationPad3dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ReplicationPad3dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ReplicationPadImpl<3,torch::nn::ReplicationPad3dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ReplicationPad3dImplBase(@ByVal @Cast("torch::ExpandingArray<3*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<3*2>*") LongPointer padding);

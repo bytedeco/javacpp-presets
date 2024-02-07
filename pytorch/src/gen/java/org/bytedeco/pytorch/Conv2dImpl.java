@@ -36,9 +36,6 @@ public class Conv2dImpl extends Conv2dImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv2dImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public Conv2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::Conv2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public Conv2dImpl(
         @Cast("int64_t") long input_channels,

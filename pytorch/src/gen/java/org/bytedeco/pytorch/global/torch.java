@@ -67894,19 +67894,16 @@ apis for specific fusers.
 // Targeting ../Module.java
 
 
-@Namespace("torch::nn") public static Pointer shiftLeft(Pointer stream, Module module) { return _shiftLeft(stream, module.asModule()); }
-private static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer _shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef Module module);
+@Namespace("torch::nn") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef Module module);
 
 
 /** Serialize a {@code Module} pointer into an {@code OutputArchive}. */
-@Namespace("torch::nn") public static OutputArchive shiftLeft(OutputArchive archive, Module module) { return _shiftLeft(archive, module.asModule()); }
-private static native @ByRef @Name("operator <<") OutputArchive _shiftLeft(
+@Namespace("torch::nn") public static native @ByRef @Name("operator <<") OutputArchive shiftLeft(
     @ByRef OutputArchive archive,
     @Const @SharedPtr("torch::nn::Module") @ByRef Module module);
 
 /** Deserializes a {@code Module} from an {@code InputArchive}. */
-@Namespace("torch::nn") public static InputArchive shiftRight(InputArchive archive, Module module) { return _shiftRight(archive, module.asModule()); }
-private static native @ByRef @Name("operator >>") InputArchive _shiftRight(
+@Namespace("torch::nn") public static native @ByRef @Name("operator >>") InputArchive shiftRight(
     @ByRef InputArchive archive,
     @Const @SharedPtr("torch::nn::Module") @ByRef Module module);
 

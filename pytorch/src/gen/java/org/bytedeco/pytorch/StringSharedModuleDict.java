@@ -149,10 +149,8 @@ public class StringSharedModuleDict extends Pointer {
   /** Inserts a new {@code (key, value)} pair into the {@code OrderedDict}. Throws an
    *  exception if the key is already present. If insertion is successful,
    *  immediately returns a reference to the inserted value. */
-  public Module insert(BytePointer key, Module value) { return _insert(key, value.asModule()); }
-  private native @SharedPtr("torch::nn::Module") @ByRef @Name("insert") Module _insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByRef(true) Module value);
-  public Module insert(String key, Module value) { return _insert(key, value.asModule()); }
-  private native @SharedPtr("torch::nn::Module") @ByRef @Name("insert") Module _insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByRef(true) Module value);
+  public native @SharedPtr("torch::nn::Module") @ByRef Module insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByRef(true) Module value);
+  public native @SharedPtr("torch::nn::Module") @ByRef Module insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByRef(true) Module value);
 
   /** Inserts all items from {@code other} into this {@code OrderedDict}. If any key from
    *  {@code other} is already present in this {@code OrderedDict}, an exception is thrown. */

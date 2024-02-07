@@ -38,9 +38,6 @@ public class PairwiseDistanceImpl extends PairwiseDistanceImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PairwiseDistanceImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public PairwiseDistanceImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::PairwiseDistanceImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public PairwiseDistanceImpl(@Const @ByRef(nullValue = "torch::nn::PairwiseDistanceOptions{}") PairwiseDistanceOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::PairwiseDistanceImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::PairwiseDistanceOptions{}") PairwiseDistanceOptions options_);

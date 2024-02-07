@@ -43,9 +43,6 @@ public class TripletMarginLossImpl extends TripletMarginLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TripletMarginLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public TripletMarginLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::TripletMarginLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public TripletMarginLossImpl(@ByVal(nullValue = "torch::nn::TripletMarginLossOptions{}") TripletMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::TripletMarginLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::TripletMarginLossOptions{}") TripletMarginLossOptions options_);

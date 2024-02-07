@@ -44,9 +44,6 @@ public class AdaptiveMaxPool2dImpl extends AdaptiveMaxPool2dImplBase {
           @Const @ByRef AdaptiveMaxPool2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveMaxPool2dImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public AdaptiveMaxPool2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::AdaptiveMaxPool2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

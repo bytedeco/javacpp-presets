@@ -1568,11 +1568,10 @@ public class torch implements LoadEnabled, InfoMapper {
             // native subclasses.
             .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaText(
                 "private native @Name(\"register_module<torch::nn::Module>\") void _register_module(@StdString BytePointer name, @SharedPtr @ByVal Module module);\n" +
-                "public <M extends Module> M register_module(BytePointer name, M module) { asModule()._register_module(name, module.asModule()); return module; }\n" +
+                "public <M extends Module> M register_module(BytePointer name, M module) { _register_module(name, module); return module; }\n" +
                 "private native @Name(\"register_module<torch::nn::Module>\") void _register_module(@StdString String name, @SharedPtr @ByVal Module module);\n" +
-                "public <M extends Module> M register_module(String name, M module) { asModule()._register_module(name, module.asModule()); return module; }"
+                "public <M extends Module> M register_module(String name, M module) { _register_module(name, module); return module; }"
             ))
-            .put(new Info("torch::nn::Module").upcast())
         ;
         String[] virtuals = {"train", "is_training", "to", "zero_grad", "save", "load", "pretty_print", "is_serializable"};
         for (String m : virtuals)

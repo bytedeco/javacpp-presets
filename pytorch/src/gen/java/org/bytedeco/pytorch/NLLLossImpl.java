@@ -37,9 +37,6 @@ public class NLLLossImpl extends NLLLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NLLLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public NLLLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::NLLLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public NLLLossImpl(@ByVal(nullValue = "torch::nn::NLLLossOptions{}") NLLLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::NLLLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::NLLLossOptions{}") NLLLossOptions options_);

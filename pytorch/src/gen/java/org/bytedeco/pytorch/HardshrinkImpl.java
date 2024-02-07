@@ -36,9 +36,6 @@ public class HardshrinkImpl extends HardshrinkImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HardshrinkImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public HardshrinkImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::HardshrinkImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HardshrinkImpl(@Const @ByRef(nullValue = "torch::nn::HardshrinkOptions{}") HardshrinkOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::HardshrinkImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::HardshrinkOptions{}") HardshrinkOptions options_);

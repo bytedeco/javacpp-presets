@@ -38,9 +38,6 @@ public class PoissonNLLLossImpl extends PoissonNLLLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PoissonNLLLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public PoissonNLLLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::PoissonNLLLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public PoissonNLLLossImpl(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::PoissonNLLLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_);

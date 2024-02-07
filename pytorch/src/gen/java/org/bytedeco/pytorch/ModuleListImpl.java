@@ -67,9 +67,6 @@ public class ModuleListImpl extends ModuleListImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModuleListImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ModuleListImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ModuleListImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public ModuleListImpl() { super((Pointer)null); allocate(); }
@@ -90,8 +87,7 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** Pretty prints the {@code ModuleList} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
-  public void push_back(Module module) { _push_back(module.asModule()); }
-  private native @Name("push_back") void _push_back(@SharedPtr("torch::nn::Module") @ByVal Module module);
+  public native void push_back(@SharedPtr("torch::nn::Module") @ByVal Module module);
 
   /** Adds a new {@code Module} to the {@code ModuleList} container, moving or copying
    *  it into a {@code shared_ptr} internally. This method allows passing value types,
@@ -138,8 +134,7 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** True if there are no modules in the {@code ModuleList}. */
   public native @Cast("bool") @NoException(true) boolean is_empty();
 
-  public void insert(long index, Module module) { _insert(index, module.asModule()); }
-  private native @Name("insert") void _insert(@Cast("size_t") long index, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public native void insert(@Cast("size_t") long index, @SharedPtr("torch::nn::Module") @ByVal Module module);
 
   /** Unwraps the contained module of a {@code ModuleHolder} and inserts it in the
    *  {@code ModuleList}. */

@@ -31,9 +31,6 @@ public class IdentityImpl extends IdentityImplCloneable {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IdentityImpl(Pointer p) { super(p); }
     @SharedPtr @Name("std::make_shared<torch::nn::IdentityImpl>") private native void allocate();
-    /** Downcast constructor. */
-    public IdentityImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::IdentityImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native void reset();
 

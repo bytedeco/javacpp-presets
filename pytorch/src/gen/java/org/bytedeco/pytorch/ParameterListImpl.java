@@ -22,9 +22,6 @@ public class ParameterListImpl extends ParameterListImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParameterListImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ParameterListImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ParameterListImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public ParameterListImpl() { super((Pointer)null); allocate(); }

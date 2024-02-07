@@ -37,9 +37,6 @@ public class HardtanhImpl extends HardtanhImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HardtanhImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public HardtanhImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::HardtanhImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HardtanhImpl(@Const @ByRef(nullValue = "torch::nn::HardtanhOptions{}") HardtanhOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::HardtanhImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::HardtanhOptions{}") HardtanhOptions options_);

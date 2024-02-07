@@ -37,9 +37,6 @@ public class GRUCellImpl extends GRUCellImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GRUCellImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public GRUCellImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::GRUCellImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public GRUCellImpl(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(input_size, hidden_size); }
   @SharedPtr @Name("std::make_shared<torch::nn::GRUCellImpl>") private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);

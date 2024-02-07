@@ -37,9 +37,6 @@ public class KLDivLossImpl extends KLDivLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KLDivLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public KLDivLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::KLDivLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public KLDivLossImpl(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::KLDivLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_);

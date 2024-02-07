@@ -36,9 +36,6 @@ public class ELUImpl extends ELUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ELUImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ELUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ELUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ELUImpl(@Const @ByRef(nullValue = "torch::nn::ELUOptions{}") ELUOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::ELUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::ELUOptions{}") ELUOptions options_);

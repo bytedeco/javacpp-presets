@@ -65,7 +65,6 @@ public class Module extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Module(Pointer p) { super(p); }
-    public Module asModule() { return this; }
 
 
   /** Tells the base {@code Module} about the name of the submodule. */
@@ -79,10 +78,9 @@ public class Module extends Pointer {
    *  time {@code .name()} is invoked. */
   public Module() { super((Pointer)null); allocate(); }
   @SharedPtr @Name("std::make_shared<JavaCPP_torch_0003a_0003ann_0003a_0003aModule>") private native void allocate();
-  public Module(@Const @ByRef Module arg0) { super((Pointer)null); allocate(arg0.asModule()); }
+  public Module(@Const @ByRef Module arg0) { super((Pointer)null); allocate(arg0); }
   @SharedPtr @Name("std::make_shared<JavaCPP_torch_0003a_0003ann_0003a_0003aModule>") private native void allocate(@Const @ByRef Module arg0);
-  public Module put(Module arg0) { return asModule()._put(arg0.asModule()); }
-  private native @ByRef @Name("operator =") Module _put(@Const @ByRef Module arg0);
+  public native @ByRef @Name("operator =") Module put(@Const @ByRef Module arg0);
 
   /** Returns the name of the {@code Module}.
    * 
@@ -96,8 +94,7 @@ public class Module extends Pointer {
   
   ///
   ///
-  public BytePointer name() { return asModule()._name(); }
-  private native @StdString @NoException(true) @Name("name") BytePointer _name();
+  public native @StdString @NoException(true) BytePointer name();
 
   /** Performs a recursive deep copy of the module and all its registered
    *  parameters, buffers and submodules.
@@ -117,8 +114,7 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public Module clone(DeviceOptional device) { return asModule()._clone(device); }
-  private native @SharedPtr("torch::nn::Module") @ByVal @Virtual(subclasses=false, method="clone") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) @Const({false, false, true}) @Name("clone") Module _clone(
+  public native @SharedPtr("torch::nn::Module") @ByVal @Virtual(subclasses=false, method="clone") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) @Const({false, false, true}) Module clone(
         @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
@@ -133,8 +129,7 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public void apply(ModuleApplyFunction function) { asModule()._apply(function); }
-  private native @Name("apply") void _apply(@Const @ByRef ModuleApplyFunction function);
+  public native void apply(@Const @ByRef ModuleApplyFunction function);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code const Module&}.
@@ -162,15 +157,12 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public void apply(NamedModuleApplyFunction function, BytePointer name_prefix) { asModule()._apply(function, name_prefix); }
-  private native @Name("apply") void _apply(
+  public native void apply(
         @Const @ByRef NamedModuleApplyFunction function,
         @StdString BytePointer name_prefix/*=std::string()*/);
-  public void apply(NamedModuleApplyFunction function) { asModule()._apply(function); }
-  private native @Name("apply") void _apply(
+  public native void apply(
         @Const @ByRef NamedModuleApplyFunction function);
-  public void apply(NamedModuleApplyFunction function, String name_prefix) { asModule()._apply(function, name_prefix); }
-  private native @Name("apply") void _apply(
+  public native void apply(
         @Const @ByRef NamedModuleApplyFunction function,
         @StdString String name_prefix/*=std::string()*/);
 
@@ -200,8 +192,7 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public void apply(SharedModuleApplyFunction function) { asModule()._apply(function); }
-  private native @Name("apply") void _apply(@Cast("const torch::nn::Module::ModulePointerApplyFunction*") @ByRef SharedModuleApplyFunction function);
+  public native void apply(@Cast("const torch::nn::Module::ModulePointerApplyFunction*") @ByRef SharedModuleApplyFunction function);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code const std::string&} for the key of the module,
@@ -218,47 +209,36 @@ public class Module extends Pointer {
    *      std::cout << key << ": " << module->name() << std::endl;
    *    });
    *  \endrst */
-  public void apply(NamedSharedModuleApplyFunction function, BytePointer name_prefix) { asModule()._apply(function, name_prefix); }
-  private native @Name("apply") void _apply(
+  public native void apply(
         @Const @ByRef NamedSharedModuleApplyFunction function,
         @StdString BytePointer name_prefix/*=std::string()*/);
-  public void apply(NamedSharedModuleApplyFunction function) { asModule()._apply(function); }
-  private native @Name("apply") void _apply(
+  public native void apply(
         @Const @ByRef NamedSharedModuleApplyFunction function);
-  public void apply(NamedSharedModuleApplyFunction function, String name_prefix) { asModule()._apply(function, name_prefix); }
-  private native @Name("apply") void _apply(
+  public native void apply(
         @Const @ByRef NamedSharedModuleApplyFunction function,
         @StdString String name_prefix/*=std::string()*/);
 
   /** Returns the parameters of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */
-  public TensorVector parameters(boolean recurse) { return asModule()._parameters(recurse); }
-  private native @Name("parameters") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _parameters(@Cast("bool") boolean recurse/*=true*/);
-  public TensorVector parameters() { return asModule()._parameters(); }
-  private native @Name("parameters") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _parameters();
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters();
 
   /** Returns an {@code OrderedDict} with the parameters of this {@code Module} along with
    *  their keys, and if {@code recurse} is true also recursively of every submodule. */
-  public StringTensorDict named_parameters(boolean recurse) { return asModule()._named_parameters(recurse); }
-  private native @ByVal @Name("named_parameters") StringTensorDict _named_parameters(@Cast("bool") boolean recurse/*=true*/);
-  public StringTensorDict named_parameters() { return asModule()._named_parameters(); }
-  private native @ByVal @Name("named_parameters") StringTensorDict _named_parameters();
+  public native @ByVal StringTensorDict named_parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal StringTensorDict named_parameters();
 
   /** Returns the buffers of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */
-  public TensorVector buffers(boolean recurse) { return asModule()._buffers(recurse); }
-  private native @Name("buffers") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _buffers(@Cast("bool") boolean recurse/*=true*/);
-  public TensorVector buffers() { return asModule()._buffers(); }
-  private native @Name("buffers") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _buffers();
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector buffers();
 
   /** Returns an {@code OrderedDict} with the buffers of this {@code Module} along with
    *  their keys, and if {@code recurse} is true also recursively of every submodule. */
   
   ///
-  public StringTensorDict named_buffers(boolean recurse) { return asModule()._named_buffers(recurse); }
-  private native @ByVal @Name("named_buffers") StringTensorDict _named_buffers(@Cast("bool") boolean recurse/*=true*/);
-  public StringTensorDict named_buffers() { return asModule()._named_buffers(); }
-  private native @ByVal @Name("named_buffers") StringTensorDict _named_buffers();
+  public native @ByVal StringTensorDict named_buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal StringTensorDict named_buffers();
 
   /** Returns the submodules of this {@code Module} (the entire submodule hierarchy)
    *  and if {@code include_self} is true, also inserts a {@code shared_ptr} to this module
@@ -273,10 +253,8 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public SharedModuleVector modules(boolean include_self) { return asModule()._modules(include_self); }
-  private native @ByVal @Name("modules") SharedModuleVector _modules(@Cast("bool") boolean include_self/*=true*/);
-  public SharedModuleVector modules() { return asModule()._modules(); }
-  private native @ByVal @Name("modules") SharedModuleVector _modules();
+  public native @ByVal SharedModuleVector modules(@Cast("bool") boolean include_self/*=true*/);
+  public native @ByVal SharedModuleVector modules();
 
   /** Returns an {@code OrderedDict} of the submodules of this {@code Module} (the entire
    *  submodule hierarchy) and their keys, and if {@code include_self} is true, also
@@ -291,36 +269,29 @@ public class Module extends Pointer {
    *    this method with {@code include_self} set to false if your {@code Module} is not
    *    stored in a {@code shared_ptr}.
    *  \endrst */
-  public StringSharedModuleDict named_modules(BytePointer name_prefix, boolean include_self) { return asModule()._named_modules(name_prefix, include_self); }
-  private native @ByVal @Name("named_modules") StringSharedModuleDict _named_modules(
+  public native @ByVal StringSharedModuleDict named_modules(
         @StdString BytePointer name_prefix/*=std::string()*/,
         @Cast("bool") boolean include_self/*=true*/);
-  public StringSharedModuleDict named_modules() { return asModule()._named_modules(); }
-  private native @ByVal @Name("named_modules") StringSharedModuleDict _named_modules();
-  public StringSharedModuleDict named_modules(String name_prefix, boolean include_self) { return asModule()._named_modules(name_prefix, include_self); }
-  private native @ByVal @Name("named_modules") StringSharedModuleDict _named_modules(
+  public native @ByVal StringSharedModuleDict named_modules();
+  public native @ByVal StringSharedModuleDict named_modules(
         @StdString String name_prefix/*=std::string()*/,
         @Cast("bool") boolean include_self/*=true*/);
 
   /** Returns the direct submodules of this {@code Module}. */
-  public SharedModuleVector children() { return asModule()._children(); }
-  private native @ByVal @Name("children") SharedModuleVector _children();
+  public native @ByVal SharedModuleVector children();
 
   /** Returns an {@code OrderedDict} of the direct submodules of this {@code Module} and
    *  their keys. */
-  public StringSharedModuleDict named_children() { return asModule()._named_children(); }
-  private native @ByVal @Name("named_children") StringSharedModuleDict _named_children();
+  public native @ByVal StringSharedModuleDict named_children();
 
   /** Enables "training" mode. */
-  public void train(boolean on) { asModule()._train(on); }
-  private native @Virtual(subclasses=false, method="train") @Name("train") void _train(@Cast("bool") boolean on/*=true*/);
+  public native @Virtual(subclasses=false, method="train") void train(@Cast("bool") boolean on/*=true*/);
 
   /** Calls train(false) to enable "eval" mode.
    *  Do not override this method, override {@code train()} instead. */
   
   ///
-  public void eval() { asModule()._eval(); }
-  private native @Name("eval") void _eval();
+  public native void eval();
 
   /** True if the module is in training mode.
    * 
@@ -333,8 +304,7 @@ public class Module extends Pointer {
    *  depending on this property. */
   
   ///
-  public boolean is_training() { return asModule()._is_training(); }
-  private native @Cast("bool") @Virtual(subclasses=false, method="is_training") @NoException(true) @Const({false, false, true}) @Name("is_training") boolean _is_training();
+  public native @Cast("bool") @Virtual(subclasses=false, method="is_training") @NoException(true) @Const({false, false, true}) boolean is_training();
 
   /** Recursively casts all parameters to the given {@code dtype} and {@code device}.
    * 
@@ -344,8 +314,7 @@ public class Module extends Pointer {
    *  effect. */
   
   ///
-  public void to(Device device, ScalarType dtype, boolean non_blocking) { asModule()._to(device, dtype, non_blocking); }
-  private native @Virtual(subclasses=false, method="to") @Name("to") void _to(
+  public native @Virtual(subclasses=false, method="to") void to(
         @ByVal Device device,
         ScalarType dtype,
         @Cast("bool") boolean non_blocking/*=false*/);
@@ -358,8 +327,7 @@ public class Module extends Pointer {
    *  effect. */
   
   ///
-  public void to(ScalarType dtype, boolean non_blocking) { asModule()._to(dtype, non_blocking); }
-  private native @Virtual(subclasses=false, method="to") @Name("to") void _to(ScalarType dtype, @Cast("bool") boolean non_blocking/*=false*/);
+  public native @Virtual(subclasses=false, method="to") void to(ScalarType dtype, @Cast("bool") boolean non_blocking/*=false*/);
 
   /** Recursively moves all parameters to the given device.
    * 
@@ -367,16 +335,14 @@ public class Module extends Pointer {
    *  destination is on the GPU or vice versa, the copy is performed
    *  asynchronously with respect to the host. Otherwise, the argument has no
    *  effect. */
-  public void to(Device device, boolean non_blocking) { asModule()._to(device, non_blocking); }
-  private native @Virtual(subclasses=false, method="to") @Name("to") void _to(@ByVal Device device, @Cast("bool") boolean non_blocking/*=false*/);
+  public native @Virtual(subclasses=false, method="to") void to(@ByVal Device device, @Cast("bool") boolean non_blocking/*=false*/);
 
   /** Recursively zeros out the {@code grad} value of each registered parameter. */
   
   ///
   ///
   ///
-  public void zero_grad(boolean set_to_none) { asModule()._zero_grad(set_to_none); }
-  private native @Virtual(subclasses=false, method="zero_grad") @Name("zero_grad") void _zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
+  public native @Virtual(subclasses=false, method="zero_grad") void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
@@ -451,8 +417,7 @@ public class Module extends Pointer {
    *  {@code nn::Functional}), those submodules are skipped when serializing. */
   
   ///
-  public void save(OutputArchive archive) { asModule()._save(archive); }
-  private native @Virtual(subclasses=false, method="save") @Const({false, false, true}) @Name("save") void _save(@ByRef OutputArchive archive);
+  public native @Virtual(subclasses=false, method="save") @Const({false, false, true}) void save(@ByRef OutputArchive archive);
 
   /** Deserializes the {@code Module} from the given {@code InputArchive}.
    * 
@@ -461,8 +426,7 @@ public class Module extends Pointer {
    *  {@code InputArchive} when deserializing. */
   
   ///
-  public void load(InputArchive archive) { asModule()._load(archive); }
-  private native @Virtual(subclasses=false, method="load") @Name("load") void _load(@ByRef InputArchive archive);
+  public native @Virtual(subclasses=false, method="load") void load(@ByRef InputArchive archive);
 
   /** Streams a pretty representation of the {@code Module} into the given {@code stream}.
    *  By default, this representation will be the name of the module (taken from
@@ -471,8 +435,7 @@ public class Module extends Pointer {
    * 
    *  Override this method to change the pretty print. The input
    *  {@code stream} should be returned from the method, to allow easy chaining. */
-  public void pretty_print(Pointer stream) { asModule()._pretty_print(stream); }
-  private native @Virtual(subclasses=false, method="pretty_print") @Const({false, false, true}) @Name("pretty_print") void _pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
+  public native @Virtual(subclasses=false, method="pretty_print") @Const({false, false, true}) void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
   /** Returns whether the {@code Module} is serializable. */
   
@@ -480,8 +443,7 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public boolean is_serializable() { return asModule()._is_serializable(); }
-  private native @Cast("bool") @Virtual(subclasses=false, method="is_serializable") @Const({false, false, true}) @Name("is_serializable") boolean _is_serializable();
+  public native @Cast("bool") @Virtual(subclasses=false, method="is_serializable") @Const({false, false, true}) boolean is_serializable();
 
   /** Registers a parameter with this {@code Module}.
    * 
@@ -504,22 +466,18 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public Tensor register_parameter(BytePointer name, Tensor tensor, boolean requires_grad) { return asModule()._register_parameter(name, tensor, requires_grad); }
-  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
+  public native @ByRef Tensor register_parameter(
         @StdString BytePointer name,
         @ByVal Tensor tensor,
         @Cast("bool") boolean requires_grad/*=true*/);
-  public Tensor register_parameter(BytePointer name, Tensor tensor) { return asModule()._register_parameter(name, tensor); }
-  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
+  public native @ByRef Tensor register_parameter(
         @StdString BytePointer name,
         @ByVal Tensor tensor);
-  public Tensor register_parameter(String name, Tensor tensor, boolean requires_grad) { return asModule()._register_parameter(name, tensor, requires_grad); }
-  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
+  public native @ByRef Tensor register_parameter(
         @StdString String name,
         @ByVal Tensor tensor,
         @Cast("bool") boolean requires_grad/*=true*/);
-  public Tensor register_parameter(String name, Tensor tensor) { return asModule()._register_parameter(name, tensor); }
-  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
+  public native @ByRef Tensor register_parameter(
         @StdString String name,
         @ByVal Tensor tensor);
 
@@ -540,10 +498,8 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public Tensor register_buffer(BytePointer name, Tensor tensor) { return asModule()._register_buffer(name, tensor); }
-  private native @ByRef @Name("register_buffer") Tensor _register_buffer(@StdString BytePointer name, @ByVal Tensor tensor);
-  public Tensor register_buffer(String name, Tensor tensor) { return asModule()._register_buffer(name, tensor); }
-  private native @ByRef @Name("register_buffer") Tensor _register_buffer(@StdString String name, @ByVal Tensor tensor);
+  public native @ByRef Tensor register_buffer(@StdString BytePointer name, @ByVal Tensor tensor);
+  public native @ByRef Tensor register_buffer(@StdString String name, @ByVal Tensor tensor);
 
   /** Registers a submodule with this {@code Module}.
    * 
@@ -563,9 +519,9 @@ public class Module extends Pointer {
   ///
   ///
   private native @Name("register_module<torch::nn::Module>") void _register_module(@StdString BytePointer name, @SharedPtr @ByVal Module module);
-  public <M extends Module> M register_module(BytePointer name, M module) { asModule()._register_module(name, module.asModule()); return module; }
+  public <M extends Module> M register_module(BytePointer name, M module) { _register_module(name, module); return module; }
   private native @Name("register_module<torch::nn::Module>") void _register_module(@StdString String name, @SharedPtr @ByVal Module module);
-  public <M extends Module> M register_module(String name, M module) { asModule()._register_module(name, module.asModule()); return module; }
+  public <M extends Module> M register_module(String name, M module) { _register_module(name, module); return module; }
 
   /** Registers a submodule with this {@code Module}.
    * 
@@ -608,12 +564,9 @@ public class Module extends Pointer {
 
   /** Unregisters a submodule from this {@code Module}. If there is no such module
    *  with {@code name} an exception is thrown. */
-  public void unregister_module(BytePointer name) { asModule()._unregister_module(name); }
-  private native @Name("unregister_module") void _unregister_module(@StdString BytePointer name);
-  public void unregister_module(String name) { asModule()._unregister_module(name); }
-  private native @Name("unregister_module") void _unregister_module(@StdString String name);
-  private static Pointer shiftLeft(Pointer stream, Module module) { return _shiftLeft(stream, module.asModule()); }
-  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer _shiftLeft(
+  public native void unregister_module(@StdString BytePointer name);
+  public native void unregister_module(@StdString String name);
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
         @Cast("std::ostream*") @ByRef Pointer stream,
         @Const @ByRef Module module);
   public Pointer shiftLeft(Pointer stream) { return shiftLeft(stream, this); }

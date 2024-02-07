@@ -22,9 +22,6 @@ public class InstanceNorm2dImplBaseBase extends InstanceNorm2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InstanceNorm2dImplBaseBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public InstanceNorm2dImplBaseBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::NormImplBase<2,torch::nn::InstanceNorm2dImpl,torch::nn::InstanceNormOptions>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native void reset();

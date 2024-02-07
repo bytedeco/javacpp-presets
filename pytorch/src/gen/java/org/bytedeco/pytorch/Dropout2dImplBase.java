@@ -23,9 +23,6 @@ public class Dropout2dImplBase extends Dropout2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dropout2dImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public Dropout2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::detail::_DropoutNd<torch::nn::Dropout2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public Dropout2dImplBase(double p) { super((Pointer)null); allocate(p); }
   private native void allocate(double p);

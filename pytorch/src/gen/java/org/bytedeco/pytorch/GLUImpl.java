@@ -36,9 +36,6 @@ public class GLUImpl extends GLUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GLUImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public GLUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::GLUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public GLUImpl(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::GLUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_);

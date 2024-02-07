@@ -42,8 +42,5 @@ public class ConstantPad2dImpl extends ConstantPad2dImplBase {
     private native void allocate(@Const @ByRef ConstantPad2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstantPad2dImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ConstantPad2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ConstantPad2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 }

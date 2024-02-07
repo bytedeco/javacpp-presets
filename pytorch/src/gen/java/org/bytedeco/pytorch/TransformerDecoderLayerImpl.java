@@ -44,9 +44,6 @@ public class TransformerDecoderLayerImpl extends TransformerDecoderLayerImplClon
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformerDecoderLayerImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public TransformerDecoderLayerImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::TransformerDecoderLayerImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public TransformerDecoderLayerImpl(@Cast("int64_t") long d_model, @Cast("int64_t") long nhead) { super((Pointer)null); allocate(d_model, nhead); }
   @SharedPtr @Name("std::make_shared<torch::nn::TransformerDecoderLayerImpl>") private native void allocate(@Cast("int64_t") long d_model, @Cast("int64_t") long nhead);

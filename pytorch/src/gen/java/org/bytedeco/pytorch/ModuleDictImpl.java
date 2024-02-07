@@ -79,9 +79,6 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModuleDictImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public ModuleDictImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::ModuleDictImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public ModuleDictImpl() { super((Pointer)null); allocate(); }

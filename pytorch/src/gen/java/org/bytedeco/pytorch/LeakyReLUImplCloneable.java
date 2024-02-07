@@ -22,11 +22,6 @@ public class LeakyReLUImplCloneable extends Module {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LeakyReLUImplCloneable(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public LeakyReLUImplCloneable(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::Cloneable<torch::nn::LeakyReLUImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
-    @Override public Module asModule() { return asModule(this); }
-    @Namespace public static native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::Module, torch::nn::Cloneable<torch::nn::LeakyReLUImpl>>") Module asModule(@SharedPtr LeakyReLUImplCloneable pointer);
 
 
   /** {@code reset()} must perform initialization of all members with reference

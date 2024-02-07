@@ -23,9 +23,6 @@ public class RNNCellImplBase extends RNNCellImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RNNCellImplBase(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public RNNCellImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::detail::RNNCellImplBase<torch::nn::RNNCellImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public RNNCellImplBase(@Const @ByRef RNNCellOptionsBase options_) { super((Pointer)null); allocate(options_); }
   private native void allocate(@Const @ByRef RNNCellOptionsBase options_);

@@ -41,9 +41,6 @@ public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BCEWithLogitsLossImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public BCEWithLogitsLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::BCEWithLogitsLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public BCEWithLogitsLossImpl(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::BCEWithLogitsLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_);

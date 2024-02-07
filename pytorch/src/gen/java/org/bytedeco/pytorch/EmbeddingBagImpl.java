@@ -39,9 +39,6 @@ public class EmbeddingBagImpl extends EmbeddingBagImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EmbeddingBagImpl(Pointer p) { super(p); }
-    /** Downcast constructor. */
-    public EmbeddingBagImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::EmbeddingBagImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public EmbeddingBagImpl(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim) { super((Pointer)null); allocate(num_embeddings, embedding_dim); }
   @SharedPtr @Name("std::make_shared<torch::nn::EmbeddingBagImpl>") private native void allocate(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim);
