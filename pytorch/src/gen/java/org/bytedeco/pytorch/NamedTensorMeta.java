@@ -73,5 +73,5 @@ public class NamedTensorMeta extends NamedTensorMetaInterface {
   public native void set_names(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameArrayRef new_names);
 
   // INVARIANT: at least one Dimname is non-WILDCARD
-  public native @StdMove DimnameVector names_(); public native NamedTensorMeta names_(DimnameVector setter);
+  public native @ByRef DimnameVector names_(); public native NamedTensorMeta names_(DimnameVector setter);
 }

@@ -130,7 +130,7 @@ private native void allocate();
   /** \}
    *  \name Expensive Operations
    *  \{ */
-  public native @StdMove DimnameVector vec();
+  public native @ByVal DimnameVector vec();
 
   /** \} */
 }

@@ -28,7 +28,7 @@ public class EdgeVector extends Pointer {
     public EdgeVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator =") @ByRef EdgeVector put(@ByRef @Cast({"", "std::vector<torch::autograd::Edge>"}) @StdMove EdgeVector x);
+    public native @Name("operator =") @ByRef EdgeVector put(@ByRef EdgeVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

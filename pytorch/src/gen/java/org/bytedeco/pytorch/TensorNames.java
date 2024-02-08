@@ -50,5 +50,5 @@ public class TensorNames extends Pointer {
   public native void checkUnique(String op_name);
 
   public native void append(@ByRef(true) TensorName name);
-  public native @StdMove DimnameVector toDimnameVec();
+  public native @ByVal DimnameVector toDimnameVec();
 }

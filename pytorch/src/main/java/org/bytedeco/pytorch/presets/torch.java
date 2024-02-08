@@ -598,12 +598,11 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<std::shared_ptr<c10::ClassType> >", "std::vector<c10::ClassTypePtr>").pointerTypes("SharedClassTypeVector").define())
             .put(new Info("std::vector<c10::Type::SingletonOrSharedTypePtr<c10::Type> >", "std::vector<c10::TypePtr>",
                 "std::vector<c10::Type::TypePtr>", "c10::AliasTypeSet").pointerTypes("TypeVector").define())
-            .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").valueTypes("@StdMove DimnameVector").pointerTypes("DimnameVector").define())
+            .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").pointerTypes("DimnameVector").define())
             .put(new Info("std::vector<c10::Stride>").pointerTypes("StrideVector").define())
             .put(new Info("std::vector<c10::ShapeSymbol>").pointerTypes("ShapeSymbolVector").define())
             .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
-            .put(new Info("std::vector<torch::autograd::Edge>", "torch::autograd::edge_list") // Used in Node constructor
-                .valueTypes("@Cast({\"\", \"std::vector<torch::autograd::Edge>\"}) @StdMove EdgeVector").pointerTypes("EdgeVector").define())
+            .put(new Info("std::vector<torch::autograd::Edge>", "torch::autograd::edge_list").pointerTypes("EdgeVector").define())  // Used in Node constructor
             .put(new Info("std::vector<torch::Tensor>", "std::vector<at::Tensor>", "std::vector<torch::autograd::Variable>", "torch::autograd::variable_list")
                 .pointerTypes("TensorVector").define())
             .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
@@ -942,9 +941,6 @@ public class torch implements LoadEnabled, InfoMapper {
             ;
         }
 
-        // What is the use for this ?
-        //.put(new Info("torch::OrderedDict<std::string,torch::nn::AnyModule>")
-        //        .valueTypes("@Cast({\"\", \"torch::OrderedDict<std::string,torch::nn::AnyModule>&&\"}) @StdMove StringAnyModuleDict"))
 
         //// std::pair
         infoMap

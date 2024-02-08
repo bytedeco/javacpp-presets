@@ -140,7 +140,7 @@ public class Node extends Pointer {
 
   public native void add_next_edge(@ByVal Edge edge);
 
-  public native void set_next_edges(@Cast({"", "std::vector<torch::autograd::Edge>"}) @StdMove EdgeVector next_edges);
+  public native void set_next_edges(@ByRef(true) EdgeVector next_edges);
 
   public native @Const @ByRef @NoException(true) Edge next_edge(@Cast("size_t") long index);
 

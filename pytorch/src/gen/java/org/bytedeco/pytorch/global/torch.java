@@ -413,9 +413,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../ExampleVector.java
 
 
-// Targeting ../EnumNameValue.java
-
-
 // Targeting ../StringTensorPair.java
 
 
@@ -435,6 +432,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../BytePointerPair.java
+
+
+// Targeting ../EnumNameValue.java
 
 
 // Targeting ../T_DataPtrSizeT_T.java
@@ -8622,7 +8622,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 // Sets the names of `tensor` to be `names`.
 @Namespace("at") public static native @Const @ByRef TensorBase internal_set_names_inplace(@Const @ByRef TensorBase tensor, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @Const @ByRef TensorBase internal_set_names_inplace(@Const @ByRef TensorBase tensor, @StdMove DimnameVector names, @Cast("bool") boolean validate_names);
+@Namespace("at") public static native @Const @ByRef TensorBase internal_set_names_inplace(@Const @ByRef TensorBase tensor, @ByRef(true) DimnameVector names, @Cast("bool") boolean validate_names);
 
 @Namespace("at") @MemberGetter public static native @Cast("const size_t") long kMaxNamedTensorDim();
 
@@ -8631,7 +8631,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // Some helper functions on TensorImpl. Useful for working with names in TH.
 // XXX: Ideally these would exist as methods on TensorImpl
 @Namespace("at::impl") public static native void internal_set_names_inplace(TensorImpl impl, @ByVal DimnameListOptional names, @Cast("bool") boolean validate_names);
-@Namespace("at::impl") public static native void internal_set_names_inplace(TensorImpl impl, @StdMove DimnameVector names, @Cast("bool") boolean validate_names);
+@Namespace("at::impl") public static native void internal_set_names_inplace(TensorImpl impl, @ByRef(true) DimnameVector names, @Cast("bool") boolean validate_names);
 
 
 
@@ -14916,25 +14916,25 @@ public static final byte min_lookups = min_lookups();
 //    the same index from the right in other.
 // 3) The output names are obtained by unifying the names individually from the
 // right.
-@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
     @ByVal DimnameArrayRef names,
     @ByVal DimnameArrayRef other,
     @Cast("const char*") BytePointer action/*="broadcast"*/);
-@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
     @ByVal DimnameArrayRef names,
     @ByVal DimnameArrayRef other);
-@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
     @ByVal DimnameVector names,
     @ByVal DimnameVector other,
     String action/*="broadcast"*/);
-@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
     @ByVal DimnameVector names,
     @ByVal DimnameVector other);
-@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
     @ByVal DimnameVector names,
     @ByVal DimnameVector other,
     @Cast("const char*") BytePointer action/*="broadcast"*/);
-@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
     @ByVal DimnameArrayRef names,
     @ByVal DimnameArrayRef other,
     String action/*="broadcast"*/);
@@ -15038,34 +15038,34 @@ public static final byte min_lookups = min_lookups();
     @Const @ByRef Tensor result,
     @Const @ByRef Tensor self);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_broadcast_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_broadcast_outnames(
     @Const @ByRef Tensor self,
     @Const @ByRef Tensor other);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector broadcast_to_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector broadcast_to_outnames(
     @Const @ByRef Tensor tensor,
     @Const @ByRef Tensor reference_tensor,
     @Cast("const char*") BytePointer op_name);
-@Namespace("at::namedinference") public static native @StdMove DimnameVector broadcast_to_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector broadcast_to_outnames(
     @Const @ByRef Tensor tensor,
     @Const @ByRef Tensor reference_tensor,
     String op_name);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_matmul_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_matmul_outnames(
     @Const @ByRef Tensor self,
     @Const @ByRef Tensor other);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_cdist_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_cdist_outnames(
     @Const @ByRef Tensor self,
     @Const @ByRef Tensor other);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_bmm_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_bmm_outnames(
     @Const @ByRef Tensor result,
     @Const @ByRef Tensor self,
     @Const @ByRef Tensor other);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_squeeze_outnames(@Const @ByRef Tensor tensor);
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_squeeze_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_squeeze_outnames(@Const @ByRef Tensor tensor);
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_squeeze_outnames(
     @Const @ByRef Tensor tensor,
     long dims);
 
@@ -15140,19 +15140,19 @@ public static final byte min_lookups = min_lookups();
     @Const @ByRef TensorBase src);
 
 // result = m1 @ m2 + bias
-@Namespace("at::namedinference") public static native @StdMove DimnameVector propagate_names_for_addmm(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector propagate_names_for_addmm(
     @Const @ByRef Tensor m1,
     @Const @ByRef Tensor m2,
     @Const @ByRef Tensor bias);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector propagate_names_for_addmv(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector propagate_names_for_addmv(
     @Const @ByRef Tensor mat,
     @Const @ByRef Tensor vec,
     @Const @ByRef Tensor bias);
 
 @Namespace("at::namedinference") public static native void check_names_for_dot(TensorImpl vec1, TensorImpl vec2);
 
-@Namespace("at::namedinference") public static native @StdMove DimnameVector compute_baddbmm_outnames(
+@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_baddbmm_outnames(
     @Const @ByRef Tensor result,
     @Const @ByRef Tensor self,
     @Const @ByRef Tensor other,
