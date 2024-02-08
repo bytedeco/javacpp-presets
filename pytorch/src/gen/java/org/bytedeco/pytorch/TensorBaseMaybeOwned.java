@@ -39,14 +39,14 @@ public class TensorBaseMaybeOwned extends Pointer {
   // T*. Copying an owned T yields another owned T for safety: no
   // chains of borrowing by default! (Note you could get that behavior
   // with MaybeOwned<T>::borrowed(*rhs) if you wanted it.)
-  public TensorBaseMaybeOwned(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned rhs) { super((Pointer)null); allocate(rhs); }
-  private native void allocate(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned rhs);
+  public TensorBaseMaybeOwned(@Const @ByRef TensorBaseMaybeOwned rhs) { super((Pointer)null); allocate(rhs); }
+  private native void allocate(@Const @ByRef TensorBaseMaybeOwned rhs);
 
-  public native @ByRef @Name("operator =") TensorBaseMaybeOwned put(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned rhs);
+  public native @ByRef @Name("operator =") TensorBaseMaybeOwned put(@Const @ByRef TensorBaseMaybeOwned rhs);
 
-  public static native @Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned borrowed(@Const @ByRef TensorBase t);
+  public static native @ByVal TensorBaseMaybeOwned borrowed(@Const @ByRef TensorBase t);
 
-  public static native @NoException(true) @Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned owned(@ByRef(true) TensorBase t);
+  public static native @ByVal @NoException(true) TensorBaseMaybeOwned owned(@ByRef(true) TensorBase t);
 
   // This is an implementation detail!  You should know what you're doing
   // if you are testing this.  If you just want to guarantee ownership move

@@ -22,15 +22,15 @@ public class T_TensorMaybeOwnedTensorMaybeOwned_T extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public T_TensorMaybeOwnedTensorMaybeOwned_T(Pointer p) { super(p); }
-    public T_TensorMaybeOwnedTensorMaybeOwned_T(@Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned value0, @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned value1) { allocate(value0, value1); }
-    private native void allocate(@Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned value0, @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned value1);
+    public T_TensorMaybeOwnedTensorMaybeOwned_T(@ByRef TensorMaybeOwned value0, @ByRef TensorMaybeOwned value1) { allocate(value0, value1); }
+    private native void allocate(@ByRef TensorMaybeOwned value0, @ByRef TensorMaybeOwned value1);
     public T_TensorMaybeOwnedTensorMaybeOwned_T()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef T_TensorMaybeOwnedTensorMaybeOwned_T put(@ByRef T_TensorMaybeOwnedTensorMaybeOwned_T x);
 
-    public @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned get0() { return get0(this); }
-    @Namespace @Name("std::get<0>") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned get0(@ByRef T_TensorMaybeOwnedTensorMaybeOwned_T container);
-    public @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned get1() { return get1(this); }
-    @Namespace @Name("std::get<1>") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned get1(@ByRef T_TensorMaybeOwnedTensorMaybeOwned_T container);
+    public @ByRef TensorMaybeOwned get0() { return get0(this); }
+    @Namespace @Name("std::get<0>") public static native @ByRef TensorMaybeOwned get0(@ByRef T_TensorMaybeOwnedTensorMaybeOwned_T container);
+    public @ByRef TensorMaybeOwned get1() { return get1(this); }
+    @Namespace @Name("std::get<1>") public static native @ByRef TensorMaybeOwned get1(@ByRef T_TensorMaybeOwnedTensorMaybeOwned_T container);
 }
 

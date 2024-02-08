@@ -307,37 +307,14 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::size_t", "c10::Dict<c10::IValue,c10::IValue>::size_type",
                 "c10::Dict<std::string,c10::impl::GenericList>::size_type").cast().valueTypes("long").pointerTypes("SizeTPointer"))
             .put(new Info("c10::approx_time_t").cast().valueTypes("long").pointerTypes("LongPointer"))
-            .put(new Info(
-                "torch::ExpandingArray<1>", "torch::ExpandingArray<2>", "torch::ExpandingArray<3>", "torch::ExpandingArray<4>",
-                "torch::ExpandingArray<D*2>", "torch::ExpandingArray<1*2>", "torch::ExpandingArray<2*2>", "torch::ExpandingArray<3*2>").cast().pointerTypes("LongPointer"))
-            .put(new Info("torch::ExpandingArray<1,double>", "torch::ExpandingArray<2,double>", "torch::ExpandingArray<3,double>").cast().pointerTypes("DoublePointer"))
-            .put(new Info("torch::ExpandingArrayWithOptionalElem<2>", "torch::ExpandingArrayWithOptionalElem<3>").cast().pointerTypes("LongOptional"))
-            .put(new Info("std::pair<std::string,c10::IValue>").pointerTypes("EnumNameValue").define())
             .put(new Info("c10::ClassType::Property").pointerTypes("ClassType.Property"))
 
-            .put(new Info("std::list<std::pair<at::RecordFunctionHandle,int> >").pointerTypes("RecordFunctionHandleIntList").define())
             .put(new Info("at::RecordFunctionHandle").valueTypes("long"))
             .put(new Info("c10::ivalue::Future::FutureError::FutureError").skip()) // This constructor takes a std::string&&  but parser sends a std::string&
             .put(new Info("operator const std::string&()").javaText( // Hopefully targets the one in ConstantString only
                 "public native @Const @ByRef @Name(\"operator const std::string&\") @StdString @Override String toString();"
             ))
-            .put(new Info("c10::weak_intrusive_ptr<c10::StorageImpl>").pointerTypes("WeakStorage"))
-
-            .put(new Info("torch::monitor::Stat<double>").pointerTypes("DoubleStat"))
-            .put(new Info("torch::monitor::Stat<int64_t>").pointerTypes("LongStat"))
-            .put(new Info("torch::jit::generic_graph_node_list<torch::jit::Node>").pointerTypes("graph_node_list"))
-            .put(new Info("torch::jit::generic_graph_node_list_iterator<torch::jit::Node>").pointerTypes("graph_node_list_iterator"))
-            .put(new Info("torch::autograd::Function<torch::nn::CrossMapLRN2d>").pointerTypes("FunctionCrossMapLRN2d"))
-
             .put(new Info("strong::type<int64_t,_VulkanID,strong::regular,strong::convertible_to<int64_t>,strong::hashable>").pointerTypes("Pointer"))
-
-            .put(new Info("c10::VaryingShape<int64_t>").pointerTypes("LongVaryingShape"))
-            .put(new Info("c10::VaryingShape<c10::Stride>").pointerTypes("StrideVaryingShape"))
-            .put(new Info("torch::detail::SelectiveStr<false>").pointerTypes("DisabledStr"))
-            .put(new Info("torch::detail::SelectiveStr<true>").pointerTypes("EnabledStr"))
-            .put(new Info("torch::detail::SelectiveStr<false>::operator const char*",
-                "torch::detail::SelectiveStr<true>::operator const char*").
-                javaText("public native @Name(\"operator const char*\") @Cast(\"const char*\") BytePointer asBytePointer();"))// Fixes bug where constexpr prevents addition of const in @Name
             .put(new Info("fbgemm::bfloat16", "__nv_bfloat16", "sycl::ext::oneapi::bfloat16").pointerTypes("BFloat16").valueTypes("short", "short", "short"))
             .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").cast().valueTypes("boolean").pointerTypes("BoolPointer"))
             .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)").pointerTypes("Half"))
@@ -350,14 +327,9 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::ClassType").purify().pointerTypes("ClassType")) // Issue #669
             .put(new Info("c10::EnumType").purify().pointerTypes("EnumType")) // Issue #669
             .put(new Info("c10::NamedType").purify().pointerTypes("NamedType")) // Issue #669
-            .put(new Info("c10::MaybeOwned<at::Tensor>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::Tensor>&&\"}) @StdMove TensorMaybeOwned").pointerTypes("TensorMaybeOwned"))
-            .put(new Info("c10::MaybeOwned<at::TensorBase>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::TensorBase>&&\"}) @StdMove TensorBaseMaybeOwned").pointerTypes("TensorBaseMaybeOwned"))
-            .put(new Info("at::InferExpandGeometryResult<at::DimVector>").pointerTypes("DimVectorInferExpandGeometryResult"))
             .put(new Info("at::namedinference::TensorName").valueTypes("@Cast({\"\", \"at::namedinference::TensorName&&\"}) @StdMove TensorName").pointerTypes("TensorName"))
             .put(new Info("c10::remove_symint<c10::SymInt>::type").valueTypes("long"))
             .put(new Info("std::aligned_storage_t<sizeof(IValue),alignof(IValue)>").pointerTypes("Pointer"))
-            .put(new Info("c10::TensorImpl::identity<c10::SymInt>").pointerTypes("SymIntIdentity"))
-            .put(new Info("c10::TensorImpl::identity<int64_t>").pointerTypes("LongIdentity"))
             .put(new Info("c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft").skipDefaults())
             .put(new Info("c10::prim::requires_grad").javaNames("requires_grad"))
             .put(new Info("c10::aten::clone").javaNames("_clone"))
@@ -985,6 +957,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::pair<void*,void*>", "std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr>").pointerTypes("PointerPair").define())
             .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
             .put(new Info("std::pair<const char*,const char*>").pointerTypes("BytePointerPair").define())
+            .put(new Info("std::pair<std::string,c10::IValue>").pointerTypes("EnumNameValue").define())
         ;
 
         //// Intrusive pointers
@@ -1997,7 +1970,36 @@ public class torch implements LoadEnabled, InfoMapper {
         ;
 
 
-        //// Instantiation of templated functions.
+        //// Instantiation of misc class templates.
+        infoMap
+            .put(new Info("std::list<std::pair<at::RecordFunctionHandle,int> >").pointerTypes("RecordFunctionHandleIntList").define())
+            .put(new Info(
+                "torch::ExpandingArray<1>", "torch::ExpandingArray<2>", "torch::ExpandingArray<3>", "torch::ExpandingArray<4>",
+                "torch::ExpandingArray<D*2>", "torch::ExpandingArray<1*2>", "torch::ExpandingArray<2*2>", "torch::ExpandingArray<3*2>").cast().pointerTypes("LongPointer"))
+            .put(new Info("torch::ExpandingArray<1,double>", "torch::ExpandingArray<2,double>", "torch::ExpandingArray<3,double>").cast().pointerTypes("DoublePointer"))
+            .put(new Info("torch::ExpandingArrayWithOptionalElem<2>", "torch::ExpandingArrayWithOptionalElem<3>").cast().pointerTypes("LongOptional"))
+            .put(new Info("c10::VaryingShape<int64_t>").pointerTypes("LongVaryingShape"))
+            .put(new Info("c10::VaryingShape<c10::Stride>").pointerTypes("StrideVaryingShape"))
+            .put(new Info("c10::MaybeOwned<at::Tensor>").pointerTypes("TensorMaybeOwned"))
+            .put(new Info("c10::MaybeOwned<at::TensorBase>").pointerTypes("TensorBaseMaybeOwned"))
+            .put(new Info("at::InferExpandGeometryResult<at::DimVector>").pointerTypes("DimVectorInferExpandGeometryResult"))
+            .put(new Info("c10::TensorImpl::identity<c10::SymInt>").pointerTypes("SymIntIdentity"))
+            .put(new Info("c10::TensorImpl::identity<int64_t>").pointerTypes("LongIdentity"))
+            .put(new Info("torch::detail::SelectiveStr<false>").pointerTypes("DisabledStr"))
+            .put(new Info("torch::detail::SelectiveStr<true>").pointerTypes("EnabledStr"))
+            .put(new Info("torch::detail::SelectiveStr<false>::operator const char*",
+                "torch::detail::SelectiveStr<true>::operator const char*").
+                javaText("public native @Name(\"operator const char*\") @Cast(\"const char*\") BytePointer asBytePointer();"))// Fixes bug where constexpr prevents addition of const in @Name
+            .put(new Info("c10::weak_intrusive_ptr<c10::StorageImpl>").pointerTypes("WeakStorage"))
+
+            .put(new Info("torch::monitor::Stat<double>").pointerTypes("DoubleStat"))
+            .put(new Info("torch::monitor::Stat<int64_t>").pointerTypes("LongStat"))
+            .put(new Info("torch::jit::generic_graph_node_list<torch::jit::Node>").pointerTypes("graph_node_list"))
+            .put(new Info("torch::jit::generic_graph_node_list_iterator<torch::jit::Node>").pointerTypes("graph_node_list_iterator"))
+            .put(new Info("torch::autograd::Function<torch::nn::CrossMapLRN2d>").pointerTypes("FunctionCrossMapLRN2d"))
+        ;
+
+        //// Instantiation of function templates.
         for (String op : new String[]{"exp", "log", "log10", "log2", "sqrt", "pow", "sin", "cos", "tan",
             "asin", "acos", "atan", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh", "log1p" }) {
             infoMap.put(new Info("c10_complex_math::" + op + "<float>").javaNames(op))

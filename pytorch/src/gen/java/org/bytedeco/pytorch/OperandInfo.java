@@ -35,8 +35,8 @@ public class OperandInfo extends Pointer {
 
   public OperandInfo() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public OperandInfo(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned t) { super((Pointer)null); allocate(t); }
-  private native void allocate(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned t);
+  public OperandInfo(@ByRef(true) TensorBaseMaybeOwned t) { super((Pointer)null); allocate(t); }
+  private native void allocate(@ByRef(true) TensorBaseMaybeOwned t);
 
   public OperandInfo(@Const @ByRef OperandInfo arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@Const @ByRef OperandInfo arg0);
@@ -81,7 +81,7 @@ public class OperandInfo extends Pointer {
    *  coalescing. */
   public native @Const @ByRef Tensor tensor();
   public native @Const @ByRef TensorBase tensor_base();
-  public native void tensor(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned tensor);
+  public native void tensor(@ByRef(true) TensorBaseMaybeOwned tensor);
 
   // Save the original tensor operand in cases when an output is modified
   // (e.g. if dtype is changed)
@@ -91,7 +91,7 @@ public class OperandInfo extends Pointer {
   // Set tensor to a new value, and store the old tensor value in
   // original_tensor Should only ever be called once for the lifetime of an
   // operand
-  public native void exchange_tensor(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned new_tensor);
+  public native void exchange_tensor(@ByRef(true) TensorBaseMaybeOwned new_tensor);
 
   // Move original_tensor back into tensor, exchange_tensor must have been
   // called before

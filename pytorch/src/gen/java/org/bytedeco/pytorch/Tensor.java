@@ -85,9 +85,9 @@ public class Tensor extends TensorBase {
    *  increment/decrement if *this is already contiguous, at the cost
    *  in all cases of an extra pointer of stack usage, an extra branch
    *  to access, and an extra branch at destruction time. */
-  public native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expect_contiguous(MemoryFormat memory_format/*=c10::MemoryFormat::Contiguous*/);
-  public native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expect_contiguous();
-  public native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expect_contiguous(@Cast("c10::MemoryFormat") byte memory_format/*=c10::MemoryFormat::Contiguous*/);
+  public native @ByVal TensorMaybeOwned expect_contiguous(MemoryFormat memory_format/*=c10::MemoryFormat::Contiguous*/);
+  public native @ByVal TensorMaybeOwned expect_contiguous();
+  public native @ByVal TensorMaybeOwned expect_contiguous(@Cast("c10::MemoryFormat") byte memory_format/*=c10::MemoryFormat::Contiguous*/);
 
   // Use .contiguous() instead. Trying to borrow from a prvalue Tensor
   // will only lead to trouble and dangling references.

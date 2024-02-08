@@ -59547,17 +59547,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // resulting from a function call, but it is still possible to make a
 // mistake.
 
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_inplace(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_inplace(
     @Const @ByRef Tensor tensor,
     @Const @ByRef Tensor to_expand);
 
 
 
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_inplace(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_inplace(
     @Const @ByRef Tensor tensor,
     @Const @ByRef Tensor to_expand,
     @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_inplace(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_inplace(
     @Const @ByRef Tensor tensor,
     @Const @ByRef Tensor to_expand,
     String api_name);
@@ -59640,28 +59640,28 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_size(
     @Const @ByRef Tensor to_expand,
     @ByVal LongArrayRef sizes);
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_size(
     @Const @ByRef Tensor to_expand,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
 
 
 
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_size(
     @Const @ByRef Tensor to_expand,
     @ByVal LongArrayRef sizes,
     @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_size(
     @Const @ByRef Tensor to_expand,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
     String api_name);
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_size(
     @Const @ByRef Tensor to_expand,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
     @Cast("const char*") BytePointer api_name);
-@Namespace("at") public static native @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned expand_size(
+@Namespace("at") public static native @ByVal TensorMaybeOwned expand_size(
     @Const @ByRef Tensor to_expand,
     @ByVal LongArrayRef sizes,
     String api_name);
