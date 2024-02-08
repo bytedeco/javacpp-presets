@@ -106,7 +106,7 @@ public class Storage extends Pointer {
   // Legacy constructor for partially initialized (dtype or memory) storages
   // that can be temporarily created with Caffe2 APIs. See the note on top of
   // TensorImpl.h for details.
-  public static native @Cast({"", "c10::Storage&&"}) @StdMove Storage create_legacy(@ByVal Device device);
+  public static native @ByVal Storage create_legacy(@ByVal Device device);
 
   // Mimic create_legacy, but without requiring a newly-created StorageImpl.
   public native void reset_legacy();
@@ -154,7 +154,7 @@ public class Storage extends Pointer {
 
   public native @Cast("bool") boolean unique();
 
-  public native @Cast("bool") boolean is_alias_of(@Cast({"", "c10::Storage&&"}) @StdMove Storage other);
+  public native @Cast("bool") boolean is_alias_of(@Const @ByRef Storage other);
 
   public native void UniqueStorageShareExternalPointer(
         Pointer src,

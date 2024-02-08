@@ -181,7 +181,7 @@ public class TensorBase extends AbstractTensor {
   public native @ByVal DispatchKeySet key_set();
   public native ScalarType scalar_type();
   public native @Cast("bool") boolean has_storage();
-  public native @Cast({"", "c10::Storage&&"}) @StdMove Storage storage();
+  public native @Const @ByRef Storage storage();
   public native @Cast("bool") boolean is_alias_of(@Const @ByRef TensorBase other);
 
   // Move the storage backend to shm based

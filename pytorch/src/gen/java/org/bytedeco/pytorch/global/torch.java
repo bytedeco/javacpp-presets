@@ -6866,8 +6866,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #include <c10/util/ExclusivelyOwned.h>
 
 @Namespace("c10") public static native @Cast("bool") boolean isSharedStorageAlias(
-    @Cast({"", "c10::Storage&&"}) @StdMove Storage storage0,
-    @Cast({"", "c10::Storage&&"}) @StdMove Storage storage1);
+    @Const @ByRef Storage storage0,
+    @Const @ByRef Storage storage1);
 // Targeting ../Storage.java
 
 
@@ -8768,11 +8768,11 @@ public static final int C10_GCC_VERSION_MINOR = 0;
  */
 @Namespace("at") public static native void storage_copy(
     @ByRef Storage dst,
-    @Cast({"", "c10::Storage&&"}) @StdMove Storage src,
+    @Const @ByRef Storage src,
     @Cast("bool") boolean non_blocking/*=false*/);
 @Namespace("at") public static native void storage_copy(
     @ByRef Storage dst,
-    @Cast({"", "c10::Storage&&"}) @StdMove Storage src);
+    @Const @ByRef Storage src);
 
 /**
  * In place change the storage to shm based.
@@ -48829,44 +48829,44 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::set.source_Storage_out(Tensor self, Storage source, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source);
+@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source);
 // aten::set.source_Storage_out(Tensor self, Storage source, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor set_outf(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor set_outf(@Const @ByRef Tensor self, @ByVal Storage source, @ByRef Tensor out);
 
 // aten::set.source_Storage(Tensor self, Storage source) -> Tensor
-@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source);
+@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @ByVal Storage source);
 
 // aten::set.source_Storage_storage_offset_out(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[], *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size, @ByVal(nullValue = "at::IntArrayRef{}") LongArrayRef stride);
-@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size);
-@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... stride);
-@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
-
-
-// aten::set.source_Storage_storage_offset_out(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[], *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor set_outf(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size, @ByVal LongArrayRef stride, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor set_outf(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] stride, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size, @ByVal(nullValue = "at::IntArrayRef{}") LongArrayRef stride);
+@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size);
+@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... stride);
+@Namespace("at") public static native @ByRef Tensor set_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
 
 
 // aten::set.source_Storage_storage_offset_out(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[], *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor set_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size, @ByVal(nullValue = "c10::SymIntArrayRef{}") SymIntArrayRef stride);
-@Namespace("at") public static native @ByRef Tensor set_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size);
+@Namespace("at") public static native @ByRef Tensor set_outf(@Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size, @ByVal LongArrayRef stride, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor set_outf(@Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] stride, @ByRef Tensor out);
 
 
 // aten::set.source_Storage_storage_offset_out(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[], *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor set_symint_outf(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size, @ByVal SymIntArrayRef stride, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor set_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size, @ByVal(nullValue = "c10::SymIntArrayRef{}") SymIntArrayRef stride);
+@Namespace("at") public static native @ByRef Tensor set_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size);
+
+
+// aten::set.source_Storage_storage_offset_out(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[], *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor set_symint_outf(@Const @ByRef Tensor self, @ByVal Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size, @ByVal SymIntArrayRef stride, @ByRef Tensor out);
 
 
 // aten::set.source_Storage_storage_offset(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[]) -> Tensor
-@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size, @ByVal(nullValue = "at::IntArrayRef{}") LongArrayRef stride);
-@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size);
-@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... stride);
-@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
+@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size, @ByVal(nullValue = "at::IntArrayRef{}") LongArrayRef stride);
+@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal LongArrayRef size);
+@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... stride);
+@Namespace("at") public static native @ByVal Tensor set(@Const @ByRef Tensor self, @ByVal Storage source, @Cast("int64_t") long storage_offset, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
 
 
 // aten::set.source_Storage_storage_offset(Tensor self, Storage source, SymInt storage_offset, SymInt[] size, SymInt[] stride=[]) -> Tensor
-@Namespace("at") public static native @ByVal Tensor set_symint(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size, @ByVal(nullValue = "c10::SymIntArrayRef{}") SymIntArrayRef stride);
-@Namespace("at") public static native @ByVal Tensor set_symint(@Const @ByRef Tensor self, @Cast({"", "c10::Storage&&"}) @StdMove Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size);
+@Namespace("at") public static native @ByVal Tensor set_symint(@Const @ByRef Tensor self, @ByVal Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size, @ByVal(nullValue = "c10::SymIntArrayRef{}") SymIntArrayRef stride);
+@Namespace("at") public static native @ByVal Tensor set_symint(@Const @ByRef Tensor self, @ByVal Storage source, @ByVal SymInt storage_offset, @ByVal SymIntArrayRef size);
 
 
 // aten::set.source_Tensor_out(Tensor self, Tensor source, *, Tensor(a!) out) -> Tensor(a!)
@@ -63108,7 +63108,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 @Namespace("at") public static native @ByVal Tensor unsafeTensorFromTH(Pointer th_pointer, @Cast("bool") boolean retain);
 
-@Namespace("at") public static native @Cast({"", "c10::Storage&&"}) @StdMove Storage unsafeStorageFromTH(Pointer th_pointer, @Cast("bool") boolean retain);
+@Namespace("at") public static native @ByVal Storage unsafeStorageFromTH(Pointer th_pointer, @Cast("bool") boolean retain);
 
 
 

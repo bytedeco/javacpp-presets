@@ -155,11 +155,11 @@ public class IValue extends Pointer {
   public native @ByRef Tensor toTensor();
   public native TensorImpl unsafeToTensorImpl();
 
-  public IValue(@Cast({"", "c10::Storage&&"}) @StdMove Storage s) { super((Pointer)null); allocate(s); }
-  private native void allocate(@Cast({"", "c10::Storage&&"}) @StdMove Storage s);
+  public IValue(@ByVal Storage s) { super((Pointer)null); allocate(s); }
+  private native void allocate(@ByVal Storage s);
   public native @Cast("bool") boolean isStorage();
   
-  public native @Cast({"", "c10::Storage&&"}) @StdMove Storage toStorage();
+  public native @ByVal Storage toStorage();
   public native @ByRef IValue toIValue();
 
   /** \private [doxygen private] */

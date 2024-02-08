@@ -25,14 +25,14 @@ public class NestedTensorImpl extends TensorImpl {
     public NestedTensorImpl(Pointer p) { super(p); }
 
   public NestedTensorImpl(
-        @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
+        @ByVal Storage storage,
         @ByVal DispatchKeySet key_set,
         @Const @ByVal TypeMeta data_type,
         @ByVal Tensor nested_sizes,
         @ByVal Tensor nested_strides,
         @ByVal Tensor storage_offsets) { super((Pointer)null); allocate(storage, key_set, data_type, nested_sizes, nested_strides, storage_offsets); }
   private native void allocate(
-        @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
+        @ByVal Storage storage,
         @ByVal DispatchKeySet key_set,
         @Const @ByVal TypeMeta data_type,
         @ByVal Tensor nested_sizes,
