@@ -52,7 +52,9 @@ sub go {
 
 chdir "cppbuild/linux-x86_64-gpu/pytorch/torch/include";
 
-go('torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_model_container_runner.h');
+# Doesn't compile on Windows. Waiting for 2.2.1.
+#go('torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_model_container_runner.h');
+go('torch/csrc/api/include/torch/torch.h', 'torch/script.h');
 
 print <<EOF;
 
@@ -62,4 +64,6 @@ print <<EOF;
 // c10/cuda/CUDAGuard.h
 EOF
 
-go('ATen/cudnn/Descriptors.h', 'ATen/cudnn/Types.h', 'c10/cuda/CUDAGuard.h', '-I/opt/cuda/targets/x86_64-linux/include/', 'torch/csrc/inductor/aoti_model_container_runner_cuda.h');
+# Doesn't compile on Windows. Waiting for 2.2.1.
+#go('ATen/cudnn/Descriptors.h', 'ATen/cudnn/Types.h', 'c10/cuda/CUDAGuard.h', '-I/opt/cuda/targets/x86_64-linux/include/', 'torch/csrc/inductor/aoti_model_container_runner_cuda.h');
+go('ATen/cudnn/Descriptors.h', 'ATen/cudnn/Types.h', 'c10/cuda/CUDAGuard.h', '-I/opt/cuda/targets/x86_64-linux/include/');

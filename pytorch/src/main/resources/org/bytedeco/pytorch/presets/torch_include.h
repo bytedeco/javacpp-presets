@@ -1426,6 +1426,7 @@
 #include "torch/csrc/jit/serialization/pickle.h"
 // #include "torch/csrc/inductor/aoti_torch/c/shim.h" // model.so API, not part of libtorch API
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
-#include "torch/csrc/inductor/aoti_model_container_runner.h"
+// Doesn't compile on Windows. Waiting for 2.2.1.
+// #include "torch/csrc/inductor/aoti_model_container_runner.h"
 
 #include "datasets.h"

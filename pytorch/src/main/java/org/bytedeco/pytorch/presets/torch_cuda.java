@@ -40,7 +40,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
                 "c10/cuda/CUDAGuard.h",
-                "torch/csrc/inductor/aoti_model_container_runner_cuda.h",
+                // Doesn't compile on Windows. Waiting for 2.2.1
+                // "torch/csrc/inductor/aoti_model_container_runner_cuda.h",
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
