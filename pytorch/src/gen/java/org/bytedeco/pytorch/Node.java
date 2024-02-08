@@ -85,7 +85,7 @@ public class Node extends Pointer {
   public native @SharedPtr Node getptr();
   /** Evaluates the function on the given inputs and returns the result of the
    *  function call. */
-  public native @Name("operator ()") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs);
+  public native @ByVal @Name("operator ()") TensorVector apply(@ByRef(true) TensorVector inputs);
 
   // Graph Connectivity API
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -324,7 +324,7 @@ public class Node extends Pointer {
   // Used by compiled autograd to call apply() with different saved tensors
   // Implementations should call saved.before() on all attrs, then apply(), then
   // saved.after() on all attrs in the same order.
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply_with_saved(
-        @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs,
+  public native @ByVal TensorVector apply_with_saved(
+        @Const @ByRef TensorVector inputs,
         @ByRef SwapSavedVariables saved);
 }

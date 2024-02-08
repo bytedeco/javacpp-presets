@@ -129,7 +129,7 @@ private native void allocate();
   /** \}
    *  \name Expensive Operations
    *  \{ */
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector vec();
+  public native @ByVal TensorVector vec();
 
   /** \} */
 }

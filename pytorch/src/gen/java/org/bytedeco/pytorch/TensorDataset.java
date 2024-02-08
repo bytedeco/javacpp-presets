@@ -27,8 +27,8 @@ public class TensorDataset extends TensorDatasetBase {
     public TensorDataset(Pointer p) { super(p); }
 
   /** Creates a {@code TensorDataset} from a vector of tensors. */
-  public TensorDataset(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensors) { super((Pointer)null); allocate(tensors); }
-  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensors);
+  public TensorDataset(@Const @ByRef TensorVector tensors) { super((Pointer)null); allocate(tensors); }
+  private native void allocate(@Const @ByRef TensorVector tensors);
 
   public TensorDataset(@ByVal Tensor tensor) { super((Pointer)null); allocate(tensor); }
   private native void allocate(@ByVal Tensor tensor);

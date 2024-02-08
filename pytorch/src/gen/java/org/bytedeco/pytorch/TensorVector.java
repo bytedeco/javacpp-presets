@@ -28,7 +28,7 @@ public class TensorVector extends Pointer {
     public TensorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator =") @ByRef TensorVector put(@ByRef @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector x);
+    public native @Name("operator =") @ByRef TensorVector put(@ByRef TensorVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

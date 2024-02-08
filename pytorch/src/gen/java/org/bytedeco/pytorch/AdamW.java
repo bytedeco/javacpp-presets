@@ -34,10 +34,10 @@ public class AdamW extends Optimizer {
         @ByVal OptimizerParamGroupVector param_groups) { super((Pointer)null); allocate(param_groups); }
   private native void allocate(
         @ByVal OptimizerParamGroupVector param_groups);
-  public AdamW(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::AdamWOptions{}") AdamWOptions defaults) { super((Pointer)null); allocate(params, defaults); }
-  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::AdamWOptions{}") AdamWOptions defaults);
-  public AdamW(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
-  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params);
+  public AdamW(@ByVal TensorVector params, @ByVal(nullValue = "torch::optim::AdamWOptions{}") AdamWOptions defaults) { super((Pointer)null); allocate(params, defaults); }
+  private native void allocate(@ByVal TensorVector params, @ByVal(nullValue = "torch::optim::AdamWOptions{}") AdamWOptions defaults);
+  public AdamW(@ByVal TensorVector params) { super((Pointer)null); allocate(params); }
+  private native void allocate(@ByVal TensorVector params);
 
   public native @ByVal Tensor step(@ByVal(nullValue = "torch::optim::Optimizer::LossClosure(nullptr)") LossClosure closure);
   public native @ByVal Tensor step();

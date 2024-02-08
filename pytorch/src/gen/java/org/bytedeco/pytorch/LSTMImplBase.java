@@ -55,7 +55,7 @@ public class LSTMImplBase extends LSTMImplCloneable {
    *  called once upon construction, inside {@code reset()}. */
   public native void flatten_parameters();
 
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector all_weights();
+  public native @ByVal TensorVector all_weights();
 
   /** The RNN's options. */
   // NOLINTNEXTLINE(cppcoreguidelines-non-private-member-variables-in-classes)

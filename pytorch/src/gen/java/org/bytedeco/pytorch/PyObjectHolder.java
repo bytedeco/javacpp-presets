@@ -32,5 +32,5 @@ public class PyObjectHolder extends Pointer {
   public native @ByVal IValue toIValue(@Const @ByRef Type.TypePtr type, @ByVal(nullValue = "c10::optional<int32_t>(c10::nullopt)") IntOptional N);
   public native @ByVal IValue toIValue(@Const @ByRef Type.TypePtr type);
   public native @StdString BytePointer toStr();
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector extractTensors();
+  public native @ByVal TensorVector extractTensors();
 }

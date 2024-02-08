@@ -55,7 +55,7 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
   public native @ByVal StringVector keys();
 
   /** Return the Values in the dict */
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector values();
+  public native @ByVal TensorVector values();
 
   /** Return an iterator to the start of ParameterDict */
   public native @ByVal @Cast("torch::nn::ParameterDictImpl::Iterator*") StringTensorDictItemVector.Iterator begin();

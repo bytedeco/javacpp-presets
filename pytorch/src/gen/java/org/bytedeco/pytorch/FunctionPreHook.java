@@ -21,10 +21,13 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::autograd") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class FunctionPreHook extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public FunctionPreHook() { super((Pointer)null); allocate(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionPreHook(Pointer p) { super(p); }
+    @UniquePtr @Name("std::make_unique<JavaCPP_torch_0003a_0003aautograd_0003a_0003aFunctionPreHook>") private native void allocate();
 
-  public native @Name("operator ()") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector grads);
+  @Virtual(true) public native @ByVal @Name("operator ()") TensorVector apply(@Const @ByRef TensorVector grads);
   // only implemented for python hooks, registers hook with compiled autograd
-  public native void compiled_args(@ByRef CompiledNodeArgs args);
+  @Virtual public native void compiled_args(@ByRef CompiledNodeArgs args);
 }

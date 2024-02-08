@@ -318,7 +318,7 @@ public class IValue extends Pointer {
   public native @Cast("bool") boolean isTensorList();
   
   public native @ByVal TensorList toTensorList();
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector toTensorVector();
+  public native @ByVal TensorVector toTensorVector();
 
   // OptionalTensorList
   public native @Cast("bool") boolean isOptionalTensorList();

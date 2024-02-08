@@ -220,8 +220,8 @@ public class Module extends Pointer {
 
   /** Returns the parameters of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters(@Cast("bool") boolean recurse/*=true*/);
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters();
+  public native @ByVal TensorVector parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal TensorVector parameters();
 
   /** Returns an {@code OrderedDict} with the parameters of this {@code Module} along with
    *  their keys, and if {@code recurse} is true also recursively of every submodule. */
@@ -230,8 +230,8 @@ public class Module extends Pointer {
 
   /** Returns the buffers of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector buffers(@Cast("bool") boolean recurse/*=true*/);
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector buffers();
+  public native @ByVal TensorVector buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal TensorVector buffers();
 
   /** Returns an {@code OrderedDict} with the buffers of this {@code Module} along with
    *  their keys, and if {@code recurse} is true also recursively of every submodule. */

@@ -179,7 +179,7 @@ public class StringTensorDict extends Pointer {
 
   /** Returns a newly allocated vector and copies all values from this
    *  {@code OrderedDict} into the vector. */
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector values();
+  public native @ByVal TensorVector values();
 
   /** Returns a newly allocated vector and copies all keys and values from this
    *  {@code OrderedDict} into a vector of {@code std::pair<Key, Value>}. */

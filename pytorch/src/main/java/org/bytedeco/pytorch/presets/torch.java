@@ -632,9 +632,9 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<c10::ShapeSymbol>").pointerTypes("ShapeSymbolVector").define())
             .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
             .put(new Info("std::vector<torch::autograd::Edge>", "torch::autograd::edge_list") // Used in Node constructor
-                                                                                              .valueTypes("@Cast({\"\", \"std::vector<torch::autograd::Edge>\"}) @StdMove EdgeVector").pointerTypes("EdgeVector").define())
+                .valueTypes("@Cast({\"\", \"std::vector<torch::autograd::Edge>\"}) @StdMove EdgeVector").pointerTypes("EdgeVector").define())
             .put(new Info("std::vector<torch::Tensor>", "std::vector<at::Tensor>", "std::vector<torch::autograd::Variable>", "torch::autograd::variable_list")
-                .valueTypes("@Cast({\"\", \"std::vector<torch::Tensor>\"}) @StdMove TensorVector").pointerTypes("TensorVector").define())
+                .pointerTypes("TensorVector").define())
             .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
             .put(new Info("std::vector<c10::optional<torch::autograd::Variable> >").pointerTypes("TensorOptionalVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >",
@@ -1808,10 +1808,10 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("at::CPUGeneratorImpl"),
             new PointerInfo("at::TensorIterator"),
             new PointerInfo("caffe2::serialize::IStreamAdapter"),
-            new PointerInfo("torch::autograd::FunctionPreHook"),
-            new PointerInfo("torch::autograd::FunctionPostHook"),
-            // Other classes passed as unique ptr ar abstract, so not instantiated from Java:
-            // ReadAdapterInterface, PostAccumulateGradHook, FunctionPreHook, FunctionPostHook, FuncTorchTLSBase, AutogradMetaInterface,
+            new PointerInfo("torch::autograd::FunctionPreHook").virtualize(),
+            new PointerInfo("torch::autograd::FunctionPostHook").virtualize(),
+            // Other classes passed as unique ptr are abstract, so not instantiated from Java:
+            // ReadAdapterInterface, PostAccumulateGradHook, FuncTorchTLSBase, AutogradMetaInterface,
             // GeneratorImpl, OpRegistrationListener, AttributeValue
         }) {
             pi.makeUnique(infoMap);
@@ -2717,6 +2717,7 @@ public class torch implements LoadEnabled, InfoMapper {
         String javaName;
         final String[] argumentNames;
         String[] otherCppNames = new String[0];
+        boolean virtualize = false;
 
         PointerInfo(String... an) {
             argumentNames = an;
@@ -2738,6 +2739,11 @@ public class torch implements LoadEnabled, InfoMapper {
             return this;
         }
 
+        PointerInfo virtualize() {
+            virtualize = true;
+            return this;
+        }
+
         void makeShared(InfoMap infoMap) {
             // See issue #670
             String[] cppNames = new String[argumentNames.length + otherCppNames.length];
@@ -2751,7 +2757,15 @@ public class torch implements LoadEnabled, InfoMapper {
 
             // Also annotate constructor of target class to ensure only one shared_ptr exists for each instance
             String n = argumentNames[0].substring(argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
-            String n2 = n.equals("torch::nn::Module") ? "JavaCPP_torch_0003a_0003ann_0003a_0003aModule" : n;
+            String n2 = n;
+            if (virtualize) {
+                n2 = mangle(n2);
+                infoMap.put(new Info(n).virtualize());
+            } else if (n.equals("torch::nn::Module")) {
+                // We don't set virtualize on Module since we don't want all virtual
+                // member functions to be annotated @Virtual (clone_, ...)
+                n2 = mangle(n2);
+            }
             infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr", "@Name(\"std::make_shared<" + n2 + ">\")"));
         }
 
@@ -2764,7 +2778,12 @@ public class torch implements LoadEnabled, InfoMapper {
             infoMap.put(new Info(cppNames).annotations("@UniquePtr").pointerTypes(javaBaseName));
 
             String n = argumentNames[0].substring(argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
-            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@UniquePtr", "@Name(\"std::make_unique<" + n + ">\")"));
+            String n2 = n;
+            if (virtualize) {
+                n2 = mangle(n2);
+                infoMap.put(new Info(n).virtualize());
+            }
+            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@UniquePtr", "@Name(\"std::make_unique<" + n2 + ">\")"));
         }
     }
 

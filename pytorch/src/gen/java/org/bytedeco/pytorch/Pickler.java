@@ -65,7 +65,7 @@ public class Pickler extends Pointer {
   public native void startTuple();
   public native void endTuple();
 
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensorData();
+  public native @Const @ByRef TensorVector tensorData();
 
   
   public native void pushDict(@Const @ByRef IValue ivalue);

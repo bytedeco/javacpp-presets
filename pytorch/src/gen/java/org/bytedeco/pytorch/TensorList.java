@@ -225,7 +225,7 @@ public class TensorList extends Pointer {
    */
   public native @Cast("bool") boolean is(@Const @ByRef TensorList rhs);
 
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector vec();
+  public native @ByVal TensorVector vec();
 
   /**
    * Returns the number of Lists currently pointing to this same list.

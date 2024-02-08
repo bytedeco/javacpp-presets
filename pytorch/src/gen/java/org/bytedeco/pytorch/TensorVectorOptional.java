@@ -22,14 +22,14 @@ public class TensorVectorOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorVectorOptional(Pointer p) { super(p); }
-    public TensorVectorOptional(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector value) { this(); put(value); }
+    public TensorVectorOptional(TensorVector value) { this(); put(value); }
     public TensorVectorOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef TensorVectorOptional put(@ByRef TensorVectorOptional x);
 
     public native boolean has_value();
     public native void reset();
-    public native @Name("value") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector get();
-    @ValueSetter public native TensorVectorOptional put(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector value);
+    public native @Name("value") @ByRef TensorVector get();
+    @ValueSetter public native TensorVectorOptional put(@ByRef TensorVector value);
 }
 

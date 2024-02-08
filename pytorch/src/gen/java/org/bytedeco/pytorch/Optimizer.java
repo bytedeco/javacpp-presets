@@ -37,7 +37,7 @@ public class Optimizer extends Pointer {
   public native @ByVal Tensor step();
 
   /** Adds the given vector of parameters to the optimizer's parameter list. */
-  public native void add_parameters(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters);
+  public native void add_parameters(@Const @ByRef TensorVector parameters);
 
   /** Zeros out the gradients of all parameters. */
   public native void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);

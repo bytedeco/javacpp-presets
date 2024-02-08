@@ -46,15 +46,15 @@ public class AutogradContext extends Pointer {
 
   /** Saves the list of variables for a future call to {@code backward}. This
    *  should be called at most once from inside of {@code forward}. */
-  public native void save_for_backward(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector to_save);
+  public native void save_for_backward(@ByVal TensorVector to_save);
   /** Marks variables in the list as modified in an in-place operation. This
    *  should be called at most once from inside of {@code forward} and all arguments
    *  should be inputs. */
-  public native void mark_dirty(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs);
+  public native void mark_dirty(@Const @ByRef TensorVector inputs);
   /** Marks outputs in the list as not requiring gradients. This should be
    *  called at most once from inside of {@code forward} and all arguments should be
    *  outputs. */
-  public native void mark_non_differentiable(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector outputs);
+  public native void mark_non_differentiable(@Const @ByRef TensorVector outputs);
   // Sets whether undefined output grad tensors should be expanded to tensors
   // full of zeros before calling backward function. Default value is true.
   public native void set_materialize_grads(@Cast("bool") boolean value);
@@ -62,7 +62,7 @@ public class AutogradContext extends Pointer {
   /** Get the list of variables that were saved in {@code forward} using
    *  {@code save_for_backward()}. Before returning them to the user, a check is made
    *  to ensure that they were not modified by any in-place operations. */
-  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector get_saved_variables();
+  public native @ByVal TensorVector get_saved_variables();
   public native @Const @ByRef TensorImplSet get_and_bump_dirty();
   public native @Const @ByRef TensorImplSet get_non_differentiable();
 

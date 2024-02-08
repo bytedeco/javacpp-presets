@@ -15769,13 +15769,13 @@ public static final byte min_lookups = min_lookups();
 ///
 ///
 @Namespace("torch::autograd") public static native void backward(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensors,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector grad_tensors/*={}*/,
+    @Const @ByRef TensorVector tensors,
+    @Const @ByRef(nullValue = "torch::autograd::variable_list{}") TensorVector grad_tensors,
     @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional retain_graph,
     @Cast("bool") boolean create_graph/*=false*/,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs/*={}*/);
+    @Const @ByRef(nullValue = "torch::autograd::variable_list{}") TensorVector inputs);
 @Namespace("torch::autograd") public static native void backward(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensors);
+    @Const @ByRef TensorVector tensors);
 
 /** Computes and returns the sum of gradients of outputs with respect to the
  *  inputs.
@@ -15803,16 +15803,16 @@ public static final byte min_lookups = min_lookups();
  *  @param allow_unused If {@code }false{@code }, specifying inputs that were not
  *      used when computing outputs (and therefore their grad is always zero)
  *      is an error. Defaults to {@code }false{@code }. */
-@Namespace("torch::autograd") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector grad(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector outputs,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector grad_outputs/*={}*/,
+@Namespace("torch::autograd") public static native @ByVal TensorVector grad(
+    @Const @ByRef TensorVector outputs,
+    @Const @ByRef TensorVector inputs,
+    @Const @ByRef(nullValue = "torch::autograd::variable_list{}") TensorVector grad_outputs,
     @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional retain_graph,
     @Cast("bool") boolean create_graph/*=false*/,
     @Cast("bool") boolean allow_unused/*=false*/);
-@Namespace("torch::autograd") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector grad(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector outputs,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs);
+@Namespace("torch::autograd") public static native @ByVal TensorVector grad(
+    @Const @ByRef TensorVector outputs,
+    @Const @ByRef TensorVector inputs);
 
 /** Creates a new dual level and returns its index. This level index should then
  *  be used to call into the other functions below. This API supports entering a
@@ -20705,8 +20705,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::align_tensors(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector align_tensors(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector align_tensors(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector align_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector align_tensors(@ByVal TensorVector tensors);
 
 
 
@@ -21981,8 +21981,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor atleast_1d(@Const @ByRef Tensor self);
 
 // aten::atleast_1d.Sequence(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_1d(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_1d(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector atleast_1d(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector atleast_1d(@ByVal TensorVector tensors);
 
 
 
@@ -22015,8 +22015,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor atleast_2d(@Const @ByRef Tensor self);
 
 // aten::atleast_2d.Sequence(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_2d(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_2d(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector atleast_2d(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector atleast_2d(@ByVal TensorVector tensors);
 
 
 
@@ -22049,8 +22049,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor atleast_3d(@Const @ByRef Tensor self);
 
 // aten::atleast_3d.Sequence(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_3d(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_3d(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector atleast_3d(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector atleast_3d(@ByVal TensorVector tensors);
 
 
 
@@ -23316,8 +23316,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::broadcast_tensors(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector broadcast_tensors(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector broadcast_tensors(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector broadcast_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector broadcast_tensors(@ByVal TensorVector tensors);
 
 
 
@@ -24012,8 +24012,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::chunk(Tensor(a -> *) self, int chunks, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks);
+@Namespace("at") public static native @ByVal TensorVector chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks);
 
 
 
@@ -26797,8 +26797,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor dequantize(@Const @ByRef Tensor self);
 
 // aten::dequantize.tensors(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dequantize(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dequantize(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector dequantize(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector dequantize(@ByVal TensorVector tensors);
 
 // aten::dequantize.self_out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor dequantize_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -27491,11 +27491,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::dsplit.int(Tensor(a -> *) self, int sections) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @ByVal TensorVector dsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
 
 // aten::dsplit.array(Tensor(a -> *) self, int[] indices) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dsplit(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
+@Namespace("at") public static native @ByVal TensorVector dsplit(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
+@Namespace("at") public static native @ByVal TensorVector dsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
 
 
 
@@ -32098,42 +32098,42 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::gradient.scalarint(Tensor self, *, Scalar? spacing=None, int? dim=None, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self);
 
 // aten::gradient.scalararray(Tensor self, *, Scalar spacing, int[] dim, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal LongArrayRef dim);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal LongArrayRef dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @Const @ByRef Scalar spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
 
 // aten::gradient.array(Tensor self, *, int[] dim, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal LongArrayRef dim);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal LongArrayRef dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
 
 // aten::gradient.scalarrayint(Tensor self, *, Scalar[] spacing, int? dim=None, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing);
 
 // aten::gradient.scalarrayarray(Tensor self, *, Scalar[] spacing, int[] dim, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal LongArrayRef dim);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal LongArrayRef dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal ScalarArrayRef spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
 
 // aten::gradient.tensorarrayint(Tensor self, *, Tensor[] spacing, int? dim=None, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing);
 
 // aten::gradient.tensorarray(Tensor self, *, Tensor[] spacing, int[] dim, int edge_order=1) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal LongArrayRef dim);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal LongArrayRef dim);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @ByVal TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
 
 
 
@@ -33174,11 +33174,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::hsplit.int(Tensor(a -> *) self, int sections) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector hsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @ByVal TensorVector hsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
 
 // aten::hsplit.array(Tensor(a -> *) self, int[] indices) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector hsplit(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector hsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
+@Namespace("at") public static native @ByVal TensorVector hsplit(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
+@Namespace("at") public static native @ByVal TensorVector hsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
 
 
 
@@ -39551,14 +39551,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::meshgrid(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector meshgrid(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector meshgrid(@ByVal TensorVector tensors);
 
 // aten::meshgrid.indexing(Tensor[] tensors, *, str indexing) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorArrayRef tensors, @StringView BytePointer indexing);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorVector tensors, @StringView String indexing);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorVector tensors, @StringView BytePointer indexing);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorArrayRef tensors, @StringView String indexing);
+@Namespace("at") public static native @ByVal TensorVector meshgrid(@ByVal TensorArrayRef tensors, @StringView BytePointer indexing);
+@Namespace("at") public static native @ByVal TensorVector meshgrid(@ByVal TensorVector tensors, @StringView String indexing);
+@Namespace("at") public static native @ByVal TensorVector meshgrid(@ByVal TensorVector tensors, @StringView BytePointer indexing);
+@Namespace("at") public static native @ByVal TensorVector meshgrid(@ByVal TensorArrayRef tensors, @StringView String indexing);
 
 
 
@@ -43074,7 +43074,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::nonzero_numpy(Tensor self) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector nonzero_numpy(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorVector nonzero_numpy(@Const @ByRef Tensor self);
 
 
 
@@ -44843,8 +44843,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor quantize_per_tensor(@Const @ByRef Tensor self, @Const @ByRef Tensor scale, @Const @ByRef Tensor zero_point, ScalarType dtype);
 
 // aten::quantize_per_tensor.tensors(Tensor[] tensors, Tensor scales, Tensor zero_points, ScalarType dtype) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector quantize_per_tensor(@ByVal TensorArrayRef tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector quantize_per_tensor(@ByVal TensorVector tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
+@Namespace("at") public static native @ByVal TensorVector quantize_per_tensor(@ByVal TensorArrayRef tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
+@Namespace("at") public static native @ByVal TensorVector quantize_per_tensor(@ByVal TensorVector tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
 
 // aten::quantize_per_tensor.out(Tensor self, float scale, int zero_point, ScalarType dtype, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor quantize_per_tensor_out(@ByRef Tensor out, @Const @ByRef Tensor self, double scale, @Cast("int64_t") long zero_point, ScalarType dtype);
@@ -52982,25 +52982,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::split.Tensor(Tensor(a -> *) self, SymInt split_size, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size);
+@Namespace("at") public static native @ByVal TensorVector split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size);
 
 
 // aten::split.Tensor(Tensor(a -> *) self, SymInt split_size, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size);
+@Namespace("at") public static native @ByVal TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size);
 
 
 // aten::split.sizes(Tensor(a -> *) self, SymInt[] split_size, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split(@Const @ByRef Tensor self, @ByVal LongArrayRef split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split(@Const @ByRef Tensor self, @ByVal LongArrayRef split_size);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_size);
+@Namespace("at") public static native @ByVal TensorVector split(@Const @ByRef Tensor self, @ByVal LongArrayRef split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split(@Const @ByRef Tensor self, @ByVal LongArrayRef split_size);
+@Namespace("at") public static native @ByVal TensorVector split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_size);
 
 
 // aten::split.sizes(Tensor(a -> *) self, SymInt[] split_size, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_size);
+@Namespace("at") public static native @ByVal TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_size);
 
 
 
@@ -53031,13 +53031,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::split_copy.Tensor(Tensor self, SymInt split_size, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_copy(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_copy(@Const @ByRef Tensor self, @Cast("int64_t") long split_size);
+@Namespace("at") public static native @ByVal TensorVector split_copy(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_copy(@Const @ByRef Tensor self, @Cast("int64_t") long split_size);
 
 
 // aten::split_copy.Tensor(Tensor self, SymInt split_size, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_copy_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_copy_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size);
+@Namespace("at") public static native @ByVal TensorVector split_copy_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_copy_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size);
 
 
 // aten::split_copy.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
@@ -53092,15 +53092,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::split_with_sizes(Tensor(a -> *) self, SymInt[] split_sizes, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
 
 
 // aten::split_with_sizes(Tensor(a -> *) self, SymInt[] split_sizes, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
 
 
 
@@ -53131,15 +53131,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::split_with_sizes_copy(Tensor self, SymInt[] split_sizes, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_copy(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
 
 
 // aten::split_with_sizes_copy(Tensor self, SymInt[] split_sizes, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_copy_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector split_with_sizes_copy_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_copy_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector split_with_sizes_copy_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
 
 
 // aten::split_with_sizes_copy.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
@@ -54369,30 +54369,30 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::tensor_split.sections(Tensor(a -> *) self, SymInt sections, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Cast("int64_t") long sections, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @Cast("int64_t") long sections, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
 
 
 // aten::tensor_split.sections(Tensor(a -> *) self, SymInt sections, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymInt sections, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymInt sections);
+@Namespace("at") public static native @ByVal TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymInt sections, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymInt sections);
 
 
 // aten::tensor_split.indices(Tensor(a -> *) self, SymInt[] indices, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal LongArrayRef indices, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] indices, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal LongArrayRef indices, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] indices, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
 
 
 // aten::tensor_split.indices(Tensor(a -> *) self, SymInt[] indices, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef indices, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef indices);
+@Namespace("at") public static native @ByVal TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef indices, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector tensor_split_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef indices);
 
 
 // aten::tensor_split.tensor_indices_or_sections(Tensor(a -> *) self, Tensor tensor_indices_or_sections, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections);
 
 
 
@@ -55639,11 +55639,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::unbind.int(Tensor(a -> *) self, int dim=0) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unbind(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unbind(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorVector unbind(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unbind(@Const @ByRef Tensor self);
 
 // aten::unbind.Dimname(Tensor(a -> *) self, Dimname dim) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unbind(@Const @ByRef Tensor self, @ByVal Dimname dim);
+@Namespace("at") public static native @ByVal TensorVector unbind(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
 
@@ -55673,8 +55673,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::unbind_copy.int(Tensor self, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unbind_copy(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unbind_copy(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal TensorVector unbind_copy(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unbind_copy(@Const @ByRef Tensor self);
 
 // aten::unbind_copy.int_out(Tensor self, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unbind_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
@@ -55759,8 +55759,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::unflatten_dense_tensors(Tensor flat, Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorVector tensors);
+@Namespace("at") public static native @ByVal TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorVector tensors);
 
 
 
@@ -56055,8 +56055,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::unsafe_chunk(Tensor self, int chunks, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks);
+@Namespace("at") public static native @ByVal TensorVector unsafe_chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unsafe_chunk(@Const @ByRef Tensor self, @Cast("int64_t") long chunks);
 
 
 
@@ -56086,13 +56086,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::unsafe_split.Tensor(Tensor self, SymInt split_size, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split(@Const @ByRef Tensor self, @Cast("int64_t") long split_size);
 
 
 // aten::unsafe_split.Tensor(Tensor self, SymInt split_size, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_symint(@Const @ByRef Tensor self, @ByVal SymInt split_size);
 
 
 // aten::unsafe_split.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
@@ -56147,15 +56147,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::unsafe_split_with_sizes(Tensor self, SymInt[] split_sizes, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_with_sizes(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
 
 
 // aten::unsafe_split_with_sizes(Tensor self, SymInt[] split_sizes, int dim=0) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unsafe_split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal TensorVector unsafe_split_with_sizes_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
 
 
 // aten::unsafe_split_with_sizes.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
@@ -57747,11 +57747,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::vsplit.int(Tensor(a -> *) self, int sections) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector vsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
+@Namespace("at") public static native @ByVal TensorVector vsplit(@Const @ByRef Tensor self, @Cast("int64_t") long sections);
 
 // aten::vsplit.array(Tensor(a -> *) self, int[] indices) -> Tensor(a)[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector vsplit(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector vsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
+@Namespace("at") public static native @ByVal TensorVector vsplit(@Const @ByRef Tensor self, @ByVal LongArrayRef indices);
+@Namespace("at") public static native @ByVal TensorVector vsplit(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... indices);
 
 
 
@@ -57836,7 +57836,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Scalar self, @Const @ByRef Scalar other);
 
 // aten::where(Tensor condition) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector where(@Const @ByRef Tensor condition);
+@Namespace("at") public static native @ByVal TensorVector where(@Const @ByRef Tensor condition);
 
 
 
@@ -59668,8 +59668,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector expand_outplace(@ByVal TensorArrayRef to_expand);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector expand_outplace(@ByVal TensorVector to_expand);
+@Namespace("at") public static native @ByVal TensorVector expand_outplace(@ByVal TensorArrayRef to_expand);
+@Namespace("at") public static native @ByVal TensorVector expand_outplace(@ByVal TensorVector to_expand);
 
 @Namespace("at") public static native @ByVal Tensor sum_to(
     @ByVal Tensor tensor,
@@ -59960,7 +59960,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @SharedPtr Node function);
 
 /** Return true if any of the variables in the list require a gradient. */
-@Namespace("torch::autograd") public static native @Cast("bool") boolean any_variable_requires_grad(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector variables);
+@Namespace("torch::autograd") public static native @Cast("bool") boolean any_variable_requires_grad(@Const @ByRef TensorVector variables);
 
 /** Return the next edges of all the given variables, or tuples of variables. */
 
@@ -62807,7 +62807,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 @Namespace("at::indexing::impl") public static native @ByVal TensorOptionalList typeConvertIndices(
     @Const @ByRef Tensor arg0,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector indices);
+    @ByRef(true) TensorVector indices);
 
 // NOTE: Why do we mirror instead of replace the `count_specified_dimensions`
 // function in torch/csrc/autograd/python_variable_indexing.cpp? It's because
@@ -62906,11 +62906,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 @Namespace("at::indexing") public static native @ByVal Tensor dispatch_index(
     @Const @ByRef Tensor self,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector indices);
+    @ByRef(true) TensorVector indices);
 
 @Namespace("at::indexing") public static native @ByVal Tensor dispatch_index_put_(
     @ByRef Tensor self,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector indices,
+    @ByRef(true) TensorVector indices,
     @Const @ByRef Tensor value);
 
 // NOTE [ Setting `disable_slice_optimization` when calling C++ tensor indexing
@@ -76224,12 +76224,12 @@ body of your function, only data pointers.
 // sense!) in order to return a CPU-side `double`. This C++ version therefore
 // cannot be run fully asynchronously w.r.t. the device of the gradients.
 @Namespace("torch::nn::utils") public static native double clip_grad_norm_(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters,
+    @Const @ByRef TensorVector parameters,
     double max_norm,
     double norm_type/*=2.0*/,
     @Cast("bool") boolean error_if_nonfinite/*=false*/);
 @Namespace("torch::nn::utils") public static native double clip_grad_norm_(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters,
+    @Const @ByRef TensorVector parameters,
     double max_norm);
 
 // A wrapper around clip_grad_norm_ that allows us to call the function with a
@@ -76251,7 +76251,7 @@ body of your function, only data pointers.
 // See https://pytorch.org/docs/stable/nn.html#clip-grad-value
 // for more details about this module.
 @Namespace("torch::nn::utils") public static native void clip_grad_value_(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters,
+    @Const @ByRef TensorVector parameters,
     double clip_value);
 
 // A wrapper around clip_grad_value_ that allows us to call the function with a
@@ -76283,12 +76283,12 @@ body of your function, only data pointers.
 
 // Convert parameters to one vector
 @Namespace("torch::nn::utils") public static native @ByVal Tensor parameters_to_vector(
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters);
+    @Const @ByRef TensorVector parameters);
 
 // Convert one vector to the parameters
 @Namespace("torch::nn::utils") public static native void vector_to_parameters(
     @Const @ByRef Tensor vec,
-    @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters);
+    @Const @ByRef TensorVector parameters);
 
  // namespace utils
  // namespace nn
