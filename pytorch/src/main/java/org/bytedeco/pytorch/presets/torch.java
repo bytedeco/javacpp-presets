@@ -215,6 +215,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::nn::Cloneable<torch::nn::" + name + "Impl>").pointerTypes(name + "ImplCloneable").purify())
                .put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
                .put(new Info("torch::nn::" + name).skip())
+               .put(new Info("torch::nn::Module::as<torch::nn::" + name + "Impl,int>").javaNames("as" + name));
         ;
 
         if (anyModuleCompatible) {

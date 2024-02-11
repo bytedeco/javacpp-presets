@@ -393,6 +393,656 @@ public class Module extends Pointer {
    *    MyModule module;
    *    module.apply(initialize_weights);
    *  \endrst */
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ModuleDictImpl,int>") @NoException(true) ModuleDictImpl asModuleDict();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ModuleListImpl,int>") @NoException(true) ModuleListImpl asModuleList();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SequentialImpl,int>") @NoException(true) SequentialImpl asSequential();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ParameterDictImpl,int>") @NoException(true) ParameterDictImpl asParameterDict();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ParameterListImpl,int>") @NoException(true) ParameterListImpl asParameterList();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveLogSoftmaxWithLossImpl,int>") @NoException(true) AdaptiveLogSoftmaxWithLossImpl asAdaptiveLogSoftmaxWithLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::BatchNorm1dImpl,int>") @NoException(true) BatchNorm1dImpl asBatchNorm1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::InstanceNorm1dImpl,int>") @NoException(true) InstanceNorm1dImpl asInstanceNorm1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::Conv1dImpl,int>") @NoException(true) Conv1dImpl asConv1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ConvTranspose1dImpl,int>") @NoException(true) ConvTranspose1dImpl asConvTranspose1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::DropoutImpl,int>") @NoException(true) DropoutImpl asDropout();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::BatchNorm2dImpl,int>") @NoException(true) BatchNorm2dImpl asBatchNorm2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::InstanceNorm2dImpl,int>") @NoException(true) InstanceNorm2dImpl asInstanceNorm2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::Conv2dImpl,int>") @NoException(true) Conv2dImpl asConv2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ConvTranspose2dImpl,int>") @NoException(true) ConvTranspose2dImpl asConvTranspose2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::Dropout2dImpl,int>") @NoException(true) Dropout2dImpl asDropout2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::BatchNorm3dImpl,int>") @NoException(true) BatchNorm3dImpl asBatchNorm3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::InstanceNorm3dImpl,int>") @NoException(true) InstanceNorm3dImpl asInstanceNorm3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::Conv3dImpl,int>") @NoException(true) Conv3dImpl asConv3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ConvTranspose3dImpl,int>") @NoException(true) ConvTranspose3dImpl asConvTranspose3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::Dropout3dImpl,int>") @NoException(true) Dropout3dImpl asDropout3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AlphaDropoutImpl,int>") @NoException(true) AlphaDropoutImpl asAlphaDropout();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::FeatureAlphaDropoutImpl,int>") @NoException(true) FeatureAlphaDropoutImpl asFeatureAlphaDropout();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::CosineSimilarityImpl,int>") @NoException(true) CosineSimilarityImpl asCosineSimilarity();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::PairwiseDistanceImpl,int>") @NoException(true) PairwiseDistanceImpl asPairwiseDistance();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::EmbeddingImpl,int>") @NoException(true) EmbeddingImpl asEmbedding();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::EmbeddingBagImpl,int>") @NoException(true) EmbeddingBagImpl asEmbeddingBag();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::FoldImpl,int>") @NoException(true) FoldImpl asFold();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::UnfoldImpl,int>") @NoException(true) UnfoldImpl asUnfold();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::IdentityImpl,int>") @NoException(true) IdentityImpl asIdentity();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LinearImpl,int>") @NoException(true) LinearImpl asLinear();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::BilinearImpl,int>") @NoException(true) BilinearImpl asBilinear();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::FlattenImpl,int>") @NoException(true) FlattenImpl asFlatten();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::UnflattenImpl,int>") @NoException(true) UnflattenImpl asUnflatten();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::L1LossImpl,int>") @NoException(true) L1LossImpl asL1Loss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::KLDivLossImpl,int>") @NoException(true) KLDivLossImpl asKLDivLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MSELossImpl,int>") @NoException(true) MSELossImpl asMSELoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::BCELossImpl,int>") @NoException(true) BCELossImpl asBCELoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::HingeEmbeddingLossImpl,int>") @NoException(true) HingeEmbeddingLossImpl asHingeEmbeddingLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MultiMarginLossImpl,int>") @NoException(true) MultiMarginLossImpl asMultiMarginLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::CosineEmbeddingLossImpl,int>") @NoException(true) CosineEmbeddingLossImpl asCosineEmbeddingLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SmoothL1LossImpl,int>") @NoException(true) SmoothL1LossImpl asSmoothL1Loss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::HuberLossImpl,int>") @NoException(true) HuberLossImpl asHuberLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MultiLabelMarginLossImpl,int>") @NoException(true) MultiLabelMarginLossImpl asMultiLabelMarginLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SoftMarginLossImpl,int>") @NoException(true) SoftMarginLossImpl asSoftMarginLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MultiLabelSoftMarginLossImpl,int>") @NoException(true) MultiLabelSoftMarginLossImpl asMultiLabelSoftMarginLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TripletMarginLossImpl,int>") @NoException(true) TripletMarginLossImpl asTripletMarginLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TripletMarginWithDistanceLossImpl,int>") @NoException(true) TripletMarginWithDistanceLossImpl asTripletMarginWithDistanceLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::CTCLossImpl,int>") @NoException(true) CTCLossImpl asCTCLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::PoissonNLLLossImpl,int>") @NoException(true) PoissonNLLLossImpl asPoissonNLLLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MarginRankingLossImpl,int>") @NoException(true) MarginRankingLossImpl asMarginRankingLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::NLLLossImpl,int>") @NoException(true) NLLLossImpl asNLLLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::CrossEntropyLossImpl,int>") @NoException(true) CrossEntropyLossImpl asCrossEntropyLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::BCEWithLogitsLossImpl,int>") @NoException(true) BCEWithLogitsLossImpl asBCEWithLogitsLoss();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReflectionPad1dImpl,int>") @NoException(true) ReflectionPad1dImpl asReflectionPad1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReplicationPad1dImpl,int>") @NoException(true) ReplicationPad1dImpl asReplicationPad1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ConstantPad1dImpl,int>") @NoException(true) ConstantPad1dImpl asConstantPad1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ZeroPad1dImpl,int>") @NoException(true) ZeroPad1dImpl asZeroPad1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AvgPool1dImpl,int>") @NoException(true) AvgPool1dImpl asAvgPool1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MaxPool1dImpl,int>") @NoException(true) MaxPool1dImpl asMaxPool1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveAvgPool1dImpl,int>") @NoException(true) AdaptiveAvgPool1dImpl asAdaptiveAvgPool1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveMaxPool1dImpl,int>") @NoException(true) AdaptiveMaxPool1dImpl asAdaptiveMaxPool1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MaxUnpool1dImpl,int>") @NoException(true) MaxUnpool1dImpl asMaxUnpool1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LPPool1dImpl,int>") @NoException(true) LPPool1dImpl asLPPool1d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReflectionPad2dImpl,int>") @NoException(true) ReflectionPad2dImpl asReflectionPad2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReplicationPad2dImpl,int>") @NoException(true) ReplicationPad2dImpl asReplicationPad2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ConstantPad2dImpl,int>") @NoException(true) ConstantPad2dImpl asConstantPad2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ZeroPad2dImpl,int>") @NoException(true) ZeroPad2dImpl asZeroPad2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AvgPool2dImpl,int>") @NoException(true) AvgPool2dImpl asAvgPool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MaxPool2dImpl,int>") @NoException(true) MaxPool2dImpl asMaxPool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveAvgPool2dImpl,int>") @NoException(true) AdaptiveAvgPool2dImpl asAdaptiveAvgPool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveMaxPool2dImpl,int>") @NoException(true) AdaptiveMaxPool2dImpl asAdaptiveMaxPool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MaxUnpool2dImpl,int>") @NoException(true) MaxUnpool2dImpl asMaxUnpool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::FractionalMaxPool2dImpl,int>") @NoException(true) FractionalMaxPool2dImpl asFractionalMaxPool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LPPool2dImpl,int>") @NoException(true) LPPool2dImpl asLPPool2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReflectionPad3dImpl,int>") @NoException(true) ReflectionPad3dImpl asReflectionPad3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReplicationPad3dImpl,int>") @NoException(true) ReplicationPad3dImpl asReplicationPad3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ConstantPad3dImpl,int>") @NoException(true) ConstantPad3dImpl asConstantPad3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ZeroPad3dImpl,int>") @NoException(true) ZeroPad3dImpl asZeroPad3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AvgPool3dImpl,int>") @NoException(true) AvgPool3dImpl asAvgPool3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MaxPool3dImpl,int>") @NoException(true) MaxPool3dImpl asMaxPool3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveAvgPool3dImpl,int>") @NoException(true) AdaptiveAvgPool3dImpl asAdaptiveAvgPool3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::AdaptiveMaxPool3dImpl,int>") @NoException(true) AdaptiveMaxPool3dImpl asAdaptiveMaxPool3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MaxUnpool3dImpl,int>") @NoException(true) MaxUnpool3dImpl asMaxUnpool3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::FractionalMaxPool3dImpl,int>") @NoException(true) FractionalMaxPool3dImpl asFractionalMaxPool3d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::RNNImpl,int>") @NoException(true) RNNImpl asRNN();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LSTMImpl,int>") @NoException(true) LSTMImpl asLSTM();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::GRUImpl,int>") @NoException(true) GRUImpl asGRU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::RNNCellImpl,int>") @NoException(true) RNNCellImpl asRNNCell();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LSTMCellImpl,int>") @NoException(true) LSTMCellImpl asLSTMCell();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::GRUCellImpl,int>") @NoException(true) GRUCellImpl asGRUCell();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::PixelShuffleImpl,int>") @NoException(true) PixelShuffleImpl asPixelShuffle();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::PixelUnshuffleImpl,int>") @NoException(true) PixelUnshuffleImpl asPixelUnshuffle();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::UpsampleImpl,int>") @NoException(true) UpsampleImpl asUpsample();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ELUImpl,int>") @NoException(true) ELUImpl asELU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SELUImpl,int>") @NoException(true) SELUImpl asSELU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::HardshrinkImpl,int>") @NoException(true) HardshrinkImpl asHardshrink();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::HardtanhImpl,int>") @NoException(true) HardtanhImpl asHardtanh();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LeakyReLUImpl,int>") @NoException(true) LeakyReLUImpl asLeakyReLU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LogSigmoidImpl,int>") @NoException(true) LogSigmoidImpl asLogSigmoid();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SoftmaxImpl,int>") @NoException(true) SoftmaxImpl asSoftmax();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SoftminImpl,int>") @NoException(true) SoftminImpl asSoftmin();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LogSoftmaxImpl,int>") @NoException(true) LogSoftmaxImpl asLogSoftmax();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::Softmax2dImpl,int>") @NoException(true) Softmax2dImpl asSoftmax2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::PReLUImpl,int>") @NoException(true) PReLUImpl asPReLU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReLUImpl,int>") @NoException(true) ReLUImpl asReLU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ReLU6Impl,int>") @NoException(true) ReLU6Impl asReLU6();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::RReLUImpl,int>") @NoException(true) RReLUImpl asRReLU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::CELUImpl,int>") @NoException(true) CELUImpl asCELU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::GLUImpl,int>") @NoException(true) GLUImpl asGLU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::GELUImpl,int>") @NoException(true) GELUImpl asGELU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SiLUImpl,int>") @NoException(true) SiLUImpl asSiLU();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MishImpl,int>") @NoException(true) MishImpl asMish();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SigmoidImpl,int>") @NoException(true) SigmoidImpl asSigmoid();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SoftplusImpl,int>") @NoException(true) SoftplusImpl asSoftplus();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SoftshrinkImpl,int>") @NoException(true) SoftshrinkImpl asSoftshrink();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::SoftsignImpl,int>") @NoException(true) SoftsignImpl asSoftsign();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TanhImpl,int>") @NoException(true) TanhImpl asTanh();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TanhshrinkImpl,int>") @NoException(true) TanhshrinkImpl asTanhshrink();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::ThresholdImpl,int>") @NoException(true) ThresholdImpl asThreshold();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::MultiheadAttentionImpl,int>") @NoException(true) MultiheadAttentionImpl asMultiheadAttention();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LayerNormImpl,int>") @NoException(true) LayerNormImpl asLayerNorm();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::LocalResponseNormImpl,int>") @NoException(true) LocalResponseNormImpl asLocalResponseNorm();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::CrossMapLRN2dImpl,int>") @NoException(true) CrossMapLRN2dImpl asCrossMapLRN2d();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::GroupNormImpl,int>") @NoException(true) GroupNormImpl asGroupNorm();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TransformerEncoderLayerImpl,int>") @NoException(true) TransformerEncoderLayerImpl asTransformerEncoderLayer();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TransformerDecoderLayerImpl,int>") @NoException(true) TransformerDecoderLayerImpl asTransformerDecoderLayer();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TransformerEncoderImpl,int>") @NoException(true) TransformerEncoderImpl asTransformerEncoder();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TransformerDecoderImpl,int>") @NoException(true) TransformerDecoderImpl asTransformerDecoder();
+  
+  ///
+  ///
+  ///
+  public native @Name("as<torch::nn::TransformerImpl,int>") @NoException(true) TransformerImpl asTransformer();
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
