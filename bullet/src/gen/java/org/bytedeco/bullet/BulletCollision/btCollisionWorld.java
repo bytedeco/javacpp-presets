@@ -108,8 +108,10 @@ public class btCollisionWorld extends Pointer {
 		public native @Cast("unsigned int") int m_flags(); public native RayResultCallback m_flags(int setter);
 		public native @Cast("bool") boolean hasHit();
 
+		@Virtual
 		public native @Cast("bool") boolean needsCollision(btBroadphaseProxy proxy0);
 
+		@Virtual
 		public native @Cast("btScalar") double addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
@@ -127,6 +129,7 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3 m_hitNormalWorld(); public native ClosestRayResultCallback m_hitNormalWorld(btVector3 setter);
 		public native @ByRef btVector3 m_hitPointWorld(); public native ClosestRayResultCallback m_hitPointWorld(btVector3 setter);
 
+		@Virtual
 		public native @Cast("btScalar") double addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
@@ -147,6 +150,7 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3Array m_hitPointWorld(); public native AllHitsRayResultCallback m_hitPointWorld(btVector3Array setter);
 		public native @ByRef btScalarArray m_hitFractions(); public native AllHitsRayResultCallback m_hitFractions(btScalarArray setter);
 
+		@Virtual
 		public native @Cast("btScalar") double addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
@@ -187,6 +191,7 @@ public class btCollisionWorld extends Pointer {
 
 		public native @Cast("bool") boolean needsCollision(btBroadphaseProxy proxy0);
 
+		@Virtual
 		public native @Cast("btScalar") double addSingleResult(@ByRef LocalConvexResult convexResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
@@ -205,6 +210,7 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3 m_hitPointWorld(); public native ClosestConvexResultCallback m_hitPointWorld(btVector3 setter);
 		public native @Const btCollisionObject m_hitCollisionObject(); public native ClosestConvexResultCallback m_hitCollisionObject(btCollisionObject setter);
 
+		@Virtual
 		public native @Cast("btScalar") double addSingleResult(@ByRef LocalConvexResult convexResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
@@ -218,8 +224,10 @@ public class btCollisionWorld extends Pointer {
 		public native int m_collisionFilterMask(); public native ContactResultCallback m_collisionFilterMask(int setter);
 		public native @Cast("btScalar") double m_closestDistanceThreshold(); public native ContactResultCallback m_closestDistanceThreshold(double setter);
 
+		@Virtual
 		public native @Cast("bool") boolean needsCollision(btBroadphaseProxy proxy0);
 
+		@Virtual
 		public native @Cast("btScalar") double addSingleResult(@ByRef btManifoldPoint cp, @Const btCollisionObjectWrapper colObj0Wrap, int partId0, int index0, @Const btCollisionObjectWrapper colObj1Wrap, int partId1, int index1);
 	}
 

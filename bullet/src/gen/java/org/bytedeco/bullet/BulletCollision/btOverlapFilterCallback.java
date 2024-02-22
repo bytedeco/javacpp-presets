@@ -20,5 +20,6 @@ public class btOverlapFilterCallback extends Pointer {
     public btOverlapFilterCallback(Pointer p) { super(p); }
 
 	// return true when pairs need collision
+    @Virtual
 	public native @Cast("bool") boolean needBroadphaseCollision(btBroadphaseProxy proxy0, btBroadphaseProxy proxy1);
 }

@@ -20,5 +20,6 @@ public class btOverlapCallback extends Pointer {
     public btOverlapCallback(Pointer p) { super(p); }
 
 	//return true for deletion of the pair
+    @Virtual
 	public native @Cast("bool") boolean processOverlap(@ByRef btBroadphasePair pair);
 }
