@@ -77902,11 +77902,11 @@ public static final int TORCH_VERSION_MAJOR = 2;
 public static final int TORCH_VERSION_MINOR = 2;
 
 /** Indicates the patch version of LibTorch. */
-public static final int TORCH_VERSION_PATCH = 0;
+public static final int TORCH_VERSION_PATCH = 1;
 
 /** Indicates the version of LibTorch. */
 public static final String TORCH_VERSION = 
-  "2.2.0";
+  "2.2.1";
 
 
 // Parsed from torch/csrc/autograd/InferenceMode.h
