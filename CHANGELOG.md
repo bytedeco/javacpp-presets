@@ -1,4 +1,6 @@
 
+ * Virtualize `btCollisionWorld`, `btOverlapFilterCallback`, `btOverlapCallback` from Bullet Physics SDK ([pull #1475](https://github.com/bytedeco/javacpp-presets/pull/1475))
+
 ### January 29, 2024 version 1.5.10
  * Introduce `macosx-arm64` builds for PyTorch ([pull #1463](https://github.com/bytedeco/javacpp-presets/pull/1463))
  * Reenable `linux-arm64` builds for CPython and NumPy ([pull #1386](https://github.com/bytedeco/javacpp-presets/pull/1386))
