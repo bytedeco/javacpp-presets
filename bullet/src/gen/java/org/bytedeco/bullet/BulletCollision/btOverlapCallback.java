@@ -16,9 +16,21 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btOverlapCallback extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public btOverlapCallback() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public btOverlapCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btOverlapCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public btOverlapCallback position(long position) {
+        return (btOverlapCallback)super.position(position);
+    }
+    @Override public btOverlapCallback getPointer(long i) {
+        return new btOverlapCallback((Pointer)this).offsetAddress(i);
+    }
 
 	//return true for deletion of the pair
-	public native @Cast("bool") boolean processOverlap(@ByRef btBroadphasePair pair);
+	@Virtual(true) public native @Cast("bool") boolean processOverlap(@ByRef btBroadphasePair pair);
 }

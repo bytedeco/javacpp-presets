@@ -1,4 +1,5 @@
 
+ * Virtualize `btCollisionWorld`, `btOverlapFilterCallback`, `btOverlapCallback` from Bullet Physics SDK ([pull #1475](https://github.com/bytedeco/javacpp-presets/pull/1475))
  * Upgrade presets for PyTorch 2.2.1 ([pull #1466](https://github.com/bytedeco/javacpp-presets/pull/1466))
 
 ### January 29, 2024 version 1.5.10
