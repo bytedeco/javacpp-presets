@@ -1,11 +1,12 @@
 // All files included by
 // #include <torch/torch.h>
 // #include <torch/script.h>
+// #include <torch/csrc/inductor/aoti_model_container_runner.h>
 // as listed by g++ -H torch/torch.h torch/script.h
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
 //   (ATen/ops/*_native.h ATen/ops/*_meta.h ATen/ops/*_ops.h)
-// - ATen/ops/_*
+// - ATen/ops/_* (internal, API can change)
 // - and some exceptions commented below
 #include "torch/csrc/utils/python_stub.h"
 #include "c10/macros/cmake_macros.h"
@@ -15,16 +16,12 @@
 #include "c10/core/DeviceType.h"
 #include "c10/util/Deprecated.h"
 // #include "c10/util/string_utils.h" // Android only
-// #include "c10/util/C++17.h"
-#include "c10/util/reverse_iterator.h"
 // #include "c10/util/string_view.h" // Not mapped. Using custom adapter instead.
 #include "c10/util/StringUtil.h"
-#include "c10/util/in_place.h"
-// #include "c10/util/variant.h" // Not parseable and incompatible with declaring c10::variant as basic container
 #include "c10/util/Exception.h"
 #include "c10/core/Device.h"
 #include "c10/core/DispatchKey.h"
-#include "c10/util/Array.h"
+// #include "c10/util/C++17.h"
 #include "c10/util/TypeTraits.h"
 #include "c10/util/TypeList.h"
 // #include "c10/util/Metaprogramming.h" // Not parseable
@@ -46,6 +43,8 @@
 #include "c10/util/floating_point_utils.h"
 #include "c10/util/Float8_e4m3fn-inl.h"
 #include "c10/util/Float8_e4m3fn.h"
+#include "c10/util/Float8_e4m3fnuz-inl.h"
+#include "c10/util/Float8_e4m3fnuz.h"
 #include "c10/util/complex_math.h"
 #include "c10/util/complex_utils.h"
 #include "c10/util/complex.h"
@@ -53,6 +52,8 @@
 #include "c10/util/Half.h"
 #include "c10/util/Float8_e5m2-inl.h"
 #include "c10/util/Float8_e5m2.h"
+#include "c10/util/Float8_e5m2fnuz-inl.h"
+#include "c10/util/Float8_e5m2fnuz.h"
 #include "c10/util/bits.h"
 #include "c10/util/qint32.h"
 #include "c10/util/qint8.h"
@@ -60,7 +61,8 @@
 #include "c10/util/quint4x2.h"
 #include "c10/util/quint8.h"
 #include "c10/core/ScalarType.h"
-#include "c10/util/ExclusivelyOwned.h"
+// #include "c10/util/Optional.h" // Incompatible with declaration of c10::optional as basic container
+#include "c10/util/in_place.h"
 #include "c10/util/MaybeOwned.h"
 #include "c10/core/SymNodeImpl.h"
 #include "c10/core/SymFloat.h"
@@ -68,12 +70,10 @@
 #include "c10/core/SymInt.h"
 #include "c10/util/TypeCast.h"
 #include "c10/core/Scalar.h"
-// #include "c10/util/Optional.h" // Incompatible with declaration of c10::optional as basic container
 #include "c10/util/IdWrapper.h"
 #include "c10/util/Type.h"
 #include "c10/util/ConstexprCrc.h"
 #include "c10/util/TypeIndex.h"
-#include "c10/util/flat_hash_map.h"
 #include "c10/util/irange.h"
 #include "c10/util/typeid.h"
 #include "c10/core/ScalarTypeToTypeMeta.h"
@@ -82,9 +82,9 @@
 #include "c10/core/Allocator.h"
 #include "c10/util/python_stub.h"
 #include "c10/core/StorageImpl.h"
+#include "c10/util/ExclusivelyOwned.h"
 #include "c10/core/Storage.h"
 #include "c10/core/AutogradState.h"
-#include "c10/core/GradMode.h"
 #include "c10/util/Registry.h"
 #include "c10/util/Flags.h"
 #include "c10/core/impl/LocalDispatchKeySet.h"
@@ -92,12 +92,13 @@
 #include "c10/core/SymIntArrayRef.h"
 #include "c10/core/DefaultDtype.h"
 #include "c10/core/TensorOptions.h"
-#include "c10/core/WrapDimMinimal.h"
 #include "c10/core/impl/HermeticPyObjectTLS.h"
 #include "c10/core/impl/PyInterpreter.h"
 #include "c10/core/impl/PyObjectSlot.h"
 #include "c10/core/impl/SizesAndStrides.h"
 #include "c10/util/DimVector.h"
+#include "c10/core/SymbolicShapeMeta.h"
+#include "c10/core/WrapDimMinimal.h"
 // #include "c10/util/logging_is_not_google_glog.h" // Not parseable
 #include "c10/util/Logging.h"
 #include "c10/util/accumulate.h"
@@ -173,26 +174,38 @@
 #include "ATen/core/function_schema.h"
 #include "ATen/core/function_schema_inl.h"
 #include "ATen/core/op_registration/infer_schema.h"
-#include "ATen/record_function.h"
 #include "ATen/core/op_registration/op_allowlist.h"
-#include "c10/util/either.h"
-#include "torch/csrc/jit/frontend/function_schema_parser.h"
-#include "c10/core/CompileTimeFunctionPointer.h"
+#include "ATen/SequenceNumber.h"
 #include "ATen/core/boxing/OperatorKernel.h"
 #include "ATen/core/boxing/BoxedKernel.h"
 #include "ATen/core/boxing/BoxedKernel_impl.h"
 #include "ATen/core/stack.h"
 #include "ATen/core/boxing/impl/boxing.h"
 #include "ATen/core/boxing/impl/make_boxed_from_unboxed_functor.h"
+#include "c10/core/CompileTimeFunctionPointer.h"
 #include "ATen/core/boxing/impl/WrapFunctionIntoFunctor.h"
 #include "ATen/core/boxing/impl/WrapFunctionIntoRuntimeFunctor.h"
 #include "ATen/core/boxing/KernelFunction.h"
 #include "ATen/core/boxing/KernelFunction_impl.h"
+#include "c10/util/flat_hash_map.h"
+#include "c10/util/either.h"
+#include "c10/core/PyHandleCache.h"
+#include "c10/core/SafePyObject.h"
+#include "c10/util/Bitset.h"
+#include "ATen/core/Variadic.h"
+#include "ATen/core/dispatch/DispatchKeyExtractor.h"
+#include "ATen/core/dispatch/OperatorEntry.h"
+#include "ATen/record_function.h"
+#include "c10/util/Synchronized.h"
+// #include "c10/util/LeftRight.h" // Not in API
+#include "c10/core/GradMode.h"
+#include "ATen/core/grad_mode.h"
+#include "ATen/core/dispatch/Dispatcher.h"
 #include "ATen/core/dispatch/CppSignature.h"
 #include "ATen/core/dispatch/RegistrationHandleRAII.h"
+#include "ATen/core/enum_tag.h"
 #include "ATen/core/ATenOpList.h"
 #include "ATen/core/op_registration/op_registration.h"
-#include "ATen/core/enum_tag.h"
 #include "ATen/core/function.h"
 // #include "ATen/core/builtin_function.h" // Not in API
 #include "ATen/core/class_type.h"
@@ -201,10 +214,8 @@
 #include "torch/library.h"
 #include "torch/csrc/autograd/autograd_not_implemented_fallback.h"
 #include "torch/csrc/autograd/anomaly_mode.h"
-#include "ATen/core/grad_mode.h"
 #include "torch/csrc/autograd/grad_mode.h"
 #include "ATen/FuncTorchTLS.h"
-#include "c10/core/SafePyObject.h"
 #include "ATen/PythonTorchFunctionTLS.h"
 #include "ATen/SavedTensorHooks.h"
 #include "ATen/ThreadLocalPythonObjects.h"
@@ -222,6 +233,7 @@
 #include "ATen/core/LegacyTypeDispatch.h"
 #include "ATen/detail/CUDAHooksInterface.h"
 #include "ATen/detail/HIPHooksInterface.h"
+#include "ATen/detail/IPUHooksInterface.h"
 #include "ATen/detail/MPSHooksInterface.h"
 #include "ATen/detail/MTIAHooksInterface.h"
 #include "ATen/detail/ORTHooksInterface.h"
@@ -714,6 +726,7 @@
 #include "ATen/ops/margin_ranking_loss.h"
 #include "ATen/ops/masked_fill.h"
 #include "ATen/ops/masked_scatter.h"
+#include "ATen/ops/masked_scatter_backward.h"
 #include "ATen/ops/masked_select.h"
 #include "ATen/ops/masked_select_backward.h"
 #include "ATen/ops/matmul.h"
@@ -1177,9 +1190,7 @@
 #include "torch/csrc/autograd/input_metadata.h"
 #include "torch/csrc/autograd/saved_variable_hooks.h"
 #include "torch/csrc/autograd/saved_variable.h"
-#include "ATen/core/Variadic.h"
 #include "torch/csrc/utils/variadic.h"
-#include "ATen/SequenceNumber.h"
 #include "torch/csrc/autograd/function.h"
 #include "torch/csrc/autograd/custom_function.h"
 #include "torch/csrc/api/include/torch/autograd.h"
@@ -1203,13 +1214,7 @@
 #include "ATen/ATen.h"
 #include "torch/csrc/api/include/torch/detail/TensorDataContainer.h"
 #include "torch/csrc/autograd/generated/variable_factories.h"
-#include "c10/core/PyHandleCache.h"
-#include "c10/util/Bitset.h"
-#include "ATen/core/dispatch/DispatchKeyExtractor.h"
-#include "ATen/core/dispatch/OperatorEntry.h"
-#include "c10/util/Synchronized.h"
-// #include "c10/util/LeftRight.h" // Not in API
-#include "ATen/core/dispatch/Dispatcher.h"
+#include "torch/csrc/jit/frontend/function_schema_parser.h"
 #include "torch/csrc/api/include/torch/types.h"
 #include "torch/csrc/api/include/torch/data/dataloader_options.h"
 #include "torch/csrc/api/include/torch/data/detail/queue.h"
@@ -1219,7 +1224,6 @@
 #include "torch/csrc/api/include/torch/data/samplers/base.h"
 #include "torch/csrc/api/include/torch/data/samplers/random.h"
 #include "torch/csrc/api/include/torch/data/worker_exception.h"
-#include "torch/csrc/utils/memory.h"
 #include "torch/csrc/api/include/torch/data/dataloader/base.h"
 #include "torch/csrc/api/include/torch/data/dataloader/stateful.h"
 #include "torch/csrc/api/include/torch/data/dataloader/stateless.h"
@@ -1237,6 +1241,7 @@
 #include "torch/csrc/jit/ir/scope.h"
 #include "torch/csrc/jit/ir/constants.h"
 #include "torch/csrc/jit/ir/named_value.h"
+// #include "c10/util/overloaded.h" // Non parseable
 #include "torch/csrc/jit/runtime/operator_options.h"
 #include "torch/csrc/jit/runtime/operator.h"
 #include "torch/csrc/utils/schema_info.h"
@@ -1273,7 +1278,7 @@
 #include "torch/csrc/api/include/torch/data/transforms/base.h"
 #include "torch/csrc/api/include/torch/data/transforms/lambda.h"
 #include "torch/csrc/api/include/torch/data/transforms/collate.h"
-#include "torch/csrc/api/include/torch/data/transforms/stack.h"
+// #include "torch/csrc/api/include/torch/data/transforms/stack.h" // See ExampleStack explicit definition
 #include "torch/csrc/api/include/torch/data/transforms/tensor.h"
 #include "torch/csrc/api/include/torch/data/transforms.h"
 #include "torch/csrc/api/include/torch/data.h"
@@ -1355,7 +1360,6 @@
 #include "torch/csrc/api/include/torch/nn/options/adaptive.h"
 #include "torch/csrc/api/include/torch/nn/modules/adaptive.h"
 #include "torch/csrc/api/include/torch/nn/modules/batchnorm.h"
-// #include "c10/util/overloaded.h" // Non parseable
 #include "torch/csrc/api/include/torch/nn/modules/conv.h"
 #include "torch/csrc/api/include/torch/nn/modules/distance.h"
 #include "torch/csrc/api/include/torch/nn/modules/dropout.h"
@@ -1420,5 +1424,9 @@
 #include "torch/csrc/jit/frontend/versioned_symbols.h"
 #include "torch/csrc/jit/frontend/tree_views.h"
 #include "torch/csrc/jit/serialization/pickle.h"
+// #include "torch/csrc/inductor/aoti_torch/c/shim.h" // model.so API, not part of libtorch API
+// #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
+// Doesn't compile on Windows. Waiting for 2.2.1.
+// #include "torch/csrc/inductor/aoti_model_container_runner.h"
 
 #include "datasets.h"

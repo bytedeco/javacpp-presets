@@ -6,7 +6,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 /* This is a modified version of the variant container without the get2 method, that would
  * return a std::function and not a function pointer. */
-@NoOffset @Name("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU,std::function<torch::Tensor(const torch::Tensor&)> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@NoOffset @Name("std::variant<torch::enumtype::kReLU,torch::enumtype::kGELU,std::function<torch::Tensor(const torch::Tensor&)> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TransformerActivation extends Pointer {
     static {
         Loader.load();
@@ -46,7 +46,7 @@ public class TransformerActivation extends Pointer {
         return get0(this);
     }
 
-    @Namespace @Name("c10::get<0>") static native @ByRef kReLU get0(@ByRef TransformerActivation container);
+    @Namespace @Name("std::get<0>") static native @ByRef kReLU get0(@ByRef TransformerActivation container);
 
     @ValueSetter public native TransformerActivation put(@ByRef kReLU value);
 
@@ -54,7 +54,7 @@ public class TransformerActivation extends Pointer {
         return get1(this);
     }
 
-    @Namespace @Name("c10::get<1>") static native @ByRef kGELU get1(@ByRef TransformerActivation container);
+    @Namespace @Name("std::get<1>") static native @ByRef kGELU get1(@ByRef TransformerActivation container);
 
     @ValueSetter public native TransformerActivation put(@ByRef kGELU value);
 
