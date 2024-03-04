@@ -104,13 +104,6 @@ if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
 
-cd zimg-release-$ZIMGLIB
-autoreconf -iv
-./configure --prefix=$INSTALL_PATH
-make -j $MAKEJ V=0
-make install
-cd ..
-
 cd nasm-$NASM_VERSION
 # fix for build with GCC 8.x
 sedinplace 's/void pure_func/void/g' include/nasmlib.h
@@ -142,10 +135,21 @@ case $PLATFORM in
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH ---host=arm-linux
+	make -j $MAKEJ V=0
+	make install
+	cd ..
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j $MAKEJ V=0
         make install
@@ -288,10 +292,21 @@ EOF
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH ---host=aarch64-linux
+	make -j $MAKEJ V=0
+	make install
+	cd ..
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
         make -j $MAKEJ V=0
         make install
@@ -433,10 +448,20 @@ EOF
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=i686-linux
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
         make -j $MAKEJ V=0
         make install
@@ -575,10 +600,20 @@ EOF
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=x86_64-linux
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
         make -j $MAKEJ V=0
         make install
@@ -712,10 +747,20 @@ EOF
         export AS="nasm"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=i686-linux
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1005,10 +1050,20 @@ EOF
 
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1203,10 +1258,20 @@ EOF
         HOST_ARCH="$(uname -m)"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1340,10 +1405,24 @@ EOF
         MACHINE_TYPE=$( uname -m )
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH
+        else
+          CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu
+        fi
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         else
@@ -1555,10 +1634,20 @@ EOF
         export CPPFLAGS="$CFLAGS"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=aarch64-apple-darwin
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="clang -arch arm64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1680,10 +1769,20 @@ EOF
         export AS="nasm"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1803,10 +1902,20 @@ EOF
     windows-x86)
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         echo ""
         echo "--------------------"
@@ -1934,10 +2043,20 @@ EOF
     windows-x86_64)
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         echo ""
         echo "--------------------"
