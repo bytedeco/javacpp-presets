@@ -116,6 +116,7 @@ runs:
         # $SUDO ln -sf /opt/cmake-3.24.2-linux-x86_64/bin/* /usr/bin/
         $SUDO ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         $SUDO ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
+        rm apache-maven-3.6.3-bin.tar.gz git-2.18.3.tar.gz gradle-7.1.1-bin.zip
 
         $SUDO python3 -m pip install gdown || $SUDO python3 -m pip install gdown
 
@@ -207,6 +208,7 @@ runs:
           python3 -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
           $SUDO unzip Video_Codec_SDK_12.1.14.zip -d /usr/local
           $SUDO ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
+          rm Video_Codec_SDK_12.1.14.zip
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
@@ -215,6 +217,7 @@ runs:
           curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz
           $SUDO tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+          rm TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
@@ -223,6 +226,7 @@ runs:
           curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz
           $SUDO tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+          rm TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
@@ -230,6 +234,7 @@ runs:
           curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/86d6a4c1-c998-4c6b-9fff-ca004e9f7455/l_onemkl_p_2024.0.0.49673_offline.sh
           $SUDO bash l_onemkl_p_2024.0.0.49673_offline.sh -s -a -s --eula accept
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
+          rm l_onemkl_p_2024.0.0.49673_offline.sh
 
           # Allocate a swapfile on Linux as it's not enabled by default
           $SUDO fallocate -l 4GB /swapfile
@@ -270,7 +275,7 @@ runs:
           echo Installing Spinnaker amd64
           python3 -m gdown.cli https://drive.google.com/uc?id=1B91OxuFgT-T29fNlBc2gsgr-K2l2LNtw
           tar -xzvf spinnaker-3.0.0.118-amd64-pkg.tar.gz
-          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xvf data.tar.xz -C /; done;
+          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xvf data.tar.xz -C /; rm $f data.tar.xz; done;
         fi
 
         GRADLE_TASK=publishToMavenLocal
