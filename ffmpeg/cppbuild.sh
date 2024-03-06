@@ -140,10 +140,9 @@ case $PLATFORM in
         echo ""
         cd zimg-release-$ZIMGLIB
 	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH ---host=arm-linux
+	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=arm-linux
 	make -j $MAKEJ V=0
 	make install
-	cd ..
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -297,16 +296,15 @@ EOF
         echo ""
         cd zimg-release-$ZIMGLIB
 	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH ---host=aarch64-linux
+	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=aarch64-linux
 	make -j $MAKEJ V=0
 	make install
-	cd ..
         echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd ../$ZLIB
+        cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
         make -j $MAKEJ V=0
         make install
@@ -453,7 +451,7 @@ EOF
         echo ""
         cd zimg-release-$ZIMGLIB
 	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --host=i686-linux
+	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
 	make -j $MAKEJ V=0
 	make install
         echo ""
@@ -605,7 +603,7 @@ EOF
         echo ""
         cd zimg-release-$ZIMGLIB
 	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --host=x86_64-linux
+	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=x86_64-linux
 	make -j $MAKEJ V=0
 	make install
         echo ""
@@ -896,11 +894,21 @@ EOF
         export AS="nasm"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMGLIB
+	autoreconf -iv
+	./configure --prefix=$INSTALL_PATH --host=x86_64-linux
+	make -j $MAKEJ V=0
+	make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
-        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        cd ../$ZLIB
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static 
         make -j $MAKEJ V=0
         make install
         echo ""
