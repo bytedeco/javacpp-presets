@@ -59,6 +59,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
+    linux-loongarch64)
+        CC="gcc -mabi=lp64" CXX="g++ -mabi=lp64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+        make -j $MAKEJ
+        make install
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then

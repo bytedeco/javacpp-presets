@@ -422,6 +422,48 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
+    linux-loongarch64)
+        export CFLAGS="-pthread -I$INSTALL_PATH/include/"
+        export CXXFLAGS="$CFLAGS"
+        export CPPFLAGS="$CFLAGS"
+        export LDFLAGS="-L$INSTALL_PATH/lib/"
+        export CC="gcc -mabi=lp64 -fPIC"
+        export CXX="g++ -mabi=lp64 -fPIC"
+        export STRIP="strip"
+        export CMAKE_CONFIG="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=loongarch64 $CMAKE_CONFIG"
+        cd $ZLIB
+        $CMAKE $CMAKE_CONFIG .
+        make -j $MAKEJ
+        make install
+        cd ../$GIFLIB
+        $CMAKE $CMAKE_CONFIG .
+        make -j $MAKEJ
+        make install
+        cd ../$LIBJPEG
+        $CMAKE $CMAKE_CONFIG .
+        make -j $MAKEJ
+        make install
+        cd ../$LIBPNG
+        $CMAKE $CMAKE_CONFIG .
+        make -j $MAKEJ
+        make install
+        cd ../$LIBWEBP
+        $CMAKE $CMAKE_CONFIG $WEBP_CONFIG .
+        make -j $MAKEJ
+        make install
+        cd ../$LIBTIFF
+        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        make -j $MAKEJ
+        make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     linux-ppc64le)
         export CFLAGS="-pthread -I$INSTALL_PATH/include/"
         export CXXFLAGS="$CFLAGS"

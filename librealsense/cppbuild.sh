@@ -20,6 +20,12 @@ echo "Decompressing archives..."
 tar --totals -xzf ../librealsense-$LIBREALSENSE_VERSION.tar.gz
 tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
+PATCH_ARCH=$(uname -m)
+
+if [ "$PATCH_ARCH" == "loongarch64" ]; then
+patch -Np1 -d libusb-$LIBUSB_VERSION < ../../libusb-add-loongarch-cpuinfo.patch
+fi
+
 cd librealsense-$LIBREALSENSE_VERSION
 patch -Np1 --binary < ../../../librealsense.patch || true
 
@@ -41,6 +47,16 @@ case $PLATFORM in
         make install
         cd ../librealsense-$LIBREALSENSE_VERSION
         PKG_CONFIG_PATH="../lib/pkgconfig" CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    linux-loongarch64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC="gcc -mabi=lp64" CXX="g++ -mabi=lp64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=loongarch64-linux-gnu --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../librealsense-$LIBREALSENSE_VERSION
+        PKG_CONFIG_PATH="../lib/pkgconfig" CC="gcc -mabi=lp64" CXX="g++ -mabi=lp64 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;

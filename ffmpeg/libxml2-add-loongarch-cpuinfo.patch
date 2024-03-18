@@ -1,0 +1,26 @@
+diff --git a/config.guess b/config.guess
+index b33c9e8..9f6c9ec 100755
+--- a/config.guess
++++ b/config.guess
+@@ -909,6 +909,9 @@ EOF
+     aarch64:Linux:*:*)
+ 	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
+ 	exit ;;
++    loongarch64:Linux:*:*)
++	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
++	exit ;;
+     aarch64_be:Linux:*:*)
+ 	UNAME_MACHINE=aarch64_be
+ 	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
+diff --git a/config.sub b/config.sub
+index b51fb8c..b19b219 100755
+--- a/config.sub
++++ b/config.sub
+@@ -1156,6 +1156,7 @@ case $cpu-$vendor in
+ 			1750a | 580 \
+ 			| a29k \
+ 			| aarch64 | aarch64_be \
++			| loongarch64 \
+ 			| abacus \
+ 			| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] \
+ 			| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] \
