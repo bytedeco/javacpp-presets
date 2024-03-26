@@ -99,7 +99,7 @@ We can also have everything downloaded and installed automatically with:
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.10'
+    implementation("org.bytedeco:$moduleName-platform:$moduleVersion-1.5.10")
   }
 ```
 
