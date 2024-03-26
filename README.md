@@ -96,7 +96,7 @@ We can also have everything downloaded and installed automatically with:
   </dependency>
 ```
 
- * Gradle (inside the `build.gradle` file)
+ * Gradle (inside the `build.gradle.kts` or `build.gradle` file)
 ```groovy
   dependencies {
     implementation("org.bytedeco:$moduleName-platform:$moduleVersion-1.5.10")
