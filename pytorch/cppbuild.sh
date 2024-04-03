@@ -53,6 +53,10 @@ git checkout v$PYTORCH_VERSION
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
+# Fix version of this submodule to allow compilation on windows.
+# Probably could be removed when we upgrade to 2.3
+(cd third_party/pocketfft; git checkout 9d3ab05a7fffbc71a492bc6a17be034e83e8f0fe)
+
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
