@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib "
+DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib"
 ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1 --enable-libzimg"
 ENABLE_VULKAN="--enable-vulkan --enable-hwaccel=h264_vulkan --enable-hwaccel=hevc_vulkan --enable-hwaccel=av1_vulkan"
 
@@ -47,7 +47,7 @@ LIBSRT_VERSION=1.5.3
 WEBP_VERSION=1.3.2
 AOMAV1_VERSION=3.8.0
 SVTAV1_VERSION=1.8.0
-ZIMGLIB=3.0.5
+ZIMG_VERSION=3.0.5
 FFMPEG_VERSION=6.1.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
@@ -70,7 +70,7 @@ download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.ta
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
-download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMGLIB.tar.gz zimg-$ZIMGLIB.tar.gz
+download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -97,7 +97,7 @@ tar --totals -xzf ../$XML2.tar.gz
 tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
 tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
 tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
-tar --totals -xzf ../zimg-$ZIMGLIB.tar.gz
+tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -138,7 +138,7 @@ case $PLATFORM in
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=arm-linux
 	make -j $MAKEJ V=0
@@ -278,7 +278,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic -lstdc++" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -294,7 +294,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=aarch64-linux
 	make -j $MAKEJ V=0
@@ -433,7 +433,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic -lstdc++" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -449,7 +449,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
 	make -j $MAKEJ V=0
@@ -585,7 +585,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic -lstdc++" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -601,7 +601,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=x86_64-linux
 	make -j $MAKEJ V=0
@@ -736,7 +736,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic -lstdc++" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -748,7 +748,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --host=i686-linux
 	make -j $MAKEJ V=0
@@ -897,7 +897,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --host=x86_64-linux
 	make -j $MAKEJ V=0
@@ -1061,7 +1061,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux-gnueabihf
 	make -j $MAKEJ V=0
@@ -1269,7 +1269,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux-gnu
 	make -j $MAKEJ V=0
@@ -1416,7 +1416,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH
@@ -1645,7 +1645,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH --host=aarch64-apple-darwin
 	make -j $MAKEJ V=0
@@ -1780,7 +1780,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH
 	make -j $MAKEJ V=0
@@ -1913,7 +1913,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH
 	make -j $MAKEJ V=0
@@ -2054,7 +2054,7 @@ EOF
         echo "Building zimg"
         echo "--------------------"
         echo ""
-        cd zimg-release-$ZIMGLIB
+        cd zimg-release-$ZIMG_VERSION
 	autoreconf -iv
 	./configure --prefix=$INSTALL_PATH
 	make -j $MAKEJ V=0
