@@ -1,4 +1,8 @@
 
+ * Enable PulseAudio support for FFmpeg on Linux ([pull #1472](https://github.com/bytedeco/javacpp-presets/pull/1472))
+ * Virtualize `btCollisionWorld`, `btOverlapFilterCallback`, `btOverlapCallback` from Bullet Physics SDK ([pull #1475](https://github.com/bytedeco/javacpp-presets/pull/1475))
+ * Upgrade presets for PyTorch 2.2.1 ([pull #1466](https://github.com/bytedeco/javacpp-presets/pull/1466))
+
 ### January 29, 2024 version 1.5.10
  * Introduce `macosx-arm64` builds for PyTorch ([pull #1463](https://github.com/bytedeco/javacpp-presets/pull/1463))
  * Reenable `linux-arm64` builds for CPython and NumPy ([pull #1386](https://github.com/bytedeco/javacpp-presets/pull/1386))
