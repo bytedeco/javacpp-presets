@@ -61,7 +61,7 @@ import org.bytedeco.openblas.presets.openblas;
             include = {
                 "torch/torch.h",
                 "torch/script.h",
-                // Doesn't compile on Windows. Waiting for 2.2.1.
+                // Doesn't compile on Windows. Waiting for 2.3.
                 //"torch/csrc/inductor/aoti_model_container_runner.h",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
@@ -2509,6 +2509,8 @@ public class torch implements LoadEnabled, InfoMapper {
         ;
 
         infoMap.put(new Info("caffe2::TypeMeta::deleteFn").javaText("public native @NoException(true) PointerConsumer deleteFn();")); // Parser picks up the wrong Delete
+
+        infoMap.put(new Info("c10::VaryingShape<c10::Stride>::merge").skip()); // https://github.com/pytorch/pytorch/issues/123248
 
     }
 
