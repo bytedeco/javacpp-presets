@@ -1,7 +1,7 @@
 diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
 --- ffmpeg-6.1/configure	2023-11-11 09:25:17.000000000 +0900
 +++ ffmpeg-6.1-patch/configure	2023-11-11 19:18:26.388930944 +0900
-@@ -6673,7 +6673,7 @@
+@@ -6675,7 +6675,7 @@ enabled gnutls            && require_pkg_config gnutls gnutls gnutls/gnutls.h gn
  enabled jni               && { [ $target_os = "android" ] && check_headers jni.h && enabled pthreads || die "ERROR: jni not found"; }
  enabled ladspa            && require_headers "ladspa.h dlfcn.h"
  enabled lcms2             && require_pkg_config lcms2 "lcms2 >= 2.13" lcms2.h cmsCreateContext
@@ -10,7 +10,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
  enabled libaribb24        && { check_pkg_config libaribb24 "aribb24 > 1.0.3" "aribb24/aribb24.h" arib_instance_new ||
                                 { enabled gpl && require_pkg_config libaribb24 aribb24 "aribb24/aribb24.h" arib_instance_new; } ||
                                 die "ERROR: libaribb24 requires version higher than 1.0.3 or --enable-gpl."; }
-@@ -6699,7 +6699,7 @@
+@@ -6701,7 +6701,7 @@ flite_extralibs="-lflite_cmu_time_awb -lflite_cmu_us_awb -lflite_cmu_us_kal -lfl
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
  enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
@@ -19,7 +19,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
  enabled libharfbuzz       && require_pkg_config libharfbuzz harfbuzz hb.h hb_buffer_create
  enabled libglslang && { check_lib spirv_compiler glslang/Include/glslang_c_interface.h glslang_initialize_process \
-@@ -6729,15 +6729,7 @@
+@@ -6731,15 +6731,7 @@ if enabled libmfx && enabled libvpl; then
  # pkg-config support.  Instead, users should make sure that the build
  # can find the libraries and headers through other means.
  elif enabled libmfx; then
@@ -36,7 +36,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
      warn "libmfx is deprecated. Please run configure with --enable-libvpl to use libvpl instead."
  elif enabled libvpl; then
  # Consider pkg-config only. The name of libmfx is still passed to check_pkg_config function for --enable-libvpl option
-@@ -6764,21 +6756,14 @@
+@@ -6766,21 +6758,14 @@ enabled libopencv         && { check_headers opencv2/core/core_c.h &&
                                 { check_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -60,7 +60,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
  enabled libplacebo        && require_pkg_config libplacebo "libplacebo >= 4.192.0" libplacebo/vulkan.h pl_vulkan_create
  enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
  enabled librabbitmq       && require_pkg_config librabbitmq "librabbitmq >= 0.7.1" amqp.h amqp_new_connection
-@@ -6794,9 +6779,9 @@
+@@ -6796,9 +6781,9 @@ enabled libsmbclient      && { check_pkg_config libsmbclient smbclient libsmbcli
  enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy -lstdc++
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh "libssh >= 0.6.0" libssh/sftp.h sftp_init
@@ -73,7 +73,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
  enabled libtensorflow     && require libtensorflow tensorflow/c/c_api.h TF_Version -ltensorflow
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
-@@ -6815,19 +6800,15 @@
+@@ -6817,19 +6802,15 @@ enabled libvorbis         && require_pkg_config libvorbis vorbis vorbis/codec.h
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -93,7 +93,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs $pthreads_extralibs"
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -6836,14 +6817,14 @@
+@@ -6838,24 +6819,24 @@ enabled libvpx            && {
  }
  
  enabled libwebp           && {
@@ -112,7 +112,10 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
                               require_cpp_condition libx265 x265.h "X265_BUILD >= 89"
  enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode "-lxavs $pthreads_extralibs $libm_extralibs"
  enabled libxavs2          && require_pkg_config libxavs2 "xavs2 >= 1.3.0" "stdint.h xavs2.h" xavs2_api_get
-@@ -6853,7 +6834,7 @@
+ enabled libxvid           && require libxvid xvid.h xvid_global -lxvidcore
+-enabled libzimg           && require_pkg_config libzimg "zimg >= 2.7.0" zimg.h zimg_get_api_version
++enabled libzimg           && require libzimg  zimg.h zimg_get_api_version -lzimg -lstdc++
+ enabled libzmq            && require_pkg_config libzmq "libzmq >= 4.2.1" zmq.h zmq_ctx_new
  enabled libzvbi           && require_pkg_config libzvbi zvbi-0.2 libzvbi.h vbi_decoder_new &&
                               { test_cpp_condition libzvbi.h "VBI_VERSION_MAJOR > 0 || VBI_VERSION_MINOR > 2 || VBI_VERSION_MINOR == 2 && VBI_VERSION_MICRO >= 28" ||
                                 enabled gpl || die "ERROR: libzvbi requires version 0.2.28 or --enable-gpl."; }
@@ -121,7 +124,7 @@ diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
  enabled mbedtls           && { check_pkg_config mbedtls mbedtls mbedtls/x509_crt.h mbedtls_x509_crt_init ||
                                 check_pkg_config mbedtls mbedtls mbedtls/ssl.h mbedtls_ssl_init ||
                                 check_lib mbedtls mbedtls/ssl.h mbedtls_ssl_init -lmbedtls -lmbedx509 -lmbedcrypto ||
-@@ -6892,15 +6873,13 @@
+@@ -6894,15 +6875,13 @@ enabled omx_rpi           && { test_code cc OMX_Core.h OMX_IndexConfigBrcmVideoR
                                 die "ERROR: OpenMAX IL headers from raspberrypi/firmware not found"; } &&
                               enable omx
  enabled omx               && require_headers OMX_Core.h
