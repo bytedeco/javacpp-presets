@@ -16,18 +16,10 @@ import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 import static org.bytedeco.ffmpeg.global.avformat.*;
 
-
-
-/**
- * Callback used by devices to communicate with application.
- */
-@Properties(inherit = org.bytedeco.ffmpeg.presets.avformat.class)
-public class av_format_control_message extends FunctionPointer {
-    static { Loader.load(); }
+@Opaque @Properties(inherit = org.bytedeco.ffmpeg.presets.avformat.class)
+public class AVIAMFMixPresentation extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVIAMFMixPresentation() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    av_format_control_message(Pointer p) { super(p); }
-    protected av_format_control_message() { allocate(); }
-    private native void allocate();
-    public native int call(AVFormatContext s, int type,
-                                         Pointer data, @Cast("size_t") long data_size);
+    public AVIAMFMixPresentation(Pointer p) { super(p); }
 }
