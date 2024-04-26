@@ -12,7 +12,7 @@ export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export MAX_JOBS=$MAKEJ
 
-export ONNX=1.15.0
+export ONNX=1.16.0
 export PROTO=3.20.3
 export PYBIND=2.11.0
 

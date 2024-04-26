@@ -50,8 +50,8 @@ public class CXXApiSample {
       // print number of model input nodes
       long num_input_nodes = session.GetInputCount();
       PointerPointer input_node_names = new PointerPointer(num_input_nodes);
-      LongPointer input_node_dims = null;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
-                                           // Otherwise need vector<vector<>>
+      LongVector input_node_dims = null;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
+                                          // Otherwise need vector<vector<>>
 
       System.out.println("Number of inputs = " + num_input_nodes);
 
@@ -108,7 +108,7 @@ public class CXXApiSample {
 
       // create input tensor object from data values
       MemoryInfo memory_info = MemoryInfo.CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-      Value input_tensor = Value.CreateTensorFloat(memory_info.asOrtMemoryInfo(), input_tensor_values, input_tensor_size, input_node_dims, 4);
+      Value input_tensor = Value.CreateTensorFloat(memory_info.asOrtMemoryInfo(), input_tensor_values, input_tensor_size, new LongPointer(input_node_dims.get()), 4);
       assert input_tensor.IsTensor();
 
       // score model & input tensor, get back output tensor
