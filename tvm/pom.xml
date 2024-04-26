@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tvm</artifactId>
-  <version>0.14.0-${project.parent.version}</version>
+  <version>0.15.0-${project.parent.version}</version>
   <name>JavaCPP Presets for TVM</name>
 
   <dependencies>
