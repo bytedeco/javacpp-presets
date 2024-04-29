@@ -180,7 +180,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 4.9.x  https://opencv.org/releases/
- * FFmpeg 6.1.x  http://ffmpeg.org/download.html
+ * FFmpeg 7.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 3.0.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -198,7 +198,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2024.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 3.3.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 3.4.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.26  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
@@ -223,18 +223,18 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 12.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
- * PyTorch 2.1.x  https://github.com/pytorch/pytorch
- * SentencePiece 0.1.99  https://github.com/google/sentencepiece
+ * PyTorch 2.2.x  https://github.com/pytorch/pytorch
+ * SentencePiece 0.2.0  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.15.x  https://github.com/tensorflow/tensorflow
- * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.41.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * TensorFlow Lite 2.16.x  https://github.com/tensorflow/tensorflow
+ * TensorRT 10.0.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.44.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
- * ONNX 1.15.x  https://github.com/onnx/onnx
+ * ONNX 1.16.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.16.x  https://github.com/microsoft/onnxruntime
- * TVM 0.14.x  https://github.com/apache/tvm
+ * ONNX Runtime 1.17.x  https://github.com/microsoft/onnxruntime
+ * TVM 0.15.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

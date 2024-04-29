@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.15.0
+TENSORFLOW_VERSION=2.16.1
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -46,7 +46,7 @@ case $PLATFORM in
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
         ;;
     android-x86_64)
-        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
+        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DXNNPACK_ENABLE_AVXVNNI=OFF $CMAKE_FLAGS"
         ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc -funsafe-math-optimizations"
@@ -56,7 +56,7 @@ case $PLATFORM in
     linux-arm64)
         export CC="aarch64-linux-gnu-gcc -funsafe-math-optimizations"
         export CXX="aarch64-linux-gnu-g++ -funsafe-math-optimizations"
-        export CMAKE_FLAGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DTFLITE_ENABLE_XNNPACK=OFF $CMAKE_FLAGS"
+        export CMAKE_FLAGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DXNNPACK_ENABLE_ARM_I8MM=OFF $CMAKE_FLAGS"
         ;;
     linux-x86)
         export CC="gcc -m32"
