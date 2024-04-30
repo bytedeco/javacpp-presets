@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.26.3
+NUMPY_VERSION=1.26.4
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -97,7 +97,7 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-TOOLS="setuptools==67.6.1 cython==0.29.35"
+TOOLS="setuptools==67.6.1 cython==3.0.10"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.12"
