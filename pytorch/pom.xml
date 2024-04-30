@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.26-${project.parent.version}</version>
+      <version>0.3.27-${project.parent.version}</version>
     </dependency>
   </dependencies>
 
@@ -41,17 +41,17 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.26-${project.parent.version}</version>
+            <version>0.3.27-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.26.3-${project.parent.version}</version>
+            <version>1.26.4-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.12.1-${project.parent.version}</version>
+            <version>3.12.3-${project.parent.version}</version>
             <classifier>${os.name}-${os.arch}</classifier>
           </dependency>
         </dependencies>
