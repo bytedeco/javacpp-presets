@@ -45,6 +45,9 @@ public class ShapeTupleObj extends TVMObject {
   /** \brief The size of the shape tuple object. */
   public native @Cast("uint64_t") long size(); public native ShapeTupleObj size(long setter);
 
+  /** \brief Get "numel", meaning the number of elements of an array if the array has this shape */
+  public native @Cast("tvm::runtime::ShapeTupleObj::index_type") long Product();
+
   @MemberGetter public static native @Cast("const uint32_t") int _type_index();
   public static final int _type_index = _type_index();
   @MemberGetter public static native @Cast("const char*") BytePointer _type_key();

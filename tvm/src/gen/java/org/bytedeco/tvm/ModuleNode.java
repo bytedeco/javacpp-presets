@@ -125,6 +125,10 @@ public class ModuleNode extends TVMObject {
    * @return The corresponding function.
    */
   public native @Const PackedFunc GetFuncFromEnv(@Const @ByRef TVMString name);
+
+  /** \brief Clear all imports of the module. */
+  public native void ClearImports();
+
   /** @return The module it imports from */
   public native @StdVector Module imports();
 

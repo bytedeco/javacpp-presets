@@ -902,7 +902,7 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #endif
 
 // TVM version
-public static final String TVM_VERSION = "0.15.0";
+public static final String TVM_VERSION = "0.16.0";
 
 // TVM Runtime is DLPack compatible.
 // #include <dlpack/dlpack.h>
@@ -1600,6 +1600,7 @@ public static native int TVMObjectDerivedFrom(@Cast("uint32_t") int child_type_i
 // #include <tvm/runtime/c_runtime_api.h>
 // #include <tvm/runtime/logging.h>
 
+// #include <cstring>
 // #include <string>
 // #include <type_traits>
 // Targeting ../DataType.java
@@ -1868,13 +1869,23 @@ public static final int TVM_OBJECT_ATOMIC_REF_COUNTER = 1;
  * \param ParentType The parent type of the objectref
  * \param ObjectName The type name of the object.
  */
-// #define TVM_DEFINE_OBJECT_REF_METHODS(TypeName, ParentType, ObjectName)
-//   TypeName() = default;
+// #define TVM_DEFINE_OBJECT_REF_METHODS_WITHOUT_DEFAULT_CONSTRUCTOR(TypeName, ParentType,
+//                                                                   ObjectName)
 //   explicit TypeName(::tvm::runtime::ObjectPtr<::tvm::runtime::Object> n) : ParentType(n) {}
 //   TVM_DEFINE_DEFAULT_COPY_MOVE_AND_ASSIGN(TypeName);
 //   const ObjectName* operator->() const { return static_cast<const ObjectName*>(data_.get()); }
 //   const ObjectName* get() const { return operator->(); }
 //   using ContainerType = ObjectName;
+
+/*
+ * \brief Define object reference methods.
+ * \param TypeName The object type name
+ * \param ParentType The parent type of the objectref
+ * \param ObjectName The type name of the object.
+ */
+// #define TVM_DEFINE_OBJECT_REF_METHODS(TypeName, ParentType, ObjectName)
+//   TypeName() = default;
+//   TVM_DEFINE_OBJECT_REF_METHODS_WITHOUT_DEFAULT_CONSTRUCTOR(TypeName, ParentType, ObjectName)
 
 /*
  * \brief Define object reference methods that is not nullable.
@@ -2354,7 +2365,7 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #include "./base.h"
 // #include "./optional.h"
 
-// #if TVM_LOG_DEBUG
+// #if TVM_DEBUG_WITH_ABI_CHANGE
 // #define TVM_MAP_FAIL_IF_CHANGED()
 //   ICHECK(state_marker == self->state_marker) << "Concurrent modification of the Map";
 // #else
@@ -2489,6 +2500,7 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #ifndef TVM_RUNTIME_CONTAINER_SHAPE_TUPLE_H_
 // #define TVM_RUNTIME_CONTAINER_SHAPE_TUPLE_H_
 
+// #include <ostream>
 // #include <utility>
 // #include <vector>
 
@@ -2503,6 +2515,10 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 
 
 
+
+
+
+@Namespace("tvm::runtime") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef ShapeTuple shape);
 
   // namespace runtime
 
@@ -2727,8 +2743,6 @@ public static final int USE_FALLBACK_STL_MAP = 0;
  * @return The check result.
  */
 @Namespace("tvm::runtime") public static native @Cast("bool") boolean IsContiguous(@Const @ByRef DLTensor arr);
-
-
 
 
 
@@ -3125,11 +3139,17 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
 // #define TVM_MODULE_VTABLE_BEGIN(TypeKey)
 //   const char* type_key() const final { return TypeKey; }
-//   PackedFunc GetFunction(const String& _name, const ObjectPtr<Object>& _self) final {
+//   PackedFunc GetFunction(const String& _name, const ObjectPtr<Object>& _self) override {
 //     using SelfPtr = std::remove_cv_t<decltype(this)>;
 // #define TVM_MODULE_VTABLE_END()
 //   return PackedFunc(nullptr);
 //   }
+// #define TVM_MODULE_VTABLE_END_WITH_DEFAULT(MemFunc)
+//   {
+//     auto f = (MemFunc);
+//     return (this->*f)(_name);
+//   }
+//   }  // NOLINT(*)
 // #define TVM_MODULE_VTABLE_ENTRY(Name, MemFunc)
 //   if (_name == Name) {
 //     return PackedFunc([_self](TVMArgs args, TVMRetValue* rv) -> void {
@@ -3141,11 +3161,11 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 //       Helper::Call(rv, self, MemFunc, args, Helper::IndexSeq{});
 //     });
 //   }
-// #define TVM_MODULE_VTABLE_ENTRY_PACKED(Name, Func)
+// #define TVM_MODULE_VTABLE_ENTRY_PACKED(Name, MemFunc)
 //   if (_name == Name) {
-//     auto f = (Func);
-//     using FType = ::tvm::runtime::detail::function_signature<decltype(f)>::FType;
-//     return TypedPackedFunc<FType>(std::move(f)).packed();
+//     return PackedFunc([_self](TVMArgs args, TVMRetValue* rv) -> void {
+//       (static_cast<SelfPtr>(_self.get())->*(MemFunc))(args, rv);
+//     });
 //   }
 
 /**
@@ -3270,6 +3290,8 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
 
 
+
+
 // ObjectRef related conversion handling
 // Object can have three possible type codes:
 //      kTVMNDArrayHandle, kTVMModuleHandle, kTVMObjectHandle
@@ -3299,8 +3321,8 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
 
 
-  // namespace runtime
-  // namespace tvm
+  // namespace runtime // NOLINT(*)
+  // namespace tvm // NOLINT(*)
 // #endif  // TVM_RUNTIME_PACKED_FUNC_H_
 
 
