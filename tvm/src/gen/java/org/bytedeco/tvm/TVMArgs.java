@@ -50,4 +50,10 @@ public class TVMArgs extends Pointer {
    * @return the ith argument.
    */
   public native @ByVal @Name("operator []") TVMArgValue get(int i);
+  /**
+   * \brief Get the i-th argument and do proper type checking with detailed error messages.
+   * \tparam T The expected type.
+   * @param i The index
+   * @return The corresponding argument value.
+   */
 }

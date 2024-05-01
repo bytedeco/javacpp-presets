@@ -117,7 +117,7 @@ LLVMErrorRef createOptimizedJITCompilerForModule(
     ExecutionEngine *ee = engineBuilder
         .setEngineKind(EngineKind::JIT)
         .setMCPU(cpu)
-        .setOptLevel(static_cast<CodeGenOpt::Level>(optLevel))
+        .setOptLevel(static_cast<CodeGenOptLevel>(optLevel))
         .setErrorStr(&error)
         .create();
     if (ee == nullptr) {

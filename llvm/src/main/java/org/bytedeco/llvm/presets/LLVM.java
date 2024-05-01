@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2023 Samuel Audet
+ * Copyright (C) 2014-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,9 +38,9 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", /*"<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",*/
                "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp17", link = {"LLVM-17", "LTO@.17", "Remarks@.17"}, resource = {"include", "lib", "libexec", "share"}),
+    compiler = "cpp17", link = {"LLVM@.18.1", "LTO@.18.1", "Remarks@.18.1"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
-        @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
+        @Platform(value = "windows", link = {"Ws2_32", "LLVM", "LTO", "Remarks"})})
 @NoException
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
@@ -70,12 +70,14 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaquePassManager").pointerTypes("LLVMPassManagerRef"))
                .put(new Info("LLVMOpaquePassRegistry").pointerTypes("LLVMPassRegistryRef"))
                .put(new Info("LLVMOpaqueUse").pointerTypes("LLVMUseRef"))
+               .put(new Info("LLVMOpaqueOperandBundle").pointerTypes("LLVMOperandBundleRef"))
                .put(new Info("LLVMOpaqueAttributeRef").pointerTypes("LLVMAttributeRef"))
                .put(new Info("LLVMOpaqueJITEventListener").pointerTypes("LLVMJITEventListenerRef"))
                .put(new Info("LLVMOpaqueBinary").pointerTypes("LLVMBinaryRef"))
                .put(new Info("LLVMOpaqueDiagnosticInfo").pointerTypes("LLVMDiagnosticInfoRef"))
                .put(new Info("LLVMOpaqueTargetData").pointerTypes("LLVMTargetDataRef"))
                .put(new Info("LLVMOpaqueTargetLibraryInfotData").pointerTypes("LLVMTargetLibraryInfoRef"))
+               .put(new Info("LLVMOpaqueTargetMachineOptions").pointerTypes("LLVMTargetMachineOptionsRef"))
                .put(new Info("LLVMOpaqueTargetMachine").pointerTypes("LLVMTargetMachineRef"))
                .put(new Info("LLVMTarget").pointerTypes("LLVMTargetRef"))
                .put(new Info("LLVMOpaqueGenericValue").pointerTypes("LLVMGenericValueRef"))
@@ -134,12 +136,14 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMPassManagerRef").valueTypes("LLVMPassManagerRef").pointerTypes("@ByPtrPtr LLVMPassManagerRef", "@Cast(\"LLVMPassManagerRef*\") PointerPointer"))
                .put(new Info("LLVMPassRegistryRef").valueTypes("LLVMPassRegistryRef").pointerTypes("@ByPtrPtr LLVMPassRegistryRef", "@Cast(\"LLVMPassRegistryRef*\") PointerPointer"))
                .put(new Info("LLVMUseRef").valueTypes("LLVMUseRef").pointerTypes("@ByPtrPtr LLVMUseRef", "@Cast(\"LLVMUseRef*\") PointerPointer"))
+               .put(new Info("LLVMOperandBundleRef").valueTypes("LLVMOperandBundleRef").pointerTypes("@ByPtrPtr LLVMOperandBundleRef", "@Cast(\"LLVMOperandBundleRef*\") PointerPointer"))
                .put(new Info("LLVMAttributeRef").valueTypes("LLVMAttributeRef").pointerTypes("@ByPtrPtr LLVMAttributeRef", "@Cast(\"LLVMAttributeRef*\") PointerPointer"))
                .put(new Info("LLVMJITEventListenerRef").valueTypes("LLVMJITEventListenerRef").pointerTypes("@ByPtrPtr LLVMJITEventListenerRef", "@Cast(\"LLVMJITEventListenerRef*\") PointerPointer"))
                .put(new Info("LLVMBinaryRef").valueTypes("LLVMBinaryRef").pointerTypes("@ByPtrPtr LLVMBinaryRef", "@Cast(\"LLVMBinaryRef*\") PointerPointer"))
                .put(new Info("LLVMDiagnosticInfoRef").valueTypes("LLVMDiagnosticInfoRef").pointerTypes("@ByPtrPtr LLVMDiagnosticInfoRef", "@Cast(\"LLVMDiagnosticInfoRef*\") PointerPointer"))
                .put(new Info("LLVMTargetDataRef").valueTypes("LLVMTargetDataRef").pointerTypes("@ByPtrPtr LLVMTargetDataRef", "@Cast(\"LLVMTargetDataRef*\") PointerPointer"))
                .put(new Info("LLVMTargetLibraryInfoRef").valueTypes("LLVMTargetLibraryInfoRef").pointerTypes("@ByPtrPtr LLVMTargetLibraryInfoRef", "@Cast(\"LLVMTargetLibraryInfoRef*\") PointerPointer"))
+               .put(new Info("LLVMTargetMachineOptionsRef").valueTypes("LLVMTargetMachineOptionsRef").pointerTypes("@ByPtrPtr LLVMTargetMachineOptionsRef", "@Cast(\"LLVMTargetMachineOptionsRef*\") PointerPointer"))
                .put(new Info("LLVMTargetMachineRef").valueTypes("LLVMTargetMachineRef").pointerTypes("@ByPtrPtr LLVMTargetMachineRef", "@Cast(\"LLVMTargetMachineRef*\") PointerPointer"))
                .put(new Info("LLVMTargetRef").valueTypes("LLVMTargetRef").pointerTypes("@ByPtrPtr LLVMTargetRef", "@Cast(\"LLVMTargetRef*\") PointerPointer"))
                .put(new Info("LLVMGenericValueRef").valueTypes("LLVMGenericValueRef").pointerTypes("@ByPtrPtr LLVMGenericValueRef", "@Cast(\"LLVMGenericValueRef*\") PointerPointer"))

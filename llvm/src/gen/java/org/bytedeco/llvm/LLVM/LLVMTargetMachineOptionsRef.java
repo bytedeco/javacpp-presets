@@ -12,12 +12,15 @@ import static org.bytedeco.llvm.global.LLVM.*;
 
 
 /**
- * A reference to an orc::ExecutionSession instance.
+ * \addtogroup LLVMCTarget
+ *
+ * \{
  */
-@Name("LLVMOrcOpaqueExecutionSession") @Opaque @Properties(inherit = org.bytedeco.llvm.presets.LLVM.class)
-public class LLVMOrcExecutionSessionRef extends Pointer {
+
+@Name("LLVMOpaqueTargetMachineOptions") @Opaque @Properties(inherit = org.bytedeco.llvm.presets.LLVM.class)
+public class LLVMTargetMachineOptionsRef extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public LLVMOrcExecutionSessionRef() { super((Pointer)null); }
+    public LLVMTargetMachineOptionsRef() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LLVMOrcExecutionSessionRef(Pointer p) { super(p); }
+    public LLVMTargetMachineOptionsRef(Pointer p) { super(p); }
 }
