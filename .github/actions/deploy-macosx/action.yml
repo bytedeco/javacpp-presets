@@ -24,7 +24,7 @@ runs:
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 little-cms2 maven openblas r
+        brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 little-cms2 maven openblas r
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
         brew link --force libomp
 
@@ -103,6 +103,11 @@ runs:
     - name: Build project
       shell: bash
       run: |
+        export LIBRARY_PATH="/usr/local/lib/gcc/10/"
+        export LD_LIBRARY_PATH="$LIBRARY_PATH"
+        export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
+        export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+
         git --version
         clang --version
         /usr/local/bin/gcc-* --version || true

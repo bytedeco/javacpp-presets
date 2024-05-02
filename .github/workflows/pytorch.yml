@@ -33,11 +33,11 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
         timeout-minutes: 350
   macosx-arm64:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
-    runs-on: macos-11
+    runs-on: macos-12
 #    strategy:
 #      matrix:
 #        ext: ["", -gpu]

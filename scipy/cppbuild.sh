@@ -147,47 +147,49 @@ fi
 
 case $PLATFORM in
     linux-armhf)
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="-fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="-fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F77="aarch64-linux-gnu-gfortran" F90="$F77" FFLAGS="-mabi=lp64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F77="aarch64-linux-gnu-gfortran" F90="$F77" FFLAGS="-mabi=lp64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
-        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F77="powerpc64le-linux-gnu-gfortran" F90="$F77" FFLAGS="-m64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F77="powerpc64le-linux-gnu-gfortran" F90="$F77" FFLAGS="-m64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         powerpc64le-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-x86)
-        ATLAS=None CC="gcc -m32 -D__STDC_NO_THREADS__" FFLAGS="-m32 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m32 -D__STDC_NO_THREADS__" FFLAGS="-m32 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         strip $(find ../ -iname *.so)
         ;;
     linux-x86_64)
-        ATLAS=None CC="gcc -m64 -D__STDC_NO_THREADS__" FFLAGS="-m64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m64 -D__STDC_NO_THREADS__" FFLAGS="-m64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
         export F77="$(ls -1 /usr/local/bin/gfortran-* | head -n 1)"
         export F90="$F77"
         export LDFLAGS="-L/usr/lib/"
-        ATLAS=None FC="$F77" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None FC="$F77" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true; done
         ;;
     windows-x86)
         # parameters required by clang-cl
         export CL="-m32"
-        ATLAS=None CC="gcc -m32" CXX="g++ -m32" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m32" CXX="g++ -m32" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         ;;
     windows-x86_64)
         # parameters required by clang-cl
         export CL="-m64"
-        ATLAS=None CC="gcc -m64" CXX="g++ -m64" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m64" CXX="g++ -m64" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+cat build/meson-logs/meson-log.txt
 
 if [[ -d $PYTHON_INSTALL_PATH/scipy ]]; then
     ln -snf $PYTHON_INSTALL_PATH ../python

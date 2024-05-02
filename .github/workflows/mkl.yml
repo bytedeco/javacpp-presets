@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  macosx-x86_64:
-#    runs-on: macos-11
+#    runs-on: macos-12
 #    steps:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
 #  windows-x86:

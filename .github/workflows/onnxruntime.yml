@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-x86_64:
-    runs-on: macos-11
+    runs-on: macos-12
 #    strategy:
 #      matrix:
 #        ext: ["", -gpu]
