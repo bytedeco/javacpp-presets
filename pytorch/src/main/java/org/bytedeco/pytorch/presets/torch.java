@@ -2342,6 +2342,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::Suspend",
             "torch::jit::TokenTrie",
             "torch::jit::TaggedRange",
+            "torch::jit::VectorReader",
             "torch::jit::WithCurrentScope",
             "torch::jit::WithInsertPoint",
             "torch::jit::variable_tensor_list",

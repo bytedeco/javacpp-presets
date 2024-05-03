@@ -79474,9 +79474,8 @@ public static final String TORCH_VERSION =
     @ByVal(nullValue = "torch::jit::TypeResolver(nullptr)") TypeResolver type_resolver,
     @ByVal(nullValue = "c10::ArrayRef<at::Tensor>{}") TensorArrayRef tensor_table,
     TypeParser type_parser/*=torch::jit::Unpickler::defaultTypeParser*/);
-// Targeting ../VectorReader.java
 
-
+// #ifndef C10_MOBILE
 // #endif
  // namespace jit
  // namespace torch
