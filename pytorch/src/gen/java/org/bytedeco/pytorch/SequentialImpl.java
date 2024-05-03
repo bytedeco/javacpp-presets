@@ -256,6 +256,7 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @Name("push_back<torch::nn::AdaptiveMaxPool3dImpl>") void push_back(@SharedPtr AdaptiveMaxPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::MaxUnpool3dImpl>") void push_back(@SharedPtr MaxUnpool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::FractionalMaxPool3dImpl>") void push_back(@SharedPtr FractionalMaxPool3dImpl module_ptr);
+  public native @Name("push_back<torch::nn::LPPool3dImpl>") void push_back(@SharedPtr LPPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::RNNImpl>") void push_back(@SharedPtr RNNImpl module_ptr);
   public native @Name("push_back<torch::nn::LSTMImpl>") void push_back(@SharedPtr LSTMImpl module_ptr);
   public native @Name("push_back<torch::nn::GRUImpl>") void push_back(@SharedPtr GRUImpl module_ptr);
@@ -463,6 +464,8 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @Name("push_back<torch::nn::MaxUnpool3dImpl>") void push_back(@StdString String name, @SharedPtr MaxUnpool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::FractionalMaxPool3dImpl>") void push_back(@StdString BytePointer name, @SharedPtr FractionalMaxPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::FractionalMaxPool3dImpl>") void push_back(@StdString String name, @SharedPtr FractionalMaxPool3dImpl module_ptr);
+  public native @Name("push_back<torch::nn::LPPool3dImpl>") void push_back(@StdString BytePointer name, @SharedPtr LPPool3dImpl module_ptr);
+  public native @Name("push_back<torch::nn::LPPool3dImpl>") void push_back(@StdString String name, @SharedPtr LPPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::RNNImpl>") void push_back(@StdString BytePointer name, @SharedPtr RNNImpl module_ptr);
   public native @Name("push_back<torch::nn::RNNImpl>") void push_back(@StdString String name, @SharedPtr RNNImpl module_ptr);
   public native @Name("push_back<torch::nn::LSTMImpl>") void push_back(@StdString BytePointer name, @SharedPtr LSTMImpl module_ptr);

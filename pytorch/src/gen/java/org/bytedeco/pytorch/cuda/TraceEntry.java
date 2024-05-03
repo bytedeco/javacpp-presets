@@ -52,7 +52,7 @@ public class TraceEntry extends Pointer {
   }
   public TraceEntry(
         Action action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
@@ -60,7 +60,7 @@ public class TraceEntry extends Pointer {
         @SharedPtr GatheredContext context/*=nullptr*/) { super((Pointer)null); allocate(action, device, addr, size, stream, time, context); }
   private native void allocate(
         Action action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
@@ -68,21 +68,21 @@ public class TraceEntry extends Pointer {
         @SharedPtr GatheredContext context/*=nullptr*/);
   public TraceEntry(
         Action action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
         @Cast("c10::approx_time_t") long time) { super((Pointer)null); allocate(action, device, addr, size, stream, time); }
   private native void allocate(
         Action action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
         @Cast("c10::approx_time_t") long time);
   public TraceEntry(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
@@ -90,7 +90,7 @@ public class TraceEntry extends Pointer {
         @SharedPtr GatheredContext context/*=nullptr*/) { super((Pointer)null); allocate(action, device, addr, size, stream, time, context); }
   private native void allocate(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
@@ -98,20 +98,20 @@ public class TraceEntry extends Pointer {
         @SharedPtr GatheredContext context/*=nullptr*/);
   public TraceEntry(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
         @Cast("c10::approx_time_t") long time) { super((Pointer)null); allocate(action, device, addr, size, stream, time); }
   private native void allocate(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
-        int device,
+        byte device,
         @Cast("int64_t") long addr,
         @Cast("size_t") long size,
         @Cast("cudaStream_t") Pointer stream,
         @Cast("c10::approx_time_t") long time);
   public native Action action_(); public native TraceEntry action_(Action setter);
-  public native int device_(); public native TraceEntry device_(int setter);
+  public native byte device_(); public native TraceEntry device_(byte setter);
   public native @Cast("int64_t") long addr_(); public native TraceEntry addr_(long setter); // for OOM, this is the amount of free bytes reported by cuda
   public native @SharedPtr GatheredContext context_(); public native TraceEntry context_(GatheredContext setter);
   public native @Cast("cudaStream_t") Pointer stream_(); public native TraceEntry stream_(Pointer setter);

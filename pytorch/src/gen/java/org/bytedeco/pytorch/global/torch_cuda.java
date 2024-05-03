@@ -61,12 +61,18 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 
 // #pragma once
 
+// #include <c10/macros/Macros.h>
 // #include <c10/util/Deprecated.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/SmallVector.h>
 
 // #include <array>
+// #include <cstddef>
+// #include <cstdint>
+// #include <initializer_list>
 // #include <iterator>
+// #include <ostream>
+// #include <type_traits>
 // #include <vector>
 // Targeting ../cuda/CUDAStreamArrayRef.java
 
@@ -114,6 +120,12 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // #include <cuda_runtime_api.h>
 // #include <cusparse.h>
 // #include <cublas_v2.h>
+
+// cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
+// added bf16 support
+// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
+// #include <cublasLt.h>
+// #endif
 
 // #ifdef CUDART_VERSION
 // #include <cusolverDn.h>
@@ -164,17 +176,20 @@ manage their own state. There is only a single CUDA context/state.
 
 @Namespace("at::cuda") public static native int warp_size();
 
-@Namespace("at::cuda") public static native Pointer getDeviceProperties(@Cast("int64_t") long device);
+@Namespace("at::cuda") public static native Pointer getDeviceProperties(byte device);
 
 @Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
-    @Cast("int64_t") long device,
-    @Cast("int64_t") long peer_device);
+    byte device,
+    byte peer_device);
 
 @Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
 
 /* Handles */
 @Namespace("at::cuda") public static native @Cast("cusparseHandle_t") Pointer getCurrentCUDASparseHandle();
 @Namespace("at::cuda") public static native @Cast("cublasHandle_t") Pointer getCurrentCUDABlasHandle();
+// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
+@Namespace("at::cuda") public static native @Cast("cublasLtHandle_t") Pointer getCurrentCUDABlasLtHandle();
+// #endif
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
 
@@ -305,8 +320,7 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 
 @Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef CUDAStream s);
 
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
  // namespace std
 
 
@@ -329,8 +343,7 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 
 // #include <c10/core/impl/PyInterpreter.h>
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/cuda/CUDADeviceAssertionHost.h
@@ -339,9 +352,11 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 
 // #include <c10/cuda/CUDAMacros.h>
 
+// #include <cstdint>
 // #include <memory>
 // #include <mutex>
 // #include <string>
+// #include <utility>
 // #include <vector>
 
 // #ifdef USE_CUDA
@@ -367,8 +382,7 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 
 
 
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
 
 // Each kernel launched with TORCH_DSA_KERNEL_LAUNCH
 // requires the same input arguments. We introduce the following macro to
@@ -418,9 +432,15 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 // #endif
 
 /**
- * The maximum number of GPUs that we recognizes.
- */
+ * The maximum number of GPUs that we recognizes. Increasing this beyond the
+ * initial limit of 16 broke Caffe2 testing, hence the ifdef guards.
+ * This value cannot be more than 128 because our DeviceIndex is a uint8_t.
+o */
+// #ifdef FBCODE_CAFFE2
+// fbcode depends on this value being 16
 public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
+// #else
+// #endif
 
 
 // Parsed from c10/cuda/impl/cuda_cmake_macros.h
@@ -443,8 +463,7 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 
 // #include <mutex>
 @Namespace("c10::cuda") public static native @NoException(true) @Cast("const char*") BytePointer get_cuda_check_suffix();
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
 
 
 // Parsed from c10/cuda/CUDAException.h
@@ -540,8 +559,7 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
     int line_number,
     @Cast("const bool") boolean include_device_assertions);
 
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
 
 
 // Parsed from c10/cuda/CUDAFunctions.h
@@ -585,17 +603,17 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 @Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDeviceCount(IntBuffer dev_count);
 @Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDeviceCount(int[] dev_count);
 
-@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(IntPointer device);
-@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(IntBuffer device);
-@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(int[] device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(BytePointer device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(ByteBuffer device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int GetDevice(byte[] device);
 
-@Namespace("c10::cuda") public static native @Cast("cudaError_t") int SetDevice(int device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int SetDevice(byte device);
 
-@Namespace("c10::cuda") public static native @Cast("cudaError_t") int MaybeSetDevice(int device);
+@Namespace("c10::cuda") public static native @Cast("cudaError_t") int MaybeSetDevice(byte device);
 
-@Namespace("c10::cuda") public static native int ExchangeDevice(int device);
+@Namespace("c10::cuda") public static native byte ExchangeDevice(byte device);
 
-@Namespace("c10::cuda") public static native int MaybeExchangeDevice(int device);
+@Namespace("c10::cuda") public static native byte MaybeExchangeDevice(byte device);
 
 @Namespace("c10::cuda") public static native void SetTargetDevice();
 
@@ -626,8 +644,7 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 @Namespace("c10::cuda") public static native @Cast("bool") boolean hasPrimaryContext(byte device_index);
 @Namespace("c10::cuda") public static native @ByVal ByteOptional getDeviceIndexWithPrimaryContext();
 
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
 
 
 // Parsed from ATen/cuda/Exceptions.h
@@ -650,6 +667,15 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 
 
   // namespace c10
+
+// #define AT_CUDNN_FRONTEND_CHECK(EXPR, ...)
+//   do {
+//     auto error_object = EXPR;
+//     if (!error_object.is_good()) {
+//       TORCH_CHECK_WITH(CuDNNError, false,
+//             "cuDNN Frontend error: ", error_object.get_message());
+//     }
+//   } while (0)                                                                                   
 
 // #define AT_CUDNN_CHECK_WITH_SHAPES(EXPR, ...) AT_CUDNN_CHECK(EXPR, "\n", ##__VA_ARGS__)
 
@@ -853,6 +879,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #pragma once
 
 // #include <c10/cuda/CUDAStream.h>
+// #include <iostream>
 // #include <utility>
 
 // CUDA Graphs utils used by c10 and aten.
@@ -877,8 +904,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Use this version where you're sure a CUDA context exists already.
 @Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int currentStreamCaptureStatusMayInitCtx();
 
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
 
 
 // Parsed from c10/util/ApproximateClock.h
@@ -887,21 +913,15 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #pragma once
 
+// #include <c10/macros/Export.h>
+// #include <array>
 // #include <chrono>
 // #include <cstddef>
 // #include <cstdint>
-// #include <list>
-// #include <string>
-// #include <unordered_map>
-// #include <vector>
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/Optional.h>
-// #include <c10/util/hash.h>
-
-// #ifndef _WIN32
 // #include <ctime>
-// #endif
+// #include <functional>
+// #include <type_traits>
+
 // #if defined(C10_IOS) && defined(C10_MOBILE)
 // #include <sys/time.h> // for gettimeofday()
 // #endif
@@ -945,17 +965,22 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #pragma once
 
 // #include <c10/core/Allocator.h>
-// #include <c10/core/StorageImpl.h>
 // #include <c10/cuda/CUDAGraphsC10Utils.h>
 // #include <c10/cuda/CUDAMacros.h>
 // #include <c10/cuda/CUDAStream.h>
 // #include <c10/util/ApproximateClock.h>
+// #include <c10/util/Exception.h>
 // #include <c10/util/Registry.h>
 
 // #include <array>
-// #include <mutex>
-// #include <set>
+// #include <atomic>
+// #include <cstddef>
+// #include <cstdint>
+// #include <functional>
+// #include <memory>
+// #include <string>
 // #include <unordered_set>
+// #include <utility>
 
 // Caching allocator will execute every registered callback if it unable to find
 // block inside of already allocated area.
@@ -963,7 +988,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #define REGISTER_FREE_MEMORY_CALLBACK(name, ...)
 //   C10_REGISTER_CLASS(FreeCudaMemoryCallbacksRegistry, name, __VA_ARGS__);
-
+ // namespace c10
+  //
 // TODO: Turn this into an honest to goodness class. I briefly attempted to do
 // this, but it was a bit irritating to figure out how to also correctly
 // apply pimpl pattern so I didn't have to leak any internal implementation
@@ -1010,6 +1036,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 // Targeting ../cuda/TraceEntry.java
+
+
+// Targeting ../cuda/AllocatorConfigInfo.java
 
 
 // Targeting ../cuda/SnapshotInfo.java
@@ -1079,9 +1108,12 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 // CUDAGraph interactions
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void beginAllocateToPool(
+    byte device,
+    @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
+    @ByVal StreamFilter filter);
 
-
-
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void endAllocateToPool(byte device, @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
 
 
@@ -1103,16 +1135,13 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
- // namespace CUDACachingAllocator
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda::CUDACachingAllocator
 
 
 // Parsed from c10/cuda/impl/CUDAGuardImpl.h
 
 // #pragma once
 
-// #include <c10/core/DeviceGuard.h>
 // #include <c10/core/impl/DeviceGuardImplInterface.h>
 // #include <c10/core/impl/GPUTrace.h>
 // #include <c10/macros/Macros.h>
@@ -1123,11 +1152,15 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <c10/cuda/CUDAFunctions.h>
 // #include <c10/cuda/CUDAStream.h>
 
+// #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
+// #include <c10/core/Stream.h>
+// #include <c10/core/impl/PyInterpreter.h>
+// #include <c10/util/Optional.h>
 // #include <cuda_runtime_api.h>
+// #include <cstdint>
 
- // namespace impl
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda::impl
 
 
 // Parsed from ATen/cudnn/Descriptors.h
@@ -1152,6 +1185,10 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <ATen/ops/empty.h>
 // #endif
 
+// #if defined(CUDNN_VERSION) && CUDNN_VERSION >= 8907
+// #define USE_CUDNN_RNN_V8_API
+// #endif
+
 
 
 // TODO: Add constructors for all of the descriptors
@@ -1168,6 +1205,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // that the stride for dim i is the product of the sizes of dims
 // i+1 to the end.  This stride is indeed uniquely determined.  This
 // function modifies 'stride' in place so this invariant holds.
+// Targeting ../cuda/RNNDataDescriptor.java
+
+
 // Targeting ../cuda/TensorDescriptor.java
 
 
@@ -1245,8 +1285,22 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
- // namespace cuda
- // namespace c10
+ // namespace c10::cuda
+
+
+// Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
+
+// #if !defined(C10_MOBILE) && !defined(ANDROID)
+// #pragma once
+
+// #include <c10/cuda/CUDAStream.h>
+// #include <torch/csrc/inductor/aoti_runner/model_container_runner.h>
+// Targeting ../cuda/AOTIModelContainerRunnerCuda.java
+
+
+
+ // namespace torch::inductor
+// #endif
 
 
 }

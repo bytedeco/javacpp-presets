@@ -53,6 +53,10 @@ public class ObjPtr extends Pointer {
 
   public native @ByRef @Name("operator =") @NoException(true) ObjPtr put(@ByRef(true) ObjPtr rhs);
 
+  // Assignment is implemented using copy and swap. That's safe for self
+  // assignment.
+  // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
+
   public native @NoException(true) Object get();
 
   public native @ByRef @Name("operator *") @NoException(true) Object multiply();
@@ -68,9 +72,9 @@ public class ObjPtr extends Pointer {
   // We do a lot of null-pointer checks in our code, good to have this be cheap.
   public native @Cast("bool") @NoException(true) boolean defined();
 
-  public native @Cast("size_t") @NoException(true) long use_count();
+  public native @Cast("uint32_t") @NoException(true) int use_count();
 
-  public native @Cast("size_t") @NoException(true) long weak_use_count();
+  public native @Cast("uint32_t") @NoException(true) int weak_use_count();
 
   public native @Cast("bool") @NoException(true) boolean unique();
 
@@ -134,7 +138,7 @@ public class ObjPtr extends Pointer {
    */
   public static native @ByVal ObjPtr unsafe_adapt_non_heap_allocated(
         Object raw_ptr,
-        @Cast("size_t") long expected_decrefs);
+        @Cast("uint32_t") int expected_decrefs);
 
   /**
    * Turn a **non-owning raw pointer** to an intrusive_ptr.  It is

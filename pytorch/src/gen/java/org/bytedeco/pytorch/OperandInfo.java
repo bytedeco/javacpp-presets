@@ -74,6 +74,8 @@ public class OperandInfo extends Pointer {
 
   public native @Cast("bool") boolean is_read_write(); public native OperandInfo is_read_write(boolean setter);
 
+  public native @Cast("bool") boolean is_const(); public native OperandInfo is_const(boolean setter);
+
   public native void validate();
 
   /** The tensor operand. Note that the strides, data pointer, and

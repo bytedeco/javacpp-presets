@@ -57,13 +57,13 @@ public class StorageImpl extends Pointer {
   public StorageImpl(
         @ByVal use_byte_size_t arg0,
         @ByVal SymInt size_bytes,
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
+        @StdMove DataPtr data_ptr,
         Allocator allocator,
         @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr, allocator, resizable); }
   private native void allocate(
         @ByVal use_byte_size_t arg0,
         @ByVal SymInt size_bytes,
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
+        @StdMove DataPtr data_ptr,
         Allocator allocator,
         @Cast("bool") boolean resizable);
 
@@ -103,12 +103,12 @@ public class StorageImpl extends Pointer {
 
   public native @ByRef DataPtr mutable_data_ptr();
 
-  public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr();
+  public native @StdMove DataPtr data_ptr();
 
   // Returns the previous data_ptr
-  public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr set_data_ptr(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
+  public native @StdMove DataPtr set_data_ptr(@StdMove DataPtr data_ptr);
 
-  public native void set_data_ptr_noswap(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
+  public native void set_data_ptr_noswap(@StdMove DataPtr data_ptr);
 
   public native @Const Pointer data();
 
@@ -142,9 +142,7 @@ public class StorageImpl extends Pointer {
   /**
    * Can only be called when use_count is 1
    */
-  public native void UniqueStorageShareExternalPointer(
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
-        @Cast("size_t") long size_bytes);
+  public native void UniqueStorageShareExternalPointer(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,  @Cast("size_t") long size_bytes);
 
   // This method can be used only after storage construction and cannot be used
   // to modify storage status

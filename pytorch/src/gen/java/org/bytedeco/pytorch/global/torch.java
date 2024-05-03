@@ -77,6 +77,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../DeviceOptional.java
 
 
+// Targeting ../DeviceTypeOptional.java
+
+
 // Targeting ../LongArrayRefOptional.java
 
 
@@ -527,6 +530,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TreeRefStringMap.java
 
 
+// Targeting ../StringIntMap.java
+
+
 // Targeting ../StringSet.java
 
 
@@ -759,6 +765,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #define TORCH_HIP_API C10_IMPORT
 // #endif
 
+// #if defined(TORCH_XPU_BUILD_MAIN_LIB)
+// #define TORCH_XPU_API C10_EXPORT
+// #else
+// #define TORCH_XPU_API C10_IMPORT
+// #endif
+
 // Enums only need to be exported on windows for non-CUDA files
 // #if defined(_WIN32) && defined(__CUDACC__)
 // #define C10_API_ENUM C10_API
@@ -934,11 +946,10 @@ public static final int C10_ASAN_ENABLED = 1;
 
 // Simply define the namespace, in case a dependent library want to refer to
 // the c10 namespace but not any nontrivial files.
- // namespace c10
 
- // namespace c10
 
- // namespace c10
+
+
 
 // Since C10 is the core library for caffe2 (and aten), we will simply reroute
 // all abstractions defined in c10 to be available in caffe2 as well.
@@ -946,8 +957,7 @@ public static final int C10_ASAN_ENABLED = 1;
 // c10 namespace where possible.
 
 
-
- // namespace at
+ // namespace at::cuda
 
 // WARNING!!! THIS IS A GIANT HACK!!!
 // This line means you cannot simultaneously include c10/hip
@@ -957,8 +967,8 @@ public static final int C10_ASAN_ENABLED = 1;
 // from at::cuda.  This namespace makes that happen.  When
 // HIPIFY is no longer out-of-place, we can switch the cuda
 // here to hip and everyone is happy.
-
- // namespace at
+ // namespace at::cuda
+ // namespace at::xpu
 
 // C10_LIKELY/C10_UNLIKELY
 //
@@ -1005,13 +1015,6 @@ public static final int C10_ASAN_ENABLED = 1;
 // #endif
 
 // #define C10_ERASE C10_ALWAYS_INLINE C10_ATTR_VISIBILITY_HIDDEN
-
-// C10_FALLTHROUGH - Annotate fallthrough to the next case in a switch.
-// #if C10_HAS_CPP_ATTRIBUTE(fallthrough)
-// #define C10_FALLTHROUGH [[fallthrough]]
-// #else
-// #define C10_FALLTHROUGH
-// #endif
 
 // #include <cstdint>
 
@@ -1088,16 +1091,6 @@ public static final int C10_ASAN_ENABLED = 1;
 // #define C10_ALWAYS_INLINE_UNLESS_MOBILE inline
 // #else
 // #define C10_ALWAYS_INLINE_UNLESS_MOBILE C10_ALWAYS_INLINE
-// #endif
-
-// Portable determination of whether type T is trivially copyable.
-// Warning: __has_trivial_copy for GCC may not always detect the non-POD
-// correctly. For example, T = std::unique_ptr may evaluate to true and be
-// treated as POD. This can cause unexpected behavior.
-// #if defined(__GNUG__) && __GNUC__ < 5 && !defined(__clang__)
-// #define C10_IS_TRIVIALLY_COPYABLE(T) __has_trivial_copy(T)
-// #else
-// #define C10_IS_TRIVIALLY_COPYABLE(T) std::is_trivially_copyable<T>::value
 // #endif
 
 // #if defined(__CUDA_ARCH__)
@@ -1225,8 +1218,11 @@ public static final int HAS_DEMANGLE = 0;
 
 // #include <c10/macros/Export.h>
 
+// #include <cstddef>
+// #include <cstdint>
 // #include <functional>
 // #include <ostream>
+// #include <string>
 
 // These contains all device types that also have a BackendComponent
 // and therefore participate in per-backend functionality dispatch keys.
@@ -1318,9 +1314,12 @@ public static final int HAS_DEMANGLE = 0;
 @Namespace("c10") public static native @StdString BytePointer get_privateuse1_backend(@Cast("bool") boolean lower_case/*=true*/);
 @Namespace("c10") public static native @StdString BytePointer get_privateuse1_backend();
 
+@Namespace("c10") public static native @Cast("bool") boolean is_privateuse1_backend_registered();
+
  // namespace c10
  // namespace std
-
+// NOLINTNEXTLINE(misc-unused-using-decls)
+ // namespace torch
 
 
 // Parsed from c10/util/Deprecated.h
@@ -1414,7 +1413,6 @@ public static final int HAS_DEMANGLE = 0;
 // #include <ostream>
 // #include <sstream>
 // #include <string>
-// #include <vector>
 
 // #if C10_CLANG_HAS_WARNING("-Wshorten-64-to-32")
 // #endif
@@ -1429,6 +1427,11 @@ public static final int HAS_DEMANGLE = 0;
 
 
 
+
+
+
+
+// Overloads of _str for wide types; forces narrowing.
 
 
 
@@ -1473,10 +1476,11 @@ public static final int HAS_DEMANGLE = 0;
 // #ifndef C10_UTIL_EXCEPTION_H_
 // #define C10_UTIL_EXCEPTION_H_
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/StringUtil.h>
 
-// #include <cstddef>
+// #include <cstdint>
 // #include <exception>
 // #include <string>
 // #include <variant>
@@ -1722,8 +1726,7 @@ public static final int HAS_DEMANGLE = 0;
 @Namespace("c10::detail") public static native String torchCheckMsgImpl(
     String arg0,
     String args);
- // namespace detail
- // namespace c10
+ // namespace c10::detail
 
 // #define TORCH_CHECK_MSG(cond, type, ...)
 //   (::c10::detail::torchCheckMsgImpl(
@@ -1779,8 +1782,7 @@ public static final int HAS_DEMANGLE = 0;
     String condMsg,
     @ByVal CompileTimeEmptyString arg4);
 
- // namespace detail
- // namespace c10
+ // namespace c10::detail
 
 // #ifdef STRIP_ERROR_MESSAGES
 // #define TORCH_CHECK(cond, ...)
@@ -1934,8 +1936,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 */
 
 
- // namespace detail
- // namespace c10
+ // namespace c10::detail
 
 // Deprecated alias; this alias was deprecated because people kept mistakenly
 // using it for user error checking.  Use TORCH_INTERNAL_ASSERT or TORCH_CHECK
@@ -1983,6 +1984,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <c10/util/Exception.h>
 
 // #include <cstddef>
+// #include <cstdint>
 // #include <functional>
 // #include <iosfwd>
 // #include <string>
@@ -2007,7 +2009,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #include <c10/core/DeviceType.h>
 // #include <c10/macros/Export.h>
+// #include <cstddef>
 // #include <cstdint>
+// #include <functional>
 // #include <ostream>
 // #include <string>
 
@@ -2058,6 +2062,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 //   _(Dense, )
 //   _(Quantized, Quantized)
 //   _(Sparse, Sparse)
+//   _(SparseCsr, SparseCsr)
 //   _(NestedTensor, NestedTensor)
 //   _(AutogradFunctionality, Autograd)
 
@@ -2236,36 +2241,34 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // See [Note: Per-Backend Functionality Dispatch Keys]
   Sparse((short)(Undefined.value + 9)),
 
-  // TODO: Make SparseCsr a functionality key
-  SparseCsrCPU((short)(Undefined.value + 10)),
-  SparseCsrCUDA((short)(Undefined.value + 11)),
+  SparseCsr((short)(Undefined.value + 10)),
 
-  NestedTensor((short)(Undefined.value + 12)),
+  NestedTensor((short)(Undefined.value + 11)),
 
   // In some situations, it is not immediately obvious what the correct
   // backend for function is, because the function in question doesn't
   // have any "tensor" arguments.  In this case, a BackendSelect function
   // can be registered to implement the custom determination of the
   // correct backend.
-  BackendSelect((short)(Undefined.value + 13)),
+  BackendSelect((short)(Undefined.value + 12)),
 
-  Python((short)(Undefined.value + 14)),
+  Python((short)(Undefined.value + 13)),
 
   // Out-of-core key for Fake Tensor in torchdistx.
   // See https://pytorch.org/torchdistx/latest/fake_tensor.html
   // TODO: delete this in favor of Python-implemented fake tensor
-  Fake((short)(Undefined.value + 15)),
+  Fake((short)(Undefined.value + 14)),
   // See Note [Out-of-tree vmap+grad prototype]. The purpose of this key
   // is to insert code after the "autograd subsystem" runs, so this key should
   // be directly after ADInplaceOrView and all of the autograd keys.
-  FuncTorchDynamicLayerBackMode((short)(Undefined.value + 16)),
+  FuncTorchDynamicLayerBackMode((short)(Undefined.value + 15)),
 
   // Alias and mutation removal.
   // If some backends want to opt into only alias removal or only mutation
   // removal,
   // we can consider adding separate keys dedicated to those individual passes.
   // See Note [Functionalization Pass In Core] for details.
-  Functionalize((short)(Undefined.value + 17)),
+  Functionalize((short)(Undefined.value + 16)),
 
   // The named dispatch key is set for any tensors with named dimensions.
   // Although we have a dispatch key for named tensors, for historical reasons,
@@ -2280,19 +2283,19 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // has named dimension propagation that doesn't match that of its
   // constituent parts.
   // TODO: delete this once torchdim lands in functorch
-  Named((short)(Undefined.value + 18)),
+  Named((short)(Undefined.value + 17)),
 
   // The Conjugate dispatch key is set for any tensors that need to perform
   // conjugation
   // This is implemented at a dispatch level right before any backends run
-  Conjugate((short)(Undefined.value + 19)),
+  Conjugate((short)(Undefined.value + 18)),
 
   // The Negative dispatch key is set for any tensors that need to perform
   // negation
   // This is implemented at a dispatch level right before any backends run
-  Negative((short)(Undefined.value + 20)),
+  Negative((short)(Undefined.value + 19)),
 
-  ZeroTensor((short)(Undefined.value + 21)), // registered at build/aten/src/ATen/RegisterZeroTensor.cpp
+  ZeroTensor((short)(Undefined.value + 20)), // registered at build/aten/src/ATen/RegisterZeroTensor.cpp
 
   // Note [ADInplaceOrView key]
   // ADInplaceOrView key is used by inplace or view ops to register a kernel
@@ -2329,7 +2332,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // `at::AutoDispatchBelowADInplaceOrView` guard of functional ops
   // up to the `VariableType` kernel. Thus we only add the extra dispatch
   // to view/inplace ops to minimize its perf impact to real models.
-  ADInplaceOrView((short)(Undefined.value + 22)),
+  ADInplaceOrView((short)(Undefined.value + 21)),
   // Note [Alias Dispatch Key : Autograd]
   // All backends are oblivious to autograd; autograd is handled as a
   // layer which happens on top of all backends. It inspects the autograd
@@ -2355,10 +2358,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // reserved user-defined backends. All other in-tree backends share the
   // AutogradOther key. We can add specific autograd key for those backends
   // upon request.
-  AutogradOther((short)(Undefined.value + 23)),
+  AutogradOther((short)(Undefined.value + 22)),
 
   // See [Note: Per-Backend Functionality Dispatch Keys]
-  AutogradFunctionality((short)(Undefined.value + 24)),
+  AutogradFunctionality((short)(Undefined.value + 23)),
 
   // NestedTensor is an example of something that isn't a "real backend"
   // (because it mostly consists of redispatching kernels)
@@ -2367,64 +2370,64 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // exclusively for handling autograd for NestedTensor.
   // lives out of tree at
   // https://github.com/pytorch/nestedtensor
-  AutogradNestedTensor((short)(Undefined.value + 25)),
+  AutogradNestedTensor((short)(Undefined.value + 24)),
 
-  Tracer((short)(Undefined.value + 26)),
+  Tracer((short)(Undefined.value + 25)),
 
   // TODO: make Autocast a functionality key
   // Autocasting precedes VariableTypeId, to ensure casts are autograd-exposed
   // and inputs are saved for backward in the post-autocast type.
-  AutocastCPU((short)(Undefined.value + 27)),
-  AutocastXPU((short)(Undefined.value + 28)),
-  AutocastIPU((short)(Undefined.value + 29)),
-  AutocastHPU((short)(Undefined.value + 30)),
-  AutocastXLA((short)(Undefined.value + 31)),
+  AutocastCPU((short)(Undefined.value + 26)),
+  AutocastXPU((short)(Undefined.value + 27)),
+  AutocastIPU((short)(Undefined.value + 28)),
+  AutocastHPU((short)(Undefined.value + 29)),
+  AutocastXLA((short)(Undefined.value + 30)),
   // AutocastXLA is only being used for TPUs. XLA GPUs continue to use
   // AutocastCUDA.
-  AutocastCUDA((short)(Undefined.value + 32)),
-  AutocastPrivateUse1((short)(Undefined.value + 33)),
+  AutocastCUDA((short)(Undefined.value + 31)),
+  AutocastPrivateUse1((short)(Undefined.value + 32)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ WRAPPERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   // There are a number of alternative modes which may want to handle before
   // autograd; for example, error checking, tracing, profiling or vmap.  They
   // go here.
 
-  FuncTorchBatched((short)(Undefined.value + 34)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchBatched((short)(Undefined.value + 33)), // See Note [Out-of-tree vmap+grad prototype]
 
   // Dispatch key for BatchedTensorImpl wrapping a nested tensor.
-  BatchedNestedTensor((short)(Undefined.value + 35)),
+  BatchedNestedTensor((short)(Undefined.value + 34)),
 
-  FuncTorchVmapMode((short)(Undefined.value + 36)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchVmapMode((short)(Undefined.value + 35)), // See Note [Out-of-tree vmap+grad prototype]
 
   // This is the dispatch key for BatchedTensorImpl, which is used to implement
   // batching rules for vmap.
-  Batched((short)(Undefined.value + 37)),
+  Batched((short)(Undefined.value + 36)),
 
   // When we are inside a vmap, all tensors dispatch on this key.
   // See Note: [DispatchKey::VmapMode usage] for more details.
-  VmapMode((short)(Undefined.value + 38)),
+  VmapMode((short)(Undefined.value + 37)),
 
-  FuncTorchGradWrapper((short)(Undefined.value + 39)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchGradWrapper((short)(Undefined.value + 38)), // See Note [Out-of-tree vmap+grad prototype]
 
   // Out-of-core key for Deferred Module Initialization in torchdistx.
   // See https://pytorch.org/torchdistx/latest/deferred_init.html
-  DeferredInit((short)(Undefined.value + 40)),
+  DeferredInit((short)(Undefined.value + 39)),
 
   // Used by Python key logic to know the set of tls on entry to the dispatcher
   // This kernel assumes it is the top-most non-functorch-related DispatchKey.
   // If you add a key above, make sure to update the fallback implementation for
   // this.
-  PythonTLSSnapshot((short)(Undefined.value + 41)),
+  PythonTLSSnapshot((short)(Undefined.value + 40)),
 
   // This key should be at the very top of the dispatcher
-  FuncTorchDynamicLayerFrontMode((short)(Undefined.value + 42)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchDynamicLayerFrontMode((short)(Undefined.value + 41)), // See Note [Out-of-tree vmap+grad prototype]
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a single
   // process test.  Use it by creating a TensorImpl with this DispatchKey, and
   // then registering operators to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp for a usage example.
-  TESTING_ONLY_GenericWrapper((short)(Undefined.value + 43)),
+  TESTING_ONLY_GenericWrapper((short)(Undefined.value + 42)),
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a ingle
@@ -2433,51 +2436,51 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp
   // for a usage example
-  TESTING_ONLY_GenericMode((short)(Undefined.value + 44)),
+  TESTING_ONLY_GenericMode((short)(Undefined.value + 43)),
 
   // This key is used for pre-dispatch tracing in make_fx.
   // It has lower priority than the PythonDispatcher key
   // because we use the PythonDispatcher to intercept the key from python,
   // and avoid having to implement it in C++.
-  PreDispatch((short)(Undefined.value + 45)),
+  PreDispatch((short)(Undefined.value + 44)),
 
   // This is a bypass that allows you to skip running the C++ dispatcher
   // entirely
-  PythonDispatcher((short)(Undefined.value + 46)),
+  PythonDispatcher((short)(Undefined.value + 45)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-  EndOfFunctionalityKeys((short)(Undefined.value + 47)),
+  EndOfFunctionalityKeys((short)(Undefined.value + 46)),
 
-  StartOfDenseBackends((short)(Undefined.value + 48)),
-      CPU((short)(Undefined.value + 49)),
+  StartOfDenseBackends((short)(Undefined.value + 47)),
+      CPU((short)(Undefined.value + 48)),
           
-  CUDA((short)(Undefined.value + 50)),
+  CUDA((short)(Undefined.value + 49)),
           
-  HIP((short)(Undefined.value + 51)),
+  HIP((short)(Undefined.value + 50)),
           
-  XLA((short)(Undefined.value + 52)),
+  XLA((short)(Undefined.value + 51)),
           
-  MPS((short)(Undefined.value + 53)),
+  MPS((short)(Undefined.value + 52)),
           
-  IPU((short)(Undefined.value + 54)),
+  IPU((short)(Undefined.value + 53)),
           
-  XPU((short)(Undefined.value + 55)),
+  XPU((short)(Undefined.value + 54)),
           
-  HPU((short)(Undefined.value + 56)),
+  HPU((short)(Undefined.value + 55)),
           
-  VE((short)(Undefined.value + 57)),
+  VE((short)(Undefined.value + 56)),
           
-  Lazy((short)(Undefined.value + 58)),
+  Lazy((short)(Undefined.value + 57)),
           
-  MTIA((short)(Undefined.value + 59)),
+  MTIA((short)(Undefined.value + 58)),
           
-  PrivateUse1((short)(Undefined.value + 60)),
+  PrivateUse1((short)(Undefined.value + 59)),
           
-  PrivateUse2((short)(Undefined.value + 61)),
+  PrivateUse2((short)(Undefined.value + 60)),
           
-  PrivateUse3((short)(Undefined.value + 62)),
+  PrivateUse3((short)(Undefined.value + 61)),
           
-  Meta((short)(Undefined.value + 63)),
+  Meta((short)(Undefined.value + 62)),
           EndOfDenseBackends((short)(0)),
   StartOfQuantizedBackends((short)(1)),
       QuantizedCPU((short)(2)),
@@ -2541,36 +2544,67 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
           
   SparseMeta((short)( QuantizedMeta.value + 16)),
           EndOfSparseBackends((short)( SparseMeta.value)),
-  StartOfNestedTensorBackends((short)( SparseMeta.value + 1)),
-      NestedTensorCPU((short)( SparseMeta.value + 2)),
+  StartOfSparseCsrBackends((short)( SparseMeta.value + 1)),
+      SparseCsrCPU((short)( SparseMeta.value + 2)),
           
-  NestedTensorCUDA((short)( SparseMeta.value + 3)),
+  SparseCsrCUDA((short)( SparseMeta.value + 3)),
           
-  NestedTensorHIP((short)( SparseMeta.value + 4)),
+  SparseCsrHIP((short)( SparseMeta.value + 4)),
           
-  NestedTensorXLA((short)( SparseMeta.value + 5)),
+  SparseCsrXLA((short)( SparseMeta.value + 5)),
           
-  NestedTensorMPS((short)( SparseMeta.value + 6)),
+  SparseCsrMPS((short)( SparseMeta.value + 6)),
           
-  NestedTensorIPU((short)( SparseMeta.value + 7)),
+  SparseCsrIPU((short)( SparseMeta.value + 7)),
           
-  NestedTensorXPU((short)( SparseMeta.value + 8)),
+  SparseCsrXPU((short)( SparseMeta.value + 8)),
           
-  NestedTensorHPU((short)( SparseMeta.value + 9)),
+  SparseCsrHPU((short)( SparseMeta.value + 9)),
           
-  NestedTensorVE((short)( SparseMeta.value + 10)),
+  SparseCsrVE((short)( SparseMeta.value + 10)),
           
-  NestedTensorLazy((short)( SparseMeta.value + 11)),
+  SparseCsrLazy((short)( SparseMeta.value + 11)),
           
-  NestedTensorMTIA((short)( SparseMeta.value + 12)),
+  SparseCsrMTIA((short)( SparseMeta.value + 12)),
           
-  NestedTensorPrivateUse1((short)( SparseMeta.value + 13)),
+  SparseCsrPrivateUse1((short)( SparseMeta.value + 13)),
           
-  NestedTensorPrivateUse2((short)( SparseMeta.value + 14)),
+  SparseCsrPrivateUse2((short)( SparseMeta.value + 14)),
           
-  NestedTensorPrivateUse3((short)( SparseMeta.value + 15)),
+  SparseCsrPrivateUse3((short)( SparseMeta.value + 15)),
           
-  NestedTensorMeta((short)( SparseMeta.value + 16)),
+  SparseCsrMeta((short)( SparseMeta.value + 16)),
+          EndOfSparseCsrBackends((short)( SparseCsrMeta.value)),
+  StartOfNestedTensorBackends((short)( SparseCsrMeta.value + 1)),
+      NestedTensorCPU((short)( SparseCsrMeta.value + 2)),
+          
+  NestedTensorCUDA((short)( SparseCsrMeta.value + 3)),
+          
+  NestedTensorHIP((short)( SparseCsrMeta.value + 4)),
+          
+  NestedTensorXLA((short)( SparseCsrMeta.value + 5)),
+          
+  NestedTensorMPS((short)( SparseCsrMeta.value + 6)),
+          
+  NestedTensorIPU((short)( SparseCsrMeta.value + 7)),
+          
+  NestedTensorXPU((short)( SparseCsrMeta.value + 8)),
+          
+  NestedTensorHPU((short)( SparseCsrMeta.value + 9)),
+          
+  NestedTensorVE((short)( SparseCsrMeta.value + 10)),
+          
+  NestedTensorLazy((short)( SparseCsrMeta.value + 11)),
+          
+  NestedTensorMTIA((short)( SparseCsrMeta.value + 12)),
+          
+  NestedTensorPrivateUse1((short)( SparseCsrMeta.value + 13)),
+          
+  NestedTensorPrivateUse2((short)( SparseCsrMeta.value + 14)),
+          
+  NestedTensorPrivateUse3((short)( SparseCsrMeta.value + 15)),
+          
+  NestedTensorMeta((short)( SparseCsrMeta.value + 16)),
           EndOfNestedTensorBackends((short)( NestedTensorMeta.value)),
   StartOfAutogradFunctionalityBackends((short)( NestedTensorMeta.value + 1)),
       AutogradCPU((short)( NestedTensorMeta.value + 2)),
@@ -2778,6 +2812,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace c10
 // Expose the constant, but not the TYPE (DispatchKey is an implementation
 // detail!)
+// NOLINTNEXTLINE(misc-unused-using-decls)
  // namespace torch
 
 // NB: You really shouldn't use this instance; this enum is guaranteed
@@ -2789,7 +2824,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #pragma once
 
-// #include <c10/util/C++17.h>
+// #include <functional>
+// #include <type_traits>
 
 /**
  * is_equality_comparable<T> is true_type iff the equality operator is defined
@@ -2850,17 +2886,19 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  * // true We define it here to resolve a MSVC bug. See
  * https://github.com/pytorch/pytorch/issues/30932 for details.
  */
- // namespace guts
- // namespace c10
+ // namespace c10::guts
 
 
 // Parsed from c10/util/TypeList.h
 
 // #pragma once
 
-// #include <c10/util/C++17.h>
 // #include <c10/util/TypeTraits.h>
 // #include <algorithm>
+// #include <cstddef>
+// #include <tuple>
+// #include <type_traits>
+// #include <utility>
 
 /**
  * Type holding a list of types for compile time type computations
@@ -3022,8 +3060,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace detail
 
  // namespace typelist
- // namespace guts
- // namespace c10
+ // namespace c10::guts
 
 
 // Parsed from c10/util/bit_cast.h
@@ -3047,11 +3084,20 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #pragma once
 // #include <c10/core/DispatchKey.h>
+// #include <c10/macros/Export.h>
+// #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Metaprogramming.h>
+// #include <c10/util/TypeList.h>
 // #include <c10/util/llvmMathExtras.h>
 // #include <array>
+// #include <cstddef>
+// #include <cstdint>
+// #include <initializer_list>
+// #include <iterator>
 // #include <ostream>
+// #include <string>
+// #include <type_traits>
 // Targeting ../FunctionalityOffsetAndMask.java
 
 
@@ -3229,23 +3275,27 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   SparseVE(12),
   SparseXPU(13),
   SparsePrivateUse1(14),
-  ORT(15),
-  XLA(16),
-  Vulkan(17),
-  Metal(18),
-  Meta(19),
-  QuantizedCPU(20),
-  QuantizedCUDA(21),
-  QuantizedXPU(22),
-  QuantizedPrivateUse1(23),
-  Undefined(24),
-  MkldnnCPU(25),
-  MPS(26),
-  HPU(27),
-  Lazy(28),
-  MTIA(29),
-  PrivateUse1(30),
-  NumOptions(31);
+  SparseCsrHIP(15),
+  SparseCsrVE(16),
+  SparseCsrXPU(17),
+  SparseCsrPrivateUse1(18),
+  ORT(19),
+  XLA(20),
+  Vulkan(21),
+  Metal(22),
+  Meta(23),
+  QuantizedCPU(24),
+  QuantizedCUDA(25),
+  QuantizedXPU(26),
+  QuantizedPrivateUse1(27),
+  Undefined(28),
+  MkldnnCPU(29),
+  MPS(30),
+  HPU(31),
+  Lazy(32),
+  MTIA(33),
+  PrivateUse1(34),
+  NumOptions(35);
 
     public final int value;
     private Backend(int v) { this.value = v; }
@@ -3283,6 +3333,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <c10/core/Backend.h>
 // #include <c10/util/Exception.h>
 
+// #include <cstdint>
 // #include <ostream>
 @Namespace("c10") public enum Layout {
   Strided((byte)(0)),
@@ -3419,7 +3470,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <iterator>
 // #include <limits>
 // #include <memory>
-// #include <new>
 // #include <ostream>
 // #include <type_traits>
 // #include <utility>
@@ -3526,12 +3576,18 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #pragma once
 
+// #include <c10/macros/Macros.h>
 // #include <c10/util/Deprecated.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/SmallVector.h>
 
 // #include <array>
+// #include <cstddef>
+// #include <cstdint>
+// #include <initializer_list>
 // #include <iterator>
+// #include <ostream>
+// #include <type_traits>
 // #include <vector>
 // Targeting ../ArgumentArrayRef.java
 
@@ -3675,11 +3731,12 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #pragma once
 
-// #include <c10/core/Backend.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
 
+// #include <cstdint>
 // #include <ostream>
+// #include <vector>
 
 // Memory format is not the property of a Tensor. It is the way to tell an
 // operator how the result should be organized in memory and nothing more. That
@@ -3815,8 +3872,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #pragma once
 
-// #include <c10/core/DeviceType.h>
 // #include <c10/util/Exception.h>
+// #include <cstdint>
+// #include <string>
 
 /**
  * QScheme is an enum that specifies the type of quantization. This has a one
@@ -3850,6 +3908,13 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #pragma once
 
 // #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
+// #include <c10/macros/Export.h>
+// #include <c10/util/Exception.h>
+// #include <cstddef>
+// #include <cstdint>
+// #include <functional>
+// #include <ostream>
 
 /** An index representing a specific stream.  A StreamId is not independently
  *  meaningful without knowing the Device it is associated with; try to
@@ -3888,6 +3953,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #include <c10/macros/Macros.h>
 // #include <cmath>
+// #include <cstdint>
 // #include <cstring>
 
 // #if defined(__CUDACC__) && !defined(USE_ROCM)
@@ -4114,6 +4180,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #pragma once
 
+// #include <c10/macros/Macros.h>
 // #include <cstdint>
 
 @Namespace("c10::detail") public static native float fp32_from_bits(@Cast("uint32_t") int w);
@@ -4267,7 +4334,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  *  and inspired by Half implementation from pytorch/c10/util/Half.h */
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/TypeSafeSignMath.h>
 // #include <c10/util/floating_point_utils.h>
 // #include <type_traits>
@@ -4323,11 +4389,29 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <c10/util/Float8_e4m3fn-inl.h> // IWYU pragma: keep
 
 
+// Parsed from c10/util/Float8_fnuz_cvt.h
+
+// #pragma once
+
+// #include <c10/util/floating_point_utils.h>
+
+// #include <cstdint>
+
+/*
+ * Convert a 8-bit floating-point number in either f8 E4M3FNUZ or bf8 E5M2FNUZ
+ * format, in bit representation, to a 32-bit floating-point number.
+ */
+
+ // namespace c10::detail
+
+
 // Parsed from c10/util/Float8_e4m3fnuz-inl.h
 
 // #pragma once
 
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Float8_fnuz_cvt.h>
+// #include <cstring>
 // #include <limits>
 
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
@@ -4345,6 +4429,100 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(
+    @Const @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Const @ByRef Float8_e4m3fnuz a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e4m3fnuz addPut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e4m3fnuz subtractPut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e4m3fnuz multiplyPut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e4m3fnuz dividePut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e4m3fnuz a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e4m3fnuz a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e4m3fnuz a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e4m3fnuz a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e4m3fnuz a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e4m3fnuz a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e4m3fnuz a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e4m3fnuz a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e4m3fnuz b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@ByVal Float8_e4m3fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@ByVal Float8_e4m3fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@ByVal Float8_e4m3fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@ByVal Float8_e4m3fnuz a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(int a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(int a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(int a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(int a, @ByVal Float8_e4m3fnuz b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e4m3fnuz to float. */
+
  // namespace c10
 
  // namespace std
@@ -4355,21 +4533,17 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 ///
-///
-///
 // #pragma once
 
 /** Defines the Float8_e4m3fnuz type (8-bit floating-point) including
  *  conversions to standard C types and basic arithmetic operations. Note that
  *  arithmetic operations are implemented by converting to floating point and
  *  performing the operation in float32.
- * 
  *  Binary configuration remains the same as Float8_e4m3fn:
  *  s eeee mmm
  *  1 sign bit
  *  4 exponent bits
  *  3 mantissa bits
- * 
  *  The key differences versus Float8_e4m3fn are:
  *  bias = 8
  *  no infinities or negative zero
@@ -4379,9 +4553,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  *  the existing Float8_e4m3fn implementation. */
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/TypeSafeSignMath.h>
 // #include <c10/util/floating_point_utils.h>
+// #include <type_traits>
 
 // #if defined(__cplusplus) && (__cplusplus >= 201103L)
 // #include <cstdint>
@@ -4392,18 +4566,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #include <iosfwd>
 // #include <ostream>
-
-/*
- * Convert a 8-bit floating-point number in fp8 E4M3FNUZ format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-// #if defined(__CUDA_ARCH__) || defined(__HIP__)
-@Namespace("c10::detail") public static native float fp8e4m3fnuz_to_fp32_value(@Cast("uint8_t") byte arg0);
-// #else
-// #endif
 
 /*
  * Convert a 32-bit floating-point number in IEEE single-precision format to a
@@ -4617,7 +4779,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // makes the code both less verbose and potentially more efficient.
 // #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
 //   typename std::enable_if_t<
-//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
+//       std::is_floating_point_v<fT> && std::is_integral_v<iT>,
 //       int> = 0
 
 // #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
@@ -4694,13 +4856,17 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
 // #endif
 
-/** Constructors */
+// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #else
 
 
 
 /** Implicit conversions */
 
 
+
+// #endif /* !defined(__aarch64__) || defined(C10_MOBILE) || defined(__CUDACC__) \
+//         */
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)
 // #endif
@@ -4818,8 +4984,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  *  If you are writing a compute bound kernel, you can use the CUDA half
  *  intrinsics directly on the Half type from device code. */
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/TypeSafeSignMath.h>
 // #include <c10/util/complex.h>
 // #include <c10/util/floating_point_utils.h>
@@ -4827,25 +4993,18 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #if defined(__cplusplus) && (__cplusplus >= 201103L)
 // #include <cmath>
-// #include <cstdint>
 // #elif !defined(__OPENCL_VERSION__)
 // #include <math.h>
-// #include <stdint.h>
 // #endif
 
 // #ifdef _MSC_VER
 // #include <intrin.h>
 // #endif
 
-// #include <complex>
 // #include <cstdint>
 // #include <cstring>
 // #include <iosfwd>
 // #include <limits>
-// #include <sstream>
-// #include <stdexcept>
-// #include <string>
-// #include <utility>
 
 // #ifdef __CUDACC__
 // #include <cuda_fp16.h>
@@ -4861,7 +5020,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <sycl/sycl.hpp> // for SYCL 2020
 // #endif
 
-// #include <typeinfo> // operator typeid
+// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #endif
 
 /*
  * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
@@ -4893,6 +5053,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  * between integer and floating-point variables.
  */
 @Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+
+// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #endif
 
 
 // Targeting ../Half.java
@@ -5119,6 +5282,8 @@ public static final int EXP_BIAS_FP8 = 15;
 // #pragma once
 
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Float8_fnuz_cvt.h>
+// #include <cstring>
 // #include <limits>
 
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
@@ -5136,6 +5301,102 @@ public static final int EXP_BIAS_FP8 = 15;
 
 
 
+
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(
+    @Const @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Const @ByRef Float8_e5m2fnuz a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e5m2fnuz addPut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e5m2fnuz subtractPut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e5m2fnuz multiplyPut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e5m2fnuz dividePut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e5m2fnuz a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e5m2fnuz a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e5m2fnuz a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e5m2fnuz a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e5m2fnuz a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e5m2fnuz a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e5m2fnuz a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e5m2fnuz a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e5m2fnuz b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@ByVal Float8_e5m2fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@ByVal Float8_e5m2fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@ByVal Float8_e5m2fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@ByVal Float8_e5m2fnuz a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(int a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(int a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(int a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(int a, @ByVal Float8_e5m2fnuz b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e5m2fnuz to float. */
+
  // namespace c10
 
  // namespace std
@@ -5146,21 +5407,17 @@ public static final int EXP_BIAS_FP8 = 15;
 
 
 ///
-///
-///
 // #pragma once
 
 /** Defines the Float8_e5m2fnuz type (8-bit floating-point) including
  *  conversions to standard C types and basic arithmetic operations. Note that
  *  arithmetic operations are implemented by converting to floating point and
  *  performing the operation in float32.
- * 
  *  Binary configuration remains the same as e5m2:
  *  s eeeee mm
  *  1 sign bit
  *  5 exponent bits
  *  2 mantissa bits
- * 
  *  The key differences that e5m2fnuz brings are:
  *  bias = 16
  *  no infinities or negative zero
@@ -5170,7 +5427,6 @@ public static final int EXP_BIAS_FP8 = 15;
  *  the existing Float8_e4m3fn implementation. */
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/TypeSafeSignMath.h>
 // #include <c10/util/floating_point_utils.h>
 
@@ -5183,18 +5439,6 @@ public static final int EXP_BIAS_FP8 = 15;
 
 // #include <iosfwd>
 // #include <ostream>
-
-/*
- * Convert a 8-bit floating-point number in fp8 E5M2FNUZ format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-// #if defined(__CUDA_ARCH__) || defined(__HIP__)
-@Namespace("c10::detail") public static native float fp8e5m2fnuz_to_fp32_value(@Cast("uint8_t") byte arg0);
-// #else
-// #endif
 
 /*
  * Convert a 32-bit floating-point number in IEEE single-precision format to a
@@ -5327,16 +5571,34 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/util/quint8.h>
 
 // #include <array>
-// #include <complex>
+// #include <cstddef>
 // #include <cstdint>
+// #include <limits>
 // #include <ostream>
+// #include <type_traits>
+
+// dummy struct for uint1 to uint7, actual functionality
+// of these dtypes will be implemented in python with Tensor subclass
 
 // For the macros below:
-// NB: If you want to macro some code for all non-QInt scalar types (i.e. types
-// with complete information, you probably want one of the
-// AT_FORALL_SCALAR_TYPES / AT_FORALL_SCALAR_TYPES_AND
-// macros below, which are designed to behave similarly to the Dispatch macros
-// with the same name.
+//
+// For users: If you want to macro some code for all non-QInt scalar types
+// (i.e. types with complete information, you probably want one of the
+// AT_FORALL_SCALAR_TYPES / AT_FORALL_SCALAR_TYPES_AND macros below, which are
+// designed to behave similarly to the Dispatch macros with the same name.
+//
+// For adding a new dtype: In the beginning, we had an idea that there was a
+// list of all scalar types, and you could use AT_FORALL_SCALAR_TYPES to
+// iterate over them.  But over the years we added weird types which couldn't
+// be handled uniformly everywhere and so in the end we ended up with some
+// mish-mosh of some helper macros, but mostly use sites making a call about
+// what dtypes they can or can't support.  So if you want to add a new dtype,
+// the preferred resolution is to find a dtype similar to what you want,
+// grep for it and edit all the sites you find this way.  If you need to add
+// a completely new kind of dtype, you're going to have to laboriously audit
+// all of the sites everywhere to figure out how it should work.  Consulting
+// some old PRs where we added new dtypes (check history of this file) can
+// help give you an idea where to start.
 
 // NB: Order matters for this macro; it is relied upon in
 // _promoteTypesLookup and the serialization format.
@@ -5368,10 +5630,24 @@ public static final int EXP_BIAS_FP8 = 15;
 //   _(c10::Float8_e4m3fn, Float8_e4m3fn) /* 24 */
 //   _(c10::Float8_e5m2fnuz, Float8_e5m2fnuz) /* 25 */
 //   _(c10::Float8_e4m3fnuz, Float8_e4m3fnuz) /* 26 */
+//   _(uint16_t, UInt16) /* 27 */
+//   _(uint32_t, UInt32) /* 28 */
+//   _(uint64_t, UInt64) /* 29 */
+//   _(c10::dummy_uint1_7_t<1>, UInt1) /* 30 */
+//   _(c10::dummy_uint1_7_t<2>, UInt2) /* 31 */
+//   _(c10::dummy_uint1_7_t<3>, UInt3) /* 32 */
+//   _(c10::dummy_uint1_7_t<4>, UInt4) /* 33 */
+//   _(c10::dummy_uint1_7_t<5>, UInt5) /* 34 */
+//   _(c10::dummy_uint1_7_t<6>, UInt6) /* 35 */
+//   _(c10::dummy_uint1_7_t<7>, UInt7) /* 36 */
 
 // If you want to support ComplexHalf for real, add ComplexHalf
 // into this macro (and change the name).  But beware: convert()
 // doesn't work for all the conversions you need...
+//
+// TODO: To add unsigned int types here, we must define accumulate type.
+// But uint8 currently accumulates into int64, so we would have to make
+// an inconsistent choice for the larger types.  Difficult.
 // #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX_EXCEPT_COMPLEX_HALF_F8NZ(_)
 //   _(uint8_t, Byte)
 //   _(int8_t, Char)
@@ -5388,6 +5664,8 @@ public static final int EXP_BIAS_FP8 = 15;
 //   _(at::Float8_e5m2, Float8_e5m2)
 //   _(at::Float8_e4m3fn, Float8_e4m3fn)
 
+// This macro controls many of our C++ APIs, including constructors
+// for Scalar as well as the data() and item() accessors on Tensor
 // #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX(_)
 //   _(uint8_t, Byte)
 //   _(int8_t, Char)
@@ -5434,9 +5712,19 @@ public static final int EXP_BIAS_FP8 = 15;
   Float8_e5m2((byte)(23)), /* 23 */
   Float8_e4m3fn((byte)(24)), /* 24 */
   Float8_e5m2fnuz((byte)(25)), /* 25 */
-  Float8_e4m3fnuz((byte)(26)),
-      Undefined((byte)(27)),
-  NumOptions((byte)(28));
+  Float8_e4m3fnuz((byte)(26)), /* 26 */
+  UInt16((byte)(27)), /* 27 */
+  UInt32((byte)(28)), /* 28 */
+  UInt64((byte)(29)), /* 29 */
+  UInt1((byte)(30)), /* 30 */
+  UInt2((byte)(31)), /* 31 */
+  UInt3((byte)(32)), /* 32 */
+  UInt4((byte)(33)), /* 33 */
+  UInt5((byte)(34)), /* 34 */
+  UInt6((byte)(35)), /* 35 */
+  UInt7((byte)(36)),
+      Undefined((byte)(37)),
+  NumOptions((byte)(38));
 
     public final byte value;
     private ScalarType(byte v) { this.value = v; }
@@ -5462,7 +5750,7 @@ public static final int EXP_BIAS_FP8 = 15;
 //     /* https://gist.github.com/izdeby/952ae7cf256ddb740a73776d39a7e7ba */
 //     /* TODO: remove once the bug is fixed. */
 //     static type t;
-//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */
+//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */ /* 27 */ /* 28 */ /* 29 */ /* 30 */ /* 31 */ /* 32 */ /* 33 */ /* 34 */ /* 35 */ /* 36 */
 
 // #undef SPECIALIZE_ScalarTypeToCPPType
 
@@ -5473,10 +5761,12 @@ public static final int EXP_BIAS_FP8 = 15;
 //   struct CppTypeToScalarType<cpp_type>
 //       : std::
 //             integral_constant<c10::ScalarType, c10::ScalarType::scalar_type> {
-//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */
+//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */ /* 27 */ /* 28 */ /* 29 */ /* 30 */ /* 31 */ /* 32 */ /* 33 */ /* 34 */ /* 35 */ /* 36 */
 
 // #undef SPECIALIZE_CppTypeToScalarType
 
+// NB: despite its generic sounding name, the macros that don't take _AND
+// are mostly only used by tensorexpr
 // #define AT_FORALL_INT_TYPES(_)
 //   _(uint8_t, Byte)
 //   _(int8_t, Char)
@@ -5492,6 +5782,11 @@ public static final int EXP_BIAS_FP8 = 15;
 //   _(int64_t, Long)
 //   _(float, Float)
 //   _(double, Double)
+
+// These macros are often controlling how many template instantiations we
+// create for kernels.  It is typically inappropriate to add new dtypes here,
+// instead, new types should be added to use sites on a case-by-case basis.
+// We generally are not accepting new dtypes due to binary size concerns.
 
 // #define AT_FORALL_SCALAR_TYPES_AND(SCALARTYPE, _)
 //   _(uint8_t, Byte)
@@ -5671,6 +5966,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #define DEFINE_CONSTANT(_, name)
 //   constexpr ScalarType k##name = ScalarType::name;
 
+// NOLINTNEXTLINE(clang-diagnostic-unused-const-variable)
 @Namespace("c10") @MemberGetter public static native ScalarType kByte(); /* 0 */
   @Namespace("c10") @MemberGetter public static native ScalarType kChar(); /* 1 */
   @Namespace("c10") @MemberGetter public static native ScalarType kShort(); /* 2 */
@@ -5698,6 +5994,16 @@ public static final int EXP_BIAS_FP8 = 15;
   @Namespace("c10") @MemberGetter public static native ScalarType kFloat8_e4m3fn(); /* 24 */
   @Namespace("c10") @MemberGetter public static native ScalarType kFloat8_e5m2fnuz(); /* 25 */
   @Namespace("c10") @MemberGetter public static native ScalarType kFloat8_e4m3fnuz(); /* 26 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt16(); /* 27 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt32(); /* 28 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt64(); /* 29 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt1(); /* 30 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt2(); /* 31 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt3(); /* 32 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt4(); /* 33 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt5(); /* 34 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt6(); /* 35 */
+  @Namespace("c10") @MemberGetter public static native ScalarType kUInt7(); /* 36 */
 // #undef DEFINE_CONSTANT
 
 @Namespace("c10") public static native @Cast("const char*") BytePointer toString(ScalarType t);
@@ -5719,6 +6025,8 @@ public static final int EXP_BIAS_FP8 = 15;
 @Namespace("c10") public static native @Cast("bool") boolean isQIntType(ScalarType t);
 
 @Namespace("c10") public static native @Cast("bool") boolean isBitsType(ScalarType t);
+
+@Namespace("c10") public static native @Cast("bool") boolean isBarebonesUnsignedType(ScalarType t);
 
 @Namespace("c10") public static native ScalarType toQIntType(ScalarType t);
 
@@ -5745,25 +6053,16 @@ public static final int EXP_BIAS_FP8 = 15;
  // namespace c10
 
 
-// Parsed from c10/util/in_place.h
-
-// #pragma once
-
-// #include <cstddef>
-
- // namespace c10
-
-
 // Parsed from c10/util/MaybeOwned.h
 
 // #pragma once
 
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/in_place.h>
 
 // #include <memory>
 // #include <type_traits>
+// #include <utility>
 
 /** MaybeOwnedTraits<T> describes how to borrow from T.  Here is how we
  *  can implement borrowing from an arbitrary type T using a raw
@@ -5794,6 +6093,9 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/util/Exception.h>
 // #include <c10/util/Optional.h>
 // #include <c10/util/intrusive_ptr.h>
+// #include <cstdint>
+// #include <ostream>
+// #include <string>
 // Targeting ../SymNodeImpl.java
 
 
@@ -5807,11 +6109,15 @@ public static final int EXP_BIAS_FP8 = 15;
 
 // #include <c10/core/SymBool.h>
 // #include <c10/core/SymNodeImpl.h>
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/intrusive_ptr.h>
 
+// #include <cstdint>
 // #include <limits>
+// #include <ostream>
+// #include <utility>
 // Targeting ../SymFloat.java
 
 
@@ -5825,9 +6131,13 @@ public static final int EXP_BIAS_FP8 = 15;
 // #pragma once
 
 // #include <c10/core/SymNodeImpl.h>
-// #include <c10/macros/Macros.h>
+// #include <c10/macros/Export.h>
 // #include <c10/util/Exception.h>
+// #include <c10/util/Optional.h>
 // #include <c10/util/intrusive_ptr.h>
+// #include <cstdint>
+// #include <ostream>
+// #include <utility>
 // Targeting ../SymBool.java
 
 
@@ -5839,6 +6149,21 @@ public static final int EXP_BIAS_FP8 = 15;
 // #define TORCH_SYM_INTERNAL_ASSERT(cond, ...)
 //   TORCH_INTERNAL_ASSERT((cond).expect_true(__FILE__, __LINE__), __VA_ARGS__)
 
+@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(@Cast("bool") boolean b, @Cast("const char*") BytePointer file, @Cast("int64_t") long line);
+@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(@Cast("bool") boolean b, String file, @Cast("int64_t") long line);
+
+@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(
+    @Const @ByRef SymBool b,
+    @Cast("const char*") BytePointer file,
+    @Cast("int64_t") long line);
+@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(
+    @Const @ByRef SymBool b,
+    String file,
+    @Cast("int64_t") long line);
+
+// #define TORCH_GUARD_SIZE_OBLIVIOUS(cond)
+//   c10::guard_size_oblivious((cond), __FILE__, __LINE__)
+
  // namespace c10
 
 
@@ -5848,11 +6173,15 @@ public static final int EXP_BIAS_FP8 = 15;
 
 // #include <c10/core/SymBool.h>
 // #include <c10/core/SymNodeImpl.h>
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Optional.h>
 
+// #include <cstdint>
+// #include <iterator>
 // #include <numeric>
+// #include <ostream>
 // #include <type_traits>
 // Targeting ../SymInt.java
 
@@ -5980,6 +6309,40 @@ public static final int EXP_BIAS_FP8 = 15;
 
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef SymInt s);
 @Namespace("c10") public static native @ByVal @Name("operator -") SymInt subtract(@Const @ByRef SymInt s);
+
+@Namespace("c10") public static native @Cast("bool") boolean sym_eq(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal SymBool sym_eq(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
+
+@Namespace("c10") public static native @Cast("bool") boolean sym_ne(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal SymBool sym_ne(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
+
+@Namespace("c10") public static native @Cast("bool") boolean sym_lt(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal SymBool sym_lt(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
+
+@Namespace("c10") public static native @Cast("bool") boolean sym_le(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal SymBool sym_le(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
+
+@Namespace("c10") public static native @Cast("bool") boolean sym_gt(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal SymBool sym_gt(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
+
+@Namespace("c10") public static native @Cast("bool") boolean sym_ge(@Cast("int64_t") long a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal SymBool sym_ge(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
+
+@Namespace("c10") public static native @Cast("bool") boolean definitely_true(
+    @Const @ByRef SymBool b,
+    @Cast("const char*") BytePointer file,
+    @Cast("int64_t") long line);
+@Namespace("c10") public static native @Cast("bool") boolean definitely_true(
+    @Const @ByRef SymBool b,
+    String file,
+    @Cast("int64_t") long line);
+
  // namespace c10
 
 
@@ -5993,6 +6356,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/util/Float8_e5m2.h>
 // #include <c10/util/Float8_e5m2fnuz.h>
 // #include <c10/util/Half.h>
+// #include <c10/util/complex.h>
 
 // #include <type_traits>
 
@@ -6029,23 +6393,25 @@ public static final int EXP_BIAS_FP8 = 15;
 
 // #pragma once
 
-// #include <stdint.h>
+// #include <cstdint>
 // #include <stdexcept>
 // #include <type_traits>
 // #include <utility>
 
 // #include <c10/core/OptionalRef.h>
 // #include <c10/core/ScalarType.h>
+// #include <c10/core/SymBool.h>
 // #include <c10/core/SymFloat.h>
 // #include <c10/core/SymInt.h>
+// #include <c10/core/SymNodeImpl.h>
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Deprecated.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Half.h>
 // #include <c10/util/TypeCast.h>
+// #include <c10/util/complex.h>
 // #include <c10/util/intrusive_ptr.h>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
 // Targeting ../Scalar.java
 
 
@@ -6073,17 +6439,18 @@ public static final int EXP_BIAS_FP8 = 15;
   
   
   
+
+
+
 // #undef DEFINE_TO
 
  // namespace c10
-
 
 
 // Parsed from c10/util/IdWrapper.h
 
 // #pragma once
 
-// #include <c10/macros/Macros.h>
 // #include <cstddef>
 // #include <functional>
 // #include <utility>
@@ -6150,6 +6517,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/util/string_view.h>
 // #include <cstddef>
 // #include <cstdint>
+// NOLINTNEXTLINE(*c-arrays*)
 @Namespace("c10::util::detail") @MemberGetter public static native @Cast("const uint64_t") long crc64_table(int i);
 @Namespace("c10::util::detail") @MemberGetter public static native @Cast("const uint64_t*") LongPointer crc64_table();
 
@@ -6166,8 +6534,7 @@ public static final int EXP_BIAS_FP8 = 15;
 
 @Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(@StringView BytePointer str);
 @Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(@StringView String str);
- // namespace util
- // namespace c10
+ // namespace c10::util
 
 // Allow usage of crc64_t in std::unordered_set
   
@@ -6177,12 +6544,14 @@ public static final int EXP_BIAS_FP8 = 15;
 
 // #pragma once
 
-// #include <c10/util/C++17.h>
 // #include <c10/util/ConstexprCrc.h>
 // #include <c10/util/IdWrapper.h>
 // #include <c10/util/string_view.h>
-// #include <cinttypes>
-// #include <functional>
+// #include <cstdint>
+// #include <ostream>
+// #include <stdexcept>
+// #include <string>
+// #include <type_traits>
 
 // TODO Make it work for more compilers
 
@@ -6246,8 +6615,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // resolved to `basic_string<char>` either in `std` namespace or in
 // `std::__cxx11` one (`__cxx11` is an inline namespace)
 // #endif
- // namespace util
- // namespace c10
+ // namespace c10::util
   
 
 
@@ -6261,8 +6629,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #include <c10/util/TypeSafeSignMath.h>
 
 // #include <algorithm>
+// #include <cstddef>
 // #include <iterator>
-// #include <limits>
 // #include <type_traits>
 
  // namespace detail
@@ -6282,21 +6650,28 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #pragma once
 
+// #include <array>
 // #include <atomic>
-// #include <cstdlib>
+// #include <cstddef>
+// #include <cstdint>
 // #include <memory>
 // #include <mutex>
+// #include <ostream>
+// #include <string>
 // #include <type_traits>
 // #include <vector>
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
+// #include <c10/util/Half.h>
 // #include <c10/util/IdWrapper.h>
 // #include <c10/util/TypeIndex.h>
 // #include <c10/util/TypeTraits.h>
+// #include <c10/util/irange.h>
+// #include <c10/util/string_view.h>
 
 // #include <c10/core/ScalarType.h>
-// #include <c10/util/irange.h>
 
 /*
  * TypeIdentifier is a small type containing an id.
@@ -6318,8 +6693,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // later.  So the namespace is not fixed at the moment.
 
 // Make at::Half a fundamental type.
- // namespace guts
- // namespace c10
+ // namespace c10::guts
 // Targeting ../TypeIdentifier.java
 
 
@@ -6372,8 +6746,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 //
 
 // item sizes for TypeMeta::itemsize() fast path
-@Namespace("caffe2") @MemberGetter public static native @Cast("const uint8_t") byte scalarTypeItemSizes(int i);
-@Namespace("caffe2") @MemberGetter public static native @Cast("const uint8_t*") BytePointer scalarTypeItemSizes();
+@Namespace("caffe2") @MemberGetter public static native @ByRef @Cast("const std::array<uint8_t,c10::NumScalarTypes>*") BytePointer scalarTypeItemSizes();
 // Targeting ../TypeMeta.java
 
 
@@ -6412,6 +6785,16 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
    /* 24 */
    /* 25 */
    /* 26 */
+   /* 27 */
+   /* 28 */
+   /* 29 */
+   /* 30 */
+   /* 31 */
+   /* 32 */
+   /* 33 */
+   /* 34 */
+   /* 35 */
+   /* 36 */
 // #undef DEFINE_SCALAR_METADATA_INSTANCE
 
 
@@ -6492,10 +6875,6 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 
   @Namespace("caffe2::detail") @MemberGetter public static native @Cast("const uint16_t") short std_string_metadata_index();
-   /* namespace detail */
-  
-
-  @Namespace("caffe2::detail") @MemberGetter public static native @Cast("const uint16_t") short uint16_t_metadata_index();
    /* namespace detail */
   
 
@@ -6615,8 +6994,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #include <c10/macros/Export.h>
 
+// #include <cstdint>
 // #include <memory>
-// #include <string>
 
 @Namespace("c10") public enum DebugInfoKind {
   PRODUCER_INFO((byte)(0)),
@@ -6650,8 +7029,11 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // Parsed from c10/util/UniqueVoidPtr.h
 
 // #pragma once
+// #include <cstddef>
 // #include <memory>
+// #include <utility>
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 
 // Does not delete anything
@@ -6691,10 +7073,16 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #pragma once
 
-// #include <stddef.h>
+// #include <cstddef>
+// #include <cstdint>
+// #include <functional>
 // #include <memory>
+// #include <utility>
 
 // #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
+// #include <c10/macros/Export.h>
+// #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/ThreadLocalDebugInfo.h>
 // #include <c10/util/UniqueVoidPtr.h>
@@ -6705,10 +7093,10 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // NB: Device is NOT tested for here; a CUDA nullptr is as much a nullptr as a
 // CPU nullptr
 
-@Namespace("c10") public static native @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr dp, @ByVal @Cast("std::nullptr_t*") PointerPointer arg1);
-@Namespace("c10") public static native @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0, @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr dp);
-@Namespace("c10") public static native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr dp, @ByVal @Cast("std::nullptr_t*") PointerPointer arg1);
-@Namespace("c10") public static native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0, @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr dp);
+@Namespace("c10") public static native @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@StdMove DataPtr dp, @ByVal @Cast("std::nullptr_t*") PointerPointer arg1);
+@Namespace("c10") public static native @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0, @StdMove DataPtr dp);
+@Namespace("c10") public static native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@StdMove DataPtr dp, @ByVal @Cast("std::nullptr_t*") PointerPointer arg1);
+@Namespace("c10") public static native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0, @StdMove DataPtr dp);
 // Targeting ../Allocator.java
 
 
@@ -6773,6 +7161,36 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
  // namespace c10
 
 
+// Parsed from c10/core/impl/COW.h
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/intrusive_ptr.h>
+ // namespace c10
+
+// Creates a Copy-on-write (COW) clone of the given storage. This will also
+// convert the given storage into a COW storage if it is not COW already.
+//
+// Converting the storage into a COW storage will not be successful if the
+// storage's DataPtr has some context (`DataPtr::get_context()`) which is not
+// equal to the data pointer (`DataPtr::get()`). In this case, a nullptr is
+// returned.
+@Namespace("c10::impl::cow") public static native @ByVal StorageImplPtr lazy_clone_storage(
+    @ByRef StorageImpl storage);
+
+// Check if a storage has a simple DataPtr with no abnormal context
+@Namespace("c10::impl::cow") public static native @Cast("bool") boolean has_simple_data_ptr(@Const @ByRef StorageImpl storage);
+
+// Check if a DataPtr is COW
+@Namespace("c10::impl::cow") public static native @Cast("bool") boolean is_cow_data_ptr(@StdMove DataPtr data_ptr);
+
+// Eagerly copies a COW storage's data, turning it into a non-COW storage.
+@Namespace("c10::impl::cow") public static native void materialize_cow_storage(@ByRef StorageImpl storage);
+
+ // namespace c10::impl::cow
+
+
 // Parsed from c10/util/python_stub.h
 
 // #pragma once
@@ -6783,21 +7201,35 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #pragma once
 
 // #include <c10/core/Allocator.h>
+// #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
 // #include <c10/core/SymInt.h>
+// #include <c10/core/impl/COW.h>
+// #include <c10/core/impl/COWDeleter.h>
 // #include <c10/core/impl/PyObjectSlot.h>
-
+// #include <c10/macros/Export.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/UniqueVoidPtr.h>
 // #include <c10/util/intrusive_ptr.h>
+// #include <cstddef>
+// #include <utility>
 // Targeting ../StorageImpl.java
 
 
 
 // Declare StorageImpl create function pointer types.
 
-@Namespace("c10") public static native void SetStorageImplCreate(DeviceType t, @Cast("c10::StorageImplCreateHelper") StorageImplPtr fptr);
-@Namespace("c10") public static native void SetStorageImplCreate(@Cast("c10::DeviceType") byte t, @Cast("c10::StorageImplCreateHelper") StorageImplPtr fptr);
 
-@Namespace("c10") public static native @Cast("c10::StorageImplCreateHelper") StorageImplPtr GetStorageImplCreate(DeviceType t);
-@Namespace("c10") public static native @Cast("c10::StorageImplCreateHelper") StorageImplPtr GetStorageImplCreate(@Cast("c10::DeviceType") byte t);
+
+
+
+@Namespace("c10") public static native @ByVal StorageImplPtr make_storage_impl(
+    @ByVal StorageImpl.use_byte_size_t use_byte_size,
+    @ByVal SymInt size_bytes,
+    @StdMove DataPtr data_ptr,
+    Allocator allocator,
+    @Cast("bool") boolean resizable,
+    @ByVal DeviceOptional device_opt);
 
  // namespace c10
 
@@ -6806,7 +7238,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #pragma once
 
-// #include <c10/util/in_place.h>
+// #include <utility>
 
 // See example implementation in TensorBase.h and TensorBody.h.
 // Synopsis:
@@ -6862,8 +7294,19 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #pragma once
 
+// #include <c10/core/Allocator.h>
+// #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
 // #include <c10/core/StorageImpl.h>
+// #include <c10/core/SymInt.h>
+// #include <c10/macros/Export.h>
+// #include <c10/util/Exception.h>
 // #include <c10/util/ExclusivelyOwned.h>
+// #include <c10/util/MaybeOwned.h>
+// #include <c10/util/UniqueVoidPtr.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <cstddef>
+// #include <utility>
 
 @Namespace("c10") public static native @Cast("bool") boolean isSharedStorageAlias(
     @Const @ByRef Storage storage0,
@@ -6900,7 +7343,6 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // NB: This Registry works poorly when you have other namespaces.
 // Make all macro invocations from inside the at namespace.
 
-// #include <algorithm>
 // #include <cstdio>
 // #include <cstdlib>
 // #include <functional>
@@ -6911,6 +7353,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #include <unordered_map>
 // #include <vector>
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Type.h>
 
@@ -7108,9 +7551,9 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
  * general - that will allow Python to run without wrong flags.
  */
 
+// #include <c10/macros/Export.h>
 // #include <string>
 
-// #include <c10/macros/Macros.h>
 // #include <c10/util/Registry.h>
 /**
  * Sets the usage message when a commandline tool is called with "--help".
@@ -7353,8 +7796,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 @Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_keyset_excluded(@ByVal DispatchKeySet ks);
 @Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_keyset_included(@ByVal DispatchKeySet ks);
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/InferenceMode.h
@@ -7362,6 +7804,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #pragma once
 
 // #include <c10/core/AutogradState.h>
+// #include <c10/core/DispatchKey.h>
+// #include <c10/core/DispatchKeySet.h>
 // #include <c10/core/impl/LocalDispatchKeySet.h>
 // #include <c10/macros/Export.h>
 // Targeting ../InferenceMode.java
@@ -7378,6 +7822,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Optional.h>
+// #include <cstdint>
 
 @Namespace("c10") public static native @ByVal LongArrayRef asIntArrayRefUnchecked(@ByVal SymIntArrayRef ar);
 
@@ -7429,15 +7874,22 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #include <c10/core/Backend.h>
 // #include <c10/core/DefaultDtype.h>
 // #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
+// #include <c10/core/DispatchKey.h>
 // #include <c10/core/Layout.h>
 // #include <c10/core/MemoryFormat.h>
 // #include <c10/core/ScalarType.h>
 // #include <c10/core/ScalarTypeToTypeMeta.h>
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
 // #include <c10/util/Optional.h>
 
+// #include <cstdint>
 // #include <iosfwd>
+// #include <string>
+// #include <type_traits>
 // #include <utility>
 
 @Namespace("c10") public static native DispatchKey computeDispatchKey(
@@ -7499,7 +7951,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 /** Convenience function that returns a {@code TensorOptions} object with the
  *  {@code device} set to CUDA and the {@code device_index} set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions device_index(short device_index);
+@Namespace("c10") public static native @ByVal TensorOptions device_index(@Cast("c10::DeviceIndex") byte device_index);
 
 /** Convenience function that returns a {@code TensorOptions} object with the
  *  {@code requires_grad} set to the given one. */
@@ -7544,8 +7996,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/impl/PyInterpreter.h
@@ -7553,6 +8004,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #pragma once
 
 // #include <c10/core/Device.h>
+// #include <c10/core/DispatchKeySet.h>
 // #include <c10/core/Layout.h>
 // #include <c10/core/MemoryFormat.h>
 // #include <c10/core/SymIntArrayRef.h>
@@ -7566,7 +8018,6 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // Forward declarations
  // namespace c10
 
- // namespace torch
 
 // Actual implementation
 // Targeting ../PyInterpreterVTable.java
@@ -7602,8 +8053,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
     @Override public String toString() { return intern().name(); }
 }
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/impl/PyObjectSlot.h
@@ -7617,8 +8067,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #include <atomic>
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/impl/SizesAndStrides.h
@@ -7637,8 +8086,7 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 
 
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/util/DimVector.h
@@ -7648,6 +8096,7 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 // #include <c10/core/SymInt.h>
 // #include <c10/core/impl/SizesAndStrides.h>
 // #include <c10/util/SmallVector.h>
+// #include <cstddef>
 // #include <cstdint>
 
 @Namespace("c10") @MemberGetter public static native @Cast("const size_t") long kDimVectorStaticSize();
@@ -7662,10 +8111,14 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 // #pragma once
 // #include <c10/core/SymBool.h>
 // #include <c10/core/SymInt.h>
+// #include <c10/macros/Export.h>
+// #include <c10/macros/Macros.h>
 // #include <c10/util/DimVector.h>
 
 // #include <atomic>
+// #include <cstdint>
 // #include <mutex>
+// #include <utility>
 // Targeting ../SymbolicShapeMeta.java
 
 
@@ -7678,6 +8131,10 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 // #pragma once
 
 // #include <c10/core/SymInt.h>
+// #include <c10/macros/Export.h>
+// #include <c10/macros/Macros.h>
+// #include <cstdint>
+// #include <utility>
 // This template can only be specialized at int64_t and c10::SymInt;
 // you'll get linker errors otherwise
  // namespace detail
@@ -7927,22 +8384,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
  * user-provided input.
  */
 
-// GCC7 is getting an internal compiler error on the new
-// implementation, so keep the old one (which evaluates the error
-// message eagerly and therefore is undesirable for general use
-// compared to the new one) around for it.
-// #if defined(__GNUG__) && __GNUC__ <= 7 && !defined(__clang__)
-
-// #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
-//   ::c10::enforce_detail::enforceThatImpl(
-//       op, lhs, rhs, __FILE__, __LINE__, expr, nullptr, ##__VA_ARGS__)
-
-// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(op, lhs, rhs, expr, ...)
-//   ::c10::enforce_detail::enforceThatImpl(
-//       op, (lhs), (rhs), __FILE__, __LINE__, expr, this, ##__VA_ARGS__)
-
-// #else
-
 // #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
 //   ::c10::enforce_detail::enforceThatImpl(
 //       op,
@@ -7970,7 +8411,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //         return ::c10::enforce_detail::enforceFailMsgImpl(
 //             arg1, arg2, ##__VA_ARGS__);
 //       })
-// #endif
 
  // namespace enforce_detail
 
@@ -8071,11 +8511,13 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #pragma once
 
-// #include <c10/util/ArrayRef.h>
-
+// #include <c10/util/Exception.h>
+// #include <cstdint>
+// #include <functional>
 // #include <iterator>
 // #include <numeric>
 // #include <type_traits>
+// #include <utility>
 
 /** Sum of a list of integers; accumulates into the int64_t datatype */
 
@@ -8103,11 +8545,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #pragma once
 // #include <c10/macros/Macros.h>
-// #include <c10/util/ArrayRef.h>
 
-// #include <iterator>
-// #include <numeric>
-// #include <type_traits>
+// #include <cstdint>
 
 // GCC has __builtin_mul_overflow from before it supported __has_builtin
 // #ifdef _MSC_VER
@@ -8133,18 +8572,27 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #pragma once
 
+// #include <c10/core/Allocator.h>
+// #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
+// #include <c10/core/DispatchKey.h>
 // #include <c10/core/DispatchKeySet.h>
 // #include <c10/core/InferenceMode.h>
+// #include <c10/core/Layout.h>
 // #include <c10/core/MemoryFormat.h>
+// #include <c10/core/ScalarType.h>
 // #include <c10/core/ScalarTypeToTypeMeta.h>
 // #include <c10/core/Storage.h>
 // #include <c10/core/SymBool.h>
+// #include <c10/core/SymInt.h>
 // #include <c10/core/SymIntArrayRef.h>
 // #include <c10/core/SymbolicShapeMeta.h>
 // #include <c10/core/WrapDimMinimal.h>
 // #include <c10/core/impl/PyObjectSlot.h>
 // #include <c10/core/impl/SizesAndStrides.h>
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/ArrayRef.h>
 // #include <c10/util/DimVector.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Flags.h>
@@ -8157,10 +8605,14 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #include <algorithm>
 // #include <atomic>
+// #include <cstddef>
+// #include <cstdint>
 // #include <limits>
 // #include <memory>
+// #include <string>
 // #include <type_traits>
 // #include <utility>
+// #include <vector>
 
 // A global boolean variable to control whether we free memory when a Tensor
 // is shrunk to a smaller size. As a result, a Tensor is always going to
@@ -8176,9 +8628,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // is larger than this flag in bytes.  This only applies to functions which
 // respect caffe2_keep_on_shrink.
 
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
  // namespace at
 
 /**
@@ -8357,12 +8806,16 @@ public static final int C10_GCC_VERSION_MINOR = 0;
  // namespace c10
 
 
-
 // Parsed from c10/core/UndefinedTensorImpl.h
 
 // #pragma once
 
+// #include <c10/core/MemoryFormat.h>
+// #include <c10/core/SymIntArrayRef.h>
 // #include <c10/core/TensorImpl.h>
+// #include <c10/macros/Export.h>
+// #include <c10/util/ArrayRef.h>
+// #include <cstdint>
 // Targeting ../UndefinedTensorImpl.java
 
 
@@ -8459,7 +8912,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <cstdint>
 
 // #include <c10/util/Exception.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/core/Device.h>
 // #include <c10/core/DispatchKeySet.h>
@@ -8606,7 +9058,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 // #include <ATen/core/Dimname.h>
 // #include <c10/core/TensorImpl.h>
-// #include <c10/util/C++17.h>
 // Targeting ../NamedTensorMeta.java
 
 
@@ -8729,6 +9180,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #pragma once
 
 // #include <c10/core/TensorImpl.h>
+// #include <c10/core/UndefinedTensorImpl.h>
 
 // #include <utility>
 // Shared ExclusivelyOwnedTraits implementation between caffe2::Tensor and
@@ -8803,6 +9255,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <c10/core/TensorOptions.h>
 // #include <c10/core/UndefinedTensorImpl.h>
 // #include <c10/core/WrapDimMinimal.h>
+// #include <c10/util/C++17.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/ExclusivelyOwned.h>
 // #include <c10/util/ExclusivelyOwnedTensorTraits.h>
@@ -8885,6 +9338,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/_is_all_true_ops.h>
 // #include <ATen/ops/_is_any_true_ops.h>
 // #include <ATen/ops/_is_zerotensor_ops.h>
+// #include <ATen/ops/_lazy_clone_ops.h>
 // #include <ATen/ops/_neg_view_ops.h>
 // #include <ATen/ops/_nested_tensor_size_ops.h>
 // #include <ATen/ops/_nested_tensor_storage_offsets_ops.h>
@@ -9220,6 +9674,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/sinc_ops.h>
 // #include <ATen/ops/sinh_ops.h>
 // #include <ATen/ops/size_ops.h>
+// #include <ATen/ops/slice_inverse_ops.h>
 // #include <ATen/ops/slice_ops.h>
 // #include <ATen/ops/slice_scatter_ops.h>
 // #include <ATen/ops/slogdet_ops.h>
@@ -9628,6 +10083,9 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::copysign_.Scalar(Tensor(a!) self, Scalar other) -> Tensor(a!)
+
+
+// aten::_lazy_clone(Tensor self) -> Tensor
 
 
 // aten::logical_not(Tensor self) -> Tensor
@@ -10510,6 +10968,12 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::slice.Tensor(Tensor(a) self, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor(a)
+
+
+// aten::slice_inverse(Tensor(a) self, Tensor src, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor(a)
+
+
+// aten::slice_inverse(Tensor(a) self, Tensor src, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor(a)
 
 
 // aten::slice_scatter(Tensor self, Tensor src, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor
@@ -11894,8 +12358,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/cpp_hook.h
@@ -11905,17 +12368,23 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <functional>
 // #include <memory>
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from c10/util/hash.h
 
 // #pragma once
 
+// #include <c10/util/Exception.h>
+// #include <cstddef>
 // #include <functional>
 // #include <iomanip>
+// #include <ios>
 // #include <sstream>
+// #include <string>
+// #include <tuple>
+// #include <type_traits>
+// #include <utility>
 // #include <vector>
 
 // #include <c10/util/ArrayRef.h>
@@ -11958,6 +12427,8 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 //   c10::sha1 sha1_hash{code};
 //   const auto hash_code = sha1_hash.str();
 // TODO: Compare vs OpenSSL and/or CryptoPP implementations
+
+@Namespace("c10") public static native @Cast("const uint64_t") @NoException(true) long twang_mix64(@Cast("uint64_t") long key);
 
 ////////////////////////////////////////////////////////////////////////////////
 // c10::hash implementation
@@ -12006,8 +12477,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // Targeting ../Edge.java
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 // The idiomatic way of enabling use of a custom type as the key of hash
 // containers in C++11. This method removes the requirement of having to pass
@@ -12121,8 +12591,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from ATen/NamedTensor.h
@@ -12469,6 +12938,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 // #pragma once
 
+// #include <cstdint>
 // #include <memory>
 // #include <type_traits>
 
@@ -12622,6 +13092,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // - make sherwood_v3_table::convertible_to_iterator public because GCC5 seems
 // to have issues with it otherwise
 // - fix compiler warnings in operator templated_iterator<const value_type>
+// - make use of 'if constexpr' and eliminate AssignIfTrue template
 
 //          Copyright Malte Skarupke 2017.
 // Distributed under the Boost Software License, Version 1.0.
@@ -12632,18 +13103,18 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 // #pragma once
 
-// #include <c10/util/C++17.h>
 // #include <algorithm>
+// #include <array>
 // #include <cmath>
 // #include <cstddef>
 // #include <cstdint>
 // #include <functional>
+// #include <initializer_list>
 // #include <iterator>
+// #include <memory>
+// #include <stdexcept>
 // #include <type_traits>
 // #include <utility>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
 
 // #ifdef _MSC_VER
 // #define SKA_NOINLINE(...) __declspec(noinline) __VA_ARGS__
@@ -12662,7 +13133,6 @@ public static final byte min_lookups = min_lookups();
  // namespace detailv3
 
  // namespace ska_ordered
-
 
 
 // Parsed from ATen/core/Dict_inl.h
@@ -13227,6 +13697,7 @@ public static final byte min_lookups = min_lookups();
 // in a Meyer singleton), it implies that you must *leak* objects when
 // putting them in the registry.  This is done by deleting the destructor
 // on DeviceGuardImplInterface.
+// NOLINTNEXTLINE(*c-arrays*)
 
 // Targeting ../DeviceGuardImplRegistrar.java
 
@@ -13257,8 +13728,7 @@ public static final byte min_lookups = min_lookups();
  * to virtual dispatch on the DeviceGuardImpl registry.
  */
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/impl/InlineDeviceGuard.h
@@ -13269,10 +13739,13 @@ public static final byte min_lookups = min_lookups();
 // InlineOptionalDeviceGuard.
 
 // #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
 // #include <c10/core/impl/DeviceGuardImplInterface.h>
 // #include <c10/core/impl/VirtualGuardImpl.h>
-// #include <c10/util/C++17.h>
+// #include <c10/util/Exception.h>
 // #include <c10/util/Optional.h>
+// #include <type_traits>
+// #include <utility>
 
 /**
  * A DeviceGuard is an RAII class that sets a device to some value
@@ -13323,15 +13796,18 @@ public static final byte min_lookups = min_lookups();
  * use this.  See OptionalDeviceGuard for user-oriented usage notes.
  */
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/DeviceGuard.h
 
 // #pragma once
 
+// #include <c10/core/Device.h>
+// #include <c10/core/impl/DeviceGuardImplInterface.h>
 // #include <c10/core/impl/InlineDeviceGuard.h>
+// #include <c10/core/impl/VirtualGuardImpl.h>
+// #include <c10/util/Optional.h>
 
 /** RAII guard that sets a certain default device in its constructor, and
  *  changes it back to the device that was originally active upon destruction.
@@ -13375,14 +13851,17 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/core/impl/DeviceGuardImplInterface.h>
 // #include <c10/util/Exception.h>
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/Event.h
 
 // #pragma once
 
+// #include <c10/core/Device.h>
+// #include <c10/core/DeviceType.h>
+// #include <c10/core/Stream.h>
+// #include <c10/core/impl/DeviceGuardImplInterface.h>
 // #include <c10/core/impl/InlineEvent.h>
 // #include <c10/core/impl/VirtualGuardImpl.h>
 
@@ -13444,15 +13923,19 @@ public static final byte min_lookups = min_lookups();
  * See InlineOptionalDeviceGuard for more guidance on how to use this class.
  */
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/StreamGuard.h
 
 // #pragma once
 
+// #include <c10/core/Device.h>
+// #include <c10/core/Stream.h>
 // #include <c10/core/impl/InlineStreamGuard.h>
+// #include <c10/core/impl/VirtualGuardImpl.h>
+// #include <c10/util/ArrayRef.h>
+// #include <c10/util/Optional.h>
 
 /**
  * A StreamGuard is an RAII class that changes the current device
@@ -13529,6 +14012,7 @@ public static final byte min_lookups = min_lookups();
 // #include <atomic>
 // #include <climits>
 // #include <memory>
+// #include <type_traits>
 
 @Namespace("c10::raw::weak_intrusive_ptr") public static native void incref(@Cast("c10::intrusive_ptr_target*") Pointer self);
 
@@ -13537,6 +14021,9 @@ public static final byte min_lookups = min_lookups();
 
 
  // namespace raw
+@Namespace("c10::detail") @MemberGetter public static native @Cast("const uint32_t") int kImpracticallyHugeReferenceCount();
+ // namespace detail
+
 /**
  * intrusive_ptr<T> is an alternative to shared_ptr<T> that has better
  * performance because it does the refcounting intrusively
@@ -13567,17 +14054,17 @@ public static final byte min_lookups = min_lookups();
 
 // Increment needs to be acquire-release to make use_count() and
 // unique() reliable.
-@Namespace("c10::detail") public static native @Cast("size_t") long atomic_refcount_increment(@Cast("std::atomic<size_t>*") @ByRef LongPointer refcount);
+@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_refcount_increment(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer refcount);
 
 // weak_use_count() is only used for testing, so we don't need it to
 // be reliable. Relaxed should be fine.
-@Namespace("c10::detail") public static native @Cast("size_t") long atomic_weakcount_increment(@Cast("std::atomic<size_t>*") @ByRef LongPointer weakcount);
+@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_weakcount_increment(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer weakcount);
 
 // Both decrements need to be acquire-release for correctness. See
 // e.g. std::shared_ptr implementation.
-@Namespace("c10::detail") public static native @Cast("size_t") long atomic_refcount_decrement(@Cast("std::atomic<size_t>*") @ByRef LongPointer refcount);
+@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_refcount_decrement(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer refcount);
 
-@Namespace("c10::detail") public static native @Cast("size_t") long atomic_weakcount_decrement(@Cast("std::atomic<size_t>*") @ByRef LongPointer weakcount);
+@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_weakcount_decrement(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer weakcount);
 
 
 // Targeting ../QuantizerPtr.java
@@ -13656,7 +14143,7 @@ public static final byte min_lookups = min_lookups();
 // NullType::singleton to this function
 @Namespace("c10::raw::intrusive_ptr") public static native void decref(@Cast("c10::intrusive_ptr_target*") Pointer self);
 
-@Namespace("c10::raw::intrusive_ptr") public static native @Cast("size_t") long use_count(@Cast("c10::intrusive_ptr_target*") Pointer self);
+@Namespace("c10::raw::intrusive_ptr") public static native @Cast("uint32_t") int use_count(@Cast("c10::intrusive_ptr_target*") Pointer self);
 
  // namespace intrusive_ptr
 
@@ -14020,6 +14507,10 @@ public static final byte min_lookups = min_lookups();
 
 
 
+
+
+
+
  // namespace detail
 
  // namespace ivalue
@@ -14043,7 +14534,6 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/core/SymBool.h>
 // #include <c10/core/SymFloat.h>
 // #include <c10/macros/Export.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/MaybeOwned.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <type_traits>
@@ -15230,7 +15720,6 @@ public static final byte min_lookups = min_lookups();
 // #include <cstdint>
 // #include <memory>
 // #include <mutex>
-// #include <stdexcept>
 // #include <string>
 // #include <utility>
 // #include <vector>
@@ -15243,478 +15732,13 @@ public static final byte min_lookups = min_lookups();
  *  compatibility with external user's legacy C++ frontend code. Our intention
  *  is to eliminate the {@code Variable} class in the near future. */
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 // The following are all internal APIs and should not be shown in libtorch docs.
 // Therefore, we wrap the following code with `#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // ... #endif`
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-/** Check if this type is supported by the autograd engine.
- *  If you change this, update the doc at the top of the
- *  torch/autograd/__init__.py file and
- *  "test_set_requires_grad_only_for_continuous_types" in test/test_autograd.py */
-@Namespace("torch::autograd") public static native @Cast("bool") boolean isDifferentiableType(ScalarType t);
-
-/**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *                                 Variable
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  A {@code Variable} augments a {@code Tensor} with the ability to interact in our
- *  autograd machinery. Conceptually, {@code Variable}s travel along {@code Edge}s between
- *  {@code Node}s in the autograd graph. A {@code Variable} can either be a leaf, like a
- *  weight in a neural network, or an interior variable, when it is the result
- *  of an operation between variables. Every {@code Variable} also stores another
- *  {@code Variable} called its {@code grad} (gradient). If the variable is a leaf, its
- *  gradient will be accumulated into this variable.
- * 
- *  Every Tensor is a Variable, but sometimes we colloquially refer to Variables
- *  that don't require gradients as Tensors (since none of the autograd
- *  machinery for Variables applies).  Historically, Variables and Tensors
- *  were separate concepts, but now they are exactly the same (i.e. we have
- *  {@code using Variable = at::Tensor}).
- * 
- *                               Gradient Edges
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  Furthermore, {@code Variable}s have the notion of a {@code gradient_edge}, which is the
- *  edge in the autograd graph that connects the variable to a particular input
- *  of the gradient function that will be invoked with the variable during the
- *  backward pass. More precisely, this gradient function can be one of two
- *  things:
- *  1. A {@code grad_fn}, if the variable is in the interior of the graph. This is the
- *     gradient of the function that produced the variable.
- *  2. A {@code grad_accumulator}, if the variable is a leaf, which accumulates a
- *     scalar gradient value into its {@code grad} variable.
- * 
- *                                Versioning
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  Another major feature of {@code Variable}s are *versions*. Versions are
- *  incremented when an in-place mutation of a variable occurs. Versions are
- *  useful when constructing {@code SavedVariable}s, which take a snapshot of a
- *  {@code Variable} at a certain version. You can retrieve a {@code Variable}'s version
- *  through its {@code current_version()} method.
- * 
- *                                  Views
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  It is possible for a  {@code Variable} to be a *view* of another {@code Variable}, in
- *  which case it tracks that {@code Variable}'s data and autograd history. Beyond
- *  construction, the interface of a view is identical to that of a regular
- *  {@code Variable}. You can determine whether {@code Variable} is in fact a view by
- *  probing its {@code is_view()} method. Note that the *view* semantics are only
- *  meaningful for {@code Variable} relations that are relevant to autograd.
- *  See NOTE [ Autograd View Variables ] for more details.
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-// Private-ish functions for manipulating variables; we don't want to put them
-// on Tensor proper
-
-// WARNING: This may return a nullptr.  If you require AutogradMeta to return
-// a materialized structure, use materialize_autograd_meta instead.
-@Namespace("torch::autograd::impl") public static native AutogradMeta get_autograd_meta(@Const @ByRef TensorBase arg0);
-
-// WARNING: This will return a nullptr if the Tensor is not a view.
-@Namespace("torch::autograd::impl") public static native DifferentiableViewMeta get_view_autograd_meta(@Const @ByRef TensorBase arg0);
-
-// Returns the current autograd meta, materializing it if it was previously
-// none.  This counts as a *mutating* operation, so do not call it on
-// "read-only" operators; in particular, this is NOT thread safe
-@Namespace("torch::autograd::impl") public static native AutogradMeta materialize_autograd_meta(@Const @ByRef TensorBase arg0);
-
-/** Set the gradient accumulator of the {@code Variable}. This is only applicable to
- *  leaf variables. Interior variables should call {@code set_gradient_edge()}. */
-
-/** Attempts to get a pointer to the gradient accumulator of the {@code Variable},
- *  if it still exists. If the gradient accumulator function has been
- *  destroyed, returns a {@code nullptr}. */
-@Namespace("torch::autograd::impl") public static native @SharedPtr Node try_get_grad_accumulator(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-/** Gets the gradient accumulator of the {@code Variable} if it has one, or else
- *  create one on the fly and return it. */
-@Namespace("torch::autograd::impl") public static native @SharedPtr Node grad_accumulator(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-/** Returns the "canonical" gradient edge of this {@code Variable}, i.e. either the
- *  gradient function if this is an interior {@code Variable}, or the gradient
- *  accumulator otherwise. If the {@code Variable} is interior, the returned {@code Edge}
- *  will store the input index of the {@code Node} to which this variable is
- *  connected in its {@code input_nr} field. For leaves, the {@code input_nr} is always
- *  zero. Note that {@code set_gradient_edge} and {@code gradient_edge} are not
- *  symmetric. You must use {@code set_gradient_edge} to set the {@code grad_fn} and
- *  {@code set_grad_accumulator} to set the accumulator. */
-@Namespace("torch::autograd::impl") public static native @ByVal Edge gradient_edge(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-/** Set the gradient edge -- i.e. {@code grad_fn} and {@code input_nr} -- of the
- *  {@code Variable}.
- *  NOTE: This will always set the {@code grad_fn}, even if this is a leaf variable,
- *  and never the {@code grad_accumulator}. For the latter, use
- *  {@code set_grad_accumulator}. This allows late construction of an interior
- *  {@code Variable}. */
-
-///
-@Namespace("torch::autograd::impl") public static native void set_gradient_edge(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @ByVal Edge edge);
-
-// Autograd Graph Interaction
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/** Update the {@code grad_fn} of an existing Variable. Called after in-place
- *  modifications.
- * 
- *  For View Variables:
- *  Called after in-place modifications. Modifies the grad_fn of the base
- *  Variable. */
-@Namespace("torch::autograd::impl") public static native void rebase_history(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @ByVal Edge gradient_edge);
-
-/** Gets the raw gradient function pointer, whatever it currently is. */
-@Namespace("torch::autograd::impl") public static native Node grad_fn_unsafe(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-/** Increments the version count of this {@code Variable}. */
-@Namespace("torch::autograd::impl") public static native void bump_version(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-@Namespace("torch::autograd::impl") public static native void set_version_counter(
-    @Cast("const torch::autograd::Variable*") @ByRef Tensor arg0,
-    @Const @ByRef VariableVersion version_counter);
-
-/** Retrieves this {@code Variable}s version counter. */
-@Namespace("torch::autograd::impl") public static native @Const @ByRef VariableVersion version_counter(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-@Namespace("torch::autograd::impl") public static native void set_name(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @StdString BytePointer name);
-@Namespace("torch::autograd::impl") public static native void set_name(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0, @StdString String name);
-
-@Namespace("torch::autograd::impl") public static native void add_hook(
-    @Const @ByRef TensorBase arg0,
-    @UniquePtr @ByVal FunctionPreHook hook);
-@Namespace("torch::autograd::impl") public static native @ByRef FunctionPreHookVector hooks(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-@Namespace("torch::autograd::impl") public static native void clear_hooks(@Const @ByRef TensorBase arg0);
-
-@Namespace("torch::autograd::impl") public static native void set_post_acc_grad_hooks(
-    @Const @ByRef TensorBase arg0,
-    @UniquePtr PostAccumulateGradHook dict);
-@Namespace("torch::autograd::impl") public static native @UniquePtr PostAccumulateGradHook post_acc_grad_hooks(
-    @Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
-
-@Namespace("torch::autograd::impl") public static native void create_cpp_hook(
-    @Const @ByRef TensorBase arg0,
-    @Cast("bool") boolean is_retains_grad_hooks/*=false*/);
-@Namespace("torch::autograd::impl") public static native void create_cpp_hook(
-    @Const @ByRef TensorBase arg0);
-
-// Targeting ../AutogradMeta.java
-
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                     DifferentiableViewMeta
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/** NOTE [ Autograd View Variables ]
- * 
- *  Many operations return Variable that shares storage with an input Variable.
- *  The returned Variable is called a **view** Variable on the input **base**
- *  Variable.
- * 
- *  In PyTorch, we have two types of views: differentiable views, and
- *  non-differentiable views. In either type, to support proper version
- *  checking, the base and view Variables must always share the same
- *  version_counter.
- * 
- * 
- *  Differentiable Views
- *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  This class allows to track both forward and backward AD differentiable
- *  views. These views can have different base as non-differentiable view for
- *  forward and backward mode AD are not the same.
- * 
- *  Most function are either both forward and backward differentiable views (for
- *  example: view, select, narrow, transpose, etc) or both not forward and not
- *  backward differentiable views (for example: indices, values, eq, lt, etc).
- *  But there are also functions that are forward but not backward
- *  differentiable views (only detach for now) or functions that are backward
- *  but not forward differentiable view (only make_dual and unpack dual for
- *  now).
- * 
- *  A concrete example of two views with different bases is as follow:
- * 
- *      # Have:
- *      #   dual is a dual Tensor that is neither a forward or backward view
- *      detached_dual = dual.detach()
- *      view = detached_dual.view_as(dual)
- *      # The forward base of view is dual
- *      # The backward base of view is detached_dual
- * 
- *  - Backward Mode View
- *  Differentiable views are the view variables where you want gradients to flow
- *  back to the base variables. Out-of-place operations on views are quite
- *  straightforward, but in-place ones are very tricky. Even if the base
- *  variable may not require grad when we create the view, we still need to
- *  track the view relation because future in-place ops may require back-proping
- *  through it. For example, we need to support
- * 
- *    (1) in-place operation on view, e.g.,
- * 
- *      # Have:
- *      #   base.requires_grad = False
- *      #   var.requires_grad = True
- *      base[1] = var  # i.e., base[1].copy_(var)
- *      torch.autograd.grad(base.sum(), var)  <- should return an all ones
- *      tensor
- * 
- *    (2) in-place operation on base after view is created, e.g.,
- * 
- *      # Have:
- *      #   base.requires_grad = False
- *      #   var.requires_grad = True
- *      view = base[1]
- *      base.copy_(var)
- *      torch.autograd.grad(view.sum(), var)  <- should return a tensor with
- *                                               var[1] filled with all ones and
- *                                               zeros everywhere else
- * 
- *  - Forward Mode View
- *  Forward differentiable views follow the same semantic as backward ones but
- *  show up differently as they are computed along with the forward evaluation.
- *  The hard examples above are thus very similar
- * 
- *    (1) in-place operation on view, e.g.,
- * 
- *      # Have:
- *      #   base is a regular Tensor
- *      #   var is a dual Tensor whose tangent is all ones
- *      base[1] = var  # i.e., base[1].copy_(var)
- *      # Now, base is a dual Tensor
- *      _, fw_grad = fwAD.unpack_dual(base) <- fw_grad should be a tensor with
- *                                               fw_grad[1] filled with all ones
- *                                               and zeros everywhere else
- * 
- *    (2) in-place operation on base after view is created, e.g.,
- * 
- *      # Have:
- *      #   base is a regular Tensor
- *      #   var is a dual Tensor whose tangent is all ones
- *      view = base[1]
- *      base.copy_(var)
- *      _, fw_grad = fwAD.unpack_dual(view) <- fw_grad should be an all ones
- *      tensor
- * 
- *  See Note [Forward Grad View/inplace] for more details on how we handle these
- *  hard cases.
- * 
- * 
- *  DifferentiableViewMeta is created to support gradient tracking of
- *  such **in-place** operations. In particular,
- *    + if an in-place op is done on base, the grad_fn field of the view may
- *      become stale. So accesses should always go through grad_fn(), which
- *      reconstructs an updated grad_fn if the version_counter has incremented.
- *      All other fields are always valid.
- *    + if an in-place op is done on view, in rebase_history() of view, which is
- *      called after every in-place op in VariableType.cpp, the grad_fn of base
- *      is updated.
- *    + if a single autograd Node returns multiple differentiable views, if any
- *      output is modified by an inplace operation, the autograd engine will
- *      make an equivalent graph (corresponding to the view operations) without
- *      using equivalent graph, where each output is treated as if it were
- *      produced by a distinct view operation. This discards the original (e.g.,
- *      user provided) grad_fn. If the provided grad_fn does more than the
- *      backward of the view, then the DifferentiableViewMeta must be created
- *      with creation_meta= CreationMeta::MULTI_OUTPUT_NODE to prevent the
- *      engine from ignoring the provided grad_fn.
- * 
- *  Interaction with GradMode:
- *  The particular case that we consider here is:
- * 
- *      # Have:
- *      #   base.requires_grad = True or False
- *      with torch.no_grad():
- *          view = base[1]
- *      base.requires_grad_()
- *      view.copy_(var)
- *      torch.autograd.grad(base.sum(), var)  <- what should it return?
- * 
- *  Given that this particular code example is ambiguous and can easily be
- *  replace by either moving both inside the no_grad block or both outside, we
- *  explicitly forbid it. For now, it is deprecated by a warning. This is
- *  achieved by setting creation_meta=CreationMeta::NO_GRAD_MODE for all
- *  differentiable views created in no_grad mode.
- * 
- *  See Note [View + Inplace update for base tensor]
- *  and Note [View + Inplace update for view tensor] for the details how
- *  autograd handles inplace update with view ops.
- * 
- *  Non-Differentiable Views
- *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  In certain cases, although function outputs share storage with inputs, they
- *  will **never** require gradient history tracking. Instead of registering the
- *  view relation via DifferentiableViewMeta in autograd, the views will be
- *  using usual AutogradMeta and just share the version counters with the base
- *  Variables.
- *  Such views include:
- *    1. Views created from .detach()
- *    2. Views that are non-differentiable by its nature.
- *       E.g., {@code sparse_tensor.indices()} is a integral view on a (possibly)
- *       floating point tensor.
- *       See top of {@code derivatives.yaml} on how to specify that outputs of a
- *       function are non-differentiable.
- *  These are called non-differentiable views as the gradients do not flow
- *  through the view relation.
- * 
- *  Relevant logic for both differentiable and non-differentiable views is
- *  implemented in make_variable_(non_)differentiable_view below, and
- *  wrap_output of gen_variable_type.py.
- <p>
- *  NOTE [ View + Inplace detection ]
- * 
- *  We want to detect views followed by inplace as they are often forbidden to
- *  ensure correctness of the computed gradients. But since we want to only
- *  notify the user when both happen, we tag the DifferentiableViewMeta when the
- *  view is created via the {@code make_variable_*_view()} functions. This tag is then
- *  checked by the {@code check_inplace()} function from {@code VariableTypeUtils.h} that
- *  should be called before every inplace operation and to detect cases where
- *  other views are modified and this one is rebased by side effect, we also
- *  check in the {@code VariableHooks::grad_fn()}.
- <p>
- *  Flag that gives more information about when this view was created:
- *  - IN_CUSTOM_FUNCTION should be set when the view is created inside a custom
- *    autograd Function is returned.
- *  - NO_GRAD_MODE should be set when a view in created when GradMode is
- *  disabled
- *  - MULTI_OUTPUT_NODE should be set when a Node created by codegen code
- *  returns
- *    multiple differentiable views
- *  - Inference_MODE should be set when a view of normal tensor is created in
- *  InferenceMode.
- *  - DEFAULT is for all other cases */
-@Namespace("torch::autograd") public enum CreationMeta {
-  DEFAULT((byte)(0)),
-  IN_CUSTOM_FUNCTION((byte)(1)),
-  MULTI_OUTPUT_NODE((byte)(2)),
-  NO_GRAD_MODE((byte)(3)),
-  INFERENCE_MODE((byte)(4));
-
-    public final byte value;
-    private CreationMeta(byte v) { this.value = v; }
-    private CreationMeta(CreationMeta e) { this.value = e.value; }
-    public CreationMeta intern() { for (CreationMeta e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/** Handles correctly propagating CreationMeta when a new view is created from a
- *  previous view. In general, we don't want the new view to be _less_
- *  restrictive than the previous view (it's okay to be _more_ restrictive). A
- *  CreationMeta value of DEFAULT is currently the least restrictive, as the
- *  behavior for all other CreationMeta values is to error out for in-place ops.
- *  A CreationMeta value of INFERENCE_MODE is currently the most restrictive, so
- *  it takes precedence in propagation. If this changes, the logic here will
- *  need to be updated to properly handle the new semantics. */
-@Namespace("torch::autograd") public static native CreationMeta propagate_creation_meta(
-    CreationMeta prev_view_creation_meta,
-    CreationMeta new_view_creation_meta);
-@Namespace("torch::autograd") public static native @Cast("torch::autograd::CreationMeta") byte propagate_creation_meta(
-    @Cast("torch::autograd::CreationMeta") byte prev_view_creation_meta,
-    @Cast("torch::autograd::CreationMeta") byte new_view_creation_meta);
-
-/** Unified function to handle error checking when rebase happens
- *  indirect=true means that the caller is not doing the inplace, but the
- *  inplace happened somewhere else. */
-@Namespace("torch::autograd") public static native void handle_view_on_rebase(
-    DifferentiableViewMeta diff_view_meta,
-    @Cast("bool") boolean indirect/*=false*/);
-@Namespace("torch::autograd") public static native void handle_view_on_rebase(
-    DifferentiableViewMeta diff_view_meta);
-// Targeting ../DifferentiableViewMeta.java
-
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                        Variable Implementation
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// Factory Functions
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/** Creates a {@code Variable} that is a *view* of another (*base*) variable.
- *  The {@code gradient_edge} is an optional (gradient_function, input_number) pair.
- *  {@code is_differentiable} is a bool that specifies whether this view is
- *  differentiable, i.e., whether the relation should be tracked by autograd.
- *  See NOTE [ Autograd View Variables ] for details.
- <p>
- *  NOTE: {@code allow_tensor_metadata_change} is set to true by default, because
- *  there are a lot of call sites to these factory functions that need to change
- *  the variable's size or storage afterwards, and they don't expect the
- *  original tensor (where the variable is created from) to be updated. Setting
- *  {@code allow_tensor_metadata_change_} to false by default would unnecessarily
- *  prevent those changes from happening and is undesirable. */
-
-// See NOTE [ Autograd View Variables ] for details.
-// Differentiable view. Track history with DifferentiableViewMeta.
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
-    @Const @ByRef Tensor data,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
-    @Cast("bool") boolean shared_view_info,
-    CreationMeta creation_meta,
-    @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
-    @Const @ByRef Tensor data,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
-    @Cast("bool") boolean shared_view_info,
-    CreationMeta creation_meta);
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
-    @Const @ByRef Tensor data,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
-    @Cast("bool") boolean shared_view_info,
-    @Cast("torch::autograd::CreationMeta") byte creation_meta,
-    @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_differentiable_view(
-    @Const @ByRef Tensor data,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer backward_info,
-    @ByVal @Cast("c10::optional<torch::autograd::ViewInfo>*") Pointer forward_info,
-    @Cast("bool") boolean shared_view_info,
-    @Cast("torch::autograd::CreationMeta") byte creation_meta);
-
-// See NOTE [ Autograd View Variables ] for details.
-// Non-differentiable view. Just share version counter.
-
-///
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_non_differentiable_view(
-    @Cast("const torch::autograd::Variable*") @ByRef Tensor base,
-    @Const @ByRef Tensor data,
-    @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable_non_differentiable_view(
-    @Cast("const torch::autograd::Variable*") @ByRef Tensor base,
-    @Const @ByRef Tensor data);
-
-/** Creates a {@code Variable} from the given {@code Tensor}, copying its underlying
- *  {@code TensorImpl}. {@code requires_grad} should be set only for leaves, and determines
- *  whether the {@code Variable} will accumulate gradients. NOTE: {@code data} must *not* be
- *  a {@code Variable} already. Its dynamic type *must* be {@code Tensor}.
- * 
- *  TODO: Eliminate this function as much as possible, as it can be expressed
- *  more clearly as detach() or a no-op in most call sites (especially when
- *  there is only one use of the variable). */
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable(
-    @ByVal Tensor data,
-    @Cast("bool") boolean requires_grad/*=false*/,
-    @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable(
-    @ByVal Tensor data);
-
-/** Creates a {@code Variable} from the given {@code Tensor}, copying its underlying
- *  {@code TensorImpl}. {@code gradient_edge} should be a (function, input_nr) pair
- *  specifying the function in the autograd graph, and what particular input of
- *  that function, this variable is connected to. */
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable(
-    @Const @ByRef Tensor data,
-    @ByVal Edge gradient_edge,
-    @Cast("bool") boolean allow_tensor_metadata_change/*=true*/);
-@Namespace("torch::autograd") public static native @ByVal @Cast("torch::autograd::Variable*") Tensor make_variable(
-    @Const @ByRef Tensor data,
-    @ByVal Edge gradient_edge);
-
-@Namespace("torch::autograd::utils") public static native @Cast("bool") boolean has_same_meta(@Cast("const torch::autograd::Variable*") @ByRef Tensor base, @Cast("const torch::autograd::Variable*") @ByRef Tensor other);
-
- // namespace utils
- // namespace autograd
- // namespace torch
 
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -15828,8 +15852,7 @@ public static final byte min_lookups = min_lookups();
 @Namespace("torch::autograd::forward_ad") public static native void exit_dual_level(@Cast("uint64_t") long level);
 
  // namespace forward_ad
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from ATen/core/alias_info.h
@@ -16019,7 +16042,6 @@ public static final byte min_lookups = min_lookups();
  */
 
 // #include <ATen/core/function_schema.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/Metaprogramming.h>
 // Targeting ../ArgumentDef.java
 
@@ -16386,6 +16408,7 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/boxing/BoxedKernel.h>
 
 // #include <c10/util/Metaprogramming.h>
+// #include <type_traits>
 
 //
 // utils
@@ -16623,6 +16646,7 @@ public static final byte min_lookups = min_lookups();
 // #pragma once
 
 // #include <c10/util/TypeTraits.h>
+// #include <type_traits>
 
 /**
  * Represent a function pointer as a C++ type.
@@ -16700,7 +16724,8 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/stack.h>
 // #include <c10/core/DispatchKeySet.h>
 // #include <c10/util/intrusive_ptr.h>
-// #include <c10/util/TypeList.h> // TODO Instead of this, move torch::jit::Stack to the c10 namespace.
+// #include <c10/util/TypeList.h>
+// #include <type_traits> // TODO Instead of this, move torch::jit::Stack to the c10 namespace.
 // Targeting ../KernelFunction.java
 
 
@@ -16716,6 +16741,9 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/boxing/impl/make_boxed_from_unboxed_functor.h>
 // #include <ATen/core/boxing/impl/WrapFunctionIntoFunctor.h>
 // #include <ATen/core/boxing/impl/WrapFunctionIntoRuntimeFunctor.h>
+
+// #include <c10/util/C++17.h>
+// #include <type_traits>
 
 
 
@@ -16780,6 +16808,7 @@ public static final byte min_lookups = min_lookups();
 // - make sherwood_v3_table::convertible_to_iterator public because GCC5 seems
 // to have issues with it otherwise
 // - fix compiler warnings in operator templated_iterator<const value_type>
+// - make use of 'if constexpr' and eliminate AssignIfTrue template
 
 //          Copyright Malte Skarupke 2017.
 // Distributed under the Boost Software License, Version 1.0.
@@ -16825,29 +16854,13 @@ public static final byte min_lookups = min_lookups();
 // #endif
 
 
-// Parsed from c10/util/either.h
-
-// Originally taken from
-// https://github.com/cryfs/cryfs/blob/14ad22570ddacef22d5ff139cdff68a54fc8234d/src/cpp-utils/either.h
-
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
-// #include <c10/util/Optional.h>
-/**
- * either<A, B> is a tagged union that holds either an object of type A
- * or an object of type B.
- */
- // namespace c10
-
-
 // Parsed from c10/core/PyHandleCache.h
 
 // #pragma once
 
 // #include <c10/core/impl/PyInterpreter.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
 // #include <c10/util/python_stub.h>
 
 // #include <atomic>
@@ -16889,6 +16902,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/core/impl/PyInterpreter.h>
 // #include <c10/macros/Export.h>
 // #include <c10/util/python_stub.h>
+// #include <utility>
 // Targeting ../SafePyObject.java
 
 
@@ -16903,9 +16917,7 @@ public static final byte min_lookups = min_lookups();
 
 // #pragma once
 
-// #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
-// #include <c10/util/Optional.h>
+// #include <cstddef>
 // #if defined(_MSC_VER)
 // #endif
 // Targeting ../bitset.java
@@ -16914,8 +16926,7 @@ public static final byte min_lookups = min_lookups();
 
 @Namespace("c10::utils") public static native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@ByVal bitset lhs, @ByVal bitset rhs);
 
- // namespace utils
- // namespace c10
+ // namespace c10::utils
 
 
 // Parsed from ATen/core/Variadic.h
@@ -16989,7 +17000,6 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/function_schema.h>
 // #include <c10/util/Metaprogramming.h>
 // #include <c10/util/flat_hash_map.h>
-// #include <c10/util/either.h>
 // #include <c10/util/Optional.h>
 // #include <c10/core/DispatchKey.h>
 // #include <c10/core/PyHandleCache.h>
@@ -17041,7 +17051,6 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/util/SmallVector.h>
 
 // #include <array>
-// #include <atomic>
 // #include <functional>
 // #include <memory>
 // #include <variant>
@@ -17314,8 +17323,6 @@ public static final byte min_lookups = min_lookups();
 
 // #include <mutex>
 
-// #include <c10/util/C++17.h>
-
 /**
  * A very simple Synchronization class for error-free use of data
  * in a multi-threaded context. See folly/docs/Synchronized.md for
@@ -17491,11 +17498,12 @@ public static final byte min_lookups = min_lookups();
         dynamic_output_shape(2),
         generated(3),
         inplace_view(4),
-        nondeterministic_bitwise(5),
-        nondeterministic_seeded(6),
-        pointwise(7),
-        pt2_compliant_tag(8),
-        view_copy(9);
+        needs_fixed_stride_order(5),
+        nondeterministic_bitwise(6),
+        nondeterministic_seeded(7),
+        pointwise(8),
+        pt2_compliant_tag(9),
+        view_copy(10);
 
         public final int value;
         private Tag(int v) { this.value = v; }
@@ -18042,8 +18050,7 @@ public static final byte min_lookups = min_lookups();
 @Namespace("torch::autograd") public static native void setAutogradFallbackMode(@Cast("torch::autograd::AutogradFallbackMode") int mode);
 @Namespace("torch::autograd") public static native AutogradFallbackMode getAutogradFallbackMode();
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/anomaly_mode.h
@@ -18063,8 +18070,7 @@ public static final byte min_lookups = min_lookups();
 
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/grad_mode.h
@@ -18074,8 +18080,7 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/grad_mode.h>
 // #include <torch/csrc/Export.h>
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from ATen/FuncTorchTLS.h
@@ -18175,8 +18180,7 @@ public static final byte min_lookups = min_lookups();
 
 
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from c10/core/impl/TorchDispatchModeTLS.h
@@ -18207,15 +18211,12 @@ public static final byte min_lookups = min_lookups();
 @Namespace("c10::impl") public static native @StdString BytePointer to_string(TorchDispatchModeKey mode_key);
 @Namespace("c10::impl") public static native @StdString String to_string(@Cast("c10::impl::TorchDispatchModeKey") byte mode_key);
 
- // namespace impl
- // namespace c10
+ // namespace c10::impl
 
 
 // Parsed from ATen/ThreadLocalState.h
 
 // #pragma once
-
-// #include <stack>
 
 // #include <c10/core/InferenceMode.h>
 // #include <c10/core/impl/LocalDispatchKeySet.h>
@@ -18334,7 +18335,6 @@ public static final byte min_lookups = min_lookups();
 // values in-place (adding an input twice will accumulate the result).
 // This behaviour is needed and used only in backward graphs.
 
-// #include <memory>
 // #include <utility>
 // #include <vector>
 
@@ -18342,8 +18342,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/util/Optional.h>
 // #include <torch/csrc/autograd/variable.h>
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/utils/warnings.h
@@ -18378,8 +18377,6 @@ public static final int NO_DEVICE = NO_DEVICE();
 @Namespace("torch::autograd") @MemberGetter public static native int CPU_DEVICE();
 public static final int CPU_DEVICE = CPU_DEVICE();
 
-
-
 // GraphTask holds metadata needed for a single execution of backward()
 
 // The guard that sets and restores current_graph_task.
@@ -18391,8 +18388,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("torch::autograd") public static native int get_current_graph_task_id();
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from ATen/core/MT19937RNGEngine.h
@@ -18445,6 +18441,72 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at::detail") public static native @ByVal Generator createCPUGenerator();
 
  // namespace detail
+
+ // namespace at
+
+
+// Parsed from ATen/detail/AcceleratorHooksInterface.h
+
+// #pragma once
+
+// #include <c10/core/Device.h>
+// Targeting ../AcceleratorHooksInterface.java
+
+
+
+ // namespace at
+
+
+// Parsed from ATen/detail/MTIAHooksInterface.h
+
+// #pragma once
+
+// #include <c10/util/Exception.h>
+
+// #include <c10/util/Registry.h>
+
+// #include <ATen/detail/AcceleratorHooksInterface.h>
+
+// #include <string>
+
+
+@Namespace("at") @MemberGetter public static native @Cast("const char*") BytePointer MTIA_HELP();
+// Targeting ../MTIAHooksInterface.java
+
+
+// #define REGISTER_MTIA_HOOKS(clsname)
+//   C10_REGISTER_CLASS(MTIAHooksRegistry, clsname, clsname)
+@Namespace("at::detail") public static native @Const @ByRef MTIAHooksInterface getMTIAHooks();
+ // namespace detail
+ // namespace at
+
+
+// Parsed from ATen/DeviceAccelerator.h
+
+// #pragma once
+
+// #include <c10/core/DeviceType.h>
+// #include <c10/macros/Macros.h>
+
+// #include <ATen/detail/MTIAHooksInterface.h>
+// #include <optional>
+
+// This file defines the top level Accelerator concept for PyTorch.
+// A device is an accelerator per the definition here if:
+// - It is mutually exclusive with all other accelerators
+// - It performs asynchronous compute via a Stream/Event system
+// - It provides a set of common APIs as defined by AcceleratorHooksInterface
+//
+// As of today, accelerator devices are (in no particular order):
+// CUDA, MTIA, PrivateUse1
+// We want to add once all the proper APIs are supported and tested:
+// HIP, MPS, XPU
+
+// Ensures that only one accelerator is available (at
+// compile time if possible) and return it.
+// When checked is true, the returned optional always has a value.
+@Namespace("at") public static native @Optional @Cast("c10::DeviceType*") BytePointer getAccelerator(@Cast("bool") boolean checked/*=false*/);
+@Namespace("at") public static native @Optional @Cast("c10::DeviceType*") BytePointer getAccelerator();
 
  // namespace at
 
@@ -18519,6 +18581,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Allocator.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Registry.h>
+
+// #include <ATen/detail/AcceleratorHooksInterface.h>
 
 // Forward-declares at::Generator and at::cuda::NVRTC
  // namespace cuda
@@ -18600,6 +18664,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <c10/core/Allocator.h>
 // #include <ATen/core/Generator.h>
+// #include <ATen/detail/AcceleratorHooksInterface.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Registry.h>
 
@@ -18614,28 +18679,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //   C10_REGISTER_CLASS(MPSHooksRegistry, clsname, clsname)
 @Namespace("at::detail") public static native @Const @ByRef MPSHooksInterface getMPSHooks();
 
- // namespace detail
- // namespace at
-
-
-// Parsed from ATen/detail/MTIAHooksInterface.h
-
-// #pragma once
-
-// #include <c10/util/Exception.h>
-
-// #include <c10/util/Registry.h>
-
-// #include <string>
-
-
-@Namespace("at") @MemberGetter public static native @Cast("const char*") BytePointer MTIA_HELP();
-// Targeting ../MTIAHooksInterface.java
-
-
-// #define REGISTER_MTIA_HOOKS(clsname)
-//   C10_REGISTER_CLASS(MTIAHooksRegistry, clsname, clsname)
-@Namespace("at::detail") public static native @Const @ByRef MTIAHooksInterface getMTIAHooks();
  // namespace detail
  // namespace at
 
@@ -18667,7 +18710,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #pragma once
 
 // #include <ATen/core/Generator.h>
+// #include <ATen/detail/AcceleratorHooksInterface.h>
+// #include <c10/core/Allocator.h>
 // #include <c10/core/Device.h>
+// #include <c10/core/Storage.h>
 // #include <c10/util/Exception.h>
 // Targeting ../PrivateUse1HooksInterface.java
 
@@ -18676,11 +18722,18 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
-@Namespace("at") public static native void RegisterPrivateUse1HooksInterface(PrivateUse1HooksInterface hook_);
+@Namespace("at") public static native void RegisterPrivateUse1HooksInterface(
+    PrivateUse1HooksInterface hook_);
 
 @Namespace("at") public static native PrivateUse1HooksInterface GetPrivateUse1HooksInterface();
 
+@Namespace("at") public static native @Cast("bool") boolean isPrivateUse1HooksRegistered();
 
+@Namespace("at::detail") public static native @Const @ByRef PrivateUse1HooksInterface getPrivateUse1Hooks();
+
+ // namespace detail
+
+ // namespace at
 
 
 // Parsed from ATen/detail/XPUHooksInterface.h
@@ -18695,9 +18748,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <cstddef>
 // #include <functional>
 // #include <memory>
-// Targeting ../DLDevice_.java
-
-
 
 @Namespace("at") @MemberGetter public static native @Cast("const char*") BytePointer XPU_HELP();
 // Targeting ../XPUHooksInterface.java
@@ -18717,9 +18767,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #pragma once
 
-// #include <c10/core/DeviceType.h>
-// #include <c10/core/DispatchKey.h>
 // #include <c10/util/Exception.h>
+// #include <cstdint>
+// #include <string>
 
 /**
  * QEngine is an enum that is used to select the engine to run quantized ops.
@@ -18768,8 +18818,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #pragma once
 
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <cstdlib>
 // #include <cstring>
+// #include <optional>
 // Reads an environment variable and returns
 // - optional<true>,              if set equal to "1"
 // - optional<false>,             if set equal to "0"
@@ -18777,10 +18828,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //
 // NB:
 // Issues a warning if the value of the environment variable is not 0 or 1.
-@Namespace("c10::utils") public static native @ByVal BoolOptional check_env(@Cast("const char*") BytePointer name);
-@Namespace("c10::utils") public static native @ByVal BoolOptional check_env(String name);
- // namespace utils
- // namespace c10
+@Namespace("c10::utils") public static native @Cast("bool*") @Optional BoolPointer check_env(@Cast("const char*") BytePointer name);
+@Namespace("c10::utils") public static native @Cast("bool*") @Optional boolean[] check_env(String name);
+ // namespace c10::utils
 
 
 // Parsed from ATen/Context.h
@@ -18788,11 +18838,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #pragma once
 
 // #include <ATen/CPUGeneratorImpl.h>
+// #include <ATen/DeviceAccelerator.h>
 // #include <ATen/LinalgBackend.h>
 // #include <ATen/core/ATenGeneral.h>
 // #include <ATen/core/DeprecatedTypeProperties.h>
 // #include <ATen/core/Generator.h>
 // #include <ATen/core/LegacyTypeDispatch.h>
+// #include <ATen/detail/AcceleratorHooksInterface.h>
 // #include <ATen/detail/CUDAHooksInterface.h>
 // #include <ATen/detail/HIPHooksInterface.h>
 // #include <ATen/detail/IPUHooksInterface.h>
@@ -18809,7 +18861,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/irange.h>
 
 // #include <cstdint>
-// #include <memory>
 // #include <mutex>
 
 @Namespace("at") public enum Float32MatmulPrecision { HIGHEST(0), HIGH(1), MEDIUM(2);
@@ -18863,9 +18914,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../NoTF32Guard.java
 
 
+// Targeting ../ROCmBackwardPassGuard.java
 
-// #ifdef USE_ROCM
-// #endif
+
 
  // namespace at
 
@@ -19312,7 +19363,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // not TensorGeometryArg, because the Tensor to TensorGeometry
 // conversion will blow up if you have undefined tensors.
 
-@Namespace("at") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @ByVal TensorGeometryArg t);
+@Namespace("at") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer out,
+    @Const @ByRef TensorGeometryArg t);
 @Namespace("at") public static native void checkDim(
     @Cast("at::CheckedFrom") BytePointer c,
     @Const @ByRef Tensor tensor,
@@ -19388,12 +19441,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Cast("at::CheckedFrom") BytePointer c,
     @Const @ByRef TensorGeometryArg t,
     @Cast("int64_t") long dim,
-    @ByVal SymInt size);
+    @Const @ByRef SymInt size);
 @Namespace("at") public static native void checkSize_symint(
     @Cast("at::CheckedFrom") String c,
     @Const @ByRef TensorGeometryArg t,
     @Cast("int64_t") long dim,
-    @ByVal SymInt size);
+    @Const @ByRef SymInt size);
 @Namespace("at") public static native void checkNumel(
     @Cast("at::CheckedFrom") BytePointer c,
     @Const @ByRef TensorGeometryArg t,
@@ -31381,7 +31434,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
 
-  // namespace at
+ // namespace at
 
 
 // Parsed from ATen/ops/from_file.h
@@ -49460,6 +49513,43 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// Parsed from ATen/ops/slice_inverse.h
+
+// #pragma once
+
+// @generated by torchgen/gen.py from Function.h
+
+// #include <ATen/Context.h>
+// #include <ATen/DeviceGuard.h>
+// #include <ATen/TensorUtils.h>
+// #include <ATen/TracerMode.h>
+// #include <ATen/core/Generator.h>
+// #include <ATen/core/Reduction.h>
+// #include <ATen/core/Tensor.h>
+// #include <c10/core/Scalar.h>
+// #include <c10/core/Storage.h>
+// #include <c10/core/TensorOptions.h>
+// #include <c10/util/Deprecated.h>
+// #include <c10/util/Optional.h>
+
+
+
+// #include <ATen/ops/slice_inverse_ops.h>
+
+
+// aten::slice_inverse(Tensor(a) self, Tensor src, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor(a)
+@Namespace("at") public static native @ByVal Tensor slice_inverse(@Const @ByRef Tensor self, @Const @ByRef Tensor src, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional start, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional end, @Cast("int64_t") long step/*=1*/);
+@Namespace("at") public static native @ByVal Tensor slice_inverse(@Const @ByRef Tensor self, @Const @ByRef Tensor src);
+
+
+// aten::slice_inverse(Tensor(a) self, Tensor src, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor(a)
+@Namespace("at") public static native @ByVal Tensor slice_inverse_symint(@Const @ByRef Tensor self, @Const @ByRef Tensor src, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional end, @ByVal(nullValue = "c10::SymInt(1)") SymInt step);
+@Namespace("at") public static native @ByVal Tensor slice_inverse_symint(@Const @ByRef Tensor self, @Const @ByRef Tensor src);
+
+
+
+
+
 // Parsed from ATen/ops/slice_scatter.h
 
 // #pragma once
@@ -50432,12 +50522,23 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/sparse_compressed_tensor_ops.h>
 
 
-// aten::sparse_compressed_tensor.comp_plain_value_size(Tensor compressed_indices, Tensor plain_indices, Tensor values, int[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
+// aten::sparse_compressed_tensor.comp_plain_value_size(Tensor compressed_indices, Tensor plain_indices, Tensor values, SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal LongArrayRef size, @ByVal TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal TensorOptions options);
-// aten::sparse_compressed_tensor.comp_plain_value_size(Tensor compressed_indices, Tensor plain_indices, Tensor values, int[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
+
+
+// aten::sparse_compressed_tensor.comp_plain_value_size(Tensor compressed_indices, Tensor plain_indices, Tensor values, SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal LongArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 @Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+
+
+// aten::sparse_compressed_tensor.comp_plain_value_size(Tensor compressed_indices, Tensor plain_indices, Tensor values, SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
+@Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor_symint(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal SymIntArrayRef size, @ByVal TensorOptions options);
+
+
+// aten::sparse_compressed_tensor.comp_plain_value_size(Tensor compressed_indices, Tensor plain_indices, Tensor values, SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
+@Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor_symint(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal SymIntArrayRef size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+
 
 // aten::sparse_compressed_tensor.comp_plain_value(Tensor compressed_indices, Tensor plain_indices, Tensor values, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor sparse_compressed_tensor(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal TensorOptions options);
@@ -58179,6 +58280,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_amp_foreach_non_finite_check_and_unscale.h>
 // #include <ATen/ops/_amp_update_scale.h>
 // #include <ATen/ops/_assert_async.h>
+// #include <ATen/ops/_assert_scalar.h>
 // #include <ATen/ops/_assert_tensor_metadata.h>
 // #include <ATen/ops/_autocast_to_full_precision.h>
 // #include <ATen/ops/_autocast_to_reduced_precision.h>
@@ -58197,6 +58299,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_cdist_forward.h>
 // #include <ATen/ops/_cholesky_solve_helper.h>
 // #include <ATen/ops/_choose_qparams_per_tensor.h>
+// #include <ATen/ops/_chunk_cat.h>
 // #include <ATen/ops/_coalesce.h>
 // #include <ATen/ops/_coalesced.h>
 // #include <ATen/ops/_compute_linear_combination.h>
@@ -58214,6 +58317,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_copy_from_and_resize.h>
 // #include <ATen/ops/_cslt_compress.h>
 // #include <ATen/ops/_cslt_sparse_mm.h>
+// #include <ATen/ops/_cslt_sparse_mm_search.h>
 // #include <ATen/ops/_ctc_loss.h>
 // #include <ATen/ops/_ctc_loss_backward.h>
 // #include <ATen/ops/_cudnn_ctc_loss.h>
@@ -58301,6 +58405,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_foreach_trunc.h>
 // #include <ATen/ops/_foreach_zero.h>
 // #include <ATen/ops/_functional_assert_async.h>
+// #include <ATen/ops/_functional_assert_scalar.h>
 // #include <ATen/ops/_functional_sym_constrain_range.h>
 // #include <ATen/ops/_functional_sym_constrain_range_for_size.h>
 // #include <ATen/ops/_fused_adam.h>
@@ -58308,6 +58413,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_fused_dropout.h>
 // #include <ATen/ops/_fused_moving_avg_obs_fq_helper.h>
 // #include <ATen/ops/_fused_sdp_choice.h>
+// #include <ATen/ops/_fused_sgd.h>
 // #include <ATen/ops/_fw_primal.h>
 // #include <ATen/ops/_fw_primal_copy.h>
 // #include <ATen/ops/_gather_sparse_backward.h>
@@ -58325,9 +58431,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_is_all_true.h>
 // #include <ATen/ops/_is_any_true.h>
 // #include <ATen/ops/_is_zerotensor.h>
+// #include <ATen/ops/_lazy_clone.h>
 // #include <ATen/ops/_linalg_check_errors.h>
 // #include <ATen/ops/_linalg_det.h>
 // #include <ATen/ops/_linalg_eigh.h>
+// #include <ATen/ops/_linalg_eigvals.h>
 // #include <ATen/ops/_linalg_slogdet.h>
 // #include <ATen/ops/_linalg_solve_ex.h>
 // #include <ATen/ops/_linalg_svd.h>
@@ -58357,6 +58465,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_neg_view_copy.h>
 // #include <ATen/ops/_nested_from_padded.h>
 // #include <ATen/ops/_nested_from_padded_and_nested_example.h>
+// #include <ATen/ops/_nested_get_jagged_dummy.h>
+// #include <ATen/ops/_nested_get_lengths.h>
+// #include <ATen/ops/_nested_get_offsets.h>
+// #include <ATen/ops/_nested_get_ragged_idx.h>
+// #include <ATen/ops/_nested_get_values.h>
+// #include <ATen/ops/_nested_get_values_copy.h>
 // #include <ATen/ops/_nested_select_backward.h>
 // #include <ATen/ops/_nested_sum_backward.h>
 // #include <ATen/ops/_nested_tensor_from_mask.h>
@@ -58368,6 +58482,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_nested_tensor_strides.h>
 // #include <ATen/ops/_nested_view_from_buffer.h>
 // #include <ATen/ops/_nested_view_from_buffer_copy.h>
+// #include <ATen/ops/_nested_view_from_jagged.h>
+// #include <ATen/ops/_nested_view_from_jagged_copy.h>
 // #include <ATen/ops/_new_zeros_with_same_feature_meta.h>
 // #include <ATen/ops/_nnpack_available.h>
 // #include <ATen/ops/_nnpack_spatial_convolution.h>
@@ -58382,6 +58498,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_pin_memory.h>
 // #include <ATen/ops/_prelu_kernel.h>
 // #include <ATen/ops/_prelu_kernel_backward.h>
+// #include <ATen/ops/_print.h>
 // #include <ATen/ops/_propagate_xla_data.h>
 // #include <ATen/ops/_remove_batch_dim.h>
 // #include <ATen/ops/_reshape_alias.h>
@@ -58393,10 +58510,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_sample_dirichlet.h>
 // #include <ATen/ops/_saturate_weight_to_fp16.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math.h>
+// #include <ATen/ops/_scaled_dot_product_cudnn_attention.h>
 // #include <ATen/ops/_scaled_dot_product_efficient_attention.h>
 // #include <ATen/ops/_scaled_dot_product_efficient_attention_backward.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_backward.h>
+// #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu.h>
+// #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu_backward.h>
 // #include <ATen/ops/_scaled_mm.h>
 // #include <ATen/ops/_segment_reduce_backward.h>
 // #include <ATen/ops/_shape_as_tensor.h>
@@ -58446,6 +58566,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_test_optional_filled_intlist.h>
 // #include <ATen/ops/_test_optional_floatlist.h>
 // #include <ATen/ops/_test_optional_intlist.h>
+// #include <ATen/ops/_test_parallel_materialize.h>
 // #include <ATen/ops/_test_serialization_subcmul.h>
 // #include <ATen/ops/_test_string_default.h>
 // #include <ATen/ops/_test_warn_in_autograd.h>
@@ -58499,6 +58620,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_values_copy.h>
 // #include <ATen/ops/_version.h>
 // #include <ATen/ops/_weight_int4pack_mm.h>
+// #include <ATen/ops/_weight_int8pack_mm.h>
 // #include <ATen/ops/_weight_norm.h>
 // #include <ATen/ops/_weight_norm_differentiable_backward.h>
 // #include <ATen/ops/_weight_norm_interface.h>
@@ -59226,6 +59348,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/slice.h>
 // #include <ATen/ops/slice_backward.h>
 // #include <ATen/ops/slice_copy.h>
+// #include <ATen/ops/slice_inverse.h>
 // #include <ATen/ops/slice_scatter.h>
 // #include <ATen/ops/slogdet.h>
 // #include <ATen/ops/slow_conv3d.h>
@@ -59810,9 +59933,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/zeros.h>
 // #endif
 
-// #include <cstdint>
-// #include <utility>
-
 /**
  * Records TensorOptions, shape of the tensor, whether or not the Python
  * dispatch key is set (tensor subclass), and, where applicable, the stream the
@@ -59821,8 +59941,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  * If is_valid() is false, then the corresponding input is not used and may be
  * an undefined tensor.
  */
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/saved_variable_hooks.h
@@ -59834,8 +59953,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/saved_variable.h
@@ -59855,8 +59973,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 /** A snapshot of a variable at a certain version. A {@code SavedVariable} stores
  *  enough information to reconstruct a variable from a certain point in time. */
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/utils/variadic.h
@@ -59956,7 +60073,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  *  If you don't want the {@code Node}'s {@code num_inputs} to be incremented, use
  *  {@code set_gradient_edge} directly. */
 @Namespace("torch::autograd") public static native void create_gradient_edge(
-    @Cast("torch::autograd::Variable*") @ByRef Tensor variable,
+    @ByRef Tensor variable,
     @SharedPtr Node function);
 
 /** Return true if any of the variables in the list require a gradient. */
@@ -59964,8 +60081,19 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 /** Return the next edges of all the given variables, or tuples of variables. */
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
+
+
+// Parsed from torch/csrc/autograd/variable_info.h
+
+// #pragma once
+
+// #include <torch/csrc/autograd/variable.h>
+// Targeting ../VariableInfo.java
+
+
+
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/autograd/custom_function.h
@@ -59978,6 +60106,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/irange.h>
 // #include <torch/csrc/autograd/function.h>
 // #include <torch/csrc/autograd/variable.h>
+// #include <torch/csrc/autograd/variable_info.h>
 // #include <vector>
 
 
@@ -60004,15 +60133,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../AutogradContext.java
 
 
-// Targeting ../VariableInfo.java
-
-
 
 // CppNode<T> is the Node in the autograd graph that represents the user defined
 // backward function for Function<T>. Calls to CppNode::apply are forward to
 // T::backward().
 
-@Namespace("torch::autograd") public static native @ByVal TensorOptionalVector to_optional(@Cast("torch::autograd::Variable*") @ByRef Tensor output);
+@Namespace("torch::autograd") public static native @ByVal TensorOptionalVector to_optional(@ByRef Tensor output);
 
 @Namespace("torch::autograd") public static native @ByVal TensorOptionalVector to_optional(@ByRef TensorVector output);
 
@@ -60028,8 +60154,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd
 
 
 // Parsed from torch/csrc/api/include/torch/autograd.h
@@ -60081,11 +60206,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #define TORCH_ARG(T, name)
 //  public:
-//   inline auto name(const T& new_##name)->decltype(*this) { /* NOLINT */
+//   inline auto name(const T& new_##name) -> decltype(*this) { /* NOLINT */
 //     this->name##_ = new_##name;
 //     return *this;
 //   }
-//   inline auto name(T&& new_##name)->decltype(*this) { /* NOLINT */
+//   inline auto name(T&& new_##name) -> decltype(*this) { /* NOLINT */
 //     this->name##_ = std::move(new_##name);
 //     return *this;
 //   }
@@ -60945,6 +61070,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #pragma once
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/DimVector.h>
+// #include <algorithm>
 
 // Computes the contiguous strides of a tensor, given its sizes.
 @Namespace("c10") public static native @ByVal @Cast("c10::DimVector*") SymDimVector contiguous_strides(@Const @ByVal LongArrayRef sizes);
@@ -61443,6 +61569,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_amp_foreach_non_finite_check_and_unscale_native.h>
 // #include <ATen/ops/_amp_update_scale_native.h>
 // #include <ATen/ops/_assert_async_native.h>
+// #include <ATen/ops/_assert_scalar_native.h>
 // #include <ATen/ops/_assert_tensor_metadata_native.h>
 // #include <ATen/ops/_autocast_to_full_precision_native.h>
 // #include <ATen/ops/_autocast_to_reduced_precision_native.h>
@@ -61461,6 +61588,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_cdist_forward_native.h>
 // #include <ATen/ops/_cholesky_solve_helper_native.h>
 // #include <ATen/ops/_choose_qparams_per_tensor_native.h>
+// #include <ATen/ops/_chunk_cat_native.h>
 // #include <ATen/ops/_coalesce_native.h>
 // #include <ATen/ops/_coalesced_native.h>
 // #include <ATen/ops/_compute_linear_combination_native.h>
@@ -61478,6 +61606,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_copy_from_and_resize_native.h>
 // #include <ATen/ops/_cslt_compress_native.h>
 // #include <ATen/ops/_cslt_sparse_mm_native.h>
+// #include <ATen/ops/_cslt_sparse_mm_search_native.h>
 // #include <ATen/ops/_ctc_loss_native.h>
 // #include <ATen/ops/_ctc_loss_backward_native.h>
 // #include <ATen/ops/_cudnn_ctc_loss_native.h>
@@ -61565,6 +61694,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_foreach_trunc_native.h>
 // #include <ATen/ops/_foreach_zero_native.h>
 // #include <ATen/ops/_functional_assert_async_native.h>
+// #include <ATen/ops/_functional_assert_scalar_native.h>
 // #include <ATen/ops/_functional_sym_constrain_range_native.h>
 // #include <ATen/ops/_functional_sym_constrain_range_for_size_native.h>
 // #include <ATen/ops/_fused_adam_native.h>
@@ -61572,6 +61702,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_fused_dropout_native.h>
 // #include <ATen/ops/_fused_moving_avg_obs_fq_helper_native.h>
 // #include <ATen/ops/_fused_sdp_choice_native.h>
+// #include <ATen/ops/_fused_sgd_native.h>
 // #include <ATen/ops/_fw_primal_native.h>
 // #include <ATen/ops/_fw_primal_copy_native.h>
 // #include <ATen/ops/_gather_sparse_backward_native.h>
@@ -61589,9 +61720,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_is_all_true_native.h>
 // #include <ATen/ops/_is_any_true_native.h>
 // #include <ATen/ops/_is_zerotensor_native.h>
+// #include <ATen/ops/_lazy_clone_native.h>
 // #include <ATen/ops/_linalg_check_errors_native.h>
 // #include <ATen/ops/_linalg_det_native.h>
 // #include <ATen/ops/_linalg_eigh_native.h>
+// #include <ATen/ops/_linalg_eigvals_native.h>
 // #include <ATen/ops/_linalg_slogdet_native.h>
 // #include <ATen/ops/_linalg_solve_ex_native.h>
 // #include <ATen/ops/_linalg_svd_native.h>
@@ -61621,6 +61754,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_neg_view_copy_native.h>
 // #include <ATen/ops/_nested_from_padded_native.h>
 // #include <ATen/ops/_nested_from_padded_and_nested_example_native.h>
+// #include <ATen/ops/_nested_get_jagged_dummy_native.h>
+// #include <ATen/ops/_nested_get_lengths_native.h>
+// #include <ATen/ops/_nested_get_offsets_native.h>
+// #include <ATen/ops/_nested_get_ragged_idx_native.h>
+// #include <ATen/ops/_nested_get_values_native.h>
+// #include <ATen/ops/_nested_get_values_copy_native.h>
 // #include <ATen/ops/_nested_select_backward_native.h>
 // #include <ATen/ops/_nested_sum_backward_native.h>
 // #include <ATen/ops/_nested_tensor_from_mask_native.h>
@@ -61632,6 +61771,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_nested_tensor_strides_native.h>
 // #include <ATen/ops/_nested_view_from_buffer_native.h>
 // #include <ATen/ops/_nested_view_from_buffer_copy_native.h>
+// #include <ATen/ops/_nested_view_from_jagged_native.h>
+// #include <ATen/ops/_nested_view_from_jagged_copy_native.h>
 // #include <ATen/ops/_new_zeros_with_same_feature_meta_native.h>
 // #include <ATen/ops/_nnpack_available_native.h>
 // #include <ATen/ops/_nnpack_spatial_convolution_native.h>
@@ -61646,6 +61787,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_pin_memory_native.h>
 // #include <ATen/ops/_prelu_kernel_native.h>
 // #include <ATen/ops/_prelu_kernel_backward_native.h>
+// #include <ATen/ops/_print_native.h>
 // #include <ATen/ops/_propagate_xla_data_native.h>
 // #include <ATen/ops/_remove_batch_dim_native.h>
 // #include <ATen/ops/_reshape_alias_native.h>
@@ -61657,10 +61799,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_sample_dirichlet_native.h>
 // #include <ATen/ops/_saturate_weight_to_fp16_native.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math_native.h>
+// #include <ATen/ops/_scaled_dot_product_cudnn_attention_native.h>
 // #include <ATen/ops/_scaled_dot_product_efficient_attention_native.h>
 // #include <ATen/ops/_scaled_dot_product_efficient_attention_backward_native.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_native.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_backward_native.h>
+// #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu_native.h>
+// #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu_backward_native.h>
 // #include <ATen/ops/_scaled_mm_native.h>
 // #include <ATen/ops/_segment_reduce_backward_native.h>
 // #include <ATen/ops/_shape_as_tensor_native.h>
@@ -61710,6 +61855,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_test_optional_filled_intlist_native.h>
 // #include <ATen/ops/_test_optional_floatlist_native.h>
 // #include <ATen/ops/_test_optional_intlist_native.h>
+// #include <ATen/ops/_test_parallel_materialize_native.h>
 // #include <ATen/ops/_test_serialization_subcmul_native.h>
 // #include <ATen/ops/_test_string_default_native.h>
 // #include <ATen/ops/_test_warn_in_autograd_native.h>
@@ -61763,6 +61909,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_values_copy_native.h>
 // #include <ATen/ops/_version_native.h>
 // #include <ATen/ops/_weight_int4pack_mm_native.h>
+// #include <ATen/ops/_weight_int8pack_mm_native.h>
 // #include <ATen/ops/_weight_norm_native.h>
 // #include <ATen/ops/_weight_norm_differentiable_backward_native.h>
 // #include <ATen/ops/_weight_norm_interface_native.h>
@@ -62490,6 +62637,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/slice_native.h>
 // #include <ATen/ops/slice_backward_native.h>
 // #include <ATen/ops/slice_copy_native.h>
+// #include <ATen/ops/slice_inverse_native.h>
 // #include <ATen/ops/slice_scatter_native.h>
 // #include <ATen/ops/slogdet_native.h>
 // #include <ATen/ops/slow_conv3d_native.h>
@@ -63000,9 +63148,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #else
 // #include <ATen/ops/empty_like.h>
 // #endif
-
-// #include <stdexcept>
-// #include <string>
 
 // #define AT_FORALL_BINARY_OPS(_)
 //   _(+, x.add(y), y.add(x))
@@ -63660,6 +63805,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("torch") public static native @ByVal @Name("_sparse_compressed_tensor_unsafe") Tensor torch__sparse_compressed_tensor_unsafe(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("_sparse_compressed_tensor_unsafe") Tensor torch__sparse_compressed_tensor_unsafe(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("_sparse_compressed_tensor_unsafe") Tensor torch__sparse_compressed_tensor_unsafe(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
+@Namespace("torch") public static native @ByVal Tensor _sparse_compressed_tensor_unsafe_symint(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal SymIntArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("torch") public static native @ByVal Tensor _sparse_compressed_tensor_unsafe_symint(@Const @ByRef Tensor compressed_indices, @Const @ByRef Tensor plain_indices, @Const @ByRef Tensor values, @ByVal SymIntArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("_sparse_csr_tensor_unsafe") Tensor torch__sparse_csr_tensor_unsafe(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("_sparse_csr_tensor_unsafe") Tensor torch__sparse_csr_tensor_unsafe(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("_sparse_csr_tensor_unsafe") Tensor torch__sparse_csr_tensor_unsafe(@Const @ByRef Tensor crow_indices, @Const @ByRef Tensor col_indices, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -64541,8 +64688,7 @@ public static final int kPrevDirection = kPrevDirection();
 // A pair of (byte offset, SourceRange) describing a specific segment
 // of the output stream
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
  // namespace std
 
 
@@ -65144,6 +65290,8 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // #include <torch/csrc/jit/runtime/argument_spec.h>
 // #include <torch/csrc/jit/runtime/interpreter.h>
 // #include <torch/csrc/jit/runtime/variable_tensor_list.h>
+
+
 
 
 
@@ -65768,7 +65916,7 @@ apis for specific fusers.
  *    torch::nn::Linear model(3, 4);
  *    torch::save(model, "model.pt");
  * 
- *    torch::optim::SGD sgd(/*lr=* /0.9);
+ *    torch::optim::SGD sgd(model->parameters(), 0.9); // 0.9 is learning rate
  *    std::ostringstream stream;
  *    // Note that the same stream cannot be used in multiple torch::save(...)
  *    // invocations, otherwise the header will be corrupted.
@@ -65828,7 +65976,7 @@ apis for specific fusers.
  *    torch::nn::Linear model(3, 4);
  *    torch::load(model, "model.pt");
  * 
- *    torch::optim::SGD sgd(/*lr=* /0.9);
+ *    torch::optim::SGD sgd(model->parameters(), 0.9); // 0.9 is learning rate
  *    std::istringstream stream("...");
  *    torch::load(sgd, stream);
  * 
@@ -66981,415 +67129,6 @@ apis for specific fusers.
 // #include <ATen/ATen.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T eig(@Const @ByRef Tensor self);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eig_out(
-    @ByRef Tensor eigvals,
-    @ByRef Tensor eigvecs,
-    @Const @ByRef Tensor self);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor eigvals(@Const @ByRef Tensor self);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor eigvals_out(@ByRef Tensor result, @Const @ByRef Tensor self);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T eigh(
-    @Const @ByRef Tensor self,
-    @StringView BytePointer uplo);
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T eigh(
-    @Const @ByRef Tensor self,
-    @StringView String uplo);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eigh_out(
-    @ByRef Tensor eigvals,
-    @ByRef Tensor eigvecs,
-    @Const @ByRef Tensor self,
-    @StringView BytePointer uplo);
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eigh_out(
-    @ByRef Tensor eigvals,
-    @ByRef Tensor eigvecs,
-    @Const @ByRef Tensor self,
-    @StringView String uplo);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @StringView BytePointer uplo);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @StringView String uplo);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor eigvalsh_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @StringView BytePointer uplo);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor eigvalsh_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @StringView String uplo);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor householder_product(@Const @ByRef Tensor input, @Const @ByRef Tensor tau);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor householder_product_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor tau);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T lu_factor(
-    @Const @ByRef Tensor self,
-    @Cast("const bool") boolean pivot);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> lu_factor_out(
-    @ByRef Tensor LU,
-    @ByRef Tensor pivots,
-    @Const @ByRef Tensor self,
-    @Cast("const bool") boolean pivot);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensorTensor_T lu(
-    @Const @ByRef Tensor self,
-    @Cast("const bool") boolean pivot);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> lu_out(
-    @ByRef Tensor P,
-    @ByRef Tensor L,
-    @ByRef Tensor U,
-    @Const @ByRef Tensor self,
-    @Cast("const bool") boolean pivot);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensorTensorTensor_T lstsq(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor b,
-    @ByVal DoubleOptional cond,
-    @ByVal StringViewOptional driver);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
-    @Const @ByRef Tensor self,
-    @Const @ByRef ScalarOptional opt_ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
-    @Const @ByRef Tensor self,
-    @Const @ByRef ScalarOptional opt_ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
-    @Const @ByRef Tensor self,
-    @StringView BytePointer ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
-    @Const @ByRef Tensor self,
-    @StringView String ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @Const @ByRef ScalarOptional opt_ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @Const @ByRef ScalarOptional opt_ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @StringView BytePointer ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @StringView String ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor vector_norm(
-    @Const @ByRef Tensor self,
-    @ByVal Scalar ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor vector_norm(
-    @Const @ByRef Tensor self,
-    @ByVal Scalar ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor vector_norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @ByVal Scalar ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor vector_norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @ByVal Scalar ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_norm(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Scalar ord,
-    @ByVal LongArrayRef dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_norm(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Scalar ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_norm_out(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Scalar ord,
-    @ByVal LongArrayRef dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype,
-    @ByRef Tensor result);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_norm_out(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Scalar ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype,
-    @ByRef Tensor result);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_norm(
-    @Const @ByRef Tensor self,
-    @StdString BytePointer ord,
-    @ByVal LongArrayRef dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_norm(
-    @Const @ByRef Tensor self,
-    @StdString String ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_norm(
-    @Const @ByRef Tensor self,
-    @StdString BytePointer ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_norm(
-    @Const @ByRef Tensor self,
-    @StdString String ord,
-    @ByVal LongArrayRef dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_norm_out(
-    @Const @ByRef Tensor self,
-    @StdString BytePointer ord,
-    @ByVal LongArrayRef dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype,
-    @ByRef Tensor result);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_norm_out(
-    @Const @ByRef Tensor self,
-    @StdString String ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype,
-    @ByRef Tensor result);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_norm_out(
-    @Const @ByRef Tensor self,
-    @StdString BytePointer ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype,
-    @ByRef Tensor result);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_norm_out(
-    @Const @ByRef Tensor self,
-    @StdString String ord,
-    @ByVal LongArrayRef dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional dtype,
-    @ByRef Tensor result);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_power_out(@Const @ByRef Tensor self, @Cast("int64_t") long n, @ByRef Tensor result);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_rank(@Const @ByRef Tensor input, double tol, @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_rank(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor tol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_rank(
-    @Const @ByRef Tensor input,
-    @ByVal DoubleOptional atol,
-    @ByVal DoubleOptional rtol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor matrix_rank(
-    @Const @ByRef Tensor input,
-    @Const @ByRef TensorOptional atol,
-    @Const @ByRef TensorOptional rtol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_rank_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    double tol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_rank_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor tol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_rank_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @ByVal DoubleOptional atol,
-    @ByVal DoubleOptional rtol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor matrix_rank_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @Const @ByRef TensorOptional atol,
-    @Const @ByRef TensorOptional rtol,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor multi_dot(@ByVal TensorArrayRef tensors);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor multi_dot(@ByVal TensorVector tensors);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor multi_dot_out(@ByVal TensorArrayRef tensors, @ByRef Tensor result);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor multi_dot_out(@ByVal TensorVector tensors, @ByRef Tensor result);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor pinv(@Const @ByRef Tensor input, double rcond, @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor pinv_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    double rcond,
-    @Cast("bool") boolean hermitian);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T qr(
-    @Const @ByRef Tensor input,
-    @StringView BytePointer mode);
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T qr(
-    @Const @ByRef Tensor input,
-    @StringView String mode);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> qr_out(
-    @ByRef Tensor Q,
-    @ByRef Tensor R,
-    @Const @ByRef Tensor input,
-    @StringView BytePointer mode);
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> qr_out(
-    @ByRef Tensor Q,
-    @ByRef Tensor R,
-    @Const @ByRef Tensor input,
-    @StringView String mode);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T solve_ex(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor other,
-    @Cast("bool") boolean left,
-    @Cast("bool") boolean check_errors);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> solve_ex_out(
-    @ByRef Tensor result,
-    @ByRef Tensor info,
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor other,
-    @Cast("bool") boolean left,
-    @Cast("bool") boolean check_errors);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor solve(@Const @ByRef Tensor input, @Const @ByRef Tensor other, @Cast("bool") boolean left);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor solve_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor other,
-    @Cast("bool") boolean left);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor solve_triangular(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor other,
-    @Cast("bool") boolean upper,
-    @Cast("bool") boolean left,
-    @Cast("bool") boolean unitriangular);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor solve_triangular_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor other,
-    @Cast("bool") boolean upper,
-    @Cast("bool") boolean left,
-    @Cast("bool") boolean unitriangular);
-
-@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensorTensor_T svd(
-    @Const @ByRef Tensor input,
-    @Cast("bool") boolean full_matrices,
-    @ByVal StringViewOptional driver);
-
-@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> svd_out(
-    @ByRef Tensor U,
-    @ByRef Tensor S,
-    @ByRef Tensor Vh,
-    @Const @ByRef Tensor input,
-    @Cast("bool") boolean full_matrices,
-    @ByVal StringViewOptional driver);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor svdvals(
-    @Const @ByRef Tensor input,
-    @ByVal StringViewOptional driver);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor svdvals_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor input,
-    @ByVal StringViewOptional driver);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor tensorinv(@Const @ByRef Tensor self, @Cast("int64_t") long ind);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor tensorinv_out(@ByRef Tensor result, @Const @ByRef Tensor self, @Cast("int64_t") long ind);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor tensorsolve(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other,
-    @ByVal LongArrayRefOptional dims);
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor tensorsolve(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor tensorsolve_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other,
-    @ByVal LongArrayRefOptional dims);
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor tensorsolve_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
-
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor inv(@Const @ByRef Tensor input);
-
-@Namespace("torch::linalg::detail") public static native @ByRef Tensor inv_out(@ByRef Tensor result, @Const @ByRef Tensor input);
-
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** Cholesky decomposition
@@ -67416,23 +67155,82 @@ apis for specific fusers.
  *  matrices
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.eig */
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T eig(@Const @ByRef Tensor self);
+
+
+///
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eig_out(
+    @ByRef Tensor eigvals,
+    @ByRef Tensor eigvecs,
+    @Const @ByRef Tensor self);
 
 /** Computes eigenvalues of non-symmetric/non-hermitian matrices
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.eigvals */
+@Namespace("torch::linalg") public static native @ByVal Tensor eigvals(@Const @ByRef Tensor self);
+
+
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor eigvals_out(@ByRef Tensor result, @Const @ByRef Tensor self);
 
 /** Computes eigenvalues and eigenvectors
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.eigh */
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T eigh(
+    @Const @ByRef Tensor self,
+    @StringView BytePointer uplo);
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T eigh(
+    @Const @ByRef Tensor self,
+    @StringView String uplo);
+
+
+///
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eigh_out(
+    @ByRef Tensor eigvals,
+    @ByRef Tensor eigvecs,
+    @Const @ByRef Tensor self,
+    @StringView BytePointer uplo);
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eigh_out(
+    @ByRef Tensor eigvals,
+    @ByRef Tensor eigvecs,
+    @Const @ByRef Tensor self,
+    @StringView String uplo);
 
 /** Computes eigenvalues
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.eigvalsh */
+@Namespace("torch::linalg") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @StringView BytePointer uplo);
+@Namespace("torch::linalg") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @StringView String uplo);
+
+
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor eigvalsh_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @StringView BytePointer uplo);
+@Namespace("torch::linalg") public static native @ByRef Tensor eigvalsh_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @StringView String uplo);
 
 /** Computes the product of Householder matrices
  * 
  *  See
  *  https://pytorch.org/docs/master/linalg.html#torch.linalg.householder_product */
+@Namespace("torch::linalg") public static native @ByVal Tensor householder_product(@Const @ByRef Tensor input, @Const @ByRef Tensor tau);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor householder_product_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor tau);
+
+
+///
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensorTensorTensor_T lstsq(
+    @Const @ByRef Tensor self,
+    @Const @ByRef Tensor b,
+    @ByVal DoubleOptional cond,
+    @ByVal StringViewOptional driver);
 
 /** Computes the matrix exponential
  * 
@@ -67452,10 +67250,18 @@ apis for specific fusers.
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.lu_factor */
 @Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T lu_factor(
+    @Const @ByRef Tensor input,
+    @Cast("const bool") boolean pivot/*=true*/);
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T lu_factor(
     @Const @ByRef Tensor input);
 
 
 ///
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> lu_factor_out(
+    @ByRef Tensor LU,
+    @ByRef Tensor pivots,
+    @Const @ByRef Tensor self,
+    @Cast("const bool") boolean pivot/*=true*/);
 @Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> lu_factor_out(
     @ByRef Tensor LU,
     @ByRef Tensor pivots,
@@ -67465,27 +67271,257 @@ apis for specific fusers.
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.lu */
 @Namespace("torch::linalg") public static native @ByVal T_TensorTensorTensor_T lu(
+    @Const @ByRef Tensor input,
+    @Cast("const bool") boolean pivot/*=true*/);
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensorTensor_T lu(
     @Const @ByRef Tensor input);
 
 @Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> lu_out(
     @ByRef Tensor P,
     @ByRef Tensor L,
     @ByRef Tensor U,
+    @Const @ByRef Tensor self,
+    @Cast("const bool") boolean pivot/*=true*/);
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> lu_out(
+    @ByRef Tensor P,
+    @ByRef Tensor L,
+    @ByRef Tensor U,
     @Const @ByRef Tensor self);
 
+@Namespace("torch::linalg") public static native @ByVal Tensor norm(
+    @Const @ByRef Tensor self,
+    @Const @ByRef ScalarOptional opt_ord,
+    @ByVal LongArrayRefOptional opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor norm(
+    @Const @ByRef Tensor self,
+    @Const @ByRef ScalarOptional opt_ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+
+@Namespace("torch::linalg") public static native @ByVal Tensor norm(
+    @Const @ByRef Tensor self,
+    @StdString BytePointer ord,
+    @ByVal LongArrayRefOptional opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor norm(
+    @Const @ByRef Tensor self,
+    @StdString String ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor norm_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @Const @ByRef ScalarOptional opt_ord,
+    @ByVal LongArrayRefOptional opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+@Namespace("torch::linalg") public static native @ByRef Tensor norm_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @Const @ByRef ScalarOptional opt_ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor norm_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @StdString BytePointer ord,
+    @ByVal LongArrayRefOptional opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+@Namespace("torch::linalg") public static native @ByRef Tensor norm_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @StdString String ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+
 /** See https://pytorch.org/docs/master/linalg.html#torch.linalg.vector_norm */
+@Namespace("torch::linalg") public static native @ByVal Tensor vector_norm(
+    @Const @ByRef Tensor self,
+    @ByVal Scalar ord,
+    @ByVal LongArrayRefOptional opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor vector_norm(
+    @Const @ByRef Tensor self,
+    @ByVal Scalar ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor vector_norm_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @ByVal Scalar ord,
+    @ByVal LongArrayRefOptional opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
+@Namespace("torch::linalg") public static native @ByRef Tensor vector_norm_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @ByVal Scalar ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional opt_dtype);
 
 /** See https://pytorch.org/docs/master/linalg.html#torch.linalg.matrix_norm */
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_norm(
+    @Const @ByRef Tensor self,
+    @Const @ByRef Scalar ord,
+    @ByVal LongArrayRef dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_norm(
+    @Const @ByRef Tensor self,
+    @Const @ByRef Scalar ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_norm_out(
+    @Const @ByRef Tensor self,
+    @Const @ByRef Scalar ord,
+    @ByVal LongArrayRef dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype,
+    @ByRef Tensor result);
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_norm_out(
+    @Const @ByRef Tensor self,
+    @Const @ByRef Scalar ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype,
+    @ByRef Tensor result);
+
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_norm(
+    @Const @ByRef Tensor self,
+    @StdString BytePointer ord,
+    @ByVal LongArrayRef dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_norm(
+    @Const @ByRef Tensor self,
+    @StdString String ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_norm(
+    @Const @ByRef Tensor self,
+    @StdString BytePointer ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype);
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_norm(
+    @Const @ByRef Tensor self,
+    @StdString String ord,
+    @ByVal LongArrayRef dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_norm_out(
+    @Const @ByRef Tensor self,
+    @StdString BytePointer ord,
+    @ByVal LongArrayRef dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype,
+    @ByRef Tensor result);
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_norm_out(
+    @Const @ByRef Tensor self,
+    @StdString String ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype,
+    @ByRef Tensor result);
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_norm_out(
+    @Const @ByRef Tensor self,
+    @StdString BytePointer ord,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype,
+    @ByRef Tensor result);
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_norm_out(
+    @Const @ByRef Tensor self,
+    @StdString String ord,
+    @ByVal LongArrayRef dim,
+    @Cast("bool") boolean keepdim,
+    @ByVal ScalarTypeOptional dtype,
+    @ByRef Tensor result);
 
 /** See https://pytorch.org/docs/master/linalg.html#torch.linalg.matrix_power */
 
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_power_out(@Const @ByRef Tensor self, @Cast("int64_t") long n, @ByRef Tensor result);
+
 /** See https://pytorch.org/docs/master/linalg.html#torch.linalg.matrix_rank */
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_rank(@Const @ByRef Tensor input, double tol, @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_rank(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor tol,
+    @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_rank(
+    @Const @ByRef Tensor input,
+    @ByVal DoubleOptional atol,
+    @ByVal DoubleOptional rtol,
+    @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByVal Tensor matrix_rank(
+    @Const @ByRef Tensor input,
+    @Const @ByRef TensorOptional atol,
+    @Const @ByRef TensorOptional rtol,
+    @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_rank_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    double tol,
+    @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_rank_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor tol,
+    @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_rank_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @ByVal DoubleOptional atol,
+    @ByVal DoubleOptional rtol,
+    @Cast("bool") boolean hermitian);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor matrix_rank_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef TensorOptional atol,
+    @Const @ByRef TensorOptional rtol,
+    @Cast("bool") boolean hermitian);
 
 /** See https://pytorch.org/docs/master/linalg.html#torch.linalg.multi_dot */
+@Namespace("torch::linalg") public static native @ByVal Tensor multi_dot(@ByVal TensorArrayRef tensors);
+@Namespace("torch::linalg") public static native @ByVal Tensor multi_dot(@ByVal TensorVector tensors);
+
+
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor multi_dot_out(@ByVal TensorArrayRef tensors, @ByRef Tensor result);
+@Namespace("torch::linalg") public static native @ByRef Tensor multi_dot_out(@ByVal TensorVector tensors, @ByRef Tensor result);
 
 /** Computes the pseudo-inverse
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.pinv */
+@Namespace("torch::linalg") public static native @ByVal Tensor pinv(
+    @Const @ByRef Tensor input,
+    double rcond/*=1e-15*/,
+    @Cast("bool") boolean hermitian/*=false*/);
 @Namespace("torch::linalg") public static native @ByVal Tensor pinv(
     @Const @ByRef Tensor input);
 
@@ -67493,11 +67529,35 @@ apis for specific fusers.
 ///
 @Namespace("torch::linalg") public static native @ByRef Tensor pinv_out(
     @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    double rcond/*=1e-15*/,
+    @Cast("bool") boolean hermitian/*=false*/);
+@Namespace("torch::linalg") public static native @ByRef Tensor pinv_out(
+    @ByRef Tensor result,
     @Const @ByRef Tensor input);
 
 /** Computes the QR decomposition
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.qr */
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T qr(
+    @Const @ByRef Tensor input,
+    @StringView BytePointer mode/*="reduced"*/);
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T qr(
+    @Const @ByRef Tensor input,
+    @StringView String mode/*="reduced"*/);
+
+
+///
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> qr_out(
+    @ByRef Tensor Q,
+    @ByRef Tensor R,
+    @Const @ByRef Tensor input,
+    @StringView BytePointer mode/*="reduced"*/);
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> qr_out(
+    @ByRef Tensor Q,
+    @ByRef Tensor R,
+    @Const @ByRef Tensor input,
+    @StringView String mode/*="reduced"*/);
 
 /** Computes the LDL decomposition
  * 
@@ -67538,10 +67598,34 @@ apis for specific fusers.
 /** Solves a system linear system AX = B
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.solve_ex */
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensor_T solve_ex(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @Cast("bool") boolean left,
+    @Cast("bool") boolean check_errors);
+
+
+///
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> solve_ex_out(
+    @ByRef Tensor result,
+    @ByRef Tensor info,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @Cast("bool") boolean left,
+    @Cast("bool") boolean check_errors);
 
 /** Computes a tensor {@code x} such that {@code matmul(input, x) = other}.
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.solve */
+@Namespace("torch::linalg") public static native @ByVal Tensor solve(@Const @ByRef Tensor input, @Const @ByRef Tensor other, @Cast("bool") boolean left);
+
+
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor solve_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @Cast("bool") boolean left);
 
 /** Computes a solution of a linear system AX = B for input = A and other = B
  *  whenever A is square upper or lower triangular and does not have zeros in
@@ -67549,14 +67633,55 @@ apis for specific fusers.
  * 
  *  See
  *  https://pytorch.org/docs/master/linalg.html#torch.linalg.solve_triangular */
+@Namespace("torch::linalg") public static native @ByVal Tensor solve_triangular(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @Cast("bool") boolean upper,
+    @Cast("bool") boolean left,
+    @Cast("bool") boolean unitriangular);
+
+
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor solve_triangular_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @Cast("bool") boolean upper,
+    @Cast("bool") boolean left,
+    @Cast("bool") boolean unitriangular);
 
 /** Computes the singular values and singular vectors
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.svd */
+@Namespace("torch::linalg") public static native @ByVal T_TensorTensorTensor_T svd(
+    @Const @ByRef Tensor input,
+    @Cast("bool") boolean full_matrices,
+    @ByVal StringViewOptional driver);
+
+
+///
+@Namespace("torch::linalg") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> svd_out(
+    @ByRef Tensor U,
+    @ByRef Tensor S,
+    @ByRef Tensor Vh,
+    @Const @ByRef Tensor input,
+    @Cast("bool") boolean full_matrices,
+    @ByVal StringViewOptional driver);
 
 /** Computes the singular values
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.svdvals */
+@Namespace("torch::linalg") public static native @ByVal Tensor svdvals(
+    @Const @ByRef Tensor input,
+    @ByVal StringViewOptional driver);
+
+
+///
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor svdvals_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @ByVal StringViewOptional driver);
 
 /** Computes the inverse of a tensor
  * 
@@ -67568,6 +67693,12 @@ apis for specific fusers.
  *  int64_t ind = 2;
  *  auto ainv = torch::linalg::tensorinv(a, ind);
  *  }</pre> */
+@Namespace("torch::linalg") public static native @ByVal Tensor tensorinv(@Const @ByRef Tensor self, @Cast("int64_t") long ind);
+
+
+///
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor tensorinv_out(@ByRef Tensor result, @Const @ByRef Tensor self, @Cast("int64_t") long ind);
 
 /** Computes a tensor {@code x} such that {@code tensordot(input, x, dims=x.dim()) = other}.
  * 
@@ -67579,11 +67710,35 @@ apis for specific fusers.
  *  auto b = torch::randn(2*3, 4);
  *  auto x = torch::linalg::tensorsolve(a, b);
  *  }</pre> */
+@Namespace("torch::linalg") public static native @ByVal Tensor tensorsolve(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @ByVal LongArrayRefOptional dims);
+@Namespace("torch::linalg") public static native @ByVal Tensor tensorsolve(
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
+
+
+///
+@Namespace("torch::linalg") public static native @ByRef Tensor tensorsolve_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @ByVal LongArrayRefOptional dims);
+@Namespace("torch::linalg") public static native @ByRef Tensor tensorsolve_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor input,
+    @Const @ByRef Tensor other,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
 
 /** Computes a tensor {@code inverse_input} such that {@code dot(input, inverse_input) =
  *  eye(input.size(0))}.
  * 
  *  See https://pytorch.org/docs/master/linalg.html#torch.linalg.inv */
+@Namespace("torch::linalg") public static native @ByVal Tensor inv(@Const @ByRef Tensor input);
+
+@Namespace("torch::linalg") public static native @ByRef Tensor inv_out(@ByRef Tensor result, @Const @ByRef Tensor input);
 
  // namespace linalg
  // namespace torch
@@ -67962,6 +68117,7 @@ public static final int AT_PARALLEL_NATIVE_TBB = 0;
 // #pragma once
 
 // #include <c10/util/Exception.h>
+// #include <c10/util/ParallelGuard.h>
 // #include <c10/util/SmallVector.h>
 
  // namespace at
@@ -68208,6 +68364,7 @@ body of your function, only data pointers.
 // #include <functional>
 // #include <memory>
 
+// #include <c10/core/Device.h>
 // #include <c10/util/strong_type.h>
 // #include <torch/csrc/Export.h>
 
@@ -68329,9 +68486,6 @@ body of your function, only data pointers.
  // namespace impl
  // namespace profiler
  // namespace torch
- // namespace profiler
- // namespace autograd
- // namespace torch
 
 
 // Parsed from torch/csrc/autograd/profiler_kineto.h
@@ -68349,8 +68503,7 @@ body of your function, only data pointers.
 
 
  // namespace kineto
- // namespace impl
- // namespace profiler
+ // namespace profiler::impl
 
 // Consolidating events returned directly from Kineto
 // with events manually created by us (e.g. start/stop marks,
@@ -68418,14 +68571,12 @@ body of your function, only data pointers.
     @Const @ByRef ProfilerConfig config,
     @Const @ByRef ActivityTypeSet activities);
 
- // namespace profiler
- // namespace autograd
+ // namespace autograd::profiler
 
 // Experimental.
 @Namespace("torch::profiler::impl") public static native void _reportVulkanEventToProfiler(@ByVal @Cast("torch::profiler::impl::vulkan_id_t*") Pointer id);
 
- // namespace impl
- // namespace profiler
+ // namespace profiler::impl
 
  // namespace torch
 
@@ -68801,6 +68952,9 @@ body of your function, only data pointers.
 // Targeting ../FractionalMaxPool3dImplCloneable.java
 
 
+// Targeting ../LPPool3dImplCloneable.java
+
+
 // Targeting ../RNNImplCloneable.java
 
 
@@ -69000,16 +69154,6 @@ body of your function, only data pointers.
 // #include <torch/types.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor batch_norm(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor running_mean,
-    @Const @ByRef Tensor running_var,
-    @ByVal Tensor weight,
-    @ByVal Tensor bias,
-    @Cast("bool") boolean training,
-    @ByVal DoubleOptional momentum,
-    double eps);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69229,20 +69373,6 @@ body of your function, only data pointers.
 // #include <torch/types.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::nn::functional::detail") public static native @StdString BytePointer padding_unwrap(@ByVal kValid arg0);
-
-@Namespace("torch::nn::functional::detail") public static native @StdString BytePointer padding_unwrap(@ByVal kSame arg0);
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv1d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @Const @ByRef Conv1dPadding padding,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer dilation,
-    @Cast("int64_t") long groups);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69257,21 +69387,15 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::conv1d(x, weight, F::Conv1dFuncOptions().stride(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv1d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
     @Const @ByRef(nullValue = "torch::nn::functional::Conv1dFuncOptions{}") Conv1dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv2d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @Const @ByRef Conv2dPadding padding,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
-    @Cast("int64_t") long groups);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69286,21 +69410,15 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::conv2d(x, weight, F::Conv2dFuncOptions().stride(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv2d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
     @Const @ByRef(nullValue = "torch::nn::functional::Conv2dFuncOptions{}") Conv2dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv3d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @Const @ByRef Conv3dPadding padding,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer dilation,
-    @Cast("int64_t") long groups);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69315,6 +69433,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::conv3d(x, weight, F::Conv3dFuncOptions().stride(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv3d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
@@ -69323,25 +69444,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose1d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal LongArrayRef stride,
-    @ByVal LongArrayRef padding,
-    @ByVal LongArrayRef output_padding,
-    @Cast("int64_t") long groups,
-    @ByVal LongArrayRef dilation);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose1d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] stride,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] padding,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] output_padding,
-    @Cast("int64_t") long groups,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dilation);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69357,31 +69459,15 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::conv_transpose1d(x, weight, F::ConvTranspose1dFuncOptions().stride(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv_transpose1d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
     @Const @ByRef(nullValue = "torch::nn::functional::ConvTranspose1dFuncOptions{}") ConvTranspose1dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose2d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal LongArrayRef stride,
-    @ByVal LongArrayRef padding,
-    @ByVal LongArrayRef output_padding,
-    @Cast("int64_t") long groups,
-    @ByVal LongArrayRef dilation);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose2d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] stride,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] padding,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] output_padding,
-    @Cast("int64_t") long groups,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dilation);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69397,31 +69483,15 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::conv_transpose2d(x, weight, F::ConvTranspose2dFuncOptions().stride(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor conv_transpose2d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
     @Const @ByRef(nullValue = "torch::nn::functional::ConvTranspose2dFuncOptions{}") ConvTranspose2dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose3d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal LongArrayRef stride,
-    @ByVal LongArrayRef padding,
-    @ByVal LongArrayRef output_padding,
-    @Cast("int64_t") long groups,
-    @ByVal LongArrayRef dilation);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor conv_transpose3d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] stride,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] padding,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] output_padding,
-    @Cast("int64_t") long groups,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dilation);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69495,7 +69565,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/distance.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69512,6 +69581,9 @@ body of your function, only data pointers.
 /** F::cosine_similarity(input1, input2,
 /** F::CosineSimilarityFuncOptions().dim(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor cosine_similarity(
     @Const @ByRef Tensor x1,
     @Const @ByRef Tensor x2,
@@ -69520,7 +69592,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69640,10 +69711,6 @@ body of your function, only data pointers.
 // #include <utility>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor dropout(@ByVal Tensor input, double p, @Cast("bool") boolean training, @Cast("bool") boolean inplace);
-
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69658,16 +69725,15 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::dropout(input, F::DropoutFuncOptions().p(0.5));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor dropout(@ByVal Tensor input, @Const @ByRef(nullValue = "torch::nn::functional::DropoutFuncOptions{}") DropoutFuncOptions options);
 @Namespace("torch::nn::functional") public static native @ByVal Tensor dropout(@ByVal Tensor input);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor dropout2d(@ByVal Tensor input, double p, @Cast("bool") boolean training, @Cast("bool") boolean inplace);
-
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69682,6 +69748,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::dropout2d(input, F::Dropout2dFuncOptions().p(0.5));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor dropout2d(
     @ByVal Tensor input,
     @Cast("const torch::nn::functional::Dropout2dFuncOptions*") @ByRef(nullValue = "torch::nn::functional::Dropout2dFuncOptions{}") DropoutFuncOptions options);
@@ -69691,10 +69760,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor dropout3d(@ByVal Tensor input, double p, @Cast("bool") boolean training, @Cast("bool") boolean inplace);
-
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69709,6 +69774,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::dropout3d(input, F::Dropout3dFuncOptions().p(0.5));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor dropout3d(
     @ByVal Tensor input,
     @Cast("const torch::nn::functional::Dropout3dFuncOptions*") @ByRef(nullValue = "torch::nn::functional::Dropout3dFuncOptions{}") DropoutFuncOptions options);
@@ -69718,14 +69786,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor alpha_dropout(
-    @ByVal Tensor input,
-    double p,
-    @Cast("bool") boolean training,
-    @Cast("bool") boolean inplace);
-
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69741,6 +69801,9 @@ body of your function, only data pointers.
 /** F::alpha_dropout(input,
 /** F::AlphaDropoutFuncOptions().p(0.5).training(false));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor alpha_dropout(
     @ByVal Tensor input,
     @Const @ByRef(nullValue = "torch::nn::functional::AlphaDropoutFuncOptions{}") AlphaDropoutFuncOptions options);
@@ -69750,14 +69813,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor feature_alpha_dropout(
-    @ByVal Tensor input,
-    double p,
-    @Cast("bool") boolean training,
-    @Cast("bool") boolean inplace);
-
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69836,21 +69891,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/embedding.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native void _no_grad_embedding_renorm_(
-    @ByVal Tensor weight,
-    @Const @ByRef Tensor input,
-    float max_norm,
-    float norm_type);
-
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor embedding(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @ByVal LongOptional padding_idx,
-    @ByVal DoubleOptional max_norm,
-    double norm_type,
-    @Cast("bool") boolean scale_grad_by_freq,
-    @Cast("bool") boolean sparse);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69866,25 +69906,15 @@ body of your function, only data pointers.
 /** F::embedding(input, weight,
 /** F::EmbeddingFuncOptions().norm_type(2.5).scale_grad_by_freq(true).sparse(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor embedding(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor weight,
     @Const @ByRef(nullValue = "torch::nn::functional::EmbeddingFuncOptions{}") EmbeddingFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor embedding_bag(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor offsets,
-    @ByVal DoubleOptional max_norm,
-    double norm_type,
-    @Cast("bool") boolean scale_grad_by_freq,
-    @ByVal EmbeddingBagMode mode,
-    @Cast("bool") boolean sparse,
-    @Const @ByRef Tensor per_sample_weights,
-    @Cast("bool") boolean include_last_offset,
-    @ByVal LongOptional padding_idx);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69961,14 +69991,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/fold.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor fold(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer output_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -69983,18 +70005,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::fold(input, F::FoldFuncOptions({3, 2}, {2, 2}));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor fold(@Const @ByRef Tensor input, @Cast("const torch::nn::functional::FoldFuncOptions*") @ByRef FoldOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor unfold(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70072,16 +70090,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/instancenorm.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor instance_norm(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor running_mean,
-    @Const @ByRef Tensor running_var,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    @Cast("bool") boolean use_input_stats,
-    double momentum,
-    double eps);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70428,8 +70436,6 @@ body of your function, only data pointers.
 // #include <utility>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor elu(@ByVal Tensor input, double alpha, @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70444,13 +70450,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::elu(x, F::ELUFuncOptions().alpha(0.42).inplace(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor elu(@ByVal Tensor input, @Cast("const torch::nn::functional::ELUFuncOptions*") @ByRef(nullValue = "torch::nn::functional::ELUFuncOptions{}") ELUOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor selu(@ByVal Tensor input, @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70465,13 +70472,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::selu(input, F::SELUFuncOptions(false));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor selu(@ByVal Tensor input, @Cast("const torch::nn::functional::SELUFuncOptions*") @ByRef(nullValue = "torch::nn::functional::SELUFuncOptions{}") SELUOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor hardshrink(@Const @ByRef Tensor input, double lambda);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70486,6 +70494,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::hardshrink(x, F::HardshrinkFuncOptions().lambda(0.42));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor hardshrink(
     @Const @ByRef Tensor input,
     @Cast("const torch::nn::functional::HardshrinkFuncOptions*") @ByRef(nullValue = "torch::nn::functional::HardshrinkFuncOptions{}") HardshrinkOptions options);
@@ -70493,12 +70504,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor hardtanh(
-    @ByVal Tensor input,
-    double min_val,
-    double max_val,
-    @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70514,13 +70519,14 @@ body of your function, only data pointers.
 /** F::hardtanh(x,
 /** F::HardtanhFuncOptions().min_val(-1.0).max_val(1.0).inplace(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor hardtanh(@ByVal Tensor input, @Cast("const torch::nn::functional::HardtanhFuncOptions*") @ByRef(nullValue = "torch::nn::functional::HardtanhFuncOptions{}") HardtanhOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor leaky_relu(@ByVal Tensor input, double negative_slope, @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70542,17 +70548,14 @@ body of your function, only data pointers.
 
 // ============================================================================
 
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor logsigmoid(@Const @ByRef Tensor input);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor gumbel_softmax(
-    @Const @ByRef Tensor logits,
-    double tau,
-    @Cast("bool") boolean hard,
-    int dim);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70567,6 +70570,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::gumbel_softmax(logits, F::GumbelSoftmaxFuncOptions().hard(true).dim(-1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor gumbel_softmax(
     @Const @ByRef Tensor logits,
     @Const @ByRef(nullValue = "torch::nn::functional::GumbelSoftmaxFuncOptions{}") GumbelSoftmaxFuncOptions options);
@@ -70576,7 +70582,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70591,16 +70596,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::softmax(input, F::SoftmaxFuncOptions(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor softmax(@Const @ByRef Tensor input, @Const @ByRef SoftmaxFuncOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor softmin(
-    @Const @ByRef Tensor input,
-    @Cast("int64_t") long dim,
-    @ByVal ScalarTypeOptional dtype);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70615,12 +70618,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::softmin(input, F::SoftminFuncOptions(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor softmin(@Const @ByRef Tensor input, @Const @ByRef SoftminFuncOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70635,6 +70640,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::log_softmax(input, LogSoftmaxFuncOptions(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor log_softmax(
     @Const @ByRef Tensor input,
     @Const @ByRef LogSoftmaxFuncOptions options);
@@ -70642,7 +70650,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70662,7 +70669,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 @Namespace("torch::nn::functional") public static native @ByVal Tensor gelu(@Const @ByRef Tensor input, @Cast("const torch::nn::functional::GELUFuncOptions*") @ByRef(nullValue = "torch::nn::functional::GELUFuncOptions{}") GELUOptions options);
@@ -70676,8 +70682,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor relu(@ByVal Tensor input, @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70692,13 +70696,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::relu(x, F::ReLUFuncOptions().inplace(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor relu(@ByVal Tensor input, @Cast("const torch::nn::functional::ReLUFuncOptions*") @ByRef(nullValue = "torch::nn::functional::ReLUFuncOptions{}") ReLUOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor relu6(@ByVal Tensor input, @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70713,18 +70718,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::relu6(x, F::ReLU6FuncOptions().inplace(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor relu6(@ByVal Tensor input, @Cast("const torch::nn::functional::ReLU6FuncOptions*") @ByRef(nullValue = "torch::nn::functional::ReLU6FuncOptions{}") ReLU6Options options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor rrelu(
-    @ByVal Tensor input,
-    double lower,
-    double upper,
-    @Cast("bool") boolean training,
-    @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70739,13 +70740,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::rrelu(x, F::RReLUFuncOptions().lower(0.1).upper(0.4).inplace(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor rrelu(@ByVal Tensor input, @Const @ByRef(nullValue = "torch::nn::functional::RReLUFuncOptions{}") RReLUFuncOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor celu(@ByVal Tensor input, double alpha, @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70760,13 +70762,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::celu(x, F::CELUFuncOptions().alpha(0.42).inplace(true));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor celu(@ByVal Tensor input, @Cast("const torch::nn::functional::CELUFuncOptions*") @ByRef(nullValue = "torch::nn::functional::CELUFuncOptions{}") CELUOptions options);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor softplus(@Const @ByRef Tensor input, double beta, double threshold);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70781,6 +70784,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::softplus(x, F::SoftplusFuncOptions().beta(0.5).threshold(3.0));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor softplus(
     @Const @ByRef Tensor input,
     @Cast("const torch::nn::functional::SoftplusFuncOptions*") @ByRef(nullValue = "torch::nn::functional::SoftplusFuncOptions{}") SoftplusOptions options);
@@ -70788,8 +70794,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor softshrink(@Const @ByRef Tensor input, double lambda);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70814,17 +70818,14 @@ body of your function, only data pointers.
 
 // ============================================================================
 
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor tanhshrink(@Const @ByRef Tensor input);
 
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor threshold(
-    @ByVal Tensor input,
-    double threshold,
-    double value,
-    @Cast("bool") boolean inplace);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -70844,46 +70845,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T multi_head_attention_forward(
-    @Const @ByRef Tensor query,
-    @Const @ByRef Tensor key,
-    @Const @ByRef Tensor value,
-    @Cast("int64_t") long embed_dim_to_check,
-    @Cast("int64_t") long num_heads,
-    @Const @ByRef Tensor in_proj_weight,
-    @Const @ByRef Tensor in_proj_bias,
-    @Const @ByRef Tensor bias_k,
-    @Const @ByRef Tensor bias_v,
-    @Cast("bool") boolean add_zero_attn,
-    double dropout_p,
-    @Const @ByRef Tensor out_proj_weight,
-    @Const @ByRef Tensor out_proj_bias,
-    @Cast("bool") boolean training/*=true*/,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor key_padding_mask,
-    @Cast("bool") boolean need_weights/*=true*/,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor attn_mask,
-    @Cast("bool") boolean use_separate_proj_weight/*=false*/,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor q_proj_weight,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor k_proj_weight,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor v_proj_weight,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor static_k,
-    @Const @ByRef(nullValue = "torch::Tensor{}") Tensor static_v,
-    @Cast("bool") boolean average_attn_weights/*=true*/);
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T multi_head_attention_forward(
-    @Const @ByRef Tensor query,
-    @Const @ByRef Tensor key,
-    @Const @ByRef Tensor value,
-    @Cast("int64_t") long embed_dim_to_check,
-    @Cast("int64_t") long num_heads,
-    @Const @ByRef Tensor in_proj_weight,
-    @Const @ByRef Tensor in_proj_bias,
-    @Const @ByRef Tensor bias_k,
-    @Const @ByRef Tensor bias_v,
-    @Cast("bool") boolean add_zero_attn,
-    double dropout_p,
-    @Const @ByRef Tensor out_proj_weight,
-    @Const @ByRef Tensor out_proj_bias);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T multi_head_attention_forward(
@@ -71215,11 +71176,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/loss.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor l1_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71234,6 +71190,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::l1_loss(input, target, F::L1LossFuncOptions(torch::kNone));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71242,16 +71201,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor kl_div(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal KLDivLossReduction reduction,
-    @Cast("bool") boolean log_target/*=false*/);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor kl_div(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal KLDivLossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71267,6 +71216,9 @@ body of your function, only data pointers.
 /** F::kl_div(input, target,
 /** F::KLDivFuncOptions.reduction(torch::kNone).log_target(false));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor kl_div(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71275,11 +71227,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor mse_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71294,6 +71241,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::mse_loss(input, target, F::MSELossFuncOptions(torch::kNone));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor mse_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71302,12 +71252,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor binary_cross_entropy(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Const @ByRef Tensor weight,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71324,6 +71268,9 @@ body of your function, only data pointers.
 /** F::binary_cross_entropy(input, target,
 /** F::BinaryCrossEntropyFuncOptions().weight(weight));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor binary_cross_entropy(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71332,12 +71279,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor hinge_embedding_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    double margin,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71354,6 +71295,9 @@ body of your function, only data pointers.
 /** F::hinge_embedding_loss(input, target,
 /** F::HingeEmbeddingLossFuncOptions().margin(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor hinge_embedding_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71362,14 +71306,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor multi_margin_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Cast("int64_t") long p,
-    double margin,
-    @Const @ByRef Tensor weight,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71386,6 +71322,9 @@ body of your function, only data pointers.
 /** F::multi_margin_loss(input, target,
 /** F::MultiMarginLossFuncOptions().margin(2).weight(weight));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor multi_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71394,13 +71333,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor cosine_embedding_loss(
-    @Const @ByRef Tensor input1,
-    @Const @ByRef Tensor input2,
-    @Const @ByRef Tensor target,
-    double margin,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71425,6 +71357,9 @@ body of your function, only data pointers.
 
 // ============================================================================
 
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor _smooth_l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71434,16 +71369,6 @@ body of your function, only data pointers.
     @Const @ByRef Tensor target);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor smooth_l1_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction,
-    @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional beta_opt);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor smooth_l1_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71474,6 +71399,9 @@ body of your function, only data pointers.
  *  namespace F = torch::nn::functional;
  *  F::smooth_l1_loss(input, target, /*options=* /torch::kNone, /*beta=* /0.5);
  *  }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor smooth_l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71483,16 +71411,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction,
-    double delta/*=1.*/);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71508,6 +71426,9 @@ body of your function, only data pointers.
 /** F::huber_loss(input, target,
 /** F::HuberLossFuncOptions().reduction(torch::kNone).delta(0.5));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor huber_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71516,11 +71437,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor multilabel_margin_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71537,6 +71453,9 @@ body of your function, only data pointers.
 /** F::multilabel_margin_loss(input, target,
 /** F::MultilabelMarginLossFuncOptions(torch::kNone));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor multilabel_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71545,11 +71464,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor soft_margin_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71565,6 +71479,9 @@ body of your function, only data pointers.
 /** F::soft_margin_loss(input, target,
 /** F::SoftMarginLossFuncOptions(torch::kNone));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor soft_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71573,12 +71490,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor multilabel_soft_margin_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Const @ByRef Tensor weight,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71595,6 +71506,9 @@ body of your function, only data pointers.
 /** F::multilabel_soft_margin_loss(input, target,
 /** F::MultilabelSoftMarginLossFuncOptions().reduction(torch::kNone).weight(weight));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor multilabel_soft_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71606,16 +71520,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor triplet_margin_loss(
-    @Const @ByRef Tensor anchor,
-    @Const @ByRef Tensor positive,
-    @Const @ByRef Tensor negative,
-    double margin,
-    double p,
-    double eps,
-    @Cast("bool") boolean swap,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71632,6 +71536,9 @@ body of your function, only data pointers.
 /** F::triplet_margin_loss(anchor, positive, negative,
 /** F::TripletMarginLossFuncOptions().margin(1.0));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor triplet_margin_loss(
     @Const @ByRef Tensor anchor,
     @Const @ByRef Tensor positive,
@@ -71641,15 +71548,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor triplet_margin_with_distance_loss(
-    @Const @ByRef Tensor anchor,
-    @Const @ByRef Tensor positive,
-    @Const @ByRef Tensor negative,
-    @ByVal @Cast("c10::optional<torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t>*") Pointer distance_function,
-    double margin,
-    @Cast("bool") boolean swap,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71666,6 +71564,9 @@ body of your function, only data pointers.
 /** F::triplet_margin_with_distance_loss(anchor, positive, negative,
 /** F::TripletMarginWithDistanceLossFuncOptions().margin(1.0));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor triplet_margin_with_distance_loss(
     @Const @ByRef Tensor anchor,
     @Const @ByRef Tensor positive,
@@ -71679,15 +71580,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor ctc_loss(
-    @Const @ByRef Tensor log_probs,
-    @Const @ByRef Tensor targets,
-    @Const @ByRef Tensor input_lengths,
-    @Const @ByRef Tensor target_lengths,
-    @Cast("int64_t") long blank,
-    @ByVal LossReduction reduction,
-    @Cast("bool") boolean zero_infinity);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71703,6 +71595,9 @@ body of your function, only data pointers.
 /** F::ctc_loss(log_probs, targets, input_lengths, target_lengths,
 /** F::CTCLossFuncOptions().reduction(torch::kNone));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor ctc_loss(
     @Const @ByRef Tensor log_probs,
     @Const @ByRef Tensor targets,
@@ -71713,14 +71608,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor poisson_nll_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Cast("bool") boolean log_input,
-    @Cast("bool") boolean full,
-    double eps,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71736,6 +71623,9 @@ body of your function, only data pointers.
 /** F::poisson_nll_loss(input, target,
 /** F::PoissonNLLLossFuncOptions().reduction(torch::kNone));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor poisson_nll_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71747,13 +71637,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor margin_ranking_loss(
-    @Const @ByRef Tensor input1,
-    @Const @ByRef Tensor input2,
-    @Const @ByRef Tensor target,
-    double margin,
-    @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71770,6 +71653,9 @@ body of your function, only data pointers.
 /** F::margin_ranking_loss(input1, input2, target,
 /** F::MarginRankingLossFuncOptions().margin(0.5).reduction(torch::kSum));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor margin_ranking_loss(
     @Const @ByRef Tensor input1,
     @Const @ByRef Tensor input2,
@@ -71779,13 +71665,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor nll_loss(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Const @ByRef Tensor weight,
-    @Cast("int64_t") long ignore_index,
-    @Const @ByVal LossReduction reduction);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71801,6 +71680,9 @@ body of your function, only data pointers.
 /** F::nll_loss(input, target,
 /** F::NLLLossFuncOptions().ignore_index(-100).reduction(torch::kMean));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor nll_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71809,14 +71691,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor cross_entropy(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Const @ByRef Tensor weight,
-    @Cast("int64_t") long ignore_index,
-    @ByVal LossReduction reduction,
-    double label_smoothing);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -71832,6 +71706,9 @@ body of your function, only data pointers.
 /** F::cross_entropy(input, target,
 /** F::CrossEntropyFuncOptions().ignore_index(-100).reduction(torch::kMean));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor cross_entropy(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
@@ -71843,13 +71720,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor binary_cross_entropy_with_logits(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor target,
-    @Const @ByRef Tensor weight,
-    @ByVal LossReduction reduction,
-    @Const @ByRef Tensor pos_weight);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72066,17 +71936,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/padding.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor pad(
-    @Const @ByRef Tensor input,
-    @ByVal LongArrayRef pad,
-    @ByVal PaddingMode mode,
-    double value);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor pad(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] pad,
-    @ByVal PaddingMode mode,
-    double value);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72549,6 +72408,16 @@ body of your function, only data pointers.
  *  LPPool2d model(LPPool2dOptions(1, std::vector<int64_t>({3, 4})).stride({5,
  *  6}).ceil_mode(true));
  *  }</pre> */
+
+///
+
+/** {@code LPPoolOptions} specialized for the {@code LPPool3d} module.
+ * 
+ *  Example:
+ *  <pre>{@code
+ *  LPPool3d model(LPPool3dOptions(1, std::vector<int64_t>({3, 4, 5})).stride(
+ *  {5, 6, 7}).ceil_mode(true));
+ *  }</pre> */
 /** Options for {@code torch::nn::functional::lp_pool1d}.
  * 
  *  See the documentation for {@code torch::nn::LPPool1dOptions} class to learn what
@@ -72571,6 +72440,17 @@ body of your function, only data pointers.
  *  F::lp_pool2d(x, F::LPPool2dFuncOptions(2, {2, 3}).stride(2));
  *  }</pre> */
  // namespace functional
+/** Options for {@code torch::nn::functional::lp_pool3d}.
+ * 
+ *  See the documentation for {@code torch::nn::LPPool3dOptions} class to learn what
+ *  arguments are supported.
+ * 
+ *  Example:
+ *  <pre>{@code
+ *  namespace F = torch::nn::functional;
+ *  F::lp_pool3d(x, F::LPPool3dFuncOptions(2, {2, 3, 4}).stride(2));
+ *  }</pre> */
+ // namespace functional
 
  // namespace nn
  // namespace torch
@@ -72586,14 +72466,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/pooling.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor avg_pool1d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer padding,
-    @Cast("bool") boolean ceil_mode,
-    @Cast("bool") boolean count_include_pad);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72608,20 +72480,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::avg_pool1d(x, F::AvgPool1dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor avg_pool1d(
     @Const @ByRef Tensor input,
     @Const @ByRef AvgPool1dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor avg_pool2d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
-    @Cast("bool") boolean ceil_mode,
-    @Cast("bool") boolean count_include_pad,
-    @ByVal LongOptional divisor_override);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72636,20 +72502,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::avg_pool2d(x, F::AvgPool2dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor avg_pool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef AvgPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor avg_pool3d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer padding,
-    @Cast("bool") boolean ceil_mode,
-    @Cast("bool") boolean count_include_pad,
-    @ByVal LongOptional divisor_override);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72664,6 +72524,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::avg_pool3d(x, F::AvgPool3dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor avg_pool3d(
     @Const @ByRef Tensor input,
     @Const @ByRef AvgPool3dOptions options);
@@ -72671,14 +72534,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor max_pool1d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer dilation,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72693,19 +72548,13 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_pool1d(x, F::MaxPool1dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor max_pool1d(
     @Const @ByRef Tensor input,
     @Const @ByRef MaxPool1dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T max_pool1d_with_indices(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer dilation,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for {@code torch::nn::functional::MaxPool1dFuncOptions}
@@ -72716,19 +72565,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_pool1d_with_indices(x, F::MaxPool1dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T max_pool1d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef MaxPool1dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor max_pool2d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72743,19 +72587,13 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_pool2d(x, F::MaxPool2dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor max_pool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef MaxPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T max_pool2d_with_indices(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for {@code torch::nn::functional::MaxPool2dFuncOptions}
@@ -72766,19 +72604,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_pool2d_with_indices(x, F::MaxPool2dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T max_pool2d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef MaxPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor max_pool3d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer dilation,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72793,19 +72626,13 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_pool3d(x, F::MaxPool3dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor max_pool3d(
     @Const @ByRef Tensor input,
     @Const @ByRef MaxPool3dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T max_pool3d_with_indices(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer padding,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer dilation,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for {@code torch::nn::functional::MaxPool3dFuncOptions}
@@ -72816,6 +72643,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_pool3d_with_indices(x, F::MaxPool3dFuncOptions(3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T max_pool3d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef MaxPool3dOptions options);
@@ -72823,27 +72653,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T adaptive_max_pool1d_with_indices(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
- // namespace detail
-
-/** See the documentation for
- *  {@code torch::nn::functional::AdaptiveMaxPool1dFuncOptions} class to learn what
- *  optional arguments are supported for this functional.
- * 
- *  Example:
- *  <pre>{@code
- *  namespace F = torch::nn::functional;
- *  F::adaptive_max_pool1d_with_indices(x, F::AdaptiveMaxPool1dFuncOptions(3));
- *  }</pre> */
-@Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T adaptive_max_pool1d_with_indices(
-    @Const @ByRef Tensor input,
-    @Const @ByRef AdaptiveMaxPool1dOptions options);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_max_pool1d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72859,15 +72668,13 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_max_pool1d(x, F::AdaptiveMaxPool1dFuncOptions(3));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor adaptive_max_pool1d(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveMaxPool1dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T adaptive_max_pool2d_with_indices(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for
@@ -72879,15 +72686,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_max_pool2d_with_indices(x, F::AdaptiveMaxPool2dFuncOptions(3));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T adaptive_max_pool2d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveMaxPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_max_pool2d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72903,15 +72709,13 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_max_pool2d(x, F::AdaptiveMaxPool2dFuncOptions(3));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor adaptive_max_pool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveMaxPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T adaptive_max_pool3d_with_indices(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for
@@ -72923,15 +72727,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_max_pool3d_with_indices(x, F::AdaptiveMaxPool3dFuncOptions(3));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T adaptive_max_pool3d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveMaxPool3dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_max_pool3d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72947,6 +72750,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_max_pool3d(x, F::AdaptiveMaxPool3dFuncOptions(3));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor adaptive_max_pool3d(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveMaxPool3dOptions options);
@@ -72954,10 +72760,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_avg_pool1d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72973,15 +72775,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_avg_pool1d(x, F::AdaptiveAvgPool1dFuncOptions(3));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor adaptive_avg_pool1d(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveAvgPool1dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_avg_pool2d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -72997,15 +72798,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::adaptive_avg_pool2d(x, F::AdaptiveAvgPool2dFuncOptions(3));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor adaptive_avg_pool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef AdaptiveAvgPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_avg_pool3d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73027,6 +72827,9 @@ body of your function, only data pointers.
 
 // ============================================================================
 
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector _unpool_output_size(
     @Const @ByRef Tensor input,
     @Const @ByRef LongArrayRef kernel_size,
@@ -73041,14 +72844,6 @@ body of your function, only data pointers.
     @Const @ByRef LongVectorOptional output_size);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor max_unpool1d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor indices,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer padding,
-    @Const @ByRef LongVectorOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73064,20 +72859,15 @@ body of your function, only data pointers.
 /** F::max_unpool1d(x, indices,
 /** F::MaxUnpool1dFuncOptions(3).stride(2).padding(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor max_unpool1d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor indices,
     @Const @ByRef MaxUnpool1dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor max_unpool2d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor indices,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer padding,
-    @Const @ByRef LongVectorOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73093,20 +72883,15 @@ body of your function, only data pointers.
 /** F::max_unpool2d(x, indices,
 /** F::MaxUnpool2dFuncOptions(3).stride(2).padding(1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor max_unpool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor indices,
     @Const @ByRef MaxUnpool2dFuncOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor max_unpool3d(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor indices,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer padding,
-    @Const @ByRef LongVectorOptional output_size);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73121,6 +72906,8 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::max_unpool3d(x, indices, F::MaxUnpool3dFuncOptions(3));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor max_unpool3d(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor indices,
@@ -73129,13 +72916,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T fractional_max_pool2d_with_indices(
-    @Const @ByRef Tensor input,
-    @Cast("const torch::ExpandingArray<2>*") @ByRef LongPointer kernel_size,
-    @Cast("const c10::optional<torch::ExpandingArray<2> >*") @ByRef LongExpandingArrayOptional output_size,
-    @Cast("const c10::optional<torch::ExpandingArray<2,double> >*") @ByRef DoubleExpandingArrayOptional output_ratio,
-    @Const @ByRef Tensor _random_samples);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for
@@ -73148,18 +72928,13 @@ body of your function, only data pointers.
 /** F::fractional_max_pool2d_with_indices(x,
 /** F::FractionalMaxPool2dFuncOptions(3).output_size(2));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T fractional_max_pool2d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef FractionalMaxPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor fractional_max_pool2d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("c10::optional<torch::ExpandingArray<2> >*") LongExpandingArrayOptional output_size,
-    @ByVal @Cast("c10::optional<torch::ExpandingArray<2,double> >*") DoubleExpandingArrayOptional output_ratio,
-    @Const @ByRef Tensor _random_samples);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for
@@ -73172,18 +72947,13 @@ body of your function, only data pointers.
 /** F::fractional_max_pool2d(x,
 /** F::FractionalMaxPool2dFuncOptions(3).output_size(2));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor fractional_max_pool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef FractionalMaxPool2dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal T_TensorTensor_T fractional_max_pool3d_with_indices(
-    @Const @ByRef Tensor input,
-    @Cast("const torch::ExpandingArray<3>*") @ByRef LongPointer kernel_size,
-    @Cast("const c10::optional<torch::ExpandingArray<3> >*") @ByRef LongExpandingArrayOptional output_size,
-    @Cast("const c10::optional<torch::ExpandingArray<3,double> >*") @ByRef DoubleExpandingArrayOptional output_ratio,
-    @Const @ByRef Tensor _random_samples);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for
@@ -73196,18 +72966,13 @@ body of your function, only data pointers.
 /** F::fractional_max_pool3d_with_indices(x,
 /** F::FractionalMaxPool3dFuncOptions(3).output_size(2));
 /** }</pre> */
+
+///
 @Namespace("torch::nn::functional") public static native @ByVal T_TensorTensor_T fractional_max_pool3d_with_indices(
     @Const @ByRef Tensor input,
     @Const @ByRef FractionalMaxPool3dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor fractional_max_pool3d(
-    @Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size,
-    @ByVal @Cast("c10::optional<torch::ExpandingArray<3> >*") LongExpandingArrayOptional output_size,
-    @ByVal @Cast("c10::optional<torch::ExpandingArray<3,double> >*") DoubleExpandingArrayOptional output_ratio,
-    @Const @ByRef Tensor _random_samples);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See the documentation for
@@ -73220,6 +72985,9 @@ body of your function, only data pointers.
 /** F::fractional_max_pool3d(x,
 /** F::FractionalMaxPool3dFuncOptions(3).output_size(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor fractional_max_pool3d(
     @Const @ByRef Tensor input,
     @Const @ByRef FractionalMaxPool3dOptions options);
@@ -73227,13 +72995,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor lp_pool1d(
-    @Const @ByRef Tensor input,
-    double norm_type,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73248,18 +73009,14 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::lp_pool1d(x, F::LPPool1dFuncOptions(2, 3).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor lp_pool1d(
     @Const @ByRef Tensor input,
     @Const @ByRef LPPool1dOptions options);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor lp_pool2d(
-    @Const @ByRef Tensor input,
-    double norm_type,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size,
-    @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @Cast("bool") boolean ceil_mode);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73274,9 +73031,31 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::lp_pool2d(x, F::LPPool2dFuncOptions(2, {2, 3}).stride(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor lp_pool2d(
     @Const @ByRef Tensor input,
     @Const @ByRef LPPool2dOptions options);
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif /* DOXYGEN_SHOULD_SKIP_THIS */
+
+/** See
+/** https://pytorch.org/docs/master/nn.functional.html#torch.nn.functional.lp_pool3d
+/** about the exact behavior of this functional.
+/**
+/** See the documentation for {@code torch::nn::functional::LPPool3dFuncOptions} class
+/** to learn what optional arguments are supported for this functional.
+/**
+/** Example:
+/** <pre>{@code
+/** namespace F = torch::nn::functional;
+/** F::lp_pool3d(x, F::LPPool3dFuncOptions(3, {3, 3, 5}).stride(3));
+/** }</pre> */
+@Namespace("torch::nn::functional") public static native @ByVal Tensor lp_pool3d(
+    @Const @ByRef Tensor input,
+    @Const @ByRef LPPool3dOptions options);
 
  // namespace functional
  // namespace nn
@@ -73350,13 +73129,6 @@ body of your function, only data pointers.
 // #include <torch/types.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor normalize(
-    @Const @ByRef Tensor input,
-    double p,
-    @Cast("int64_t") long dim,
-    double eps,
-    @ByVal TensorOptional out);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73371,6 +73143,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::normalize(input, F::NormalizeFuncOptions().p(1).dim(-1));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor normalize(
     @Const @ByRef Tensor input,
     @ByVal(nullValue = "torch::nn::functional::NormalizeFuncOptions{}") NormalizeFuncOptions options);
@@ -73380,13 +73155,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor layer_norm(
-    @Const @ByRef Tensor input,
-    @Cast("const std::vector<int64_t>*") @ByRef LongVector normalized_shape,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    double eps);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73401,6 +73169,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::layer_norm(input, F::LayerNormFuncOptions({2, 2}).eps(2e-5));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor layer_norm(
     @Const @ByRef Tensor input,
     @Const @ByRef LayerNormFuncOptions options);
@@ -73408,13 +73179,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor local_response_norm(
-    @Const @ByRef Tensor input,
-    @Cast("int64_t") long size,
-    double alpha,
-    double beta,
-    double k);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73430,6 +73194,9 @@ body of your function, only data pointers.
 /** namespace F = torch::nn::functional;
 /** F::local_response_norm(x, F::LocalResponseNormFuncOptions(2));
 /** }</pre> */
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor local_response_norm(
     @Const @ByRef Tensor input,
     @Cast("const torch::nn::functional::LocalResponseNormFuncOptions*") @ByRef LocalResponseNormOptions options);
@@ -73437,13 +73204,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor group_norm(
-    @Const @ByRef Tensor input,
-    @Cast("int64_t") long num_groups,
-    @Const @ByRef Tensor weight,
-    @Const @ByRef Tensor bias,
-    double eps);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73517,7 +73277,6 @@ body of your function, only data pointers.
 // #include <torch/nn/options/pixelshuffle.h>
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73580,20 +73339,14 @@ body of your function, only data pointers.
 // #include <cmath>
 // #include <utility>
 
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector _interp_output_size(
     @Cast("int64_t") long dim,
     @ByVal @Cast("std::tuple<torch::Tensor,c10::optional<std::vector<int64_t> >,c10::optional<std::vector<double> >,c10::optional<bool> >*") Pointer closed_over_args);
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor interpolate(
-    @Const @ByRef Tensor input,
-    @Const @ByRef LongVectorOptional size,
-    @Const @ByRef DoubleVectorOptional scale_factor,
-    @ByVal InterpolateMode mode,
-    @ByVal BoolOptional align_corners,
-    @ByVal BoolOptional recompute_scale_factor,
-    @Cast("bool") boolean antialias);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -73644,6 +73397,9 @@ body of your function, only data pointers.
 // #include <torch/nn/options/vision.h>
 // #include <torch/types.h>
 
+
+///
+///
 @Namespace("torch::nn::functional") public static native @ByVal Tensor affine_grid(
     @Const @ByRef Tensor theta,
     @Const @ByRef LongArrayRef size,
@@ -73662,13 +73418,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor grid_sample(
-    @Const @ByRef Tensor input,
-    @Const @ByRef Tensor grid,
-    @ByVal GridSampleMode mode,
-    @ByVal GridSamplePaddingMode padding_mode,
-    @ByVal BoolOptional align_corners);
- // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /** See
@@ -75607,6 +75356,9 @@ body of your function, only data pointers.
 // Targeting ../LPPool2dImplBase.java
 
 
+// Targeting ../LPPool3dImplBase.java
+
+
 // Targeting ../LPPool1dImpl.java
 
 
@@ -75624,6 +75376,15 @@ body of your function, only data pointers.
  *  See the documentation for {@code LPPool2dImpl} class to learn what methods it
  *  provides, and examples of how to use {@code LPPool2d} with
  *  {@code torch::nn::LPPool2dOptions}. See the documentation for {@code ModuleHolder} to
+ *  learn about PyTorch's module storage semantics. */
+// Targeting ../LPPool3dImpl.java
+
+
+
+/** A {@code ModuleHolder} subclass for {@code LPPool3dImpl}.
+ *  See the documentation for {@code LPPool3dImpl} class to learn what methods it
+ *  provides, and examples of how to use {@code LPPool3d} with
+ *  {@code torch::nn::LPPool3dOptions}. See the documentation for {@code ModuleHolder} to
  *  learn about PyTorch's module storage semantics. */
 
  // namespace nn
@@ -76335,12 +76096,6 @@ body of your function, only data pointers.
 // #include <memory>
 // #include <string>
 // #include <vector>
-
-// Forward declarations confuse Doxygen
-// #ifndef DOXYGEN_SHOULD_SKIP_THIS
- // namespace at
- // namespace serialize
-
 // Targeting ../OptimizerParamState.java
 
 
@@ -77899,14 +77654,41 @@ in Python API, we skip c10::nullopt values when serializing the param state. */
 public static final int TORCH_VERSION_MAJOR = 2;
 
 /** Indicates the minor version of LibTorch. */
-public static final int TORCH_VERSION_MINOR = 2;
+public static final int TORCH_VERSION_MINOR = 3;
 
 /** Indicates the patch version of LibTorch. */
-public static final int TORCH_VERSION_PATCH = 2;
+public static final int TORCH_VERSION_PATCH = 0;
 
 /** Indicates the version of LibTorch. */
 public static final String TORCH_VERSION = 
-  "2.2.2";
+  "2.3.0";
+
+
+// Parsed from torch/csrc/api/include/torch/xpu.h
+
+// #pragma once
+
+// #include <torch/csrc/Export.h>
+
+// #include <cstddef>
+// #include <cstdint>
+
+/** Returns the number of XPU devices available. */
+@Namespace("torch::xpu") public static native @Cast("size_t") @Name("device_count") long xpu_device_count();
+
+/** Returns true if at least one XPU device is available. */
+@Namespace("torch::xpu") public static native @Cast("bool") @Name("is_available") boolean xpu_is_available();
+
+/** Sets the seed for the current GPU. */
+@Namespace("torch::xpu") public static native @Name("manual_seed") void xpu_manual_seed(@Cast("uint64_t") long seed);
+
+/** Sets the seed for all available GPUs. */
+@Namespace("torch::xpu") public static native @Name("manual_seed_all") void xpu_manual_seed_all(@Cast("uint64_t") long seed);
+
+/** Waits for all kernels in all streams on a XPU device to complete. */
+@Namespace("torch::xpu") public static native @Name("synchronize") void xpu_synchronize(@Cast("int64_t") long device_index);
+
+ // namespace torch::xpu
 
 
 // Parsed from torch/csrc/autograd/InferenceMode.h
@@ -77917,7 +77699,6 @@ public static final String TORCH_VERSION =
 // #include <torch/csrc/Export.h>
 
 
- // namespace torch
 
 
 // Parsed from caffe2/serialize/read_adapter_interface.h
@@ -78315,7 +78096,6 @@ public static final String TORCH_VERSION =
 
 // #pragma once
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
 // #include <c10/util/Exception.h>
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/jit/frontend/parser_constants.h>
@@ -79694,9 +79474,45 @@ public static final String TORCH_VERSION =
     @ByVal(nullValue = "torch::jit::TypeResolver(nullptr)") TypeResolver type_resolver,
     @ByVal(nullValue = "c10::ArrayRef<at::Tensor>{}") TensorArrayRef tensor_table,
     TypeParser type_parser/*=torch::jit::Unpickler::defaultTypeParser*/);
+// Targeting ../VectorReader.java
 
+
+// #endif
  // namespace jit
  // namespace torch
+
+
+// Parsed from torch/csrc/inductor/aoti_runner/model_container_runner.h
+
+// #if !defined(C10_MOBILE) && !defined(ANDROID)
+// #pragma once
+
+// #include <ATen/Tensor.h>
+// #include <torch/csrc/inductor/aoti_runtime/interface.h>
+// Targeting ../DynamicLibrary.java
+
+
+
+// Targeting ../AOTIModelContainerRunner.java
+
+
+
+ // namespace torch::inductor
+// #endif
+
+
+// Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h
+
+// #if !defined(C10_MOBILE) && !defined(ANDROID)
+// #pragma once
+
+// #include <torch/csrc/inductor/aoti_runner/model_container_runner.h>
+// Targeting ../AOTIModelContainerRunnerCpu.java
+
+
+
+ // namespace torch::inductor
+// #endif
 
 
 // Parsed from datasets.h

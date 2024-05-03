@@ -19,7 +19,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class PrivateUse1HooksInterface extends Pointer {
+public class PrivateUse1HooksInterface extends AcceleratorHooksInterface {
     static { Loader.load(); }
     /** Default native constructor. */
     public PrivateUse1HooksInterface() { super((Pointer)null); allocate(); }
@@ -36,7 +36,15 @@ public class PrivateUse1HooksInterface extends Pointer {
         return new PrivateUse1HooksInterface((Pointer)this).offsetAddress(i);
     }
 
-  public native @Const @ByRef Generator getDefaultGenerator(@Cast("c10::DeviceIndex") byte device_index);
+  public native @Const @ByRef Generator getDefaultGenerator(
+        @Cast("c10::DeviceIndex") byte device_index);
 
   public native @ByVal Device getDeviceFromPtr(Pointer data);
+
+  public native Allocator getPinnedMemoryAllocator();
+
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+
+  public native void initPrivateUse1();
+  public native void resizePrivateUse1Bytes(@Const @ByRef Storage storage, @Cast("size_t") long newsize);
 }

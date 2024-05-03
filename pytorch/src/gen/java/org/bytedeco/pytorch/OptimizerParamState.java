@@ -16,7 +16,10 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
- // namespace torch
+
+
+// Forward declarations confuse Doxygen
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // #endif // DOXYGEN_SHOULD_SKIP_THIS
 
 @Namespace("torch::optim") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)

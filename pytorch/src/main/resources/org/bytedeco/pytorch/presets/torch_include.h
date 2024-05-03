@@ -1,7 +1,7 @@
 // All files included by
 // #include <torch/torch.h>
 // #include <torch/script.h>
-// #include <torch/csrc/inductor/aoti_model_container_runner.h>
+// #include <torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h>
 // as listed by g++ -H torch/torch.h torch/script.h
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
@@ -43,6 +43,7 @@
 #include "c10/util/floating_point_utils.h"
 #include "c10/util/Float8_e4m3fn-inl.h"
 #include "c10/util/Float8_e4m3fn.h"
+#include "c10/util/Float8_fnuz_cvt.h"
 #include "c10/util/Float8_e4m3fnuz-inl.h"
 #include "c10/util/Float8_e4m3fnuz.h"
 #include "c10/util/complex_math.h"
@@ -62,7 +63,6 @@
 #include "c10/util/quint8.h"
 #include "c10/core/ScalarType.h"
 // #include "c10/util/Optional.h" // Incompatible with declaration of c10::optional as basic container
-#include "c10/util/in_place.h"
 #include "c10/util/MaybeOwned.h"
 #include "c10/core/SymNodeImpl.h"
 #include "c10/core/SymFloat.h"
@@ -80,6 +80,8 @@
 #include "c10/util/ThreadLocalDebugInfo.h"
 #include "c10/util/UniqueVoidPtr.h"
 #include "c10/core/Allocator.h"
+#include "c10/core/impl/COW.h"
+//#include "c10/core/impl/COWDeleter.h"
 #include "c10/util/python_stub.h"
 #include "c10/core/StorageImpl.h"
 #include "c10/util/ExclusivelyOwned.h"
@@ -188,7 +190,6 @@
 #include "ATen/core/boxing/KernelFunction.h"
 #include "ATen/core/boxing/KernelFunction_impl.h"
 #include "c10/util/flat_hash_map.h"
-#include "c10/util/either.h"
 #include "c10/core/PyHandleCache.h"
 #include "c10/core/SafePyObject.h"
 #include "c10/util/Bitset.h"
@@ -228,6 +229,9 @@
 #include "torch/csrc/autograd/graph_task.h"
 #include "ATen/core/MT19937RNGEngine.h"
 #include "ATen/CPUGeneratorImpl.h"
+#include "ATen/detail/AcceleratorHooksInterface.h"
+#include "ATen/detail/MTIAHooksInterface.h"
+#include "ATen/DeviceAccelerator.h"
 #include "ATen/LinalgBackend.h"
 #include "ATen/core/ATenGeneral.h"
 #include "ATen/core/LegacyTypeDispatch.h"
@@ -235,7 +239,6 @@
 #include "ATen/detail/HIPHooksInterface.h"
 #include "ATen/detail/IPUHooksInterface.h"
 #include "ATen/detail/MPSHooksInterface.h"
-#include "ATen/detail/MTIAHooksInterface.h"
 #include "ATen/detail/ORTHooksInterface.h"
 #include "ATen/detail/PrivateUse1HooksInterface.h"
 #include "ATen/detail/XPUHooksInterface.h"
@@ -977,6 +980,7 @@
 #include "ATen/ops/slice.h"
 #include "ATen/ops/slice_backward.h"
 #include "ATen/ops/slice_copy.h"
+#include "ATen/ops/slice_inverse.h"
 #include "ATen/ops/slice_scatter.h"
 #include "ATen/ops/slogdet.h"
 #include "ATen/ops/slow_conv3d.h"
@@ -1192,6 +1196,7 @@
 #include "torch/csrc/autograd/saved_variable.h"
 #include "torch/csrc/utils/variadic.h"
 #include "torch/csrc/autograd/function.h"
+#include "torch/csrc/autograd/variable_info.h"
 #include "torch/csrc/autograd/custom_function.h"
 #include "torch/csrc/api/include/torch/autograd.h"
 #include "torch/csrc/api/include/torch/cuda.h"
@@ -1296,6 +1301,7 @@
 #include "torch/csrc/api/include/torch/nn/module.h"
 #include "ATen/Config.h"
 // #include "ATen/ParallelOpenMP.h" // Internal only
+ #include "c10/util/ParallelGuard.h"
 #include "ATen/Parallel-inl.h"
 #include "ATen/Parallel.h"
 #include "torch/csrc/profiler/orchestration/observer.h"
@@ -1402,6 +1408,7 @@
 #include "torch/csrc/api/include/torch/sparse.h"
 #include "torch/csrc/api/include/torch/special.h"
 #include "torch/csrc/api/include/torch/version.h"
+#include "torch/csrc/api/include/torch/xpu.h"
 #include "torch/csrc/autograd/InferenceMode.h"
 // #include "torch/csrc/jit/runtime/custom_operator.h" // Name conflict with torch::RegisterOperator + little chance to have any use
 #include "caffe2/serialize/read_adapter_interface.h"
@@ -1425,8 +1432,9 @@
 #include "torch/csrc/jit/frontend/tree_views.h"
 #include "torch/csrc/jit/serialization/pickle.h"
 // #include "torch/csrc/inductor/aoti_torch/c/shim.h" // model.so API, not part of libtorch API
+// #include "torch/csrc/inductor/aoti_runtime/utils.h" // model.so API, not part of libtorch API
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
-// Doesn't compile on Windows. Waiting for 2.2.1.
-// #include "torch/csrc/inductor/aoti_model_container_runner.h"
+#include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
+#include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
 
 #include "datasets.h"

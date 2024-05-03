@@ -19,7 +19,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class MTIAHooksInterface extends Pointer {
+public class MTIAHooksInterface extends AcceleratorHooksInterface {
     static { Loader.load(); }
     /** Default native constructor. */
     public MTIAHooksInterface() { super((Pointer)null); allocate(); }
@@ -42,4 +42,7 @@ public class MTIAHooksInterface extends Pointer {
   public native @Cast("bool") boolean hasMTIA();
 
   public native @StdString BytePointer showConfig();
+
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+
 }
