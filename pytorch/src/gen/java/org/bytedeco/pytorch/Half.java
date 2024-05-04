@@ -46,9 +46,9 @@ public class Half extends Pointer {
 // #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
 // #else
   public Half(float value) { super((Pointer)null); allocate(value); }
-  @Namespace @Name("javacpp::allocate_Half") private native void allocate(float value);
+  private native void allocate(@Cast("/**/\n#if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)\nfloat16_t\n#else\nfloat\n#endif\n/**/") float value);
   public float asFloat() { return _asFloat(this); }
-  private static native @Namespace @Name("javacpp::cast_Half_to_float") float _asFloat(Half h);
+  private static native @Namespace @Name("(float)\n#if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)\n(float16_t)\n#endif\n*") float _asFloat(Half h);
 // #endif
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)

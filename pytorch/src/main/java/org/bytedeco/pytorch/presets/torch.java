@@ -71,8 +71,7 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/csrc/jit/serialization/storage_context.h",
 
                 "datasets.h",
-                "pytorch_adapters.h",
-                "platform_unification.h"
+                "pytorch_adapters.h"
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             link = {"c10", "torch_cpu", "torch"},
@@ -2542,10 +2541,13 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// Different C++ API between platforms
         infoMap
-            .put(new Info("c10::Half::Half(float)").annotations("@Namespace @Name(\"javacpp::allocate_Half\")"))
+            .put(new Info("c10::Half::Half(float)").javaText(
+                "public Half(float value) { super((Pointer)null); allocate(value); }\n" +
+                "private native void allocate(@Cast(\"/**/\\n#if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)\\nfloat16_t\\n#else\\nfloat\\n#endif\\n/**/\") float value);\n"
+                ))
             .put(new Info("c10::Half::operator float()").javaText(
                 "public float asFloat() { return _asFloat(this); }\n" +
-                "private static native @Namespace @Name(\"javacpp::cast_Half_to_float\") float _asFloat(Half h);"
+                "private static native @Namespace @Name(\"(float)\\n#if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)\\n(float16_t)\\n#endif\\n*\") float _asFloat(Half h);"
             ))
         ;
     }
