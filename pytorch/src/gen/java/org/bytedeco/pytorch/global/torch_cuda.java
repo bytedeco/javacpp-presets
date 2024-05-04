@@ -188,7 +188,7 @@ manage their own state. There is only a single CUDA context/state.
 @Namespace("at::cuda") public static native @Cast("cusparseHandle_t") Pointer getCurrentCUDASparseHandle();
 @Namespace("at::cuda") public static native @Cast("cublasHandle_t") Pointer getCurrentCUDABlasHandle();
 // #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
-@Namespace("at::cuda") public static native @Cast("cublasLtHandle_t") Pointer getCurrentCUDABlasLtHandle();
+
 // #endif
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();

@@ -208,5 +208,10 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         ;
 
         infoMap.put(new Info("USE_CUDNN_RNN_V8_API").define()); // Using CuDNN 8.9.7 or more recent
+
+        //// Different C++ API between platforms
+        infoMap
+            .put(new Info("at::cuda::getCurrentCUDABlasLtHandle").skip()) // No cublas lt with Microsoft compiler
+        ;
     }
 }
