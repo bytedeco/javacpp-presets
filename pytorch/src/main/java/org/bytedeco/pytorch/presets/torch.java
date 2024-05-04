@@ -71,7 +71,8 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/csrc/jit/serialization/storage_context.h",
 
                 "datasets.h",
-                "pytorch_adapters.h"
+                "pytorch_adapters.h",
+                "platform_unification.h"
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             link = {"c10", "torch_cpu", "torch"},
@@ -354,12 +355,12 @@ public class torch implements LoadEnabled, InfoMapper {
             //.put(new Info("c10::DataPtr&&", "at::DataPtr&&").valueTypes("@Cast({\"\", \"c10::DataPtr&&\"}) @StdMove DataPtr").pointerTypes("DataPtr")) // DataPtr::operator= deleted
             .put(new Info("c10::DataPtr", "at::DataPtr").valueTypes("@StdMove DataPtr").pointerTypes("DataPtr"))
             .put(new Info("c10::StorageImpl::UniqueStorageShareExternalPointer(at::DataPtr&&, size_t)",
-                          "c10::Storage::UniqueStorageShareExternalPointer(at::DataPtr&&, size_t)").javaText(
+                "c10::Storage::UniqueStorageShareExternalPointer(at::DataPtr&&, size_t)").javaText(
                 "public native void UniqueStorageShareExternalPointer(@Cast({\"\", \"c10::DataPtr&&\"}) @StdMove DataPtr data_ptr,  @Cast(\"size_t\") long size_bytes);"
-                ))
+            ))
             .put(new Info("c10::GetStorageImplCreate", "c10::SetStorageImplCreate",
                 "c10::intrusive_ptr<c10::StorageImpl> (*)(c10::StorageImpl::use_byte_size_t, c10::SymInt, c10::DataPtr, c10::Allocator*, bool)").skip())
-;
+        ;
         //// Enumerations
         infoMap
             .put(new Info("c10::ScalarType", "at::ScalarType", "torch::Dtype").enumerate().valueTypes("ScalarType").pointerTypes("@Cast(\"c10::ScalarType*\") BytePointer"))
@@ -1113,21 +1114,21 @@ public class torch implements LoadEnabled, InfoMapper {
                 "c10::complex<c10::Half>::operator -=(c10::Half)",
                 "c10::complex<c10::Half>::operator *=(c10::Half)",
                 "c10::complex<c10::Half>::operator /=(c10::Half)"
-                ).skip())
+            ).skip())
             .put(new Info("c10::complex<c10::Half>::complex(const c10::Half&, const c10::Half&)").javaText( // Second argument not optional + add specific functions
-                "public HalfComplex(Half re, Half im) { super((Pointer)null); allocate(re, im); }\n" +
-                "private native void allocate(@Const @ByRef Half re, @Const @ByRef(nullValue = \"c10::Half()\") Half im);\n" +
-                "public HalfComplex(@Const @ByRef FloatComplex value) { super((Pointer)null); allocate(value); }\n" +
-                "private native void allocate(@Const @ByRef FloatComplex value);\n" +
-                "\n" +
-                "// Conversion operator\n" +
-                "public native @ByVal @Name(\"operator c10::complex<float>\") FloatComplex asFloatComplex();\n" +
-                "\n" +
-                "public native @ByRef @Name(\"operator +=\") HalfComplex addPut(@Const @ByRef HalfComplex other);\n" +
-                "\n" +
-                "public native @ByRef @Name(\"operator -=\") HalfComplex subtractPut(@Const @ByRef HalfComplex other);\n" +
-                "\n" +
-                "public native @ByRef @Name(\"operator *=\") HalfComplex multiplyPut(@Const @ByRef HalfComplex other);"
+                    "public HalfComplex(Half re, Half im) { super((Pointer)null); allocate(re, im); }\n" +
+                    "private native void allocate(@Const @ByRef Half re, @Const @ByRef(nullValue = \"c10::Half()\") Half im);\n" +
+                    "public HalfComplex(@Const @ByRef FloatComplex value) { super((Pointer)null); allocate(value); }\n" +
+                    "private native void allocate(@Const @ByRef FloatComplex value);\n" +
+                    "\n" +
+                    "// Conversion operator\n" +
+                    "public native @ByVal @Name(\"operator c10::complex<float>\") FloatComplex asFloatComplex();\n" +
+                    "\n" +
+                    "public native @ByRef @Name(\"operator +=\") HalfComplex addPut(@Const @ByRef HalfComplex other);\n" +
+                    "\n" +
+                    "public native @ByRef @Name(\"operator -=\") HalfComplex subtractPut(@Const @ByRef HalfComplex other);\n" +
+                    "\n" +
+                    "public native @ByRef @Name(\"operator *=\") HalfComplex multiplyPut(@Const @ByRef HalfComplex other);"
                 )
             )
         ;
@@ -1202,7 +1203,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("torch::jit::Wrap<torch::jit::Block>").pointerTypes("BlockWrap"))
             .put(new Info("torch::jit::Wrap<torch::jit::Node>").pointerTypes("JitNodeWrap"))
             .put(new Info("torch::jit::Wrap<torch::jit::Value>").pointerTypes("ValueWrap"))
-            ;
+        ;
 
 
         //// Data loader
@@ -1786,7 +1787,7 @@ public class torch implements LoadEnabled, InfoMapper {
                 .put(new Info("torch::optim::" + opt + "Options", "torch::optim::" + opt + "ParamState")) // Help qualification
                 .put(new Info("torch::optim::OptimizerCloneableOptions<torch::optim::" + opt + "Options>").pointerTypes("OptimizerCloneable" + opt + "Options"))
                 .put(new Info("torch::optim::OptimizerCloneableParamState<torch::optim::" + opt + "ParamState>").pointerTypes("OptimizerCloneable" + opt + "ParamState"))
-                ;
+            ;
             new PointerInfo("torch::optim::" + opt + "Options").makeUnique(infoMap);
             new PointerInfo("torch::optim::OptimizerCloneableParamState<torch::optim::" + opt + "ParamState>").javaBaseName("OptimizerCloneable" + opt + "AdagradParamState").makeUnique(infoMap);
             new PointerInfo("torch::optim::OptimizerCloneableOptions<torch::optim::" + opt + "Options>").javaBaseName("OptimizerCloneable" + opt + "Options").makeUnique(infoMap);
@@ -2433,8 +2434,7 @@ public class torch implements LoadEnabled, InfoMapper {
                    "std::enable_shared_from_this<torch::jit::tracer::TracingState>", "std::enable_shared_from_this<TracingState>",
                    "std::enable_shared_from_this<torch::nn::Module>", "std::enable_shared_from_this<Module>"
                ).pointerTypes("Pointer").cast())
-            .put(new Info("MTLCommandBuffer_t", "DispatchQueue_t").valueTypes("Pointer").pointerTypes("PointerPointer").skip());
-
+               .put(new Info("MTLCommandBuffer_t", "DispatchQueue_t").valueTypes("Pointer").pointerTypes("PointerPointer").skip());
 
 
         ///// Special cases needing javaText
@@ -2540,6 +2540,14 @@ public class torch implements LoadEnabled, InfoMapper {
 
         infoMap.put(new Info("c10::VaryingShape<c10::Stride>::merge").skip()); // https://github.com/pytorch/pytorch/issues/123248, waiting for the fix in 2.3.1 or 2.4
 
+        //// Different C++ API between platforms
+        infoMap
+            .put(new Info("c10::Half::Half(float)").annotations("@Namespace @Name(\"javacpp::allocate_Half\")"))
+            .put(new Info("c10::Half::operator float()").javaText(
+                "public float asFloat() { return _asFloat(this); }\n" +
+                "private static native @Namespace @Name(\"javacpp::cast_Half_to_float\") float _asFloat(Half h);"
+            ))
+        ;
     }
 
     private static String template(String t, String... args) {
