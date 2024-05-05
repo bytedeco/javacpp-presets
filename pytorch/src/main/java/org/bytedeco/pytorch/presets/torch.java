@@ -42,9 +42,11 @@ import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 
+import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.javacpp.tools.Logger;
 
 import org.bytedeco.openblas.presets.openblas;
 
@@ -99,7 +101,7 @@ import org.bytedeco.openblas.presets.openblas;
     target = "org.bytedeco.pytorch",
     global = "org.bytedeco.pytorch.global.torch"
 )
-public class torch implements LoadEnabled, InfoMapper {
+public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
     static {
         Loader.checkVersion("org.bytedeco", "pytorch");
     }
@@ -139,8 +141,6 @@ public class torch implements LoadEnabled, InfoMapper {
         List<String> resources = properties.get("platform.preloadresource");
 
         initIncludes(getClass(), properties);
-
-        arm64 = platform.contains("arm64");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
         if (!Loader.isLoadLibraries() || extension == null || !extension.endsWith("-gpu")) {
@@ -189,6 +189,11 @@ public class torch implements LoadEnabled, InfoMapper {
             resources.add("/org/bytedeco/cuda/");
             resources.add("/org/bytedeco/tensorrt/");
         }
+    }
+
+    @Override
+    public void init(Logger logger, java.util.Properties properties, String encoding) {
+        arm64 = properties.getProperty("platform").contains("arm64");
     }
 
     public void mapModule(InfoMap infoMap, String name) {
