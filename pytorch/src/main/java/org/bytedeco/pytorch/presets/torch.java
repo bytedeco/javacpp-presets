@@ -129,6 +129,8 @@ public class torch implements LoadEnabled, InfoMapper {
         }
     }
 
+    private boolean arm64;
+
     @Override
     public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
@@ -185,6 +187,8 @@ public class torch implements LoadEnabled, InfoMapper {
             resources.add("/org/bytedeco/cuda/");
             resources.add("/org/bytedeco/tensorrt/");
         }
+
+        arm64 = platform.contains("arm64");
     }
 
     public void mapModule(InfoMap infoMap, String name) {
@@ -2540,16 +2544,18 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("c10::VaryingShape<c10::Stride>::merge").skip()); // https://github.com/pytorch/pytorch/issues/123248, waiting for the fix in 2.3.1 or 2.4
 
         //// Different C++ API between platforms
-        infoMap
-            .put(new Info("c10::Half::Half(float)").javaText(
-                "public Half(float value) { super((Pointer)null); allocate(value); }\n" +
-                "private native void allocate(@Cast(\"/**/\\n#if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)\\nfloat16_t\\n#else\\nfloat\\n#endif\\n/**/\") float value);\n"
+        // This will produce different Java codes, but as long as the differences only concern
+        // JavaCPP annotations, we don't care.
+        if (arm64) {
+            infoMap
+                .put(new Info("c10::Half::Half(float)").javaText(
+                    "public Half(float value) { super((Pointer)null); allocate(value); }\n" +
+                    "private native void allocate(@Cast(\"float16_t\") float value);"
                 ))
-            .put(new Info("c10::Half::operator float()").javaText(
-                "public float asFloat() { return _asFloat(this); }\n" +
-                "private static native @Namespace @Name(\"(float)\\n#if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)\\n(float16_t)\\n#endif\\n*\") float _asFloat(Half h);"
-            ))
-        ;
+                .put(new Info("c10::Half::operator float()").javaText(
+                    "public native @Name(\"operator float16_t\") @Cast(\"float\") float asFloat();"
+                ));
+        }
     }
 
     private static String template(String t, String... args) {
