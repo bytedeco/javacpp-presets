@@ -140,6 +140,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
         initIncludes(getClass(), properties);
 
+        arm64 = platform.contains("arm64");
+
         // Only apply this at load time since we don't want to copy the CUDA libraries here
         if (!Loader.isLoadLibraries() || extension == null || !extension.endsWith("-gpu")) {
             return;
@@ -187,8 +189,6 @@ public class torch implements LoadEnabled, InfoMapper {
             resources.add("/org/bytedeco/cuda/");
             resources.add("/org/bytedeco/tensorrt/");
         }
-
-        arm64 = platform.contains("arm64");
     }
 
     public void mapModule(InfoMap infoMap, String name) {
