@@ -32,7 +32,7 @@ jobs:
           key: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@
           path: /home/runner/.ccache
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: HGuillemet/javacpp-presets/.github/actions/deploy-ubuntu@actions
         timeout-minutes: 350
   macosx-arm64:
     runs-on: macos-11
