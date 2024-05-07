@@ -24,8 +24,6 @@ jobs:
     strategy:
       matrix:
         ext: ["", -gpu]
-    env:
-      SWAP_SIZE: 2
     steps:
       - uses: bytedeco/cache@always
         with:
