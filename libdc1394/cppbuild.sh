@@ -24,6 +24,13 @@ if [[ "$PLATFORM" == windows* ]]; then
     export C_INCLUDE_PATH="$INSTALL_PATH/1394camera/include/"
     export LIBRARY_PATH="$INSTALL_PATH/bin/"
 fi
+
+PATCH_ARCH=$(uname -m)
+
+if [ "$PATCH_ARCH" == "loongarch64" ]; then
+patch -Np1 -d libdc1394-$LIBDC1394_VERSION < ../../libdc1394-add-loongarch-cpuinfo.patch
+fi
+
 cd libdc1394-$LIBDC1394_VERSION
 
 case $PLATFORM in
@@ -44,6 +51,11 @@ case $PLATFORM in
         ;;
     linux-arm64)
         CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --disable-sdltest
+        make -j4
+        make install-strip
+        ;;
+    linux-loongarch64)
+        CC="gcc -mabi=lp64" ./configure --prefix=$INSTALL_PATH --disable-sdltest
         make -j4
         make install-strip
         ;;

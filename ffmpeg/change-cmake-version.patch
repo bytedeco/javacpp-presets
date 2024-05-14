@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 913a303..ef5fba9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,7 +9,7 @@
+ # PATENTS file, you can obtain it at https://www.aomedia.org/license/patent-license.
+ #
+ 
+-cmake_minimum_required(VERSION 3.16)
++cmake_minimum_required(VERSION 3.13.4)
+ 
+ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+     message(WARNING "Building in-source is highly not recommended\n"

@@ -29,6 +29,12 @@ if [[ $PLATFORM == windows* ]]; then
     patch -Np1 -d libfreenect-$LIBFREENECT_VERSION < ../../libfreenect-windows.patch
 fi
 
+PATCH_ARCH=$(uname -m)
+
+if [ "$PATCH_ARCH" == "loongarch64" ]; then
+patch -Np1 -d libusb-$LIBUSB_VERSION < ../../libusb-add-loongarch-cpuinfo.patch
+fi
+
 cd libfreenect-$LIBFREENECT_VERSION
 
 case $PLATFORM in
@@ -69,6 +75,16 @@ case $PLATFORM in
         make install
         cd ../libfreenect-$LIBFREENECT_VERSION
         CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a .
+        make -j $MAKEJ
+        make install
+        ;;
+    linux-loongarch64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC="gcc -mabi=lp64" CXX="g++ -mabi=lp64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=loongarch64-linux-gnu --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
+        CC="gcc -mabi=lp64" CXX="g++ -mabi=lp64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a .
         make -j $MAKEJ
         make install
         ;;
