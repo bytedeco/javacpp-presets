@@ -4,7 +4,7 @@
     <artifactId>samples</artifactId>
     <version>1.5.11-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>Factorial</exec.mainClass>
+        <exec.mainClass>MCJIT</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
@@ -47,7 +47,7 @@
         <profile>
             <id>factorial</id>
             <properties>
-                <exec.mainClass>Factorial</exec.mainClass>
+                <exec.mainClass>MCJIT</exec.mainClass>
             </properties>
         </profile>
         <profile>

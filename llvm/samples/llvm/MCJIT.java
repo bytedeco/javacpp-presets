@@ -54,15 +54,13 @@ import static org.bytedeco.llvm.global.LLVM.*;
  * <p>
  * TODO(supergrecko): Replace with new Pass Manager for LLVM 13
  */
-public class Factorial {
-    // a 'char *' used to retrieve error messages from LLVM
+public class MCJIT {
+    // A 'char *' used to retrieve error messages from LLVM
     private static final BytePointer error = new BytePointer();
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
-        LLVMLinkInMCJIT();
         LLVMInitializeNativeAsmPrinter();
-        LLVMInitializeNativeAsmParser();
         LLVMInitializeNativeTarget();
 
         // Stage 2: Build the factorial function.
@@ -105,7 +103,10 @@ public class Factorial {
         LLVMAddIncoming(phi, phiValues, phiBlocks, /* pairCount */ 2);
         LLVMBuildRet(builder, phi);
 
-        // Stage 3: Verify the module using LLVMVerifier
+        // Print generated LLVM-IR to console (optional)
+        LLVMDumpModule(module);
+
+        // Stage 3: Verify the module (optional; recommended)
         if (LLVMVerifyModule(module, LLVMPrintMessageAction, error) != 0) {
             LLVMDisposeMessage(error);
             return;
@@ -114,7 +115,6 @@ public class Factorial {
         // Stage 4: Create a pass pipeline using the legacy pass manager
         LLVMPassManagerRef pm = LLVMCreatePassManager();
         LLVMRunPassManager(pm, module);
-        LLVMDumpModule(module);
 
         // Stage 5: Execute the code using MCJIT
         LLVMExecutionEngineRef engine = new LLVMExecutionEngineRef();
@@ -128,8 +128,8 @@ public class Factorial {
         LLVMGenericValueRef argument = LLVMCreateGenericValueOfInt(i32Type, 10, /* signExtend */ 0);
         LLVMGenericValueRef result = LLVMRunFunction(engine, factorial, /* argumentCount */ 1, argument);
         System.out.println();
-        System.out.println("; Running factorial(10) with MCJIT...");
-        System.out.println("; Result: " + LLVMGenericValueToInt(result, /* signExtend */ 0));
+        System.out.println("Running factorial(10) with MCJIT...");
+        System.out.println("Result: " + LLVMGenericValueToInt(result, /* signExtend */ 0));
 
         // Stage 6: Dispose of the allocated resources
         LLVMDisposeExecutionEngine(engine);
