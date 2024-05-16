@@ -118,8 +118,8 @@ public class Factorial {
         LLVMAddIncoming(phi, phiValues, phiBlocks, /* pairCount */ 2);
         LLVMBuildRet(builder, phi);
 
-	    // Print generated LLVM-IR to console (optional)
-	    LLVMDumpModule(module);
+        // Print generated LLVM-IR to console (optional)
+        LLVMDumpModule(module);
 
         // Stage 3: Verify the module using LLVMVerifier
         if (LLVMVerifyModule(module, LLVMPrintMessageAction, error) != 0) {
