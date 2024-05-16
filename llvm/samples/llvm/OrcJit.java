@@ -21,7 +21,6 @@
  */
 
 import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
@@ -60,7 +59,6 @@ public class OrcJit {
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
-//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMInitializeNativeTarget();
         LLVMInitializeNativeAsmPrinter();
 
@@ -93,7 +91,6 @@ public class OrcJit {
         // Stage 3: Execute using OrcJIT
         LLVMOrcLLJITRef jit = new LLVMOrcLLJITRef();
         LLVMOrcLLJITBuilderRef jitBuilder = LLVMOrcCreateLLJITBuilder();
-        Loader.loadGlobal(Loader.load(LLVM.class));
         if ((err = LLVMOrcCreateLLJIT(jit, jitBuilder)) != null) {
             BytePointer errorMessage = LLVMGetErrorMessage(err);
             System.err.println("Failed to create LLJIT: " + errorMessage.getString());
