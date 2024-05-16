@@ -22,6 +22,7 @@
 
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
@@ -94,22 +95,25 @@ public class OrcJit {
         LLVMOrcLLJITBuilderRef jitBuilder = LLVMOrcCreateLLJITBuilder();
         Loader.loadGlobal(Loader.load(LLVM.class));
         if ((err = LLVMOrcCreateLLJIT(jit, jitBuilder)) != null) {
-            System.err.println("Failed to create LLJIT: " + LLVMGetErrorMessage(err).getString());
-            LLVMConsumeError(err);
+            BytePointer errorMessage = LLVMGetErrorMessage(err);
+            System.err.println("Failed to create LLJIT: " + errorMessage.getString());
+            LLVMDisposeErrorMessage(errorMessage);
             return;
         }
 
         LLVMOrcJITDylibRef mainDylib = LLVMOrcLLJITGetMainJITDylib(jit);
         if ((err = LLVMOrcLLJITAddLLVMIRModule(jit, mainDylib, threadModule)) != null) {
-            System.err.println("Failed to add LLVM IR module: " + LLVMGetErrorMessage(err).getString());
-            LLVMConsumeError(err);
+            BytePointer errorMessage = LLVMGetErrorMessage(err);
+            System.err.println("Failed to add LLVM IR module: " + errorMessage.getString());
+            LLVMDisposeErrorMessage(errorMessage);
             return;
         }
 
         final LongPointer res = new LongPointer(1);
         if ((err = LLVMOrcLLJITLookup(jit, res, "sum")) != null) {
-            System.err.println("Failed to look up 'sum' symbol: " + LLVMGetErrorMessage(err).getString());
-            LLVMConsumeError(err);
+            BytePointer errorMessage = LLVMGetErrorMessage(err);
+            System.err.println("Failed to look up 'sum' symbol: " + errorMessage.getString());
+            LLVMDisposeErrorMessage(errorMessage);
             return;
         }
 
