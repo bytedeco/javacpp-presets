@@ -69,10 +69,8 @@ public class EmitBitcode {
      */
     public static void EmitBitcodeAndRelocatableObject() {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeNativeAsmPrinter();
-        LLVMInitializeNativeAsmParser();
-        LLVMInitializeNativeDisassembler();
         LLVMInitializeNativeTarget();
+        LLVMInitializeNativeAsmPrinter();
 
         // Stage 2: Build the sum function
         LLVMContextRef context = LLVMContextCreate();
@@ -156,8 +154,6 @@ public class EmitBitcode {
      */
     public static void EvaluateBitcode() {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeNativeAsmPrinter();
-        LLVMInitializeNativeAsmParser();
         LLVMInitializeNativeTarget();
 
         // Stage 2: Load and parse bitcode
@@ -208,8 +204,6 @@ public class EmitBitcode {
             case "-evaluate":
                 EvaluateBitcode();
                 System.exit(0);
-            default:
-                // Display help
         }
         System.err.println("Pass `-emit` or `-evaluate`.");
         System.exit(1);

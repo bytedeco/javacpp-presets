@@ -26,7 +26,6 @@ import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.libffi.ffi_cif;
-import org.bytedeco.llvm.global.LLVM;
 import org.bytedeco.llvm.LLVM.LLVMBasicBlockRef;
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
@@ -98,7 +97,7 @@ public class OrcJit {
         // Stage 4: Execute using OrcJIT
         LLVMOrcLLJITRef jit = new LLVMOrcLLJITRef();
         LLVMOrcLLJITBuilderRef jitBuilder = LLVMOrcCreateLLJITBuilder();
-        LLVMErrorRef error = null;
+        LLVMErrorRef error;
         if ((error = LLVMOrcCreateLLJIT(jit, jitBuilder)) != null) {
             BytePointer errorMessage = LLVMGetErrorMessage(error);
             System.err.println("Failed to create LLJIT: " + errorMessage.getString());

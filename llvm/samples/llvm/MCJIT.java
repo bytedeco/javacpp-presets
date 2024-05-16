@@ -60,8 +60,8 @@ public class MCJIT {
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeTarget();
+        LLVMInitializeNativeAsmPrinter();
 
         // Stage 2: Build the factorial function.
         LLVMContextRef context = LLVMContextCreate();
