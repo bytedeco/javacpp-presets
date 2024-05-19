@@ -75,6 +75,17 @@ public class DeviceStats extends Pointer {
   // COUNT: total number of oversize blocks requiring malloc
   public native @ByRef Stat oversize_segments(); public native DeviceStats oversize_segments(Stat setter);
 
+  // COUNT: total number of synchronize_and_free_events() calls
+  public native @Cast("int64_t") long num_sync_all_streams(); public native DeviceStats num_sync_all_streams(long setter);
+
+  // COUNT: total number of CUDA allocation calls. This includes both cuMemMap
+  // and cudaMalloc.
+  public native @Cast("int64_t") long num_device_alloc(); public native DeviceStats num_device_alloc(long setter);
+
+  // COUNT: total number of CUDA free calls. This includes both cuMemUnmap
+  // and cudaFree.
+  public native @Cast("int64_t") long num_device_free(); public native DeviceStats num_device_free(long setter);
+
   // SIZE: maximum block size that is allowed to be split.
   public native @Cast("int64_t") long max_split_size(); public native DeviceStats max_split_size(long setter);
 }

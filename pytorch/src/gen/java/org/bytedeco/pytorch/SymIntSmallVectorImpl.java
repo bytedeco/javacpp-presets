@@ -42,7 +42,7 @@ public class SymIntSmallVectorImpl extends SymIntSmallVectorBase {
 
   public native @ByVal SymInt pop_back_val();
 
-  public native void swap(@ByRef SymIntSmallVectorImpl RHS);
+  public native @NoException(true) void swap(@ByRef SymIntSmallVectorImpl RHS);
 
   /** Add the specified range to the end of the SmallVector. */
 

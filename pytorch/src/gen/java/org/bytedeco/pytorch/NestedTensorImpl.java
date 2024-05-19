@@ -40,19 +40,23 @@ public class NestedTensorImpl extends TensorImpl {
         @ByVal Tensor storage_offsets);
 
   public NestedTensorImpl(
-        @ByVal Tensor buffer,
+        @Const @ByRef Tensor buffer,
         @ByVal Tensor nested_sizes,
         @ByVal Tensor nested_strides,
         @ByVal Tensor storage_offsets) { super((Pointer)null); allocate(buffer, nested_sizes, nested_strides, storage_offsets); }
   private native void allocate(
-        @ByVal Tensor buffer,
+        @Const @ByRef Tensor buffer,
         @ByVal Tensor nested_sizes,
         @ByVal Tensor nested_strides,
         @ByVal Tensor storage_offsets);
   // assume contiguous, `nested_strides` and `offsets`
   // can be infered from `nested_sizes`
-  public NestedTensorImpl(@ByVal Tensor buffer, @ByVal Tensor nested_sizes) { super((Pointer)null); allocate(buffer, nested_sizes); }
-  private native void allocate(@ByVal Tensor buffer, @ByVal Tensor nested_sizes);
+  public NestedTensorImpl(
+        @Const @ByRef Tensor buffer,
+        @Const @ByRef Tensor nested_sizes) { super((Pointer)null); allocate(buffer, nested_sizes); }
+  private native void allocate(
+        @Const @ByRef Tensor buffer,
+        @Const @ByRef Tensor nested_sizes);
 
   // This constructor is used creating view tensors from nested tensors
   public NestedTensorImpl(

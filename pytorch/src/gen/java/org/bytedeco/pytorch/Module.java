@@ -822,6 +822,11 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  public native @Name("as<torch::nn::LPPool3dImpl,int>") @NoException(true) LPPool3dImpl asLPPool3d();
+  
+  ///
+  ///
+  ///
   public native @Name("as<torch::nn::RNNImpl,int>") @NoException(true) RNNImpl asRNN();
   
   ///

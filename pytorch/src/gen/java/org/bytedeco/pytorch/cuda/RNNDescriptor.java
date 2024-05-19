@@ -41,7 +41,10 @@ public class RNNDescriptor extends Pointer {
     }
 
   
-  public native void set(@Cast("cudnnHandle_t") Pointer handle, int hidden_size, int proj_size, int num_layers, @ByRef(true) DropoutDescriptor dropout_desc,
+  public native void set(@Cast("cudnnHandle_t") Pointer handle,
+         int input_size,
+         @Cast("bool") boolean packed,
+         int hidden_size, int proj_size, int num_layers, @ByRef(true) DropoutDescriptor dropout_desc,
              @Cast("cudnnRNNInputMode_t") int input_mode, @Cast("cudnnDirectionMode_t") int bidirectional,
              @Cast("cudnnRNNMode_t") int mode, @Cast("cudnnDataType_t") int datatype, @Cast("cudnnDataType_t") int input_type, @Cast("cudnnRNNAlgo_t") int algo, @Cast("bool") boolean allow_tf32);
 }

@@ -46,6 +46,7 @@ public class DeviceAssertionsData extends Pointer {
    *  in {@code assertions} */
   public native int assertion_count(); public native DeviceAssertionsData assertion_count(int setter);
   /** An array of assertions that will be written to in a race-free manner */
+  // NOLINTNEXTLINE(*-c-arrays)
   public native @ByRef DeviceAssertionData assertions(int i); public native DeviceAssertionsData assertions(int i, DeviceAssertionData setter);
   @MemberGetter public native DeviceAssertionData assertions();
 }

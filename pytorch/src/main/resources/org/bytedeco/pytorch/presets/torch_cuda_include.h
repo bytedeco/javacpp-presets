@@ -4,7 +4,7 @@
 // ATen/cudnn/Descriptors.h
 // ATen/cudnn/Types.h
 // c10/cuda/CUDAGuard.h
-// torch/csrc/inductor/aoti_model_container_runner_cuda.h
+// torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
 #include "ATen/cuda/CUDAContextLight.h"
 #include "c10/cuda/CUDAStream.h"
 #include "ATen/cuda/CUDAContext.h"
@@ -27,5 +27,4 @@
 #include "ATen/cudnn/Descriptors.h"
 #include "ATen/cudnn/Types.h"
 #include "c10/cuda/CUDAGuard.h"
-// Doesn't compile on Windows. Waiting for 2.2.1.
-// #include "torch/csrc/inductor/aoti_model_container_runner_cuda.h"
+#include "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h"

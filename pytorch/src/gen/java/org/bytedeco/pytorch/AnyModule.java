@@ -283,6 +283,8 @@ public class AnyModule extends Pointer {
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl module);
   public AnyModule(FractionalMaxPool3dImpl module) { super((Pointer)null); allocate(module); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl module);
+  public AnyModule(LPPool3dImpl module) { super((Pointer)null); allocate(module); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LPPool3dImpl>"}) LPPool3dImpl module);
   public AnyModule(RNNImpl module) { super((Pointer)null); allocate(module); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl module);
   public AnyModule(LSTMImpl module) { super((Pointer)null); allocate(module); }

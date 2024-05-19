@@ -16,6 +16,16 @@ runs:
         fi
         cd $HOME
 
+        # Free disk space by removing some unused system components
+        $SUDO rm -rf /usr/local/lib/android
+        $SUDO rm -rf /usr/share/dotnet
+
+        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
+        $SUDO fallocate -l 4GB /swapfile
+        $SUDO chmod 600 /swapfile
+        $SUDO mkswap /swapfile
+        $SUDO swapon /swapfile
+
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
@@ -230,12 +240,6 @@ runs:
           curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/86d6a4c1-c998-4c6b-9fff-ca004e9f7455/l_onemkl_p_2024.0.0.49673_offline.sh
           $SUDO bash l_onemkl_p_2024.0.0.49673_offline.sh -s -a -s --eula accept
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
-
-          # Allocate a swapfile on Linux as it's not enabled by default
-          $SUDO fallocate -l 4GB /swapfile
-          $SUDO chmod 600 /swapfile
-          $SUDO mkswap /swapfile
-          $SUDO swapon /swapfile
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then

@@ -65,20 +65,20 @@ public class Storage extends Pointer {
   // Allocates memory buffer using given allocator and creates a storage with it
   public Storage(
         @ByVal use_byte_size_t arg0,
-        @ByVal SymInt size_bytes,
+        @Const @ByRef SymInt size_bytes,
         Allocator allocator/*=nullptr*/,
         @Cast("bool") boolean resizable/*=false*/) { super((Pointer)null); allocate(arg0, size_bytes, allocator, resizable); }
   private native void allocate(
         @ByVal use_byte_size_t arg0,
-        @ByVal SymInt size_bytes,
+        @Const @ByRef SymInt size_bytes,
         Allocator allocator/*=nullptr*/,
         @Cast("bool") boolean resizable/*=false*/);
   public Storage(
         @ByVal use_byte_size_t arg0,
-        @ByVal SymInt size_bytes) { super((Pointer)null); allocate(arg0, size_bytes); }
+        @Const @ByRef SymInt size_bytes) { super((Pointer)null); allocate(arg0, size_bytes); }
   private native void allocate(
         @ByVal use_byte_size_t arg0,
-        @ByVal SymInt size_bytes);
+        @Const @ByRef SymInt size_bytes);
 
   // Creates storage with pre-allocated memory buffer. Allocator is given for
   // potential future reallocations, however it can be nullptr if the storage
@@ -86,23 +86,23 @@ public class Storage extends Pointer {
   public Storage(
         @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
+        @StdMove DataPtr data_ptr,
         Allocator allocator/*=nullptr*/,
         @Cast("bool") boolean resizable/*=false*/) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr, allocator, resizable); }
   private native void allocate(
         @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
+        @StdMove DataPtr data_ptr,
         Allocator allocator/*=nullptr*/,
         @Cast("bool") boolean resizable/*=false*/);
   public Storage(
         @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr); }
+        @StdMove DataPtr data_ptr) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr); }
   private native void allocate(
         @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
+        @StdMove DataPtr data_ptr);
   // Legacy constructor for partially initialized (dtype or memory) storages
   // that can be temporarily created with Caffe2 APIs. See the note on top of
   // TensorImpl.h for details.
@@ -129,12 +129,12 @@ public class Storage extends Pointer {
 
   public native @ByRef DataPtr mutable_data_ptr();
 
-  public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr();
+  public native @StdMove DataPtr data_ptr();
 
   // Returns the previous data_ptr
-  public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr set_data_ptr(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
+  public native @StdMove DataPtr set_data_ptr(@StdMove DataPtr data_ptr);
 
-  public native void set_data_ptr_noswap(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
+  public native void set_data_ptr_noswap(@StdMove DataPtr data_ptr);
 
   public native DeviceType device_type();
 
@@ -164,7 +164,5 @@ public class Storage extends Pointer {
         Pointer src,
         @Cast("size_t") long _capacity);
 
-  public native void UniqueStorageShareExternalPointer(
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
-        @Cast("size_t") long _capacity);
+  public native void UniqueStorageShareExternalPointer(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,  @Cast("size_t") long size_bytes);
 }

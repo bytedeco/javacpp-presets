@@ -35,6 +35,9 @@ public class Method extends IMethod {
 
   // the module that contains this method.
   public native @ByVal JitModule owner();
+  // the raw objectptr that owns this method, for when the method is owned by a
+  // torchbind object.
+  public native @ByVal @Cast("torch::jit::ObjectPtr*") ObjPtr raw_owner();
   public native void run(@ByRef IValueVector stack);
 
   public native @ByVal @Name("operator ()") IValue apply(

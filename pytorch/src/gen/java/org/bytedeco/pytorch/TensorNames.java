@@ -49,6 +49,6 @@ public class TensorNames extends Pointer {
   public native void checkUnique(@Cast("const char*") BytePointer op_name);
   public native void checkUnique(String op_name);
 
-  public native void append(@ByRef(true) TensorName name);
+  public native void append(@ByVal TensorName name);
   public native @ByVal DimnameVector toDimnameVec();
 }

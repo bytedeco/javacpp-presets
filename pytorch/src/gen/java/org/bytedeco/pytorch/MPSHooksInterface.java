@@ -19,7 +19,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class MPSHooksInterface extends Pointer {
+public class MPSHooksInterface extends AcceleratorHooksInterface {
     static { Loader.load(); }
     /** Default native constructor. */
     public MPSHooksInterface() { super((Pointer)null); allocate(); }
@@ -44,8 +44,8 @@ public class MPSHooksInterface extends Pointer {
   // Initialize the MPS library state
   public native void initMPS();
   public native @Cast("bool") boolean hasMPS();
-  public native @Cast("bool") boolean isOnMacOS13orNewer(@Cast("unsigned") int minor/*=0*/);
-  public native @Cast("bool") boolean isOnMacOS13orNewer();
+  public native @Cast("bool") boolean isOnMacOSorNewer(@Cast("unsigned") int major/*=13*/, @Cast("unsigned") int minor/*=0*/);
+  public native @Cast("bool") boolean isOnMacOSorNewer();
   public native @Const @ByRef Generator getDefaultMPSGenerator();
   public native Allocator getMPSDeviceAllocator();
   public native void deviceSynchronize();
@@ -66,6 +66,6 @@ public class MPSHooksInterface extends Pointer {
   public native void synchronizeEvent(@Cast("uint32_t") int event_id);
   public native @Cast("bool") boolean queryEvent(@Cast("uint32_t") int event_id);
   public native double elapsedTimeOfEvents(@Cast("uint32_t") int start_event_id, @Cast("uint32_t") int end_event_id);
-
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
 //   #undef FAIL_MPSHOOKS_FUNC
 }

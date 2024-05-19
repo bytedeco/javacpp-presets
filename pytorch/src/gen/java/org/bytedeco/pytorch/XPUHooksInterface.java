@@ -43,14 +43,7 @@ public class XPUHooksInterface extends Pointer {
 
   public native @StdString BytePointer showConfig();
 
-  public native @ByVal Device getATenDeviceFromDLPackDevice(
-        @Const @ByRef DLDevice_ dl_device,
-        Pointer data);
-
-  public native @ByRef DLDevice_ getDLPackDeviceFromATenDevice(
-        @ByRef DLDevice_ dl_device,
-        @Const @ByRef Device aten_device,
-        Pointer data);
+  public native int getGlobalIdxFromDevice(@Const @ByRef Device device);
 
   public native @ByVal Generator getXPUGenerator(@Cast("c10::DeviceIndex") byte device_index/*=-1*/);
   public native @ByVal Generator getXPUGenerator();
@@ -58,5 +51,11 @@ public class XPUHooksInterface extends Pointer {
   public native @Const @ByRef Generator getDefaultXPUGenerator(@Cast("c10::DeviceIndex") byte device_index/*=-1*/);
   public native @Const @ByRef Generator getDefaultXPUGenerator();
 
-  public native int getNumGPUs();
+  public native @Cast("c10::DeviceIndex") byte getNumGPUs();
+
+  public native @Cast("c10::DeviceIndex") byte current_device();
+
+  public native @ByVal Device getDeviceFromPtr(Pointer arg0);
+
+  public native void deviceSynchronize(@Cast("c10::DeviceIndex") byte arg0);
 }

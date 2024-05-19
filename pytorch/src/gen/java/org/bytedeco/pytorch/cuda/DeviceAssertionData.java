@@ -43,12 +43,15 @@ public class DeviceAssertionData extends Pointer {
     }
 
   /** Stringification of the assertion */
+  // NOLINTNEXTLINE(*-c-arrays)
   public native @Cast("char") byte assertion_msg(int i); public native DeviceAssertionData assertion_msg(int i, byte setter);
   @MemberGetter public native @Cast("char*") BytePointer assertion_msg();
   /** File the assertion was in */
+  // NOLINTNEXTLINE(*-c-arrays)
   public native @Cast("char") byte filename(int i); public native DeviceAssertionData filename(int i, byte setter);
   @MemberGetter public native @Cast("char*") BytePointer filename();
   /** Name of the function the assertion was in */
+  // NOLINTNEXTLINE(*-c-arrays)
   public native @Cast("char") byte function_name(int i); public native DeviceAssertionData function_name(int i, byte setter);
   @MemberGetter public native @Cast("char*") BytePointer function_name();
   /** Line number the assertion was at */
@@ -56,9 +59,11 @@ public class DeviceAssertionData extends Pointer {
   /** Number uniquely identifying the kernel launch that triggered the assertion */
   public native @Cast("uint32_t") int caller(); public native DeviceAssertionData caller(int setter);
   /** block_id of the thread that failed the assertion */
+  // NOLINTNEXTLINE(*-c-arrays)
   public native int block_id(int i); public native DeviceAssertionData block_id(int i, int setter);
   @MemberGetter public native IntPointer block_id();
   /** third_id of the thread that failed the assertion */
+  // NOLINTNEXTLINE(*-c-arrays)
   public native int thread_id(int i); public native DeviceAssertionData thread_id(int i, int setter);
   @MemberGetter public native IntPointer thread_id();
 }

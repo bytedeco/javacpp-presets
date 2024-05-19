@@ -50,7 +50,7 @@ public class HIPHooksInterface extends Pointer {
 
   public native @Cast("bool") boolean hasHIP();
 
-  public native @Cast("int64_t") long current_device();
+  public native @Cast("c10::DeviceIndex") byte current_device();
 
   public native Allocator getPinnedMemoryAllocator();
 

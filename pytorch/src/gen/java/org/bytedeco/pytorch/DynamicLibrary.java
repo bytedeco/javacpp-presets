@@ -18,13 +18,11 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// We use forward declaration here instead of #include <ATen/dlpack.h> to avoid
-// leaking DLPack implementation detail to every project that includes `ATen/Context.h`, which in turn
-// would lead to a conflict when linked with another project using DLPack (for example TVM)
-@Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DLDevice_ extends Pointer {
+// Forward declare DynamicLibrary
+@Namespace("at") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class DynamicLibrary extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public DLDevice_() { super((Pointer)null); }
+    public DynamicLibrary() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DLDevice_(Pointer p) { super(p); }
+    public DynamicLibrary(Pointer p) { super(p); }
 }
