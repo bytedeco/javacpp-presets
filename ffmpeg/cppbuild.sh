@@ -33,22 +33,22 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.2.0
-OPENH264_VERSION=2.4.0
+OPENSSL=openssl-3.3.0
+OPENH264_VERSION=2.4.1
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.13.1
-ALSA_VERSION=1.2.10
+VPX_VERSION=1.14.0
+ALSA_VERSION=1.2.11
 FREETYPE_VERSION=2.13.2
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=12.1.14.0
+NVCODEC_VERSION=12.2.72.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.3
-WEBP_VERSION=1.3.2
-AOMAV1_VERSION=3.8.0
-SVTAV1_VERSION=1.8.0
+WEBP_VERSION=1.4.0
+AOMAV1_VERSION=3.8.2
+SVTAV1_VERSION=2.0.0
 ZIMG_VERSION=3.0.5
-FFMPEG_VERSION=6.1.1
+FFMPEG_VERSION=7.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -118,6 +118,7 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
@@ -139,10 +140,10 @@ case $PLATFORM in
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=arm-linux
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=arm-linux
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -295,10 +296,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=aarch64-linux
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -450,10 +451,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -602,10 +603,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=x86_64-linux
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=x86_64-linux
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -749,10 +750,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --host=i686-linux
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -898,10 +899,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --host=x86_64-linux
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -1062,10 +1063,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux-gnueabihf
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -1270,10 +1271,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux-gnu
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux-gnu
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -1369,7 +1370,11 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-linux-arm.patch
+        sedinplace '/neon_i8mm/d' ./configure
         CROSS=aarch64-linux-gnu- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=armv8-linux-gcc
+        sedinplace 's/HAS_NEON_I8MM (1 << 2)/HAS_NEON_I8MM 0/g' vpx_ports/*.h
+        sedinplace 's/#if HAVE_NEON_I8MM/#if 0/g' test/*.c* vpx_ports/*.c*
+        sedinplace 's/flags & HAS_NEON_I8MM/0/g' *.h
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
@@ -1417,14 +1422,14 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH
+        autoreconf -iv
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         else
-          CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu
+          CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu
         fi
-	make -j $MAKEJ V=0
-	make install
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -1646,10 +1651,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH --host=aarch64-apple-darwin
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -1781,10 +1786,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -1914,10 +1919,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -2055,10 +2060,10 @@ EOF
         echo "--------------------"
         echo ""
         cd zimg-release-$ZIMG_VERSION
-	autoreconf -iv
-	./configure --prefix=$INSTALL_PATH
-	make -j $MAKEJ V=0
-	make install
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
         echo ""
         echo "--------------------"
         echo "Building zlib"

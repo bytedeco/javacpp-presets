@@ -68,7 +68,7 @@
 <!--    <module>../ngraph/platform</module>-->
     <module>../onnxruntime/platform</module>
     <module>../tvm/platform</module>
-<!--    <module>../bullet/platform</module>-->
+    <module>../bullet/platform</module>
 <!--    <module>../liquidfun/platform</module>-->
 <!--    <module>../qt/platform</module>-->
 <!--    <module>../skia/platform</module>-->
@@ -92,7 +92,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>6.1.1-${project.version}</version>
+      <version>7.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -182,12 +182,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>3.3.4-${project.version}</version>
+      <version>3.4.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.26-${project.version}</version>
+      <version>0.3.27-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -212,17 +212,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.12.1-${project.version}</version>
+      <version>3.12.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.26.3-${project.version}</version>
+      <version>1.26.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.12.0-${project.version}</version>
+      <version>1.13.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -232,12 +232,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>17.0.6-${project.version}</version>
+      <version>18.1.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>libffi-platform</artifactId>
-      <version>3.4.4-${project.version}</version>
+      <version>3.4.6-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -297,7 +297,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>sentencepiece-platform</artifactId>
-      <version>0.1.99-${project.version}</version>
+      <version>0.2.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -307,17 +307,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-lite-platform</artifactId>
-      <version>2.15.0-${project.version}</version>
+      <version>2.16.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>8.6-${project.version}</version>
+      <version>10.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tritonserver-platform</artifactId>
-      <version>2.41-${project.version}</version>
+      <version>2.44-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -332,7 +332,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnx-platform</artifactId>
-      <version>1.15.0-${project.version}</version>
+      <version>1.16.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -342,18 +342,18 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.16.3-${project.version}</version>
+      <version>1.17.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tvm-platform</artifactId>
-      <version>0.14.0-${project.version}</version>
+      <version>0.16.0-${project.version}</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.bytedeco</groupId>-->
-<!--      <artifactId>bullet-platform</artifactId>-->
-<!--      <version>3.25-${project.version}</version>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>bullet-platform</artifactId>
+      <version>3.25-${project.version}</version>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
 <!--      <artifactId>liquidfun-platform</artifactId>-->

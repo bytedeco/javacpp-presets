@@ -133,10 +133,10 @@ runs:
         echo Installing Vulkan-SDK
         if [[ "$CODENAME" == "jammy" ]]; then
           curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
-          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-jammy.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list
+          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.280-jammy.list https://packages.lunarg.com/vulkan/1.3.280/lunarg-vulkan-1.3.280-jammy.list
         else
           curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO apt-key add -
-          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-focal.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-focal.list
+          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.280-focal.list https://packages.lunarg.com/vulkan/1.3.280/lunarg-vulkan-1.3.280-focal.list
         fi
         $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk
 
@@ -222,16 +222,16 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz
-          $SUDO tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
+          curl -LO https://developer.download.nvidia.com/compute/machine-learning/tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Ubuntu-22.04.aarch64-gnu.cuda-12.4.tar.gz
+          $SUDO tar -hxvf TensorRT-10.0.1.6.Ubuntu-22.04.aarch64-gnu.cuda-12.4.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz
-          $SUDO tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
+          curl -LO https://developer.download.nvidia.com/compute/machine-learning/tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Linux.x86_64-gnu.cuda-12.4.tar.gz
+          $SUDO tar -hxvf TensorRT-10.0.1.6.Linux.x86_64-gnu.cuda-12.4.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

@@ -1,8 +1,9 @@
 
+ * Fix Vulkan GPU acceleration for FFmpeg ([pull #1497](https://github.com/bytedeco/javacpp-presets/pull/1497))
  * Build FFmpeg with zimg to enable zscale filter ([pull #1481](https://github.com/bytedeco/javacpp-presets/pull/1481))
  * Enable PulseAudio support for FFmpeg on Linux ([pull #1472](https://github.com/bytedeco/javacpp-presets/pull/1472))
  * Virtualize `btCollisionWorld`, `btOverlapFilterCallback`, `btOverlapCallback` from Bullet Physics SDK ([pull #1475](https://github.com/bytedeco/javacpp-presets/pull/1475))
- * Upgrade presets for PyTorch 2.2.2 ([pull #1466](https://github.com/bytedeco/javacpp-presets/pull/1466))
+ * Upgrade presets for FFmpeg 7.0, DNNL 3.4.1, OpenBLAS 0.3.27, CPython 3.12.3, NumPy 1.26.4, SciPy 1.13.0, LLVM 18.1.4, libffi 3.4.6, PyTorch 2.2.2 ([pull #1466](https://github.com/bytedeco/javacpp-presets/pull/1466)), SentencePiece 0.2.0, TensorFlow Lite 2.16.1, TensorRT 10.0.1.6, Triton Inference Server 2.44.0, ONNX 1.16.0, ONNX Runtime 1.17.3, TVM 0.16.0, and their dependencies
 
 ### January 29, 2024 version 1.5.10
  * Introduce `macosx-arm64` builds for PyTorch ([pull #1463](https://github.com/bytedeco/javacpp-presets/pull/1463))

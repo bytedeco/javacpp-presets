@@ -7,12 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export CUDACXX="/usr/local/cuda/bin/nvcc"
+export CUDA_HOME="/usr/local/cuda"
+export CUDNN_HOME="/usr/local/cuda"
 export GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DUSE_CUDA=ON -DUSE_CUDNN=ON -DUSE_CUBLAS=ON"
 fi
 
-TVM_VERSION=0.14.0
+TVM_VERSION=0.16.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -111,7 +114,10 @@ if [[ -f $f ]]; then
     chmod +x $LLVM_PATH/bin/llvm-config*
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.dylib" ]]; then
-    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-17.dylib
+    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-18.dylib
+fi
+if [[ -f "$LLVM_PATH/lib/libLLVM.so" ]]; then
+    ln -sf libLLVM.so $LLVM_PATH/lib/libLLVM-18.so
 fi
 if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
@@ -144,7 +150,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 cython==0.29.35
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 cython==3.0.10
 
 case $PLATFORM in
     linux-x86_64)
@@ -167,6 +173,11 @@ case $PLATFORM in
         for f in $(find ../ -iname '*.dylib'); do install_name_tool -add_rpath @loader_path/ -add_rpath @loader_path/../../ $f || true; done
         ;;
     windows-x86_64)
+        if [[ -n "${CUDA_PATH:-}" ]]; then
+            export CUDACXX="$CUDA_PATH/bin/nvcc"
+            export CUDA_HOME="$CUDA_PATH"
+            export CUDNN_HOME="$CUDA_PATH"
+        fi
         export CC="cl.exe"
         export CXX="cl.exe"
         $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_BLAS=openblas -DCMAKE_PREFIX_PATH=$OPENBLAS_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH .

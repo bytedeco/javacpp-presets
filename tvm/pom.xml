@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tvm</artifactId>
-  <version>0.14.0-${project.parent.version}</version>
+  <version>0.16.0-${project.parent.version}</version>
   <name>JavaCPP Presets for TVM</name>
 
   <dependencies>
@@ -23,17 +23,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm</artifactId>
-      <version>17.0.6-${project.parent.version}</version>
+      <version>18.1.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.26-${project.parent.version}</version>
+      <version>0.3.27-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy</artifactId>
-      <version>1.12.0-${project.parent.version}</version>
+      <version>1.13.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -61,17 +61,17 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>17.0.6-${project.parent.version}</version>
+            <version>18.1.4-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.26-${project.parent.version}</version>
+            <version>0.3.27-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.12.0-${project.parent.version}</version>
+            <version>1.13.0-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>

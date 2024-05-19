@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.swresample",
     global = "org.bytedeco.ffmpeg.global.swresample",
     value = {
-        @Platform(cinclude = {"<libswresample/swresample.h>", "<libswresample/version_major.h>", "<libswresample/version.h>"}, link = "swresample@.4"),
-        @Platform(value = "windows", preload = "swresample-4")
+        @Platform(cinclude = {"<libswresample/swresample.h>", "<libswresample/version_major.h>", "<libswresample/version.h>"}, link = "swresample@.5"),
+        @Platform(value = "windows", preload = "swresample-5")
     }
 )
 public class swresample implements InfoMapper {
