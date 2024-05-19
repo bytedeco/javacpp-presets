@@ -52,6 +52,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // we have:
 // - "Dense":     CPU, CUDA, XLA, ... (~12 keys)
 // - "Sparse":    SparseCPU, SparseCUDA, ...
+// - "SparseCsr": SparseCsrCPU, SparseCsrCUDA, ...
 // - "Quantized": QuantizedCPU, QuantizedCUDA, QuantizedXLA, ...
 // - "Autograd":  AutogradCPU, AutogradCUDA, Autograd XLA, ...
 // The problem is that total number of keys grows quadratically with [#
@@ -65,7 +66,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // (1) "Building block" keys
 //    (a) backends: Everything in the BackendComponent enum (e.g. CPUBit,
 //    CUDABit) (b) functionalities: (per-backend) functionality-bit DispatchKeys
-//    (e.g. AutogradFunctionality, Sparse, Dense)
+//    (e.g. AutogradFunctionality, SparseCsr, Sparse, Dense)
 // (2) "Runtime" keys
 //    (a) "non-customizable backends" (e.g. FPGA)
 //    (b) "non-customizable functionalities" (e.g. Functionalize)
@@ -89,14 +90,16 @@ import static org.bytedeco.pytorch.global.torch.*;
 // Backend keys and functionality keys that count as "building blocks" will
 // contribute to a full cross product of functionality that can be overriden.
 //
-// For example, right now we have at least 12 "backend" building blocks (CPU,
-// CUDA, XLA, ...) and at least 4 "functionality" building blocks (Dense,
-// Sparse, Quantized, AutogradFunctionality, ...). These keys together allow
-// every dispatcher operator to be customized in up to 12*4 different ways. Each
-// of those requires a slot in the operator table of every dispatcher operator.
-// Not every piece of functionality necessarily needs to be customizable
-// per-backend, and not every backend necessarily needs to be able to customize
-// every type of functionality.
+// For example, right now we have at least 12 "backend" building
+// blocks (CPU, CUDA, XLA, ...) and at least 5 "functionality"
+// building blocks (Dense, Sparse, SparseCsr, Quantized,
+// AutogradFunctionality, ...). These keys together allow every
+// dispatcher operator to be customized in up to 12*4 different
+// ways. Each of those requires a slot in the operator table of every
+// dispatcher operator.  Not every piece of functionality necessarily
+// needs to be customizable per-backend, and not every backend
+// necessarily needs to be able to customize every type of
+// functionality.
 //
 //
 // (2) Every runtime key corresponds directly to a slot in an operator's runtime

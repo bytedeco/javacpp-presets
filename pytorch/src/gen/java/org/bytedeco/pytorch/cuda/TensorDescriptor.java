@@ -22,16 +22,6 @@ import static org.bytedeco.pytorch.global.torch.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
 
-// A generic class for wrapping cuDNN descriptor types.  All you need
-// is to give the underlying type the Descriptor_t points to (usually,
-// if it's cudnnTensorDescriptor_t it points to cudnnTensorStruct),
-// the constructor and the destructor.  Subclasses are responsible
-// for defining a set() function to actually set the descriptor.
-//
-// Descriptors default construct to a nullptr, and have a descriptor
-// initialized the first time you call set() or any other initializing
-// function.
-
 @Namespace("at::native") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class TensorDescriptor extends Pointer {
     static { Loader.load(); }

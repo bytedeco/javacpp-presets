@@ -83,4 +83,5 @@ public class Code extends Pointer {
   public native @Cast("torch::jit::Node**") @StdVector PointerPointer instructions_source();
   public native void request_bailout(@Cast("size_t") long index);
   public native @Cast("size_t") long register_size();
+  public native @SharedPtr("torch::jit::Graph") @ByVal Graph graph();
 }

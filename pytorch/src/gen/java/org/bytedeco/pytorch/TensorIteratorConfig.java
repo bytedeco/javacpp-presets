@@ -45,8 +45,10 @@ public class TensorIteratorConfig extends Pointer {
   // Important: the outputs have to be added before the inputs.
   public native @ByRef TensorIteratorConfig add_output(@Const @ByRef TensorBase output);
   public native @ByRef TensorIteratorConfig add_input(@Const @ByRef TensorBase input);
+  public native @ByRef TensorIteratorConfig add_const_input(@Const @ByRef TensorBase input);
 
   // Borrowing from temporaries is unlikely to go well.
+  
   
   
 
@@ -56,6 +58,7 @@ public class TensorIteratorConfig extends Pointer {
   // compile.
   public native @ByRef TensorIteratorConfig add_owned_output(@Const @ByRef TensorBase output);
   public native @ByRef TensorIteratorConfig add_owned_input(@Const @ByRef TensorBase input);
+  public native @ByRef TensorIteratorConfig add_owned_const_input(@Const @ByRef TensorBase input);
 
   // Advanced API: stores input/output Tensors without incrementing
   // the reference count. The caller must ensure that these Tensors
@@ -64,8 +67,10 @@ public class TensorIteratorConfig extends Pointer {
   // Important: the outputs have to be added before the inputs.
   public native @ByRef TensorIteratorConfig add_borrowed_output(@Const @ByRef TensorBase output);
   public native @ByRef TensorIteratorConfig add_borrowed_input(@Const @ByRef TensorBase input);
+  public native @ByRef TensorIteratorConfig add_borrowed_const_input(@Const @ByRef TensorBase input);
 
   // Borrowing from temporaries is unlikely to go well.
+  
   
   
 

@@ -31,7 +31,7 @@ public class DataPtrVector extends Pointer {
 
     public DataPtr front() { return get(0); }
     public DataPtr back() { return get(size() - 1); }
-    @Index(function = "at") public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr get(@Cast("size_t") long i);
+    @Index(function = "at") public native @StdMove DataPtr get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -41,7 +41,7 @@ public class DataPtrVector extends Pointer {
 
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator *") @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr get();
+        public native @Name("operator *") @StdMove DataPtr get();
     }
 }
 

@@ -35,10 +35,10 @@ public class VariableInfo extends Pointer {
 
   public VariableInfo() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public VariableInfo(@Cast("const torch::autograd::Variable*") @ByRef Tensor var) { super((Pointer)null); allocate(var); }
-  private native void allocate(@Cast("const torch::autograd::Variable*") @ByRef Tensor var);
+  public VariableInfo(@Const @ByRef Tensor var) { super((Pointer)null); allocate(var); }
+  private native void allocate(@Const @ByRef Tensor var);
 
-  public native @ByVal @Cast("torch::autograd::Variable*") Tensor zeros(@ByRef OptionalDeviceGuard device_guard);
+  public native @ByVal Tensor zeros(@ByRef OptionalDeviceGuard device_guard);
 
   public native @ByRef Layout layout(); public native VariableInfo layout(Layout setter);
   public native @ByRef Device device(); public native VariableInfo device(Device setter);

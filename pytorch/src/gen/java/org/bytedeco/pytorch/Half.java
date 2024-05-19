@@ -43,9 +43,12 @@ public class Half extends Pointer {
 
   public Half(@Cast("unsigned short") short bits, @ByVal from_bits_t arg1) { super((Pointer)null); allocate(bits, arg1); }
   private native void allocate(@Cast("unsigned short") short bits, @ByVal from_bits_t arg1);
+// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #else
   public Half(float value) { super((Pointer)null); allocate(value); }
   private native void allocate(float value);
   public native @Name("operator float") float asFloat();
+// #endif
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)
 // #endif

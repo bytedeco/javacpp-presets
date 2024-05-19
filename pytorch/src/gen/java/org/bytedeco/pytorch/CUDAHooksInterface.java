@@ -36,7 +36,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // never forgets to implement each virtual function in the real implementation
 // in CUDAHooks.  This probably doesn't buy us much though.
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class CUDAHooksInterface extends Pointer {
+public class CUDAHooksInterface extends AcceleratorHooksInterface {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDAHooksInterface() { super((Pointer)null); allocate(); }

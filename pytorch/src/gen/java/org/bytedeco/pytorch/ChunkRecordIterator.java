@@ -27,4 +27,5 @@ public class ChunkRecordIterator extends Pointer {
 
   // Read at most `chunkSize` into `buf`. Return the number of actual bytes read.
   public native @Cast("size_t") long next(Pointer buf);
+  public native @Cast("size_t") long recordSize();
 }

@@ -199,7 +199,7 @@ private native void allocate(MemoryFormat memory_format);
   public native @ByVal @NoException(true) DeviceOptional device_opt();
 
   /** Returns the device index of the {@code TensorOptions}. */
-  public native @NoException(true) int device_index();
+  public native @Cast("c10::DeviceIndex") @NoException(true) byte device_index();
 
   /** Returns the dtype of the {@code TensorOptions}. */
   public native @ByVal @NoException(true) TypeMeta dtype();
@@ -240,7 +240,11 @@ private native void allocate(MemoryFormat memory_format);
   /** Returns if the layout is sparse */
   public native @Cast("bool") boolean is_sparse();
 
+  /** Returns if the layout is sparse CSR, deprecated, use
+   *  is_sparse_compressed() instead */
   public native @Cast("bool") boolean is_sparse_csr();
+
+  public native @Cast("bool") boolean is_sparse_compressed();
 
   // For compatibility with legacy tensor.type() comparisons
   public native @Cast("bool") boolean type_equal(@Const @ByRef TensorOptions other);

@@ -24,12 +24,12 @@ public class PostAccumulateGradHook extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PostAccumulateGradHook(Pointer p) { super(p); }
 
-  public native @Name("operator ()") void apply(@Cast("const torch::autograd::Variable*") @ByRef Tensor tensor);
+  public native @Name("operator ()") void apply(@Const @ByRef Tensor tensor);
   // only implemented for python hooks on nodes, registers hook with compiled
   // autograd
   public native void compiled_args(@ByRef CompiledNodeArgs args);
 
   public native void apply_with_saved(
-        @Cast("torch::autograd::Variable*") @ByRef Tensor arg0,
+        @ByRef Tensor arg0,
         @ByRef SwapSavedVariables arg1);
 }

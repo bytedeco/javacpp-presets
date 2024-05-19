@@ -45,9 +45,11 @@ public class SizesAndStrides extends Pointer {
   // TODO: different iterator types for sizes & strides to prevent
   // mixing the two accidentally.
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public SizesAndStrides() { super((Pointer)null); allocate(); }
   private native void allocate();
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public SizesAndStrides(@Const @ByRef SizesAndStrides rhs) { super((Pointer)null); allocate(rhs); }
   private native void allocate(@Const @ByRef SizesAndStrides rhs);
 

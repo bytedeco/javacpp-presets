@@ -63,9 +63,9 @@ public class WeakStorage extends Pointer {
   //
   public native @NoException(true) StorageImpl _unsafe_get_target();
 
-  public native @Cast("size_t") @NoException(true) long use_count();
+  public native @Cast("uint32_t") @NoException(true) int use_count();
 
-  public native @Cast("size_t") @NoException(true) long weak_use_count();
+  public native @Cast("uint32_t") @NoException(true) int weak_use_count();
 
   public native @Cast("bool") @NoException(true) boolean expired();
 

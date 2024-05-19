@@ -41,10 +41,8 @@ public class CTCLossDescriptor extends Pointer {
     }
 
   public native void set(@Cast("cudnnDataType_t") int datatype);
-// #if CUDNN_VERSION >= 7600
   public native void setEx(
         @Cast("cudnnDataType_t") int datatype,
         @Cast("cudnnLossNormalizationMode_t") int normMode,
         @Cast("cudnnNanPropagation_t") int gradMode);
-// #endif
 }

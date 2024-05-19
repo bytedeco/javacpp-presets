@@ -41,7 +41,7 @@ public class SegmentInfo extends Pointer {
         return new SegmentInfo((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("int64_t") long device(); public native SegmentInfo device(long setter);
+  public native byte device(); public native SegmentInfo device(byte setter);
   public native @Cast("int64_t") @Name("address") long _address(); public native SegmentInfo _address(long setter);
   public native @Cast("int64_t") long total_size(); public native SegmentInfo total_size(long setter);
   public native @Cast("int64_t") long requested_size(); public native SegmentInfo requested_size(long setter); // unrounded, actually requested size

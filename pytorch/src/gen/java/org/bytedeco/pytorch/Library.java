@@ -261,4 +261,7 @@ public class Library extends Pointer {
   // within a library. The API is the same as before with 1 minor change.
   // Instead of m.class_<foo>("foo") you instead do
   // m.class_<foo>(TORCH_SELECTIVE_CLASS("foo"))
+
+  // De-registers all registrations created with this Library
+  public native void reset();
 }

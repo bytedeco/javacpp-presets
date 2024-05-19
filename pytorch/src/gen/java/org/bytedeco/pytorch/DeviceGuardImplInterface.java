@@ -173,7 +173,7 @@ public class DeviceGuardImplInterface extends Pointer {
    * being used on the given stream, and that it should thus avoid recycling the
    * DataPtr until all work on that stream is done.
    */
-  public native void recordDataPtrOnStream(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr arg0, @Const @ByRef Stream arg1);
+  public native void recordDataPtrOnStream(@StdMove DataPtr arg0, @Const @ByRef Stream arg1);
 
   /**
    * Intended use of this class is to leak the DeviceGuardImpl at program end.

@@ -26,8 +26,8 @@ public class T_DataPtrSizeT_T extends Pointer {
     private native void allocate();
 
 
-    public @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr get0() { return get0(this); }
-    @Namespace @Name("std::get<0>") public static native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr get0(@ByRef T_DataPtrSizeT_T container);
+    public @StdMove DataPtr get0() { return get0(this); }
+    @Namespace @Name("std::get<0>") public static native @StdMove DataPtr get0(@ByRef T_DataPtrSizeT_T container);
     public @Cast("size_t") long get1() { return get1(this); }
     @Namespace @Name("std::get<1>") public static native @Cast("size_t") long get1(@ByRef T_DataPtrSizeT_T container);
 }

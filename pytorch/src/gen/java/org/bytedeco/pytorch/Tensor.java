@@ -489,6 +489,7 @@ public class Tensor extends TensorBase {
   public native @ByRef Tensor copysign_(@Const @ByRef Tensor other);
   public native @ByVal Tensor copysign(@Const @ByRef Scalar other);
   public native @ByRef Tensor copysign_(@Const @ByRef Scalar other);
+  public native @ByVal Tensor _lazy_clone();
   public native @ByVal Tensor logical_not();
   public native @ByRef Tensor logical_not_();
   public native @ByVal Tensor logical_xor(@Const @ByRef Tensor other);
@@ -915,6 +916,10 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor slice();
   public native @ByVal Tensor slice_symint(@Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional end, @ByVal(nullValue = "c10::SymInt(1)") SymInt step);
   public native @ByVal Tensor slice_symint();
+  public native @ByVal Tensor slice_inverse(@Const @ByRef Tensor src, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional start, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional end, @Cast("int64_t") long step/*=1*/);
+  public native @ByVal Tensor slice_inverse(@Const @ByRef Tensor src);
+  public native @ByVal Tensor slice_inverse_symint(@Const @ByRef Tensor src, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional end, @ByVal(nullValue = "c10::SymInt(1)") SymInt step);
+  public native @ByVal Tensor slice_inverse_symint(@Const @ByRef Tensor src);
   public native @ByVal Tensor slice_scatter(@Const @ByRef Tensor src, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional start, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional end, @Cast("int64_t") long step/*=1*/);
   public native @ByVal Tensor slice_scatter(@Const @ByRef Tensor src);
   public native @ByVal Tensor slice_scatter_symint(@Const @ByRef Tensor src, @Cast("int64_t") long dim/*=0*/, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start, @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional end, @ByVal(nullValue = "c10::SymInt(1)") SymInt step);

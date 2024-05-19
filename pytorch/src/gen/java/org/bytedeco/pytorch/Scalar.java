@@ -80,6 +80,15 @@ public class Scalar extends Pointer {
   public Scalar(@ByVal DoubleComplex vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@ByVal DoubleComplex vv);
 
+  // Helper constructors to allow Scalar creation from long and long long types
+  // As std::is_same_v<long, long long> is false(except Android), one needs to
+  // provide a constructor from either long or long long in addition to one from
+  // int64_t
+// #if defined(__APPLE__) || defined(__MACOSX)
+// #endif
+// #if defined(__linux__) && !defined(__ANDROID__)
+// #endif
+
 // #undef DEFINE_IMPLICIT_CTOR
 
   // Value* is both implicitly convertible to SymbolicVariable and bool which
@@ -97,6 +106,8 @@ public class Scalar extends Pointer {
 //       return checked_convert<type, bool>(v.i, #type);
 //     } else if (Tag::HAS_i == tag) {
 //       return checked_convert<type, int64_t>(v.i, #type);
+//     } else if (Tag::HAS_u == tag) {
+//       return checked_convert<type, uint64_t>(v., #type);
 //     } else if (Tag::HAS_si == tag) {
 //       return checked_convert<type, int64_t>(
 //           toSymInt().guard_int(__FILE__, __LINE__), #type);
@@ -128,6 +139,9 @@ public class Scalar extends Pointer {
   public native @ByVal Float8_e4m3fn toFloat8_e4m3fn();
   public native @ByVal Float8_e5m2fnuz toFloat8_e5m2fnuz();
   public native @ByVal Float8_e4m3fnuz toFloat8_e4m3fnuz();
+  public native @Cast("uint16_t") short toUInt16();
+  public native @Cast("uint32_t") int toUInt32();
+  public native @Cast("uint64_t") long toUInt64();
 
 // #undef DEFINE_ACCESSOR
 

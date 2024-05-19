@@ -415,6 +415,9 @@ public class TensorImpl extends Pointer {
   // Whether a tensor is sparse CSR or not.
   public native @Cast("bool") boolean is_sparse_csr();
 
+  // Whether a tensor is sparse CSR/CSC/BSR/BSC or not.
+  public native @Cast("bool") boolean is_sparse_compressed();
+
   public native @Cast("bool") boolean is_quantized();
 
   public native @Cast("bool") boolean is_meta();
@@ -465,7 +468,7 @@ public class TensorImpl extends Pointer {
   //   Inference tensor has version_counter_.enabled() == false
   public native @Cast("bool") boolean is_inference();
 
-  public native @Cast("int64_t") long get_device();
+  public native @Cast("c10::DeviceIndex") byte get_device();
 
   public native @ByVal Device device();
   public native Layout layout();
@@ -956,7 +959,7 @@ public class TensorImpl extends Pointer {
   public native void ShareData(@Const @ByRef TensorImpl src);
 
   public native void ShareExternalPointer(
-        @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
+        @StdMove DataPtr data_ptr,
         @Const @ByVal TypeMeta data_type,
         @Cast("size_t") long size_bytes);
 

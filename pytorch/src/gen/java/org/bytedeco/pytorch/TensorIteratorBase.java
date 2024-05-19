@@ -61,33 +61,33 @@ public class TensorIteratorBase extends MetaBase {
   public native @Cast("bool") boolean is_dim_reduced(int dim);
 
   /** Accessors for each operand */
-  public native @ByVal LongArrayRef strides(int arg);
-  public native Pointer data_ptr(int arg);
-  public native ScalarType dtype(int arg/*=0*/);
+  public native @ByVal LongArrayRef strides(@Cast("int64_t") long arg);
+  public native Pointer data_ptr(@Cast("int64_t") long arg);
+  public native ScalarType dtype(@Cast("int64_t") long arg/*=0*/);
   public native ScalarType dtype();
   public native ScalarType common_dtype();
-  public native ScalarType input_dtype(int arg/*=0*/);
+  public native ScalarType input_dtype(@Cast("int64_t") long arg/*=0*/);
   public native ScalarType input_dtype();
-  public native @ByVal Device device(int arg/*=0*/);
+  public native @ByVal Device device(@Cast("int64_t") long arg/*=0*/);
   public native @ByVal Device device();
-  public native DeviceType device_type(int arg/*=0*/);
+  public native DeviceType device_type(@Cast("int64_t") long arg/*=0*/);
   public native DeviceType device_type();
-  public native @Cast("int64_t") long element_size(int arg);
-  public native @Cast("bool") boolean is_scalar(int arg);
-  public native @Cast("bool") boolean is_cpu_scalar(int arg);
+  public native @Cast("int64_t") long element_size(@Cast("int64_t") long arg);
+  public native @Cast("bool") boolean is_scalar(@Cast("int64_t") long arg);
+  public native @Cast("bool") boolean is_cpu_scalar(@Cast("int64_t") long arg);
 
-  public native @Const @ByRef TensorBase tensor_base(int arg);
-  public native @Const @ByRef Tensor tensor(int arg);
+  public native @Const @ByRef TensorBase tensor_base(@Cast("int64_t") long arg);
+  public native @Const @ByRef Tensor tensor(@Cast("int64_t") long arg);
 
-  public native @Const @ByRef TensorBase output_base(int arg/*=0*/);
+  public native @Const @ByRef TensorBase output_base(@Cast("int64_t") long arg/*=0*/);
   public native @Const @ByRef TensorBase output_base();
 
-  public native @Const @ByRef Tensor output(int arg/*=0*/);
+  public native @Const @ByRef Tensor output(@Cast("int64_t") long arg/*=0*/);
   public native @Const @ByRef Tensor output();
 
-  public native @Const @ByRef TensorBase input_base(int arg/*=0*/);
+  public native @Const @ByRef TensorBase input_base(@Cast("int64_t") long arg/*=0*/);
   public native @Const @ByRef TensorBase input_base();
-  public native @Const @ByRef Tensor input(int arg/*=0*/);
+  public native @Const @ByRef Tensor input(@Cast("int64_t") long arg/*=0*/);
   public native @Const @ByRef Tensor input();
 
   // Copies from temporary outputs back to the original outputs
@@ -95,7 +95,7 @@ public class TensorIteratorBase extends MetaBase {
   public native void cast_outputs();
 
   /** Removes an operand from this iterator */
-  public native void remove_operand(int arg);
+  public native void remove_operand(@Cast("int64_t") long arg);
   /** Shrinks an iterated dimension */
   public native void narrow(int dim, @Cast("int64_t") long start, @Cast("int64_t") long size);
   /** Narrows every dim after and including {@code start_dim} to size one. */
@@ -104,7 +104,7 @@ public class TensorIteratorBase extends MetaBase {
   /** Replaces the data pointer for the operand at index {@code arg}.
    *  The new pointer should have the same sizes, strides and dtype as the
    *  original */
-  public native void unsafe_replace_operand(int arg, Pointer data);
+  public native void unsafe_replace_operand(@Cast("int64_t") long arg, Pointer data);
 
   /** Splits this TensorIterator into two iterators. Together they iterate over
    *  the entire operation. Used by {@code with_32bit_indexing()}. */
@@ -130,7 +130,7 @@ public class TensorIteratorBase extends MetaBase {
   /** Create a strides array for a Tensor with shape of this iterator. The
    *  parameter {@code element_size} specifies the size of Tensor's data type in
    *  bytes (e.g. {@code 4} for {@code float}) */
-  public native @ByVal @Cast("at::TensorIteratorBase::StrideVector*") SymDimVector compatible_stride(int element_size);
+  public native @ByVal @Cast("at::TensorIteratorBase::StrideVector*") SymDimVector compatible_stride(@Cast("int64_t") long element_size);
 
   /** Inverts the re-ordering done by reorder_dimensions. This can only be
    *  called *before* coalesce_dimensions() is called. */
@@ -148,9 +148,9 @@ public class TensorIteratorBase extends MetaBase {
   public native @ByVal @Cast("at::TensorIteratorBase::PtrVector*") SymDimVector get_base_ptrs();
 
   // Helper functions for advanced stride manipulations (e.g. torch.flip)
-  public native void _unsafe_set_arg_strides(int arg, @ByVal LongArrayRef strides);
-  public native void _unsafe_set_arg_strides(int arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
-  public native void _unsafe_set_arg_data(int arg, Pointer data);
+  public native void _unsafe_set_arg_strides(@Cast("const int64_t") long arg, @ByVal LongArrayRef strides);
+  public native void _unsafe_set_arg_strides(@Cast("const int64_t") long arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
+  public native void _unsafe_set_arg_data(@Cast("const int64_t") long arg, Pointer data);
 
   /** true if the stride computation can use 32-bit arithmetic. Used by GPU
    *  kernels */

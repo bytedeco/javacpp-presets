@@ -39,7 +39,7 @@ public class LongSmallVectorImpl extends LongSmallVectorBase {
 
   public native @Cast("int64_t") long pop_back_val();
 
-  public native void swap(@ByRef LongSmallVectorImpl RHS);
+  public native @NoException(true) void swap(@ByRef LongSmallVectorImpl RHS);
 
   /** Add the specified range to the end of the SmallVector. */
 
