@@ -19,13 +19,13 @@ runs:
         # Free disk space by removing some unused system components
         $SUDO rm -rf /usr/local/lib/android
         $SUDO rm -rf /usr/share/dotnet
-        
-        # Add some swap. Needed for pytorch and mkl.
+
+        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
         $SUDO mkswap /swapfile
         $SUDO swapon /swapfile
-        
+
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
@@ -276,7 +276,7 @@ runs:
           tar -xzvf spinnaker-3.0.0.118-amd64-pkg.tar.gz
           find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xvf data.tar.xz -C /; done;
         fi
-        
+
         GRADLE_TASK=publishToMavenLocal
         MAVEN_PHASE=install
         if [[ -n ${CI_DEPLOY_USERNAME:-} ]] && [[ ! "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
