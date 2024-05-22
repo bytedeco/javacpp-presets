@@ -129,6 +129,29 @@ runs:
           $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.280-focal.list https://packages.lunarg.com/vulkan/1.3.280/lunarg-vulkan-1.3.280-focal.list
         fi
         $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk
+        
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
+          # Install required packages for building libva
+          $SUDO apt-get update
+          # Install common build tools and libraries
+          $SUDO apt-get install -y autoconf libtool build-essential libdrm-dev libgl1-mesa-dev
+          
+          # Install VAAPI driver development packages for Intel, AMD and potentially NVIDIA
+          $SUDO apt-get install -y libva-dev libva-drm2 libva-x11-2 libva-glx2 libva-wayland2 libva2 libwayland-dev
+          
+          # Additional drivers for different hardware
+          $SUDO apt-get install -y va-driver-all
+          
+          # Cloning and building libva (Intel's Video Acceleration API implementation)
+          git clone https://github.com/intel/libva.git
+          cd libva
+          git checkout master  # Specify a tag or commit for a specific version if needed
+          ./autogen.sh
+          ./configure --prefix=/usr
+          make -j$(nproc)
+          $SUDO make install
+          cd ..
+        fi
 
         if [[ -n ${USERLAND_BUILDME:-} ]]; then
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
