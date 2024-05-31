@@ -72,6 +72,7 @@ runs:
         sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
         python3 -m pip install gdown || python3 -m pip install gdown
+        python3 -m pip install ninja
 
         # Install vulkan sdk
         echo Installing Vulkan SDK
