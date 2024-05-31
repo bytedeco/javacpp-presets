@@ -26,11 +26,6 @@ runs:
         $SUDO mkswap /swapfile
         $SUDO swapon /swapfile
 
-        mkdir -p .ccache
-        echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
-        echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
-        echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
-
         export ARCH=amd64
         export PREFIX=x86_64-linux-gnu
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]]; then
@@ -94,7 +89,6 @@ runs:
         mvn -version
         gpg --version
         python3 --version
-        ccache -s --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)
