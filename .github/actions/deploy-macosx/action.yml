@@ -23,6 +23,7 @@ runs:
           echo Removing old SDKs without ARM support
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
+        
 
         brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 little-cms2 maven openblas r
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
@@ -54,6 +55,13 @@ runs:
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
           otool -L /usr/local/lib/gcc/10/*.dylib
         fi
+
+        if [[ -n ${CI_DEPLOY_NEED_NINJA:-} ]]; then
+          echo Installing Ninja
+          brew install Ninja
+        fi
+
+        
 
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
