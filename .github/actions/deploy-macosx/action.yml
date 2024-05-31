@@ -34,6 +34,8 @@ runs:
         # brew unlink cmake
         # brew install cmake.rb
 
+        brew install ninja
+
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC
           brew install gcc@10
