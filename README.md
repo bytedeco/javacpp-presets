@@ -181,6 +181,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
 
  * OpenCV 4.9.x  https://opencv.org/releases/
  * FFmpeg 7.0.x  http://ffmpeg.org/download.html
+ * Shaka Packager 3.2.x  https://github.com/shaka-project/shaka-packager
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 3.0.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
