@@ -26,15 +26,13 @@ runs:
         
 
         brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 little-cms2 maven openblas r
-        brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
+        brew install boost ccache ninja swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
         brew link --force libomp
 
         # echo Installing an older less buggy version of CMake
         # curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
         # brew unlink cmake
         # brew install cmake.rb
-
-        brew install ninja
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC
@@ -58,13 +56,6 @@ runs:
           otool -L /usr/local/lib/gcc/10/*.dylib
         fi
 
-        if [[ -n ${CI_DEPLOY_NEED_NINJA:-} ]]; then
-          echo Installing Ninja
-          brew install Ninja
-        fi
-
-        
-
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
@@ -74,7 +65,6 @@ runs:
         sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
         python3 -m pip install gdown || python3 -m pip install gdown
-        python3 -m pip install ninja
 
         # Install vulkan sdk
         echo Installing Vulkan SDK
@@ -123,6 +113,7 @@ runs:
         clang --version
         /usr/local/bin/gcc-* --version || true
         cmake --version
+        ninja --version
         gradle --version
         mvn -version
         gpg --version
