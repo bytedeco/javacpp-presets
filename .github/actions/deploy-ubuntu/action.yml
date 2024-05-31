@@ -73,7 +73,7 @@ runs:
         $SUDO apt-get update
         $SUDO apt-get -y install gnupg
 
-        $SUDO apt-get -y install ninja ninja-build
+        $SUDO apt-get -y install  ninja-build
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
 
