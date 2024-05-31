@@ -17,6 +17,7 @@
   <modules>
     <module>../opencv/platform</module>
     <module>../ffmpeg/platform</module>
+    <module>../shaka-packager/platform</module>
 <!--    <module>../flycapture/platform</module>-->
 <!--    <module>../spinnaker/platform</module>-->
 <!--    <module>../libdc1394/platform</module>-->
@@ -93,6 +94,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>ffmpeg-platform</artifactId>
       <version>7.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>shaka-packager-platform</artifactId>
+      <version>3.2.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
