@@ -63,7 +63,6 @@ runs:
         ln -sf $JAVA_HOME /usr/lib/jvm/default-java
         find /usr/lib/jvm/default-java/
         curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
-        $SUDO tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
         $SUDO unzip gradle-7.1.1-bin.zip -d /opt/
         $SUDO ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 
