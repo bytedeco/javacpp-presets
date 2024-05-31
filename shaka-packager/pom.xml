@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.5.11-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.bytedeco</groupId>
+  <artifactId>shaka-packager</artifactId>
+  <version>3.2.0-${project.parent.version}</version>
+  <name>JavaCPP Presets for shaka-packager</name>
+
+  <properties>
+  <javacpp.packageName>shakapackager</javacpp.packageName>
+   <javacpp.cppbuild.skip>true</javacpp.cppbuild.skip> <!-- To skip execution of cppbuild.sh: -Djavacpp.cppbuild.skip=true -->
+  <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
+  <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
+<build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+  <groupId>org.bytedeco</groupId>
+  <artifactId>javacpp</artifactId>
+  <version>${project.parent.version}</version>
+  <configuration>
+    <properties>${javacpp.platform}</properties>
+    <propertyKeysAndValues>
+      <property>
+        <name>platform.root</name>
+        <value>${javacpp.platform.root}</value>
+      </property>
+      <property>
+        <name>platform.compiler</name>
+        <value>${javacpp.platform.compiler}</value>
+      </property>
+    </propertyKeysAndValues>
+    <classPath>${project.build.outputDirectory}</classPath>
+    <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+    <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+    <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+  </configuration>
+  <executions>
+    <execution>
+      <id>javacpp.parser</id>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>build</goal>
+      </goals>
+      <configuration>
+        <skip>${javacpp.parser.skip}</skip>
+        <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+        <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+      </configuration>
+    </execution>
+    <execution>
+      <id>javacpp.compiler</id>
+      <phase>process-classes</phase>
+      <goals>
+        <goal>build</goal>
+      </goals>
+      <configuration>
+        <skip>${javacpp.compiler.skip}</skip>
+        <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
+        <copyLibs>true</copyLibs>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+    </plugins>
+  </build>
+
+</project>
