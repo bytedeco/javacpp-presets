@@ -9,7 +9,6 @@ runs:
       run: |
         cd /d %USERPROFILE%
 
-        choco install -y visualstudio2022community visualstudio2022-workload-nativedesktop visualstudio2022buildtools windows-sdk-10.0
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
 
