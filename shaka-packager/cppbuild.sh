@@ -55,6 +55,8 @@ case $PLATFORM in
     windows-x86_64)
         cmake -B build -DBUILD_SHARED_LIBS="ON"
         cmake --build build --parallel --config Release
+        echo $PWD
+        echo `ls $PWD`
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
