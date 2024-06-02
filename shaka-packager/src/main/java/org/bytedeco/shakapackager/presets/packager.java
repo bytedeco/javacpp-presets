@@ -66,21 +66,21 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        define = {"NDEBUG 1","SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
                        compiler = "cpp17",
                        include = {
-                                "shaka-packager/include/packager/status.h",
-                                "shaka-packager/include/packager/mpd_params.h",
-                                "shaka-packager/include/packager/mp4_output_params.h",
-                                "shaka-packager/include/packager/hls_params.h",
-                                "shaka-packager/include/packager/file.h",
-                                "shaka-packager/include/packager/macros/classes.h",
-                                "shaka-packager/include/packager/export.h",
-                                "shaka-packager/include/packager/chunking_params.h",
-                                "shaka-packager/include/packager/buffer_callback_params.h",
-                                "shaka-packager/include/packager/crypto_params.h",
-                                "shaka-packager/include/packager/ad_cue_generator_params.h",
-                                "shaka-packager/include/packager/packager.h"
+                                "packager/status.h",
+                                "packager/mpd_params.h",
+                                "packager/mp4_output_params.h",
+                                "packager/hls_params.h",
+                                "packager/file.h",
+                                "packager/macros/classes.h",
+                                "packager/export.h",
+                                "packager/chunking_params.h",
+                                "packager/buffer_callback_params.h",
+                                "packager/crypto_params.h",
+                                "packager/ad_cue_generator_params.h",
+                                "packager/packager.h"
                        },
                        
-                       link  = "shaka-packager/build/packager/packager"
+                       link  = "packager"
 
                 )
         })
