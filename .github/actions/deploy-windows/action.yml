@@ -27,7 +27,7 @@ runs:
 
         )
 
-        if not "%CI_DEPLOY_MODULE%"=="shaka-packager" (
+        else (
 
                 echo Installing MSYS2
                 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
