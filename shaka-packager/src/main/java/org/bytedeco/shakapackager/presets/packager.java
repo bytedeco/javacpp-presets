@@ -80,7 +80,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "shaka-packager/include/packager/packager.h"
                        },
                        
-                       link  = "packager"
+                       link  = "shaka-packager/build/packager/packager"
 
                 )
         })
