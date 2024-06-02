@@ -11,7 +11,7 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="shaka-packager"
             echo Installing Choco
-            @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+            powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 
             choco install -y git cmake ninja python visualstudio2022community visualstudio2022-workload-nativedesktop visualstudio2022buildtools windows-sdk-10.0
 
