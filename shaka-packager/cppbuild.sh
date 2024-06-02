@@ -53,9 +53,11 @@ case $PLATFORM in
         cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
         ;;
     windows-x86_64)
-        cmake -B build -DBUILD_SHARED_LIBS="ON" -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
-        cmake --build build --parallel --config Release
-        cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -B build -DBUILD_SHARED_LIBS="ON" -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
+        "$CMAKE" cmake --build build --parallel --config Release
+        "$CMAKE" cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
         echo $CURRENT_PLATFORM_PATH
         echo  `ls $CURRENT_PLATFORM_PATH`
         echo $PWD
