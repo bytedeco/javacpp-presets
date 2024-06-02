@@ -11,17 +11,6 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="shaka-packager"
 
-        @echo off
-
-            SET DIR=%~dp0%
-
-            echo Installing Choco
-            ::download install.ps1
-            %systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((new-object net.webclient).DownloadFile('https://chocolatey.org/install.ps1','%DIR%install.ps1'))"
-            ::run installer
-            %systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%DIR%install.ps1' %*"
-            
-
             choco install -y git cmake ninja python visualstudio2022community visualstudio2022-workload-nativedesktop visualstudio2022buildtools windows-sdk-10.0
 
             set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
