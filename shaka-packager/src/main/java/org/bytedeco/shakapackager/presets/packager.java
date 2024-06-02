@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         global = "org.bytedeco.shakapackager.global.packager",
         value = {
                 @Platform(
-                       value = {"linux", "macosx", "windows"},
+                       value = {"linux", "macosx"},
                        define = {"NDEBUG 1","SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
                        compiler = "cpp17",
                        include = {
@@ -56,6 +56,28 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "packager/crypto_params.h",
                                 "packager/ad_cue_generator_params.h",
                                 "packager/packager.h"
+                       },
+                       
+                       link  = "packager"
+
+                ),
+                @Platform(
+                       value = {"windows"},
+                       define = {"NDEBUG 1","SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
+                       compiler = "cpp17",
+                       include = {
+                                "shaka-packager/include/packager/status.h",
+                                "shaka-packager/include/packager/mpd_params.h",
+                                "shaka-packager/include/packager/mp4_output_params.h",
+                                "shaka-packager/include/packager/hls_params.h",
+                                "shaka-packager/include/packager/file.h",
+                                "shaka-packager/include/packager/macros/classes.h",
+                                "shaka-packager/include/packager/export.h",
+                                "shaka-packager/include/packager/chunking_params.h",
+                                "shaka-packager/include/packager/buffer_callback_params.h",
+                                "shaka-packager/include/packager/crypto_params.h",
+                                "shaka-packager/include/packager/ad_cue_generator_params.h",
+                                "shaka-packager/include/packager/packager.h"
                        },
                        
                        link  = "packager"
