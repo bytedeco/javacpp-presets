@@ -15,12 +15,7 @@ runs:
 
             choco install -y git cmake ninja python visualstudio2022community visualstudio2022-workload-nativedesktop visualstudio2022buildtools windows-sdk-10.0
 
-            # Find python install
-            $pythonpath = powershell.exe "Get-Item c:\Python* | sort CreationDate | Select-Object -First 1"
-
-            # Symlink python3 to python
-            powershell.exe "New-Item -ItemType SymbolicLink -Path \"$pythonpath/python3.exe\" -Target \"$pythonpath/python.exe\"
-            set "PATH=C:\Program Files\Git\bin;c:\Program Files\CMake\bin;$pythonpath;C:\msys64\usr\bin;%PATH%"
+            set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
             curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
             bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
