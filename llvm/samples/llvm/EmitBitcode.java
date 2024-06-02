@@ -45,7 +45,7 @@ import static org.bytedeco.llvm.global.LLVM.*;
  * <p>
  * The EvaluateBitcode sample depends on EmitBitcodeAndRelocatableObject
  * <p>
- * The samples should be ran in declaration order, meaning EmitBitcodeAndRelocatableObject
+ * The samples should be called in declaration order, meaning EmitBitcodeAndRelocatableObject
  * should run before EvaluateBitcode.
  */
 public class EmitBitcode {
@@ -54,7 +54,7 @@ public class EmitBitcode {
     /**
      * Sample for generating both LLVM bitcode and relocatable object file from an LLVM module
      * <p>
-     * The generated module (and objec file) will have a single sum function, which returns
+     * The generated module (and object file) will have a single 'sum' function, which returns
      * the sum of two integers.
      * <p>
      * declare i32 @sum(i32 %lhs, i32 %rhs)
@@ -69,11 +69,8 @@ public class EmitBitcode {
      */
     public static void EmitBitcodeAndRelocatableObject() {
         // Stage 1: Initialize LLVM components
-//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
-        LLVMInitializeNativeAsmPrinter();
-        LLVMInitializeNativeAsmParser();
-        LLVMInitializeNativeDisassembler();
         LLVMInitializeNativeTarget();
+        LLVMInitializeNativeAsmPrinter();
 
         // Stage 2: Build the sum function
         LLVMContextRef context = LLVMContextCreate();
@@ -143,10 +140,10 @@ public class EmitBitcode {
 
     /**
      * Sample code for importing a LLVM bitcode file and running a function
-     * inside of the imported module
+     * from the imported module
      * <p>
-     * This sample depends on EmitBitcode to produce the bitcode file. Make sure
-     * you've ran the EmitBitcode sample and have the 'sum.bc' bitcode file.
+     * This sample depends on EmitBitcodeAndRelocatableObject to produce the bitcode file.
+     * Make sure you ran the EmitBitcodeAndRelocatableObject sample and have the 'sum.bc' bitcode file.
      * <p>
      * This sample contains code for the following steps:
      * <p>
@@ -157,9 +154,6 @@ public class EmitBitcode {
      */
     public static void EvaluateBitcode() {
         // Stage 1: Initialize LLVM components
-//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
-        LLVMInitializeNativeAsmPrinter();
-        LLVMInitializeNativeAsmParser();
         LLVMInitializeNativeTarget();
 
         // Stage 2: Load and parse bitcode
@@ -210,8 +204,6 @@ public class EmitBitcode {
             case "-evaluate":
                 EvaluateBitcode();
                 System.exit(0);
-            default:
-                // Display help
         }
         System.err.println("Pass `-emit` or `-evaluate`.");
         System.exit(1);
