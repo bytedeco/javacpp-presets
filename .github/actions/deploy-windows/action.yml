@@ -9,7 +9,7 @@ runs:
       run: |
         cd /d %USERPROFILE%
 
-        choco install -y git cmake ninja python visualstudio2022community visualstudio2022-workload-nativedesktop visualstudio2022buildtools windows-sdk-10.0
+        choco install -y visualstudio2022community visualstudio2022-workload-nativedesktop visualstudio2022buildtools windows-sdk-10.0
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
 
@@ -18,6 +18,22 @@ runs:
         C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
         C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git "
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
+
+        C:\msys64\usr\bin\bash -lc "pacman -Q"
+
+        echo Removing broken stuff from WSL, MSYS2, etc
+        rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+        rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
+        rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
+        rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
+        rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a" "C:/Strawberry/c/bin/cmake.exe"
+
+        curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
+
+
+        bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git mingw-w64-i686-zlib mingw-w64-x86_64-zlib"
 
 
 
