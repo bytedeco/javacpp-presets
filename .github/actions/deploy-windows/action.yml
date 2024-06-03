@@ -9,9 +9,6 @@ runs:
       run: |
         cd /d %USERPROFILE%
 
-        echo Installing MSYS2
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
         choco install wsl-ubuntu-2204
