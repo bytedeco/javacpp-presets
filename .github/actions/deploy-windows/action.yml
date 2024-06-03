@@ -45,13 +45,13 @@ runs:
         set MSYSTEM=MINGW64
 
         
-        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\mingw64\bin;C:\msys64\usr\bin;%PATH%"
+        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
+
         echo %PATH%
         where bash
         where curl
         where git
 
-        echo Check CL
         where cl
         where gcc
         where cmake
