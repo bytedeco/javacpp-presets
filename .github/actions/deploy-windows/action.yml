@@ -37,7 +37,7 @@ runs:
           set MSYSTEM=MINGW64
 
         
-        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\bin\Hostx64\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
+        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\bin\Hostx64\x64;C:\msys64\mingw64\bin;C:\msys64\usr\bin;%PATH%"
 
         where bash
         where curl
