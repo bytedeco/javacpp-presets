@@ -32,9 +32,9 @@ runs:
     - name: Build project
       shell: cmd
       run: |
-          echo set Visual Studio
-          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
-          set MSYSTEM=MINGW64
+        echo set Visual Studio
+        call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
+        set MSYSTEM=MINGW64
 
         
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\mingw64\bin;C:\msys64\usr\bin;%PATH%"
