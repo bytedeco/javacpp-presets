@@ -59,7 +59,6 @@ runs:
         git --version
 
         echo Check CL
-        C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.33.31629\bin\HostX86\x64\cl.exe
         cl
         gcc --version
         cmake --version
@@ -68,9 +67,7 @@ runs:
         gpg --version
         python --version
         clang-cl --version
-        ccache --version -sv
-        df -h
-        wmic pagefile list /format:list
+
 
         set MAKEJ=%NUMBER_OF_PROCESSORS%
         echo Fetching %GITHUB_REPOSITORY%@%GITHUB_SHA%
@@ -119,8 +116,7 @@ runs:
           exit /b !STATUS!
         )
         :done3
-        df -h
-        wmic pagefile list /format:list
+
 
     - name: Clean up
       shell: cmd
