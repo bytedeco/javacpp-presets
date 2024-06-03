@@ -15,7 +15,7 @@ runs:
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
         wsl --update
-        wsl -s --distribution Ubuntu-22.04
+        wsl --install --distribution Ubuntu-22.04
  
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
