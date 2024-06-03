@@ -69,7 +69,7 @@ runs:
         gcc --version
         cmake --version
         gradle --version
-        mvn -version
+        call mvn -version
         gpg --version
         python --version
         clang-cl --version
