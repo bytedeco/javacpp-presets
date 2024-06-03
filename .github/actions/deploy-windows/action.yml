@@ -9,76 +9,7 @@ runs:
       run: |
         cd /d %USERPROFILE%
 
-        curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-        bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
-
-        echo Installing MSYS2
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git "
-        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
-
-        C:\msys64\usr\bin\bash -lc "pacman -Q"
-
-        echo Removing broken stuff from WSL, MSYS2, etc
-        rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
-        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
-        rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
-        rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
-        rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
-        rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a" "C:/Strawberry/c/bin/cmake.exe"
-
-        curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-        bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
-
-        python -m pip install gdown || python -m pip install gdown
-
-
-        if not "%CI_DEPLOY_NEED_GCC%"=="" (
-          echo Installing an older less buggy version of GCC
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gdb-12.1-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gdb-multiarch-12.1-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.39-3-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-headers-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-loader-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gdb-12.1-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gdb-multiarch-12.1-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-12.2.0-9-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.39-3-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-10.0.0.r202.g4359b3570-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-headers-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-loader-1.3.280.0-1-any.pkg.tar.zst
-          bash -c "pacman -U --noconfirm *.pkg.tar.zst"
-        ) else (
-          bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git mingw-w64-i686-zlib mingw-w64-x86_64-zlib"
-        )
-
-
-
+ 
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
         set "MESSAGE=%GITHUB_EVENT_HEAD_COMMIT_MESSAGE%"
@@ -103,35 +34,22 @@ runs:
       run: |
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
           echo set Visual Studio
-          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
           set MSYSTEM=MINGW64
         )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" (
           echo set Visual Studio
-          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
           set MSYSTEM=MINGW32
         )
-        if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
-          echo Shorten work paths to prevent Bazel from reaching MAX_PATH limit
-          set "TEST_TMPDIR=C:\tmp"
-          set "TMPDIR=C:\tmp"
-          set "TEMP=C:\tmp"
-          set "TMP=C:\tmp"
-          mkdir C:\tmp
-          C:/msys64/usr/bin/bazel.exe version
-        )
-        if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3"
-          set "CUDA_PATH_V12_3=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3"
-          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\libnvvp;%PATH%"
-          echo CUDA Version 12.3.2>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\version.txt"
-        )
-        set "CCACHE_DIR=%USERPROFILE%\ccache"
-        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
+        
+        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\bin\Hostx64\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 
         where bash
         where curl
         where git
+
+        echo Check CL
         where cl
         where gcc
         where cmake
@@ -145,6 +63,8 @@ runs:
 
         bash --version
         git --version
+
+        echo Check CL
         cl
         gcc --version
         cmake --version
@@ -184,11 +104,7 @@ runs:
         echo ^<servers^>^<server^>^<id^>sonatype-nexus-snapshots^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^<server^>^<id^>sonatype-nexus-staging^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^</servers^> >> %USERPROFILE%\.m2\settings.xml
         echo ^</settings^> >> %USERPROFILE%\.m2\settings.xml
 
-        set /a "SECONDS=%RANDOM% %% 300"
-        if "%CI_DEPLOY_NEED_CUDA%"=="" (
-            echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
-            timeout %SECONDS% > nul
-        )
+        set /a "SECONDS=%RANDOM% %% 25"
 
         echo Executing Maven %MAVEN_PHASE% %CI_DEPLOY_OPTIONS% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}
@@ -208,7 +124,6 @@ runs:
           exit /b !STATUS!
         )
         :done3
-        ccache --version -sv
         df -h
         wmic pagefile list /format:list
 
