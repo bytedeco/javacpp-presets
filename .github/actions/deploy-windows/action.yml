@@ -17,6 +17,15 @@ runs:
 
         C:\msys64\usr\bin\bash -lc "pacman -Q"
 
+        echo Removing broken stuff from WSL, MSYS2, etc
+        rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+        rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
+        rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
+        rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
+        rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a" "C:/Strawberry/c/bin/cmake.exe"
+
+        python -m pip install gdown || python -m pip install gdown
  
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
@@ -40,9 +49,15 @@ runs:
     - name: Build project
       shell: cmd
       run: |
-        echo set Visual Studio
-        call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64 10.0.22621.0
-        set MSYSTEM=MINGW64
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
+          call "%ProgramFiles%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64 10.0.22621.0
+          set MSYSTEM=MINGW64
+        )
+        if "%CI_DEPLOY_PLATFORM%"=="windows-x86" (
+          call "%ProgramFiles(%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86 10.0.22621.0
+          set MSYSTEM=MINGW32
+        )
 
         
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
