@@ -9,6 +9,8 @@ runs:
       run: |
         cd /d %USERPROFILE%
 
+        rm "C:\Program Files\Git\bin\bash.exe" "C:\Windows\System32\bash.exe" "C:\Program Files\Git\usr\bin\bash.exe"
+
  
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
@@ -64,7 +66,7 @@ runs:
         gcc --version
         cmake --version
         gradle --version
-        call mvn -version
+        mvn -version
         gpg --version
         python --version
         clang-cl --version
