@@ -13,6 +13,7 @@ runs:
         C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
         C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
         rm "C:\Program Files\Git\bin\bash.exe" "C:\Windows\System32\bash.exe" "C:\Program Files\Git\usr\bin\bash.exe"
+        set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
  
         set GRADLE_TASK=publishToMavenLocal
