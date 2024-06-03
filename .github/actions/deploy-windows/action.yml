@@ -51,11 +51,11 @@ runs:
       run: |
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
-          call "%ProgramFiles%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64 10.0.22621.0
+          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64 10.0.22621.0
           set MSYSTEM=MINGW64
         )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" (
-          call "%ProgramFiles(%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86 10.0.22621.0
+          call "%ProgramFiles(%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86 10.0.22621.0
           set MSYSTEM=MINGW32
         )
 
