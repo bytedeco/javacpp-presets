@@ -33,7 +33,7 @@ runs:
       shell: cmd
       run: |
         echo set Visual Studio
-        call "%ProgramFiles (x86)%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+        call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64 10.0.22621.0
         set MSYSTEM=MINGW64
 
         
