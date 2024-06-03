@@ -10,7 +10,6 @@ fi
 
 # Compilation instructions at https://github.com/shaka-project/shaka-packager/blob/main/docs/source/build_instructions.md
 
-SHAKA_PACKAGER_VERSION=v3.2.0
 
 mkdir -p $PLATFORM
 cd $PLATFORM
