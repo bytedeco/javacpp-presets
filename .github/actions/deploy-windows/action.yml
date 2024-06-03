@@ -11,7 +11,7 @@ runs:
 
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
-        choco install wsl-ubuntu-2204
+        choco install wsl-ubuntu-2004
  
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
