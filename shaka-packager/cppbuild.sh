@@ -57,7 +57,7 @@ case $PLATFORM in
         export CXX="cl.exe"
         "$CMAKE" -B build -DBUILD_SHARED_LIBS="ON" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
         "$CMAKE" --build build --parallel --config Release
-        "$CMAKE"--install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
+        "$CMAKE" --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
         echo $CURRENT_PLATFORM_PATH
         echo  `ls $CURRENT_PLATFORM_PATH`
         echo $PWD
