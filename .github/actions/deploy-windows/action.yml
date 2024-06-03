@@ -54,7 +54,7 @@ runs:
         where gcc
         where cmake
         where gradle
-        where mvn
+        call where mvn
         where gpg
         where python
         where python3
