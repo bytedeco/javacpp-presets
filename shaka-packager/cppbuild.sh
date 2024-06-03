@@ -53,17 +53,9 @@ case $PLATFORM in
         cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
         ;;
     windows-x86_64)
-        export CC="cl.exe"
-        export CXX="cl.exe"
-        "$CMAKE" -B build -DBUILD_SHARED_LIBS="ON" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
-        "$CMAKE" --build build --parallel --config Release
-        "$CMAKE" --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
-        echo $CURRENT_PLATFORM_PATH
-        echo  `ls $CURRENT_PLATFORM_PATH`
-        echo $PWD
-        echo `ls $PWD`
-        cd build/packager
-        echo `ls`
+        cmake -S . -B build -DBUILD_SHARED_LIBS="ON"  -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
+        cmake --build build/ --config Release --parallel 
+        cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
