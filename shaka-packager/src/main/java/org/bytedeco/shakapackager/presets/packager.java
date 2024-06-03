@@ -80,7 +80,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "packager/packager.h"
                        },
                        
-                       link  = "packager"
+                       link  = "libpackager"
 
                 )
         })
