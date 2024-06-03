@@ -14,7 +14,7 @@ runs:
         C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
-        
+        wsl --install
  
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
@@ -45,8 +45,6 @@ runs:
 
         
         set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
-
-        rm "C:\Windows\system32\bash.exe"
 
         echo %PATH%
         where bash
