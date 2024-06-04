@@ -94,7 +94,6 @@ public class packager implements InfoMapper {
        .put(new Info().enumerate().friendly())
        .put(new Info("SHAKA_EXPORT").cppTypes().annotations())
        .put(new Info().javaText("import org.bytedeco.shakapackager.functions.*;"))
-       .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
        .put(new Info("std::string").annotations("@StdString").valueTypes("String","BytePointer").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
        .put(new Info("std::optional<double>").pointerTypes("DoubleOptional").define())
        .put(new Info("std::optional<uint32_t>").pointerTypes("IntOptional").define())
