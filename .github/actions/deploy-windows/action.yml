@@ -17,10 +17,6 @@ runs:
 
         C:\msys64\usr\bin\bash -lc "pacman -Q"
 
-        echo Installing Windows SDK 8.1
-        curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
-        sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
-
         echo Removing broken stuff from WSL, MSYS2, etc
         rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
         rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
@@ -216,11 +212,11 @@ runs:
       shell: cmd
       run: |
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
-          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64 10.0.22621.0
           set MSYSTEM=MINGW64
         )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" (
-          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86 10.0.22621.0
           set MSYSTEM=MINGW32
         )
         if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
