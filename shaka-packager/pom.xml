@@ -69,9 +69,17 @@
             <groupId>org.bytedeco</groupId>
             <artifactId>javacpp</artifactId>
             <configuration>
-              <properties>${javacpp.platform}</properties>
+              <properties>${javacpp.platform}-mingw</properties>
               <compilerOptions>
-                <compilerOption>/MT</compilerOption>
+                <compilerOption>-std=c++0x</compilerOption>
+                <compilerOption>-static-libgcc</compilerOption>
+                <compilerOption>-static-libstdc++</compilerOption>
+                <compilerOption>-Wl,-Bstatic</compilerOption>
+                <compilerOption>-lstdc++</compilerOption>
+                <compilerOption>-lgcc</compilerOption>
+                <compilerOption>-lgcc_eh</compilerOption>
+                <compilerOption>-lpthread</compilerOption>
+                <compilerOption>-Wl,-Bdynamic</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>
