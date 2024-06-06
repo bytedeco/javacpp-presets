@@ -71,7 +71,7 @@
             <configuration>
               <properties>${javacpp.platform}-mingw</properties>
               <compilerOptions>
-                <compilerOption>-std=c++0x</compilerOption>
+                <compilerOption>-std=c++17</compilerOption>
                 <compilerOption>-static-libgcc</compilerOption>
                 <compilerOption>-static-libstdc++</compilerOption>
                 <compilerOption>-Wl,-Bstatic</compilerOption>
