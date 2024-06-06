@@ -63,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 ),
                 @Platform(
                        value = {"windows"},
-                       define = {"SHAKA_IMPLEMENTATION","SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
+                       define = {"_CRT_SECURE_NO_WARNINGS","SHAKA_EXPORT"},
                        compiler = "cpp17",
                        include = {
                                 "packager/status.h",
