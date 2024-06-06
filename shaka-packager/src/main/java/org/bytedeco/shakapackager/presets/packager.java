@@ -63,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 ),
                 @Platform(
                        value = {"windows"},
-                       define = {"NDEBUG 1","SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
+                       define = {"SHAKA_IMPLEMENTATION","SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
                        compiler = "cpp17",
                        include = {
                                 "packager/status.h",
@@ -93,6 +93,9 @@ public class packager implements InfoMapper {
         infoMap
        .put(new Info().enumerate().friendly())
        .put(new Info("SHAKA_EXPORT").cppTypes().annotations())
+       .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("boolean[]", "BoolPointer"))
+       .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
+       .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
        .put(new Info().javaText("import org.bytedeco.shakapackager.functions.*;"))
        .put(new Info("std::string").annotations("@StdString").valueTypes("String","BytePointer").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
        .put(new Info("std::optional<double>").pointerTypes("DoubleOptional").define())
