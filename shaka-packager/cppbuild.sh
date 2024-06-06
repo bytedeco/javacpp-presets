@@ -52,9 +52,9 @@ case $PLATFORM in
         cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
         ;;
     windows-x86_64)
-        cmake -S . -B build -DBUILD_SHARED_LIBS="ON"  -DCMAKE_BUILD_TYPE=Release  -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
-        cmake --build build/ --config Release --parallel 
-        cmake --install build/ --strip --config Release --prefix=$CURRENT_PLATFORM_PATH
+        cmake -S . -B build -DBUILD_SHARED_LIBS="OFF"  -DCMAKE_BUILD_TYPE=Debug  -DCMAKE_INSTALL_PREFIX=$CURRENT_PLATFORM_PATH
+        cmake --build build/ --config Debug --parallel 
+        cmake --install build/ --strip --config Debug --prefix=$CURRENT_PLATFORM_PATH
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
