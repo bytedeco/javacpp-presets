@@ -80,6 +80,8 @@
                 <compilerOption>-lgcc_eh</compilerOption>
                 <compilerOption>-lpthread</compilerOption>
                 <compilerOption>-Wl,-Bdynamic</compilerOption>
+                <compilerOption>-DSHAKA_EXPORT</compilerOption>
+                <compilerOption>-DSHAKA_IMPLEMENTATION</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>
