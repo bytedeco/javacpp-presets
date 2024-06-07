@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch-platform-gpu</artifactId>
-  <version>2.3.0-${project.parent.version}</version>
+  <version>2.3.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for PyTorch</name>
 
   <properties>

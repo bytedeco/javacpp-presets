@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -17,37 +19,22 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::Dict<std::string,c10::impl::GenericList>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::Dict<std::string,c10::impl::GenericList>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class StringGenericListDict extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringGenericListDict(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public StringGenericListDict(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public StringGenericListDict position(long position) {
-        return (StringGenericListDict)super.position(position);
-    }
-    @Override public StringGenericListDict getPointer(long i) {
-        return new StringGenericListDict((Pointer)this).offsetAddress(i);
-    }
 
 
   /**
    * Creates an empty dict.
    */
-  public StringGenericListDict() { super((Pointer)null); allocate(); }
-  private native void allocate();
 
   /**
    * Create a generic dict with runtime type information.
    * This only works for c10::impl::GenericDict and is not part of the public API
    * but only supposed to be used internally by PyTorch.
    */
-  
-
-  public StringGenericListDict(@Const @ByRef StringGenericListDict arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@Const @ByRef StringGenericListDict arg0);
   public native @ByRef @Name("operator =") StringGenericListDict put(@Const @ByRef StringGenericListDict arg0);
 
   /**
@@ -61,13 +48,13 @@ public class StringGenericListDict extends Pointer {
    * Returns an iterator to the first element of the container.
    * If the container is empty, the returned iterator will be equal to end().
    */
-  public native @ByVal @Cast("c10::Dict<std::string,c10::impl::GenericList>::iterator*") GenericDictIterator begin();
+  public native @ByVal StringGenericListDictIterator begin();
 
   /**
    * Returns an iterator to the element following the last element of the container.
    * This element acts as a placeholder; attempting to access it results in undefined behavior.
    */
-  public native @ByVal @Cast("c10::Dict<std::string,c10::impl::GenericList>::iterator*") GenericDictIterator end();
+  public native @ByVal StringGenericListDictIterator end();
 
   /**
    * Checks if the container has no elements.
@@ -105,7 +92,7 @@ public class StringGenericListDict extends Pointer {
    * May invalidate any references, pointers, or iterators referring to contained elements.
    * The iterator iter must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for iter.
    */
-  public native void erase(@ByVal @Cast("c10::Dict<std::string,c10::impl::GenericList>::iterator*") GenericDictIterator iter);
+  public native void erase(@ByVal StringGenericListDictIterator iter);
 
   /**
    * Removes the element with the given key, if it exists.
@@ -129,8 +116,8 @@ public class StringGenericListDict extends Pointer {
    * @return Iterator to an element with key equivalent to key.
    *         If no such element is found, past-the-end (see end()) iterator is returned.
    */
-  public native @ByVal @Cast("c10::Dict<std::string,c10::impl::GenericList>::iterator*") GenericDictIterator find(@StdString BytePointer key);
-  public native @ByVal @Cast("c10::Dict<std::string,c10::impl::GenericList>::iterator*") GenericDictIterator find(@StdString String key);
+  public native @ByVal StringGenericListDictIterator find(@StdString BytePointer key);
+  public native @ByVal StringGenericListDictIterator find(@StdString String key);
 
   /**
    * Checks if there is an element with key equivalent to key in the container.

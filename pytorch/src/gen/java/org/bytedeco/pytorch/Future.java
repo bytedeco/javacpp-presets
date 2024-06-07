@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -29,32 +31,6 @@ public class Future extends Pointer {
   
   
   
-
-  @NoOffset public static class FutureError extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public FutureError() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public FutureError(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public FutureError(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public FutureError position(long position) {
-          return (FutureError)super.position(position);
-      }
-      @Override public FutureError getPointer(long i) {
-          return new FutureError((Pointer)this).offsetAddress(i);
-      }
-  
-    
-
-    
-
-    public native @NoException(true) @Cast("const char*") BytePointer what();
-
-    public native @StdString BytePointer error_msg(); public native FutureError error_msg(BytePointer setter);
-  }
 
   /**
    * Wait on the future until it completes.
@@ -79,7 +55,7 @@ public class Future extends Pointer {
    */
   public native void markCompleted(
         @ByVal IValue value,
-        @ByVal(nullValue = "c10::optional<std::vector<c10::ivalue::Future::WeakStorage> >(c10::nullopt)") WeakStorageVectorOptional storages);
+        @ByVal(nullValue = "c10::optional<std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >(c10::nullopt)") WeakStorageVectorOptional storages);
   public native void markCompleted(
         @ByVal IValue value);
 
@@ -98,7 +74,7 @@ public class Future extends Pointer {
 
   // This accessor should only be used if we know that the future is
   // completed() with no error.
-  public native @StdVector WeakStorage storages();
+  public native @Const @ByRef WeakStorageVector storages();
 
   /**
    * Add a callback to the future.
@@ -133,5 +109,5 @@ public class Future extends Pointer {
 
   // This method should be used when one intends to manually create a child
   // future, for example when implementing a customized version of then().
-  public native @ByVal FuturePtr createInstance(@ByVal Type.TypePtr type);
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future createInstance(@ByVal Type.TypePtr type);
 }

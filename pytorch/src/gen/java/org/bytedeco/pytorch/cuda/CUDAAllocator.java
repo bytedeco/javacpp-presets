@@ -3,8 +3,15 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cusparse.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cusolver.*;
+import org.bytedeco.cuda.cudnn.*;
+import org.bytedeco.cuda.nccl.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;
@@ -29,7 +36,7 @@ public class CUDAAllocator extends Allocator {
     public CUDAAllocator(Pointer p) { super(p); }
 
   public native Pointer raw_alloc(@Cast("size_t") long nbytes);
-  public native Pointer raw_alloc_with_stream(@Cast("size_t") long nbytes, @Cast("cudaStream_t") Pointer stream);
+  public native Pointer raw_alloc_with_stream(@Cast("size_t") long nbytes, CUstream_st stream);
   public native void raw_delete(Pointer ptr);
   public native void init(int device_count);
   public native @Cast("bool") boolean initialized();
@@ -99,7 +106,7 @@ public class CUDAAllocator extends Allocator {
         @Const Pointer src,
         int srcDevice,
         @Cast("size_t") long count,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("bool") boolean p2p_enabled);
   public native @SharedPtr("c10::cuda::CUDACachingAllocator::AllocatorState") @ByVal AllocatorState getCheckpointState(
         byte device,

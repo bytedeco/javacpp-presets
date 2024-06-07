@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -50,6 +52,21 @@ public class ClassType extends NamedType {
   }
 
   // Create a class type with name `name` and its methods stored in `cu`.
+  public static native @SharedPtr("c10::ClassType") @ByVal ClassType create(
+        @ByVal QualifiedNameOptional qualifiedName,
+        @WeakPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
+        @Cast("bool") boolean is_module/*=false*/,
+        @StdString BytePointer doc_string/*=""*/,
+        @ByVal(nullValue = "std::vector<std::string>{}") StringVector unresolved_class_attributes);
+  public static native @SharedPtr("c10::ClassType") @ByVal ClassType create(
+        @ByVal QualifiedNameOptional qualifiedName,
+        @WeakPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu);
+  public static native @SharedPtr("c10::ClassType") @ByVal ClassType create(
+        @ByVal QualifiedNameOptional qualifiedName,
+        @WeakPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
+        @Cast("bool") boolean is_module/*=false*/,
+        @StdString String doc_string/*=""*/,
+        @ByVal(nullValue = "std::vector<std::string>{}") StringVector unresolved_class_attributes);
 
   public native @Cast("bool") boolean equals(@Const @ByRef Type rhs);
 
@@ -243,7 +260,7 @@ public class ClassType extends NamedType {
   public native void unsafeRemoveMethod(@StdString BytePointer name);
   public native void unsafeRemoveMethod(@StdString String name);
 
-  public native @SharedPtr CompilationUnit compilation_unit();
+  public native @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit compilation_unit();
 
   // generate a refined version of this class.
   // It has the same name but the slot Types are subtypes of

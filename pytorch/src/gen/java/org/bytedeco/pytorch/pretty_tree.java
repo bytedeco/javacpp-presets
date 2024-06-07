@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -25,13 +27,13 @@ public class pretty_tree extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public pretty_tree(Pointer p) { super(p); }
 
-  public pretty_tree(@Const @ByRef TreeRef tree, @Cast("size_t") long col/*=40*/) { super((Pointer)null); allocate(tree, col); }
-  private native void allocate(@Const @ByRef TreeRef tree, @Cast("size_t") long col/*=40*/);
-  public pretty_tree(@Const @ByRef TreeRef tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@Const @ByRef TreeRef tree);
-  @MemberGetter public native @Const @ByRef TreeRef tree();
+  public pretty_tree(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree, @Cast("size_t") long col/*=40*/) { super((Pointer)null); allocate(tree, col); }
+  private native void allocate(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree, @Cast("size_t") long col/*=40*/);
+  public pretty_tree(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree);
+  @MemberGetter public native @IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree();
   public native @Cast("size_t") long col(); public native pretty_tree col(long setter);
-  public native @ByRef TreeRefStringMap flat_strings(); public native pretty_tree flat_strings(TreeRefStringMap setter);
-  public native @StdString BytePointer get_flat(@Const @ByRef TreeRef t);
-  public native void print(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef TreeRef t, int indent);
+  public native @ByRef TreeStringMap flat_strings(); public native pretty_tree flat_strings(TreeStringMap setter);
+  public native @StdString BytePointer get_flat(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree t);
+  public native void print(@Cast("std::ostream*") @ByRef Pointer out, @IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree t, int indent);
 }

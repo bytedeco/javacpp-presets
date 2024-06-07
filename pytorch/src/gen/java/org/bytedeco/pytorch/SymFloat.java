@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -27,20 +29,20 @@ public class SymFloat extends Pointer {
 
   /*implicit*/ public SymFloat(double d) { super((Pointer)null); allocate(d); }
 private native void allocate(double d);
-  public SymFloat(@ByVal SymNode ptr) { super((Pointer)null); allocate(ptr); }
-  private native void allocate(@ByVal SymNode ptr);
+  public SymFloat(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode ptr) { super((Pointer)null); allocate(ptr); }
+  private native void allocate(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode ptr);
   public SymFloat() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native SymNodeImpl toSymNodeImplUnowned();
+  public native SymNode toSymNodeImplUnowned();
 
   
 
   // Only valid if is_symbolic()
-  public native @ByVal SymNode toSymNodeImpl();
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode toSymNodeImpl();
 
   // Guaranteed to return a SymNode, wrapping using base if necessary
-  public native @ByVal SymNode wrap_node(@Const @ByRef SymNode base);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode wrap_node(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode base);
 
   public native double expect_float();
 

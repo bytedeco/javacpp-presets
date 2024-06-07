@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,19 +33,10 @@ public class BackendMeta extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public BackendMeta() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BackendMeta(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackendMeta(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public BackendMeta position(long position) {
-        return (BackendMeta)super.position(position);
-    }
-    @Override public BackendMeta getPointer(long i) {
-        return new BackendMeta((Pointer)this).offsetAddress(i);
-    }
+    @IntrusivePtr @Name("c10::make_intrusive<c10::BackendMeta>") private native void allocate();
 
-  public native @ByVal BackendMetaRef clone(
-        @Const @ByRef BackendMetaRef ptr);
+  public native @IntrusivePtr("c10::BackendMeta") @Cast({"", "c10::intrusive_ptr<c10::BackendMeta>&"}) BackendMeta clone(
+        @IntrusivePtr("c10::BackendMeta") @Cast({"", "c10::intrusive_ptr<c10::BackendMeta>&"}) BackendMeta ptr);
 }

@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -37,7 +39,7 @@ public class Method extends IMethod {
   public native @ByVal JitModule owner();
   // the raw objectptr that owns this method, for when the method is owned by a
   // torchbind object.
-  public native @ByVal @Cast("torch::jit::ObjectPtr*") ObjPtr raw_owner();
+  public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj raw_owner();
   public native void run(@ByRef IValueVector stack);
 
   public native @ByVal @Name("operator ()") IValue apply(
@@ -50,11 +52,11 @@ public class Method extends IMethod {
   // interpreter that executes ops inline, one by one, on caller's thread. A
   // model can utilize async op, i.e. `fork`, to launch an asynchronous task
   // which will be launched on provided `taskLauncher`.
-  public native @ByVal FuturePtr run_async(
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future run_async(
         @ByVal IValueVector stack,
         @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") StringIValueMap kwargs,
         @ByVal(nullValue = "torch::jit::TaskLauncher(at::launch)") @Cast("torch::jit::TaskLauncher*") Pointer taskLauncher);
-  public native @ByVal FuturePtr run_async(
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future run_async(
         @ByVal IValueVector stack);
 
   public native @SharedPtr("torch::jit::Graph") @ByVal Graph graph();

@@ -18,7 +18,7 @@ sub flush($) {
     for (my $d = @inc_per_depth - 1; $d >= $min_depth; $d--) {
         if ($inc_per_depth[$d]) {
             foreach my $i (@{$inc_per_depth[$d]}) {
-                print "#include \"$i\"\n";
+                print "#include \"$i\"\n" unless $incs{$i};
                 $incs{$i} = 1;
             }
             undef $inc_per_depth[$d];
@@ -27,12 +27,13 @@ sub flush($) {
 }
 
 sub go {
-    my $path = join ' ', @_;
+    my ($roots, $opts) = @_;
+    my $path = join ' ', @$roots, @$opts;
 
-    my @inc = `g++ -I. -I torch/csrc/api/include/ -H $path -E 2>&1 > /dev/null`;
+    my @inc = `g++ -I. -I torch/csrc/api/include/ -DUSE_UCC -DUSE_C10D_NCCL -DUSE_C10D_GLOO -DUSE_C10D_MPI -DUSE_DISTRIBUTED -H $path -E 2>&1 > /dev/null`;
     foreach my $i (@inc) {
         chomp $i;
-        my ($depth, $f) = $i =~ /^(\.+)\s(.*\.h)$/;
+        my ($depth, $f) = $i =~ /^(\.+)\s(.*\.h(?:pp)?)$/;
         next unless $depth;
         $depth = length($depth);
         $f =~ s#^\./##;
@@ -48,18 +49,32 @@ sub go {
         push @$incs, $f;
     }
     flush(0);
+    foreach my $i (@$roots) {
+      print "#include \"$i\"\n" unless $incs{$i};
+      $incs{$i} = 1;
+    }
 }
 
 chdir "cppbuild/linux-x86_64-gpu/pytorch/torch/include";
 
-go('torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h');
+print <<EOF;
+// Included by
+// torch/csrc/api/include/torch/torch.h
+// torch/script.h
+// torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h
+// torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+// torch/csrc/distributed/c10d/PrefixStore.hpp
+// torch/csrc/distributed/c10d/logger.hpp
+EOF
+
+go(['torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h', 'torch/csrc/distributed/c10d/ProcessGroupGloo.hpp', 'torch/csrc/distributed/c10d/PrefixStore.hpp', 'torch/csrc/distributed/c10d/logger.hpp'], ['-DUSE_C10D_GLOO', '-DUSE_DISTRIBUTED']);
 
 print <<EOF;
 
 // Included by
 // ATen/cudnn/Descriptors.h
-// ATen/cudnn/Types.h
-// c10/cuda/CUDAGuard.h
+// torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
+// torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp
 EOF
 
-go('ATen/cudnn/Descriptors.h', 'ATen/cudnn/Types.h', 'c10/cuda/CUDAGuard.h', '-I/opt/cuda/targets/x86_64-linux/include/', 'torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h');
+go(['ATen/cudnn/Descriptors.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h', 'torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp'], ['-I/opt/cuda/targets/x86_64-linux/include/', '-DUSE_CUDA', '-DUSE_C10D_NCCL', '-DUSE_DISTRIBUTED', '-DUSE_C10D_GLOO']);

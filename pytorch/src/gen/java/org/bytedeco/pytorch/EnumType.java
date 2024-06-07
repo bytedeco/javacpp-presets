@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -24,6 +26,12 @@ public class EnumType extends NamedType {
     public EnumType(Pointer p) { super(p); }
 
   @MemberGetter public static native TypeKind Kind();
+
+  public static native @SharedPtr EnumType create(
+        @Const @ByRef QualifiedName qualified_class_name,
+        @ByVal Type.TypePtr value,
+        @StdVector EnumNameValue enum_names_values,
+        @WeakPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu);
 
   public native @StdString BytePointer str();
 

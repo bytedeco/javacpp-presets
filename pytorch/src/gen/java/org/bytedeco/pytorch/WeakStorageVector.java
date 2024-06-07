@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -29,9 +31,9 @@ public class WeakStorageVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    public WeakStorage front() { return get(0); }
-    public WeakStorage back() { return get(size() - 1); }
-    @Index(function = "at") public native @ByRef WeakStorage get(@Cast("size_t") long i);
+    public StorageImpl front() { return get(0); }
+    public StorageImpl back() { return get(size() - 1); }
+    @Index(function = "at") public native @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -41,7 +43,7 @@ public class WeakStorageVector extends Pointer {
 
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator *") @ByRef @Const WeakStorage get();
+        public native @Name("operator *") @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl get();
     }
 }
 

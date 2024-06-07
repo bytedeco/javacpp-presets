@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -38,13 +40,13 @@ public class JitObject extends Pointer {
   public JitObject(@Const @ByRef JitObject arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@Const @ByRef JitObject arg0);
   public native @ByRef @Name("operator =") JitObject put(@Const @ByRef JitObject arg0);
-  public JitObject(@ByVal @Cast("torch::jit::ObjectPtr*") ObjPtr _ivalue) { super((Pointer)null); allocate(_ivalue); }
-  private native void allocate(@ByVal @Cast("torch::jit::ObjectPtr*") ObjPtr _ivalue);
-  public JitObject(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }
-  private native void allocate(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
+  public JitObject(@IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj _ivalue) { super((Pointer)null); allocate(_ivalue); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj _ivalue);
+  public JitObject(@SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }
+  private native void allocate(@SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   
 
-  public native @ByVal @Cast("torch::jit::ObjectPtr*") ObjPtr _ivalue();
+  public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj _ivalue();
 
   public native @SharedPtr("c10::ClassType") @ByVal ClassType type();
 

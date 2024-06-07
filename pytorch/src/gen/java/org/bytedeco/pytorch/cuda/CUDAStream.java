@@ -3,8 +3,15 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cusparse.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cusolver.*;
+import org.bytedeco.cuda.cudnn.*;
+import org.bytedeco.cuda.nccl.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;
@@ -59,7 +66,7 @@ public class CUDAStream extends Pointer {
   public native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@Const @ByRef CUDAStream other);
 
   /** Implicit conversion to cudaStream_t. */
-  public native @Cast("cudaStream_t") @Name("operator cudaStream_t") Pointer asPointer();
+  public native @Name("operator cudaStream_t") CUstream_st asCUstream_st();
 
   /** Implicit conversion to Stream (a.k.a., forget that the stream is a
    *  CUDA stream). */
@@ -85,7 +92,7 @@ public class CUDAStream extends Pointer {
   public native int priority();
 
   /** Explicit conversion to cudaStream_t. */
-  public native @Cast("cudaStream_t") Pointer stream();
+  public native CUstream_st stream();
 
   /** Explicit conversion to Stream. */
   

@@ -3,8 +3,15 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cusparse.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cusolver.*;
+import org.bytedeco.cuda.cudnn.*;
+import org.bytedeco.cuda.nccl.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;
@@ -40,6 +47,6 @@ public class trace_time_ extends Pointer {
         return new trace_time_((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("c10::time_t") long t_(); public native trace_time_ t_(long setter);
+  public native @ByRef @Cast("time_t*") Pointer t_(); public native trace_time_ t_(Pointer setter);
   public native @Cast("c10::approx_time_t") long approx_t_(); public native trace_time_ approx_t_(long setter);
 }
