@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -26,11 +28,13 @@ public class WeakOrStrongCompilationUnit extends Pointer {
     public WeakOrStrongCompilationUnit(Pointer p) { super(p); }
 
   public WeakOrStrongCompilationUnit(
-        @SharedPtr CompilationUnit shared_cu) { super((Pointer)null); allocate(shared_cu); }
+        @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit shared_cu) { super((Pointer)null); allocate(shared_cu); }
   private native void allocate(
-        @SharedPtr CompilationUnit shared_cu);
+        @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit shared_cu);
 
-  public native @SharedPtr CompilationUnit getStrongRefOrThrow();
+  public native @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit getStrongRefOrThrow();
+
+  public native @WeakPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit getWeakRefOrThrow();
 
   public native @Cast("bool") boolean holdingStrongRef();
 

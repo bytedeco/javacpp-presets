@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -25,9 +27,9 @@ public class EnumHolder extends Pointer {
     public EnumHolder(Pointer p) { super(p); }
 
   public EnumHolder(@SharedPtr EnumType type, @StdString BytePointer name, @ByVal IValue value) { super((Pointer)null); allocate(type, name, value); }
-  private native void allocate(@SharedPtr EnumType type, @StdString BytePointer name, @ByVal IValue value);
+  @IntrusivePtr @Name("c10::make_intrusive<c10::ivalue::EnumHolder>") private native void allocate(@SharedPtr EnumType type, @StdString BytePointer name, @ByVal IValue value);
   public EnumHolder(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value) { super((Pointer)null); allocate(type, name, value); }
-  private native void allocate(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value);
+  @IntrusivePtr @Name("c10::make_intrusive<c10::ivalue::EnumHolder>") private native void allocate(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value);
 
   
 

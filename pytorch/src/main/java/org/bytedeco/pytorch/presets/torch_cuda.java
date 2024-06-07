@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.pytorch.presets.torch.PointerInfo;
 
 /**
  * @author Hervé Guillemet
@@ -36,22 +37,24 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             extension = "-gpu",
+            define = "USE_C10D_NCCL",
             include = {
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
-                "c10/cuda/CUDAGuard.h",
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
+                "torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp",
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
             },
-            link = { "cudart", "cusparse", "cudnn" },
+            link = { "cudart", "cusparse", "cudnn", "nccl" },
             linkpath = {
                 "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
                 "/usr/local/cuda-12.3/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/lib64/"
-            }
+            },
+            library = "jnitorch"
         ),
     },
     target = "org.bytedeco.pytorch.cuda",
@@ -72,12 +75,17 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         torch.sharedMap(infoMap);
 
         infoMap
-            .put(new Info("basic/containers").cppTypes("c10::optional"))
-
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
+            .put(new Info().javaText("import org.bytedeco.cuda.cudart.*;"))
+            .put(new Info().javaText("import org.bytedeco.cuda.cusparse.*;"))
+            .put(new Info().javaText("import org.bytedeco.cuda.cublas.*;"))
+            .put(new Info().javaText("import org.bytedeco.cuda.cusolver.*;"))
+            .put(new Info().javaText("import org.bytedeco.cuda.cudnn.*;"))
+            .put(new Info().javaText("import org.bytedeco.cuda.nccl.*;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.cuda.functions.*;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.Error;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.MemoryFormat;"))
@@ -92,6 +100,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "at::CUDAGeneratorImpl"
             ).skip())
 
+            //// std::unordered_map
+            //.put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").pointerTypes("StringNCCLCommMap").define())
+            .put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").skip()) // See getNcclErrorDetailStr below
 
             //// std::unordered_set
             .put(new Info("std::unordered_set<void*>").pointerTypes("PointerSet").define())
@@ -107,15 +118,26 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
             //// std::array
             .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray").cast().pointerTypes("Stat"))
+            .put(new Info("std::array<void*,c10d::intra_node_comm::kMaxDevices>").cast().pointerTypes("PointerPointer<Pointer>"))
+        ;
 
-            //// Function pointers
+        //// Intrusive pointers
+        for (PointerInfo pi : new PointerInfo[]{
+            new PointerInfo("c10d::ProcessGroupNCCL::Options"),
+            new PointerInfo("c10d::intra_node_comm::IntraNodeComm")
+        }) {
+            pi.makeIntrusive(infoMap);
+        }
+
+        //// Function pointers
+        infoMap
             .put(new Info("std::function<void(const c10::cuda::CUDACachingAllocator::TraceEntry&)>").pointerTypes("AllocatorTraceTracker"))
             .put(new Info("std::function<void(int64_t,int64_t,int64_t,int64_t)>").pointerTypes("OutOfMemoryObserver"))
             .put(new Info("std::function<bool(cudaStream_t)>").pointerTypes("StreamFilter"))
 
-            // Function pointer returning shared_ptr don't compile on windows
-            // "D:\a\javacpp-presets\javacpp-presets\pytorch\target\native\org\bytedeco\pytorch\windows-x86_64\jnitorch.cpp(98904): error C2526: 'JavaCPP_org_bytedeco_pytorch_functions_GatheredContextSupplier_allocate_callback': C linkage function cannot return C++ class 'std::shared_ptr<c10::GatheredContext>'"
-            //.put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
+        // Function pointer returning shared_ptr don't compile on windows
+        // "jnitorch.cpp(98904): error C2526: 'JavaCPP_org_bytedeco_pytorch_functions_GatheredContextSupplier_allocate_callback': C linkage function cannot return C++ class 'std::shared_ptr<c10::GatheredContext>'"
+        //.put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
         ;
 
         //// Avoiding name clashes by skipping or renaming
@@ -131,31 +153,36 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             infoMap.put(new Info("c10::cuda::CUDACachingAllocator::" + s).skip());
         }
 
-        //// Already defined in main torch
+        //// Parsed in main torch
+        // We need to help namespace resolution and to redefine names of template instances.
         infoMap
-            .put(new Info("c10::Stream").pointerTypes("Stream"))
+            .put(new Info("c10::Stream"))
             .put(new Info("c10::optional<c10::Stream>").pointerTypes("StreamOptional"))
-            .put(new Info("c10::optional<c10::Device>").pointerTypes("DeviceOptional"))
-            .put(new Info("c10::Device").pointerTypes("Device"))
-            .put(new Info("c10::impl::PyInterpreter").pointerTypes("PyInterpreter"))
+            .put(new Info("c10::optional<c10::Device>", "c10::optional<at::Device>", "optional<at::Device>").pointerTypes("DeviceOptional"))
+            .put(new Info("c10::Device"))
+            .put(new Info("c10::impl::PyInterpreter"))
             .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T"))
             .put(new Info("c10::optional<c10::DeviceIndex>").pointerTypes("ByteOptional"))
             .put(new Info("c10::IntArrayRef", "at::IntArrayRef").pointerTypes("LongArrayRef"))
             .put(new Info("std::vector<at::DataPtr>").pointerTypes("DataPtrVector"))
-            .put(new Info("c10::Allocator").pointerTypes("Allocator"))
+            .put(new Info("c10::Allocator"))
+            .put(new Info("c10d::Work"))
+            .put(new Info("c10d::Store", "c10d::ScatterOptions", "c10d::ReduceScatterOptions", "c10d::AllToAllOptions", "c10d::BarrierOptions", "c10d::AllreduceCoalescedOptions"))
+            .put(new Info("c10d::BroadcastOptions", "c10d::ReduceOptions", "c10d::AllreduceOptions", "c10d::AllgatherOptions", "c10d::GatherOptions"))
             .put(new Info("CUDAContextLight.h").linePatterns("struct Allocator;").skip()) // Prevent regeneration of Allocator class in cuda package
+            .put(new Info("c10d::Backend::Options").pointerTypes("DistributedBackend.Options"))
 
-            .put(new Info("c10::DeviceIndex").valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
+            .put(new Info("c10::DeviceIndex", "at::DeviceIndex").valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
             .put(new Info("c10::StreamId").valueTypes("long"))
             .put(new Info("c10::cuda::CaptureStatus").valueTypes("int").cast().skip()) // Enum doesn't parse
             .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
-            .put(new Info("c10::CuDNNError", "c10::CUDAError").purify())
             .put(new Info("c10::impl::GPUTrace::gpuTraceState").skip())
             .put(new Info("at::native::RNNDescriptor::dropout_desc_").skip())
             .put(new Info("at::native::operator <<(std::ostream&, at::native::TensorDescriptor&)",
                 "at::native::operator <<(std::ostream&, at::native::FilterDescriptor&)",
                 "at::native::cudnnTypeToString", "at::native::getCudnnDataType", "at::native::cudnn_version",
                 "c10::cuda::c10_retrieve_device_side_assertion_info").skip())
+            .put(new Info("std::function<void(std::shared_ptr<c10d::WorkInfo>)>", "std::function<void(c10d::WorkInfo*)>", "std::function<void(WorkInfo*)>").pointerTypes("WorkInfoConsumer"))
 
             .put(new Info("c10::cuda::CUDACachingAllocator::CheckpointDelta").immutable()) // at::DataPtr is not constructible
 
@@ -174,44 +201,88 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
                 "std::hash<c10::cuda::CUDAStream>",
 
-                "std::shared_ptr<c10::CreateContextFn> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn"  // See comment for GatheredContextSupplier
+                "std::shared_ptr<c10::CreateContextFn> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn",  // See comment for GatheredContextSupplier
 
-            ).cast().pointerTypes("Pointer"))
+                "std::enable_shared_from_this<WorkNCCL>"
 
-            //// CUDA types
-            .put(new Info( // Struct
-                "cudaDeviceProp"
-            ).pointerTypes("Pointer"))
-            .put(new Info( // Pointers to opaque structs
-                "cudaStream_t", "cusparseHandle_t", "cublasHandle_t", "cusolverDnHandle_t", "cudnnHandle_t", "cudaEvent_t",
-                "cublasLtHandle_t"
-            ).valueTypes("Pointer").cast())
-            .put(new Info( // Enums
+            ).cast().pointerTypes("Pointer"));
+        new PointerInfo("c10d::Store").makeIntrusive(infoMap);
+        new PointerInfo("c10d::Work").makeIntrusive(infoMap);
+
+
+        //// CUDA types
+        infoMap
+            .put(new Info("cudaStream_t").valueTypes("CUstream_st").pointerTypes("@ByPtrPtr CUstream_st"))
+            .put(new Info("cudaEvent_t").valueTypes("CUevent_st").pointerTypes("@ByPtrPtr CUevent_st"))
+            .put(new Info("cusparseHandle_t").valueTypes("cusparseContext").pointerTypes("@ByPtrPtr cusparseContext"))
+            .put(new Info("cublasHandle_t").valueTypes("cublasContext").pointerTypes("@ByPtrPtr cublasContext"))
+            .put(new Info("cublasLtHandle_t").valueTypes("cublasLtContext").pointerTypes("@ByPtrPtr cublasLtContext"))
+            .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
+            .put(new Info("cudnnHandle_t").valueTypes("cudnnContext").pointerTypes("@ByPtrPtr cudnnContext"))
+            .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer"))
+
+            .put(new Info( // Enums, cuda presets doesn't use Info.enumerate
                 "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t", "cudnnRNNDataLayout_t",
                 "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudaStreamCaptureMode", "cudnnDataType_t", "cudnnNanPropagation_t",
                 "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t", "cudaError_t",
-                "cudaMemcpyKind"
+                "cudaMemcpyKind", "ncclResult_t", "ncclDataType_t", "ncclRedOp_t", "ncclScalarResidence_t"
             ).valueTypes("int").cast())
         ;
 
         new torch.ArrayInfo("CUDAStream").elementTypes("c10::cuda::CUDAStream").mapArrayRef(infoMap);
 
-        new torch.PointerInfo("c10::cuda::CUDACachingAllocator::AllocatorState").makeShared(infoMap);
+        new PointerInfo("c10::cuda::CUDACachingAllocator::AllocatorState").makeShared(infoMap);
+        //new PointerInfo("c10d::NCCLComm").makeShared(infoMap); // See getNcclErrorDetailStr below
 
         // Classes that are not part of the API (no TORCH_API nor C10_API) and are not argument nor return type of API methods.
         infoMap.put(new Info(
             "c10::cuda::OptionalCUDAGuard",
             "c10::cuda::OptionalCUDAStreamGuard",
             "c10::cuda::impl::CUDAGuardImpl",
-            "c10::FreeMemoryCallback" // in API, but useless as long as we don't map FreeCudaMemoryCallbacksRegistry,
+            "c10::FreeMemoryCallback", // in API, but useless as long as we don't map FreeCudaMemoryCallbacksRegistry,
+            "AT_DISALLOW_COPY_AND_ASSIGN",
+            "c10d::NCCLComm", "std::shared_ptr<c10d::NCCLComm>" // See getNcclErrorDetailStr below
         ).skip())
         ;
 
-        infoMap.put(new Info("USE_CUDNN_RNN_V8_API").define()); // Using CuDNN 8.9.7 or more recent
+        infoMap
+            .put(new Info("USE_CUDNN_RNN_V8_API").define()) // Using CuDNN 8.9.7 or more recent
+            .put(new Info("defined(IS_NCCL_EXP) && defined(NCCL_COMM_DUMP)").define(false))
+        ;
 
         //// Different C++ API between platforms
         infoMap
             .put(new Info("at::cuda::getCurrentCUDABlasLtHandle").skip()) // No cublas lt with Microsoft compiler
+        ;
+
+        //// Don't map all custom pytorch errors since there is currently no way to catch them as objects from Java
+        infoMap.put(new Info(
+            "c10::CUDAError",
+            "c10::CuDNNError"
+        ).skip());
+
+        //// Not part of public API or not exposed by libtorch
+        infoMap
+            .put(new Info(
+                "c10d::DumpPipe",
+                "c10d::nccl_use_nonblocking",
+                "c10d::getNcclErrorDetailStr", // Prevents c10d::NCCLComm to be mapped
+                "c10d::ncclGetErrorWithVersion",
+                "c10d::nccl_nonblocking_timeout",
+                "c10d::getNcclVersion",
+                "c10d::ProcessGroupNCCL::operator <<"
+                ).skip())
+
+        ;
+
+        //// Help namespace resolution
+        infoMap
+            .put(new Info("c10::optional", "c10d::WorkInfo"))
+        ;
+
+        //// No way to map
+        infoMap
+            .put(new Info("c10::optional<std::function<std::string()> >").skip())
         ;
     }
 }

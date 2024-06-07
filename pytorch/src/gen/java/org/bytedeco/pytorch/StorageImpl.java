@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -60,7 +62,7 @@ public class StorageImpl extends Pointer {
         @StdMove DataPtr data_ptr,
         Allocator allocator,
         @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr, allocator, resizable); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::StorageImpl>") private native void allocate(
         @ByVal use_byte_size_t arg0,
         @ByVal SymInt size_bytes,
         @StdMove DataPtr data_ptr,
@@ -72,7 +74,7 @@ public class StorageImpl extends Pointer {
         @Const @ByRef SymInt size_bytes,
         Allocator allocator,
         @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, allocator, resizable); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::StorageImpl>") private native void allocate(
         @ByVal use_byte_size_t arg0,
         @Const @ByRef SymInt size_bytes,
         Allocator allocator,

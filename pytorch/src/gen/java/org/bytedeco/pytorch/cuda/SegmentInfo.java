@@ -3,8 +3,15 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cusparse.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cusolver.*;
+import org.bytedeco.cuda.cudnn.*;
+import org.bytedeco.cuda.nccl.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;
@@ -47,7 +54,7 @@ public class SegmentInfo extends Pointer {
   public native @Cast("int64_t") long requested_size(); public native SegmentInfo requested_size(long setter); // unrounded, actually requested size
   public native @Cast("int64_t") long allocated_size(); public native SegmentInfo allocated_size(long setter);
   public native @Cast("int64_t") long active_size(); public native SegmentInfo active_size(long setter);
-  public native @Cast("cudaStream_t") Pointer stream(); public native SegmentInfo stream(Pointer setter);
+  public native CUstream_st stream(); public native SegmentInfo stream(CUstream_st setter);
   public native @Cast("bool") boolean is_large(); public native SegmentInfo is_large(boolean setter);
   public native @Cast("bool") boolean is_expandable(); public native SegmentInfo is_expandable(boolean setter);
   public native @ByRef @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair owner_private_pool_id(); public native SegmentInfo owner_private_pool_id(DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair setter);

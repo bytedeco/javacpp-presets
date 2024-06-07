@@ -7,8 +7,10 @@ import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -224,6 +226,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../BytePointerPairOptional.java
 
 
+// Targeting ../DistributedBackendOptional.java
+
+
+// Targeting ../LoggerOptional.java
+
+
 // Targeting ../ExampleOptional.java
 
 
@@ -249,6 +257,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../StringLongMap.java
+
+
+// Targeting ../StringTensorMap.java
 
 
 // Targeting ../ActivityTypeSet.java
@@ -291,6 +302,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../BoolVector.java
+
+
+// Targeting ../ByteVector.java
 
 
 // Targeting ../BytePointerVector.java
@@ -407,6 +421,21 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../ReadAdapterInterfaceVector.java
 
 
+// Targeting ../SizeTVectorVector.java
+
+
+// Targeting ../LongArrayRefVector.java
+
+
+// Targeting ../FutureVector.java
+
+
+// Targeting ../SymNodeVector.java
+
+
+// Targeting ../GlooDeviceVector.java
+
+
 // Targeting ../ExampleVector.java
 
 
@@ -500,6 +529,21 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_SafePyObjectTorchDispatchModeKey_T.java
 
 
+// Targeting ../T_MessageWeakStorage_T.java
+
+
+// Targeting ../T_SizeTVectorVectorSizeTVector_T.java
+
+
+// Targeting ../SizeTStringMap.java
+
+
+// Targeting ../LongRecvRpcBackwardMap.java
+
+
+// Targeting ../LongSendRpcBackwardMap.java
+
+
 // Targeting ../HashAliasedIValueMap.java
 
 
@@ -527,7 +571,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../ArgumentSpecExecutionPlanMap.java
 
 
-// Targeting ../TreeRefStringMap.java
+// Targeting ../TreeStringMap.java
 
 
 // Targeting ../StringIntMap.java
@@ -549,6 +593,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../DeviceTypeSet.java
+
+
+// Targeting ../ShortSet.java
 
 
 // Targeting ../Nonlinearity.java
@@ -1488,9 +1535,14 @@ public static final int HAS_DEMANGLE = 0;
 
 // #if defined(_MSC_VER) && _MSC_VER <= 1900
 // #endif
-// Targeting ../Error.java
 
-
+/** The primary ATen error class.
+ *  Provides a complete error message with source location information via
+ *  {@code what()}, and a more concise message via {@code what_without_backtrace()}.
+ *  Don't throw this directly; use TORCH_CHECK/TORCH_INTERNAL_ASSERT instead.
+ * 
+ *  NB: c10::Error is handled specially by the default torch to suppress the
+ *  backtrace, see torch/csrc/Exceptions.h */
 // Targeting ../Warning.java
 
 
@@ -1536,46 +1588,44 @@ public static final int HAS_DEMANGLE = 0;
 
 
 
+ // namespace WarningUtils
 
-// Targeting ../ErrorAlwaysShowCppStacktrace.java
+// Like Error, but we always report the C++ backtrace, instead of only
+// reporting when TORCH_SHOW_CPP_STACKTRACES
 
+// Used in ATen for out-of-bound indices that can reasonably only be detected
+// lazily inside a kernel (See: advanced indexing).  These turn into
+// IndexError when they cross to Python.
 
-// Targeting ../IndexError.java
+// Used in ATen for invalid values.  These turn into
+// ValueError when they cross to Python.
 
+// Used in ATen for invalid types.  These turn into
+// TypeError when they cross to Python.
 
-// Targeting ../ValueError.java
+// Used in ATen for functionality that is not implemented.  These turn into
+// NotImplementedError when they cross to Python.
 
+// Used in ATen for non finite indices.  These turn into
+// ExitException when they cross to Python.
 
-// Targeting ../TypeError.java
+// Used in Onnxifi backend lowering.  These turn into
+// ExitException when they cross to Python.
 
+// Used for numerical errors from the linalg module. These
+// turn into LinAlgError when they cross into Python.
 
-// Targeting ../NotImplementedError.java
+// Base error type for all distributed errors.
+// These turn into DistError when they cross into Python.
 
+// Used for collective communication library errors from the distributed module.
+// These turn into DistBackendError when they cross into Python.
 
-// Targeting ../EnforceFiniteError.java
+// Used for errors originating from the store.
+// These turn into DistStoreError when they cross into Python.
 
-
-// Targeting ../OnnxfiBackendSystemError.java
-
-
-// Targeting ../LinAlgError.java
-
-
-// Targeting ../OutOfMemoryError.java
-
-
-// Targeting ../DistError.java
-
-
-// Targeting ../DistBackendError.java
-
-
-// Targeting ../DistStoreError.java
-
-
-// Targeting ../DistNetworkError.java
-
-
+// Used for errors originating from the TCP/IP stack and not from collective
+// libraries. These turn into DistNetworkError when they cross into Python.
 
 // A utility function to return an exception std::string by prepending its
 // exception type before its what() content
@@ -3625,7 +3675,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // Targeting ../FloatComplexArrayRef.java
 
 
-// Targeting ../FuturePtrArrayRef.java
+// Targeting ../FutureArrayRef.java
 
 
 // Targeting ../HalfArrayRef.java
@@ -6096,7 +6146,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <cstdint>
 // #include <ostream>
 // #include <string>
-// Targeting ../SymNodeImpl.java
+// Targeting ../SymNode.java
 
 
 
@@ -7176,7 +7226,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // storage's DataPtr has some context (`DataPtr::get_context()`) which is not
 // equal to the data pointer (`DataPtr::get()`). In this case, a nullptr is
 // returned.
-@Namespace("c10::impl::cow") public static native @ByVal StorageImplPtr lazy_clone_storage(
+@Namespace("c10::impl::cow") public static native @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl lazy_clone_storage(
     @ByRef StorageImpl storage);
 
 // Check if a storage has a simple DataPtr with no abnormal context
@@ -7223,7 +7273,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 
 
-@Namespace("c10") public static native @ByVal StorageImplPtr make_storage_impl(
+@Namespace("c10") public static native @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl make_storage_impl(
     @ByVal StorageImpl.use_byte_size_t use_byte_size,
     @ByVal SymInt size_bytes,
     @StdMove DataPtr data_ptr,
@@ -8224,51 +8274,11 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(int[] argc, @Cast("char**") @ByPtrPtr byte[] argv);
 @Namespace("c10") public static native void UpdateLoggingLevelsFromFlags();
 
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @StdString BytePointer msg,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @StdString BytePointer msg);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @StdString String msg,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @StdString String msg);
 
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @ByVal CompileTimeEmptyString arg3,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @ByVal CompileTimeEmptyString arg3);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @ByVal CompileTimeEmptyString arg3,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @ByVal CompileTimeEmptyString arg3);
+
+
+
+
 
 @Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
     @Cast("const char*") BytePointer file,
@@ -9204,7 +9214,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
  *
  * @param size  size in bytes
  */
-@Namespace("at") public static native @ByVal StorageImplPtr new_shm_fd_storage(@Cast("size_t") long size);
+@Namespace("at") public static native @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl new_shm_fd_storage(@Cast("size_t") long size);
 
 /**
  * Copy src to dst
@@ -13219,11 +13229,20 @@ public static final byte min_lookups = min_lookups();
 // Targeting ../GenericDictIterator.java
 
 
+// Targeting ../StringGenericListDictIterator.java
+
+
+// Targeting ../TensorTensorDictIterator.java
+
+
 
 // Targeting ../GenericDict.java
 
 
 // Targeting ../StringGenericListDict.java
+
+
+// Targeting ../TensorTensorDict.java
 
 
 // GenericDict is how IValue stores dicts. It is, however, not part of the
@@ -14003,162 +14022,6 @@ public static final byte min_lookups = min_lookups();
  // namespace c10
 
 
-// Parsed from c10/util/intrusive_ptr.h
-
-// #pragma once
-
-// #include <c10/util/Exception.h>
-// #include <c10/util/MaybeOwned.h>
-// #include <atomic>
-// #include <climits>
-// #include <memory>
-// #include <type_traits>
-
-@Namespace("c10::raw::weak_intrusive_ptr") public static native void incref(@Cast("c10::intrusive_ptr_target*") Pointer self);
-
-
-// Targeting ../DontIncreaseRefcount.java
-
-
- // namespace raw
-@Namespace("c10::detail") @MemberGetter public static native @Cast("const uint32_t") int kImpracticallyHugeReferenceCount();
- // namespace detail
-
-/**
- * intrusive_ptr<T> is an alternative to shared_ptr<T> that has better
- * performance because it does the refcounting intrusively
- * (i.e. in a member of the object itself).
- * Your class T needs to inherit from intrusive_ptr_target to allow it to be
- * used in an intrusive_ptr<T>. Your class's constructor should not allow
- *{@code this} to escape to other threads or create an intrusive_ptr from {@code this}.
- */
-
-// Note [Stack allocated intrusive_ptr_target safety]
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// A well known problem with std::enable_shared_from_this is that it
-// allows you to create a std::shared_ptr from a stack allocated object,
-// which is totally bogus because the object will die once you return
-// from the stack.  In intrusive_ptr, we can detect that this has occurred,
-// because we set the refcount/weakcount of objects which inherit from
-// intrusive_ptr_target to zero, *unless* we can prove that the object
-// was dynamically allocated (e.g., via make_intrusive).
-//
-// Thus, whenever you transmute a T* into a intrusive_ptr<T>, we check
-// and make sure that the refcount isn't zero (or, a more subtle
-// test for weak_intrusive_ptr<T>, for which the refcount may validly
-// be zero, but the weak refcount better not be zero), because that
-// tells us if the object was allocated by us.  If it wasn't, no
-// intrusive_ptr for you!
-
-// NOLINTNEXTLINE(cppcoreguidelines-virtual-class-destructor)
-
-// Increment needs to be acquire-release to make use_count() and
-// unique() reliable.
-@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_refcount_increment(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer refcount);
-
-// weak_use_count() is only used for testing, so we don't need it to
-// be reliable. Relaxed should be fine.
-@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_weakcount_increment(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer weakcount);
-
-// Both decrements need to be acquire-release for correctness. See
-// e.g. std::shared_ptr implementation.
-@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_refcount_decrement(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer refcount);
-
-@Namespace("c10::detail") public static native @Cast("uint32_t") int atomic_weakcount_decrement(@Cast("std::atomic<uint32_t>*") @ByRef IntPointer weakcount);
-
-
-// Targeting ../QuantizerPtr.java
-
-
-// Targeting ../GeneratorImplPtr.java
-
-
-// Targeting ../TuplePtr.java
-
-
-// Targeting ../FuturePtr.java
-
-
-// Targeting ../ConstantStringPtr.java
-
-
-// Targeting ../AwaitPtr.java
-
-
-// Targeting ../ObjPtr.java
-
-
-// Targeting ../PyObjectHolderPtr.java
-
-
-// Targeting ../EnumHolderPtr.java
-
-
-// Targeting ../RRefInterfacePtr.java
-
-
-// Targeting ../TensorImplPtr.java
-
-
-// Targeting ../StorageImplPtr.java
-
-
-// Targeting ../SymNode.java
-
-
-// Targeting ../BackendMetaRef.java
-
-
-// Targeting ../TreeRef.java
-
-
-
-// To allow intrusive_ptr inside std::map or std::set, we need operator<
-// Targeting ../WeakStorage.java
-
-
-
-// To allow weak_intrusive_ptr inside std::map or std::set, we need operator<
-
-// Alias for documentary purposes, to more easily distinguish
-// weak raw intrusive pointers from intrusive pointers.
-
-// This namespace provides some methods for working with
-// raw pointers that subclass intrusive_ptr_target.  They are not provided
-// as methods on intrusive_ptr_target, because ideally you would not need these
-// methods at all (use smart pointers), but if you are dealing with legacy code
-// that still needs to pass around raw pointers, you may find these quite
-// useful.
-//
-// An important usage note: some functions are only valid if you have a
-// strong raw pointer to the object, while others are only valid if you
-// have a weak raw pointer to the object.  ONLY call intrusive_ptr namespace
-// functions on strong pointers, and weak_intrusive_ptr namespace functions
-// on weak pointers.  If you mix it up, you may get an assert failure.
-
-// WARNING: Unlike the reclaim() API, it is NOT valid to pass
-// NullType::singleton to this function
-
-// WARNING: Unlike the reclaim() API, it is NOT valid to pass
-// NullType::singleton to this function
-@Namespace("c10::raw::intrusive_ptr") public static native void decref(@Cast("c10::intrusive_ptr_target*") Pointer self);
-
-@Namespace("c10::raw::intrusive_ptr") public static native @Cast("uint32_t") int use_count(@Cast("c10::intrusive_ptr_target*") Pointer self);
-
- // namespace intrusive_ptr
-
-// This gives the STRONG refcount of a WEAK pointer
-
- // namespace weak_intrusive_ptr
-
- // namespace raw
-
- // namespace c10
-// To allow intrusive_ptr and weak_intrusive_ptr inside std::unordered_map or
-// std::unordered_set, we need std::hash
- // namespace std
-
-
 // Parsed from ATen/core/ivalue_inl.h
 
 // #pragma once
@@ -14264,13 +14127,13 @@ public static final byte min_lookups = min_lookups();
 
 // Input is a list of Futures with the same target type.
 // Output is a Future to the List of completed Futures.
-@Namespace("c10") public static native @ByVal FuturePtr collectAll(
-    @Const @ByRef FuturePtrList srcs);
+@Namespace("c10") public static native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future collectAll(
+    @Const @ByRef FutureList srcs);
 // Input is a List of Futures with the same target type.
 // Output is a Future that will be updated with a seen value.
-@Namespace("c10") public static native @ByVal FuturePtr collectAny(
-    @Const @ByRef FuturePtrList srcs);
-// Targeting ../Object.java
+@Namespace("c10") public static native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future collectAny(
+    @Const @ByRef FutureList srcs);
+// Targeting ../Obj.java
 
 
 // Targeting ../PyObjectHolder.java
@@ -14688,7 +14551,7 @@ public static final byte min_lookups = min_lookups();
 
 @Namespace("c10::impl") public static native void swap(@ByRef(true) TensorElementReference lhs, @ByRef(true) TensorElementReference rhs);
 
-@Namespace("c10::impl") public static native void swap(@ByRef(true) FuturePtrElementReference lhs, @ByRef(true) FuturePtrElementReference rhs);
+@Namespace("c10::impl") public static native void swap(@ByRef(true) FutureElementReference lhs, @ByRef(true) FutureElementReference rhs);
 
 @Namespace("c10::impl") public static native void swap(@ByRef(true) GenericElementReference lhs, @ByRef(true) GenericElementReference rhs);
 
@@ -14798,7 +14661,7 @@ public static final byte min_lookups = min_lookups();
 // Targeting ../TensorElementReference.java
 
 
-// Targeting ../FuturePtrElementReference.java
+// Targeting ../FutureElementReference.java
 
 
 // Targeting ../GenericElementReference.java
@@ -14822,7 +14685,7 @@ public static final byte min_lookups = min_lookups();
 // Targeting ../TensorListIterator.java
 
 
-// Targeting ../FuturePtrListIterator.java
+// Targeting ../FutureListIterator.java
 
 
 // Targeting ../GenericListIterator.java
@@ -14847,7 +14710,7 @@ public static final byte min_lookups = min_lookups();
 // Targeting ../TensorList.java
 
 
-// Targeting ../FuturePtrList.java
+// Targeting ../FutureList.java
 
 
 // Targeting ../GenericList.java
@@ -65945,7 +65808,7 @@ apis for specific fusers.
  *    torch::save(tensor_vec, stream);
  *  \endrst */
 
-@Namespace("torch") public static native @Cast("char*") @StdVector BytePointer pickle_save(@Const @ByRef IValue ivalue);
+@Namespace("torch") public static native @ByVal @Cast("std::vector<char>*") ByteVector pickle_save(@Const @ByRef IValue ivalue);
 
 ///
 ///
@@ -65953,9 +65816,7 @@ apis for specific fusers.
 ///
 ///
 ///
-@Namespace("torch") public static native @ByVal IValue pickle_load(@Cast("char*") @StdVector BytePointer data);
-@Namespace("torch") public static native @ByVal IValue pickle_load(@Cast("char*") @StdVector ByteBuffer data);
-@Namespace("torch") public static native @ByVal IValue pickle_load(@Cast("char*") @StdVector byte[] data);
+@Namespace("torch") public static native @ByVal IValue pickle_load(@Cast("const std::vector<char>*") @ByRef ByteVector data);
 
 /** Deserializes the given {@code value}.
  *  There must be an overload of {@code operator>>} between {@code serialize::InputArchive}
@@ -67115,8 +66976,8 @@ apis for specific fusers.
  *    )JIT");
  *    IValue output = module->run_method("relu_script", a, b);
  *  \endrst */
-@Namespace("torch::jit") public static native @SharedPtr CompilationUnit compile(@StdString BytePointer source);
-@Namespace("torch::jit") public static native @SharedPtr CompilationUnit compile(@StdString String source);
+@Namespace("torch::jit") public static native @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit compile(@StdString BytePointer source);
+@Namespace("torch::jit") public static native @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit compile(@StdString String source);
 
  // namespace jit
  // namespace torch
@@ -78036,9 +77897,6 @@ public static final String TORCH_VERSION =
 // Targeting ../Call.java
 
 
-// Targeting ../ErrorReport.java
-
-
 
  // namespace jit
  // namespace torch
@@ -78086,7 +77944,7 @@ public static final String TORCH_VERSION =
 
 @Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @ByVal pretty_tree t_);
 
-@Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef TreeRef t);
+@Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree t);
 
  // namespace jit
  // namespace torch
@@ -78468,100 +78326,100 @@ public static final String TORCH_VERSION =
  // namespace caffe2
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString BytePointer filename,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString BytePointer filename);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString String filename,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString String filename);
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @Cast("std::istream*") @ByRef Pointer in);
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @UniquePtr ReadAdapterInterface rai,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @UniquePtr ReadAdapterInterface rai);
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString BytePointer filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/,
     @Cast("bool") boolean restore_shapes/*=false*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString BytePointer filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString String filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/,
     @Cast("bool") boolean restore_shapes/*=false*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString String filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
 
 // For reading unified serialization format from torch.Package
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @ByVal @Cast("std::shared_ptr<caffe2::serialize::PyTorchStreamReader>*") Pointer reader,
     @SharedPtr DeserializationStorageContext storage_context,
     @ByVal DeviceOptional device,
     @StdString BytePointer ts_id);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @ByVal @Cast("std::shared_ptr<caffe2::serialize::PyTorchStreamReader>*") Pointer reader,
     @SharedPtr DeserializationStorageContext storage_context,
     @ByVal DeviceOptional device,
     @StdString String ts_id);
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/,
     @Cast("bool") boolean restore_shapes/*=false*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @UniquePtr ReadAdapterInterface rai,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
-    @SharedPtr CompilationUnit cu,
+    @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @UniquePtr ReadAdapterInterface rai,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
@@ -78707,7 +78565,7 @@ public static final String TORCH_VERSION =
     @Cast("std::istream*") @ByRef Pointer in,
     @ByRef ExtraFilesMap extra_files);
 
-@Namespace("torch::jit") public static native @ByVal ObjPtr ObjLoaderFunc(
+@Namespace("torch::jit") public static native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj ObjLoaderFunc(
     @Const @ByRef StrongTypePtr type,
     @ByVal IValue input);
 
@@ -79351,10 +79209,10 @@ public static final String TORCH_VERSION =
  *    print(values)
  * 
  *  \endrst */
-@Namespace("torch::jit") public static native @Cast("char*") @StdVector BytePointer pickle(
+@Namespace("torch::jit") public static native @ByVal @Cast("std::vector<char>*") ByteVector pickle(
     @Const @ByRef IValue ivalue,
     TensorVector tensor_table/*=nullptr*/);
-@Namespace("torch::jit") public static native @Cast("char*") @StdVector BytePointer pickle(
+@Namespace("torch::jit") public static native @ByVal @Cast("std::vector<char>*") ByteVector pickle(
     @Const @ByRef IValue ivalue);
 
 /** Save a {@code torch::IValue} in a format that can be loaded by both
@@ -79512,6 +79370,1176 @@ public static final String TORCH_VERSION =
 
  // namespace torch::inductor
 // #endif
+
+
+// Parsed from torch/csrc/distributed/c10d/Store.hpp
+
+// #pragma once
+
+// #include <chrono>
+// #include <cstdint>
+// #include <stdexcept>
+// #include <string>
+// #include <vector>
+
+// #include <c10/macros/Macros.h>
+// #include <torch/custom_class.h>
+
+// callback function will be given arguments (optional<string> oldValue,
+// optional<string> newValue)
+// Targeting ../Store.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/Types.hpp
+
+// #pragma once
+
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+
+// #include <chrono>
+// #include <cstdint>
+
+// #include <ATen/core/Tensor.h>
+// #include <ATen/core/ivalue.h>
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/intrusive_ptr.h>
+// Targeting ../_SupplementBase.java
+
+
+// Targeting ../NCCLPreMulSumSupplement.java
+
+
+// Targeting ../ReduceOp.java
+
+
+// Targeting ../BroadcastOptions.java
+
+
+// Targeting ../AllreduceOptions.java
+
+
+// Targeting ../AllreduceCoalescedOptions.java
+
+
+// Targeting ../ReduceOptions.java
+
+
+// Targeting ../AllgatherOptions.java
+
+
+// Targeting ../GatherOptions.java
+
+
+// Targeting ../ScatterOptions.java
+
+
+// Targeting ../ReduceScatterOptions.java
+
+
+// Targeting ../AllToAllOptions.java
+
+
+// Targeting ../BarrierOptions.java
+
+
+// Targeting ../DistributedBackendOptions.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/Utils.hpp
+
+// #pragma once
+
+// #include <ATen/ATen.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/accumulate.h>
+// #include <c10/util/irange.h>
+// #include <torch/csrc/distributed/c10d/Types.hpp>
+
+// #ifdef _WIN32
+// #else
+// #include <fcntl.h>
+// #include <netdb.h>
+// #include <sys/poll.h>
+// #include <sys/socket.h>
+// #include <unistd.h>
+// #endif
+
+// #include <sys/types.h>
+
+// #include <chrono>
+// #include <cstdint>
+// #include <cstdlib>
+// #include <functional>
+// #include <limits>
+// #include <string>
+// #include <system_error>
+// #include <tuple>
+// #include <vector>
+
+@Namespace("c10d") public static native @Cast("size_t") long getTensorsNumel(@Const @ByRef TensorVector tensors);
+
+// Retrieve tensor shapes from a given tensor.
+@Namespace("c10d") public static native @ByVal TensorVector getTensorShapes(
+    @Const @ByRef TensorVector tensors);
+
+// Use -2 to represent unset state of env vars
+public static final int C10D_ENV_NOT_SET = -2;
+
+// Turns at::IntArrayRef into "(1, 2, 3, 4)".
+@Namespace("c10d") public static native @StdString BytePointer toString(@ByVal LongArrayRef l);
+@Namespace("c10d") public static native @StdString String toString(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... l);
+
+@Namespace("c10d") public static native @StdString BytePointer toString(Layout layout);
+
+@Namespace("c10d") public static native @ByVal StringVector split(
+    @Cast("char") byte separator,
+    @StdString BytePointer string);
+@Namespace("c10d") public static native @ByVal StringVector split(
+    @Cast("char") byte separator,
+    @StdString String string);
+
+@Namespace("c10d") public static native @StdString BytePointer getCvarString(
+    @Const @ByRef StringVector env,
+    @Cast("const char*") BytePointer def);
+@Namespace("c10d") public static native @StdString String getCvarString(
+    @Const @ByRef StringVector env,
+    String def);
+
+@Namespace("c10d") public static native int getCvarInt(@Const @ByRef StringVector env, int def);
+
+@Namespace("c10d") public static native @Cast("bool") boolean getCvarBool(@Const @ByRef StringVector env, @Cast("bool") boolean def);
+
+@Namespace("c10d") public static native void assertSameSizes(
+    @Const @ByRef LongArrayRef sizes,
+    @Const @ByRef TensorVector tensors);
+@Namespace("c10d") public static native void assertSameSizes(
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @Const @ByRef TensorVector tensors);
+
+@Namespace("c10d") public static native void assertSameSizeAndType(@Const @ByRef TensorVector tensors);
+
+@Namespace("c10d") public static native void assertTypeMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByRef TensorOptions options,
+    @Const @ByVal TensorArrayRef tensors,
+    @Cast("size_t") long index);
+@Namespace("c10d") public static native void assertTypeMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByRef TensorOptions options,
+    @Const @ByVal TensorVector tensors,
+    @Cast("size_t") long index);
+
+@Namespace("c10d") public static native void assertSizesMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByRef LongArrayRef sizes,
+    @Const @ByVal TensorArrayRef tensors,
+    @Cast("size_t") long index);
+@Namespace("c10d") public static native void assertSizesMatch(
+    @ByVal StringConsumer fn,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @Const @ByVal TensorVector tensors,
+    @Cast("size_t") long index);
+
+@Namespace("c10d") public static native void assertLayoutMatch(
+    @ByVal StringConsumer fn,
+    Layout expected,
+    @Const @ByVal TensorArrayRef tensors,
+    @Cast("size_t") long index);
+@Namespace("c10d") public static native void assertLayoutMatch(
+    @ByVal StringConsumer fn,
+    @Cast("c10::Layout") byte expected,
+    @Const @ByVal TensorVector tensors,
+    @Cast("size_t") long index);
+@Namespace("c10d") public static native void assertLayoutMatch(
+    @ByVal StringConsumer fn,
+    Layout expected,
+    @Const @ByVal TensorVector tensors,
+    @Cast("size_t") long index);
+@Namespace("c10d") public static native void assertLayoutMatch(
+    @ByVal StringConsumer fn,
+    @Cast("c10::Layout") byte expected,
+    @Const @ByVal TensorArrayRef tensors,
+    @Cast("size_t") long index);
+
+@Namespace("c10d") public static native void assertLayoutMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertLayoutMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertNonEmpty(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertNonEmpty(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertSingleElement(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertSingleElement(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertSingleElementInput(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertSingleElementInput(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertSingleElementOutput(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertSingleElementOutput(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertRootRank(
+    @ByVal StringConsumer fn,
+    int rank,
+    int size);
+
+@Namespace("c10d") public static native void assertRootTensor(
+    @ByVal StringConsumer fn,
+    int rank,
+    int size);
+
+@Namespace("c10d") public static native void assertDense(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertDense(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertCPU(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertCPU(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertSameDevice(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertSameDevice(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native void assertTypeAndSizesMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors,
+    @Const @ByRef TensorOptions options,
+    @Const @ByRef LongArrayRef sizes);
+@Namespace("c10d") public static native void assertTypeAndSizesMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors,
+    @Const @ByRef TensorOptions options,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
+
+@Namespace("c10d") public static native void assertTypeAndSizesMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native void assertTypeAndSizesMatch(
+    @ByVal StringConsumer fn,
+    @Const @ByVal TensorVector tensors);
+
+// Copied from ATen/core/functional.h.
+
+// Copied from torch/csrc/utils/tensor_flatten.h.
+@Namespace("c10d") public static native @ByVal Tensor flattenDenseTensors(@ByVal TensorArrayRef tensors);
+@Namespace("c10d") public static native @ByVal Tensor flattenDenseTensors(@ByVal TensorVector tensors);
+
+@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(
+    @StdVector TensorVector tensors,
+    @Cast("size_t") long deviceIdx);
+
+@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(@ByRef TensorVector tensors);
+
+@Namespace("c10d") public static native @Cast("std::vector<int64_t>*") @StdVector LongVector getSizes(
+    @Const @ByRef TensorVector tensors);
+
+@Namespace("c10d") public static native @StdVector IntPointer getDevices(@Const @ByRef TensorVector tensors);
+
+// For alltoall split size sanity check
+@Namespace("c10d") public static native void checkSplitSizes(
+    @Cast("const std::vector<int64_t>*") @ByRef LongVector split_sizes,
+    @Const @ByRef Tensor tensor,
+    int group_size);
+
+// Compute alltoall lengths and offsets, handling multi-dimension tensors
+
+// `errno` is only meaningful when it fails. E.g., a  successful `fork()` sets
+// `errno` to `EINVAL` in child process on some macos
+// (https://stackoverflow.com/a/20295079), and thus `errno` should really only
+// be inspected if an error occurred.
+//
+// `success_cond` is an expression used to check if an error has happend. So for
+// `fork()`, we can use `SYSCHECK(pid = fork(), pid != -1)`. The function output
+// is stored in variable `__output` and may be used in `success_cond`.
+// #ifdef _WIN32
+// #else
+// #define SYSCHECK(expr, success_cond)
+//   while (true) {
+//     auto __output = (expr);
+//     (void)__output;
+//     if (!(success_cond)) {
+//       if (errno == EINTR) {
+//         continue;
+//       } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
+//         C10_THROW_ERROR(DistNetworkError, "Socket Timeout");
+//       } else {
+//         C10_THROW_ERROR(DistNetworkError, std::strerror(errno));
+//       }
+//     } else {
+//       break;
+//     }
+//   }
+// #endif
+
+// Most functions indicate error by returning `-1`. This is a helper macro for
+// this common case with `SYSCHECK`.
+// Since SOCKET_ERROR = -1 in MSVC, so also leverage SYSCHECK_ERR_RETURN_NEG1
+// #define SYSCHECK_ERR_RETURN_NEG1(expr) SYSCHECK(expr, __output != -1)
+
+// Send and receive
+
+// send a vector's length and data
+
+// receive a vector as sent in sendVector
+
+// this is only for convenience when sending rvalues
+
+// send a string's length and data
+@Namespace("c10d::tcputil") public static native void sendString(
+    int socket,
+    @StdString BytePointer str,
+    @Cast("bool") boolean moreData/*=false*/);
+@Namespace("c10d::tcputil") public static native void sendString(
+    int socket,
+    @StdString BytePointer str);
+@Namespace("c10d::tcputil") public static native void sendString(
+    int socket,
+    @StdString String str,
+    @Cast("bool") boolean moreData/*=false*/);
+@Namespace("c10d::tcputil") public static native void sendString(
+    int socket,
+    @StdString String str);
+
+// receive a string as sent in sendString
+@Namespace("c10d::tcputil") public static native @StdString BytePointer recvString(int socket);
+
+ // namespace tcputil
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/Work.hpp
+
+// #pragma once
+
+// #include <ATen/ATen.h>
+// #include <stdexcept>
+// #include <vector>
+
+@Namespace("c10d") @MemberGetter public static native @Cast("const char*") BytePointer kSeqNumStoreKey();
+
+@Namespace("c10d") public enum OpType {
+  BROADCAST((byte)(0)),
+  ALLREDUCE((byte)(1)),
+  ALLREDUCE_COALESCED((byte)(2)),
+  REDUCE((byte)(3)),
+  ALLGATHER((byte)(4)),
+  _ALLGATHER_BASE((byte)(5)),
+  ALLGATHER_COALESCED((byte)(6)),
+  GATHER((byte)(7)),
+  SCATTER((byte)(8)),
+  REDUCE_SCATTER((byte)(9)),
+  ALLTOALL_BASE((byte)(10)),
+  ALLTOALL((byte)(11)),
+  SEND((byte)(12)),
+  RECV((byte)(13)),
+  RECVANYSOURCE((byte)(14)),
+  BARRIER((byte)(15)),
+  _REDUCE_SCATTER_BASE((byte)(16)),
+  COALESCED((byte)(17)),
+  _ALLREDUCE_SPARSE((byte)(18)),
+  UNKNOWN((byte)(100));
+
+    public final byte value;
+    private OpType(byte v) { this.value = v; }
+    private OpType(OpType e) { this.value = e.value; }
+    public OpType intern() { for (OpType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+// Converts OpType to human readable string.
+@Namespace("c10d") public static native @StdString BytePointer opTypeToString(OpType opType);
+@Namespace("c10d") public static native @StdString String opTypeToString(@Cast("c10d::OpType") byte opType);
+
+// Whether or not an OP is an p2p op (SEND, RECV, RECVANYSOURCE)
+@Namespace("c10d") public static native @Cast("bool") boolean isP2POp(OpType opType, @Cast("bool") boolean batchP2P/*=false*/);
+@Namespace("c10d") public static native @Cast("bool") boolean isP2POp(OpType opType);
+@Namespace("c10d") public static native @Cast("bool") boolean isP2POp(@Cast("c10d::OpType") byte opType, @Cast("bool") boolean batchP2P/*=false*/);
+@Namespace("c10d") public static native @Cast("bool") boolean isP2POp(@Cast("c10d::OpType") byte opType);
+// Targeting ../Work.java
+
+
+// Targeting ../WorkInfo.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/debug.h
+
+// Copyright (c) Meta Platforms, Inc. and its affiliates.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+
+@Namespace("c10d") public enum DebugLevel { Off(0), Info(1), Detail(2);
+
+    public final int value;
+    private DebugLevel(int v) { this.value = v; }
+    private DebugLevel(DebugLevel e) { this.value = e.value; }
+    public DebugLevel intern() { for (DebugLevel e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10d") public static native void setDebugLevel(DebugLevel level);
+@Namespace("c10d") public static native void setDebugLevel(@Cast("c10d::DebugLevel") int level);
+
+// Sets the debug level based on the value of the `TORCH_DISTRIBUTED_DEBUG`
+// environment variable.
+@Namespace("c10d") public static native void setDebugLevelFromEnvironment();
+
+@Namespace("c10d") public static native @NoException(true) DebugLevel debug_level();
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/Backend.hpp
+
+// #pragma once
+
+// #include <condition_variable>
+// #include <memory>
+// #include <mutex>
+// #include <stdexcept>
+// #include <unordered_map>
+// #include <utility>
+// #include <vector>
+
+// #include <ATen/ATen.h>
+// #include <c10/macros/Macros.h>
+
+// #include <torch/csrc/distributed/c10d/Types.hpp>
+// #include <torch/csrc/distributed/c10d/Utils.hpp>
+// #include <torch/csrc/distributed/c10d/Work.hpp>
+// #include <torch/csrc/distributed/c10d/debug.h>
+// Targeting ../DistributedBackend.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/ProcessGroup.hpp
+
+// #pragma once
+
+// #include <torch/csrc/distributed/c10d/Backend.hpp>
+// #include <condition_variable>
+// #include <memory>
+// #include <mutex>
+// #include <stdexcept>
+// #include <unordered_map>
+// #include <utility>
+// #include <vector>
+
+// #include <ATen/ATen.h>
+// #include <ATen/core/dispatch/Dispatcher.h>
+// #include <c10/macros/Macros.h>
+
+// #include <torch/csrc/distributed/c10d/Work.hpp>
+// *************************************************************************
+// PROCESS GROUP collective communication API IS BEING CHANGED BETWEEN
+// versions 1.7 and 1.8.
+// PLEASE DO NOT ADD ANY DEPENDENCIES.
+// SEE RFC: https://github.com/pytorch/pytorch/issues/39662
+// *************************************************************************
+// Targeting ../ProcessGroup.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/comm.hpp
+
+// #pragma once
+
+// #include <ATen/ATen.h>
+// #include <ATen/core/ivalue.h>
+// #include <torch/csrc/Export.h>
+// #include <torch/csrc/distributed/c10d/ProcessGroup.hpp>
+// #include <utility>
+
+// Broadcast many tensors to all processes in the process group.
+@Namespace("c10d") public static native void broadcast_coalesced(
+    @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+    @ByVal TensorArrayRef tensors,
+    @Cast("size_t") long buffer_size,
+    int rank/*=0*/);
+@Namespace("c10d") public static native void broadcast_coalesced(
+    @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+    @ByVal TensorArrayRef tensors,
+    @Cast("size_t") long buffer_size);
+@Namespace("c10d") public static native void broadcast_coalesced(
+    @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+    @ByVal TensorVector tensors,
+    @Cast("size_t") long buffer_size,
+    int rank/*=0*/);
+@Namespace("c10d") public static native void broadcast_coalesced(
+    @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+    @ByVal TensorVector tensors,
+    @Cast("size_t") long buffer_size);
+// Targeting ../GradBucket.java
+
+
+// Targeting ../CommHookInterface.java
+
+
+// This helper function is called both by CppCommHookInterface below and inside
+// reducer.
+@Namespace("c10d::detail") public static native @ByVal Tensor parseCppCommHookResult(@Const @ByRef IValue result);
+
+// Targeting ../ProcessGroupCppCommHookInterface.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/default_comm_hooks.hpp
+
+// #pragma once
+
+// #include <torch/csrc/distributed/c10d/ProcessGroup.hpp>
+// #include <torch/csrc/distributed/c10d/comm.hpp>
+
+@Namespace("c10d") public enum BuiltinCommHookType {
+  ALLREDUCE(1),
+  FP16_COMPRESS(2);
+
+    public final int value;
+    private BuiltinCommHookType(int v) { this.value = v; }
+    private BuiltinCommHookType(BuiltinCommHookType e) { this.value = e.value; }
+    public BuiltinCommHookType intern() { for (BuiltinCommHookType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+// Almost same as AllReduceCommHook, but without division inside the hook.
+// This enables the optimization of fusing copy and division and saves one scan
+// over all the input parameters, when no communication hook is provided by the
+// user. Only used internally and not released as a public built-in
+// communication hook.
+
+ // namespace c10d
+
+
+// Parsed from c10/util/ApproximateClock.h
+
+// Copyright 2023-present Facebook. All Rights Reserved.
+
+// #pragma once
+
+// #include <c10/macros/Export.h>
+// #include <array>
+// #include <chrono>
+// #include <cstddef>
+// #include <cstdint>
+// #include <ctime>
+// #include <functional>
+// #include <type_traits>
+
+// #if defined(C10_IOS) && defined(C10_MOBILE)
+// #include <sys/time.h> // for gettimeofday()
+// #endif
+
+// #if defined(__i386__) || defined(__x86_64__) || defined(__amd64__)
+// #define C10_RDTSC
+// #if defined(_MSC_VER)
+// #elif defined(__CUDACC__) || defined(__HIPCC__)
+// #elif defined(__clang__)
+// `__rdtsc` is available by default.
+// NB: This has to be first, because Clang will also define `__GNUC__`
+// #elif defined(__GNUC__)
+// #include <x86intrin.h>
+// #else
+// #undef C10_RDTSC
+// #endif
+// #endif
+
+@Namespace("c10") public static native @Cast("c10::time_t") long getTimeSinceEpoch();
+
+@Namespace("c10") public static native @Cast("c10::time_t") long getTime(@Cast("bool") boolean allow_monotonic/*=false*/);
+@Namespace("c10") public static native @Cast("c10::time_t") long getTime();
+
+// We often do not need to capture true wall times. If a fast mechanism such
+// as TSC is available we can use that instead and convert back to epoch time
+// during post processing. This greatly reduce the clock's contribution to
+// profiling.
+//   http://btorpey.github.io/blog/2014/02/18/clock-sources-in-linux/
+//   https://quick-bench.com/q/r8opkkGZSJMu9wM_XTbDouq-0Io
+// TODO: We should use
+// `https://github.com/google/benchmark/blob/main/src/cycleclock.h`
+// Targeting ../ApproximateClockToUnixTimeConverter.java
+
+
+
+ // namespace c10
+
+
+// Parsed from torch/csrc/distributed/c10d/reducer_timer.hpp
+
+// #pragma once
+// #include <c10/util/ApproximateClock.h>
+// #include <torch/csrc/autograd/profiler.h>
+@Namespace("c10d") @MemberGetter public static native int kUnsetTime();
+
+@Namespace("c10d") public static native @Cast("int64_t") long current_time_in_nanos();
+// Targeting ../Timer.java
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/autograd/functions/basic_ops.h
+
+// #pragma once
+
+// #include <c10/util/irange.h>
+// #include <torch/csrc/Export.h>
+// #include <torch/csrc/autograd/function.h>
+// #include <torch/csrc/autograd/variable.h>
+
+// #include <memory>
+// #include <string>
+// #include <vector>
+// Targeting ../AutogradError.java
+
+
+// Targeting ../NotImplemented.java
+
+
+// Targeting ../DelayedError.java
+
+
+// Targeting ../UndefinedGrad.java
+
+
+// Targeting ../UndefinedGradBackward.java
+
+
+// Targeting ../GraphRoot.java
+
+
+// Targeting ../Identity.java
+
+
+
+ // namespace autograd
+ // namespace torch
+
+
+// Parsed from torch/csrc/autograd/engine.h
+
+// #pragma once
+
+// Engine implements backpropagation from output variables and their gradients
+// to "root" variables (variables created by the user with requires_grad=True).
+
+// #include <ATen/Tensor.h>
+// #include <ATen/ThreadLocalState.h>
+// #include <ATen/core/ivalue.h>
+// #include <torch/csrc/Export.h>
+// #include <torch/csrc/autograd/anomaly_mode.h>
+// #include <torch/csrc/autograd/function.h>
+// #include <torch/csrc/autograd/functions/basic_ops.h>
+// #include <torch/csrc/autograd/graph_task.h>
+// #include <torch/csrc/autograd/input_buffer.h>
+// #include <torch/csrc/autograd/saved_variable_hooks.h>
+// #include <torch/csrc/autograd/utils/warnings.h>
+
+// #include <c10/util/CallOnce.h>
+
+// #include <exception>
+// #include <functional>
+// #include <memory>
+// #include <queue>
+// #include <utility>
+// #include <vector>
+
+
+// Maximum reentrant backward depth before switching to a new thread
+// This limit is based on the TSAN's deadlock detector, where it will
+// fail if a program hold more than 65 locks in one thread at once.
+// As we hold mutex in every of our custom C++ autograd Node, we would
+// like to avoid TSAN complains on this when doing reentrant backwards
+// For reference, see https://github.com/google/sanitizers/issues/950
+@Namespace("torch::autograd") @MemberGetter public static native int MAX_DEPTH();
+public static final int MAX_DEPTH = MAX_DEPTH();
+
+
+@Namespace("torch::autograd") public static native void validate_outputs(
+    @Const @ByRef EdgeVector edges,
+    @ByRef TensorVector grads,
+    @Const @ByRef StringMapper format_error);
+
+// Guard that sets and restores checkpoint_valid
+// Targeting ../Engine.java
+
+
+// Targeting ../EngineStub.java
+
+
+@Namespace("torch::autograd") public static native void set_default_engine_stub(EngineStub stub);
+
+ // namespace torch::autograd
+
+
+// Parsed from torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h
+
+// #pragma once
+
+// #include <torch/csrc/Export.h>
+// #include <cstdint>
+// Targeting ../AutogradMetadata.java
+
+
+
+ // namespace autograd
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/rpc/message.h
+
+// #pragma once
+
+// #include <torch/types.h>
+// #include <vector>
+
+// An enum denoting common RPC errors to allow specific error handling for them.
+@Namespace("torch::distributed::rpc") public enum RPCErrorType {
+  UNKNOWN_ERROR(0), /* Indicates that error type could not be parsed */
+  TIMEOUT(1), /* Indicates that the RPC has timed out */
+  INTENTIONAL_FAILURE(2);/* Deliberate failure, such as those injected by
+                             FaultyAgent for testing */
+
+    public final int value;
+    private RPCErrorType(int v) { this.value = v; }
+    private RPCErrorType(RPCErrorType e) { this.value = e.value; }
+    public RPCErrorType intern() { for (RPCErrorType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+// The enum values are bitwise ORed with MessageType
+// They are bit flags starting from 0x100 and should have
+// value such as 0x100, 0x200, 0x400, 0x800, 0xF00, etc.
+/** enum torch::distributed::rpc::MessageTypeFlags */
+public static final int
+  REQUEST_TYPE = 0x100,
+  RESPONSE_TYPE = 0x200;
+
+// Message types must have values between 0x00 to 0xff
+@Namespace("torch::distributed::rpc") public enum MessageType {
+  // messages for dist.rpc on builtin operators
+  SCRIPT_CALL(REQUEST_TYPE),
+  SCRIPT_RET(RESPONSE_TYPE),
+
+  // messages for dist.rpc on Python UDF
+  PYTHON_CALL(REQUEST_TYPE),
+  PYTHON_RET(RESPONSE_TYPE),
+
+  // messages for dist.remote on builtin operators and Python UDF
+  SCRIPT_REMOTE_CALL(REQUEST_TYPE), // A remote call on a builtin operator
+  PYTHON_REMOTE_CALL(REQUEST_TYPE), // A remote call on a Python UDF
+  REMOTE_RET(RESPONSE_TYPE), // Response for remote calls for
+                                              // UDF, builtin, or script
+
+  // RRef related internal messages
+  SCRIPT_RREF_FETCH_CALL(REQUEST_TYPE), // A UserRRef<IValue> fetches value
+                                             // from owner
+  PYTHON_RREF_FETCH_CALL(REQUEST_TYPE), // A UserRRef<py::object> fetches
+                                             // value from owner
+  SCRIPT_RREF_FETCH_RET(RESPONSE_TYPE), // An OwnerRRef sends ivalue to user
+  PYTHON_RREF_FETCH_RET(RESPONSE_TYPE), // An OwnerRRef sends py::object to user
+  RREF_USER_DELETE(REQUEST_TYPE), // A UserRRef tells the owner to deref
+  RREF_FORK_REQUEST(REQUEST_TYPE), // A child UserRRef tells the owner
+                                             // about itself
+  RREF_CHILD_ACCEPT(REQUEST_TYPE), // A child UserRRef tells parent
+                                             // that owner knows it
+  RREF_ACK(RESPONSE_TYPE), // ACK to internal RRef messages
+
+  // Messages with autograd info
+  FORWARD_AUTOGRAD_REQ(REQUEST_TYPE),
+  FORWARD_AUTOGRAD_RESP(RESPONSE_TYPE),
+
+  // Messages to propagate gradients on the backward pass.
+  BACKWARD_AUTOGRAD_REQ(REQUEST_TYPE),
+  BACKWARD_AUTOGRAD_RESP(RESPONSE_TYPE),
+
+  // Messages to tell workers to clean up their autograd context.
+  CLEANUP_AUTOGRAD_CONTEXT_REQ(REQUEST_TYPE),
+  CLEANUP_AUTOGRAD_CONTEXT_RESP(RESPONSE_TYPE),
+
+  // Messages that tell workers to run requests with profiling enabled.
+  RUN_WITH_PROFILING_REQ(REQUEST_TYPE),
+  RUN_WITH_PROFILING_RESP(RESPONSE_TYPE),
+
+  // Messages to support RRef.backward().
+  RREF_BACKWARD_REQ(REQUEST_TYPE),
+  RREF_BACKWARD_RESP(RESPONSE_TYPE),
+
+  // Other internal message types
+  EXCEPTION(RESPONSE_TYPE),
+  UNKNOWN(0x3c);
+
+    public final int value;
+    private MessageType(int v) { this.value = v; }
+    private MessageType(MessageType e) { this.value = e.value; }
+    public MessageType intern() { for (MessageType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../Message.java
+
+
+
+// Create a response Message of type Exception.
+// The exception string representation will be used as the message's payload.
+// A message ID corresponding to the request that resulted in this response can
+// be provided for matching requests/responses.
+@Namespace("torch::distributed::rpc") public static native @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message createExceptionResponse(
+    @Cast("const std::exception*") @ByRef Pointer e,
+    @Cast("int64_t") long id);
+
+// Create a response Message of type Exception.
+// The passed in string representation will be used as the message's payload.
+// A message ID corresponding to the request that resulted in this response can
+// be provided for matching requests/responses.
+@Namespace("torch::distributed::rpc") public static native @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message createExceptionResponse(
+    @StdString BytePointer exceptionStr,
+    @Cast("int64_t") long id);
+@Namespace("torch::distributed::rpc") public static native @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message createExceptionResponse(
+    @StdString String exceptionStr,
+    @Cast("int64_t") long id);
+
+@Namespace("torch::distributed::rpc") public static native @ByVal T_MessageWeakStorage_T withStorages(@IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message message);
+
+ // namespace rpc
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/rpc/request_callback.h
+
+// #pragma once
+
+// #include <torch/csrc/distributed/rpc/message.h>
+// Targeting ../RequestCallback.java
+
+
+
+ // namespace rpc
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/rpc/types.h
+
+// #pragma once
+
+// #include <ATen/core/ivalue.h>
+// #include <atomic>
+
+
+@Namespace("torch::distributed::rpc") public static native void enableJitRRefPickle();
+@Namespace("torch::distributed::rpc") public static native void disableJitRRefPickle();
+// Targeting ../JitRRefPickleGuard.java
+
+
+// Targeting ../GloballyUniqueId.java
+
+
+
+@Namespace("torch::distributed::rpc") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer os,
+    @Const @ByRef GloballyUniqueId globalId);
+// Targeting ../SerializedPyObj.java
+
+
+
+ // namespace rpc
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/rpc/rpc_agent.h
+
+// #pragma once
+
+// #include <torch/csrc/distributed/rpc/message.h>
+// #include <torch/csrc/distributed/rpc/request_callback.h>
+// #include <torch/csrc/distributed/rpc/types.h>
+
+// #include <algorithm>
+// #include <cctype>
+// #include <chrono>
+// #include <condition_variable>
+// #include <mutex>
+// #include <thread>
+
+// Default RPC timeout
+@Namespace("torch::distributed::rpc") @MemberGetter public static native float kDefaultRpcTimeoutSeconds();
+// Unset RPC timeout. This is the value agent::send() will have if user does not
+// pass in a specific timeout, and indicates that we must use the default
+// timeout for RPCs.
+@Namespace("torch::distributed::rpc") @MemberGetter public static native float kUnsetRpcTimeout();
+@Namespace("torch::distributed::rpc") @MemberGetter public static native float kSecToMsConversion();
+// Input is qualified name string, output is JIT StrongTypePtr
+// Same as jit::TypeResolver, did not import jit::TypeResolver to here
+// because it could introduce cyclic dependencies.
+// Targeting ../RpcBackendOptions.java
+
+
+// Targeting ../WorkerInfo.java
+
+
+// Targeting ../RegisterWorkerInfoOnce.java
+
+
+
+@Namespace("torch::distributed::rpc") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer os,
+    @Const @ByRef WorkerInfo workerInfo);
+// Targeting ../RpcRetryOptions.java
+
+
+// Targeting ../RpcRetryInfo.java
+
+
+// Targeting ../RpcAgent.java
+
+
+
+ // namespace rpc
+ // namespace distributed
+ // namespace torch
+ // namespace std
+
+
+// Parsed from torch/csrc/distributed/autograd/functions/recvrpc_backward.h
+
+// #pragma once
+
+// #include <torch/csrc/autograd/function.h>
+// #include <torch/csrc/distributed/autograd/context/context.h>
+// #include <torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h>
+// #include <torch/csrc/distributed/rpc/rpc_agent.h>
+
+// Forward declarations.
+// Targeting ../RecvRpcBackward.java
+
+
+
+ // namespace autograd
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/autograd/functions/sendrpc_backward.h
+
+// #pragma once
+
+// #include <torch/csrc/autograd/function.h>
+// Targeting ../SendRpcBackward.java
+
+
+
+ // namespace autograd
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/autograd/context/context.h
+
+// #pragma once
+
+// #include <cstdint>
+// #include <functional>
+
+// #include <ATen/core/Dict.h>
+// #include <torch/csrc/autograd/engine.h>
+// #include <torch/csrc/distributed/autograd/functions/recvrpc_backward.h>
+// #include <torch/csrc/distributed/autograd/functions/sendrpc_backward.h>
+// #include <torch/csrc/distributed/rpc/rpc_agent.h>
+// Targeting ../DistAutogradContext.java
+
+
+
+// This class stores a shared_ptr to a DistAutogradContext instance in a
+// thread local variable. The instance is given by the call site. The class
+// doesn't know the current context. It's just a util class.
+
+ // namespace autograd
+ // namespace distributed
+ // namespace torch
+
+
+// Parsed from torch/csrc/distributed/c10d/reducer.hpp
+
+// #pragma once
+
+// #include <c10/core/ScalarType.h>
+// #include <atomic>
+// #include <memory>
+// #include <mutex>
+// #include <tuple>
+// #include <unordered_map>
+// #include <vector>
+
+// #include <ATen/core/ivalue_inl.h>
+// #include <c10/macros/Macros.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <torch/csrc/autograd/function.h>
+// #include <torch/csrc/autograd/profiler.h>
+// #include <torch/csrc/autograd/variable.h>
+// #include <torch/csrc/distributed/c10d/ProcessGroup.hpp>
+// #include <torch/csrc/distributed/c10d/Utils.hpp>
+// #include <torch/csrc/distributed/c10d/comm.hpp>
+// #include <torch/csrc/distributed/c10d/debug.h>
+// #include <torch/csrc/distributed/c10d/default_comm_hooks.hpp>
+// #include <torch/csrc/distributed/c10d/reducer_timer.hpp>
+// #ifndef _WIN32
+// #include <torch/csrc/distributed/autograd/context/context.h>
+// #endif
+
+@Namespace("c10d") @MemberGetter public static native int kDefaultFirstBucketBytes();
+@Namespace("c10d") @MemberGetter public static native int kDefaultBucketBytesCap();
+// Collect runtime stats once for every kDDPRuntimeLoggingSampleRate iterations.
+@Namespace("c10d") @MemberGetter public static native int kDDPRuntimeLoggingSampleRate();
+
+// Forward declaration
+// Targeting ../BucketAccumulator.java
+
+
+// Targeting ../Reducer.java
+
+
+
+// This is equivalent to take_tensors but returns indices into the
+// tensor list argument for bucket assignment. Also, it is aware
+// of device placement and will not allow buckets to span devices.
+// The index of tensors[i] assigned to bucket is tensor_indices[i],
+// when tensor_indices is empty, the index of tensors[i] assigned to
+// bucket is i.
+@Namespace("c10d") public static native @ByVal T_SizeTVectorVectorSizeTVector_T compute_bucket_assignment_by_size(
+    @Const @ByRef TensorVector tensors,
+    @Cast("const std::vector<size_t>*") @ByRef SizeTVector bucket_size,
+    @Const @ByRef(nullValue = "std::vector<bool>{}") BoolVector expect_sparse_gradient,
+    @Cast("const std::vector<int64_t>*") @ByRef(nullValue = "std::vector<int64_t>{}") LongVector tensor_indices,
+    @Const @ByRef(nullValue = "c10::optional<std::weak_ptr<c10d::Logger> >{}") LoggerOptional logger);
+@Namespace("c10d") public static native @ByVal T_SizeTVectorVectorSizeTVector_T compute_bucket_assignment_by_size(
+    @Const @ByRef TensorVector tensors,
+    @Cast("const std::vector<size_t>*") @ByRef SizeTVector bucket_size);
+
+// Verify models across all processes are the same as model on rank 0 with
+// respect to no. of params and matching dtype/size/layout.
+@Namespace("c10d") public static native void verify_params_across_processes(
+    @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+    @Const @ByRef TensorVector params,
+    @Const @ByRef LoggerOptional logger);
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+
+// #pragma once
+
+// #ifdef USE_C10D_GLOO
+
+// #include <condition_variable>
+// #include <deque>
+// #include <mutex>
+// #include <thread>
+// #include <unordered_map>
+// #include <vector>
+
+// #include <gloo/algorithm.h>
+// #include <gloo/common/error.h>
+// #include <gloo/context.h>
+// #include <gloo/rendezvous/store.h>
+// #include <gloo/transport/device.h>
+
+// #include <c10/util/hash.h>
+
+// #include <torch/csrc/distributed/c10d/Backend.hpp>
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// #include <torch/csrc/distributed/c10d/Types.hpp>
+// #include <torch/csrc/distributed/c10d/Utils.hpp>
+
+@Namespace("c10d") @MemberGetter public static native @Cast("const char*") BytePointer GLOO_BACKEND_NAME();
+// Targeting ../ProcessGroupGloo.java
+
+
+
+ // namespace c10d
+
+// #endif // USE_C10D_GLOO
+
+
+// Parsed from torch/csrc/distributed/c10d/PrefixStore.hpp
+
+// #pragma once
+
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// #include <memory>
+// Targeting ../PrefixStore.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/logger.hpp
+
+// #include <c10/util/Logging.h>
+// #include <torch/csrc/distributed/c10d/reducer.hpp>
+
+// #include <mutex>
+// Targeting ../Logger.java
+
+
+
+ // namespace c10d
 
 
 // Parsed from datasets.h

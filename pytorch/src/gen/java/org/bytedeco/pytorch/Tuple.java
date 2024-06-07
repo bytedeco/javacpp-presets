@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -26,28 +28,28 @@ public class Tuple extends Pointer {
 
   // named tuples have additional type information, so we
   // directly create them tagged
-  public static native @ByVal TuplePtr createNamed(
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple createNamed(
         @ByVal IValueVector elements_,
         @ByVal Type.TypePtr type_);
 
-  public static native @ByVal TuplePtr createNamed(
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple createNamed(
         @ByVal TupleElements elements_,
         @SharedPtr TupleType type_);
 
   // MSVC apparently can't disambiguate the other two overloads of
   // create when passed an initializer_list without this.
 
-  public static native @ByVal TuplePtr create(@ByVal IValueVector elements_);
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple create(@ByVal IValueVector elements_);
 
-  public static native @ByVal TuplePtr create(@ByVal TupleElements elements_);
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple create(@ByVal TupleElements elements_);
 
-  public static native @ByVal TuplePtr create(@ByVal IValueArrayRef elements_);
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple create(@ByVal IValueArrayRef elements_);
 
-  public static native @ByVal TuplePtr create(@ByVal IValue e1);
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple create(@ByVal IValue e1);
 
-  public static native @ByVal TuplePtr create(@ByVal IValue e1, @ByVal IValue e2);
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple create(@ByVal IValue e1, @ByVal IValue e2);
 
-  public static native @ByVal TuplePtr create(@ByVal IValue e1, @ByVal IValue e2, @ByVal IValue e3);
+  public static native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple create(@ByVal IValue e1, @ByVal IValue e2, @ByVal IValue e3);
 
   // Again, it would be nice to make this noncopyable, but there's a
   // lot of extant code that copies Tuples.

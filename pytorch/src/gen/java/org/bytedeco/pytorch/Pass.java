@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -24,7 +26,7 @@ public class Pass extends Stmt {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Pass(Pointer p) { super(p); }
 
-  public Pass(@Const @ByRef TreeRef tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@Const @ByRef TreeRef tree);
+  public Pass(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree);
   public static native @ByVal Pass create(@Const @ByRef SourceRange range);
 }

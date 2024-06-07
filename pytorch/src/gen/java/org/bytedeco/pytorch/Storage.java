@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -59,8 +61,8 @@ public class Storage extends Pointer {
 
   public Storage() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public Storage(@ByVal StorageImplPtr ptr) { super((Pointer)null); allocate(ptr); }
-  private native void allocate(@ByVal StorageImplPtr ptr);
+  public Storage(@IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl ptr) { super((Pointer)null); allocate(ptr); }
+  private native void allocate(@IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl ptr);
 
   // Allocates memory buffer using given allocator and creates a storage with it
   public Storage(
@@ -146,7 +148,7 @@ public class Storage extends Pointer {
 
   public native @NoException(true) StorageImpl unsafeGetStorageImpl();
 
-  public native @ByVal WeakStorage getWeakStorageImpl();
+  public native @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl getWeakStorageImpl();
 
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 

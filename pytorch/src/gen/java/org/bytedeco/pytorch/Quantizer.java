@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -51,7 +53,7 @@ public class Quantizer extends Pointer {
   @MemberGetter public native ScalarType scalar_type_();
 
   // Copied from torch/csrc/jit/ir/scope.h
-  public native @ByVal QuantizerPtr intrusive_from_this();
+  public native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer intrusive_from_this();
 
   /**
    * Each concrete Quantizer type should have a unique QScheme type.
@@ -78,5 +80,5 @@ public class Quantizer extends Pointer {
   /**
    * Compare against {@code other} for equality.
    */
-  public native @Cast("bool") boolean equalTo(@ByVal QuantizerPtr other);
+  public native @Cast("bool") boolean equalTo(@IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer other);
 }

@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,7 +33,7 @@ public class Value extends Pointer {
   public native Value setType(@ByVal Type.TypePtr type);
   public native void inferTypeFrom(@Const @ByRef Tensor output);
   public native void inferTypeFrom(
-        @Const @ByRef ObjPtr output);
+        @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj output);
   public native @Const @ByRef Type.TypePtr type();
   public native @Cast("bool") boolean requires_grad();
   public native @Cast("bool") boolean isCompleteTensor();

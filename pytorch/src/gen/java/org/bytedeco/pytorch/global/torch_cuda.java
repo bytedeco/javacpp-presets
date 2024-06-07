@@ -5,8 +5,15 @@ package org.bytedeco.pytorch.global;
 import org.bytedeco.pytorch.cuda.*;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cusparse.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cusolver.*;
+import org.bytedeco.cuda.cudnn.*;
+import org.bytedeco.cuda.nccl.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;
@@ -110,233 +117,6 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
  // namespace c10
 
 
-// Parsed from ATen/cuda/CUDAContextLight.h
-
-// #pragma once
-// Light-weight version of CUDAContext.h with fewer transitive includes
-
-// #include <cstdint>
-
-// #include <cuda_runtime_api.h>
-// #include <cusparse.h>
-// #include <cublas_v2.h>
-
-// cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
-// added bf16 support
-// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
-// #include <cublasLt.h>
-// #endif
-
-// #ifdef CUDART_VERSION
-// #include <cusolverDn.h>
-// #endif
-
-// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
-// #include <hipsolver/hipsolver.h>
-// #endif
-
-// #include <c10/core/Allocator.h>
-// #include <c10/cuda/CUDAFunctions.h>
-
-
-/*
-A common CUDA interface for ATen.
-
-This interface is distinct from CUDAHooks, which defines an interface that links
-to both CPU-only and CUDA builds. That interface is intended for runtime
-dispatch and should be used from files that are included in both CPU-only and
-CUDA builds.
-
-CUDAContext, on the other hand, should be preferred by files only included in
-CUDA builds. It is intended to expose CUDA functionality in a consistent
-manner.
-
-This means there is some overlap between the CUDAContext and CUDAHooks, but
-the choice of which to use is simple: use CUDAContext when in a CUDA-only file,
-use CUDAHooks otherwise.
-
-Note that CUDAContext simply defines an interface with no associated class.
-It is expected that the modules whose functions compose this interface will
-manage their own state. There is only a single CUDA context/state.
-*/
-
-/**
- * DEPRECATED: use device_count() instead
- */
-@Namespace("at::cuda") public static native @Cast("int64_t") long getNumGPUs();
-
-/**
- * CUDA is available if we compiled with CUDA, and there are one or more
- * devices.  If we compiled with CUDA but there is a driver problem, etc.,
- * this function will report CUDA is not available (rather than raise an error.)
- */
-@Namespace("at::cuda") public static native @Cast("bool") boolean is_available();
-
-@Namespace("at::cuda") public static native Pointer getCurrentDeviceProperties();
-
-@Namespace("at::cuda") public static native int warp_size();
-
-@Namespace("at::cuda") public static native Pointer getDeviceProperties(byte device);
-
-@Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
-    byte device,
-    byte peer_device);
-
-@Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
-
-/* Handles */
-@Namespace("at::cuda") public static native @Cast("cusparseHandle_t") Pointer getCurrentCUDASparseHandle();
-@Namespace("at::cuda") public static native @Cast("cublasHandle_t") Pointer getCurrentCUDABlasHandle();
-// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
-
-// #endif
-
-@Namespace("at::cuda") public static native void clearCublasWorkspaces();
-
-// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
-@Namespace("at::cuda") public static native @Cast("cusolverDnHandle_t") Pointer getCurrentCUDASolverDnHandle();
-// #endif
-
- // namespace at::cuda
-
-
-// Parsed from c10/cuda/CUDAStream.h
-
-// #pragma once
-
-// #include <cstdint>
-// #include <utility>
-
-// #include <cuda_runtime_api.h>
-
-// #include <c10/core/DeviceGuard.h>
-// #include <c10/core/Stream.h>
-// #include <c10/cuda/CUDAFunctions.h>
-// #include <c10/util/Exception.h>
-
-/*
- * Stream pool note.
- *
- * A CUDAStream is an abstraction of an actual cuStream on the GPU. CUDAStreams
- * are backed by cuStreams, but they use several pools to minimize the costs
- * associated with creating, retaining, and destroying cuStreams.
- *
- * There are three pools per device, and a device's pools are lazily created.
- *
- * The first pool contains only the default stream. When the default stream
- * is requested it's returned.
- *
- * The second pool is the "low priority" or "default priority" streams. In
- * HIP builds there is no distinction between streams in this pool and streams
- * in the third pool (below). There are 32 of these streams per device, and
- * when a stream is requested one of these streams is returned round-robin.
- * That is, the first stream requested is at index 0, the second at index 1...
- * to index 31, then index 0 again.
- *
- * This means that if 33 low priority streams are requested, the first and
- * last streams requested are actually the same stream (under the covers)
- * and kernels enqueued on them cannot run concurrently.
- *
- * The third pool is the "high priority" streams. The third pool acts like
- * the second pool except the streams are created with a higher priority.
- *
- * These pools suggest that stream users should prefer many short-lived streams,
- * as the cost of acquiring and releasing streams is effectively zero. If
- * many longer-lived streams are required in performance critical scenarios
- * then the functionality here may need to be extended to allow, for example,
- * "reserving" a subset of the pool so that other streams do not accidentally
- * overlap the performance critical streams.
- *
- * Note: although the notion of "current stream for device" is thread local
- * (every OS thread has a separate current stream, as one might expect),
- * the stream pool is global across all threads; stream 0 is always stream 0
- * no matter which thread you use it on.  Multiple threads can synchronize
- * on the same stream.  Although the CUDA documentation is not very clear
- * on the matter, streams are thread safe; e.g., it is safe to enqueue
- * a kernel on the same stream from two different threads.
- */
-
-@Namespace("c10::cuda") @MemberGetter public static native int max_compile_time_stream_priorities();
-public static final int max_compile_time_stream_priorities = max_compile_time_stream_priorities();
-// Targeting ../cuda/CUDAStream.java
-
-
-
-/**
- * Get a new stream from the CUDA stream pool.  You can think of this
- * as "creating" a new stream, but no such creation actually happens;
- * instead, streams are preallocated from the pool and returned in a
- * round-robin fashion.
- *
- * You can request a stream from the high priority pool by setting
- * isHighPriority to true, or a stream for a specific device by setting device
- * (defaulting to the current CUDA stream.)
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(@Cast("const bool") boolean isHighPriority/*=false*/, byte device/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool();
-// no default priority to disambiguate overloads
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority, byte device/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority);
-
-/**
- * Get a CUDAStream from a externally allocated one.
- *
- * This is mainly for interoperability with different libraries where we
- * want to operate on a non-torch allocated stream for data exchange or similar
- * purposes
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromExternal(@Cast("cudaStream_t") Pointer ext_stream, byte device_index);
-
-/**
- * Get the default CUDA stream, for the passed CUDA device, or for the
- * current device if no device index is passed.  The default stream is
- * where most computation occurs when you aren't explicitly using
- * streams.
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream(byte device_index/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream();
-
-/**
- * Get the current CUDA stream, for the passed CUDA device, or for the
- * current device if no device index is passed.  The current CUDA stream
- * will usually be the default CUDA stream for the device, but it may
- * be different if someone called 'setCurrentCUDAStream' or used 'StreamGuard'
- * or 'CUDAStreamGuard'.
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream(byte device_index/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream();
-
-/**
- * Set the current stream on the device of the passed in stream to be
- * the passed in stream.  Yes, you read that right: this function
- * has *nothing* to do with the current device: it toggles the current
- * stream of the device of the passed stream.
- *
- * Confused?  Avoid using this function; prefer using 'CUDAStreamGuard' instead
- * (which will switch both your current device and current stream in the way you
- * expect, and reset it back to its original state afterwards).
- */
-@Namespace("c10::cuda") public static native void setCurrentCUDAStream(@ByVal CUDAStream stream);
-
-@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef CUDAStream s);
-
- // namespace c10::cuda
- // namespace std
-
-
-// Parsed from ATen/cuda/CUDAContext.h
-
-// #pragma once
-
-// #include <ATen/cuda/CUDAContextLight.h>
-
-// Preserved for BC, as many files depend on these includes
-// #include <ATen/Context.h>
-// #include <c10/cuda/CUDAStream.h>
-// #include <c10/util/Logging.h>
-// #include <ATen/cuda/Exceptions.h>
-
-
 // Parsed from c10/core/impl/GPUTrace.h
 
 // #pragma once
@@ -344,6 +124,53 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 // #include <c10/core/impl/PyInterpreter.h>
 
  // namespace c10::impl
+
+
+// Parsed from c10/cuda/CUDAMacros.h
+
+// #pragma once
+
+// #ifndef C10_USING_CUSTOM_GENERATED_MACROS
+
+// We have not yet modified the AMD HIP build to generate this file so
+// we add an extra option to specifically ignore it.
+// #ifndef C10_CUDA_NO_CMAKE_CONFIGURE_FILE
+// #include <c10/cuda/impl/cuda_cmake_macros.h>
+// #endif // C10_CUDA_NO_CMAKE_CONFIGURE_FILE
+
+// #endif
+
+// See c10/macros/Export.h for a detailed explanation of what the function
+// of these macros are.  We need one set of macros for every separate library
+// we build.
+
+// #ifdef _WIN32
+// #else // _WIN32
+// #if defined(__GNUC__)
+// #define C10_CUDA_EXPORT __attribute__((__visibility__("default")))
+// #else // defined(__GNUC__)
+// #define C10_CUDA_EXPORT
+// #endif // defined(__GNUC__)
+// #define C10_CUDA_IMPORT C10_CUDA_EXPORT
+// #endif // _WIN32
+
+// This one is being used by libc10_cuda.so
+// #ifdef C10_CUDA_BUILD_MAIN_LIB
+// #define C10_CUDA_API C10_CUDA_EXPORT
+// #else
+// #define C10_CUDA_API C10_CUDA_IMPORT
+// #endif
+
+/**
+ * The maximum number of GPUs that we recognizes. Increasing this beyond the
+ * initial limit of 16 broke Caffe2 testing, hence the ifdef guards.
+ * This value cannot be more than 128 because our DeviceIndex is a uint8_t.
+o */
+// #ifdef FBCODE_CAFFE2
+// fbcode depends on this value being 16
+public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
+// #else
+// #endif
 
 
 // Parsed from c10/cuda/CUDADeviceAssertionHost.h
@@ -396,63 +223,6 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 // #define TORCH_DSA_KERNEL_ARGS_PASS assertions_data, assertion_caller_id
 
 
-// Parsed from c10/cuda/CUDAMacros.h
-
-// #pragma once
-
-// #ifndef C10_USING_CUSTOM_GENERATED_MACROS
-
-// We have not yet modified the AMD HIP build to generate this file so
-// we add an extra option to specifically ignore it.
-// #ifndef C10_CUDA_NO_CMAKE_CONFIGURE_FILE
-// #include <c10/cuda/impl/cuda_cmake_macros.h>
-// #endif // C10_CUDA_NO_CMAKE_CONFIGURE_FILE
-
-// #endif
-
-// See c10/macros/Export.h for a detailed explanation of what the function
-// of these macros are.  We need one set of macros for every separate library
-// we build.
-
-// #ifdef _WIN32
-// #else // _WIN32
-// #if defined(__GNUC__)
-// #define C10_CUDA_EXPORT __attribute__((__visibility__("default")))
-// #else // defined(__GNUC__)
-// #define C10_CUDA_EXPORT
-// #endif // defined(__GNUC__)
-// #define C10_CUDA_IMPORT C10_CUDA_EXPORT
-// #endif // _WIN32
-
-// This one is being used by libc10_cuda.so
-// #ifdef C10_CUDA_BUILD_MAIN_LIB
-// #define C10_CUDA_API C10_CUDA_EXPORT
-// #else
-// #define C10_CUDA_API C10_CUDA_IMPORT
-// #endif
-
-/**
- * The maximum number of GPUs that we recognizes. Increasing this beyond the
- * initial limit of 16 broke Caffe2 testing, hence the ifdef guards.
- * This value cannot be more than 128 because our DeviceIndex is a uint8_t.
-o */
-// #ifdef FBCODE_CAFFE2
-// fbcode depends on this value being 16
-public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
-// #else
-// #endif
-
-
-// Parsed from c10/cuda/impl/cuda_cmake_macros.h
-
-// #pragma once
-
-// Automatically generated header file for the C10 CUDA library.  Do not
-// include this file directly.  Instead, include c10/cuda/CUDAMacros.h
-
-// #define C10_CUDA_BUILD_SHARED_LIBS
-
-
 // Parsed from c10/cuda/CUDAMiscFunctions.h
 
 // #pragma once
@@ -477,9 +247,17 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <c10/util/Exception.h>
 // #include <c10/util/irange.h>
 // #include <cuda.h>
-// Targeting ../cuda/CUDAError.java
 
+// Note [CHECK macro]
+// ~~~~~~~~~~~~~~~~~~
+// This is a macro so that AT_ERROR can get accurate __LINE__
+// and __FILE__ information.  We could split this into a short
+// macro and a function implementation if we pass along __LINE__
+// and __FILE__, but no one has found this worth doing.
 
+// Used to denote errors from CUDA framework.
+// This needs to be declared here instead util/Exception.h for proper conversion
+// during hipify.
  // namespace c10
 
 // #define C10_CUDA_CHECK(EXPR)
@@ -637,14 +415,228 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
     @Const Pointer src,
     @Cast("int64_t") long nbytes,
     @Cast("cudaMemcpyKind") int kind,
-    @Cast("cudaStream_t") Pointer stream);
+    CUstream_st stream);
 
-@Namespace("c10::cuda") public static native void stream_synchronize(@Cast("cudaStream_t") Pointer stream);
+@Namespace("c10::cuda") public static native void stream_synchronize(CUstream_st stream);
 
 @Namespace("c10::cuda") public static native @Cast("bool") boolean hasPrimaryContext(byte device_index);
 @Namespace("c10::cuda") public static native @ByVal ByteOptional getDeviceIndexWithPrimaryContext();
 
  // namespace c10::cuda
+
+
+// Parsed from ATen/cuda/CUDAContextLight.h
+
+// #pragma once
+// Light-weight version of CUDAContext.h with fewer transitive includes
+
+// #include <cstdint>
+
+// #include <cuda_runtime_api.h>
+// #include <cusparse.h>
+// #include <cublas_v2.h>
+
+// cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
+// added bf16 support
+// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
+// #include <cublasLt.h>
+// #endif
+
+// #ifdef CUDART_VERSION
+// #include <cusolverDn.h>
+// #endif
+
+// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
+// #include <hipsolver/hipsolver.h>
+// #endif
+
+// #include <c10/core/Allocator.h>
+// #include <c10/cuda/CUDAFunctions.h>
+
+
+/*
+A common CUDA interface for ATen.
+
+This interface is distinct from CUDAHooks, which defines an interface that links
+to both CPU-only and CUDA builds. That interface is intended for runtime
+dispatch and should be used from files that are included in both CPU-only and
+CUDA builds.
+
+CUDAContext, on the other hand, should be preferred by files only included in
+CUDA builds. It is intended to expose CUDA functionality in a consistent
+manner.
+
+This means there is some overlap between the CUDAContext and CUDAHooks, but
+the choice of which to use is simple: use CUDAContext when in a CUDA-only file,
+use CUDAHooks otherwise.
+
+Note that CUDAContext simply defines an interface with no associated class.
+It is expected that the modules whose functions compose this interface will
+manage their own state. There is only a single CUDA context/state.
+*/
+
+/**
+ * DEPRECATED: use device_count() instead
+ */
+@Namespace("at::cuda") public static native @Cast("int64_t") long getNumGPUs();
+
+/**
+ * CUDA is available if we compiled with CUDA, and there are one or more
+ * devices.  If we compiled with CUDA but there is a driver problem, etc.,
+ * this function will report CUDA is not available (rather than raise an error.)
+ */
+@Namespace("at::cuda") public static native @Cast("bool") boolean is_available();
+
+@Namespace("at::cuda") public static native cudaDeviceProp getCurrentDeviceProperties();
+
+@Namespace("at::cuda") public static native int warp_size();
+
+@Namespace("at::cuda") public static native cudaDeviceProp getDeviceProperties(byte device);
+
+@Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
+    byte device,
+    byte peer_device);
+
+@Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
+
+/* Handles */
+@Namespace("at::cuda") public static native cusparseContext getCurrentCUDASparseHandle();
+@Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle();
+// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
+
+// #endif
+
+@Namespace("at::cuda") public static native void clearCublasWorkspaces();
+
+// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
+@Namespace("at::cuda") public static native cusolverDnContext getCurrentCUDASolverDnHandle();
+// #endif
+
+ // namespace at::cuda
+
+
+// Parsed from c10/cuda/CUDAStream.h
+
+// #pragma once
+
+// #include <cstdint>
+// #include <utility>
+
+// #include <cuda_runtime_api.h>
+
+// #include <c10/core/DeviceGuard.h>
+// #include <c10/core/Stream.h>
+// #include <c10/cuda/CUDAFunctions.h>
+// #include <c10/util/Exception.h>
+
+/*
+ * Stream pool note.
+ *
+ * A CUDAStream is an abstraction of an actual cuStream on the GPU. CUDAStreams
+ * are backed by cuStreams, but they use several pools to minimize the costs
+ * associated with creating, retaining, and destroying cuStreams.
+ *
+ * There are three pools per device, and a device's pools are lazily created.
+ *
+ * The first pool contains only the default stream. When the default stream
+ * is requested it's returned.
+ *
+ * The second pool is the "low priority" or "default priority" streams. In
+ * HIP builds there is no distinction between streams in this pool and streams
+ * in the third pool (below). There are 32 of these streams per device, and
+ * when a stream is requested one of these streams is returned round-robin.
+ * That is, the first stream requested is at index 0, the second at index 1...
+ * to index 31, then index 0 again.
+ *
+ * This means that if 33 low priority streams are requested, the first and
+ * last streams requested are actually the same stream (under the covers)
+ * and kernels enqueued on them cannot run concurrently.
+ *
+ * The third pool is the "high priority" streams. The third pool acts like
+ * the second pool except the streams are created with a higher priority.
+ *
+ * These pools suggest that stream users should prefer many short-lived streams,
+ * as the cost of acquiring and releasing streams is effectively zero. If
+ * many longer-lived streams are required in performance critical scenarios
+ * then the functionality here may need to be extended to allow, for example,
+ * "reserving" a subset of the pool so that other streams do not accidentally
+ * overlap the performance critical streams.
+ *
+ * Note: although the notion of "current stream for device" is thread local
+ * (every OS thread has a separate current stream, as one might expect),
+ * the stream pool is global across all threads; stream 0 is always stream 0
+ * no matter which thread you use it on.  Multiple threads can synchronize
+ * on the same stream.  Although the CUDA documentation is not very clear
+ * on the matter, streams are thread safe; e.g., it is safe to enqueue
+ * a kernel on the same stream from two different threads.
+ */
+
+@Namespace("c10::cuda") @MemberGetter public static native int max_compile_time_stream_priorities();
+public static final int max_compile_time_stream_priorities = max_compile_time_stream_priorities();
+// Targeting ../cuda/CUDAStream.java
+
+
+
+/**
+ * Get a new stream from the CUDA stream pool.  You can think of this
+ * as "creating" a new stream, but no such creation actually happens;
+ * instead, streams are preallocated from the pool and returned in a
+ * round-robin fashion.
+ *
+ * You can request a stream from the high priority pool by setting
+ * isHighPriority to true, or a stream for a specific device by setting device
+ * (defaulting to the current CUDA stream.)
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(@Cast("const bool") boolean isHighPriority/*=false*/, byte device/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool();
+// no default priority to disambiguate overloads
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority, byte device/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority);
+
+/**
+ * Get a CUDAStream from a externally allocated one.
+ *
+ * This is mainly for interoperability with different libraries where we
+ * want to operate on a non-torch allocated stream for data exchange or similar
+ * purposes
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromExternal(CUstream_st ext_stream, byte device_index);
+
+/**
+ * Get the default CUDA stream, for the passed CUDA device, or for the
+ * current device if no device index is passed.  The default stream is
+ * where most computation occurs when you aren't explicitly using
+ * streams.
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream(byte device_index/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream();
+
+/**
+ * Get the current CUDA stream, for the passed CUDA device, or for the
+ * current device if no device index is passed.  The current CUDA stream
+ * will usually be the default CUDA stream for the device, but it may
+ * be different if someone called 'setCurrentCUDAStream' or used 'StreamGuard'
+ * or 'CUDAStreamGuard'.
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream(byte device_index/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream();
+
+/**
+ * Set the current stream on the device of the passed in stream to be
+ * the passed in stream.  Yes, you read that right: this function
+ * has *nothing* to do with the current device: it toggles the current
+ * stream of the device of the passed stream.
+ *
+ * Confused?  Avoid using this function; prefer using 'CUDAStreamGuard' instead
+ * (which will switch both your current device and current stream in the way you
+ * expect, and reset it back to its original state afterwards).
+ */
+@Namespace("c10::cuda") public static native void setCurrentCUDAStream(@ByVal CUDAStream stream);
+
+@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef CUDAStream s);
+
+ // namespace c10::cuda
+ // namespace std
 
 
 // Parsed from ATen/cuda/Exceptions.h
@@ -662,9 +654,6 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <ATen/Context.h>
 // #include <c10/util/Exception.h>
 // #include <c10/cuda/CUDAException.h>
-// Targeting ../cuda/CuDNNError.java
-
-
 
   // namespace c10
 
@@ -813,6 +802,19 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //   } while (0)
 
 
+// Parsed from ATen/cuda/CUDAContext.h
+
+// #pragma once
+
+// #include <ATen/cuda/CUDAContextLight.h>
+
+// Preserved for BC, as many files depend on these includes
+// #include <ATen/Context.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/util/Logging.h>
+// #include <ATen/cuda/Exceptions.h>
+
+
 // Parsed from ATen/cudnn/cudnn-wrapper.h
 
 // #pragma once
@@ -845,6 +847,17 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
 
 
+// Parsed from ATen/cudnn/Handle.h
+
+// #pragma once
+
+// #include <ATen/cudnn/cudnn-wrapper.h>
+// #include <ATen/cuda/ATenCUDAGeneral.h>
+
+@Namespace("at::native") public static native cudnnContext getCudnnHandle();
+ // namespace at::native
+
+
 // Parsed from ATen/cudnn/Utils.h
 
 // #pragma once
@@ -863,15 +876,201 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
-// Parsed from ATen/cudnn/Handle.h
+// Parsed from torch/csrc/distributed/c10d/NCCLUtils.hpp
 
 // #pragma once
 
-// #include <ATen/cudnn/cudnn-wrapper.h>
-// #include <ATen/cuda/ATenCUDAGeneral.h>
+// #ifdef USE_C10D_NCCL
 
-@Namespace("at::native") public static native @Cast("cudnnHandle_t") Pointer getCudnnHandle();
- // namespace at::native
+// #include <stdio.h>
+// #include <stdlib.h>
+
+// #include <memory>
+// #include <mutex>
+// #include <thread>
+
+// #include <ATen/ATen.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/Optional.h>
+// #include <nccl.h>
+
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 14)
+// #define NCCL_HAS_COMM_NONBLOCKING
+// #endif
+
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 18)
+// #define NCCL_HAS_COMM_SPLIT
+// #endif
+
+// ncclGetLastError() is enabled only for NCCL versions 2.13+
+// ncclRemoteError only exists in NCCL versions 2.13+
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 13)
+// #define ENABLE_NCCL_GET_LAST_ERROR
+// #define NCCL_REMOTE_ERROR
+// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
+// #define ENABLE_NCCL_GET_LAST_ERROR
+// #define NCCL_REMOTE_ERROR
+// #endif
+
+// Error checking is enabled only for NCCL versions 2.4+ since ncclCommAbort()
+// and ncclCommGetAsyncError() are not supported in earlier versions.
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 4)
+// #define ENABLE_NCCL_ERROR_CHECKING
+// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
+// #define ENABLE_NCCL_ERROR_CHECKING
+// #endif
+
+// P2P is enabled only for NCCL versions 2.7+ since ncclSend()
+// and ncclRecv() are not supported in earlier versions.
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 7)
+// #define ENABLE_NCCL_P2P_SUPPORT
+// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
+// #define ENABLE_NCCL_P2P_SUPPORT
+// #endif
+
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 11)
+// #define ENABLE_NCCL_PREMUL_SUM_SUPPORT
+// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
+// #define ENABLE_NCCL_PREMUL_SUM_SUPPORT
+// #endif
+
+// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//     (NCCL_MINOR >= 17)
+// #define NCCL_HAS_COMM_CTA_CGA
+// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
+// #define NCCL_HAS_COMM_CTA_CGA
+// #endif
+
+// #if defined(NCCL_REGISTRATION_SUPPORTED) ||
+//     ((defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
+//       (NCCL_MINOR >= 19)))
+// #define NCCL_HAS_COMM_REGISTER
+// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
+// #define NCCL_HAS_COMM_REGISTER
+// #endif
+
+// Macro to throw on a non-successful NCCL return value.
+// #define C10D_NCCL_CHECK(cmd, failureReason)
+//   do {
+//     ncclResult_t result = cmd;
+//     if (result != ncclSuccess) {
+//       std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
+//           std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(result) +
+//           "\n" + getNcclErrorDetailStr(result, failureReason);
+//       TORCH_CHECK_WITH(DistBackendError, false, err);
+//     }
+//   } while (0)
+
+// Macro to throw on a non-successful NCCL return value for NONBLOCKING calls.
+// #define C10D_NCCL_CHECK_NONBLOCKING(cmd, failureReason)
+//   do {
+//     ncclResult_t result = cmd;
+//     if (result != ncclSuccess && result != ncclInProgress) {
+//       std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
+//           std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(result) +
+//           "\n" + getNcclErrorDetailStr(result, failureReason);
+//       TORCH_CHECK_WITH(DistBackendError, false, err);
+//     }
+//   } while (0)
+
+// Macro to throw on a non-successful NCCL return value, non-blocking.
+// #define C10D_NCCL_CHECK_TIMEOUT(cmd, comm, failureReason)
+//   ncclResult_t result = cmd;
+//   auto startTimepoint = std::chrono::steady_clock::now();
+//   while (result == ncclInProgress) {
+//     if (nccl_nonblocking_timeout() > 0) {
+//       auto currentTimepoint = std::chrono::steady_clock::now();
+//       auto timeElapsed = std::chrono::duration_cast<std::chrono::seconds>(
+//                              currentTimepoint - startTimepoint)
+//                              .count();
+//       if (timeElapsed > nccl_nonblocking_timeout()) {
+//         std::string err = "NCCL timeout in: " + std::string(__FILE__) + ":" +
+//             std::to_string(__LINE__) + ", " +
+//             ncclGetErrorWithVersion(result) + "\n" +
+//             getNcclErrorDetailStr(result, failureReason);
+//         TORCH_CHECK_WITH(DistBackendError, false, err);
+//       }
+//     }
+//     ncclCommGetAsyncError(comm, &result);
+//   }
+//   if (result != ncclSuccess) {
+//     std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
+//         std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(result) +
+//         "\n" + getNcclErrorDetailStr(result, failureReason);
+//     TORCH_CHECK_WITH(DistBackendError, false, err);
+//   }
+
+// #define C10D_NCCL_CHECK_TIMEOUT_GROUPEND(cmd, comm, failureReason)
+//   ncclResult_t state = cmd;
+//   auto startTimepoint = std::chrono::steady_clock::now();
+//   if (state == ncclInProgress) {
+//     do {
+//       if (nccl_nonblocking_timeout() > 0) {
+//         auto currentTimepoint = std::chrono::steady_clock::now();
+//         auto timeElapsed = std::chrono::duration_cast<std::chrono::seconds>(
+//                                currentTimepoint - startTimepoint)
+//                                .count();
+//         if (timeElapsed > nccl_nonblocking_timeout()) {
+//           std::string err = "NCCL timeout in: " + std::string(__FILE__) +
+//               ":" + std::to_string(__LINE__) + ", " +
+//               ncclGetErrorWithVersion(state) + "\n" +
+//               getNcclErrorDetailStr(state, failureReason);
+//           TORCH_CHECK_WITH(DistBackendError, false, err);
+//         }
+//       }
+//       ncclCommGetAsyncError(comm->getNcclComm(), &state);
+//     } while (state == ncclInProgress);
+//   }
+//   if (state != ncclSuccess) {
+//     std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
+//         std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(state) +
+//         "\n" + getNcclErrorDetailStr(state, failureReason);
+//     TORCH_CHECK_WITH(DistBackendError, false, err);
+//   }
+
+// Macro to print and abort on a non-successful NCCL return value.
+// #define C10D_NCCL_ASSERT(cmd)
+//   do {
+//     ncclResult_t result = cmd;
+//     if (result != ncclSuccess) {
+//       std::string err = ncclGetErrorWithVersion(result);
+//       fprintf(
+//           stderr,
+//           "NCCL error in: %s:%d, %s\n",
+//           __FILE__,
+//           __LINE__,
+//           err.c_str());
+//       abort();
+//     }
+//   } while (0)
+
+@Namespace("c10d") public static native @Cast("size_t") long hashTensors(@Const @ByRef TensorVector tensors);
+
+
+
+
+
+// Provides additional detail into NCCL error codes based on when these are
+// thrown in the NCCL codebase.
+
+// Targeting ../cuda/DebugInfoWriter.java
+
+
+
+// RAII wrapper for NCCL communicator
+// Targeting ../cuda/ncclRedOpRAII.java
+
+
+
+ // namespace c10d
+
+// #endif // USE_C10D_NCCL
 
 
 // Parsed from c10/cuda/CUDAGraphsC10Utils.h
@@ -905,59 +1104,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 @Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int currentStreamCaptureStatusMayInitCtx();
 
  // namespace c10::cuda
-
-
-// Parsed from c10/util/ApproximateClock.h
-
-// Copyright 2023-present Facebook. All Rights Reserved.
-
-// #pragma once
-
-// #include <c10/macros/Export.h>
-// #include <array>
-// #include <chrono>
-// #include <cstddef>
-// #include <cstdint>
-// #include <ctime>
-// #include <functional>
-// #include <type_traits>
-
-// #if defined(C10_IOS) && defined(C10_MOBILE)
-// #include <sys/time.h> // for gettimeofday()
-// #endif
-
-// #if defined(__i386__) || defined(__x86_64__) || defined(__amd64__)
-// #define C10_RDTSC
-// #if defined(_MSC_VER)
-// #elif defined(__CUDACC__) || defined(__HIPCC__)
-// #elif defined(__clang__)
-// `__rdtsc` is available by default.
-// NB: This has to be first, because Clang will also define `__GNUC__`
-// #elif defined(__GNUC__)
-// #include <x86intrin.h>
-// #else
-// #undef C10_RDTSC
-// #endif
-// #endif
-
-@Namespace("c10") public static native @Cast("c10::time_t") long getTimeSinceEpoch();
-
-@Namespace("c10") public static native @Cast("c10::time_t") long getTime(@Cast("bool") boolean allow_monotonic/*=false*/);
-@Namespace("c10") public static native @Cast("c10::time_t") long getTime();
-
-// We often do not need to capture true wall times. If a fast mechanism such
-// as TSC is available we can use that instead and convert back to epoch time
-// during post processing. This greatly reduce the clock's contribution to
-// profiling.
-//   http://btorpey.github.io/blog/2014/02/18/clock-sources-in-linux/
-//   https://quick-bench.com/q/r8opkkGZSJMu9wM_XTbDouq-0Io
-// TODO: We should use
-// `https://github.com/google/benchmark/blob/main/src/cycleclock.h`
-// Targeting ../cuda/ApproximateClockToUnixTimeConverter.java
-
-
-
- // namespace c10
 
 
 // Parsed from c10/cuda/CUDACachingAllocator.h
@@ -1163,6 +1309,102 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
  // namespace c10::cuda::impl
 
 
+// Parsed from c10/cuda/CUDAGuard.h
+
+// #pragma once
+
+// #include <c10/core/DeviceType.h>
+// #include <c10/core/impl/InlineDeviceGuard.h>
+// #include <c10/core/impl/InlineStreamGuard.h>
+// #include <c10/cuda/CUDAMacros.h>
+// #include <c10/cuda/impl/CUDAGuardImpl.h>
+
+// #include <cstddef>
+// Targeting ../cuda/CUDAGuard.java
+
+
+
+/** A variant of OptionalDeviceGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
+// Targeting ../cuda/CUDAStreamGuard.java
+
+
+
+/** A variant of OptionalStreamGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
+// Targeting ../cuda/CUDAMultiStreamGuard.java
+
+
+
+ // namespace c10::cuda
+
+
+// Parsed from ATen/cuda/CUDAEvent.h
+
+// #pragma once
+
+// #include <ATen/cuda/ATenCUDAGeneral.h>
+// #include <ATen/cuda/CUDAContext.h>
+// #include <c10/core/impl/GPUTrace.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/cuda/CUDAGuard.h>
+// #include <ATen/cuda/Exceptions.h>
+// #include <c10/util/Exception.h>
+
+// #include <cuda_runtime_api.h>
+
+// #include <cstdint>
+// #include <utility>
+// Targeting ../cuda/CUDAEvent.java
+
+
+
+ // namespace at::cuda
+
+
+// Parsed from torch/csrc/distributed/c10d/intra_node_comm.hpp
+
+// #pragma once
+
+// #include <ATen/ATen.h>
+// #include <ATen/cuda/CUDAEvent.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// #include <torch/csrc/distributed/c10d/Work.hpp>
+
+@Namespace("c10d::intra_node_comm") @MemberGetter public static native @Cast("const size_t") long kMaxDevices();
+@Namespace("c10d::intra_node_comm") @MemberGetter public static native @Cast("const size_t") long kDefaultBufferSize();
+
+@Namespace("c10d::intra_node_comm") public enum Topology { UNKNOWN(0), FULLY_CONNECTED(1), HYBRID_CUBE_MESH(2);
+
+    public final int value;
+    private Topology(int v) { this.value = v; }
+    private Topology(Topology e) { this.value = e.value; }
+    public Topology intern() { for (Topology e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10d::intra_node_comm") public enum AllReduceAlgo { NONE(0), ONE_SHOT(1), TWO_SHOT(2), HCM(3);
+
+    public final int value;
+    private AllReduceAlgo(int v) { this.value = v; }
+    private AllReduceAlgo(AllReduceAlgo e) { this.value = e.value; }
+    public AllReduceAlgo intern() { for (AllReduceAlgo e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../cuda/IntraNodeComm.java
+
+
+// Targeting ../cuda/IntraNodeCommWork.java
+
+
+
+@Namespace("c10d::intra_node_comm") public static native @Cast("int64_t") long getIntraNodeCommUsageCounter();
+
+ // namespace intra_node_comm
+ // namespace c10d
+
+
 // Parsed from ATen/cudnn/Descriptors.h
 
 // #pragma once
@@ -1243,51 +1485,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
   // namespace
 
 
-// Parsed from ATen/cudnn/Types.h
-
-// #pragma once
-
-// #include <ATen/cudnn/cudnn-wrapper.h>
-// #include <ATen/Tensor.h>
-
-@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(ScalarType dtype);
-
-
-
-
-  // namespace at::cudnn
-
-
-// Parsed from c10/cuda/CUDAGuard.h
-
-// #pragma once
-
-// #include <c10/core/DeviceType.h>
-// #include <c10/core/impl/InlineDeviceGuard.h>
-// #include <c10/core/impl/InlineStreamGuard.h>
-// #include <c10/cuda/CUDAMacros.h>
-// #include <c10/cuda/impl/CUDAGuardImpl.h>
-
-// #include <cstddef>
-// Targeting ../cuda/CUDAGuard.java
-
-
-
-/** A variant of OptionalDeviceGuard that is specialized for CUDA.  See
- *  CUDAGuard for when you can use this. */
-// Targeting ../cuda/CUDAStreamGuard.java
-
-
-
-/** A variant of OptionalStreamGuard that is specialized for CUDA.  See
- *  CUDAGuard for when you can use this. */
-// Targeting ../cuda/CUDAMultiStreamGuard.java
-
-
-
- // namespace c10::cuda
-
-
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
 
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
@@ -1301,6 +1498,164 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace torch::inductor
 // #endif
+
+
+// Parsed from torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp
+
+// #pragma once
+
+// #if defined(__linux__)
+// #include <fcntl.h>
+// #include <sys/stat.h>
+// #include <sys/types.h>
+// #include <unistd.h>
+// #endif
+
+// #ifdef USE_C10D_NCCL
+
+// #include <atomic>
+// #include <chrono>
+// #include <future>
+// #include <iostream>
+// #include <list>
+// #include <mutex>
+// #include <thread>
+// #include <unordered_map>
+
+// #include <torch/csrc/distributed/c10d/Backend.hpp>
+// #include <torch/csrc/distributed/c10d/NCCLUtils.hpp>
+// #include <torch/csrc/distributed/c10d/PrefixStore.hpp>
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// #include <torch/csrc/distributed/c10d/intra_node_comm.hpp>
+
+// #include <ATen/DynamicLibrary.h>
+// #include <ATen/cuda/CUDAContext.h>
+// #include <ATen/cuda/CUDAEvent.h>
+// #include <c10/core/Stream.h>
+// #include <c10/core/StreamGuard.h>
+// #include <c10/cuda/CUDACachingAllocator.h>
+// #include <c10/cuda/CUDAGuard.h>
+// #include <c10/cuda/CUDAStream.h>
+
+// #include <torch/custom_class.h>
+
+// Control whether or not wait() is blocking or non-blocking.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_BLOCKING_WAIT(); public static native void TORCH_NCCL_BLOCKING_WAIT(StringVector setter);
+
+// Control whether or not we perform Async Error Handling with NCCL.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ASYNC_ERROR_HANDLING(); public static native void TORCH_NCCL_ASYNC_ERROR_HANDLING(StringVector setter);
+
+// Control whether dumping debug info on watchdog
+// timeout is enabled. This variable must be set together with
+// TORCH_NCCL_ENABLE_MONITORING=1 and TORCH_NCCL_TRACE_BUFFER_SIZE > 0.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_DUMP_ON_TIMEOUT(); public static native void TORCH_NCCL_DUMP_ON_TIMEOUT(StringVector setter);
+
+// Control whether Desync Debug is enabled. This variable must be set
+// together with TORCH_NCCL_ASYNC_ERROR_HANDLING.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_DESYNC_DEBUG(); public static native void TORCH_NCCL_DESYNC_DEBUG(StringVector setter);
+
+// Enable recording start-events for all ProcessGroupNCCL collectives, and
+// compute accurate collective timing per-collective. (Note: end-events are
+// recorded by default. Turn on this flag can increase chances of a watchdog
+// hang due to performing a CUDA event query which eventually calls
+// cudaEventElapsedTime() API.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ENABLE_TIMING(); public static native void TORCH_NCCL_ENABLE_TIMING(StringVector setter);
+
+// Enable monitoring thread which aborts the process when the ProcessGroupNCCL
+// Watchdog thread gets stuck and no heartbeat is detected after
+// TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC. This can happen due to calling CUDA/NCCL
+// APIs that may hang. It is Useful to prevent jobs being stuck for a prolonged
+// time than necessary tying up cluster resources.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ENABLE_MONITORING(); public static native void TORCH_NCCL_ENABLE_MONITORING(StringVector setter);
+
+// Control the watchdog heartbeat timeout period after which the monitoring
+// thread will abort the process.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC(); public static native void TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC(StringVector setter);
+
+// The maximum number of events we store in the flight recorder's ring buffer.
+// (One event could be the start or end of a collective, for example).
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_TRACE_BUFFER_SIZE(); public static native void TORCH_NCCL_TRACE_BUFFER_SIZE(StringVector setter);
+
+// Control how much extra time we will wait for dumping the debugging info
+// before we exit and throws timeout exception.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC(); public static native void TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC(StringVector setter);
+
+// Control the interval inside the watchdog thread to check the coordinated
+// signal from other ranks, e.g. to dump the debugging information.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_COORD_CHECK_MILSEC(); public static native void TORCH_NCCL_COORD_CHECK_MILSEC(StringVector setter);
+
+// Whether to abort the communicators when users call destroy_process_group().
+// If yes, communicators will be aborted when destroy_process_group is called,
+// but not in destructor.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ABORT_IN_DESTROY_PG(); public static native void TORCH_NCCL_ABORT_IN_DESTROY_PG(StringVector setter);
+
+@Namespace("c10d") @MemberGetter public static native @Cast("const char*") BytePointer NCCL_BACKEND_NAME();
+
+@Namespace("c10d") @MemberGetter public static native @Cast("const char*") BytePointer TIMEOUT_DUMP();
+
+@Namespace("c10d") @MemberGetter public static native int kWorkStatusUpdatePeriodMs(); // 10 seconds
+
+// NoHandling: do not handle asynchronous NCCL errors
+// TearDown: tear down process upon error, see `WorkNCCL::handleException`
+// CleanUpOnly: just clean up collectives and abort communicators without
+// tearing down process SkipCleanUp: (this is a temporary option and can be
+// removed in future) tear down process without cleaning up NCCL communicators.
+// This should be used as a last resort in case `ncclCommAbort` itself is
+// hanging
+@Namespace("c10d") public enum ErrorHandlingMode {
+  NoHandling(0),
+  TearDown(1),
+  CleanUpOnly(2),
+  SkipCleanUp(3);
+
+    public final int value;
+    private ErrorHandlingMode(int v) { this.value = v; }
+    private ErrorHandlingMode(ErrorHandlingMode e) { this.value = e.value; }
+    public ErrorHandlingMode intern() { for (ErrorHandlingMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+// #define SHOULD_CLEAN_UP(a) (a != NoHandling && a != SkipCleanUp)
+
+// #define SHOULD_TEAR_DOWN(a) (a != NoHandling && a != CleanUpOnly)
+
+// #define PRINT_COLLECTIVE_HASH_SIGNATURE(phase, opType, numel, hashValue)
+//   LOG(WARNING) << logPrefix() << "Hash of " << phase << " to NCCL " << opType
+//                << " with size " << numel << " is " << hashValue;
+
+// If set, ProcessGroupNCCL doesn't use recordStream calls to ensure
+// caching allocator safety for tensors used on both user-facing and
+// internal comm streams.
+// Instead, it stashes live references to those tensors until after
+// user-facing streams are synced with comm streams.
+// See stashed_for_allocator_safety_ below.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_AVOID_RECORD_STREAMS(); public static native void TORCH_NCCL_AVOID_RECORD_STREAMS(StringVector setter);
+
+// If set, ProcessGroupNCCL registers postAlloc and preFree hooks to cuda cache
+// allocator so that whenever a tensor is allocated or freed, ProcessGroupNCCL
+// can register/deregister the tensor on all available NCCL communicators.
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK(); public static native void TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK(StringVector setter);
+
+// #if defined(__linux__)
+// #else
+// Targeting ../cuda/ProcessGroupNCCL.java
+
+
+
+@Namespace("c10d") public static native @StdString BytePointer dump_nccl_trace();
+
+// Gets a mutable reference to a global optional function.  Heartbeat Monitor
+// will query this function and if available, call it to dump traces. Inside
+// fbcode, we store a function here that uses an internal tool for process
+// tracing
+// Targeting ../cuda/gil_checker_t.java
+
+
+
+@Namespace("c10d") public static native @ByPtrRef gil_checker_t get_gil_checker();
+ // namespace c10d
+
+// #endif // USE_C10D_NCCL
 
 
 }

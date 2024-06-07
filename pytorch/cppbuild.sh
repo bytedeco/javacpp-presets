@@ -22,6 +22,7 @@ export USE_CUDNN=0
 export USE_NUMPY=0
 export USE_OPENMP=1
 export USE_SYSTEM_NCCL=1
+export USE_DISTRIBUTED=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
     export USE_CUDNN=1
@@ -35,7 +36,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.3.0
+PYTORCH_VERSION=2.3.1
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -186,6 +187,7 @@ sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
 rm -Rf ../lib
 ln -sf pytorch/torch/include ../include
+ln -sf ../../third_party/gloo/gloo ../include/gloo
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
 

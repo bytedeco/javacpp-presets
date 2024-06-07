@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,9 +37,9 @@ public class AOTIModelContainerRunner extends Pointer {
 
   public native @ByVal ExtraFilesMap getConstantNamesToOriginalFQNs();
   public native @ByVal StringIntMap getConstantNamesToDtypes();
-  public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map);
+  public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map);
   public native void update_constant_buffer(
-        @Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map,
+        @Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map,
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean validate_full_updates);
   public native void run_const_fold(

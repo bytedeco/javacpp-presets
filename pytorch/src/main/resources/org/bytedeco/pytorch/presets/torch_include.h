@@ -2,6 +2,9 @@
 // #include <torch/torch.h>
 // #include <torch/script.h>
 // #include <torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h>
+// torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+// torch/csrc/distributed/c10d/PrefixStore.hpp
+// torch/csrc/distributed/c10d/logger.hpp
 // as listed by g++ -H torch/torch.h torch/script.h
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
@@ -156,7 +159,7 @@
 #include "c10/core/impl/InlineStreamGuard.h"
 #include "c10/core/StreamGuard.h"
 #include "c10/util/FunctionRef.h"
-#include "c10/util/intrusive_ptr.h"  // Moved after the definition or its template args
+//#include "c10/util/intrusive_ptr.h"  // Moved after the definition or its template args
 #include "ATen/core/ivalue_inl.h"
 #include "ATen/core/ivalue.h"
 #include "ATen/core/List_inl.h"
@@ -1436,5 +1439,31 @@
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
 #include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
+
+#include "torch/csrc/distributed/c10d/Store.hpp"
+#include "torch/csrc/distributed/c10d/Types.hpp"
+#include "torch/csrc/distributed/c10d/Utils.hpp"
+#include "torch/csrc/distributed/c10d/Work.hpp"
+#include "torch/csrc/distributed/c10d/debug.h"
+#include "torch/csrc/distributed/c10d/Backend.hpp"
+#include "torch/csrc/distributed/c10d/ProcessGroup.hpp"
+#include "torch/csrc/distributed/c10d/comm.hpp"
+#include "torch/csrc/distributed/c10d/default_comm_hooks.hpp"
+#include "c10/util/ApproximateClock.h"
+#include "torch/csrc/distributed/c10d/reducer_timer.hpp"
+#include "torch/csrc/autograd/functions/basic_ops.h"
+#include "torch/csrc/autograd/engine.h"
+#include "torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h"
+#include "torch/csrc/distributed/rpc/message.h"
+#include "torch/csrc/distributed/rpc/request_callback.h"
+#include "torch/csrc/distributed/rpc/types.h"
+#include "torch/csrc/distributed/rpc/rpc_agent.h"
+#include "torch/csrc/distributed/autograd/functions/recvrpc_backward.h"
+#include "torch/csrc/distributed/autograd/functions/sendrpc_backward.h"
+#include "torch/csrc/distributed/autograd/context/context.h"
+#include "torch/csrc/distributed/c10d/reducer.hpp"
+#include "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp"
+#include "torch/csrc/distributed/c10d/PrefixStore.hpp"
+#include "torch/csrc/distributed/c10d/logger.hpp"
 
 #include "datasets.h"

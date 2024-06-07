@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -24,8 +26,8 @@ public class AssignListIterator extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AssignListIterator(Pointer p) { super(p); }
 
-  public AssignListIterator(@ByVal @Cast("torch::jit::TreeList::const_iterator*") TreeRef it) { super((Pointer)null); allocate(it); }
-  private native void allocate(@ByVal @Cast("torch::jit::TreeList::const_iterator*") TreeRef it);
+  public AssignListIterator(@ByVal @Cast("torch::jit::TreeList::const_iterator*") Tree it) { super((Pointer)null); allocate(it); }
+  private native void allocate(@ByVal @Cast("torch::jit::TreeList::const_iterator*") Tree it);
   public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef AssignListIterator rhs);
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef AssignListIterator rhs);
   public native @ByVal @Name("operator *") Assign multiply();

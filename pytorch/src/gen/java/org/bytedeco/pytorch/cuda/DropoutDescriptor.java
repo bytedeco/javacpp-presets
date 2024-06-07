@@ -3,8 +3,15 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cusparse.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cusolver.*;
+import org.bytedeco.cuda.cudnn.*;
+import org.bytedeco.cuda.nccl.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;
@@ -44,11 +51,11 @@ public class DropoutDescriptor extends Pointer {
 
   // Initialize a dropout descriptor's RNG state.
   // WARNING: This function is very expensive, avoid calling this function!
-  public native void initialize_rng(@Cast("cudnnHandle_t") Pointer handle, float dropout, long seed, @Const @ByRef TensorOptions options);
+  public native void initialize_rng(cudnnContext handle, float dropout, long seed, @Const @ByRef TensorOptions options);
 
   // Restore a dropout descriptor given a dropout probability and existing RNG state.
-  public native void set(@Cast("cudnnHandle_t") Pointer handle, float dropout, @ByVal Tensor state_);
+  public native void set(cudnnContext handle, float dropout, @ByVal Tensor state_);
 
   // Restore a dropout descriptor corresponding to no dropout
-  public native void set_no_dropout(@Cast("cudnnHandle_t") Pointer handle);
+  public native void set_no_dropout(cudnnContext handle);
 }

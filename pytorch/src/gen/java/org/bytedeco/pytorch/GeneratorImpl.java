@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,7 +33,7 @@ public class GeneratorImpl extends Pointer {
   
   
   
-  public native @ByVal @Name("clone") GeneratorImplPtr clonePtr();
+  public native @IntrusivePtr("c10::GeneratorImpl") @Name("clone") @Cast({"", "c10::intrusive_ptr<c10::GeneratorImpl>&"}) GeneratorImpl clonePtr();
 
   // Common methods for all generators
   public native void set_current_seed(@Cast("uint64_t") long seed);
@@ -40,7 +42,7 @@ public class GeneratorImpl extends Pointer {
   public native @Cast("uint64_t") long current_seed();
   public native @Cast("uint64_t") long seed();
   public native void set_state(@Const @ByRef TensorImpl new_state);
-  public native @ByVal TensorImplPtr get_state();
+  public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl get_state();
   public native @ByVal Device device();
 
   // See Note [Acquire lock when using random generators]

@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -123,7 +125,7 @@ public class PyInterpreterVTable extends Pointer {
   // Perform a detach by deferring to the __torch_dispatch__ implementation of
   // detach, which will also arrange for the PyObject to get copied in this
   // situation
-  public native @ByVal TensorImplPtr detach(
+  public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl detach(
         @Const TensorImpl self);
 
   // Invoke the Python boxed fallback dispatch to go back into Python

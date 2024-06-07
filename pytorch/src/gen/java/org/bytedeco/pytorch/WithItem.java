@@ -5,8 +5,10 @@ package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.functions.*;
+import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -25,8 +27,8 @@ public class WithItem extends Expr {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WithItem(Pointer p) { super(p); }
 
-  public WithItem(@Const @ByRef TreeRef tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@Const @ByRef TreeRef tree);
+  public WithItem(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree);
 
   public native @ByVal Expr target();
 
