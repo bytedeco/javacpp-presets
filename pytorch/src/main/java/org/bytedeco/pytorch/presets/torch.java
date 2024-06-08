@@ -59,7 +59,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             compiler = "cpp17",
-            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO"},
+            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO", "_WINSOCKAPI_"},
             include = {
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
