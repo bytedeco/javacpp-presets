@@ -25,11 +25,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -40,7 +35,6 @@ import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 
-import org.bytedeco.javacpp.annotation.Adapter;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.MemberGetter;
@@ -67,12 +61,12 @@ import org.bytedeco.openblas.presets.openblas;
             compiler = "cpp17",
             define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO"},
             include = {
-                "torch/torch.h",
-                "torch/script.h",
-                "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
                 "torch/csrc/distributed/c10d/logger.hpp",
+                "torch/torch.h",
+                "torch/script.h",
+                "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
