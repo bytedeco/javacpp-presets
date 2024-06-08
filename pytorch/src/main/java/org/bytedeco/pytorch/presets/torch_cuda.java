@@ -77,6 +77,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         infoMap
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.helper.*;"))
             .put(new Info().javaText("import org.bytedeco.cuda.cudart.*;"))
             .put(new Info().javaText("import org.bytedeco.cuda.cusparse.*;"))
             .put(new Info().javaText("import org.bytedeco.cuda.cublas.*;"))
