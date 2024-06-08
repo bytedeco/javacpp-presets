@@ -186,8 +186,8 @@ sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 "$PYTHON_BIN_PATH" setup.py build
 
 rm -Rf ../lib
+ln -sf ../../third_party/gloo/gloo torch/include
 ln -sf pytorch/torch/include ../include
-ln -sf ../../third_party/gloo/gloo ../include/gloo
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
 
