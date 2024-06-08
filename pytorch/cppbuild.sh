@@ -182,6 +182,9 @@ TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& modul
 ' torch/csrc/api/include/torch/nn/module.h
 sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
+# some windows header defines a macro named "interface"
+sedinplace 's/const std::string& interface)/const std::string\& interface_name)/g' torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build
 
