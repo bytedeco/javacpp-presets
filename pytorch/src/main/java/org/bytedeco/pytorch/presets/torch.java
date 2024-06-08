@@ -323,7 +323,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
             .put(new Info().javaText("import org.bytedeco.javacpp.annotation.Cast;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.presets.torch.IntrusivePtr;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.helper.*;"))
 
             .put(new Info("std::nullptr_t").cast().pointerTypes("PointerPointer"))
 
@@ -3017,17 +3017,4 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
     @Namespace("std") public static native @MemberGetter @ByRef @Cast("std::ostream*") Pointer clog();
 
-    @Documented @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD, ElementType.PARAMETER})
-    @Adapter("IntrusivePtrAdapter")
-    public @interface IntrusivePtr {
-        String value() default "";
-    }
-
-    @Documented @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD, ElementType.PARAMETER})
-    @Adapter("WeakPtrAdapter")
-    public @interface WeakPtr {
-        String value() default "";
-    }
 }

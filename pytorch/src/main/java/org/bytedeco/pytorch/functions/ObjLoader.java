@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.pytorch.Obj;
 import org.bytedeco.pytorch.StrongTypePtr;
 import org.bytedeco.pytorch.IValue;
-import org.bytedeco.pytorch.presets.torch;
+import org.bytedeco.pytorch.helper.IntrusivePtr;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ObjLoader extends FunctionPointer {
@@ -31,5 +31,5 @@ public class ObjLoader extends FunctionPointer {
 
     // std::function<c10::intrusive_ptr<c10::ivalue::Object>(const at::StrongTypePtr&, IValue)>
     // Without @Cast, the generated JavaCPP_org_bytedeco_pytorch_functions_ObjLoader::ptr would return an ivalue::Object
-    public native @ByVal @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>"}) @torch.IntrusivePtr Obj call(@Const @ByRef StrongTypePtr stp, @ByVal IValue iv);
+    public native @ByVal @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>"}) @IntrusivePtr Obj call(@Const @ByRef StrongTypePtr stp, @ByVal IValue iv);
 }

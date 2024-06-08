@@ -10,7 +10,7 @@ import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
-import org.bytedeco.pytorch.presets.torch.IntrusivePtr;
+import org.bytedeco.pytorch.helper.*;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;

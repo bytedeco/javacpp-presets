@@ -3,6 +3,7 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.helper.*;
 import org.bytedeco.cuda.cudart.*;
 import org.bytedeco.cuda.cusparse.*;
 import org.bytedeco.cuda.cublas.*;
