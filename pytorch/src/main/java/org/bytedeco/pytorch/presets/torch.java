@@ -61,12 +61,12 @@ import org.bytedeco.openblas.presets.openblas;
             compiler = "cpp17",
             define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO", "_WINSOCKAPI_"},
             include = {
-                "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
-                "torch/csrc/distributed/c10d/PrefixStore.hpp",
-                "torch/csrc/distributed/c10d/logger.hpp",
                 "torch/torch.h",
                 "torch/script.h",
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
+                "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
+                "torch/csrc/distributed/c10d/PrefixStore.hpp",
+                "torch/csrc/distributed/c10d/logger.hpp",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
