@@ -59,7 +59,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             compiler = "cpp17",
-            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO", "_WINSOCKAPI_"},
+            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO"},
             include = {
                 "torch/torch.h",
                 "torch/script.h",
