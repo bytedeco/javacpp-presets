@@ -868,8 +868,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::unordered_set<int16_t>", "std::unordered_set<torch::distributed::rpc::worker_id_t>").pointerTypes("ShortSet").define())
             .put(new Info("std::set<torch::profiler::impl::ActivityType>").pointerTypes("ActivityTypeSet").define())
             .put(new Info("std::unordered_map<size_t,std::string>").pointerTypes("SizeTStringMap").define())
-            .put(new Info("std::unordered_map<int64_t,std::shared_ptr<torch::distributed::autograd::RecvRpcBackward> >").pointerTypes("LongRecvRpcBackwardMap").define())
-            .put(new Info("std::unordered_map<int64_t,std::shared_ptr<torch::distributed::autograd::SendRpcBackward> >").pointerTypes("LongSendRpcBackwardMap").define())
+            // .put(new Info("std::unordered_map<int64_t,std::shared_ptr<torch::distributed::autograd::RecvRpcBackward> >").pointerTypes("LongRecvRpcBackwardMap").define()) // Not on windows
+            // .put(new Info("std::unordered_map<int64_t,std::shared_ptr<torch::distributed::autograd::SendRpcBackward> >").pointerTypes("LongSendRpcBackwardMap").define())
         ;
 
 
@@ -929,7 +929,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("const std::tuple<at::DataPtr,size_t>", "std::tuple<at::DataPtr,size_t>").pointerTypes("T_DataPtrSizeT_T").define())
             .put(new Info("std::tuple<c10::TypePtr,int32_t>", "std::pair<c10::TypePtr,int32_t>").pointerTypes("T_TypePtrLong_T").define()) // Parse this pair as tuple because Parser doesn't generate valid code for optional<pair>
             .put(new Info("std::tuple<std::shared_ptr<c10::SafePyObject>,c10::impl::TorchDispatchModeKey>").pointerTypes("T_SafePyObjectTorchDispatchModeKey_T").define())
-            .put(new Info("std::tuple<c10::intrusive_ptr<torch::distributed::rpc::Message>,std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >").pointerTypes("T_MessageWeakStorage_T").define())
+            //.put(new Info("std::tuple<c10::intrusive_ptr<torch::distributed::rpc::Message>,std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >").pointerTypes("T_MessageWeakStorage_T").define()) // Message not on Windows
             .put(new Info("std::tuple<std::vector<std::vector<size_t> >,std::vector<size_t> >").pointerTypes("T_SizeTVectorVectorSizeTVector_T").define())
         ;
 
@@ -1066,7 +1066,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new PointerInfo("c10d::_SupplementBase"),
             new PointerInfo("c10d::ProcessGroup"),
             new PointerInfo("intra_node_comm::IntraNodeComm"),
-            new PointerInfo("torch::distributed::rpc::Message"),
+            //new PointerInfo("torch::distributed::rpc::Message"), // Not on Windows
             new PointerInfo("c10d::ProcessGroupGloo::AsyncWork"),
             new PointerInfo("c10d::ProcessGroupGloo::Options"),
             new PointerInfo("c10d::ProcessGroupGloo")
@@ -1821,8 +1821,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new PointerInfo("torch::jit::SugaredValue"),
             new PointerInfo("caffe2::serialize::ReadAdapterInterface"),
             new PointerInfo("c10::SafePyObject"),
-            new PointerInfo("torch::distributed::autograd::SendRpcBackward"),
-            new PointerInfo("torch::distributed::autograd::RecvRpcBackward"),
+            //new PointerInfo("torch::distributed::autograd::SendRpcBackward"), // Not on Windows
+            //new PointerInfo("torch::distributed::autograd::RecvRpcBackward"),
             new PointerInfo("c10d::Logger"), // Not sure if this class (and c10d::Reducer) has any use,
             new PointerInfo("torch::distributed::autograd::DistAutogradContext"),
             new PointerInfo("torch::jit::CompilationUnit"),
