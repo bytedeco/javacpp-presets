@@ -1451,16 +1451,16 @@
 #include "torch/csrc/distributed/c10d/default_comm_hooks.hpp"
 #include "c10/util/ApproximateClock.h"
 #include "torch/csrc/distributed/c10d/reducer_timer.hpp"
-#include "torch/csrc/autograd/functions/basic_ops.h"
-#include "torch/csrc/autograd/engine.h"
-#include "torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h"
-#include "torch/csrc/distributed/rpc/message.h"
-#include "torch/csrc/distributed/rpc/request_callback.h"
-#include "torch/csrc/distributed/rpc/types.h"
-#include "torch/csrc/distributed/rpc/rpc_agent.h"
-#include "torch/csrc/distributed/autograd/functions/recvrpc_backward.h"
-#include "torch/csrc/distributed/autograd/functions/sendrpc_backward.h"
-#include "torch/csrc/distributed/autograd/context/context.h"
+// #include "torch/csrc/autograd/functions/basic_ops.h" // Not on Windows
+// #include "torch/csrc/autograd/engine.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/message.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/request_callback.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/types.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/rpc_agent.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/functions/recvrpc_backward.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/functions/sendrpc_backward.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/context/context.h" // Not on Windows
 #include "torch/csrc/distributed/c10d/reducer.hpp"
 #include "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp"
 #include "torch/csrc/distributed/c10d/PrefixStore.hpp"

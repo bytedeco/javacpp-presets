@@ -30,7 +30,13 @@ sub go {
     my ($roots, $opts) = @_;
     my $path = join ' ', @$roots, @$opts;
 
-    my @inc = `g++ -I. -I torch/csrc/api/include/ -DUSE_UCC -DUSE_C10D_NCCL -DUSE_C10D_GLOO -DUSE_C10D_MPI -DUSE_DISTRIBUTED -H $path -E 2>&1 > /dev/null`;
+    my $exe = "g++ -I. -I torch/csrc/api/include/ -DUSE_UCC -DUSE_C10D_GLOO -DUSE_C10D_MPI -DUSE_DISTRIBUTED -D_WIN32 -H $path -E 2>&1 > /dev/null";
+    my @inc = `$exe`;
+    if ($? != 0) {
+      print STDERR "Failed:\n$exe\nError: $?: $!\n";
+      exit $?;
+    }
+
     foreach my $i (@inc) {
         chomp $i;
         my ($depth, $f) = $i =~ /^(\.+)\s(.*\.h(?:pp)?)$/;
@@ -67,7 +73,7 @@ print <<EOF;
 // torch/csrc/distributed/c10d/logger.hpp
 EOF
 
-go(['torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h', 'torch/csrc/distributed/c10d/ProcessGroupGloo.hpp', 'torch/csrc/distributed/c10d/PrefixStore.hpp', 'torch/csrc/distributed/c10d/logger.hpp'], ['-DUSE_C10D_GLOO', '-DUSE_DISTRIBUTED']);
+go(['torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h', 'torch/csrc/distributed/c10d/ProcessGroupGloo.hpp', 'torch/csrc/distributed/c10d/PrefixStore.hpp', 'torch/csrc/distributed/c10d/logger.hpp'], []);
 
 print <<EOF;
 
@@ -77,4 +83,4 @@ print <<EOF;
 // torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp
 EOF
 
-go(['ATen/cudnn/Descriptors.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h', 'torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp'], ['-I/opt/cuda/targets/x86_64-linux/include/', '-DUSE_CUDA', '-DUSE_C10D_NCCL', '-DUSE_DISTRIBUTED', '-DUSE_C10D_GLOO']);
+go(['ATen/cudnn/Descriptors.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h', 'torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp'], ['-I/opt/cuda/targets/x86_64-linux/include/', '-DUSE_CUDA', '-DUSE_C10D_NCCL']);
