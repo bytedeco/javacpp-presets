@@ -210,7 +210,6 @@ rm -Rf ../lib
 if [[ ! -e torch/include/gloo ]]; then
     ln -sf ../../third_party/gloo/gloo torch/include
 fi
-ln -sf ../../third_party/gloo/gloo torch/include
 ln -sf pytorch/torch/include ../include
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
