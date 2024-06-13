@@ -59,6 +59,8 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             compiler = "cpp17",
+	        // __WINSOCKAPI_ fixes compilation error on windows due to
+	        // inclusion of both V1 and V2 of winsock API.
             define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO", "_WINSOCKAPI_"},
             include = {
                 "torch/torch.h",
@@ -76,7 +78,11 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/csrc/jit/serialization/storage_context.h",
 
                 "datasets.h",
-                "pytorch_adapters.h"
+                "pytorch_adapters.h",
+
+		        // Fix link error on Windows:
+		        "gloo/common/logging.cc"
+
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             link = {"c10", "torch_cpu", "torch"},

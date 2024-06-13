@@ -45,6 +45,23 @@ mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
+# Distributed needs libuv on Windows (on other platforms, it's included
+# in tensorpipe)
+if [[ $PLATFORM == windows* ]]; then
+    if [[ ! -d libuv ]]; then
+        mkdir libuv
+        cd libuv
+        download https://dist.libuv.org/dist/v1.39.0/libuv-v1.39.0.tar.gz libuv.tgz
+        tar xfz libuv.tgz
+        mkdir build
+        cd build
+        cmake ../libuv-v1.39.0 -DBUILD_TESTING=OFF
+        cmake --install . --config Release --prefix=../dist
+        cd ../..
+    fi
+    export libuv_ROOT=`pwd`/libuv/dist
+fi
+
 if [[ ! -d pytorch ]]; then
     git clone https://github.com/pytorch/pytorch
 fi
@@ -189,6 +206,9 @@ sedinplace 's/const std::string& interface)/const std::string\& interface_name)/
 "$PYTHON_BIN_PATH" setup.py build
 
 rm -Rf ../lib
+if [[ ! -e torch/include/gloo ]]; then
+    ln -sf ../../third_party/gloo/gloo torch/include
+fi
 ln -sf ../../third_party/gloo/gloo torch/include
 ln -sf pytorch/torch/include ../include
 ln -sf pytorch/torch/lib ../lib
@@ -202,6 +222,9 @@ case $PLATFORM in
         install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
         install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
         ;;
+    windows-*)
+        cp libuv/dist/lib/Release/* lib
+	;;
 esac
 
 cd ../..
