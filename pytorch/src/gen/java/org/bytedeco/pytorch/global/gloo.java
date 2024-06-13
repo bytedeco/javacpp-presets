@@ -136,33 +136,6 @@ public class gloo extends org.bytedeco.pytorch.presets.gloo {
  // namespace gloo
 
 
-// Parsed from gloo/context.h
-
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// #pragma once
-
-// #include <chrono>
-// #include <memory>
-// #include <vector>
-
-// #include <gloo/transport/pair.h>
-
-// There is no need to materialize all transport types here.
-
-// Targeting ../gloo/Context.java
-
-
-
- // namespace gloo
-
-
 // Parsed from gloo/common/common.h
 
 /**
@@ -248,9 +221,6 @@ public class gloo extends org.bytedeco.pytorch.presets.gloo {
 @Namespace("gloo") @MemberGetter public static native @Cast("const uint8_t") byte kBroadcastSlotPrefix();
 @Namespace("gloo") @MemberGetter public static native @Cast("const uint8_t") byte kBarrierSlotPrefix();
 @Namespace("gloo") @MemberGetter public static native @Cast("const uint8_t") byte kAlltoallSlotPrefix();
-// Targeting ../gloo/Slot.java
-
-
 @Namespace("gloo") public static native @ByVal float16 cpu_float2half_rn(float f);
 @Namespace("gloo") public static native float cpu_half2float(@ByVal float16 h);
 // Targeting ../gloo/float16.java

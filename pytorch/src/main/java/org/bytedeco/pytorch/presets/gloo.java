@@ -75,13 +75,17 @@ public class gloo implements LoadEnabled, InfoMapper {
             .put(new Info("gloo::transport::Context").pointerTypes("TransportContext"))
         ;
 
+	//// Not exported
+	infoMap
+	    .put(new Info("gloo::Slot").skip())
+        ;
+
         infoMap
             .put(new Info("__CUDA_ARCH__").define(false))
         ;
 
         infoMap.put(new Info("gloo::kOnDeviceThreshold").javaText("public static final long kOnDeviceThreshold = 256 * 1024;"));
 
-        new torch.PointerInfo("gloo::Context").makeShared(infoMap);
         new torch.PointerInfo("gloo::transport::Context").javaBaseName("TransportContext").makeShared(infoMap);
         new torch.PointerInfo("gloo::transport::Device").makeShared(infoMap);
 
