@@ -51,6 +51,11 @@
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform</artifactId>
+            <version>12.3-8.9-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
             <version>2.0.0-${project.parent.version}</version>
           </dependency>
