@@ -223,7 +223,7 @@ case $PLATFORM in
         install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
         ;;
     windows-*)
-        cp libuv/dist/lib/Release/* lib
+        cp ../libuv/dist/lib/Release/* ../lib
 	;;
 esac
 
