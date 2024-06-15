@@ -319,7 +319,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
             .put(new Info().javaText("import org.bytedeco.pytorch.Allocator;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Function;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
             .put(new Info().javaText("import org.bytedeco.javacpp.annotation.Cast;"))

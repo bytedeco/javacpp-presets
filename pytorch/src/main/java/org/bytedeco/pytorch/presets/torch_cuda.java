@@ -84,8 +84,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info().javaText("import org.bytedeco.cuda.cusolver.*;"))
             .put(new Info().javaText("import org.bytedeco.cuda.cudnn.*;"))
             // .put(new Info().javaText("import org.bytedeco.cuda.nccl.*;")) // Not on Windows
-            .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.cuda.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
