@@ -37,17 +37,17 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
     value = {
         @Platform(
             extension = "-gpu",
-            define = "USE_C10D_NCCL",
+            // define = "USE_C10D_NCCL", // Not on Windows
             include = {
-                "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
+                "ATen/cudnn/Descriptors.h",
+                "ATen/cuda/CUDAEvent.h",
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
-                "torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp",
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
             },
-            link = { "cudart", "cusparse", "cudnn", "nccl" },
+            link = { "cudart", "cusparse", "cudnn" },
             linkpath = {
                 "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
                 "/usr/local/cuda-12.3/lib64/",
@@ -83,7 +83,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info().javaText("import org.bytedeco.cuda.cublas.*;"))
             .put(new Info().javaText("import org.bytedeco.cuda.cusolver.*;"))
             .put(new Info().javaText("import org.bytedeco.cuda.cudnn.*;"))
-            .put(new Info().javaText("import org.bytedeco.cuda.nccl.*;"))
+            // .put(new Info().javaText("import org.bytedeco.cuda.nccl.*;")) // Not on Windows
             .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.cuda.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
@@ -102,8 +102,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             ).skip())
 
             //// std::unordered_map
-            //.put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").pointerTypes("StringNCCLCommMap").define())
-            .put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").skip()) // See getNcclErrorDetailStr below
+            ////.put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").pointerTypes("StringNCCLCommMap").define())
+            //.put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").skip()) // See getNcclErrorDetailStr below. Not on Windows
 
             //// std::unordered_set
             .put(new Info("std::unordered_set<void*>").pointerTypes("PointerSet").define())
@@ -123,12 +123,14 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         ;
 
         //// Intrusive pointers
+        /* Not on Windows
         for (PointerInfo pi : new PointerInfo[]{
             new PointerInfo("c10d::ProcessGroupNCCL::Options"),
             new PointerInfo("c10d::intra_node_comm::IntraNodeComm")
         }) {
             pi.makeIntrusive(infoMap);
         }
+         */
 
         //// Function pointers
         infoMap
@@ -202,9 +204,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
                 "std::hash<c10::cuda::CUDAStream>",
 
-                "std::shared_ptr<c10::CreateContextFn> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn",  // See comment for GatheredContextSupplier
+                "std::shared_ptr<c10::CreateContextFn> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn"  // See comment for GatheredContextSupplier
 
-                "std::enable_shared_from_this<WorkNCCL>"
+                // "std::enable_shared_from_this<WorkNCCL>" // Not on Windows
 
             ).cast().pointerTypes("Pointer"));
         new PointerInfo("c10d::Store").makeIntrusive(infoMap);
@@ -220,7 +222,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("cublasLtHandle_t").valueTypes("cublasLtContext").pointerTypes("@ByPtrPtr cublasLtContext"))
             .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
             .put(new Info("cudnnHandle_t").valueTypes("cudnnContext").pointerTypes("@ByPtrPtr cudnnContext"))
-            .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer"))
+            // .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer")) // Not on Windows
 
             .put(new Info( // Enums, cuda presets doesn't use Info.enumerate
                 "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t", "cudnnRNNDataLayout_t",

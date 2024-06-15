@@ -11,7 +11,6 @@ import org.bytedeco.cuda.cusparse.*;
 import org.bytedeco.cuda.cublas.*;
 import org.bytedeco.cuda.cusolver.*;
 import org.bytedeco.cuda.cudnn.*;
-import org.bytedeco.cuda.nccl.*;
 import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.cuda.functions.*;
 import org.bytedeco.pytorch.chrono.*;
@@ -116,6 +115,25 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // This alias is deprecated because it doesn't make ownership
 // semantics obvious.  Use IntArrayRef instead!
  // namespace c10
+
+
+// Parsed from ATen/cudnn/cudnn-wrapper.h
+
+// #pragma once
+
+// #include <cudnn.h>
+
+// #define STRINGIFY(x) #x
+// #define STRING(x) STRINGIFY(x)
+
+// #if CUDNN_MAJOR < 6
+// #pragma message ("CuDNN v" STRING(CUDNN_MAJOR) " found, but need at least CuDNN v6. You can get the latest version of CuDNN from https://developer.nvidia.com/cudnn or disable CuDNN with USE_CUDNN=0")
+// #pragma message "We strongly encourage you to move to 6.0 and above."
+// #pragma message "This message is intended to annoy you enough to update."
+// #endif
+
+// #undef STRINGIFY
+// #undef STRING
 
 
 // Parsed from c10/core/impl/GPUTrace.h
@@ -816,25 +834,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <ATen/cuda/Exceptions.h>
 
 
-// Parsed from ATen/cudnn/cudnn-wrapper.h
-
-// #pragma once
-
-// #include <cudnn.h>
-
-// #define STRINGIFY(x) #x
-// #define STRING(x) STRINGIFY(x)
-
-// #if CUDNN_MAJOR < 6
-// #pragma message ("CuDNN v" STRING(CUDNN_MAJOR) " found, but need at least CuDNN v6. You can get the latest version of CuDNN from https://developer.nvidia.com/cudnn or disable CuDNN with USE_CUDNN=0")
-// #pragma message "We strongly encourage you to move to 6.0 and above."
-// #pragma message "This message is intended to annoy you enough to update."
-// #endif
-
-// #undef STRINGIFY
-// #undef STRING
-
-
 // Parsed from ATen/cuda/ATenCUDAGeneral.h
 
 // #pragma once
@@ -875,203 +874,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 @Namespace("at::native") public static native @ByVal Tensor contiguousIfZeroInStrides(@Const @ByRef Tensor t);
 
 
-
-
-// Parsed from torch/csrc/distributed/c10d/NCCLUtils.hpp
-
-// #pragma once
-
-// #ifdef USE_C10D_NCCL
-
-// #include <stdio.h>
-// #include <stdlib.h>
-
-// #include <memory>
-// #include <mutex>
-// #include <thread>
-
-// #include <ATen/ATen.h>
-// #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
-// #include <nccl.h>
-
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 14)
-// #define NCCL_HAS_COMM_NONBLOCKING
-// #endif
-
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 18)
-// #define NCCL_HAS_COMM_SPLIT
-// #endif
-
-// ncclGetLastError() is enabled only for NCCL versions 2.13+
-// ncclRemoteError only exists in NCCL versions 2.13+
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 13)
-// #define ENABLE_NCCL_GET_LAST_ERROR
-// #define NCCL_REMOTE_ERROR
-// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
-// #define ENABLE_NCCL_GET_LAST_ERROR
-// #define NCCL_REMOTE_ERROR
-// #endif
-
-// Error checking is enabled only for NCCL versions 2.4+ since ncclCommAbort()
-// and ncclCommGetAsyncError() are not supported in earlier versions.
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 4)
-// #define ENABLE_NCCL_ERROR_CHECKING
-// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
-// #define ENABLE_NCCL_ERROR_CHECKING
-// #endif
-
-// P2P is enabled only for NCCL versions 2.7+ since ncclSend()
-// and ncclRecv() are not supported in earlier versions.
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 7)
-// #define ENABLE_NCCL_P2P_SUPPORT
-// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
-// #define ENABLE_NCCL_P2P_SUPPORT
-// #endif
-
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 11)
-// #define ENABLE_NCCL_PREMUL_SUM_SUPPORT
-// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
-// #define ENABLE_NCCL_PREMUL_SUM_SUPPORT
-// #endif
-
-// #if defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//     (NCCL_MINOR >= 17)
-// #define NCCL_HAS_COMM_CTA_CGA
-// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
-// #define NCCL_HAS_COMM_CTA_CGA
-// #endif
-
-// #if defined(NCCL_REGISTRATION_SUPPORTED) ||
-//     ((defined(NCCL_MAJOR) && (NCCL_MAJOR == 2) && defined(NCCL_MINOR) &&
-//       (NCCL_MINOR >= 19)))
-// #define NCCL_HAS_COMM_REGISTER
-// #elif defined(NCCL_MAJOR) && (NCCL_MAJOR >= 3)
-// #define NCCL_HAS_COMM_REGISTER
-// #endif
-
-// Macro to throw on a non-successful NCCL return value.
-// #define C10D_NCCL_CHECK(cmd, failureReason)
-//   do {
-//     ncclResult_t result = cmd;
-//     if (result != ncclSuccess) {
-//       std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
-//           std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(result) +
-//           "\n" + getNcclErrorDetailStr(result, failureReason);
-//       TORCH_CHECK_WITH(DistBackendError, false, err);
-//     }
-//   } while (0)
-
-// Macro to throw on a non-successful NCCL return value for NONBLOCKING calls.
-// #define C10D_NCCL_CHECK_NONBLOCKING(cmd, failureReason)
-//   do {
-//     ncclResult_t result = cmd;
-//     if (result != ncclSuccess && result != ncclInProgress) {
-//       std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
-//           std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(result) +
-//           "\n" + getNcclErrorDetailStr(result, failureReason);
-//       TORCH_CHECK_WITH(DistBackendError, false, err);
-//     }
-//   } while (0)
-
-// Macro to throw on a non-successful NCCL return value, non-blocking.
-// #define C10D_NCCL_CHECK_TIMEOUT(cmd, comm, failureReason)
-//   ncclResult_t result = cmd;
-//   auto startTimepoint = std::chrono::steady_clock::now();
-//   while (result == ncclInProgress) {
-//     if (nccl_nonblocking_timeout() > 0) {
-//       auto currentTimepoint = std::chrono::steady_clock::now();
-//       auto timeElapsed = std::chrono::duration_cast<std::chrono::seconds>(
-//                              currentTimepoint - startTimepoint)
-//                              .count();
-//       if (timeElapsed > nccl_nonblocking_timeout()) {
-//         std::string err = "NCCL timeout in: " + std::string(__FILE__) + ":" +
-//             std::to_string(__LINE__) + ", " +
-//             ncclGetErrorWithVersion(result) + "\n" +
-//             getNcclErrorDetailStr(result, failureReason);
-//         TORCH_CHECK_WITH(DistBackendError, false, err);
-//       }
-//     }
-//     ncclCommGetAsyncError(comm, &result);
-//   }
-//   if (result != ncclSuccess) {
-//     std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
-//         std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(result) +
-//         "\n" + getNcclErrorDetailStr(result, failureReason);
-//     TORCH_CHECK_WITH(DistBackendError, false, err);
-//   }
-
-// #define C10D_NCCL_CHECK_TIMEOUT_GROUPEND(cmd, comm, failureReason)
-//   ncclResult_t state = cmd;
-//   auto startTimepoint = std::chrono::steady_clock::now();
-//   if (state == ncclInProgress) {
-//     do {
-//       if (nccl_nonblocking_timeout() > 0) {
-//         auto currentTimepoint = std::chrono::steady_clock::now();
-//         auto timeElapsed = std::chrono::duration_cast<std::chrono::seconds>(
-//                                currentTimepoint - startTimepoint)
-//                                .count();
-//         if (timeElapsed > nccl_nonblocking_timeout()) {
-//           std::string err = "NCCL timeout in: " + std::string(__FILE__) +
-//               ":" + std::to_string(__LINE__) + ", " +
-//               ncclGetErrorWithVersion(state) + "\n" +
-//               getNcclErrorDetailStr(state, failureReason);
-//           TORCH_CHECK_WITH(DistBackendError, false, err);
-//         }
-//       }
-//       ncclCommGetAsyncError(comm->getNcclComm(), &state);
-//     } while (state == ncclInProgress);
-//   }
-//   if (state != ncclSuccess) {
-//     std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
-//         std::to_string(__LINE__) + ", " + ncclGetErrorWithVersion(state) +
-//         "\n" + getNcclErrorDetailStr(state, failureReason);
-//     TORCH_CHECK_WITH(DistBackendError, false, err);
-//   }
-
-// Macro to print and abort on a non-successful NCCL return value.
-// #define C10D_NCCL_ASSERT(cmd)
-//   do {
-//     ncclResult_t result = cmd;
-//     if (result != ncclSuccess) {
-//       std::string err = ncclGetErrorWithVersion(result);
-//       fprintf(
-//           stderr,
-//           "NCCL error in: %s:%d, %s\n",
-//           __FILE__,
-//           __LINE__,
-//           err.c_str());
-//       abort();
-//     }
-//   } while (0)
-
-@Namespace("c10d") public static native @Cast("size_t") long hashTensors(@Const @ByRef TensorVector tensors);
-
-
-
-
-
-// Provides additional detail into NCCL error codes based on when these are
-// thrown in the NCCL codebase.
-
-// Targeting ../cuda/DebugInfoWriter.java
-
-
-
-// RAII wrapper for NCCL communicator
-// Targeting ../cuda/ncclRedOpRAII.java
-
-
-
- // namespace c10d
-
-// #endif // USE_C10D_NCCL
 
 
 // Parsed from c10/cuda/CUDAGraphsC10Utils.h
@@ -1340,70 +1142,19 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
  // namespace c10::cuda
 
 
-// Parsed from ATen/cuda/CUDAEvent.h
+// Parsed from ATen/cudnn/Types.h
 
 // #pragma once
 
-// #include <ATen/cuda/ATenCUDAGeneral.h>
-// #include <ATen/cuda/CUDAContext.h>
-// #include <c10/core/impl/GPUTrace.h>
-// #include <c10/cuda/CUDAStream.h>
-// #include <c10/cuda/CUDAGuard.h>
-// #include <ATen/cuda/Exceptions.h>
-// #include <c10/util/Exception.h>
+// #include <ATen/cudnn/cudnn-wrapper.h>
+// #include <ATen/Tensor.h>
 
-// #include <cuda_runtime_api.h>
-
-// #include <cstdint>
-// #include <utility>
-// Targeting ../cuda/CUDAEvent.java
+@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(ScalarType dtype);
 
 
 
- // namespace at::cuda
 
-
-// Parsed from torch/csrc/distributed/c10d/intra_node_comm.hpp
-
-// #pragma once
-
-// #include <ATen/ATen.h>
-// #include <ATen/cuda/CUDAEvent.h>
-// #include <c10/cuda/CUDAStream.h>
-// #include <torch/csrc/distributed/c10d/Store.hpp>
-// #include <torch/csrc/distributed/c10d/Work.hpp>
-
-@Namespace("c10d::intra_node_comm") @MemberGetter public static native @Cast("const size_t") long kMaxDevices();
-@Namespace("c10d::intra_node_comm") @MemberGetter public static native @Cast("const size_t") long kDefaultBufferSize();
-
-@Namespace("c10d::intra_node_comm") public enum Topology { UNKNOWN(0), FULLY_CONNECTED(1), HYBRID_CUBE_MESH(2);
-
-    public final int value;
-    private Topology(int v) { this.value = v; }
-    private Topology(Topology e) { this.value = e.value; }
-    public Topology intern() { for (Topology e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-@Namespace("c10d::intra_node_comm") public enum AllReduceAlgo { NONE(0), ONE_SHOT(1), TWO_SHOT(2), HCM(3);
-
-    public final int value;
-    private AllReduceAlgo(int v) { this.value = v; }
-    private AllReduceAlgo(AllReduceAlgo e) { this.value = e.value; }
-    public AllReduceAlgo intern() { for (AllReduceAlgo e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../cuda/IntraNodeComm.java
-
-
-// Targeting ../cuda/IntraNodeCommWork.java
-
-
-
-@Namespace("c10d::intra_node_comm") public static native @Cast("int64_t") long getIntraNodeCommUsageCounter();
-
- // namespace intra_node_comm
- // namespace c10d
+  // namespace at::cudnn
 
 
 // Parsed from ATen/cudnn/Descriptors.h
@@ -1486,6 +1237,29 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
   // namespace
 
 
+// Parsed from ATen/cuda/CUDAEvent.h
+
+// #pragma once
+
+// #include <ATen/cuda/ATenCUDAGeneral.h>
+// #include <ATen/cuda/CUDAContext.h>
+// #include <c10/core/impl/GPUTrace.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/cuda/CUDAGuard.h>
+// #include <ATen/cuda/Exceptions.h>
+// #include <c10/util/Exception.h>
+
+// #include <cuda_runtime_api.h>
+
+// #include <cstdint>
+// #include <utility>
+// Targeting ../cuda/CUDAEvent.java
+
+
+
+ // namespace at::cuda
+
+
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
 
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
@@ -1499,164 +1273,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace torch::inductor
 // #endif
-
-
-// Parsed from torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp
-
-// #pragma once
-
-// #if defined(__linux__)
-// #include <fcntl.h>
-// #include <sys/stat.h>
-// #include <sys/types.h>
-// #include <unistd.h>
-// #endif
-
-// #ifdef USE_C10D_NCCL
-
-// #include <atomic>
-// #include <chrono>
-// #include <future>
-// #include <iostream>
-// #include <list>
-// #include <mutex>
-// #include <thread>
-// #include <unordered_map>
-
-// #include <torch/csrc/distributed/c10d/Backend.hpp>
-// #include <torch/csrc/distributed/c10d/NCCLUtils.hpp>
-// #include <torch/csrc/distributed/c10d/PrefixStore.hpp>
-// #include <torch/csrc/distributed/c10d/Store.hpp>
-// #include <torch/csrc/distributed/c10d/intra_node_comm.hpp>
-
-// #include <ATen/DynamicLibrary.h>
-// #include <ATen/cuda/CUDAContext.h>
-// #include <ATen/cuda/CUDAEvent.h>
-// #include <c10/core/Stream.h>
-// #include <c10/core/StreamGuard.h>
-// #include <c10/cuda/CUDACachingAllocator.h>
-// #include <c10/cuda/CUDAGuard.h>
-// #include <c10/cuda/CUDAStream.h>
-
-// #include <torch/custom_class.h>
-
-// Control whether or not wait() is blocking or non-blocking.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_BLOCKING_WAIT(); public static native void TORCH_NCCL_BLOCKING_WAIT(StringVector setter);
-
-// Control whether or not we perform Async Error Handling with NCCL.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ASYNC_ERROR_HANDLING(); public static native void TORCH_NCCL_ASYNC_ERROR_HANDLING(StringVector setter);
-
-// Control whether dumping debug info on watchdog
-// timeout is enabled. This variable must be set together with
-// TORCH_NCCL_ENABLE_MONITORING=1 and TORCH_NCCL_TRACE_BUFFER_SIZE > 0.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_DUMP_ON_TIMEOUT(); public static native void TORCH_NCCL_DUMP_ON_TIMEOUT(StringVector setter);
-
-// Control whether Desync Debug is enabled. This variable must be set
-// together with TORCH_NCCL_ASYNC_ERROR_HANDLING.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_DESYNC_DEBUG(); public static native void TORCH_NCCL_DESYNC_DEBUG(StringVector setter);
-
-// Enable recording start-events for all ProcessGroupNCCL collectives, and
-// compute accurate collective timing per-collective. (Note: end-events are
-// recorded by default. Turn on this flag can increase chances of a watchdog
-// hang due to performing a CUDA event query which eventually calls
-// cudaEventElapsedTime() API.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ENABLE_TIMING(); public static native void TORCH_NCCL_ENABLE_TIMING(StringVector setter);
-
-// Enable monitoring thread which aborts the process when the ProcessGroupNCCL
-// Watchdog thread gets stuck and no heartbeat is detected after
-// TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC. This can happen due to calling CUDA/NCCL
-// APIs that may hang. It is Useful to prevent jobs being stuck for a prolonged
-// time than necessary tying up cluster resources.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ENABLE_MONITORING(); public static native void TORCH_NCCL_ENABLE_MONITORING(StringVector setter);
-
-// Control the watchdog heartbeat timeout period after which the monitoring
-// thread will abort the process.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC(); public static native void TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC(StringVector setter);
-
-// The maximum number of events we store in the flight recorder's ring buffer.
-// (One event could be the start or end of a collective, for example).
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_TRACE_BUFFER_SIZE(); public static native void TORCH_NCCL_TRACE_BUFFER_SIZE(StringVector setter);
-
-// Control how much extra time we will wait for dumping the debugging info
-// before we exit and throws timeout exception.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC(); public static native void TORCH_NCCL_WAIT_TIMEOUT_DUMP_MILSEC(StringVector setter);
-
-// Control the interval inside the watchdog thread to check the coordinated
-// signal from other ranks, e.g. to dump the debugging information.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_COORD_CHECK_MILSEC(); public static native void TORCH_NCCL_COORD_CHECK_MILSEC(StringVector setter);
-
-// Whether to abort the communicators when users call destroy_process_group().
-// If yes, communicators will be aborted when destroy_process_group is called,
-// but not in destructor.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_ABORT_IN_DESTROY_PG(); public static native void TORCH_NCCL_ABORT_IN_DESTROY_PG(StringVector setter);
-
-@Namespace("c10d") @MemberGetter public static native @Cast("const char*") BytePointer NCCL_BACKEND_NAME();
-
-@Namespace("c10d") @MemberGetter public static native @Cast("const char*") BytePointer TIMEOUT_DUMP();
-
-@Namespace("c10d") @MemberGetter public static native int kWorkStatusUpdatePeriodMs(); // 10 seconds
-
-// NoHandling: do not handle asynchronous NCCL errors
-// TearDown: tear down process upon error, see `WorkNCCL::handleException`
-// CleanUpOnly: just clean up collectives and abort communicators without
-// tearing down process SkipCleanUp: (this is a temporary option and can be
-// removed in future) tear down process without cleaning up NCCL communicators.
-// This should be used as a last resort in case `ncclCommAbort` itself is
-// hanging
-@Namespace("c10d") public enum ErrorHandlingMode {
-  NoHandling(0),
-  TearDown(1),
-  CleanUpOnly(2),
-  SkipCleanUp(3);
-
-    public final int value;
-    private ErrorHandlingMode(int v) { this.value = v; }
-    private ErrorHandlingMode(ErrorHandlingMode e) { this.value = e.value; }
-    public ErrorHandlingMode intern() { for (ErrorHandlingMode e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-// #define SHOULD_CLEAN_UP(a) (a != NoHandling && a != SkipCleanUp)
-
-// #define SHOULD_TEAR_DOWN(a) (a != NoHandling && a != CleanUpOnly)
-
-// #define PRINT_COLLECTIVE_HASH_SIGNATURE(phase, opType, numel, hashValue)
-//   LOG(WARNING) << logPrefix() << "Hash of " << phase << " to NCCL " << opType
-//                << " with size " << numel << " is " << hashValue;
-
-// If set, ProcessGroupNCCL doesn't use recordStream calls to ensure
-// caching allocator safety for tensors used on both user-facing and
-// internal comm streams.
-// Instead, it stashes live references to those tensors until after
-// user-facing streams are synced with comm streams.
-// See stashed_for_allocator_safety_ below.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_AVOID_RECORD_STREAMS(); public static native void TORCH_NCCL_AVOID_RECORD_STREAMS(StringVector setter);
-
-// If set, ProcessGroupNCCL registers postAlloc and preFree hooks to cuda cache
-// allocator so that whenever a tensor is allocated or freed, ProcessGroupNCCL
-// can register/deregister the tensor on all available NCCL communicators.
-@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK(); public static native void TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK(StringVector setter);
-
-// #if defined(__linux__)
-// #else
-// Targeting ../cuda/ProcessGroupNCCL.java
-
-
-
-@Namespace("c10d") public static native @StdString BytePointer dump_nccl_trace();
-
-// Gets a mutable reference to a global optional function.  Heartbeat Monitor
-// will query this function and if available, call it to dump traces. Inside
-// fbcode, we store a function here that uses an internal tool for process
-// tracing
-// Targeting ../cuda/gil_checker_t.java
-
-
-
-@Namespace("c10d") public static native @ByPtrRef gil_checker_t get_gil_checker();
- // namespace c10d
-
-// #endif // USE_C10D_NCCL
 
 
 }
