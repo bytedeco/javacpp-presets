@@ -23,6 +23,8 @@ export USE_NUMPY=0
 export USE_OPENMP=1
 export USE_SYSTEM_NCCL=1
 export USE_DISTRIBUTED=1
+export USE_NCCL=0 # Not supported on Windows
+
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
     export USE_CUDNN=1

@@ -78,9 +78,10 @@ go(['torch/csrc/api/include/torch/torch.h', 'torch/script.h', 'torch/csrc/induct
 print <<EOF;
 
 // Included by
+// ATen/cudnn/Types.h
 // ATen/cudnn/Descriptors.h
+// ATen/cuda/CUDAEvent.h
 // torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
-// torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp
 EOF
 
-go(['ATen/cudnn/Descriptors.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h', 'torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp'], ['-I/opt/cuda/targets/x86_64-linux/include/', '-DUSE_CUDA', '-DUSE_C10D_NCCL']);
+go(['ATen/cudnn/Types.h', 'ATen/cudnn/Descriptors.h', 'ATen/cuda/CUDAEvent.h', 'torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h'], ['-I/opt/cuda/targets/x86_64-linux/include/', '-DUSE_CUDA']);
