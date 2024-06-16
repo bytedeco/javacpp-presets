@@ -1336,7 +1336,14 @@ public class OrtApi extends Pointer {
 
   /** \brief Used for custom operators, get an input of a kernel
    *
-   * @see ::OrtCustomOp
+   * The function attempts fetches the input of the kernel. If the input is optional
+   * and not present, the function returns success and out is set to nullptr.
+   *
+   * @param context [in] ::OrtKernelContext instance
+   * @param input [in] index. See KernelContext_GetInputCount for boundaries check.
+   * @param returns [in, out] a ptr to OrtValue if the input is present
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
    */
   public native OrtStatus KernelContext_GetInput( @Const OrtKernelContext context, @Cast("size_t") long index,
                     @Cast("const OrtValue**") PointerPointer out);
@@ -1345,7 +1352,14 @@ public class OrtApi extends Pointer {
 
   /** \brief Used for custom operators, get an output of a kernel
    *
-   * @see ::OrtCustomOp
+   * The function attempts fetches the output of the kernel. If the output is optional
+   * and not present, the function returns success and out is set to nullptr.
+   *
+   * @param context [in] ::OrtKernelContext instance
+   * @param output [in] index. See KernelContext_GetOutputCount for boundaries check.
+   * @param returns [in, out] a ptr to OrtValue if the output is present
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
    */
   public native OrtStatus KernelContext_GetOutput( OrtKernelContext context, @Cast("size_t") long index,
                     @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count, @Cast("OrtValue**") PointerPointer out);
@@ -2593,7 +2607,7 @@ public class OrtApi extends Pointer {
    *
    * Please refer to https://onnxruntime.ai/docs/execution-providers/TensorRT-ExecutionProvider.html#cc
    * to know the available keys and values. Key should be in null terminated string format of the member of ::OrtTensorRTProviderOptionsV2
-   * and value should be its related range.
+   * and value should be its related range. Recreates the options and only sets the supplied values.
    *
    * For example, key="trt_max_workspace_size" and value="2147483648"
    *
@@ -3177,7 +3191,7 @@ public class OrtApi extends Pointer {
    *
    * Please refer to https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#configuration-options
    * to know the available keys and values. Key should be in null terminated string format of the member of ::OrtCUDAProviderOptionsV2
-   * and value should be its related range.
+   * and value should be its related range. Recreates the options and only sets the supplied values.
    *
    * For example, key="device_id" and value="0"
    *
@@ -3273,7 +3287,7 @@ public class OrtApi extends Pointer {
    * @param options [in]
    * @param initializer_names [in] Array of null terminated UTF-8 encoded strings of the initializers names.
    * @param initializers [in] Array of ::OrtValue type
-   * @param initializers_num [in] Number of elements in the initializer_names and initializers
+   * @param num_initializers [in] Number of elements in the initializer_names and initializers
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    *
@@ -3281,16 +3295,16 @@ public class OrtApi extends Pointer {
    */
   public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
                     @Cast("const char*const*") PointerPointer initializer_names,
-                    @Cast("const OrtValue*const*") PointerPointer initializers, @Cast("size_t") long initializers_num);
+                    @Cast("const OrtValue*const*") PointerPointer initializers, @Cast("size_t") long num_initializers);
   public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
                     @Cast("const char*const*") @ByPtrPtr BytePointer initializer_names,
-                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long initializers_num);
+                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long num_initializers);
   public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
                     @Cast("const char*const*") @ByPtrPtr ByteBuffer initializer_names,
-                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long initializers_num);
+                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long num_initializers);
   public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
                     @Cast("const char*const*") @ByPtrPtr byte[] initializer_names,
-                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long initializers_num);
+                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long num_initializers);
 
   /** \brief: Create attribute of onnxruntime operator
    *
@@ -3491,6 +3505,7 @@ public class OrtApi extends Pointer {
    * QNN supported keys:
    *   "backend_path": file path to QNN backend library.
    *   "profiling_level": QNN profiling level, options: "off", "basic", "detailed". Default to off.
+   *   "profiling_file_path": QNN profiling file path if ETW not enabled.
    *   "rpc_control_latency": QNN RPC control latency.
    *   "vtcm_mb": QNN VTCM size in MB. default to 0(not set).
    *   "htp_performance_mode": QNN performance mode, options: "burst", "balanced", "default", "high_performance",
@@ -3512,6 +3527,10 @@ public class OrtApi extends Pointer {
    *     - "73"
    *     - "75"
    *   "device_id": The ID of the device to use when setting 'htp_arch'. Defaults to "0" (for single device).
+       "enable_htp_fp16_precision": Only used for float32 model.
+       Enable the float32 model to be inferenced with fp16 precision. Otherwise, it will be fp32 precision.
+         - "0": Default. With fp32 precision.
+         - "1": With fp16 precision.
    *
    * SNPE supported keys:
    *   "runtime": SNPE runtime engine, options: "CPU", "CPU_FLOAT32", "GPU", "GPU_FLOAT32_16_HYBRID", "GPU_FLOAT16",
@@ -4719,4 +4738,98 @@ public class OrtApi extends Pointer {
                     @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys,
                     @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
                     @Cast("size_t") long num_keys);
+
+  /** \brief Append VitisAI provider to session options
+   *
+   * If VitisAI is not available (due to a non VitisAI enabled build, or if VitisAI is not installed on the system), this function will return failure.
+   *
+   * @param options [in]
+   * @param provider_options_keys [in]
+   * @param provider_options_values [in]
+   * @param num_keys [in]
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_VitisAI(
+                    OrtSessionOptions options,
+                    @Cast("const char*const*") PointerPointer provider_options_keys,
+                    @Cast("const char*const*") PointerPointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider_VitisAI(
+                    OrtSessionOptions options,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider_VitisAI(
+                    OrtSessionOptions options,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider_VitisAI(
+                    OrtSessionOptions options,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
+                    @Cast("size_t") long num_keys);
+
+  /** \brief Get scratch buffer from the corresponding allocator under the sepcific OrtMemoryInfo object.
+   *         NOTE: callers are responsible to release this scratch buffer from the corresponding allocator
+   *  @param context [in] OrtKernelContext instance
+   *  @param mem_info [in] OrtMemoryInfo instance
+   *  @param count_or_bytes [in] How many bytes is this scratch buffer
+   *  @param out [out] A pointer to the scrach buffer
+   *  \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus KernelContext_GetScratchBuffer( @Const OrtKernelContext context, @Const OrtMemoryInfo mem_info, @Cast("size_t") long count_or_bytes, @Cast("void**") PointerPointer out);
+  public native OrtStatus KernelContext_GetScratchBuffer( @Const OrtKernelContext context, @Const OrtMemoryInfo mem_info, @Cast("size_t") long count_or_bytes, @Cast("void**") @ByPtrPtr Pointer out);
+
+  /** \brief Get allocator from KernelInfo for a specific memory type. Please use C API ReleaseAllocator to release out object
+   *
+   * @param info [in] OrtKernelInfo instance
+   * @param mem_type [in] OrtMemType object
+   * @param out [out] A pointer to OrtAllocator
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus KernelInfoGetAllocator( @Const OrtKernelInfo info, @Cast("OrtMemType") int mem_type, @Cast("OrtAllocator**") PointerPointer out);
+  public native OrtStatus KernelInfoGetAllocator( @Const OrtKernelInfo info, @Cast("OrtMemType") int mem_type, @ByPtrPtr OrtAllocator out);
+
+  /** \brief Replace initialized Tensors with external data with the provided files in memory
+   *
+   * The function will find the initialized TensorProtos with external data in the graph with the provided
+   * external file names and the file content in memory. The API gets the external file name, offset, data length
+   * from TensorProto, and locate the tensor data from the file in memory buffer.
+   * It creates a Tensor to replace the existing Tensor in graph. The replacement
+   * will occur before any of the optimizations take place. The data will be copied into the graph
+   * since TensorProto can't refer to the user provided buffers.
+   *
+   * @param session [in] options
+   * @param external_initializer_file_names [in] Array of null terminated UTF-8 encoded strings of the file names
+   *            which holds the external initializers.
+   * @param external_initializer_file_buffer_array [in] Array of pointers to the buffer of the file content.
+   *            The buffer can be freed after session creation.
+   * @param external_initializer_file_lengths [in] Array of size_t to indicate the length of file content
+   * @param num_external_initializer_files [in] Number of external files
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus AddExternalInitializersFromFilesInMemory( OrtSessionOptions options,
+                    @Cast("const ORTCHAR_T*const*") PointerPointer external_initializer_file_names,
+                    @Cast("char*const*") PointerPointer external_initializer_file_buffer_array,
+                    @Cast("const size_t*") SizeTPointer external_initializer_file_lengths,
+                    @Cast("size_t") long num_external_initializer_files);
+  public native OrtStatus AddExternalInitializersFromFilesInMemory( OrtSessionOptions options,
+                    @Cast("const ORTCHAR_T*const*") @ByPtrPtr Pointer external_initializer_file_names,
+                    @Cast("char*const*") @ByPtrPtr BytePointer external_initializer_file_buffer_array,
+                    @Cast("const size_t*") SizeTPointer external_initializer_file_lengths,
+                    @Cast("size_t") long num_external_initializer_files);
+  public native OrtStatus AddExternalInitializersFromFilesInMemory( OrtSessionOptions options,
+                    @Cast("const ORTCHAR_T*const*") @ByPtrPtr Pointer external_initializer_file_names,
+                    @Cast("char*const*") @ByPtrPtr ByteBuffer external_initializer_file_buffer_array,
+                    @Cast("const size_t*") SizeTPointer external_initializer_file_lengths,
+                    @Cast("size_t") long num_external_initializer_files);
+  public native OrtStatus AddExternalInitializersFromFilesInMemory( OrtSessionOptions options,
+                    @Cast("const ORTCHAR_T*const*") @ByPtrPtr Pointer external_initializer_file_names,
+                    @Cast("char*const*") @ByPtrPtr byte[] external_initializer_file_buffer_array,
+                    @Cast("const size_t*") SizeTPointer external_initializer_file_lengths,
+                    @Cast("size_t") long num_external_initializer_files);
 }

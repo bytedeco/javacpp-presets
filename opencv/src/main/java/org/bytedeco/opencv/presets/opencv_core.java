@@ -57,10 +57,10 @@ import org.bytedeco.openblas.presets.*;
             "<opencv2/core/utility.hpp>", "<opencv2/core/utils/instrumentation.hpp>", "<opencv2/core/utils/tls.hpp>",
             "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.409", "opencv_imgproc@.409"},
+            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.410", "opencv_imgproc@.410"},
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake", "python"}, linkresource = "lib",
-            preload = {"opencv_cudev@.409"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
+            preload = {"opencv_cudev@.410"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
@@ -69,7 +69,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core490", "opencv_imgproc490"}, preload = {"opencv_cudev490"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core4100", "opencv_imgproc4100"}, preload = {"opencv_cudev4100"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -224,7 +224,8 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("__CV_BEGIN__", "__CV_END__", "__CV_EXIT__").cppTypes())
 
                .put(new Info("uchar").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
-               .put(new Info("std::vector<std::vector<char> >", "std::vector<std::vector<uchar> >", "std::vector<std::vector<cv::uint8_t> >").cast().pointerTypes("ByteVectorVector").define())
+               .put(new Info("std::vector<std::vector<char> >", "std::vector<std::vector<uchar> >", "std::vector<std::vector<uint8_t> >",
+                             "std::vector<std::vector<cv::uint8_t> >").cast().pointerTypes("ByteVectorVector").define())
                .put(new Info("std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define())
                .put(new Info("std::vector<std::vector<float> >").pointerTypes("FloatVectorVector").define())
                .put(new Info("std::vector<cv::String>", "std::vector<std::string>").pointerTypes("StringVector").define())
@@ -394,9 +395,9 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::saturate_cast<unsigned>").javaNames("unsignedSaturateCast"))
                .put(new Info("cv::saturate_cast<uint64>").javaNames("uint64SaturateCast"))
                .put(new Info("cv::saturate_cast<int64>").javaNames("int64SaturateCast"))
-               .put(new Info("cv::saturate_cast<cv::float16_t>", "saturate_cast<float16_t>").javaNames("float16SaturateCast"))
+               .put(new Info("cv::saturate_cast<cv::hfloat>", "cv::saturate_cast<cv::float16_t>", "saturate_cast<float16_t>").javaNames("float16SaturateCast"))
 
-               .put(new Info("cv::normL2Sqr", "cv::normL1", "cv::seqPopMulti").skip())
+               .put(new Info("cv::normL2Sqr", "cv::normL1", "cv::seqPopMulti", "cv::hal::polarToCart32f", "cv::hal::polarToCart64f").skip())
 
                .put(new Info("cv::Formatted(cv::Mat&, cv::Formatter*, int*)").javaText(
                        "public Formatted(@Const @ByRef Mat m, @Const Formatter fmt,\n"

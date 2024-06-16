@@ -31,9 +31,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_calib3d.class,
     value = {
-        @Platform(include = "<opencv2/rapid.hpp>", link = "opencv_rapid@.409"),
+        @Platform(include = "<opencv2/rapid.hpp>", link = "opencv_rapid@.410"),
         @Platform(value = "ios", preload = "libopencv_rapid"),
-        @Platform(value = "windows", link = "opencv_rapid490")
+        @Platform(value = "windows", link = "opencv_rapid4100")
     },
     target = "org.bytedeco.opencv.opencv_rapid",
     global = "org.bytedeco.opencv.global.opencv_rapid"

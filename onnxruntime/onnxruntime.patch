@@ -1,8 +1,8 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index 68522a7dda..69432fa783 100644
+index 690b6d4e66..cc99e69580 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
-@@ -11,8 +11,8 @@ endif()
+@@ -20,8 +20,8 @@ endif()
  # Enable space optimization for gcc/clang
  # Cannot use "-ffunction-sections -fdata-sections" if we enable bitcode (iOS)
  if (NOT MSVC AND NOT onnxruntime_ENABLE_BITCODE)
@@ -14,10 +14,10 @@ index 68522a7dda..69432fa783 100644
  
  if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 59ebf8eca4..2a326e4057 100644
+index e15c8a046d..0504f81348 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -131,9 +131,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
+@@ -117,9 +117,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
  
  if(UNIX)
    if (APPLE)
@@ -30,10 +30,10 @@ index 59ebf8eca4..2a326e4057 100644
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 8f0a5aeaa3..c684682e7d 100644
+index 80bd301c20..e7e4b1ce4f 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1132,13 +1132,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1365,13 +1365,33 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -67,7 +67,7 @@ index 8f0a5aeaa3..c684682e7d 100644
      ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1157,7 +1177,7 @@ struct ProviderSharedLibrary {
+@@ -1390,7 +1410,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -76,7 +76,7 @@ index 8f0a5aeaa3..c684682e7d 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1190,6 +1210,18 @@ struct ProviderLibrary {
+@@ -1423,6 +1443,18 @@ struct ProviderLibrary {
          s_library_shared.Ensure();
  
          auto full_path = Env::Default().GetRuntimePath() + filename_;
@@ -96,10 +96,10 @@ index 8f0a5aeaa3..c684682e7d 100644
  
          Provider* (*PGetProvider)();
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index d6546ccdd9..70914d6758 100644
+index 575434d19b..272893301a 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-@@ -113,10 +113,11 @@ struct OnUnload {
+@@ -114,10 +114,11 @@ struct OnUnload {
  
  } g_on_unload;
  
@@ -113,7 +113,7 @@ index d6546ccdd9..70914d6758 100644
    return g_host->CreateAllocator(info);
  }
  
-@@ -251,19 +252,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
+@@ -252,19 +253,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -137,7 +137,7 @@ index d6546ccdd9..70914d6758 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -271,16 +275,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -272,16 +276,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -157,7 +157,7 @@ index d6546ccdd9..70914d6758 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -291,6 +298,7 @@ int64_t TensorShape::Size() const {
+@@ -292,6 +299,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -165,7 +165,7 @@ index d6546ccdd9..70914d6758 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -300,74 +308,89 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -301,84 +309,98 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -205,11 +205,6 @@ index d6546ccdd9..70914d6758 100644
                                             std::vector<NodeComputeInfo>& node_compute_funcs) {
 +  g_host = Provider_GetHost();
    return g_host->IExecutionProvider__Compile(this, fused_nodes_and_graphs, node_compute_funcs);
- }
- 
- int IExecutionProvider::GenerateMetaDefId(const onnxruntime::GraphViewer& graph_viewer, HashValue& model_hash) const {
-+  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GenerateMetaDefId(this, graph_viewer, model_hash);
  }
  
  #ifdef USE_TENSORRT
@@ -258,7 +253,25 @@ index d6546ccdd9..70914d6758 100644
    return g_host->GetCpuPreferredNodes(graph, kernel_lookup, tentative_nodes);
  }
  
-@@ -464,10 +487,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+ namespace profiling {
+ 
+-std::string demangle(const char* name) { return g_host->demangle(name); }
+-std::string demangle(const std::string& name) { return g_host->demangle(name); }
++std::string demangle(const char* name) { g_host = Provider_GetHost(); return g_host->demangle(name); }
++std::string demangle(const std::string& name) { g_host = Provider_GetHost(); return g_host->demangle(name); }
+ 
+ }  // namespace profiling
+ 
+ namespace logging {
+ 
+-unsigned int GetThreadId() { return g_host->GetThreadId(); }
+-unsigned int GetProcessId() { return g_host->GetProcessId(); }
++unsigned int GetThreadId() { g_host = Provider_GetHost(); return g_host->GetThreadId(); }
++unsigned int GetProcessId() { g_host = Provider_GetHost(); return g_host->GetProcessId(); }
+ 
+ const char* Category::onnxruntime = "onnxruntime";
+ 
+@@ -461,10 +483,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -272,10 +285,10 @@ index d6546ccdd9..70914d6758 100644
  }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 4c3e8b76e8..24b8b715d7 100644
+index 3df351711a..6a75127088 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -946,6 +946,9 @@ def generate_build_tree(
+@@ -1003,6 +1003,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -285,13 +298,13 @@ index 4c3e8b76e8..24b8b715d7 100644
          # There are two ways of locating python C API header file. "find_package(PythonLibs 3.5 REQUIRED)"
          # and "find_package(Python 3.5 COMPONENTS Development.Module)". The first one is deprecated and it
          # depends on the "PYTHON_EXECUTABLE" variable. The second needs "Python_EXECUTABLE". Here we set both
-@@ -2525,6 +2528,9 @@ def main():
+@@ -2795,6 +2798,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
 +        if is_linux() and args.arm64:
 +            cmake_extra_args = ["-DCMAKE_SYSTEM_NAME=Linux", "-DCMAKE_SYSTEM_PROCESSOR=aarch64"]
 +
-         if is_ubuntu_1604():
-             if args.arm or args.arm64:
-                 raise BuildError("Only Windows ARM(64) cross-compiled builds supported currently through this script")
+         if args.enable_pybind and is_windows():
+             install_python_deps(args.numpy_version)
+ 

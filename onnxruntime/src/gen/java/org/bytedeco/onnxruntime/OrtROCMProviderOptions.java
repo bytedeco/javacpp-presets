@@ -86,6 +86,8 @@ public class OrtROCMProviderOptions extends Pointer {
    */
   public native OrtArenaCfg default_memory_arena_cfg(); public native OrtROCMProviderOptions default_memory_arena_cfg(OrtArenaCfg setter);
 
+  public native int enable_hip_graph(); public native OrtROCMProviderOptions enable_hip_graph(int setter);
+
   /** \brief Enable TunableOp for using.
    *   Set it to 1/0 to enable/disable TunableOp. Otherwise, it is disabled by default.
    *   This option can be overriden by environment variable ORT_ROCM_TUNABLE_OP_ENABLE.

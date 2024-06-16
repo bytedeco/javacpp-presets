@@ -179,7 +179,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.9.x  https://opencv.org/releases/
+ * OpenCV 4.10.x  https://opencv.org/releases/
  * FFmpeg 7.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 3.0.x https://www.flir.com/products/spinnaker-sdk
@@ -201,9 +201,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DNNL 3.4.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.27  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
- * CMINPACK 1.3.8  https://github.com/devernay/cminpack
+ * CMINPACK 1.3.9  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
- * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
+ * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.12.x  https://www.python.org/downloads/
  * NumPy 1.26.x  https://github.com/numpy/numpy
  * SciPy 1.13.x  https://github.com/scipy/scipy
@@ -223,7 +223,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 12.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
- * PyTorch 2.2.x  https://github.com/pytorch/pytorch
+ * PyTorch 2.3.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.2.0  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.16.x  https://github.com/tensorflow/tensorflow
@@ -233,7 +233,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.16.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.17.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.18.x  https://github.com/microsoft/onnxruntime
  * TVM 0.16.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

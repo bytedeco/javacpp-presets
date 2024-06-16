@@ -274,4 +274,51 @@ public class OrtCustomOp extends Pointer {
       public native int call(@Const OrtCustomOp op);
   }
   public native GetEndVersion_OrtCustomOp GetEndVersion(); public native OrtCustomOp GetEndVersion(GetEndVersion_OrtCustomOp setter);
+
+  // Get the inplace_map that defines which output can reuse which input
+  // Callers will provide 2 raw int* and pass in their address, this function will fill these 2 arrays
+  // when return, output (*output_index)[i] may reuse the input (*input_index[i]).
+  // The return value is the size of these 2 arrays.
+  // Callers are responsible to delete these 2 arrays after use by calling OrtCustomOp::ReleaseMayInplace().
+  public static class GetMayInplace_PointerPointer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetMayInplace_PointerPointer_PointerPointer(Pointer p) { super(p); }
+      protected GetMayInplace_PointerPointer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("size_t") long call(@Cast("int**") PointerPointer input_index, @Cast("int**") PointerPointer output_index);
+  }
+  public native GetMayInplace_PointerPointer_PointerPointer GetMayInplace(); public native OrtCustomOp GetMayInplace(GetMayInplace_PointerPointer_PointerPointer setter);
+
+  // Release the pointer input_index and output_index allocated from GetMayInplace() function.
+  // If GetMayInplace() is defined, this function MUST be defined as well.
+  public static class ReleaseMayInplace_IntPointer_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseMayInplace_IntPointer_IntPointer(Pointer p) { super(p); }
+      protected ReleaseMayInplace_IntPointer_IntPointer() { allocate(); }
+      private native void allocate();
+      public native void call(IntPointer input_index, IntPointer output_index);
+  }
+  public native ReleaseMayInplace_IntPointer_IntPointer ReleaseMayInplace(); public native OrtCustomOp ReleaseMayInplace(ReleaseMayInplace_IntPointer_IntPointer setter);
+
+  // Same as GetMayInplace() and ReleaseMayInplace()
+  public static class GetAliasMap_PointerPointer_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetAliasMap_PointerPointer_PointerPointer(Pointer p) { super(p); }
+      protected GetAliasMap_PointerPointer_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("size_t") long call(@Cast("int**") PointerPointer input_index, @Cast("int**") PointerPointer output_index);
+  }
+  public native GetAliasMap_PointerPointer_PointerPointer GetAliasMap(); public native OrtCustomOp GetAliasMap(GetAliasMap_PointerPointer_PointerPointer setter);
+  public static class ReleaseAliasMap_IntPointer_IntPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseAliasMap_IntPointer_IntPointer(Pointer p) { super(p); }
+      protected ReleaseAliasMap_IntPointer_IntPointer() { allocate(); }
+      private native void allocate();
+      public native void call(IntPointer input_index, IntPointer output_index);
+  }
+  public native ReleaseAliasMap_IntPointer_IntPointer ReleaseAliasMap(); public native OrtCustomOp ReleaseAliasMap(ReleaseAliasMap_IntPointer_IntPointer setter);
 }

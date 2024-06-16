@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnx</artifactId>
-  <version>1.16.0-${project.parent.version}</version>
+  <version>1.16.1-${project.parent.version}</version>
   <name>JavaCPP Presets for ONNX</name>
 
   <dependencies>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython</artifactId>
-      <version>3.12.3-${project.parent.version}</version>
+      <version>3.12.4-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -42,7 +42,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.12.3-${project.parent.version}</version>
+            <version>3.12.4-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>

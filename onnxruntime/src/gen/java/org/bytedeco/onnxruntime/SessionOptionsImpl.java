@@ -88,6 +88,19 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
   public native @ByRef SessionOptionsImpl AddInitializer(String name, @Const OrtValue ort_val);
   /** Wraps OrtApi::AddExternalInitializers */
   public native @ByRef SessionOptionsImpl AddExternalInitializers(@Const @ByRef StringVector names, @StdMove ValueVector ort_values);
+  /** Wraps OrtApi::AddExternalInitializersFromFilesInMemory */
+  public native @ByRef SessionOptionsImpl AddExternalInitializersFromFilesInMemory(@Cast("std::basic_string<ORTCHAR_T>*") @StdVector Pointer external_initializer_file_names,
+                                                                 @Cast("char**") @StdVector PointerPointer external_initializer_file_buffer_array,
+                                                                 @Cast("size_t*") @StdVector SizeTPointer external_initializer_file_lengths);
+  public native @ByRef SessionOptionsImpl AddExternalInitializersFromFilesInMemory(@Cast("std::basic_string<ORTCHAR_T>*") @StdVector Pointer external_initializer_file_names,
+                                                                 @Cast("char**") @StdVector @ByPtrPtr BytePointer external_initializer_file_buffer_array,
+                                                                 @Cast("size_t*") @StdVector SizeTPointer external_initializer_file_lengths);
+  public native @ByRef SessionOptionsImpl AddExternalInitializersFromFilesInMemory(@Cast("std::basic_string<ORTCHAR_T>*") @StdVector Pointer external_initializer_file_names,
+                                                                 @Cast("char**") @StdVector @ByPtrPtr ByteBuffer external_initializer_file_buffer_array,
+                                                                 @Cast("size_t*") @StdVector SizeTPointer external_initializer_file_lengths);
+  public native @ByRef SessionOptionsImpl AddExternalInitializersFromFilesInMemory(@Cast("std::basic_string<ORTCHAR_T>*") @StdVector Pointer external_initializer_file_names,
+                                                                 @Cast("char**") @StdVector @ByPtrPtr byte[] external_initializer_file_buffer_array,
+                                                                 @Cast("size_t*") @StdVector SizeTPointer external_initializer_file_lengths);
 
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CUDA */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_CUDA(@Const @ByRef OrtCUDAProviderOptions provider_options);
@@ -132,7 +145,11 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
   public native @ByRef SessionOptionsImpl RegisterCustomOpsLibrary(@Cast("const ORTCHAR_T*") Pointer library_name, @Const @ByRef(nullValue = "Ort::CustomOpConfigs{}") CustomOpConfigs custom_op_configs);
   public native @ByRef SessionOptionsImpl RegisterCustomOpsLibrary(@Cast("const ORTCHAR_T*") Pointer library_name);
 
-  /** Wraps OrtApi::RegisterCustomOpsUsingFunction */
+  /** Wraps OrtApi::RegisterCustomOpsUsingFunction
+   <p>
+   *  Wraps OrtApi::SessionOptionsAppendExecutionProvider_VitisAI */
   public native @ByRef SessionOptionsImpl RegisterCustomOpsUsingFunction(@Cast("const char*") BytePointer function_name);
   public native @ByRef SessionOptionsImpl RegisterCustomOpsUsingFunction(String function_name);
+  public native @ByRef SessionOptionsImpl AppendExecutionProvider_VitisAI(@Const @ByRef(nullValue = "std::unordered_map<std::string,std::string>{}") StringStringMap provider_options);
+  public native @ByRef SessionOptionsImpl AppendExecutionProvider_VitisAI();
 }

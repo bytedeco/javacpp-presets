@@ -53,9 +53,9 @@ import org.bytedeco.opencv.presets.*;
         opencv_dnn_superres.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.409", "opencv_cudaarithm@.409", "opencv_cudafilters@.409", "opencv_cudaimgproc@.409", "opencv_java"}),
+        @Platform(preload = {"opencv_cuda@.410", "opencv_cudaarithm@.410", "opencv_cudafilters@.410", "opencv_cudaimgproc@.410", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda490", "opencv_cudaarithm490", "opencv_cudafilters490", "opencv_cudaimgproc490", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda4100", "opencv_cudaarithm4100", "opencv_cudafilters4100", "opencv_cudaimgproc4100", "opencv_java"}),
     }
 )
 public class opencv_java {
