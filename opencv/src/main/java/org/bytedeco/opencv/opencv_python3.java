@@ -65,12 +65,12 @@ import org.bytedeco.opencv.presets.*;
         opencv_wechat_qrcode.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.409", "opencv_cudaarithm@.409", "opencv_cudafilters@.409", "opencv_cudaimgproc@.409",
-                             "opencv_cudacodec@.409", "opencv_cudaobjdetect@.409", "opencv_cudabgsegm@.409", "opencv_cudastereo@.409",
-                             "opencv_cudafeatures2d@.409", "opencv_cudaoptflow@.409", "opencv_cudawarping@.409", "opencv_cudalegacy@.409"}),
-        @Platform(value = "windows", preload = {"opencv_cuda490", "opencv_cudaarithm490", "opencv_cudafilters490", "opencv_cudaimgproc490",
-                             "opencv_cudacodec490", "opencv_cudaobjdetect490", "opencv_cudabgsegm490", "opencv_cudastereo490",
-                             "opencv_cudafeatures2d490", "opencv_cudaoptflow490", "opencv_cudawarping490", "opencv_cudalegacy490"}),
+        @Platform(preload = {"opencv_cuda@.410", "opencv_cudaarithm@.410", "opencv_cudafilters@.410", "opencv_cudaimgproc@.410",
+                             "opencv_cudacodec@.410", "opencv_cudaobjdetect@.410", "opencv_cudabgsegm@.410", "opencv_cudastereo@.410",
+                             "opencv_cudafeatures2d@.410", "opencv_cudaoptflow@.410", "opencv_cudawarping@.410", "opencv_cudalegacy@.410"}),
+        @Platform(value = "windows", preload = {"opencv_cuda4100", "opencv_cudaarithm4100", "opencv_cudafilters4100", "opencv_cudaimgproc4100",
+                             "opencv_cudacodec4100", "opencv_cudaobjdetect4100", "opencv_cudabgsegm4100", "opencv_cudastereo4100",
+                             "opencv_cudafeatures2d4100", "opencv_cudaoptflow4100", "opencv_cudawarping4100", "opencv_cudalegacy4100"}),
     }
 )
 public class opencv_python3 {

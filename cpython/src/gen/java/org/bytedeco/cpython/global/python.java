@@ -144,12 +144,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        12;
-public static final int PY_MICRO_VERSION =        3;
+public static final int PY_MICRO_VERSION =        4;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.12.3";
+public static final String PY_VERSION =              "3.12.4";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -2888,6 +2888,9 @@ public static final long PY_DWORD_MAX = 4294967295L;
 // #elif defined(__GNUC__)
 // #  if defined(__SANITIZE_ADDRESS__)
 // #    define _Py_ADDRESS_SANITIZER
+// #  endif
+// #  if defined(__SANITIZE_THREAD__)
+// #    define _Py_THREAD_SANITIZER
 // #  endif
 // #endif
 
@@ -9234,7 +9237,7 @@ public static final Pointer Py_MOD_PER_INTERPRETER_GIL_SUPPORTED = Py_MOD_PER_IN
 // #endif
 
 
-// #define COMMON_FIELDS(PREFIX)
+// #define _Py_COMMON_FIELDS(PREFIX)
 //     PyObject *PREFIX ## globals;
 //     PyObject *PREFIX ## builtins;
 //     PyObject *PREFIX ## name;
@@ -9249,6 +9252,8 @@ public static final Pointer Py_MOD_PER_INTERPRETER_GIL_SUPPORTED = Py_MOD_PER_IN
 // Targeting ../PyFunctionObject.java
 
 
+
+// #undef _Py_COMMON_FIELDS
 
 public static native @ByRef PyTypeObject PyFunction_Type(); public static native void PyFunction_Type(PyTypeObject setter);
 
@@ -13707,7 +13712,7 @@ public static final int CO_FUTURE_ANNOTATIONS =    0x1000000;
 */
 // #define PY_PARSER_REQUIRES_FUTURE_KEYWORD
 
-public static final int CO_MAXBLOCKS = 20; /* Max static block nesting within a function */
+public static final int CO_MAXBLOCKS = 21; /* Max static block nesting within a function */
 
 public static native @ByRef PyTypeObject PyCode_Type(); public static native void PyCode_Type(PyTypeObject setter);
 

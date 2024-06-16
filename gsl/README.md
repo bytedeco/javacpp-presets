@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * GSL 2.7  http://www.gnu.org/software/gsl/
+ * GSL 2.8  http://www.gnu.org/software/gsl/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

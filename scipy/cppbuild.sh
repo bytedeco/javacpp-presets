@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.13.0
+SCIPY_VERSION=1.13.1
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/data-apis/array-api-compat/archive/05548f0.tar.gz array-api-compat-05548f0.tar.gz
 download https://github.com/scipy/HiGHS/archive/4a12295.tar.gz HiGHS-4a12295.tar.gz

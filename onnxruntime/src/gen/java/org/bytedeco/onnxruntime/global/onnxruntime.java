@@ -74,7 +74,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 17;
+public static final int ORT_API_VERSION = 18;
 
 // #ifdef __cplusplus
 // #endif
@@ -313,7 +313,7 @@ public static final int
 /** \} */
 // #define ORT_RUNTIME_CLASS(X)
 //   struct Ort##X;
-//   typedef struct Ort##X Ort##X;
+//   typedef struct Ort##X Ort##X
 // Targeting ../OrtEnv.java
 
 
@@ -590,7 +590,7 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
  *
  * \param device_id CUDA device id, starts from zero.
  */
-public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Tensorrt( OrtSessionOptions options, int device_id);
+
 
 // #ifdef __cplusplus
 // #endif
