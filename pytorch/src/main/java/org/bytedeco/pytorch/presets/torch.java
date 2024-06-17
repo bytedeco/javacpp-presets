@@ -86,12 +86,12 @@ import org.bytedeco.openblas.presets.openblas;
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             link = {"c10", "torch_cpu", "torch"},
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm"}
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "uv"}
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
             link = { "c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch" },
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "uv", "cupti@.12"},
             includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/include/"},
             preloadpath = {
                 "/usr/local/cuda-12.3/lib64/",
