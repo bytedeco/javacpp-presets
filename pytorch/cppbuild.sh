@@ -47,8 +47,7 @@ mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
-# Distributed needs libuv on Windows (on other platforms, it's included
-# in tensorpipe)
+# Distributed needs libuv on Windows (on other platforms, it's included in tensorpipe)
 if [[ $PLATFORM == windows* ]]; then
     if [[ ! -d libuv ]]; then
         mkdir libuv
@@ -62,7 +61,7 @@ if [[ $PLATFORM == windows* ]]; then
         cmake --install . --config Release --prefix=../dist
         cd ../..
     fi
-    export libuv_ROOT=`pwd`/libuv/dist
+    export libuv_ROOT=${INSTALL_PATH}/libuv/dist
 fi
 
 if [[ ! -d pytorch ]]; then
@@ -205,6 +204,16 @@ sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 # some windows header defines a macro named "interface"
 sedinplace 's/const std::string& interface)/const std::string\& interface_name)/g' torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
 
+if [[ $PLATFORM == windows* ]]; then
+    # Remove pytorch adaptations of FindOpenMP.cmake that, without iomp and with
+    # new versions of VS 2019 including -openmp:experimental and libomp, causes
+    # final binary to be linked to both libomp and vcomp and produce incorrect results.
+    # Wait for eventual upstream fix, or for cmake 2.30 that allows to choose between -openmp and -openmp:experimental
+    # and see if choosing experimental works.
+    rm cmake/Modules/FindOpenMP.cmake
+    sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
+fi
+
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build
 
@@ -216,9 +225,9 @@ ln -sf pytorch/torch/include ../include
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
 
-# fix library with correct rpath on Mac
 case $PLATFORM in
     macosx-*)
+        # fix library with correct rpath
         cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
         chmod +w ../lib/libiomp5.dylib
         install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
