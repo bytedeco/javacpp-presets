@@ -77508,11 +77508,11 @@ public static final int TORCH_VERSION_MAJOR = 2;
 public static final int TORCH_VERSION_MINOR = 3;
 
 /** Indicates the patch version of LibTorch. */
-public static final int TORCH_VERSION_PATCH = 0;
+public static final int TORCH_VERSION_PATCH = 1;
 
 /** Indicates the version of LibTorch. */
 public static final String TORCH_VERSION = 
-  "2.3.0";
+  "2.3.1";
 
 
 // Parsed from torch/csrc/api/include/torch/xpu.h

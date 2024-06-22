@@ -241,9 +241,9 @@ public class ProcessGroupGloo extends DistributedBackend {
 
   // Create new device instance for specific interface.
   public static native @SharedPtr @ByVal org.bytedeco.pytorch.gloo.Device createDeviceForInterface(
-        @StdString BytePointer _interface);
+        @StdString BytePointer interface_name);
   public static native @SharedPtr @ByVal org.bytedeco.pytorch.gloo.Device createDeviceForInterface(
-        @StdString String _interface);
+        @StdString String interface_name);
 
   // Create new device instance for specific hostname or address.
   public static native @SharedPtr @ByVal org.bytedeco.pytorch.gloo.Device createDeviceForHostname(

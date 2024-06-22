@@ -204,15 +204,14 @@ sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 # some windows header defines a macro named "interface"
 sedinplace 's/const std::string& interface)/const std::string\& interface_name)/g' torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
 
-if [[ $PLATFORM == windows* ]]; then
-    # Remove pytorch adaptations of FindOpenMP.cmake that, without iomp and with
-    # new versions of VS 2019 including -openmp:experimental and libomp, causes
-    # final binary to be linked to both libomp and vcomp and produce incorrect results.
-    # Wait for eventual upstream fix, or for cmake 2.30 that allows to choose between -openmp and -openmp:experimental
-    # and see if choosing experimental works.
-    rm cmake/Modules/FindOpenMP.cmake
-    sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
-fi
+# Remove pytorch adaptations of FindOpenMP.cmake that.
+# On Windows without iomp and with new versions of VS 2019, including -openmp:experimental and libomp, causes
+# final binary to be linked to both libomp and vcomp and produce incorrect results.
+# Wait for eventual upstream fix, or for cmake 2.30 that allows to choose between -openmp and -openmp:experimental
+# and see if choosing experimental works. See Issue #1503.
+# On Linux, pytorch FindOpenMP.cmake picks llvm libomp over libgomp. See Issue #1504.
+rm cmake/Modules/FindOpenMP.cmake
+sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
 
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build

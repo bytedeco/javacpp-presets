@@ -47,13 +47,6 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
             },
-            link = { "cudart", "cusparse", "cudnn" },
-            linkpath = {
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
-                "/usr/local/cuda-12.3/lib64/",
-                "/usr/local/cuda/lib64/",
-                "/usr/lib64/"
-            },
             library = "jnitorch"
         ),
     },
