@@ -85,13 +85,10 @@ import org.bytedeco.openblas.presets.openblas;
 
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
-            link = {"c10", "torch_cpu", "torch"},
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "uv"}
+            preload = { "asmjit", "fbgemm" }
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
-            link = { "c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch" },
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "uv", "cupti@.12"},
             includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/include/"},
             preloadpath = {
                 "/usr/local/cuda-12.3/lib64/",
@@ -103,9 +100,32 @@ import org.bytedeco.openblas.presets.openblas;
                 "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
-
+            linkpath = {
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
+                "/usr/local/cuda-12.3/lib64/",
+                "/usr/local/cuda/lib64/",
+                "/usr/lib64/"
+            },
             extension = "-gpu"
         ),
+        @Platform(
+            value = {"linux", "macosx"},
+            link = { "c10", "torch", "torch_cpu" }
+        ),
+        @Platform(
+            value = "windows",
+            link = { "c10", "torch", "torch_cpu", "uv" }
+        ),
+        @Platform(
+            value = "linux",
+            extension = "-gpu",
+            link = { "c10", "torch", "torch_cpu", "c10_cuda", "torch_cuda", "cudart", "cusparse", "cudnn" } // cupti@.12 needed ?
+        ),
+        @Platform(
+            value = "windows",
+            extension = "-gpu",
+            link = { "c10", "torch", "torch_cpu", "uv", "c10_cuda", "torch_cuda", "cudart", "cusparse", "cudnn" }
+        )
     },
     target = "org.bytedeco.pytorch",
     global = "org.bytedeco.pytorch.global.torch"
