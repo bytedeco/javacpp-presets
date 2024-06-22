@@ -109,8 +109,12 @@ import org.bytedeco.openblas.presets.openblas;
             extension = "-gpu"
         ),
         @Platform(
-            value = {"linux", "macosx"},
+            value = {"linux"},
             link = { "c10", "torch", "torch_cpu" }
+        ),
+        @Platform(
+            value = {"macosx"},
+            link = { "c10", "torch", "torch_cpu", "omp" }
         ),
         @Platform(
             value = "windows",

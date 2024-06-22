@@ -58,7 +58,7 @@ if [[ $PLATFORM == windows* ]]; then
         cd build
         cmake ../libuv-v1.39.0 -DBUILD_TESTING=OFF
         cmake --build . --config Release
-        cmake --install . --config Release --prefix=../dist
+        cmake --install . --config Release --prefix ../dist
         cd ../..
     fi
     export libuv_ROOT=${INSTALL_PATH}/libuv/dist
@@ -143,7 +143,7 @@ case $PLATFORM in
     macosx-arm64)
         export CC="clang"
         export CXX="clang++"
-        export CMAKE_OSX_ARCHITECTURES=arm64 # enable cross-compilation on a x86_64 host machine
+        # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         export USE_MKLDNN=OFF
         export USE_QNNPACK=OFF # not compatible with arm64 as of PyTorch 2.1.2
         export CMAKE_OSX_DEPLOYMENT_TARGET=11.00 # minimum needed for arm64 support
@@ -151,6 +151,8 @@ case $PLATFORM in
     macosx-x86_64)
         export CC="clang"
         export CXX="clang++"
+        export USE_MKLDNN=OFF
+        # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         ;;
     windows-x86_64)
         if which ccache.exe; then
@@ -210,6 +212,7 @@ sedinplace 's/const std::string& interface)/const std::string\& interface_name)/
 # Wait for eventual upstream fix, or for cmake 2.30 that allows to choose between -openmp and -openmp:experimental
 # and see if choosing experimental works. See Issue #1503.
 # On Linux, pytorch FindOpenMP.cmake picks llvm libomp over libgomp. See Issue #1504.
+# On MacOS CMake standard version works tooL
 rm cmake/Modules/FindOpenMP.cmake
 sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
 
@@ -226,11 +229,7 @@ ln -sf pytorch/torch/bin ../bin
 
 case $PLATFORM in
     macosx-*)
-        # fix library with correct rpath
-        cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
-        chmod +w ../lib/libiomp5.dylib
-        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
+        cp $(brew ls libomp|grep libomp.dylib) ../lib
         ;;
     windows-*)
         cp ../libuv/dist/lib/Release/* ../lib

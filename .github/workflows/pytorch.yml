@@ -33,16 +33,13 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
         timeout-minutes: 350
   macosx-arm64:
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+      - uses: HGuillemet/javacpp-presets/.github/actions/deploy-macosx@hg_pytorch
   macosx-x86_64:
     runs-on: macos-12
-#    strategy:
-#      matrix:
-#        ext: ["", -gpu]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+      - uses: HGuillemet/javacpp-presets/.github/actions/deploy-macosx@hg_pytorch
   windows-x86_64:
     runs-on: windows-2019
     strategy:

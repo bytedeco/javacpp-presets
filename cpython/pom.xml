@@ -9,7 +9,7 @@
     <version>1.5.11-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco</groupId>
+  <groupId>fr.apteryx</groupId>
   <artifactId>cpython</artifactId>
   <version>3.12.4-${project.parent.version}</version>
   <name>JavaCPP Presets for CPython</name>
