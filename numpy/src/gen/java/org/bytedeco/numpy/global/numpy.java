@@ -34,22 +34,23 @@ public static final int NPY_SIZEOF_COMPLEX_DOUBLE = 16;
 public static final int NPY_SIZEOF_LONGDOUBLE = 16;
 public static final int NPY_SIZEOF_COMPLEX_LONGDOUBLE = 32;
 public static final int NPY_SIZEOF_PY_INTPTR_T = 8;
+public static final int NPY_SIZEOF_INTP = 8;
+public static final int NPY_SIZEOF_UINTP = 8;
+public static final int NPY_SIZEOF_WCHAR_T = 4;
 public static final int NPY_SIZEOF_OFF_T = 8;
 public static final int NPY_SIZEOF_PY_LONG_LONG = 8;
 public static final int NPY_SIZEOF_LONGLONG = 8;
 
-public static final int NPY_USE_C99_COMPLEX = 1;
-public static final int NPY_HAVE_COMPLEX_DOUBLE = 1;
-public static final int NPY_HAVE_COMPLEX_FLOAT = 1;
-public static final int NPY_HAVE_COMPLEX_LONG_DOUBLE = 1;
-public static final int NPY_USE_C99_FORMATS = 1;
-
-/* #undef NPY_NO_SIGNAL */
+/*
+ * Defined to 1 or 0. Note that Pyodide hardcodes NPY_NO_SMP (and other defines
+ * in this header) for better cross-compilation, so don't rename them without a
+ * good reason.
+ */
 public static final int NPY_NO_SMP = 0;
 
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
-public static final int NPY_ABI_VERSION = 0x01000009;
-public static final int NPY_API_VERSION = 0x00000011;
+public static final int NPY_ABI_VERSION = 0x02000000;
+public static final int NPY_API_VERSION = 0x00000012;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -76,7 +77,6 @@ public static final int __STDC_FORMAT_MACROS = 1;
  */
 // #ifdef __APPLE__
 //     #undef NPY_SIZEOF_LONG
-//     #undef NPY_SIZEOF_PY_INTPTR_T
 
 //     #ifdef __LP64__
 //     #else
@@ -131,6 +131,7 @@ public static final int NPY_1_22_API_VERSION = 0x0000000f;
 public static final int NPY_1_23_API_VERSION = 0x00000010;
 public static final int NPY_1_24_API_VERSION = 0x00000010;
 public static final int NPY_1_25_API_VERSION = 0x00000011;
+public static final int NPY_2_0_API_VERSION = 0x00000012;
 
 
 /*
@@ -161,7 +162,7 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
  * Users of the stable ABI may wish to target the last Python that is not
  * end of life.  This would be 3.8 at NumPy 1.25 release time.
  * 1.17 as default was the choice of oldest-support-numpy at the time and
- * has in practice no limit (comapared to 1.19).  Even earlier becomes legacy.
+ * has in practice no limit (compared to 1.19).  Even earlier becomes legacy.
  */
 // #if defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD
 // #elif defined(NPY_TARGET_VERSION) && NPY_TARGET_VERSION
@@ -178,6 +179,27 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 // #elif NPY_FEATURE_VERSION < NPY_1_15_API_VERSION
     /* No support for irrelevant old targets, no need for error, but warn. */
 //     #warning "Requested NumPy target lower than supported NumPy 1.15."
+// #endif
+
+/*
+ * We define a human readable translation to the Python version of NumPy
+ * for error messages (and also to allow grepping the binaries for conda).
+ */
+// #if NPY_FEATURE_VERSION == NPY_1_7_API_VERSION
+    public static final String NPY_FEATURE_VERSION_STRING = "1.7";
+// #elif NPY_FEATURE_VERSION == NPY_1_8_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_1_9_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_1_10_API_VERSION  /* also 1.11, 1.12 */
+// #elif NPY_FEATURE_VERSION == NPY_1_13_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_1_14_API_VERSION  /* also 1.15 */
+// #elif NPY_FEATURE_VERSION == NPY_1_16_API_VERSION  /* also 1.17, 1.18, 1.19 */
+// #elif NPY_FEATURE_VERSION == NPY_1_20_API_VERSION  /* also 1.21 */
+// #elif NPY_FEATURE_VERSION == NPY_1_22_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_1_23_API_VERSION  /* also 1.24 */
+// #elif NPY_FEATURE_VERSION == NPY_1_25_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_2_0_API_VERSION
+// #else
+//     #error "Missing version string define for new NumPy version."
 // #endif
 
 
@@ -361,8 +383,8 @@ public static final int
         NPY_CPU_BIG = 2;
 
 /*
- * This is to typedef npy_intp to the appropriate pointer size for this
- * platform.  Py_intptr_t, Py_uintptr_t are defined in pyport.h.
+ * This is to typedef npy_intp to the appropriate size for Py_ssize_t.
+ * (Before NumPy 2.0 we used Py_intptr_t and Py_uintptr_t from `pyport.h`.)
  */
 
 /*
@@ -372,8 +394,6 @@ public static final int NPY_SIZEOF_CHAR = 1;
 public static final int NPY_SIZEOF_BYTE = 1;
 public static final int NPY_SIZEOF_DATETIME = 8;
 public static final int NPY_SIZEOF_TIMEDELTA = 8;
-public static final int NPY_SIZEOF_INTP = NPY_SIZEOF_PY_INTPTR_T;
-public static final int NPY_SIZEOF_UINTP = NPY_SIZEOF_PY_INTPTR_T;
 public static final int NPY_SIZEOF_HALF = 2;
 public static final int NPY_SIZEOF_CFLOAT = NPY_SIZEOF_COMPLEX_FLOAT;
 public static final int NPY_SIZEOF_CDOUBLE = NPY_SIZEOF_COMPLEX_DOUBLE;
@@ -391,33 +411,28 @@ public static final String NPY_SSIZE_T_PYFMT = "n";
  *      functions use different formatting codes that are portably specified
  *      according to the Python documentation. See issue gh-2388.
  */
-// #if NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_INT
-// #elif NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONG
-// #elif defined(PY_LONG_LONG) && (NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONGLONG)
+// #if NPY_SIZEOF_INTP == NPY_SIZEOF_LONG
         public static native @MemberGetter long NPY_INTP();
         public static final long NPY_INTP = NPY_INTP();
         public static native @MemberGetter long NPY_UINTP();
         public static final long NPY_UINTP = NPY_UINTP();
-//         #define PyIntpArrType_Type PyLongLongArrType_Type
-//         #define PyUIntpArrType_Type PyULongLongArrType_Type
+//         #define PyIntpArrType_Type PyLongArrType_Type
+//         #define PyUIntpArrType_Type PyULongArrType_Type
         public static native @MemberGetter long NPY_MAX_INTP();
         public static final long NPY_MAX_INTP = NPY_MAX_INTP();
         public static native @MemberGetter long NPY_MIN_INTP();
         public static final long NPY_MIN_INTP = NPY_MIN_INTP();
         public static native @MemberGetter long NPY_MAX_UINTP();
         public static final long NPY_MAX_UINTP = NPY_MAX_UINTP();
-        public static final String NPY_INTP_FMT = "lld";
-// #endif
-
-/*
- * We can only use C99 formats for npy_int_p if it is the same as
- * intp_t, hence the condition on HAVE_UNITPTR_T
- */
-// #if (NPY_USE_C99_FORMATS) == 1
-//         && (defined HAVE_UINTPTR_T)
-//         && (defined HAVE_INTTYPES_H)
-//         #include <inttypes.h>
-//         #undef NPY_INTP_FMT
+        public static final String NPY_INTP_FMT = "ld";
+// #elif NPY_SIZEOF_INTP == NPY_SIZEOF_INT
+//         #define PyIntpArrType_Type PyIntArrType_Type
+//         #define PyUIntpArrType_Type PyUIntArrType_Type
+// #elif defined(PY_LONG_LONG) && (NPY_SIZEOF_INTP == NPY_SIZEOF_LONGLONG)
+//         #define PyIntpArrType_Type PyLongLongArrType_Type
+//         #define PyUIntpArrType_Type PyULongLongArrType_Type
+// #else
+//     #error "Failed to correctly define NPY_INTP and NPY_UINTP"
 // #endif
 
 
@@ -465,8 +480,9 @@ public static final int NPY_TRUE = 1;
  * See https://github.com/numpy/numpy/issues/20348
  */
 // #if NPY_SIZEOF_LONGDOUBLE == NPY_SIZEOF_DOUBLE
-    public static final String NPY_LONGDOUBLE_FMT = "g";
 // #else
+    public static final String NPY_LONGDOUBLE_FMT = "Lg";
+//     #define longdouble_t long double
 // #endif
 
 // #ifndef Py_USING_UNICODE
@@ -474,37 +490,27 @@ public static final int NPY_TRUE = 1;
 // #endif
 
 /* These are for completeness */
-public static final int NPY_SIZEOF_HASH_T = NPY_SIZEOF_INTP;
-
-/*
- * Disabling C99 complex usage: a lot of C code in numpy/scipy rely on being
- * able to do .real/.imag. Will have to convert code first.
- */
-// #if 0
-// #endif
-// #if NPY_SIZEOF_COMPLEX_DOUBLE != 2 * NPY_SIZEOF_DOUBLE
-// #error npy_cdouble definition is not compatible with C99 complex definition !
-//         Please contact NumPy maintainers and give detailed information about your
-//         compiler and platform
+public static native @MemberGetter int NPY_SIZEOF_HASH_T();
+public static final int NPY_SIZEOF_HASH_T = NPY_SIZEOF_HASH_T();
 // Targeting ../npy_cdouble.java
 
 
-
-// #if NPY_SIZEOF_COMPLEX_FLOAT != 2 * NPY_SIZEOF_FLOAT
-// #error npy_cfloat definition is not compatible with C99 complex definition !
-//         Please contact NumPy maintainers and give detailed information about your
-//         compiler and platform
 // Targeting ../npy_cfloat.java
 
 
-
-// #if NPY_SIZEOF_COMPLEX_LONGDOUBLE != 2 * NPY_SIZEOF_LONGDOUBLE
-// #error npy_clongdouble definition is not compatible with C99 complex definition !
-//         Please contact NumPy maintainers and give detailed information about your
-//         compiler and platform
 // Targeting ../npy_clongdouble.java
 
 
+
+// #else
+
+// #include <complex.h>
+
+// #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
+// #else /* !defined(_MSC_VER) || defined(__INTEL_COMPILER) */
+// #endif
+
+// #endif
 
 /*
  * numarray-style bit-width typedefs
@@ -1176,66 +1182,6 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_ENDIAN_H_ */
 
 
-// Parsed from npy_interrupt.h
-
-/*
- * This API is only provided because it is part of publicly exported
- * headers. Its use is considered DEPRECATED, and it will be removed
- * eventually.
- * (This includes the _PyArray_SigintHandler and _PyArray_GetSigintBuf
- * functions which are however, public API, and not headers.)
- *
- * Instead of using these non-threadsafe macros consider periodically
- * querying `PyErr_CheckSignals()` or `PyOS_InterruptOccurred()` will work.
- * Both of these require holding the GIL, although cpython could add a
- * version of `PyOS_InterruptOccurred()` which does not. Such a version
- * actually exists as private API in Python 3.10, and backported to 3.9 and 3.8,
- * see also https://bugs.python.org/issue41037 and
- * https://github.com/python/cpython/pull/20599).
- */
-
-// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_INTERRUPT_H_
-// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_INTERRUPT_H_
-
-// #ifndef NPY_NO_SIGNAL
-
-// #include <setjmp.h>
-// #include <signal.h>
-
-// #ifndef sigsetjmp
-
-// #define NPY_SIGSETJMP(arg1, arg2) setjmp(arg1)
-// #define NPY_SIGLONGJMP(arg1, arg2) longjmp(arg1, arg2)
-// #define NPY_SIGJMP_BUF jmp_buf
-
-// #else
-
-// #define NPY_SIGSETJMP(arg1, arg2) sigsetjmp(arg1, arg2)
-// #define NPY_SIGLONGJMP(arg1, arg2) siglongjmp(arg1, arg2)
-// #define NPY_SIGJMP_BUF sigjmp_buf
-
-// #endif
-
-// #    define NPY_SIGINT_ON {
-//                    PyOS_sighandler_t _npy_sig_save;
-//                    _npy_sig_save = PyOS_setsig(SIGINT, _PyArray_SigintHandler);
-//                    if (NPY_SIGSETJMP(*((NPY_SIGJMP_BUF *)_PyArray_GetSigintBuf()),
-//                                  1) == 0) {                             
-
-// #    define NPY_SIGINT_OFF }
-//         PyOS_setsig(SIGINT, _npy_sig_save);
-//         }
-
-// #else  /* NPY_NO_SIGNAL  */
-
-// #define NPY_SIGINT_ON
-// #define NPY_SIGINT_OFF
-
-// #endif  /* HAVE_SIGSETJMP */
-
-// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_INTERRUPT_H_ */
-
-
 // Parsed from npy_math.h
 
 // #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_MATH_H_
@@ -1255,6 +1201,9 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 
 // #ifdef __cplusplus
 // #endif
+
+// #define PyArray_MAX(a,b) (((a)>(b))?(a):(b))
+// #define PyArray_MIN(a,b) (((a)<(b))?(a):(b))
 
 /*
  * NAN and INFINITY like macros (same behavior as glibc for NAN, same as C99
@@ -1469,9 +1418,7 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 @NoException public static native @Cast("npy_longdouble") double npy_log2l(@Cast("npy_longdouble") double x);
 @NoException public static native @Cast("npy_longdouble") double npy_atan2l(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
 @NoException public static native @Cast("npy_longdouble") double npy_powl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
-@NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") DoublePointer y);
-@NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") DoubleBuffer y);
-@NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") double[] y);
+@NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") Pointer y);
 
 /* Mandatory C99 double math funcs, no blocklisting or fixups */
 /* defined for legacy reasons, should be deprecated at some point */
@@ -1504,11 +1451,7 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 @NoException public static native @Cast("npy_longdouble") double npy_logaddexpl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
 @NoException public static native @Cast("npy_longdouble") double npy_logaddexp2l(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
 @NoException public static native @Cast("npy_longdouble") double npy_divmodl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y,
-                           @Cast("npy_longdouble*") DoublePointer modulus);
-@NoException public static native @Cast("npy_longdouble") double npy_divmodl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y,
-                           @Cast("npy_longdouble*") DoubleBuffer modulus);
-@NoException public static native @Cast("npy_longdouble") double npy_divmodl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y,
-                           @Cast("npy_longdouble*") double[] modulus);
+                           @Cast("npy_longdouble*") Pointer modulus);
 @NoException public static native @Cast("npy_longdouble") double npy_heavisidel(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double h0);
 
 
@@ -1517,57 +1460,38 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
  * Complex declarations
  */
 
-/*
- * C99 specifies that complex numbers have the same representation as
- * an array of two elements, where the first element is the real part
- * and the second element is the imaginary part.
- */
-// #define __NPY_CPACK_IMP(x, y, type, ctype)
-//     union {
-//         ctype z;
-//         type a[2];
-//     } z1;
-// 
-//     z1.a[0] = (x);
-//     z1.a[1] = (y);
-// 
-//     return z1.z;
+@NoException public static native double npy_creal(@Const @ByVal npy_cdouble z);
+
+@NoException public static native void npy_csetreal(npy_cdouble z, double r);
+
+@NoException public static native double npy_cimag(@Const @ByVal npy_cdouble z);
+
+@NoException public static native void npy_csetimag(npy_cdouble z, double i);
+
+@NoException public static native float npy_crealf(@Const @ByVal npy_cfloat z);
+
+@NoException public static native void npy_csetrealf(npy_cfloat z, float r);
+
+@NoException public static native float npy_cimagf(@Const @ByVal npy_cfloat z);
+
+@NoException public static native void npy_csetimagf(npy_cfloat z, float i);
+
+@NoException public static native @Cast("npy_longdouble") double npy_creall(@Const @ByVal npy_clongdouble z);
+
+@NoException public static native @Cast("npy_longdouble") double npy_cimagl(@Const @ByVal npy_clongdouble z);
+
+// #define NPY_CSETREAL(z, r) npy_csetreal(z, r)
+// #define NPY_CSETIMAG(z, i) npy_csetimag(z, i)
+// #define NPY_CSETREALF(z, r) npy_csetrealf(z, r)
+// #define NPY_CSETIMAGF(z, i) npy_csetimagf(z, i)
+// #define NPY_CSETREALL(z, r) npy_csetreall(z, r)
+// #define NPY_CSETIMAGL(z, i) npy_csetimagl(z, i)
 
 @NoException public static native @ByVal npy_cdouble npy_cpack(double x, double y);
 
 @NoException public static native @ByVal npy_cfloat npy_cpackf(float x, float y);
 
 @NoException public static native @ByVal npy_clongdouble npy_cpackl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
-// #undef __NPY_CPACK_IMP
-
-/*
- * Same remark as above, but in the other direction: extract first/second
- * member of complex number, assuming a C99-compatible representation
- *
- * Those are defineds as static inline, and such as a reasonable compiler would
- * most likely compile this to one or two instructions (on CISC at least)
- */
-// #define __NPY_CEXTRACT_IMP(z, index, type, ctype)
-//     union {
-//         ctype z;
-//         type a[2];
-//     } __z_repr;
-//     __z_repr.z = z;
-// 
-//     return __z_repr.a[index];
-
-@NoException public static native double npy_creal(@ByVal npy_cdouble z);
-
-@NoException public static native double npy_cimag(@ByVal npy_cdouble z);
-
-@NoException public static native float npy_crealf(@ByVal npy_cfloat z);
-
-@NoException public static native float npy_cimagf(@ByVal npy_cfloat z);
-
-@NoException public static native @Cast("npy_longdouble") double npy_creall(@ByVal npy_clongdouble z);
-
-@NoException public static native @Cast("npy_longdouble") double npy_cimagl(@ByVal npy_clongdouble z);
-// #undef __NPY_CEXTRACT_IMP
 
 /*
  * Double precision complex functions
@@ -1821,11 +1745,6 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #define Py_ARRAYOBJECT_H
 
 // #include "ndarrayobject.h"
-// #include "npy_interrupt.h"
-
-// #ifdef NPY_NO_PREFIX
-// #include "noprefix.h"
-// #endif
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_ARRAYOBJECT_H_ */
 
@@ -1931,10 +1850,13 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 
 // #define PyArrayScalar_New(cls)
 //         Py##cls##ArrType_Type.tp_alloc(&Py##cls##ArrType_Type, 0)
+// #ifndef Py_LIMITED_API
+/* For the limited API, use PyArray_ScalarAsCtype instead */
 // #define PyArrayScalar_VAL(obj, cls)
 //         ((Py##cls##ScalarObject *)obj)->obval
 // #define PyArrayScalar_ASSIGN(obj, cls, val)
 //         PyArrayScalar_VAL(obj, cls) = val
+// #endif
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_ARRAYSCALARS_H_ */
 
@@ -1951,22 +1873,14 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 
 // #define NPY_NO_EXPORT NPY_VISIBILITY_HIDDEN
 
-/* Only use thread if configured in config and python supports it */
-// #if defined WITH_THREAD && !NPY_NO_SMP
+/* Always allow threading unless it was explicitly disabled at build time */
+// #if !NPY_NO_SMP
         public static final int NPY_ALLOW_THREADS = 1;
 // #else
 // #endif
 
 // #ifndef __has_extension
 // #define __has_extension(x) 0
-// #endif
-
-// #if !defined(_NPY_NO_DEPRECATIONS) &&
-//     ((defined(__GNUC__)&& __GNUC__ >= 6) ||
-//      __has_extension(attribute_deprecated_with_message))
-// #define NPY_ATTR_DEPRECATE(text) __attribute__ ((deprecated (text)))
-// #else
-// #define NPY_ATTR_DEPRECATE(text)
 // #endif
 
 /*
@@ -1977,10 +1891,17 @@ public static final int NPY_MAX_HALF =    (0x7bff);
  * The array creation itself could have arbitrary dimensions but all
  * the places where static allocation is used would need to be changed
  * to dynamic (including inside of several structures)
+ *
+ * As of NumPy 2.0, we strongly discourage the downstream use of NPY_MAXDIMS,
+ * but since auditing everything seems a big ask, define it as 64.
+ * A future version could:
+ * - Increase or remove the limit and require recompilation (like 2.0 did)
+ * - Deprecate or remove the macro but keep the limit (at basically any time)
  */
-
-public static final int NPY_MAXDIMS = 32;
-public static final int NPY_MAXARGS = 32;
+public static final int NPY_MAXDIMS = 64;
+/* We cannot change this as it would break ABI: */
+public static final int NPY_MAXDIMS_LEGACY_ITERS = 32;
+/* NPY_MAXARGS is version dependent and defined in npy_2_compat.h */
 
 /* Used for Converter Functions "O&" code in ParseTuple */
 public static final int NPY_FAIL = 0;
@@ -2005,16 +1926,28 @@ public static final int    NPY_BOOL = 0,
                      */
                     NPY_DATETIME = 21, NPY_TIMEDELTA = 22, NPY_HALF = 23,
 
-                    NPY_NTYPES = 24,
+                    NPY_CHAR = 24, /* Deprecated, will raise if used */
+
+                    /* The number of *legacy* dtypes */
+                    NPY_NTYPES_LEGACY = 24,
+
+                    /* assign a high value to avoid changing this in the
+                       future when new dtypes are added */
                     NPY_NOTYPE = 25,
-                    NPY_CHAR = 26,
+
                     NPY_USERDEF = 256,  /* leave room for characters */
 
                     /* The number of types not including the new 1.6 types */
-                    NPY_NTYPES_ABI_COMPATIBLE = 21;
-// #if defined(_MSC_VER) && !defined(__clang__)
-// #pragma deprecated(NPY_CHAR)
-// #endif
+                    NPY_NTYPES_ABI_COMPATIBLE = 21,
+
+                    /*
+                     * New DTypes which do not share the legacy layout
+                     * (added after NumPy 2.0).  VSTRING is the first of these
+                     * we may open up a block for user-defined dtypes in the
+                     * future.
+                     */
+                    NPY_VSTRING = 2056;
+
 
 /* basetype array priority */
 public static final double NPY_PRIORITY = 0.0;
@@ -2055,7 +1988,7 @@ public static final int
         NPY_CLONGDOUBLELTR = 'G',
         NPY_OBJECTLTR = 'O',
         NPY_STRINGLTR = 'S',
-        NPY_STRINGLTR2 = 'a',
+        NPY_DEPRECATED_STRINGLTR2 = 'a',
         NPY_UNICODELTR = 'U',
         NPY_VOIDLTR = 'V',
         NPY_DATETIMELTR = 'M',
@@ -2063,13 +1996,19 @@ public static final int
         NPY_CHARLTR = 'c',
 
         /*
-         * No Descriptor, just a define -- this let's
-         * Python users specify an array of integers
-         * large enough to hold a pointer on the
-         * platform
+         * New non-legacy DTypes
          */
-        NPY_INTPLTR = 'p',
-        NPY_UINTPLTR = 'P',
+        NPY_VSTRINGLTR = 'T',
+
+        /*
+         * Note, we removed `NPY_INTPLTR` due to changing its definition
+         * to 'n', rather than 'p'.  On any typical platform this is the
+         * same integer.  'n' should be used for the `np.intp` with the same
+         * size as `size_t` while 'p' remains pointer sized.
+         *
+         * 'p', 'P', 'n', and 'N' are valid and defined explicitly
+         * in `arraytypes.c.src`.
+         */
 
         /*
          * These are for dtype 'kinds', not dtype 'typecodes'
@@ -2090,6 +2029,7 @@ public static final int
  */
 /** enum NPY_SORTKIND */
 public static final int
+        _NPY_SORT_UNDEFINED = -1,
         NPY_QUICKSORT = 0,
         NPY_HEAPSORT = 1,
         NPY_MERGESORT = 2,
@@ -2235,6 +2175,7 @@ public static final int
     /* Raise an exception for non-business days. */
     NPY_BUSDAY_RAISE = NPY_BUSDAY_BACKWARD + 4;
 
+
 /************************************************************
  * NumPy Auxiliary Data for inner loops, sort functions, etc.
  ************************************************************/
@@ -2343,31 +2284,17 @@ public static final int NPY_USE_PYMEM = 1;
 // Targeting ../PyArray_ArgSortFunc.java
 
 
-// Targeting ../PyArray_PartitionFunc.java
-
-
-// Targeting ../PyArray_ArgPartitionFunc.java
-
-
 // Targeting ../PyArray_FillWithScalarFunc.java
 
 
 // Targeting ../PyArray_ScalarKindFunc.java
 
 
-// Targeting ../PyArray_FastClipFunc.java
-
-
-// Targeting ../PyArray_FastPutmaskFunc.java
-
-
-// Targeting ../PyArray_FastTakeFunc.java
-
-
 // Targeting ../PyArray_Dims.java
 
 
 // Targeting ../PyArray_ArrFuncs.java
+
 
 
 
@@ -2400,13 +2327,13 @@ public static final int NPY_FROM_FIELDS =    (NPY_NEEDS_INIT | NPY_LIST_PICKLE |
 public static final int NPY_OBJECT_DTYPE_FLAGS = (NPY_LIST_PICKLE | NPY_USE_GETITEM | 
                                 NPY_ITEM_IS_POINTER | NPY_ITEM_REFCOUNT | 
                                 NPY_NEEDS_INIT | NPY_NEEDS_PYAPI);
-
-// #define PyDataType_FLAGCHK(dtype, flag)
-//         (((dtype)->flags & (flag)) == (flag))
-
-// #define PyDataType_REFCHK(dtype)
-//         PyDataType_FLAGCHK(dtype, NPY_ITEM_REFCOUNT)
 // Targeting ../PyArray_Descr.java
+
+
+// Targeting ../_PyArray_LegacyDescr.java
+
+
+// Targeting ../PyArray_DescrProto.java
 
 
 // Targeting ../PyArray_ArrayDescr.java
@@ -2433,9 +2360,6 @@ public static final int NPY_OBJECT_DTYPE_FLAGS = (NPY_LIST_PICKLE | NPY_USE_GETI
  * PyArrayObject field access is deprecated as of NumPy 1.7.
  */
 // #else
-// Targeting ../PyArrayFlagsObject.java
-
-
 // Targeting ../PyArray_Chunk.java
 
 
@@ -2620,19 +2544,6 @@ public static final int NPY_BUFSIZE = 8192;
 /* buffer stress test size: */
 /*#define NPY_BUFSIZE 17*/
 
-// #define PyArray_MAX(a,b) (((a)>(b))?(a):(b))
-// #define PyArray_MIN(a,b) (((a)<(b))?(a):(b))
-// #define PyArray_CLT(p,q) ((((p).real==(q).real) ? ((p).imag < (q).imag) :
-//                                ((p).real < (q).real)))
-// #define PyArray_CGT(p,q) ((((p).real==(q).real) ? ((p).imag > (q).imag) :
-//                                ((p).real > (q).real)))
-// #define PyArray_CLE(p,q) ((((p).real==(q).real) ? ((p).imag <= (q).imag) :
-//                                ((p).real <= (q).real)))
-// #define PyArray_CGE(p,q) ((((p).real==(q).real) ? ((p).imag >= (q).imag) :
-//                                ((p).real >= (q).real)))
-// #define PyArray_CEQ(p,q) (((p).real==(q).real) && ((p).imag == (q).imag))
-// #define PyArray_CNE(p,q) (((p).real!=(q).real) || ((p).imag != (q).imag))
-
 /*
  * C API: consists of Macros and functions.  The MACROS are defined
  * here.
@@ -2657,13 +2568,6 @@ public static final int NPY_BUFSIZE = 8192;
 // #define NPY_BEGIN_THREADS_THRESHOLDED(loop_size) do { if ((loop_size) > 500)
 //                 { _save = PyEval_SaveThread();} } while (0);
 
-// #define NPY_BEGIN_THREADS_DESCR(dtype)
-//         do {if (!(PyDataType_FLAGCHK((dtype), NPY_NEEDS_PYAPI)))
-//                 NPY_BEGIN_THREADS;} while (0);
-
-// #define NPY_END_THREADS_DESCR(dtype)
-//         do {if (!(PyDataType_FLAGCHK((dtype), NPY_NEEDS_PYAPI)))
-//                 NPY_END_THREADS; } while (0);
 
 // #define NPY_ALLOW_C_API_DEF  PyGILState_STATE __save__;
 // #define NPY_ALLOW_C_API      do {__save__ = PyGILState_Ensure();} while (0);
@@ -2798,7 +2702,7 @@ public static final int NPY_ITER_PER_OP_FLAGS =               0xffff0000;
 //                 _PyArray_ITER_NEXT1(_PyAIT(it));
 //         }
 //         else if (_PyAIT(it)->contiguous)
-//                 _PyAIT(it)->dataptr += PyArray_DESCR(_PyAIT(it)->ao)->elsize;
+//                 _PyAIT(it)->dataptr += PyArray_ITEMSIZE(_PyAIT(it)->ao);
 //         else if (_PyAIT(it)->nd_m1 == 1) {
 //                 _PyArray_ITER_NEXT2(_PyAIT(it));
 //         }
@@ -2851,7 +2755,7 @@ public static final int NPY_ITER_PER_OP_FLAGS =               0xffff0000;
 //         }
 //         else if (_PyAIT(it)->contiguous)
 //                 _PyAIT(it)->dataptr = PyArray_BYTES(_PyAIT(it)->ao) +
-//                         __npy_ind * PyArray_DESCR(_PyAIT(it)->ao)->elsize;
+//                         __npy_ind * PyArray_ITEMSIZE(_PyAIT(it)->ao);
 //         else {
 //                 _PyAIT(it)->dataptr = PyArray_BYTES(_PyAIT(it)->ao);
 //                 for (__npy_i = 0; __npy_i<=_PyAIT(it)->nd_m1;
@@ -2914,8 +2818,24 @@ public static final int NPY_ITER_PER_OP_FLAGS =               0xffff0000;
 
 // #define PyArray_MultiIter_NOTDONE(multi)
 //         (_PyMIT(multi)->index < _PyMIT(multi)->size)
-// Targeting ../PyArrayMapIterObject.java
 
+
+@NoException public static native int PyArray_MultiIter_NUMITER(PyArrayMultiIterObject multi);
+
+
+@NoException public static native @Cast("npy_intp") long PyArray_MultiIter_SIZE(PyArrayMultiIterObject multi);
+
+
+@NoException public static native @Cast("npy_intp") long PyArray_MultiIter_INDEX(PyArrayMultiIterObject multi);
+
+
+@NoException public static native int PyArray_MultiIter_NDIM(PyArrayMultiIterObject multi);
+
+
+@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_MultiIter_DIMS(PyArrayMultiIterObject multi);
+
+
+@NoException public static native @Cast("void**") PointerPointer PyArray_MultiIter_ITERS(PyArrayMultiIterObject multi);
 
 
 /** enum  */
@@ -2951,6 +2871,7 @@ public static final int
 
 /* The default array type */
 public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
+/* default integer type defined in npy_2_compat header */
 
 /*
  * All sorts of useful ways to look into a PyArrayObject. It is recommended
@@ -2973,84 +2894,34 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 // #define PyArray_FORTRAN_IF(m) ((PyArray_CHKFLAGS(m, NPY_ARRAY_F_CONTIGUOUS) ?
 //                                NPY_ARRAY_F_CONTIGUOUS : 0))
 
-// #if (defined(NPY_NO_DEPRECATED_API) && (NPY_1_7_API_VERSION <= NPY_NO_DEPRECATED_API))
-/*
- * Changing access macros into functions, to allow for future hiding
- * of the internal memory layout. This later hiding will allow the 2.x series
- * to change the internal representation of arrays without affecting
- * ABI compatibility.
- */
-
 @NoException public static native int PyArray_NDIM(@Const PyArrayObject arr);
 
-@NoException public static native Pointer PyArray_DATA(PyArrayObject arr);
+@NoException public static native Pointer PyArray_DATA(@Const PyArrayObject arr);
 
-@NoException public static native @Cast("char*") BytePointer PyArray_BYTES(PyArrayObject arr);
+@NoException public static native @Cast("char*") BytePointer PyArray_BYTES(@Const PyArrayObject arr);
 
-@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_DIMS(PyArrayObject arr);
+@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_DIMS(@Const PyArrayObject arr);
 
-@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_STRIDES(PyArrayObject arr);
+@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_STRIDES(@Const PyArrayObject arr);
 
 @NoException public static native @Cast("npy_intp") long PyArray_DIM(@Const PyArrayObject arr, int idim);
 
 @NoException public static native @Cast("npy_intp") long PyArray_STRIDE(@Const PyArrayObject arr, int istride);
 
-@NoException public static native PyObject PyArray_BASE(PyArrayObject arr);
+@NoException public static native PyObject PyArray_BASE(@Const PyArrayObject arr);
 
-@NoException public static native PyArray_Descr PyArray_DESCR(PyArrayObject arr);
+@NoException public static native PyArray_Descr PyArray_DESCR(@Const PyArrayObject arr);
 
 @NoException public static native int PyArray_FLAGS(@Const PyArrayObject arr);
 
-@NoException public static native @Cast("npy_intp") long PyArray_ITEMSIZE(@Const PyArrayObject arr);
 
 @NoException public static native int PyArray_TYPE(@Const PyArrayObject arr);
 
 @NoException public static native int PyArray_CHKFLAGS(@Const PyArrayObject arr, int flags);
 
-@NoException public static native PyObject PyArray_GETITEM(@Const PyArrayObject arr, @Cast("const char*") BytePointer itemptr);
-@NoException public static native PyObject PyArray_GETITEM(@Const PyArrayObject arr, String itemptr);
+@NoException public static native PyArray_Descr PyArray_DTYPE(@Const PyArrayObject arr);
 
-/*
- * SETITEM should only be used if it is known that the value is a scalar
- * and of a type understood by the arrays dtype.
- * Use `PyArray_Pack` if the value may be of a different dtype.
- */
-@NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") BytePointer itemptr, PyObject v);
-@NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") ByteBuffer itemptr, PyObject v);
-@NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") byte[] itemptr, PyObject v);
-
-// #else
-
-/* These macros are deprecated as of NumPy 1.7. */
-// #define PyArray_NDIM(obj) (((PyArrayObject_fields *)(obj))->nd)
-// #define PyArray_BYTES(obj) (((PyArrayObject_fields *)(obj))->data)
-// #define PyArray_DATA(obj) ((void *)((PyArrayObject_fields *)(obj))->data)
-// #define PyArray_DIMS(obj) (((PyArrayObject_fields *)(obj))->dimensions)
-// #define PyArray_STRIDES(obj) (((PyArrayObject_fields *)(obj))->strides)
-// #define PyArray_DIM(obj,n) (PyArray_DIMS(obj)[n])
-// #define PyArray_STRIDE(obj,n) (PyArray_STRIDES(obj)[n])
-// #define PyArray_BASE(obj) (((PyArrayObject_fields *)(obj))->base)
-// #define PyArray_DESCR(obj) (((PyArrayObject_fields *)(obj))->descr)
-// #define PyArray_FLAGS(obj) (((PyArrayObject_fields *)(obj))->flags)
-// #define PyArray_CHKFLAGS(m, FLAGS)
-//         ((((PyArrayObject_fields *)(m))->flags & (FLAGS)) == (FLAGS))
-// #define PyArray_ITEMSIZE(obj)
-//                     (((PyArrayObject_fields *)(obj))->descr->elsize)
-// #define PyArray_TYPE(obj)
-//                     (((PyArrayObject_fields *)(obj))->descr->type_num)
-// #define PyArray_GETITEM(obj,itemptr)
-//         PyArray_DESCR(obj)->f->getitem((char *)(itemptr),
-//                                      (PyArrayObject *)(obj))
-
-// #define PyArray_SETITEM(obj,itemptr,v)
-//         PyArray_DESCR(obj)->f->setitem((PyObject *)(v),
-//                                      (char *)(itemptr),
-//                                      (PyArrayObject *)(obj))
-// #endif
-
-@NoException public static native PyArray_Descr PyArray_DTYPE(PyArrayObject arr);
-
-@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_SHAPE(PyArrayObject arr);
+@NoException public static native @Cast("npy_intp*") SizeTPointer PyArray_SHAPE(@Const PyArrayObject arr);
 
 /*
  * Enables the specified array flags. Does no checking,
@@ -3065,6 +2936,7 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 @NoException public static native void PyArray_CLEARFLAGS(PyArrayObject arr, int flags);
 
 // #if NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION
+    
 // #endif
 
 // #define PyTypeNum_ISBOOL(type) ((type) == NPY_BOOL)
@@ -3097,12 +2969,6 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 // #define PyTypeNum_ISCOMPLEX(type) (((type) >= NPY_CFLOAT) &&
 //                                 ((type) <= NPY_CLONGDOUBLE))
 
-// #define PyTypeNum_ISPYTHON(type) (((type) == NPY_LONG) ||
-//                                   ((type) == NPY_DOUBLE) ||
-//                                   ((type) == NPY_CDOUBLE) ||
-//                                   ((type) == NPY_BOOL) ||
-//                                   ((type) == NPY_OBJECT ))
-
 // #define PyTypeNum_ISFLEXIBLE(type) (((type) >=NPY_STRING) &&
 //                                     ((type) <=NPY_VOID))
 
@@ -3119,6 +2985,7 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 // #define PyTypeNum_ISOBJECT(type) ((type) == NPY_OBJECT)
 
 
+// #define PyDataType_ISLEGACY(dtype) ((dtype)->type_num < NPY_VSTRING && ((dtype)->type_num >= 0))
 // #define PyDataType_ISBOOL(obj) PyTypeNum_ISBOOL(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISUNSIGNED(obj) PyTypeNum_ISUNSIGNED(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISSIGNED(obj) PyTypeNum_ISSIGNED(((PyArray_Descr*)(obj))->type_num)
@@ -3127,17 +2994,18 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 // #define PyDataType_ISNUMBER(obj) PyTypeNum_ISNUMBER(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISSTRING(obj) PyTypeNum_ISSTRING(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISCOMPLEX(obj) PyTypeNum_ISCOMPLEX(((PyArray_Descr*)(obj))->type_num)
-// #define PyDataType_ISPYTHON(obj) PyTypeNum_ISPYTHON(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISFLEXIBLE(obj) PyTypeNum_ISFLEXIBLE(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISDATETIME(obj) PyTypeNum_ISDATETIME(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISUSERDEF(obj) PyTypeNum_ISUSERDEF(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISEXTENDED(obj) PyTypeNum_ISEXTENDED(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_ISOBJECT(obj) PyTypeNum_ISOBJECT(((PyArray_Descr*)(obj))->type_num)
-// #define PyDataType_HASFIELDS(obj) (((PyArray_Descr *)(obj))->names != NULL)
-// #define PyDataType_HASSUBARRAY(dtype) ((dtype)->subarray != NULL)
-// #define PyDataType_ISUNSIZED(dtype) ((dtype)->elsize == 0 &&
-//                                       !PyDataType_HASFIELDS(dtype))
 // #define PyDataType_MAKEUNSIZED(dtype) ((dtype)->elsize = 0)
+/*
+ * PyDataType_* FLAGS, FLACHK, REFCHK, HASFIELDS, HASSUBARRAY, UNSIZED,
+ * SUBARRAY, NAMES, FIELDS, C_METADATA, and METADATA require version specific
+ * lookup and are defined in npy_2_compat.h.
+ */
+
 
 // #define PyArray_ISBOOL(obj) PyTypeNum_ISBOOL(PyArray_TYPE(obj))
 // #define PyArray_ISUNSIGNED(obj) PyTypeNum_ISUNSIGNED(PyArray_TYPE(obj))
@@ -3147,7 +3015,6 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 // #define PyArray_ISNUMBER(obj) PyTypeNum_ISNUMBER(PyArray_TYPE(obj))
 // #define PyArray_ISSTRING(obj) PyTypeNum_ISSTRING(PyArray_TYPE(obj))
 // #define PyArray_ISCOMPLEX(obj) PyTypeNum_ISCOMPLEX(PyArray_TYPE(obj))
-// #define PyArray_ISPYTHON(obj) PyTypeNum_ISPYTHON(PyArray_TYPE(obj))
 // #define PyArray_ISFLEXIBLE(obj) PyTypeNum_ISFLEXIBLE(PyArray_TYPE(obj))
 // #define PyArray_ISDATETIME(obj) PyTypeNum_ISDATETIME(PyArray_TYPE(obj))
 // #define PyArray_ISUSERDEF(obj) PyTypeNum_ISUSERDEF(PyArray_TYPE(obj))
@@ -3201,8 +3068,16 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 // Targeting ../PyArrayInterface.java
 
 
-// Targeting ../PyDataMem_EventHookFunc.java
+// Targeting ../npy_packed_static_string.java
 
+
+// Targeting ../npy_static_string.java
+
+
+// Targeting ../npy_string_allocator.java
+
+
+// Targeting ../PyArray_StringDTypeObject.java
 
 
 
@@ -3258,6 +3133,7 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 
 // #include <Python.h>
 // #include "ndarraytypes.h"
+// #include "dtype_api.h"
 
 /* Includes the "function" C-API -- these are all stored in a
    list of pointers --- one for each file
@@ -3268,6 +3144,11 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 
 // #include "__multiarray_api.h"
 
+/*
+ * Include any definitions which are defined differently for 1.x and 2.x
+ * (Symbols only available on 2.x are not there, but rather guarded.)
+ */
+// #include "npy_2_compat.h"
 
 /* C-API that requires previous API to be defined */
 
@@ -3346,11 +3227,6 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 
 // #define PyArray_FILLWBYTE(obj, val) memset(PyArray_DATA(obj), val,
 //                                            PyArray_NBYTES(obj))
-// #ifndef PYPY_VERSION
-// #define PyArray_REFCOUNT(obj) (((PyObject *)(obj))->ob_refcnt)
-// #define NPY_REFCOUNT PyArray_REFCOUNT
-// #endif
-public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 
 // #define PyArray_ContiguousFromAny(op, type, min_depth, max_depth)
 //         PyArray_FromAny(op, PyArray_DescrFromType(type), min_depth,
@@ -3437,12 +3313,6 @@ public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 // #define PyArray_Put(ap, items, values)
 //         PyArray_PutTo(ap, items, values, NPY_RAISE)
 
-/* Compatibility with old Numeric stuff -- don't use in new code */
-
-// #define PyArray_FromDimsAndData(nd, d, type, data)
-//         PyArray_FromDimsAndDataAndDescr(nd, d, PyArray_DescrFromType(type),
-//                                         data)
-
 
 /*
    Check to see if this key in the dictionary is the "title"
@@ -3458,11 +3328,492 @@ public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 // #define DEPRECATE(msg) PyErr_WarnEx(PyExc_DeprecationWarning,msg,1)
 // #define DEPRECATE_FUTUREWARNING(msg) PyErr_WarnEx(PyExc_FutureWarning,msg,1)
 
+
+/*
+ * These macros and functions unfortunately require runtime version checks
+ * that are only defined in `npy_2_compat.h`.  For that reasons they cannot be
+ * part of `ndarraytypes.h` which tries to be self contained.
+ */
+
+@NoException public static native @Cast("npy_intp") long PyArray_ITEMSIZE(@Const PyArrayObject arr);
+
+// #define PyDataType_HASFIELDS(obj) (PyDataType_ISLEGACY((PyArray_Descr*)(obj)) && PyDataType_NAMES((PyArray_Descr*)(obj)) != NULL)
+// #define PyDataType_HASSUBARRAY(dtype) (PyDataType_ISLEGACY(dtype) && PyDataType_SUBARRAY(dtype) != NULL)
+// #define PyDataType_ISUNSIZED(dtype) ((dtype)->elsize == 0 &&
+//                                       !PyDataType_HASFIELDS(dtype))
+
+// #define PyDataType_FLAGCHK(dtype, flag)
+//         ((PyDataType_FLAGS(dtype) & (flag)) == (flag))
+
+// #define PyDataType_REFCHK(dtype)
+//         PyDataType_FLAGCHK(dtype, NPY_ITEM_REFCOUNT)
+
+// #define NPY_BEGIN_THREADS_DESCR(dtype)
+//         do {if (!(PyDataType_FLAGCHK((dtype), NPY_NEEDS_PYAPI)))
+//                 NPY_BEGIN_THREADS;} while (0);
+
+// #define NPY_END_THREADS_DESCR(dtype)
+//         do {if (!(PyDataType_FLAGCHK((dtype), NPY_NEEDS_PYAPI)))
+//                 NPY_END_THREADS; } while (0);
+
+// #if !(defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD)
+/* The internal copy of this is now defined in `dtypemeta.h` */
+/*
+ * `PyArray_Scalar` is the same as this function but converts will convert
+ * most NumPy types to Python scalars.
+ */
+@NoException public static native PyObject PyArray_GETITEM(@Const PyArrayObject arr, @Cast("const char*") BytePointer itemptr);
+@NoException public static native PyObject PyArray_GETITEM(@Const PyArrayObject arr, String itemptr);
+
+/*
+ * SETITEM should only be used if it is known that the value is a scalar
+ * and of a type understood by the arrays dtype.
+ * Use `PyArray_Pack` if the value may be of a different dtype.
+ */
+@NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") BytePointer itemptr, PyObject v);
+@NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") ByteBuffer itemptr, PyObject v);
+@NoException public static native int PyArray_SETITEM(PyArrayObject arr, @Cast("char*") byte[] itemptr, PyObject v);
+// #endif  /* not internal */
+
+
 // #ifdef __cplusplus
 // #endif
 
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NDARRAYOBJECT_H_ */
+
+
+// Parsed from dtype_api.h
+
+/*
+ * The public DType API
+ */
+
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY___DTYPE_API_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY___DTYPE_API_H_
+// Targeting ../PyArrayMethodObject_tag.java
+
+
+// Targeting ../PyArray_DTypeMeta.java
+
+
+
+// #else
+
+// #endif /* Py_LIMITED_API */
+
+// #endif  /* not internal build */
+
+/*
+ * ******************************************************
+ *         ArrayMethod API (Casting and UFuncs)
+ * ******************************************************
+ */
+
+
+/** enum NPY_ARRAYMETHOD_FLAGS */
+public static final int
+    /* Flag for whether the GIL is required */
+    NPY_METH_REQUIRES_PYAPI = 1 << 0,
+    /*
+     * Some functions cannot set floating point error flags, this flag
+     * gives us the option (not requirement) to skip floating point error
+     * setup/check. No function should set error flags and ignore them
+     * since it would interfere with chaining operations (e.g. casting).
+     */
+    NPY_METH_NO_FLOATINGPOINT_ERRORS = 1 << 1,
+    /* Whether the method supports unaligned access (not runtime) */
+    NPY_METH_SUPPORTS_UNALIGNED = 1 << 2,
+    /*
+     * Used for reductions to allow reordering the operation.  At this point
+     * assume that if set, it also applies to normal operations though!
+     */
+    NPY_METH_IS_REORDERABLE = 1 << 3,
+    /*
+     * Private flag for now for *logic* functions.  The logical functions
+     * `logical_or` and `logical_and` can always cast the inputs to booleans
+     * "safely" (because that is how the cast to bool is defined).
+     * @seberg: I am not sure this is the best way to handle this, so its
+     * private for now (also it is very limited anyway).
+     * There is one "exception". NA aware dtypes cannot cast to bool
+     * (hopefully), so the `??->?` loop should error even with this flag.
+     * But a second NA fallback loop will be necessary.
+     */
+    _NPY_METH_FORCE_CAST_INPUTS = 1 << 17,
+
+    /* All flags which can change at runtime */
+    NPY_METH_RUNTIME_FLAGS = (
+            NPY_METH_REQUIRES_PYAPI |
+            NPY_METH_NO_FLOATINGPOINT_ERRORS);
+// Targeting ../PyArrayMethod_Context.java
+
+
+// Targeting ../PyArrayMethod_Spec.java
+
+
+
+
+/*
+ * ArrayMethod slots
+ * -----------------
+ *
+ * SLOTS IDs For the ArrayMethod creation, once fully public, IDs are fixed
+ * but can be deprecated and arbitrarily extended.
+ */
+public static final int _NPY_METH_resolve_descriptors_with_scalars = 1;
+public static final int NPY_METH_resolve_descriptors = 2;
+public static final int NPY_METH_get_loop = 3;
+public static final int NPY_METH_get_reduction_initial = 4;
+/* specific loops for constructions/default get_loop: */
+public static final int NPY_METH_strided_loop = 5;
+public static final int NPY_METH_contiguous_loop = 6;
+public static final int NPY_METH_unaligned_strided_loop = 7;
+public static final int NPY_METH_unaligned_contiguous_loop = 8;
+public static final int NPY_METH_contiguous_indexed_loop = 9;
+public static final int _NPY_METH_static_data = 10;
+// Targeting ../PyArrayMethod_ResolveDescriptors.java
+
+
+// Targeting ../PyArrayMethod_ResolveDescriptorsWithScalar.java
+
+
+// Targeting ../PyArrayMethod_StridedLoop.java
+
+
+// Targeting ../PyArrayMethod_GetLoop.java
+
+
+// Targeting ../PyArrayMethod_GetReductionInitial.java
+
+
+// Targeting ../PyArrayMethod_TranslateGivenDescriptors.java
+
+
+// Targeting ../PyArrayMethod_TranslateLoopDescriptors.java
+
+
+// Targeting ../PyArrayMethod_TraverseLoop.java
+
+
+// Targeting ../PyArrayMethod_GetTraverseLoop.java
+
+
+// Targeting ../PyArrayMethod_PromoterFunction.java
+
+
+
+/*
+ * ****************************
+ *          DTYPE API
+ * ****************************
+ */
+
+public static final int NPY_DT_ABSTRACT = 1 << 1;
+public static final int NPY_DT_PARAMETRIC = 1 << 2;
+public static final int NPY_DT_NUMERIC = 1 << 3;
+
+/*
+ * These correspond to slots in the NPY_DType_Slots struct and must
+ * be in the same order as the members of that struct. If new slots
+ * get added or old slots get removed NPY_NUM_DTYPE_SLOTS must also
+ * be updated
+ */
+
+public static final int NPY_DT_discover_descr_from_pyobject = 1;
+// this slot is considered private because its API hasn't been decided
+public static final int _NPY_DT_is_known_scalar_type = 2;
+public static final int NPY_DT_default_descr = 3;
+public static final int NPY_DT_common_dtype = 4;
+public static final int NPY_DT_common_instance = 5;
+public static final int NPY_DT_ensure_canonical = 6;
+public static final int NPY_DT_setitem = 7;
+public static final int NPY_DT_getitem = 8;
+public static final int NPY_DT_get_clear_loop = 9;
+public static final int NPY_DT_get_fill_zero_loop = 10;
+public static final int NPY_DT_finalize_descr = 11;
+
+// These PyArray_ArrFunc slots will be deprecated and replaced eventually
+// getitem and setitem can be defined as a performance optimization;
+// by default the user dtypes call `legacy_getitem_using_DType` and
+// `legacy_setitem_using_DType`, respectively. This functionality is
+// only supported for basic NumPy DTypes.
+
+
+// used to separate dtype slots from arrfuncs slots
+// intended only for internal use but defined here for clarity
+public static final int _NPY_DT_ARRFUNCS_OFFSET = (1 << 10);
+
+// Cast is disabled
+// #define NPY_DT_PyArray_ArrFuncs_cast 0 + _NPY_DT_ARRFUNCS_OFFSET
+
+public static final int NPY_DT_PyArray_ArrFuncs_getitem = 1 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_setitem = 2 + _NPY_DT_ARRFUNCS_OFFSET;
+
+// Copyswap is disabled
+// #define NPY_DT_PyArray_ArrFuncs_copyswapn 3 + _NPY_DT_ARRFUNCS_OFFSET
+// #define NPY_DT_PyArray_ArrFuncs_copyswap 4 + _NPY_DT_ARRFUNCS_OFFSET
+public static final int NPY_DT_PyArray_ArrFuncs_compare = 5 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_argmax = 6 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_dotfunc = 7 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_scanfunc = 8 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_fromstr = 9 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_nonzero = 10 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_fill = 11 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_fillwithscalar = 12 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_sort = 13 + _NPY_DT_ARRFUNCS_OFFSET;
+public static final int NPY_DT_PyArray_ArrFuncs_argsort = 14 + _NPY_DT_ARRFUNCS_OFFSET;
+
+// Casting related slots are disabled. See
+// https://github.com/numpy/numpy/pull/23173#discussion_r1101098163
+// #define NPY_DT_PyArray_ArrFuncs_castdict 15 + _NPY_DT_ARRFUNCS_OFFSET
+// #define NPY_DT_PyArray_ArrFuncs_scalarkind 16 + _NPY_DT_ARRFUNCS_OFFSET
+// #define NPY_DT_PyArray_ArrFuncs_cancastscalarkindto 17 + _NPY_DT_ARRFUNCS_OFFSET
+// #define NPY_DT_PyArray_ArrFuncs_cancastto 18 + _NPY_DT_ARRFUNCS_OFFSET
+
+// These are deprecated in NumPy 1.19, so are disabled here.
+// #define NPY_DT_PyArray_ArrFuncs_fastclip 19 + _NPY_DT_ARRFUNCS_OFFSET
+// #define NPY_DT_PyArray_ArrFuncs_fastputmask 20 + _NPY_DT_ARRFUNCS_OFFSET
+// #define NPY_DT_PyArray_ArrFuncs_fasttake 21 + _NPY_DT_ARRFUNCS_OFFSET
+public static final int NPY_DT_PyArray_ArrFuncs_argmin = 22 + _NPY_DT_ARRFUNCS_OFFSET;
+// Targeting ../PyArrayDTypeMeta_Spec.java
+
+
+// Targeting ../PyArrayDTypeMeta_DiscoverDescrFromPyobject.java
+
+
+// Targeting ../PyArrayDTypeMeta_IsKnownScalarType.java
+
+
+// Targeting ../PyArrayDTypeMeta_DefaultDescriptor.java
+
+
+// Targeting ../PyArrayDTypeMeta_CommonDType.java
+
+
+
+
+/*
+ * Convenience utility for getting a reference to the DType metaclass associated
+ * with a dtype instance.
+ */
+// #define NPY_DTYPE(descr) ((PyArray_DTypeMeta *)Py_TYPE(descr))
+
+@NoException public static native PyArray_DTypeMeta NPY_DT_NewRef(PyArray_DTypeMeta o);
+// Targeting ../PyArrayDTypeMeta_CommonInstance.java
+
+
+// Targeting ../PyArrayDTypeMeta_EnsureCanonical.java
+
+
+// Targeting ../PyArrayDTypeMeta_FinalizeDescriptor.java
+
+
+// Targeting ../PyArrayDTypeMeta_SetItem.java
+
+
+// Targeting ../PyArrayDTypeMeta_GetItem.java
+
+
+
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY___DTYPE_API_H_ */
+
+
+// Parsed from npy_2_compat.h
+
+/*
+ * This header file defines relevant features which:
+ * - Require runtime inspection depending on the NumPy version.
+ * - May be needed when compiling with an older version of NumPy to allow
+ *   a smooth transition.
+ *
+ * As such, it is shipped with NumPy 2.0, but designed to be vendored in full
+ * or parts by downstream projects.
+ *
+ * It must be included after any other includes.  `import_array()` must have
+ * been called in the scope or version dependency will misbehave, even when
+ * only `PyUFunc_` API is used.
+ *
+ * If required complicated defs (with inline functions) should be written as:
+ *
+ *     #if NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION
+ *         Simple definition when NumPy 2.0 API is guaranteed.
+ *     #else
+ *         static inline definition of a 1.x compatibility shim
+ *         #if NPY_ABI_VERSION < 0x02000000
+ *            Make 1.x compatibility shim the public API (1.x only branch)
+ *         #else
+ *             Runtime dispatched version (1.x or 2.x)
+ *         #endif
+ *     #endif
+ *
+ * An internal build always passes NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION
+ */
+
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_2_COMPAT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_2_COMPAT_H_
+
+/*
+ * New macros for accessing real and complex part of a complex number can be
+ * found in "npy_2_complexcompat.h".
+ */
+
+
+/*
+ * This header is meant to be included by downstream directly for 1.x compat.
+ * In that case we need to ensure that users first included the full headers
+ * and not just `ndarraytypes.h`.
+ */
+
+// #ifndef NPY_FEATURE_VERSION
+//   #error "The NumPy 2 compat header requires `import_array()` for which "
+//          "the `ndarraytypes.h` header include is not sufficient.  Please "
+//          "include it after `numpy/ndarrayobject.h` or similar.\n"
+//          "To simplify inclusion, you may use `PyArray_ImportNumPy()` "
+//          "which is defined in the compat header and is lightweight (can be)."
+// #endif
+
+// #if NPY_ABI_VERSION < 0x02000000
+// #endif
+
+
+/*
+ * Define a better way to call `_import_array()` to simplify backporting as
+ * we now require imports more often (necessary to make ABI flexible).
+ */
+// #ifdef import_array1
+
+@NoException public static native int PyArray_ImportNumPyAPI();
+
+// #endif  /* import_array1 */
+
+
+/*
+ * NPY_DEFAULT_INT
+ *
+ * The default integer has changed, `NPY_DEFAULT_INT` is available at runtime
+ * for use as type number, e.g. `PyArray_DescrFromType(NPY_DEFAULT_INT)`.
+ *
+ * NPY_RAVEL_AXIS
+ *
+ * This was introduced in NumPy 2.0 to allow indicating that an axis should be
+ * raveled in an operation. Before NumPy 2.0, NPY_MAXDIMS was used for this purpose.
+ *
+ * NPY_MAXDIMS
+ *
+ * A constant indicating the maximum number dimensions allowed when creating
+ * an ndarray.
+ *
+ * NPY_NTYPES_LEGACY
+ *
+ * The number of built-in NumPy dtypes.
+ */
+// #if NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION
+    public static native @MemberGetter long NPY_DEFAULT_INT();
+    public static final long NPY_DEFAULT_INT = NPY_DEFAULT_INT();
+    public static native @MemberGetter long NPY_RAVEL_AXIS();
+    public static final long NPY_RAVEL_AXIS = NPY_RAVEL_AXIS();
+    public static final int NPY_MAXARGS = 64;
+
+// #elif NPY_ABI_VERSION < 0x02000000
+// #else
+// #endif
+
+
+/*
+ * Access inline functions for descriptor fields.  Except for the first
+ * few fields, these needed to be moved (elsize, alignment) for
+ * additional space.  Or they are descriptor specific and are not generally
+ * available anymore (metadata, c_metadata, subarray, names, fields).
+ *
+ * Most of these are defined via the `DESCR_ACCESSOR` macro helper.
+ */
+// #if NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION || NPY_ABI_VERSION < 0x02000000
+    /* Compiling for 1.x or 2.x only, direct field access is OK: */
+
+    @NoException public static native void PyDataType_SET_ELSIZE(PyArray_Descr dtype, @Cast("npy_intp") long size);
+
+    @NoException public static native @Cast("npy_uint64") long PyDataType_FLAGS(@Const PyArray_Descr dtype);
+
+//     #define DESCR_ACCESSOR(FIELD, field, type, legacy_only)
+//         static inline type
+//         PyDataType_##FIELD(const PyArray_Descr *dtype) {
+//             if (legacy_only && !PyDataType_ISLEGACY(dtype)) {
+//                 return (type)0;
+//             }
+//             return ((_PyArray_LegacyDescr *)dtype)->field;
+//         }
+// #else  /* compiling for both 1.x and 2.x */
+
+    /* Cast to LegacyDescr always fine but needed when `legacy_only` */
+//     #define DESCR_ACCESSOR(FIELD, field, type, legacy_only)
+//         static inline type
+//         PyDataType_##FIELD(const PyArray_Descr *dtype) {
+//             if (legacy_only && !PyDataType_ISLEGACY(dtype)) {
+//                 return (type)0;
+//             }
+//             if (PyArray_RUNTIME_VERSION >= NPY_2_0_API_VERSION) {
+//                 return ((_PyArray_LegacyDescr *)dtype)->field;
+//             }
+//             else {
+//                 return ((PyArray_DescrProto *)dtype)->field;
+//             }
+//         }
+// #endif
+
+@NoException public static native @Cast("npy_intp") long PyDataType_ELSIZE(@Const PyArray_Descr dtype);
+@NoException public static native @Cast("npy_intp") long PyDataType_ALIGNMENT(@Const PyArray_Descr dtype);
+@NoException public static native PyObject PyDataType_METADATA(@Const PyArray_Descr dtype);
+@NoException public static native PyArray_ArrayDescr PyDataType_SUBARRAY(@Const PyArray_Descr dtype);
+@NoException public static native PyObject PyDataType_NAMES(@Const PyArray_Descr dtype);
+@NoException public static native PyObject PyDataType_FIELDS(@Const PyArray_Descr dtype);
+@NoException public static native NpyAuxData PyDataType_C_METADATA(@Const PyArray_Descr dtype);
+
+// #undef DESCR_ACCESSOR
+
+
+// #if !(defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD)
+// #if NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION
+    @NoException public static native PyArray_ArrFuncs PyDataType_GetArrFuncs(@Const PyArray_Descr descr);
+// #elif NPY_ABI_VERSION < 0x02000000
+// #else
+// #endif
+
+
+// #endif  /* not internal build */
+
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_2_COMPAT_H_ */
+
+
+// Parsed from npy_2_complexcompat.h
+
+/* This header is designed to be copy-pasted into downstream packages, since it provides
+   a compatibility layer between the old C struct complex types and the new native C99
+   complex types. The new macros are in numpy/npy_math.h, which is why it is included here. */
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_2_COMPLEXCOMPAT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_2_COMPLEXCOMPAT_H_
+
+// #include <numpy/npy_math.h>
+
+// #ifndef NPY_CSETREALF
+// #define NPY_CSETREALF(c, r) (c)->real = (r)
+// #endif
+// #ifndef NPY_CSETIMAGF
+// #define NPY_CSETIMAGF(c, i) (c)->imag = (i)
+// #endif
+// #ifndef NPY_CSETREAL
+// #define NPY_CSETREAL(c, r)  (c)->real = (r)
+// #endif
+// #ifndef NPY_CSETIMAG
+// #define NPY_CSETIMAG(c, i)  (c)->imag = (i)
+// #endif
+// #ifndef NPY_CSETREALL
+// #define NPY_CSETREALL(c, r) (c)->real = (r)
+// #endif
+// #ifndef NPY_CSETIMAGL
+// #define NPY_CSETIMAGL(c, i) (c)->imag = (i)
+// #endif
+
+// #endif
 
 
 // Parsed from __multiarray_api.h
@@ -3471,19 +3822,14 @@ public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 // #if defined(_MULTIARRAYMODULE) || defined(WITH_CPYCHECKER_STEALS_REFERENCE_TO_ARG_ATTRIBUTE)
 
 
-
 public static native @ByRef PyBoolScalarObject _PyArrayScalar_BoolValues(int i); public static native void _PyArrayScalar_BoolValues(int i, PyBoolScalarObject setter);
 @MemberGetter public static native PyBoolScalarObject _PyArrayScalar_BoolValues();
 
 @NoException public static native @Cast("unsigned int") int PyArray_GetNDArrayCVersion();
-public static native @ByRef PyTypeObject PyBigArray_Type(); public static native void PyBigArray_Type(PyTypeObject setter);
-
 public static native @ByRef PyTypeObject PyArray_Type(); public static native void PyArray_Type(PyTypeObject setter);
 
 public static native @ByRef PyTypeObject PyArrayDescr_Type(); public static native void PyArrayDescr_Type(PyTypeObject setter);
 // #define PyArrayDescr_Type (*(PyTypeObject *)(&PyArrayDescr_TypeFull))
-
-public static native @ByRef PyTypeObject PyArrayFlags_Type(); public static native void PyArrayFlags_Type(PyTypeObject setter);
 
 public static native @ByRef PyTypeObject PyArrayIter_Type(); public static native void PyArrayIter_Type(PyTypeObject setter);
 
@@ -3553,8 +3899,6 @@ public static native @ByRef PyTypeObject PyUnicodeArrType_Type(); public static 
 
 public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static native void PyVoidArrType_Type(PyTypeObject setter);
 
-@NoException public static native int PyArray_SetNumericOps(PyObject arg0);
-@NoException public static native PyObject PyArray_GetNumericOps();
 @NoException public static native int PyArray_INCREF(PyArrayObject arg0);
 @NoException public static native int PyArray_XDECREF(PyArrayObject arg0);
 @NoException public static native void PyArray_SetStringFunction(PyObject arg0, int arg1);
@@ -3563,8 +3907,8 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native @Cast("char*") BytePointer PyArray_Zero(PyArrayObject arg0);
 @NoException public static native @Cast("char*") BytePointer PyArray_One(PyArrayObject arg0);
 @NoException public static native PyObject PyArray_CastToType(PyArrayObject arg0, PyArray_Descr arg1, int arg2);
-@NoException public static native int PyArray_CastTo(PyArrayObject arg0, PyArrayObject arg1);
-@NoException public static native int PyArray_CastAnyTo(PyArrayObject arg0, PyArrayObject arg1);
+@NoException public static native int PyArray_CopyInto(PyArrayObject arg0, PyArrayObject arg1);
+@NoException public static native int PyArray_CopyAnyInto(PyArrayObject arg0, PyArrayObject arg1);
 @NoException public static native int PyArray_CanCastSafely(int arg0, int arg1);
 @NoException public static native @Cast("npy_bool") byte PyArray_CanCastTo(PyArray_Descr arg0, PyArray_Descr arg1);
 @NoException public static native int PyArray_ObjectType(PyObject arg0, int arg1);
@@ -3580,14 +3924,7 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native void PyArray_ScalarAsCtype(PyObject arg0, Pointer arg1);
 @NoException public static native int PyArray_CastScalarToCtype(PyObject arg0, Pointer arg1, PyArray_Descr arg2);
 @NoException public static native int PyArray_CastScalarDirect(PyObject arg0, PyArray_Descr arg1, Pointer arg2, int arg3);
-@NoException public static native PyObject PyArray_ScalarFromObject(PyObject arg0);
-@NoException public static native PyArray_VectorUnaryFunc PyArray_GetCastFunc(PyArray_Descr arg0, int arg1);
-@NoException public static native PyObject PyArray_FromDims(int __NPY_UNUSED_TAGGEDnd, IntPointer __NPY_UNUSED_TAGGEDd, int __NPY_UNUSED_TAGGEDtype );
-@NoException public static native PyObject PyArray_FromDims(int __NPY_UNUSED_TAGGEDnd, IntBuffer __NPY_UNUSED_TAGGEDd, int __NPY_UNUSED_TAGGEDtype );
-@NoException public static native PyObject PyArray_FromDims(int __NPY_UNUSED_TAGGEDnd, int[] __NPY_UNUSED_TAGGEDd, int __NPY_UNUSED_TAGGEDtype );
-@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int __NPY_UNUSED_TAGGEDnd, IntPointer __NPY_UNUSED_TAGGEDd, PyArray_Descr arg2, @Cast("char*") BytePointer __NPY_UNUSED_TAGGEDdata );
-@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int __NPY_UNUSED_TAGGEDnd, IntBuffer __NPY_UNUSED_TAGGEDd, PyArray_Descr arg2, @Cast("char*") ByteBuffer __NPY_UNUSED_TAGGEDdata );
-@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int __NPY_UNUSED_TAGGEDnd, int[] __NPY_UNUSED_TAGGEDd, PyArray_Descr arg2, @Cast("char*") byte[] __NPY_UNUSED_TAGGEDdata );
+@NoException public static native int PyArray_Pack(PyArray_Descr arg0, Pointer arg1, PyObject arg2);
 @NoException public static native PyObject PyArray_FromAny(PyObject arg0, PyArray_Descr arg1, int arg2, int arg3, int arg4, PyObject arg5);
 @NoException public static native PyObject PyArray_EnsureArray(PyObject arg0);
 @NoException public static native PyObject PyArray_EnsureAnyArray(PyObject arg0);
@@ -3604,9 +3941,6 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native int PyArray_SetField(PyArrayObject arg0, PyArray_Descr arg1, int arg2, PyObject arg3);
 @NoException public static native PyObject PyArray_Byteswap(PyArrayObject arg0, @Cast("npy_bool") byte arg1);
 @NoException public static native PyObject PyArray_Resize(PyArrayObject arg0, PyArray_Dims arg1, int arg2, @Cast("NPY_ORDER") int __NPY_UNUSED_TAGGEDorder );
-@NoException public static native int PyArray_MoveInto(PyArrayObject arg0, PyArrayObject arg1);
-@NoException public static native int PyArray_CopyInto(PyArrayObject arg0, PyArrayObject arg1);
-@NoException public static native int PyArray_CopyAnyInto(PyArrayObject arg0, PyArrayObject arg1);
 @NoException public static native int PyArray_CopyObject(PyArrayObject arg0, PyObject arg1);
 @NoException public static native PyObject PyArray_NewCopy(PyArrayObject arg0, @Cast("NPY_ORDER") int arg1);
 @NoException public static native PyObject PyArray_ToList(PyArrayObject arg0);
@@ -3628,7 +3962,6 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native int PyArray_PyIntAsInt(PyObject arg0);
 @NoException public static native @Cast("npy_intp") long PyArray_PyIntAsIntp(PyObject arg0);
 @NoException public static native int PyArray_Broadcast(PyArrayMultiIterObject arg0);
-@NoException public static native void PyArray_FillObjectArray(PyArrayObject arg0, PyObject arg1);
 @NoException public static native int PyArray_FillWithScalar(PyArrayObject arg0, PyObject arg1);
 @NoException public static native @Cast("npy_bool") byte PyArray_CheckStrides(int arg0, int arg1, @Cast("npy_intp") long arg2, @Cast("npy_intp") long arg3, @Cast("const npy_intp*") SizeTPointer arg4, @Cast("const npy_intp*") SizeTPointer arg5);
 @NoException public static native PyArray_Descr PyArray_DescrNewByteorder(PyArray_Descr arg0, @Cast("char") byte arg1);
@@ -3643,11 +3976,7 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native @Cast("NPY_SCALARKIND") int PyArray_ScalarKind(int arg0, @Cast("PyArrayObject**") PointerPointer arg1);
 @NoException public static native @Cast("NPY_SCALARKIND") int PyArray_ScalarKind(int arg0, @ByPtrPtr PyArrayObject arg1);
 @NoException public static native int PyArray_CanCoerceScalar(int arg0, int arg1, @Cast("NPY_SCALARKIND") int arg2);
-@NoException public static native PyObject PyArray_NewFlagsObject(PyObject arg0);
 @NoException public static native @Cast("npy_bool") byte PyArray_CanCastScalar(PyTypeObject arg0, PyTypeObject arg1);
-@NoException public static native int PyArray_CompareUCS4(@Cast("const npy_ucs4*") IntPointer arg0, @Cast("const npy_ucs4*") IntPointer arg1, @Cast("size_t") long arg2);
-@NoException public static native int PyArray_CompareUCS4(@Cast("const npy_ucs4*") IntBuffer arg0, @Cast("const npy_ucs4*") IntBuffer arg1, @Cast("size_t") long arg2);
-@NoException public static native int PyArray_CompareUCS4(@Cast("const npy_ucs4*") int[] arg0, @Cast("const npy_ucs4*") int[] arg1, @Cast("size_t") long arg2);
 @NoException public static native int PyArray_RemoveSmallest(PyArrayMultiIterObject arg0);
 @NoException public static native int PyArray_ElementStrides(PyObject arg0);
 @NoException public static native void PyArray_Item_INCREF(@Cast("char*") BytePointer arg0, PyArray_Descr arg1);
@@ -3656,7 +3985,6 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native void PyArray_Item_XDECREF(@Cast("char*") BytePointer arg0, PyArray_Descr arg1);
 @NoException public static native void PyArray_Item_XDECREF(@Cast("char*") ByteBuffer arg0, PyArray_Descr arg1);
 @NoException public static native void PyArray_Item_XDECREF(@Cast("char*") byte[] arg0, PyArray_Descr arg1);
-@NoException public static native PyObject PyArray_FieldNames(PyObject arg0);
 @NoException public static native PyObject PyArray_Transpose(PyArrayObject arg0, PyArray_Dims arg1);
 @NoException public static native PyObject PyArray_TakeFrom(PyArrayObject arg0, PyObject arg1, int arg2, PyArrayObject arg3, @Cast("NPY_CLIPMODE") int arg4);
 @NoException public static native PyObject PyArray_PutTo(PyArrayObject arg0, PyObject arg1, PyObject arg2, @Cast("NPY_CLIPMODE") int arg3);
@@ -3700,14 +4028,6 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native int PyArray_CompareLists(@Cast("const npy_intp*") SizeTPointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, int arg2);
 @NoException public static native int PyArray_AsCArray(@Cast("PyObject**") PointerPointer arg0, Pointer arg1, @Cast("npy_intp*") SizeTPointer arg2, int arg3, PyArray_Descr arg4);
 @NoException public static native int PyArray_AsCArray(@ByPtrPtr PyObject arg0, Pointer arg1, @Cast("npy_intp*") SizeTPointer arg2, int arg3, PyArray_Descr arg4);
-@NoException public static native int PyArray_As1D(@Cast("PyObject**") PointerPointer __NPY_UNUSED_TAGGEDop, @Cast("char**") PointerPointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char**") @ByPtrPtr BytePointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char**") @ByPtrPtr ByteBuffer __NPY_UNUSED_TAGGEDptr, IntBuffer __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char**") @ByPtrPtr byte[] __NPY_UNUSED_TAGGEDptr, int[] __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As2D(@Cast("PyObject**") PointerPointer __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, IntPointer __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, IntPointer __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, IntBuffer __NPY_UNUSED_TAGGEDd1, IntBuffer __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
-@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, int[] __NPY_UNUSED_TAGGEDd1, int[] __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
 @NoException public static native int PyArray_Free(PyObject arg0, Pointer arg1);
 @NoException public static native int PyArray_Converter(PyObject arg0, @Cast("PyObject**") PointerPointer arg1);
 @NoException public static native int PyArray_Converter(PyObject arg0, @ByPtrPtr PyObject arg1);
@@ -3715,9 +4035,7 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native PyObject PyArray_Concatenate(PyObject arg0, int arg1);
 @NoException public static native PyObject PyArray_InnerProduct(PyObject arg0, PyObject arg1);
 @NoException public static native PyObject PyArray_MatrixProduct(PyObject arg0, PyObject arg1);
-@NoException public static native PyObject PyArray_CopyAndTranspose(PyObject arg0);
 @NoException public static native PyObject PyArray_Correlate(PyObject arg0, PyObject arg1, int arg2);
-@NoException public static native int PyArray_TypestrConvert(int arg0, int arg1);
 @NoException public static native int PyArray_DescrConverter(PyObject arg0, @Cast("PyArray_Descr**") PointerPointer arg1);
 @NoException public static native int PyArray_DescrConverter(PyObject arg0, @ByPtrPtr PyArray_Descr arg1);
 @NoException public static native int PyArray_DescrConverter2(PyObject arg0, @Cast("PyArray_Descr**") PointerPointer arg1);
@@ -3748,21 +4066,17 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native PyObject PyArray_LexSort(PyObject arg0, int arg1);
 @NoException public static native PyObject PyArray_Round(PyArrayObject arg0, int arg1, PyArrayObject arg2);
 @NoException public static native @Cast("unsigned char") byte PyArray_EquivTypenums(int arg0, int arg1);
-@NoException public static native int PyArray_RegisterDataType(PyArray_Descr arg0);
+@NoException public static native int PyArray_RegisterDataType(PyArray_DescrProto arg0);
 @NoException public static native int PyArray_RegisterCastFunc(PyArray_Descr arg0, int arg1, PyArray_VectorUnaryFunc arg2);
 @NoException public static native int PyArray_RegisterCanCast(PyArray_Descr arg0, int arg1, @Cast("NPY_SCALARKIND") int arg2);
 @NoException public static native void PyArray_InitArrFuncs(PyArray_ArrFuncs arg0);
 @NoException public static native PyObject PyArray_IntTupleFromIntp(int arg0, @Cast("const npy_intp*") SizeTPointer arg1);
-@NoException public static native int PyArray_TypeNumFromName(@Cast("const char*") BytePointer arg0);
-@NoException public static native int PyArray_TypeNumFromName(String arg0);
 @NoException public static native int PyArray_ClipmodeConverter(PyObject arg0, @Cast("NPY_CLIPMODE*") IntPointer arg1);
 @NoException public static native int PyArray_ClipmodeConverter(PyObject arg0, @Cast("NPY_CLIPMODE*") IntBuffer arg1);
 @NoException public static native int PyArray_ClipmodeConverter(PyObject arg0, @Cast("NPY_CLIPMODE*") int[] arg1);
 @NoException public static native int PyArray_OutputConverter(PyObject arg0, @Cast("PyArrayObject**") PointerPointer arg1);
 @NoException public static native int PyArray_OutputConverter(PyObject arg0, @ByPtrPtr PyArrayObject arg1);
 @NoException public static native PyObject PyArray_BroadcastToShape(PyObject arg0, @Cast("npy_intp*") SizeTPointer arg1, int arg2);
-@NoException public static native void _PyArray_SigintHandler(int arg0);
-@NoException public static native Pointer _PyArray_GetSigintBuf();
 @NoException public static native int PyArray_DescrAlignConverter(PyObject arg0, @Cast("PyArray_Descr**") PointerPointer arg1);
 @NoException public static native int PyArray_DescrAlignConverter(PyObject arg0, @ByPtrPtr PyArray_Descr arg1);
 @NoException public static native int PyArray_DescrAlignConverter2(PyObject arg0, @Cast("PyArray_Descr**") PointerPointer arg1);
@@ -3772,8 +4086,6 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native PyObject PyArray_CheckAxis(PyArrayObject arg0, IntBuffer arg1, int arg2);
 @NoException public static native PyObject PyArray_CheckAxis(PyArrayObject arg0, int[] arg1, int arg2);
 @NoException public static native @Cast("npy_intp") long PyArray_OverflowMultiplyList(@Cast("const npy_intp*") SizeTPointer arg0, int arg1);
-@NoException public static native int PyArray_CompareString(@Cast("const char*") BytePointer arg0, @Cast("const char*") BytePointer arg1, @Cast("size_t") long arg2);
-@NoException public static native int PyArray_CompareString(String arg0, String arg1, @Cast("size_t") long arg2);
 @NoException public static native PyObject PyArray_MultiIterFromObjects(@Cast("PyObject**") PointerPointer arg0, int arg1, int arg2);
 @NoException public static native PyObject PyArray_MultiIterFromObjects(@ByPtrPtr PyObject arg0, int arg1, int arg2);
 @NoException public static native int PyArray_GetEndianness();
@@ -3790,11 +4102,6 @@ public static native @ByRef PyTypeObject PyHalfArrType_Type(); public static nat
 
 public static native @ByRef PyTypeObject NpyIter_Type(); public static native void NpyIter_Type(PyTypeObject setter);
 
-@NoException public static native void PyArray_SetDatetimeParseFunction(PyObject __NPY_UNUSED_TAGGEDop );
-@NoException public static native void PyArray_DatetimeToDatetimeStruct(@Cast("npy_datetime") long __NPY_UNUSED_TAGGEDval, @Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_datetimestruct arg2);
-@NoException public static native void PyArray_TimedeltaToTimedeltaStruct(@Cast("npy_timedelta") long __NPY_UNUSED_TAGGEDval, @Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_timedeltastruct arg2);
-@NoException public static native @Cast("npy_datetime") long PyArray_DatetimeStructToDatetime(@Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_datetimestruct __NPY_UNUSED_TAGGEDd );
-@NoException public static native @Cast("npy_datetime") long PyArray_TimedeltaStructToTimedelta(@Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_timedeltastruct __NPY_UNUSED_TAGGEDd );
 @NoException public static native NpyIter NpyIter_New(PyArrayObject arg0, @Cast("npy_uint32") int arg1, @Cast("NPY_ORDER") int arg2, @Cast("NPY_CASTING") int arg3, PyArray_Descr arg4);
 @NoException public static native NpyIter NpyIter_MultiNew(int arg0, @Cast("PyArrayObject**") PointerPointer arg1, @Cast("npy_uint32") int arg2, @Cast("NPY_ORDER") int arg3, @Cast("NPY_CASTING") int arg4, @Cast("npy_uint32*") IntPointer arg5, @Cast("PyArray_Descr**") PointerPointer arg6);
 @NoException public static native NpyIter NpyIter_MultiNew(int arg0, @ByPtrPtr PyArrayObject arg1, @Cast("npy_uint32") int arg2, @Cast("NPY_ORDER") int arg3, @Cast("NPY_CASTING") int arg4, @Cast("npy_uint32*") IntPointer arg5, @ByPtrPtr PyArray_Descr arg6);
@@ -3880,10 +4187,6 @@ public static native @ByRef PyTypeObject NpyIter_Type(); public static native vo
 @NoException public static native PyArrayObject PyArray_EinsteinSum(@Cast("char*") ByteBuffer arg0, @Cast("npy_intp") long arg1, @ByPtrPtr PyArrayObject arg2, PyArray_Descr arg3, @Cast("NPY_ORDER") int arg4, @Cast("NPY_CASTING") int arg5, PyArrayObject arg6);
 @NoException public static native PyArrayObject PyArray_EinsteinSum(@Cast("char*") byte[] arg0, @Cast("npy_intp") long arg1, @ByPtrPtr PyArrayObject arg2, PyArray_Descr arg3, @Cast("NPY_ORDER") int arg4, @Cast("NPY_CASTING") int arg5, PyArrayObject arg6);
 @NoException public static native PyObject PyArray_NewLikeArray(PyArrayObject arg0, @Cast("NPY_ORDER") int arg1, PyArray_Descr arg2, int arg3);
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @Cast("PyArray_Descr**") PointerPointer __NPY_UNUSED_TAGGEDout_dtype, IntPointer __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @Cast("PyArrayObject**") PointerPointer __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @ByPtrPtr PyArray_Descr __NPY_UNUSED_TAGGEDout_dtype, IntPointer __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @ByPtrPtr PyArray_Descr __NPY_UNUSED_TAGGEDout_dtype, IntBuffer __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
-@NoException public static native int PyArray_GetArrayParamsFromObject(PyObject __NPY_UNUSED_TAGGEDop, PyArray_Descr __NPY_UNUSED_TAGGEDrequested_dtype, @Cast("npy_bool") byte __NPY_UNUSED_TAGGEDwriteable, @ByPtrPtr PyArray_Descr __NPY_UNUSED_TAGGEDout_dtype, int[] __NPY_UNUSED_TAGGEDout_ndim, @Cast("npy_intp*") SizeTPointer __NPY_UNUSED_TAGGEDout_dims, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDout_arr, PyObject __NPY_UNUSED_TAGGEDcontext );
 @NoException public static native int PyArray_ConvertClipmodeSequence(PyObject arg0, @Cast("NPY_CLIPMODE*") IntPointer arg1, int arg2);
 @NoException public static native int PyArray_ConvertClipmodeSequence(PyObject arg0, @Cast("NPY_CLIPMODE*") IntBuffer arg1, int arg2);
 @NoException public static native int PyArray_ConvertClipmodeSequence(PyObject arg0, @Cast("NPY_CLIPMODE*") int[] arg1, int arg2);
@@ -3901,14 +4204,8 @@ public static native @ByRef PyTypeObject NpyIter_Type(); public static native vo
 @NoException public static native Pointer PyDataMem_NEW(@Cast("size_t") long arg0);
 @NoException public static native void PyDataMem_FREE(Pointer arg0);
 @NoException public static native Pointer PyDataMem_RENEW(Pointer arg0, @Cast("size_t") long arg1);
-@NoException public static native PyDataMem_EventHookFunc PyDataMem_SetEventHook(PyDataMem_EventHookFunc arg0, Pointer arg1, @Cast("void**") PointerPointer arg2);
-@NoException public static native PyDataMem_EventHookFunc PyDataMem_SetEventHook(PyDataMem_EventHookFunc arg0, Pointer arg1, @Cast("void**") @ByPtrPtr Pointer arg2);
 public static native @Cast("NPY_CASTING") int NPY_DEFAULT_ASSIGN_CASTING(); public static native void NPY_DEFAULT_ASSIGN_CASTING(int setter);
 
-@NoException public static native void PyArray_MapIterSwapAxes(PyArrayMapIterObject arg0, @Cast("PyArrayObject**") PointerPointer arg1, int arg2);
-@NoException public static native void PyArray_MapIterSwapAxes(PyArrayMapIterObject arg0, @ByPtrPtr PyArrayObject arg1, int arg2);
-@NoException public static native PyObject PyArray_MapIterArray(PyArrayObject arg0, PyObject arg1);
-@NoException public static native void PyArray_MapIterNext(PyArrayMapIterObject arg0);
 @NoException public static native int PyArray_Partition(PyArrayObject arg0, PyArrayObject arg1, int arg2, @Cast("NPY_SELECTKIND") int arg3);
 @NoException public static native PyObject PyArray_ArgPartition(PyArrayObject arg0, PyArrayObject arg1, int arg2, @Cast("NPY_SELECTKIND") int arg3);
 @NoException public static native int PyArray_SelectkindConverter(PyObject arg0, @Cast("NPY_SELECTKIND*") IntPointer arg1);
@@ -3916,13 +4213,43 @@ public static native @Cast("NPY_CASTING") int NPY_DEFAULT_ASSIGN_CASTING(); publ
 @NoException public static native int PyArray_SelectkindConverter(PyObject arg0, @Cast("NPY_SELECTKIND*") int[] arg1);
 @NoException public static native Pointer PyDataMem_NEW_ZEROED(@Cast("size_t") long arg0, @Cast("size_t") long arg1);
 @NoException public static native int PyArray_CheckAnyScalarExact(PyObject arg0);
-@NoException public static native PyObject PyArray_MapIterArrayCopyIfOverlap(PyArrayObject arg0, PyObject arg1, int arg2, PyArrayObject arg3);
 @NoException public static native int PyArray_ResolveWritebackIfCopy(PyArrayObject arg0);
 @NoException public static native int PyArray_SetWritebackIfCopyBase(PyArrayObject arg0, PyArrayObject arg1);
 
 
 public static native PyObject PyDataMem_DefaultHandler(); public static native void PyDataMem_DefaultHandler(PyObject setter);
 
+@NoException public static native int NpyDatetime_ConvertDatetime64ToDatetimeStruct(PyArray_DatetimeMetaData arg0, @Cast("npy_datetime") long arg1, npy_datetimestruct arg2);
+@NoException public static native int NpyDatetime_ConvertDatetimeStructToDatetime64(PyArray_DatetimeMetaData arg0, @Const npy_datetimestruct arg1, @Cast("npy_datetime*") CLongPointer arg2);
+@NoException public static native int NpyDatetime_ConvertPyDateTimeToDatetimeStruct(PyObject arg0, npy_datetimestruct arg1, @Cast("NPY_DATETIMEUNIT*") IntPointer arg2, int arg3);
+@NoException public static native int NpyDatetime_ConvertPyDateTimeToDatetimeStruct(PyObject arg0, npy_datetimestruct arg1, @Cast("NPY_DATETIMEUNIT*") IntBuffer arg2, int arg3);
+@NoException public static native int NpyDatetime_ConvertPyDateTimeToDatetimeStruct(PyObject arg0, npy_datetimestruct arg1, @Cast("NPY_DATETIMEUNIT*") int[] arg2, int arg3);
+@NoException public static native int NpyDatetime_GetDatetimeISO8601StrLen(int arg0, @Cast("NPY_DATETIMEUNIT") int arg1);
+@NoException public static native int NpyDatetime_MakeISO8601Datetime(npy_datetimestruct arg0, @Cast("char*") BytePointer arg1, @Cast("npy_intp") long arg2, int arg3, int arg4, @Cast("NPY_DATETIMEUNIT") int arg5, int arg6, @Cast("NPY_CASTING") int arg7);
+@NoException public static native int NpyDatetime_MakeISO8601Datetime(npy_datetimestruct arg0, @Cast("char*") ByteBuffer arg1, @Cast("npy_intp") long arg2, int arg3, int arg4, @Cast("NPY_DATETIMEUNIT") int arg5, int arg6, @Cast("NPY_CASTING") int arg7);
+@NoException public static native int NpyDatetime_MakeISO8601Datetime(npy_datetimestruct arg0, @Cast("char*") byte[] arg1, @Cast("npy_intp") long arg2, int arg3, int arg4, @Cast("NPY_DATETIMEUNIT") int arg5, int arg6, @Cast("NPY_CASTING") int arg7);
+@NoException public static native int NpyDatetime_ParseISO8601Datetime(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1, @Cast("NPY_DATETIMEUNIT") int arg2, @Cast("NPY_CASTING") int arg3, npy_datetimestruct arg4, @Cast("NPY_DATETIMEUNIT*") IntPointer arg5, @Cast("npy_bool*") BytePointer arg6);
+@NoException public static native int NpyDatetime_ParseISO8601Datetime(String arg0, @Cast("Py_ssize_t") long arg1, @Cast("NPY_DATETIMEUNIT") int arg2, @Cast("NPY_CASTING") int arg3, npy_datetimestruct arg4, @Cast("NPY_DATETIMEUNIT*") IntBuffer arg5, @Cast("npy_bool*") ByteBuffer arg6);
+@NoException public static native int NpyDatetime_ParseISO8601Datetime(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1, @Cast("NPY_DATETIMEUNIT") int arg2, @Cast("NPY_CASTING") int arg3, npy_datetimestruct arg4, @Cast("NPY_DATETIMEUNIT*") int[] arg5, @Cast("npy_bool*") byte[] arg6);
+@NoException public static native int NpyDatetime_ParseISO8601Datetime(String arg0, @Cast("Py_ssize_t") long arg1, @Cast("NPY_DATETIMEUNIT") int arg2, @Cast("NPY_CASTING") int arg3, npy_datetimestruct arg4, @Cast("NPY_DATETIMEUNIT*") IntPointer arg5, @Cast("npy_bool*") BytePointer arg6);
+@NoException public static native int NpyDatetime_ParseISO8601Datetime(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1, @Cast("NPY_DATETIMEUNIT") int arg2, @Cast("NPY_CASTING") int arg3, npy_datetimestruct arg4, @Cast("NPY_DATETIMEUNIT*") IntBuffer arg5, @Cast("npy_bool*") ByteBuffer arg6);
+@NoException public static native int NpyDatetime_ParseISO8601Datetime(String arg0, @Cast("Py_ssize_t") long arg1, @Cast("NPY_DATETIMEUNIT") int arg2, @Cast("NPY_CASTING") int arg3, npy_datetimestruct arg4, @Cast("NPY_DATETIMEUNIT*") int[] arg5, @Cast("npy_bool*") byte[] arg6);
+@NoException public static native int NpyString_load(npy_string_allocator arg0, @Const npy_packed_static_string arg1, npy_static_string arg2);
+@NoException public static native int NpyString_pack(npy_string_allocator arg0, npy_packed_static_string arg1, @Cast("const char*") BytePointer arg2, @Cast("size_t") long arg3);
+@NoException public static native int NpyString_pack(npy_string_allocator arg0, npy_packed_static_string arg1, String arg2, @Cast("size_t") long arg3);
+@NoException public static native int NpyString_pack_null(npy_string_allocator arg0, npy_packed_static_string arg1);
+@NoException public static native npy_string_allocator NpyString_acquire_allocator(@Const PyArray_StringDTypeObject arg0);
+@NoException public static native void NpyString_acquire_allocators(@Cast("size_t") long arg0, @Cast("PyArray_Descr*const*") PointerPointer descrs, @Cast("npy_string_allocator**") PointerPointer allocators);
+@NoException public static native void NpyString_acquire_allocators(@Cast("size_t") long arg0, @ByPtrPtr PyArray_Descr descrs, @ByPtrPtr npy_string_allocator allocators);
+@NoException public static native void NpyString_release_allocator(npy_string_allocator arg0);
+@NoException public static native void NpyString_release_allocators(@Cast("size_t") long arg0, @Cast("npy_string_allocator**") PointerPointer allocators);
+@NoException public static native void NpyString_release_allocators(@Cast("size_t") long arg0, @ByPtrPtr npy_string_allocator allocators);
+@NoException public static native PyArray_Descr PyArray_GetDefaultDescr(PyArray_DTypeMeta arg0);
+@NoException public static native int PyArrayInitDTypeMeta_FromSpec(PyArray_DTypeMeta arg0, PyArrayDTypeMeta_Spec arg1);
+@NoException public static native PyArray_DTypeMeta PyArray_CommonDType(PyArray_DTypeMeta arg0, PyArray_DTypeMeta arg1);
+@NoException public static native PyArray_DTypeMeta PyArray_PromoteDTypeSequence(@Cast("npy_intp") long arg0, @Cast("PyArray_DTypeMeta**") PointerPointer arg1);
+@NoException public static native PyArray_DTypeMeta PyArray_PromoteDTypeSequence(@Cast("npy_intp") long arg0, @ByPtrPtr PyArray_DTypeMeta arg1);
+@NoException public static native PyArray_ArrFuncs _PyDataType_GetArrFuncs(@Const PyArray_Descr arg0);
 
 // #else
 
@@ -3932,6 +4259,7 @@ public static native PyObject PyDataMem_DefaultHandler(); public static native v
 // #if defined(NO_IMPORT) || defined(NO_IMPORT_ARRAY)
 public static native Pointer PyArray_API(int i); public static native void PyArray_API(int i, Pointer setter);
 public static native @Cast("void**") PointerPointer PyArray_API(); public static native void PyArray_API(PointerPointer setter);
+public static native int PyArray_RUNTIME_VERSION(); public static native void PyArray_RUNTIME_VERSION(int setter);
 // #else
 // #if defined(PY_ARRAY_UNIQUE_SYMBOL)
 // #else
@@ -3939,14 +4267,44 @@ public static native @Cast("void**") PointerPointer PyArray_API(); public static
 // #endif
 
 
+/*
+ * The DType classes are inconvenient for the Python generation so exposed
+ * manually in the header below  (may be moved).
+ */
+// #include "numpy/_public_dtype_api_table.h"
+
 // #if !defined(NO_IMPORT_ARRAY) && !defined(NO_IMPORT)
 @NoException public static native int _import_array();
 
-// #define import_array() {if (_import_array() < 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import"); return NULL; } }
+// #define import_array() {
+//   if (_import_array() < 0) {
+//     PyErr_Print();
+//     PyErr_SetString(
+//         PyExc_ImportError,
+//         "numpy._core.multiarray failed to import"
+//     );
+//     return NULL;
+//   }
+// }
 
-// #define import_array1(ret) {if (_import_array() < 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import"); return ret; } }
+// #define import_array1(ret) {
+//   if (_import_array() < 0) {
+//     PyErr_Print();
+//     PyErr_SetString(
+//         PyExc_ImportError,
+//         "numpy._core.multiarray failed to import"
+//     );
+//     return ret;
+//   }
+// }
 
-// #define import_array2(msg, ret) {if (_import_array() < 0) {PyErr_Print(); PyErr_SetString(PyExc_ImportError, msg); return ret; } }
+// #define import_array2(msg, ret) {
+//   if (_import_array() < 0) {
+//     PyErr_Print();
+//     PyErr_SetString(PyExc_ImportError, msg);
+//     return ret;
+//   }
+// }
 
 // #endif
 
@@ -4012,18 +4370,12 @@ public static native @Cast("void**") PointerPointer PyArray_API(); public static
 
 public static native @ByRef PyTypeObject PyUFunc_Type(); public static native void PyUFunc_Type(PyTypeObject setter);
 
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") PointerPointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9);
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9);
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
-@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9);
+@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") PointerPointer arg1, @Cast("const char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
+@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") @ByPtrPtr Pointer arg1, @Cast("const char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
+@NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") @ByPtrPtr Pointer arg1, String arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9);
 @NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, @Const IntPointer arg3, Pointer arg4);
 @NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, @Const IntBuffer arg3, Pointer arg4);
 @NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, @Const int[] arg3, Pointer arg4);
-@NoException public static native int PyUFunc_GenericFunction(PyUFuncObject __NPY_UNUSED_TAGGEDufunc, PyObject __NPY_UNUSED_TAGGEDargs, PyObject __NPY_UNUSED_TAGGEDkwds, @Cast("PyArrayObject**") PointerPointer __NPY_UNUSED_TAGGEDop );
-@NoException public static native int PyUFunc_GenericFunction(PyUFuncObject __NPY_UNUSED_TAGGEDufunc, PyObject __NPY_UNUSED_TAGGEDargs, PyObject __NPY_UNUSED_TAGGEDkwds, @ByPtrPtr PyArrayObject __NPY_UNUSED_TAGGEDop );
 @NoException public static native void PyUFunc_f_f_As_d_d(@Cast("char**") PointerPointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native void PyUFunc_f_f_As_d_d(@Cast("char**") @ByPtrPtr BytePointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native void PyUFunc_f_f_As_d_d(@Cast("char**") @ByPtrPtr ByteBuffer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
@@ -4108,30 +4460,14 @@ public static native @ByRef PyTypeObject PyUFunc_Type(); public static native vo
 @NoException public static native void PyUFunc_On_Om(@Cast("char**") @ByPtrPtr BytePointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native void PyUFunc_On_Om(@Cast("char**") @ByPtrPtr ByteBuffer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native void PyUFunc_On_Om(@Cast("char**") @ByPtrPtr byte[] arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
-@NoException public static native int PyUFunc_GetPyValues(@Cast("char*") BytePointer arg0, IntPointer arg1, IntPointer arg2, @Cast("PyObject**") PointerPointer arg3);
-@NoException public static native int PyUFunc_GetPyValues(@Cast("char*") BytePointer arg0, IntPointer arg1, IntPointer arg2, @ByPtrPtr PyObject arg3);
-@NoException public static native int PyUFunc_GetPyValues(@Cast("char*") ByteBuffer arg0, IntBuffer arg1, IntBuffer arg2, @ByPtrPtr PyObject arg3);
-@NoException public static native int PyUFunc_GetPyValues(@Cast("char*") byte[] arg0, int[] arg1, int[] arg2, @ByPtrPtr PyObject arg3);
-@NoException public static native int PyUFunc_checkfperr(int arg0, PyObject arg1, IntPointer arg2);
-@NoException public static native int PyUFunc_checkfperr(int arg0, PyObject arg1, IntBuffer arg2);
-@NoException public static native int PyUFunc_checkfperr(int arg0, PyObject arg1, int[] arg2);
 @NoException public static native void PyUFunc_clearfperr();
 @NoException public static native int PyUFunc_getfperr();
-@NoException public static native int PyUFunc_handlefperr(int arg0, PyObject arg1, int arg2, IntPointer arg3);
-@NoException public static native int PyUFunc_handlefperr(int arg0, PyObject arg1, int arg2, IntBuffer arg3);
-@NoException public static native int PyUFunc_handlefperr(int arg0, PyObject arg1, int arg2, int[] arg3);
 @NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, @Const IntPointer arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
 @NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, @Const IntBuffer arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
 @NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, @Const int[] arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") PointerPointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10);
-@NoException public static native int PyUFunc_SetUsesArraysAsData(@Cast("void**") PointerPointer __NPY_UNUSED_TAGGEDdata, @Cast("size_t") long __NPY_UNUSED_TAGGEDi );
-@NoException public static native int PyUFunc_SetUsesArraysAsData(@Cast("void**") @ByPtrPtr Pointer __NPY_UNUSED_TAGGEDdata, @Cast("size_t") long __NPY_UNUSED_TAGGEDi );
+@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") PointerPointer arg1, @Cast("const char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
+@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") @ByPtrPtr Pointer arg1, @Cast("const char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
+@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") @ByPtrPtr Pointer arg1, String arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10);
 @NoException public static native void PyUFunc_e_e(@Cast("char**") PointerPointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native void PyUFunc_e_e(@Cast("char**") @ByPtrPtr BytePointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native void PyUFunc_e_e(@Cast("char**") @ByPtrPtr ByteBuffer arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
@@ -4158,17 +4494,19 @@ public static native @ByRef PyTypeObject PyUFunc_Type(); public static native vo
 @NoException public static native void PyUFunc_ee_e_As_dd_d(@Cast("char**") @ByPtrPtr byte[] arg0, @Cast("const npy_intp*") SizeTPointer arg1, @Cast("const npy_intp*") SizeTPointer arg2, Pointer arg3);
 @NoException public static native int PyUFunc_DefaultTypeResolver(PyUFuncObject arg0, @Cast("NPY_CASTING") int arg1, @Cast("PyArrayObject**") PointerPointer arg2, PyObject arg3, @Cast("PyArray_Descr**") PointerPointer arg4);
 @NoException public static native int PyUFunc_DefaultTypeResolver(PyUFuncObject arg0, @Cast("NPY_CASTING") int arg1, @ByPtrPtr PyArrayObject arg2, PyObject arg3, @ByPtrPtr PyArray_Descr arg4);
-@NoException public static native int PyUFunc_ValidateCasting(PyUFuncObject arg0, @Cast("NPY_CASTING") int arg1, @Cast("PyArrayObject**") PointerPointer arg2, @Cast("PyArray_Descr**") PointerPointer arg3);
+@NoException public static native int PyUFunc_ValidateCasting(PyUFuncObject arg0, @Cast("NPY_CASTING") int arg1, @Cast("PyArrayObject**") PointerPointer arg2, @Cast("PyArray_Descr*const*") PointerPointer arg3);
 @NoException public static native int PyUFunc_ValidateCasting(PyUFuncObject arg0, @Cast("NPY_CASTING") int arg1, @ByPtrPtr PyArrayObject arg2, @ByPtrPtr PyArray_Descr arg3);
 @NoException public static native int PyUFunc_RegisterLoopForDescr(PyUFuncObject arg0, PyArray_Descr arg1, PyUFuncGenericFunction arg2, @Cast("PyArray_Descr**") PointerPointer arg3, Pointer arg4);
 @NoException public static native int PyUFunc_RegisterLoopForDescr(PyUFuncObject arg0, PyArray_Descr arg1, PyUFuncGenericFunction arg2, @ByPtrPtr PyArray_Descr arg3, Pointer arg4);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") PointerPointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10, PyObject arg11);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10, PyObject arg11);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10, PyObject arg11);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10, PyObject arg11);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10, PyObject arg11);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10, PyObject arg11);
-@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10, PyObject arg11);
+@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") PointerPointer arg1, @Cast("const char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10, PyObject arg11);
+@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") @ByPtrPtr Pointer arg1, @Cast("const char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10, PyObject arg11);
+@NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignatureAndIdentity(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void*const*") @ByPtrPtr Pointer arg1, String arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10, PyObject arg11);
+@NoException public static native int PyUFunc_AddLoopFromSpec(PyObject arg0, PyArrayMethod_Spec arg1);
+@NoException public static native int PyUFunc_AddPromoter(PyObject arg0, PyObject arg1, PyObject arg2);
+@NoException public static native int PyUFunc_AddWrappingLoop(PyObject arg0, @Cast("PyArray_DTypeMeta**") PointerPointer new_dtypes, @Cast("PyArray_DTypeMeta**") PointerPointer wrapped_dtypes, PyArrayMethod_TranslateGivenDescriptors arg3, PyArrayMethod_TranslateLoopDescriptors arg4);
+@NoException public static native int PyUFunc_AddWrappingLoop(PyObject arg0, @ByPtrPtr PyArray_DTypeMeta new_dtypes, @ByPtrPtr PyArray_DTypeMeta wrapped_dtypes, PyArrayMethod_TranslateGivenDescriptors arg3, PyArrayMethod_TranslateLoopDescriptors arg4);
+@NoException public static native int PyUFunc_GiveFloatingpointErrors(@Cast("const char*") BytePointer arg0, int arg1);
+@NoException public static native int PyUFunc_GiveFloatingpointErrors(String arg0, int arg1);
 
 // #else
 
@@ -4206,9 +4544,6 @@ public static native @Cast("void**") PointerPointer PyUFunc_API(); public static
 // Targeting ../PyUFunc_TypeResolutionFunc.java
 
 
-// Targeting ../PyUFunc_LegacyInnerLoopSelectionFunc.java
-
-
 // Targeting ../PyUFuncObject.java
 
 
@@ -4222,34 +4557,10 @@ public static final int UFUNC_CORE_DIM_CAN_IGNORE = 0x0004;
 /* flags inferred during execution */
 public static final int UFUNC_CORE_DIM_MISSING = 0x00040000;
 
-public static final int UFUNC_ERR_IGNORE = 0;
-public static final int UFUNC_ERR_WARN =   1;
-public static final int UFUNC_ERR_RAISE =  2;
-public static final int UFUNC_ERR_CALL =   3;
-public static final int UFUNC_ERR_PRINT =  4;
-public static final int UFUNC_ERR_LOG =    5;
-
-        /* Python side integer mask */
-
-public static final int UFUNC_MASK_DIVIDEBYZERO = 0x07;
-public static final int UFUNC_MASK_OVERFLOW = 0x3f;
-public static final int UFUNC_MASK_UNDERFLOW = 0x1ff;
-public static final int UFUNC_MASK_INVALID = 0xfff;
-
-public static final int UFUNC_SHIFT_DIVIDEBYZERO = 0;
-public static final int UFUNC_SHIFT_OVERFLOW =     3;
-public static final int UFUNC_SHIFT_UNDERFLOW =    6;
-public static final int UFUNC_SHIFT_INVALID =      9;
-
 
 public static final int UFUNC_OBJ_ISOBJECT =      1;
 public static final int UFUNC_OBJ_NEEDS_API =     2;
 
-   /* Default user error mode */
-public static final int UFUNC_ERR_DEFAULT =                               
-        (UFUNC_ERR_WARN << UFUNC_SHIFT_DIVIDEBYZERO) +  
-        (UFUNC_ERR_WARN << UFUNC_SHIFT_OVERFLOW) +      
-        (UFUNC_ERR_WARN << UFUNC_SHIFT_INVALID);
 
 // #if NPY_ALLOW_THREADS
 // #define NPY_LOOP_BEGIN_THREADS do {if (!(loop->obj & UFUNC_OBJ_NEEDS_API)) _save = PyEval_SaveThread();} while (0);
@@ -4302,8 +4613,6 @@ public static final int UFUNC_OUTER = 3;
 
 
 
-// #include "__ufunc_api.h"
-
 public static final String UFUNC_PYVALS_NAME = "UFUNC_PYVALS";
 
 /*
@@ -4327,6 +4636,8 @@ public static final int UFUNC_FPE_INVALID =       NPY_FPE_INVALID;
 // #define UFUNC_NOFPE
 // #endif
 // #endif
+
+// #include "__ufunc_api.h"
 
 // #ifdef __cplusplus
 // #endif

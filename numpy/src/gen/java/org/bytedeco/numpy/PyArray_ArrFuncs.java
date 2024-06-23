@@ -136,9 +136,9 @@ public class PyArray_ArrFuncs extends Pointer {
         public native @Cast("int**") PointerPointer cancastscalarkindto(); public native PyArray_ArrFuncs cancastscalarkindto(PointerPointer setter);
         public native IntPointer cancastto(); public native PyArray_ArrFuncs cancastto(IntPointer setter);
 
-        public native PyArray_FastClipFunc fastclip(); public native PyArray_ArrFuncs fastclip(PyArray_FastClipFunc setter);
-        public native PyArray_FastPutmaskFunc fastputmask(); public native PyArray_ArrFuncs fastputmask(PyArray_FastPutmaskFunc setter);
-        public native PyArray_FastTakeFunc fasttake(); public native PyArray_ArrFuncs fasttake(PyArray_FastTakeFunc setter);
+        public native Pointer _unused1(); public native PyArray_ArrFuncs _unused1(Pointer setter);
+        public native Pointer _unused2(); public native PyArray_ArrFuncs _unused2(Pointer setter);
+        public native Pointer _unused3(); public native PyArray_ArrFuncs _unused3(Pointer setter);
 
         /*
          * Function to select smallest

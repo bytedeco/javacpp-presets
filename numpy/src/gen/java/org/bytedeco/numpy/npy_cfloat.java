@@ -14,7 +14,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
-// #endif
+
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class npy_cfloat extends Pointer {
     static { Loader.load(); }
@@ -32,5 +32,7 @@ public class npy_cfloat extends Pointer {
     @Override public npy_cfloat getPointer(long i) {
         return new npy_cfloat((Pointer)this).offsetAddress(i);
     }
- public native float real(); public native npy_cfloat real(float setter);
-public native float imag(); public native npy_cfloat imag(float setter); }
+
+    public native float _Val(int i); public native npy_cfloat _Val(int i, float setter);
+    @MemberGetter public native FloatPointer _Val();
+}

@@ -14,7 +14,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
-// #endif
+
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class npy_clongdouble extends Pointer {
     static { Loader.load(); }
@@ -32,5 +32,7 @@ public class npy_clongdouble extends Pointer {
     @Override public npy_clongdouble getPointer(long i) {
         return new npy_clongdouble((Pointer)this).offsetAddress(i);
     }
- public native @Cast("npy_longdouble") double real(); public native npy_clongdouble real(double setter);
-public native @Cast("npy_longdouble") double imag(); public native npy_clongdouble imag(double setter); }
+
+    public native @Cast("long double") double _Val(int i); public native npy_clongdouble _Val(int i, double setter);
+    @MemberGetter public native @Cast("long double*") Pointer _Val();
+}

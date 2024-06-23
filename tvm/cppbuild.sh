@@ -37,7 +37,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             CPYTHON_PATH="$P"
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
-        elif [[ -f "$P/python/numpy/core/include/numpy/numpyconfig.h" ]]; then
+        elif [[ -f "$P/python/numpy/_core/include/numpy/numpyconfig.h" ]]; then
             NUMPY_PATH="$P"
         elif [[ -f "$P/python/scipy/version.py" ]]; then
             SCIPY_PATH="$P"

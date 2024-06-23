@@ -15,6 +15,7 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
+
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyArray_ArrayDescr extends Pointer {
     static { Loader.load(); }

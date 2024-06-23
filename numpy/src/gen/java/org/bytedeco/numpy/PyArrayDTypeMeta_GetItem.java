@@ -15,14 +15,11 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
-public class PyArray_FastTakeFunc extends FunctionPointer {
+public class PyArrayDTypeMeta_GetItem extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PyArray_FastTakeFunc(Pointer p) { super(p); }
-    protected PyArray_FastTakeFunc() { allocate(); }
+    public    PyArrayDTypeMeta_GetItem(Pointer p) { super(p); }
+    protected PyArrayDTypeMeta_GetItem() { allocate(); }
     private native void allocate();
-    public native int call(Pointer dest, Pointer src, @Cast("npy_intp*") SizeTPointer indarray,
-                                       @Cast("npy_intp") long nindarray, @Cast("npy_intp") long n_outer,
-                                       @Cast("npy_intp") long m_middle, @Cast("npy_intp") long nelem,
-                                       @Cast("NPY_CLIPMODE") int clipmode);
+    public native PyObject call(PyArray_Descr arg0, @Cast("char*") BytePointer arg1);
 }

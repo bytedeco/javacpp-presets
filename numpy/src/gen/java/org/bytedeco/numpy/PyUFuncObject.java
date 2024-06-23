@@ -54,8 +54,8 @@ public class PyUFuncObject extends Pointer {
         /* Array of one-dimensional core loops */
         public native @ByPtrPtr PyUFuncGenericFunction functions(); public native PyUFuncObject functions(PyUFuncGenericFunction setter);
         /* Array of funcdata that gets passed into the functions */
-        public native Pointer data(int i); public native PyUFuncObject data(int i, Pointer setter);
-        public native @Cast("void**") PointerPointer data(); public native PyUFuncObject data(PointerPointer setter);
+        @MemberGetter public native Pointer data(int i);
+        @MemberGetter public native @Cast("void*const*") PointerPointer data();
         /* The number of elements in 'functions' and 'data' */
         public native int ntypes(); public native PyUFuncObject ntypes(int setter);
 
@@ -66,7 +66,7 @@ public class PyUFuncObject extends Pointer {
         public native @Cast("const char*") BytePointer name(); public native PyUFuncObject name(BytePointer setter);
 
         /* Array of type numbers, of size ('nargs' * 'ntypes') */
-        public native @Cast("char*") BytePointer types(); public native PyUFuncObject types(BytePointer setter);
+        public native @Cast("const char*") BytePointer types(); public native PyUFuncObject types(BytePointer setter);
 
         /* Documentation string */
         public native @Cast("const char*") BytePointer doc(); public native PyUFuncObject doc(BytePointer setter);
@@ -107,13 +107,8 @@ public class PyUFuncObject extends Pointer {
          * with the dtypes for the inputs and outputs.
          */
         public native PyUFunc_TypeResolutionFunc type_resolver(); public native PyUFuncObject type_resolver(PyUFunc_TypeResolutionFunc setter);
-        /*
-         * A function which returns an inner loop written for
-         * NumPy 1.6 and earlier ufuncs. This is for backwards
-         * compatibility, and may be NULL if inner_loop_selector
-         * is specified.
-         */
-        public native PyUFunc_LegacyInnerLoopSelectionFunc legacy_inner_loop_selector(); public native PyUFuncObject legacy_inner_loop_selector(PyUFunc_LegacyInnerLoopSelectionFunc setter);
+        /* Was the legacy loop resolver */
+        public native Pointer reserved2(); public native PyUFuncObject reserved2(Pointer setter);
         /*
          * This was blocked off to be the "new" inner loop selector in 1.7,
          * but this was never implemented. (This is also why the above
@@ -125,7 +120,7 @@ public class PyUFuncObject extends Pointer {
 //         #endif
 
         /* Was previously the `PyUFunc_MaskedInnerLoopSelectionFunc` */
-        public native Pointer _always_null_previously_masked_innerloop_selector(); public native PyUFuncObject _always_null_previously_masked_innerloop_selector(Pointer setter);
+        public native Pointer reserved3(); public native PyUFuncObject reserved3(Pointer setter);
 
         /*
          * List of flags for each operand when ufunc is called by nditer object.
@@ -160,5 +155,9 @@ public class PyUFuncObject extends Pointer {
 
         /* New in NPY_API_VERSION 0x0000000F and above */
 //     #if NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION
+        /* New private fields related to dispatching */
+        public native Pointer _dispatch_cache(); public native PyUFuncObject _dispatch_cache(Pointer setter);
+        /* A PyListObject of `(tuple of DTypes, ArrayMethod/Promoter)` */
+        public native PyObject _loops(); public native PyUFuncObject _loops(PyObject setter);
 //     #endif
 }

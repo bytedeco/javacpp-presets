@@ -14,6 +14,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+// #ifndef Py_LIMITED_API
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyUnicodeScalarObject extends Pointer {
     static { Loader.load(); }
@@ -36,5 +37,6 @@ public class PyUnicodeScalarObject extends Pointer {
         public native @ByRef PyUnicodeObject base(); public native PyUnicodeScalarObject base(PyUnicodeObject setter);
         public native @Cast("Py_UCS4*") IntPointer obval(); public native PyUnicodeScalarObject obval(IntPointer setter);
 //     #if NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION
+        public native @Cast("char*") BytePointer buffer_fmt(); public native PyUnicodeScalarObject buffer_fmt(BytePointer setter);
 //     #endif
 }

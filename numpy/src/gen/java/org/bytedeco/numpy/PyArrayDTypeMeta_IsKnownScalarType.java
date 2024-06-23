@@ -15,13 +15,19 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
+/*
+ * Before making this public, we should decide whether it should pass
+ * the type, or allow looking at the object. A possible use-case:
+ * `np.array(np.array([0]), dtype=np.ndarray)`
+ * Could consider arrays that are not `dtype=ndarray` "scalars".
+ */
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
-public class PyArray_FastClipFunc extends FunctionPointer {
+public class PyArrayDTypeMeta_IsKnownScalarType extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PyArray_FastClipFunc(Pointer p) { super(p); }
-    protected PyArray_FastClipFunc() { allocate(); }
+    public    PyArrayDTypeMeta_IsKnownScalarType(Pointer p) { super(p); }
+    protected PyArrayDTypeMeta_IsKnownScalarType() { allocate(); }
     private native void allocate();
-    public native void call(Pointer in, @Cast("npy_intp") long n_in, Pointer min,
-                                    Pointer max, Pointer out);
+    public native int call(
+        PyArray_DTypeMeta cls, PyTypeObject obj);
 }
