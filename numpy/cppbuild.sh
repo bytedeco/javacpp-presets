@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.26.4
+NUMPY_VERSION=2.0.0
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -56,18 +56,6 @@ include_directories : includes\\
 sedinplace "/lapack_dep = dependency(.*)/c\\
 lapack_dep = blas\\
 " numpy/meson.build
-
-sedinplace '/_distributor_init_local/d' numpy/meson.build
-
-# https://github.com/scipy/scipy/issues/13072
-sedinplace 's/for lib in libraries:/for lib in libraries[:]:/g' ./numpy/distutils/command/build_ext.py
-
-# https://github.com/numpy/numpy/pull/20354
-sedinplace 's/auto x/double x/g' numpy/core/setup.py
-
-sedinplace '/import numpy.distutils.command.sdist/i\
-import setuptools\
-' setup.py
 
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg

@@ -8,12 +8,13 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.13.1
+SCIPY_VERSION=1.14.0rc2
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download https://github.com/data-apis/array-api-compat/archive/05548f0.tar.gz array-api-compat-05548f0.tar.gz
+download https://github.com/data-apis/array-api-compat/archive/fd22a73.tar.gz array-api-compat-fd22a73.tar.gz
+download https://github.com/cobyqa/cobyqa/archive/7f40b6d.tar.gz cobyqa-7f40b6d.tar.gz
 download https://github.com/scipy/HiGHS/archive/4a12295.tar.gz HiGHS-4a12295.tar.gz
 download https://github.com/scipy/unuran/archive/21810c8.tar.gz unuran-21810c8.tar.gz
-download https://github.com/scipy/pocketfft/archive/0bf2b51.tar.gz pocketfft-0bf2b51.tar.gz
+download https://github.com/scipy/pocketfft/archive/9367142.tar.gz pocketfft-9367142.tar.gz
 download https://github.com/scipy/PROPACK/archive/96f6800.tar.gz PROPACK-96f6800.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
@@ -39,7 +40,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             fi
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
-        elif [[ -f "$P/python/numpy/core/include/numpy/numpyconfig.h" ]]; then
+        elif [[ -f "$P/python/numpy/_core/include/numpy/numpyconfig.h" ]]; then
             NUMPY_PATH="$P"
         fi
     done
@@ -53,7 +54,8 @@ NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives..."
 tar --totals -xzf ../boost_$BOOST.tar.gz
-tar --totals -xzf ../array-api-compat-*.tar.gz
+tar --totals -xzf ../array-api-compat-*.tar.gz || true
+tar --totals -xzf ../cobyqa-*.tar.gz
 tar --totals -xzf ../HiGHS-*.tar.gz
 tar --totals -xzf ../unuran-*.tar.gz
 tar --totals -xzf ../pocketfft-*.tar.gz
@@ -61,6 +63,7 @@ tar --totals -xzf ../PROPACK-*.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
 cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost_math/
 cp -a array-api-compat-*/* scipy-$SCIPY_VERSION/scipy/_lib/array_api_compat/
+cp -a cobyqa-*/* scipy-$SCIPY_VERSION/scipy/_lib/cobyqa/
 cp -a HiGHS-*/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
 cp -a unuran-*/* scipy-$SCIPY_VERSION/scipy/_lib/unuran/
 cp -a pocketfft-*/* scipy-$SCIPY_VERSION/scipy/_lib/pocketfft/
@@ -121,7 +124,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.12"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.4 numpy==1.26.4 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.4 numpy==2.0.0 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.12" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.12/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.12/include" "$PYTHON_LIB_PATH"

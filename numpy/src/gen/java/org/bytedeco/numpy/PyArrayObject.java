@@ -83,10 +83,12 @@ public class PyArrayObject extends PyObject {
     /* For weak references */
     public native PyObject weakreflist(); public native PyArrayObject weakreflist(PyObject setter);
 // #if NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION
+    public native Pointer _buffer_info(); public native PyArrayObject _buffer_info(Pointer setter);  /* private buffer info, tagged to allow warning */
 // #endif
     /*
      * For malloc/calloc/realloc/free per object
      */
 // #if NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION
+    public native PyObject mem_handler(); public native PyArrayObject mem_handler(PyObject setter);
 // #endif
 }

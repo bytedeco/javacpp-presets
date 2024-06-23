@@ -14,13 +14,19 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+/*
+ * Returns either a new reference to *dtype* or a new descriptor instance
+ * initialized with the same parameters as *dtype*. The caller cannot know
+ * which choice a dtype will make. This function is called just before the
+ * array buffer is created for a newly created array, it is not called for
+ * views and the descriptor returned by this function is attached to the array.
+ */
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
-public class PyArray_FastPutmaskFunc extends FunctionPointer {
+public class PyArrayDTypeMeta_FinalizeDescriptor extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PyArray_FastPutmaskFunc(Pointer p) { super(p); }
-    protected PyArray_FastPutmaskFunc() { allocate(); }
+    public    PyArrayDTypeMeta_FinalizeDescriptor(Pointer p) { super(p); }
+    protected PyArrayDTypeMeta_FinalizeDescriptor() { allocate(); }
     private native void allocate();
-    public native void call(Pointer in, Pointer mask, @Cast("npy_intp") long n_in,
-                                       Pointer values, @Cast("npy_intp") long nv);
+    public native PyArray_Descr call(PyArray_Descr dtype);
 }

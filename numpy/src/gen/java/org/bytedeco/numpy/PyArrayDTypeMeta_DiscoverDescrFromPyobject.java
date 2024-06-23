@@ -14,14 +14,15 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+
+
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
-public class PyArray_ArgPartitionFunc extends FunctionPointer {
+public class PyArrayDTypeMeta_DiscoverDescrFromPyobject extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PyArray_ArgPartitionFunc(Pointer p) { super(p); }
-    protected PyArray_ArgPartitionFunc() { allocate(); }
+    public    PyArrayDTypeMeta_DiscoverDescrFromPyobject(Pointer p) { super(p); }
+    protected PyArrayDTypeMeta_DiscoverDescrFromPyobject() { allocate(); }
     private native void allocate();
-    public native int call(Pointer arg0, @Cast("npy_intp*") SizeTPointer arg1, @Cast("npy_intp") long arg2, @Cast("npy_intp") long arg3,
-                                       @Cast("npy_intp*") SizeTPointer arg4, @Cast("npy_intp*") SizeTPointer arg5,
-                                       Pointer arg6);
+    public native PyArray_Descr call(
+        PyArray_DTypeMeta cls, PyObject obj);
 }
