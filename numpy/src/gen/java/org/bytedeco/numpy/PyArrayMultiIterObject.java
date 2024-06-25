@@ -46,6 +46,22 @@ public class PyArrayMultiIterObject extends Pointer {
         public native int nd(); public native PyArrayMultiIterObject nd(int setter);                      /* number of dims */
         public native @Cast("npy_intp") long dimensions(int i); public native PyArrayMultiIterObject dimensions(int i, long setter);
         @MemberGetter public native @Cast("npy_intp*") SizeTPointer dimensions(); /* dimensions */
+        /*
+         * Space for the individual iterators, do not specify size publicly
+         * to allow changing it more easily.
+         * One reason is that Cython uses this for checks and only allows
+         * growing structs (as of Cython 3.0.6).  It also allows NPY_MAXARGS
+         * to be runtime dependent.
+         */
+// #if (defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD)
         public native PyArrayIterObject iters(int i); public native PyArrayMultiIterObject iters(int i, PyArrayIterObject setter);
-        @MemberGetter public native @Cast("PyArrayIterObject**") PointerPointer iters();     /* iterators */
+        @MemberGetter public native @Cast("PyArrayIterObject**") PointerPointer iters();
+// #elif defined(__cplusplus)
+        /*
+         * C++ doesn't stricly support flexible members and gives compilers
+         * warnings (pedantic only), so we lie.  We can't make it 64 because
+         * then Cython is unhappy (larger struct at runtime is OK smaller not).
+         */
+// #else
+// #endif
 }

@@ -14,6 +14,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+// #endif
 
 
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
@@ -36,9 +37,13 @@ public class PyVoidScalarObject extends Pointer {
 
         public native @ByRef PyVarObject ob_base(); public native PyVoidScalarObject ob_base(PyVarObject setter);
         public native @Cast("char*") BytePointer obval(); public native PyVoidScalarObject obval(BytePointer setter);
+// #if defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD
+// #else
         public native PyArray_Descr descr(); public native PyVoidScalarObject descr(PyArray_Descr setter);
+// #endif
         public native int flags(); public native PyVoidScalarObject flags(int setter);
         public native PyObject base(); public native PyVoidScalarObject base(PyObject setter);
 //     #if NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION
+        public native Pointer _buffer_info(); public native PyVoidScalarObject _buffer_info(Pointer setter);  /* private buffer info, tagged to allow warning */
 //     #endif
 }

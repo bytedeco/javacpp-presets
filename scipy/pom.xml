@@ -11,14 +11,14 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>scipy</artifactId>
-  <version>1.13.0-${project.parent.version}</version>
+  <version>1.14.0-${project.parent.version}</version>
   <name>JavaCPP Presets for SciPy</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy</artifactId>
-      <version>1.26.4-${project.parent.version}</version>
+      <version>2.0.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -41,7 +41,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy</artifactId>
-            <version>1.26.4-${project.parent.version}</version>
+            <version>2.0.0-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -52,13 +52,13 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.12.3-${project.parent.version}</version>
+            <version>3.12.4-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy</artifactId>
-            <version>1.26.4-${project.parent.version}</version>
+            <version>2.0.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -80,14 +80,14 @@
             <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.12/</includePath>
             <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
-            <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/core/include/</includePath>
-            <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/core/include/numpy/</includePath>
+            <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/_core/include/</includePath>
+            <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/_core/include/numpy/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/libs/</linkPath>
-            <linkPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/core/lib/</linkPath>
+            <linkPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/_core/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
@@ -110,8 +110,8 @@
             <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.12/</includeResource>
             <includeResource>/org/bytedeco/numpy/include/</includeResource>
-            <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/include/</includeResource>
-            <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/include/numpy/</includeResource>
+            <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/_core/include/</includeResource>
+            <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/_core/include/numpy/</includeResource>
           </includeResources>
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/</linkResource>
@@ -122,7 +122,7 @@
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/libs/</linkResource>
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/</linkResource>
-            <linkResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/lib/</linkResource>
+            <linkResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/_core/lib/</linkResource>
           </linkResources>
         </configuration>
         <executions>
@@ -177,7 +177,7 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>cpython</artifactId>
-                <version>3.12.3-${project.parent.version}</version>
+                <version>3.12.4-${project.parent.version}</version>
                 <classifier>${os.name}-${os.arch}</classifier>
               </dependency>
             </dependencies>

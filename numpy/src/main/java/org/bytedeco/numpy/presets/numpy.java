@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2023 Samuel Audet
+ * Copyright (C) 2019-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ import org.bytedeco.openblas.presets.*;
     inherit = {openblas.class, python.class},
     value = {
         @Platform(
+            define = "NPY_TARGET_VERSION NPY_2_0_API_VERSION",
             cinclude = {
                 "_numpyconfig.h",
                 "numpyconfig.h",
@@ -52,7 +53,7 @@ import org.bytedeco.openblas.presets.*;
                 "npy_os.h",
                 "npy_cpu.h",
                 "npy_endian.h",
-                "npy_interrupt.h",
+//                "npy_interrupt.h",
                 "npy_math.h",
 //                "npy_math_internal.h",
                 "halffloat.h",
@@ -61,6 +62,9 @@ import org.bytedeco.openblas.presets.*;
                 "arrayscalars.h",
                 "ndarraytypes.h",
                 "ndarrayobject.h",
+                "dtype_api.h",
+                "npy_2_compat.h",
+                "npy_2_complexcompat.h",
                 "__multiarray_api.h",
                 "_neighborhood_iterator_imp.h",
 //                "noprefix.h",
@@ -104,9 +108,9 @@ public class numpy implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__multiarray_api.h").linePatterns("#define PyArray_GetNDArrayCVersion .*",
-                                                                "#define PyDataMem_DefaultHandler .*").skip())
+                                                                "    PyArray_API\\[365\\]\\)").skip())
                .put(new Info("__ufunc_api.h").linePatterns("#define PyUFunc_Type .*",
-                                                           "         PyUFunc_API\\[42\\]\\)").skip())
+                                                           "         PyUFunc_API\\[46\\]\\)").skip())
                .put(new Info("npy_math.h").linePatterns("#define npy_.*").skip())
 
                .put(new Info("NPY_VISIBILITY_HIDDEN", "NPY_FEATURE_VERSION", "NPY_NOINLINE", "NPY_GCC_UNROLL_LOOPS", "NPY_GCC_OPT_3",
@@ -145,11 +149,11 @@ public class numpy implements InfoMapper {
 
                .put(new Info("defined(_MSC_VER) && defined(_WIN64) && (_MSC_VER > 1400) ||"
                            + "    defined(__MINGW32__) || defined(__MINGW64__)",
-                             "NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION",
-                             "NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION",
+                             "NPY_ABI_VERSION < 0x02000000",
                              "defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD",
                              "NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_INT",
                              "NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONG",
+                             "NPY_SIZEOF_LONGDOUBLE == NPY_SIZEOF_DOUBLE",
                              "NPY_BITSOF_LONG == 8",   "NPY_BITSOF_LONGLONG == 8",
                              "NPY_BITSOF_LONG == 16",  "NPY_BITSOF_LONGLONG == 16",
                              "NPY_BITSOF_LONG == 32",  "NPY_BITSOF_LONGLONG == 32",
@@ -162,12 +166,15 @@ public class numpy implements InfoMapper {
 
                .put(new Info("NPY_BITSOF_LONG == 64", "NPY_BITSOF_LONGLONG == 64",
                              "NPY_BITSOF_INT == 32", "NPY_BITSOF_SHORT == 16",
+                             "NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION",
+                             "NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION",
+                             "NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION",
                              "PY_VERSION_HEX >= 0x03080000").define(true))
 
                .put(new Info("NPY_MAX_INT", "INT_MIN", "NPY_MIN_INT", "NPY_MAX_UINT", "NPY_MAX_LONG", "NPY_MIN_LONG", "NPY_MAX_ULONG",
                              "NPY_INTP", "NPY_UINTP", "NPY_MAX_INTP", "NPY_MIN_INTP", "NPY_MAX_UINTP").translate(false).cppTypes("long"))
 
-               .put(new Info("NPY_SIZEOF_SHORT", "NPY_SIZEOF_INT", "NPY_SIZEOF_LONG",
+               .put(new Info("NPY_SIZEOF_SHORT", "NPY_SIZEOF_INT", "NPY_SIZEOF_LONG", "NPY_SIZEOF_HASH_T",
                              "NPY_MAX_BYTE", "NPY_MIN_BYTE", "NPY_MAX_UBYTE", "NPY_MAX_SHORT", "NPY_MIN_SHORT", "NPY_MAX_USHORT",
                              "NPY_BITSOF_CHAR", "NPY_BITSOF_BYTE", "NPY_BITSOF_SHORT", "NPY_BITSOF_INT", "NPY_BITSOF_LONG", "NPY_BITSOF_LONGLONG",
                              "NPY_BITSOF_INTP", "NPY_BITSOF_HALF", "NPY_BITSOF_FLOAT", "NPY_BITSOF_DOUBLE", "NPY_BITSOF_LONGDOUBLE",
@@ -188,7 +195,7 @@ public class numpy implements InfoMapper {
                .put(new Info("PyArrayDescr_TypeFull").javaText(
                        "public static native @ByRef PyTypeObject PyArrayDescr_Type(); public static native void PyArrayDescr_Type(PyTypeObject setter);"))
 
-               .put(new Info("PyArrayMapIter_Type", "PyArrayNeighborhoodIter_Type",
+               .put(new Info("PyArrayMapIter_Type", "PyArrayNeighborhoodIter_Type", "longdouble_t",
                              "PyArray_HANDLER", "PyDataMem_SetHandler", "PyDataMem_GetHandler").skip())
         ;
     }

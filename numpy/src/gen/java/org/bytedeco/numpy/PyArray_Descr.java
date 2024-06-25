@@ -15,6 +15,10 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
+// #if NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION
+/*
+ * Public version of the Descriptor struct as of 2.x
+ */
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyArray_Descr extends Pointer {
     static { Loader.load(); }
@@ -50,46 +54,21 @@ public class PyArray_Descr extends Pointer {
          * (not-applicable), or '=' (native).
          */
         public native @Cast("char") byte byteorder(); public native PyArray_Descr byteorder(byte setter);
-        /* flags describing data type */
-        public native @Cast("char") byte flags(); public native PyArray_Descr flags(byte setter);
+        /* Former flags flags space (unused) to ensure type_num is stable. */
+        public native @Cast("char") byte _former_flags(); public native PyArray_Descr _former_flags(byte setter);
         /* number representing this type */
         public native int type_num(); public native PyArray_Descr type_num(int setter);
+        /* Space for dtype instance specific flags. */
+        public native @Cast("npy_uint64") long flags(); public native PyArray_Descr flags(long setter);
         /* element size (itemsize) for this type */
-        public native int elsize(); public native PyArray_Descr elsize(int setter);
+        public native @Cast("npy_intp") long elsize(); public native PyArray_Descr elsize(long setter);
         /* alignment needed for this type */
-        public native int alignment(); public native PyArray_Descr alignment(int setter);
-        /*
-         * Non-NULL if this type is
-         * is an array (C-contiguous)
-         * of some other type
-         */
-        public native PyArray_ArrayDescr subarray(); public native PyArray_Descr subarray(PyArray_ArrayDescr setter);
-        /*
-         * The fields dictionary for this type
-         * For statically defined descr this
-         * is always Py_None
-         */
-        public native PyObject fields(); public native PyArray_Descr fields(PyObject setter);
-        /*
-         * An ordered tuple of field names or NULL
-         * if no fields are defined
-         */
-        public native PyObject names(); public native PyArray_Descr names(PyObject setter);
-        /*
-         * a table of functions specific for each
-         * basic data descriptor
-         */
-        public native PyArray_ArrFuncs f(); public native PyArray_Descr f(PyArray_ArrFuncs setter);
-        /* Metadata about this dtype */
+        public native @Cast("npy_intp") long alignment(); public native PyArray_Descr alignment(long setter);
+        /* metadata dict or NULL */
         public native PyObject metadata(); public native PyArray_Descr metadata(PyObject setter);
-        /*
-         * Metadata specific to the C implementation
-         * of the particular dtype. This was added
-         * for NumPy 1.7.0.
-         */
-        public native NpyAuxData c_metadata(); public native PyArray_Descr c_metadata(NpyAuxData setter);
-        /* Cached hash value (-1 if not yet computed).
-         * This was added for NumPy 2.0.0.
-         */
+        /* Cached hash value (-1 if not yet computed). */
         public native @Cast("npy_hash_t") long hash(); public native PyArray_Descr hash(long setter);
+        /* Unused slot (must be initialized to NULL) for future use */
+        public native Pointer reserved_null(int i); public native PyArray_Descr reserved_null(int i, Pointer setter);
+        @MemberGetter public native @Cast("void**") PointerPointer reserved_null();
 }
