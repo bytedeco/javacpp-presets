@@ -108,7 +108,7 @@ runs:
         export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
         export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
 
-	# Change default JVM on macos-14 runner
+        # Change default JVM on macos-14 runner
         if [[ -n ${JAVA_HOME_17_arm64:-} ]]; then
           export JAVA_HOME=$JAVA_HOME_17_arm64
         fi
