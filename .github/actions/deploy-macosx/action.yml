@@ -63,7 +63,7 @@ runs:
         sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
         sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
-        python3 -m pip install gdown || python3 -m pip install gdown
+        PIP_BREAK_SYSTEM_PACKAGES=1 python3 -m pip install gdown || python3 -m pip install gdown
 
         # Install vulkan sdk
         echo Installing Vulkan SDK
