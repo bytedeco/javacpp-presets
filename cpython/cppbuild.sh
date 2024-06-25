@@ -142,11 +142,13 @@ case $PLATFORM in
         make install
         ;;
     macosx-arm64)
-	export PYTHON_BUILD_SKIP_HOMEBREW=1
         cd ../$OPENSSL
         ./Configure darwin64-arm64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
+
+	# Without this variable, cpython will pick up openssl 1.1 from homebrew
+	export PYTHON_BUILD_SKIP_HOMEBREW=1
         cd ../Python-$CPYTHON_VERSION
         sedinplace 's/libintl.h//g' configure
         sedinplace 's/ac_cv_lib_intl_textdomain=yes/ac_cv_lib_intl_textdomain=no/g' configure
