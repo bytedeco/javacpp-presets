@@ -132,12 +132,21 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install-strip
         ;;
-    macosx-*)
-        patch -Np1 < ../../../fftw-macosx.patch
+    macosx-x86_64)
+        patch -Np1 < ../../../fftw-macosx_x64_64.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j $MAKEJ V=0
         make install-strip
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-float
+        make -j $MAKEJ V=0
+        make install-strip
+        ;;
+    macosx-arm64)
+        patch configure ../../../fftw-macosx_arm64.patch
+        ./configure --prefix=$INSTALL_PATH --enable-threads --enable-neon --enable-armv8-cntvct-el0
+        make -j $MAKEJ V=0
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --enable-threads --enable-neon --enable-armv8-cntvct-el0 --enable-float
         make -j $MAKEJ V=0
         make install-strip
         ;;
