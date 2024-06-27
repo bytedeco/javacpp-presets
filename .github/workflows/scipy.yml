@@ -38,6 +38,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+  macosx-arm64:
+    runs-on: macos-14
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
     runs-on: macos-12
     steps:
