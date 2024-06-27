@@ -1461,6 +1461,7 @@
         <module>ffmpeg</module>
         <module>lz4</module>
         <module>openblas</module>
+        <module>cpython</module>
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
@@ -1469,7 +1470,6 @@
         <module>tesseract</module>
         <module>pytorch</module>
         <module>sentencepiece</module>
-        <module>cpython</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

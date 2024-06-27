@@ -147,8 +147,8 @@ case $PLATFORM in
         make -s -j $MAKEJ
         make install_sw
 
-	# Without this variable, cpython will pick up openssl 1.1 from homebrew
-	export PYTHON_BUILD_SKIP_HOMEBREW=1
+        # Without this variable, cpython will pick up openssl 1.1 from homebrew
+        export PYTHON_BUILD_SKIP_HOMEBREW=1
         cd ../Python-$CPYTHON_VERSION
         sedinplace 's/libintl.h//g' configure
         sedinplace 's/ac_cv_lib_intl_textdomain=yes/ac_cv_lib_intl_textdomain=no/g' configure
