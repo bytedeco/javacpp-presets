@@ -133,7 +133,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-x86_64)
-        patch -Np1 < ../../../fftw-macosx_x64_64.patch
+        patch -Np1 < ../../../fftw-macosx_x86_64.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j $MAKEJ V=0
         make install-strip
