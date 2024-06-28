@@ -55,15 +55,15 @@ runs:
           otool -L /usr/local/lib/gcc/10/*.dylib
         fi
 
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib `brew ls libomp|grep libomp.dylib`
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib `brew ls sdl2|grep libSDL2-2.0.0.dylib`
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib `brew ls libusb|grep libusb-1.0.0.dylib`
 
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
         sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
-        python3 -m pip install gdown || python3 -m pip install gdown
+        PIP_BREAK_SYSTEM_PACKAGES=1 python3 -m pip install gdown || python3 -m pip install gdown
 
         # Install vulkan sdk
         echo Installing Vulkan SDK
@@ -107,6 +107,11 @@ runs:
         export LD_LIBRARY_PATH="$LIBRARY_PATH"
         export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
         export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+
+        # Change default JVM on macos-14 runner
+        if [[ -n ${JAVA_HOME_17_arm64:-} ]]; then
+          export JAVA_HOME=$JAVA_HOME_17_arm64
+        fi
 
         git --version
         clang --version
