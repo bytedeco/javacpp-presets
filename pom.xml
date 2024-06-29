@@ -1462,6 +1462,7 @@
         <module>lz4</module>
         <module>openblas</module>
         <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
