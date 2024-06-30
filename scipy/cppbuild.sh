@@ -170,7 +170,7 @@ case $PLATFORM in
         strip $(find ../ -iname *.so)
         ;;
     macosx-arm64)
-        export F77="$(brew ls gfortran | grep bin/gfortran | head -n 1)"
+        export F77="$(brew ls gcc | grep bin/gfortran | head -n 1)"
         export F90="$F77"
         export LDFLAGS="-L/usr/lib/"
         ATLAS=None FC="$F77" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
