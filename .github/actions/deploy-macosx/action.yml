@@ -26,8 +26,7 @@ runs:
 
         brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 little-cms2 maven openblas r
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
-        brew link --force libomp
-
+        
         # echo Installing an older less buggy version of CMake
         # curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
         # brew unlink cmake
@@ -53,11 +52,19 @@ runs:
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
           otool -L /usr/local/lib/gcc/10/*.dylib
+        else
+          brew link libomp --force -v
         fi
 
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib `brew ls libomp|grep libomp.dylib`
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib `brew ls sdl2|grep libSDL2-2.0.0.dylib`
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib `brew ls libusb|grep libusb-1.0.0.dylib`
+        # Change rpath and resign all brew libraries that could be bundled in presets
+        for i in libomp sdl2 libusb; do
+          for l in $(brew ls $i|grep .dylib); do
+            if [ ! -L $l ]; then 
+              install_name_tool -add_rpath @loader_path/. -id @rpath/$(basename $l) $l
+              codesign --force -s - $l
+            fi
+          done
+        done
 
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
@@ -103,10 +110,12 @@ runs:
     - name: Build project
       shell: bash
       run: |
-        export LIBRARY_PATH="/usr/local/lib/gcc/10/"
-        export LD_LIBRARY_PATH="$LIBRARY_PATH"
-        export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
-        export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+        if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
+          export LIBRARY_PATH="/usr/local/lib/gcc/10/"
+          export LD_LIBRARY_PATH="$LIBRARY_PATH"
+          export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
+          export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+        fi
 
         # Change default JVM on macos-14 runner
         if [[ -n ${JAVA_HOME_17_arm64:-} ]]; then
