@@ -61,7 +61,7 @@ runs:
         # Change rpath and resign all brew libraries that could be bundled in presets
         FORMULAE+=("libomp" "sdl2" "libusb")
         for i in $FORMULAE; do
-          for l in $(brew ls $i|grep .dylib); do
+          for l in $(brew ls $i|grep -e ".dylib$"); do
             if [ ! -L $l ]; then 
               install_name_tool -add_rpath @loader_path/. -id @rpath/$(basename $l) $l
               codesign --force -s - $l
