@@ -1463,6 +1463,7 @@
         <module>openblas</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
