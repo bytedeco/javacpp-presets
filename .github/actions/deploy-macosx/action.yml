@@ -103,10 +103,12 @@ runs:
     - name: Build project
       shell: bash
       run: |
-        export LIBRARY_PATH="/usr/local/lib/gcc/10/"
-        export LD_LIBRARY_PATH="$LIBRARY_PATH"
-        export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
-        export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+        if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
+          export LIBRARY_PATH="/usr/local/lib/gcc/10/"
+          export LD_LIBRARY_PATH="$LIBRARY_PATH"
+          export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
+          export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+        fi
 
         # Change default JVM on macos-14 runner
         if [[ -n ${JAVA_HOME_17_arm64:-} ]]; then

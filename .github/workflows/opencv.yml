@@ -66,9 +66,9 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-arm64:
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+      - uses: HGuillemet/javacpp-presets/.github/actions/deploy-macosx@opencv_macosx_arm64
   macosx-x86_64:
     runs-on: macos-12
     steps:
