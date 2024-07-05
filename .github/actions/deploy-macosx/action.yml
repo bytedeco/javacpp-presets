@@ -24,7 +24,7 @@ runs:
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 little-cms2 maven openblas r
+        brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 gcc@14 little-cms2 maven openblas r
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
         
         # echo Installing an older less buggy version of CMake
@@ -32,39 +32,27 @@ runs:
         # brew unlink cmake
         # brew install cmake.rb
 
+        FORMULAE=()
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC
-          brew install gcc@10
-          brew link --overwrite gcc@10
-
+          brew install gcc@13
+          brew link --overwrite gcc@13
           echo Removing "fixed" header files that are actually broken
-          sudo rm -Rf $(find /usr/local/Cellar/gcc@10/ -iname include-fixed)
-
-          echo Fixing up some binaries to support rpath
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/10/libgomp.1.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libstdc++.6.dylib /usr/local/lib/gcc/10/libstdc++.6.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libgfortran.5.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgcc_s.1.dylib
-          sudo install_name_tool -change $(otool -L /usr/local/lib/gcc/10/libgfortran.5.dylib | grep /usr/local/Cellar/gcc@10/ | cut -f1 -d ' ') @rpath/libquadmath.0.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgomp.1.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libstdc++.6.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
-          otool -L /usr/local/lib/gcc/10/*.dylib
-        else
-          brew link libomp --force -v
+          rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed)
+          FORMULAE+="gcc@13"
         fi
 
         # Change rpath and resign all brew libraries that could be bundled in presets
-        for i in libomp sdl2 libusb; do
-          for l in $(brew ls $i|grep .dylib); do
-            if [ ! -L $l ]; then 
+        FORMULAE+=("libomp" "sdl2" "libusb")
+        for i in $FORMULAE; do
+          for l in $(brew ls $i|grep -e ".dylib$"); do
+            if [ ! -L $l ]; then
               install_name_tool -add_rpath @loader_path/. -id @rpath/$(basename $l) $l
               codesign --force -s - $l
             fi
           done
         done
+        otool -L $(brew ls gcc@13|grep -e ".dylib$");
 
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
@@ -111,7 +99,7 @@ runs:
       shell: bash
       run: |
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
-          export LIBRARY_PATH="/usr/local/lib/gcc/10/"
+          export LIBRARY_PATH="$(brew --prefix)/lib/gcc/13/"
           export LD_LIBRARY_PATH="$LIBRARY_PATH"
           export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
           export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"

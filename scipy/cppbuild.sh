@@ -169,7 +169,18 @@ case $PLATFORM in
         ATLAS=None CC="gcc -m64 -D__STDC_NO_THREADS__" FFLAGS="-m64 -fPIC" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
         strip $(find ../ -iname *.so)
         ;;
-    macosx-*)
+    macosx-arm64)
+        export F77=$(compgen -cX '!gfortran*')
+        export F90="$F77"
+        export LDFLAGS="-L/usr/lib/"
+        ATLAS=None FC="$F77" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=builddir=build
+        # need to add RPATH so it can find MKL in cache
+        for f in $(find ../ -iname *.so); do
+          install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true;
+          codesign --force -s - $f
+        done
+        ;;
+    macosx-x86_64)
         export F77="$(ls -1 /usr/local/bin/gfortran-* | head -n 1)"
         export F90="$F77"
         export LDFLAGS="-L/usr/lib/"
