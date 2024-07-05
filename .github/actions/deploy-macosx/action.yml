@@ -35,12 +35,12 @@ runs:
 
         FORMULAE=()
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
-            echo Installing an older less buggy version of GCC
-            brew install gcc@13
-            brew link --overwrite gcc@13
-            echo Removing "fixed" header files that are actually broken
-            rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed)
-            FORMULAE+="gcc@13"
+          echo Installing an older less buggy version of GCC
+          brew install gcc@13
+          brew link --overwrite gcc@13
+          echo Removing "fixed" header files that are actually broken
+          rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed)
+          FORMULAE+="gcc@13"
         fi
 
         # Change rpath and resign all brew libraries that could be bundled in presets
