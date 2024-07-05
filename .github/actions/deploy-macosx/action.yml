@@ -35,10 +35,11 @@ runs:
 
         FORMULAE=()
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
+            echo Installing an older less buggy version of GCC
             brew install gcc@13
             brew link --overwrite gcc@13
             echo Removing "fixed" header files that are actually broken
-            rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed) 
+            rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed)
             FORMULAE+="gcc@13"
         fi
 
@@ -46,7 +47,7 @@ runs:
         FORMULAE+=("libomp" "sdl2" "libusb")
         for i in $FORMULAE; do
           for l in $(brew ls $i|grep -e ".dylib$"); do
-            if [ ! -L $l ]; then 
+            if [ ! -L $l ]; then
               install_name_tool -add_rpath @loader_path/. -id @rpath/$(basename $l) $l
               codesign --force -s - $l
             fi
