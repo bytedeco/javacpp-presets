@@ -1,5 +1,5 @@
 
- * Introduce `macosx-arm64` builds for CPython ([pull #1511](https://github.com/bytedeco/javacpp-presets/pull/1511)), NumPy ([pull #1515](https://github.com/bytedeco/javacpp-presets/pull/1515))
+ * Introduce `macosx-arm64` builds for CPython ([pull #1511](https://github.com/bytedeco/javacpp-presets/pull/1511)), NumPy ([pull #1515](https://github.com/bytedeco/javacpp-presets/pull/1515)), SciPy ([pull #1516](https://github.com/bytedeco/javacpp-presets/pull/1516))
  * Update and fix the sample code of the presets for LLVM ([pull #1501](https://github.com/bytedeco/javacpp-presets/pull/1501))
  * Fix Vulkan GPU acceleration for FFmpeg ([pull #1497](https://github.com/bytedeco/javacpp-presets/pull/1497))
  * Build FFmpeg with zimg to enable zscale filter ([pull #1481](https://github.com/bytedeco/javacpp-presets/pull/1481))
