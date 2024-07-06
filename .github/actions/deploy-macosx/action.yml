@@ -52,7 +52,6 @@ runs:
             fi
           done
         done
-        otool -L $(brew ls gcc@13|grep -e ".dylib$");
 
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
@@ -103,6 +102,7 @@ runs:
           export LD_LIBRARY_PATH="$LIBRARY_PATH"
           export DYLD_LIBRARY_PATH="$LIBRARY_PATH"
           export DYLD_FALLBACK_LIBRARY_PATH="$LIBRARY_PATH"
+          otool -L $(brew ls gcc@13|grep -e ".dylib$");
         fi
 
         # Change default JVM on macos-14 runner

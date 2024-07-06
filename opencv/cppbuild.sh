@@ -383,7 +383,7 @@ case $PLATFORM in
     macosx-arm64)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
-        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
