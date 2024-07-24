@@ -1,0 +1,14 @@
+diff --git a/libavutil/vulkan.c b/libavutil/vulkan.c
+index 67b9526255..e3c0c4c24a 100644
+--- a/libavutil/vulkan.c
++++ b/libavutil/vulkan.c
+@@ -605,6 +605,9 @@ int ff_vk_exec_add_dep_frame(FFVulkanContext *s, FFVkExecContext *e, AVFrame *f,
+     VkImageLayout *layout_dst;
+     uint32_t *queue_family_dst;
+     VkAccessFlagBits *access_dst;
+ 
++    if (!f || !f->hw_frames_ctx)
++        return 1;
++
+     AVHWFramesContext *hwfc = (AVHWFramesContext *)f->hw_frames_ctx->data;
+     AVVulkanFramesContext *vkfc = hwfc->hwctx;

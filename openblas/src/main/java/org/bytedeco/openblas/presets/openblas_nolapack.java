@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2023 Samuel Audet
+ * Copyright (C) 2016-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -130,7 +130,10 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
         String[] functions = {
             // not available in Accelerate
-            "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
+            "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
+            "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
+            "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
             // not exported by OpenBLAS
             "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
             "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
@@ -138,7 +141,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
             "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
             "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu", "cblas_cgeadd",
             "cblas_cimatcopy", "cblas_comatcopy", "cblas_dgeadd", "cblas_dimatcopy", "cblas_domatcopy", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",

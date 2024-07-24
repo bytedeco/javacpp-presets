@@ -40,11 +40,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
                 "c10/cuda/CUDAGuard.h",
+                "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
             },
-            link = { "cudart", "cusparse" },
+            link = { "cudart", "cusparse", "cudnn" },
             linkpath = {
                 "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
                 "/usr/local/cuda-12.3/lib64/",
@@ -75,7 +76,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.cuda.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Error;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
@@ -108,6 +109,10 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray").cast().pointerTypes("Stat"))
 
             //// Function pointers
+            .put(new Info("std::function<void(const c10::cuda::CUDACachingAllocator::TraceEntry&)>").pointerTypes("AllocatorTraceTracker"))
+            .put(new Info("std::function<void(int64_t,int64_t,int64_t,int64_t)>").pointerTypes("OutOfMemoryObserver"))
+            .put(new Info("std::function<bool(cudaStream_t)>").pointerTypes("StreamFilter"))
+
             // Function pointer returning shared_ptr don't compile on windows
             // "D:\a\javacpp-presets\javacpp-presets\pytorch\target\native\org\bytedeco\pytorch\windows-x86_64\jnitorch.cpp(98904): error C2526: 'JavaCPP_org_bytedeco_pytorch_functions_GatheredContextSupplier_allocate_callback': C linkage function cannot return C++ class 'std::shared_ptr<c10::GatheredContext>'"
             //.put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
@@ -137,12 +142,14 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<c10::DeviceIndex>").pointerTypes("ByteOptional"))
             .put(new Info("c10::IntArrayRef", "at::IntArrayRef").pointerTypes("LongArrayRef"))
             .put(new Info("std::vector<at::DataPtr>").pointerTypes("DataPtrVector"))
+            .put(new Info("c10::Allocator").pointerTypes("Allocator"))
+            .put(new Info("CUDAContextLight.h").linePatterns("struct Allocator;").skip()) // Prevent regeneration of Allocator class in cuda package
 
-            .put(new Info("c10::DeviceIndex").valueTypes("byte"))
+            .put(new Info("c10::DeviceIndex").valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
             .put(new Info("c10::StreamId").valueTypes("long"))
             .put(new Info("c10::cuda::CaptureStatus").valueTypes("int").cast().skip()) // Enum doesn't parse
             .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
-            .put(new Info("c10::CuDNNError").purify())
+            .put(new Info("c10::CuDNNError", "c10::CUDAError").purify())
             .put(new Info("c10::impl::GPUTrace::gpuTraceState").skip())
             .put(new Info("at::native::RNNDescriptor::dropout_desc_").skip())
             .put(new Info("at::native::operator <<(std::ostream&, at::native::TensorDescriptor&)",
@@ -152,12 +159,15 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
             .put(new Info("c10::cuda::CUDACachingAllocator::CheckpointDelta").immutable()) // at::DataPtr is not constructible
 
+            .put(new Info("c10::cuda::CUDACachingAllocator::kLargeBuffer").skip()) // Triggers UnsatisfiedLinkException as of 2.2.0
+
             .put(new Info(
                 "at::native::Descriptor<cudnnActivationStruct,cudnnCreateActivationDescriptor&,cudnnDestroyActivationDescriptor&>",
                 "at::native::Descriptor<cudnnConvolutionStruct,cudnnCreateConvolutionDescriptor&,cudnnDestroyConvolutionDescriptor&>",
                 "at::native::Descriptor<cudnnCTCLossStruct,cudnnCreateCTCLossDescriptor&,cudnnDestroyCTCLossDescriptor&>",
                 "at::native::Descriptor<cudnnDropoutStruct,cudnnCreateDropoutDescriptor&,cudnnDestroyDropoutDescriptor&>",
                 "at::native::Descriptor<cudnnFilterStruct,cudnnCreateFilterDescriptor&,cudnnDestroyFilterDescriptor&>",
+                "at::native::Descriptor<cudnnRNNDataStruct,cudnnCreateRNNDataDescriptor&,cudnnDestroyRNNDataDescriptor&>",
                 "at::native::Descriptor<cudnnRNNStruct,cudnnCreateRNNDescriptor&,cudnnDestroyRNNDescriptor&>",
                 "at::native::Descriptor<cudnnSpatialTransformerStruct,cudnnCreateSpatialTransformerDescriptor&,cudnnDestroySpatialTransformerDescriptor&>",
                 "at::native::Descriptor<cudnnTensorStruct,cudnnCreateTensorDescriptor&,cudnnDestroyTensorDescriptor&>",
@@ -173,12 +183,14 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "cudaDeviceProp"
             ).pointerTypes("Pointer"))
             .put(new Info( // Pointers to opaque structs
-                "cudaStream_t", "cusparseHandle_t", "cublasHandle_t", "cusolverDnHandle_t", "cudnnHandle_t", "cudaEvent_t"
+                "cudaStream_t", "cusparseHandle_t", "cublasHandle_t", "cusolverDnHandle_t", "cudnnHandle_t", "cudaEvent_t",
+                "cublasLtHandle_t"
             ).valueTypes("Pointer").cast())
             .put(new Info( // Enums
-                "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t",
+                "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t", "cudnnRNNDataLayout_t",
                 "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudaStreamCaptureMode", "cudnnDataType_t", "cudnnNanPropagation_t",
-                "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t", "cudaError_t"
+                "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t", "cudaError_t",
+                "cudaMemcpyKind"
             ).valueTypes("int").cast())
         ;
 
@@ -195,5 +207,11 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         ).skip())
         ;
 
+        infoMap.put(new Info("USE_CUDNN_RNN_V8_API").define()); // Using CuDNN 8.9.7 or more recent
+
+        //// Different C++ API between platforms
+        infoMap
+            .put(new Info("at::cuda::getCurrentCUDABlasLtHandle").skip()) // No cublas lt with Microsoft compiler
+        ;
     }
 }

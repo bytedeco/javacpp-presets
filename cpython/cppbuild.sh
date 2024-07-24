@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENSSL=openssl-3.2.0
-CPYTHON_VERSION=3.12.1
+OPENSSL=openssl-3.3.0
+CPYTHON_VERSION=3.12.4
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
@@ -141,7 +141,23 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
-    macosx-*)
+    macosx-arm64)
+        cd ../$OPENSSL
+        ./Configure darwin64-arm64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        make -s -j $MAKEJ
+        make install_sw
+
+        # Without this variable, cpython will pick up openssl 1.1 from homebrew
+        export PYTHON_BUILD_SKIP_HOMEBREW=1
+        cd ../Python-$CPYTHON_VERSION
+        sedinplace 's/libintl.h//g' configure
+        sedinplace 's/ac_cv_lib_intl_textdomain=yes/ac_cv_lib_intl_textdomain=no/g' configure
+        ./configure --prefix=$INSTALL_PATH --enable-shared --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../,-rpath,@loader_path/../lib/' ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+        sedinplace 's:-install_name,$(prefix)/lib/:-install_name,@rpath/:g' Makefile
+        make -j $MAKEJ
+        make install
+        ;;
+    macosx-x86_64)
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tritonserver</groupId>
     <artifactId>simplecpp</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SimpleCPP</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -12,13 +12,13 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tritonserver-platform</artifactId>
-            <version>2.41-1.5.10</version>
+            <version>2.44-1.5.11-SNAPSHOT</version>
             <classifier>shaded</classifier>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.9.0</version>
+            <version>2.10.1</version>
         </dependency>
     </dependencies>
     <build>

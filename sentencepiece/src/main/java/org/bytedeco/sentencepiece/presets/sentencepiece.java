@@ -60,6 +60,7 @@ public class sentencepiece implements InfoMapper {
             .put(new Info(
                 "sentencepiece::ModelInterface",
                 "sentencepiece::normalizer::Normalizer",
+                "sentencepiece::SentencePieceNormalizer::Load",
                 "sentencepiece::SentencePieceTrainer::GetNormalizerSpec",
                 "sentencepiece::SentencePieceProcessor::SetVocabulary"
             ).skip());

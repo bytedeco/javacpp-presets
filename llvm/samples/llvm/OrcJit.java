@@ -21,12 +21,11 @@
  */
 
 import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.libffi.ffi_cif;
-import org.bytedeco.llvm.global.LLVM;
 import org.bytedeco.llvm.LLVM.LLVMBasicBlockRef;
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
@@ -50,16 +49,15 @@ import static org.bytedeco.libffi.global.ffi.*;
  * <p>
  * 1. Initializing required LLVM components
  * 2. Generating LLVM IR for a sum function
- * 3. Load the module into OrcJIT and get the address of "sum"
- * 4. Call the sum function with libffi
- * 5. Dispose of the allocated resources
+ * 3. Verify the module
+ * 4. Load the module into OrcJIT and get the address of "sum"
+ * 5. Call the sum function with libffi
+ * 6. Dispose of the allocated resources
  */
 public class OrcJit {
-    public static LLVMErrorRef err = null;
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
-//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMInitializeNativeTarget();
         LLVMInitializeNativeAsmPrinter();
 
@@ -86,54 +84,65 @@ public class OrcJit {
         LLVMValueRef result = LLVMBuildAdd(builder, lhs, rhs, "result = lhs + rhs");
         LLVMBuildRet(builder, result);
 
+        // Print generated LLVM-IR to console (optional)
         LLVMDumpModule(module);
-        LLVMOrcThreadSafeModuleRef threadModule = LLVMOrcCreateNewThreadSafeModule(module, threadContext);
 
-        // Stage 3: Execute using OrcJIT
+        // Stage 3: Verify the module (optional; recommended)
+        BytePointer errorMessageVariable = new BytePointer();
+        if (LLVMVerifyModule(module, LLVMPrintMessageAction, errorMessageVariable) != 0) {
+            LLVMDisposeMessage(errorMessageVariable);
+            return;
+        }
+
+        // Stage 4: Execute using OrcJIT
         LLVMOrcLLJITRef jit = new LLVMOrcLLJITRef();
         LLVMOrcLLJITBuilderRef jitBuilder = LLVMOrcCreateLLJITBuilder();
-        Loader.loadGlobal(Loader.load(LLVM.class));
-        if ((err = LLVMOrcCreateLLJIT(jit, jitBuilder)) != null) {
-            System.err.println("Failed to create LLJIT: " + LLVMGetErrorMessage(err).getString());
-            LLVMConsumeError(err);
+        LLVMErrorRef error;
+        if ((error = LLVMOrcCreateLLJIT(jit, jitBuilder)) != null) {
+            BytePointer errorMessage = LLVMGetErrorMessage(error);
+            System.err.println("Failed to create LLJIT: " + errorMessage.getString());
+            LLVMDisposeErrorMessage(errorMessage);
             return;
         }
 
         LLVMOrcJITDylibRef mainDylib = LLVMOrcLLJITGetMainJITDylib(jit);
-        if ((err = LLVMOrcLLJITAddLLVMIRModule(jit, mainDylib, threadModule)) != null) {
-            System.err.println("Failed to add LLVM IR module: " + LLVMGetErrorMessage(err).getString());
-            LLVMConsumeError(err);
+        LLVMOrcThreadSafeModuleRef threadModule = LLVMOrcCreateNewThreadSafeModule(module, threadContext);
+        if ((error = LLVMOrcLLJITAddLLVMIRModule(jit, mainDylib, threadModule)) != null) {
+            BytePointer errorMessage = LLVMGetErrorMessage(error);
+            System.err.println("Failed to add LLVM IR module: " + errorMessage.getString());
+            LLVMDisposeErrorMessage(errorMessage);
             return;
         }
 
         final LongPointer res = new LongPointer(1);
-        if ((err = LLVMOrcLLJITLookup(jit, res, "sum")) != null) {
-            System.err.println("Failed to look up 'sum' symbol: " + LLVMGetErrorMessage(err).getString());
-            LLVMConsumeError(err);
+        if ((error = LLVMOrcLLJITLookup(jit, res, "sum")) != null) {
+            BytePointer errorMessage = LLVMGetErrorMessage(error);
+            System.err.println("Failed to look up 'sum' symbol: " + errorMessage.getString());
+            LLVMDisposeErrorMessage(errorMessage);
             return;
         }
 
-        // Stage 4: Call the function with libffi
-        ffi_cif cif = new ffi_cif();
+        // Stage 5: Call the function with libffi
+        ffi_cif callInterface = new ffi_cif();
         PointerPointer<Pointer> arguments = new PointerPointer<>(2)
             .put(0, ffi_type_sint())
             .put(1, ffi_type_sint());
         PointerPointer<Pointer> values = new PointerPointer<>(2)
             .put(0, new IntPointer(1).put(42))
             .put(1, new IntPointer(1).put(30));
-        IntPointer returns = new IntPointer(1);
+        IntPointer resultVariable = new IntPointer(1);
 
-        if (ffi_prep_cif(cif, FFI_DEFAULT_ABI(), 2, ffi_type_sint(), arguments) != FFI_OK) {
-            System.err.println("Failed to prepare the libffi cif");
+        if (ffi_prep_cif(callInterface, FFI_DEFAULT_ABI(), 2, ffi_type_sint(), arguments) != FFI_OK) {
+            System.err.println("Failed to prepare the libffi call interface");
             return;
         }
         Pointer function = new Pointer() {{
             address = res.get();
         }};
-        ffi_call(cif, function, returns, values);
-        System.out.println("Evaluating sum(42, 30) through OrcJIT results in: " + returns.get());
+        ffi_call(callInterface, function, resultVariable, values);
+        System.out.println("Evaluating sum(42, 30) through OrcJIT results in: " + resultVariable.get());
 
-        // Stage 5: Dispose of the allocated resources
+        // Stage 6: Dispose of the allocated resources
         LLVMOrcDisposeLLJIT(jit);
         LLVMShutdown();
     }

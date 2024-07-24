@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>sentencepiece</artifactId>
-  <version>0.1.99-${project.parent.version}</version>
+  <version>0.2.0-${project.parent.version}</version>
   <name>JavaCPP Presets for SentencePiece</name>
 
   <dependencies>

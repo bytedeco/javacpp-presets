@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.26.3
+NUMPY_VERSION=2.0.0
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -57,18 +57,6 @@ sedinplace "/lapack_dep = dependency(.*)/c\\
 lapack_dep = blas\\
 " numpy/meson.build
 
-sedinplace '/_distributor_init_local/d' numpy/meson.build
-
-# https://github.com/scipy/scipy/issues/13072
-sedinplace 's/for lib in libraries:/for lib in libraries[:]:/g' ./numpy/distutils/command/build_ext.py
-
-# https://github.com/numpy/numpy/pull/20354
-sedinplace 's/auto x/double x/g' numpy/core/setup.py
-
-sedinplace '/import numpy.distutils.command.sdist/i\
-import setuptools\
-' setup.py
-
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
@@ -97,7 +85,7 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-TOOLS="setuptools==67.6.1 cython==0.29.35"
+TOOLS="setuptools==67.6.1 cython==3.0.10"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.12"
