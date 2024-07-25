@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libraw</groupId>
     <artifactId>librawdemo</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11-SNAPSHOT</version>
     <properties>
         <exec.mainClass>LibRawDemo</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libraw-platform</artifactId>
-            <version>0.21.2-1.5.10</version>
+            <version>0.21.2-1.5.11-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
