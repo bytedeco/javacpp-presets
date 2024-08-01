@@ -2554,9 +2554,12 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// TORCH_API and the like are not honored on Linux but are on Windows. We must skip all public
         //// functions not marked as part of API.
         infoMap.put(new Info(
+            "at::TensorBase::TensorBase(c10::intrusive_ptr<c10::TensorImpl,c10::UndefinedTensorImpl>)", // "should not be used by end users"
             "at::TensorIteratorBase::apply_perm_and_mul",
             "at::assert_no_partial_overlap(c10::TensorImpl*, c10::TensorImpl*)",
             "at::impl::VariableHooksInterface::_register_hook",
+            "at::native::construct_nested_strides", // Not exported
+            "at::native::construct_offsets", // Not exported
             "at::native::get_numel_from_nested_size_tensor",
             "at::operator <<(std::ostream&, at::Range&)",
             "c10::cuda::CUDACachingAllocator::format_size",
@@ -2568,24 +2571,24 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10::ivalue::EnumHolder::operator ==", // The friend operator is truly a member of c10::ivalue and not c10::ivalue::EnumHolder
             "c10::ivalue::EnumHolder::unqualifiedClassName",
             "c10::ivalue::Future::operator <<",
+            "c10::merge_primitive", // templated function with some specializations. Will have to figure what instances to create if needed.
             "c10::operator <<(std::ostream&, c10::SourceLocation&)",
+            "c10d::checkForNaN", // Not exported
+            "c10d::Logger::operator <<(std::ostream&, const c10d::Logger&)", // No definition
+            "c10d::ProcessGroupGloo::createProcessGroupGloo", // No definition
             "caffe2::serialize::detail::getPadding",
             "torch::autograd::add_node_to_current_graph_task_exec_info",
+            "torch::autograd::set_device(int)",
             "torch::detail::constructSchemaOrName",
+            "torch::distributed::rpc::Message::isShutdown", // No definition
+            "torch::distributed::rpc::Message:isShutdown", // No definition
+            "torch::distributed::rpc::getAllowJitRRefPickle",
+            "torch::distributed::rpm::getAllowJitRRefPickle",
             "torch::jit::ClassDef::create",
             "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code
-            "torch::profiler::impl::getNvtxStr",
-            "torch::profiler::impl::shapeToStr",
-            "c10::merge_primitive", // templated function with some specializations. Will have to figure what instances to create if needed.
-            "at::TensorBase::TensorBase(c10::intrusive_ptr<c10::TensorImpl,c10::UndefinedTensorImpl>)", // "should not be used by end users"
             "torch::jit::Object::Object(c10::QualifiedName, std::shared_ptr<torch::jit::CompilationUnit>, bool)", // No definition
-            "c10d::Logger::operator <<(std::ostream&, const c10d::Logger&)", // No definition
-            "torch::distributed::rpc::Message:isShutdown", // No definition
-            "torch::distributed::rpm::getAllowJitRRefPickle",
-            "c10d::ProcessGroupGloo::createProcessGroupGloo", // No definition
-            "torch::autograd::set_device(int)",
-            "torch::distributed::rpc::Message::isShutdown", // No definition
-            "torch::distributed::rpc::getAllowJitRRefPickle"
+            "torch::profiler::impl::getNvtxStr",
+            "torch::profiler::impl::shapeToStr"
         ).skip());
 
         //// Aliases necessary because of Parser limited namespace resolution
