@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Dropout ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies dropout over a 1-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Dropout to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Dropout to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::DropoutOptions} class to learn what

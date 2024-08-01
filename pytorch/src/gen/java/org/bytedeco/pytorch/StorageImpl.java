@@ -102,9 +102,12 @@ public class StorageImpl extends Pointer {
 
   public native @Cast("bool") boolean resizable();
 
+  public native @StdMove DataPtr data_ptr();
+
   public native @ByRef DataPtr mutable_data_ptr();
 
-  public native @StdMove DataPtr data_ptr();
+  // Returns the data_ptr. Bypasses all checks.
+  public native @ByRef DataPtr _mutable_data_ptr_no_checks();
 
   // Returns the previous data_ptr
   public native @StdMove DataPtr set_data_ptr(@StdMove DataPtr data_ptr);
@@ -152,4 +155,8 @@ public class StorageImpl extends Pointer {
   public native @Cast("bool") boolean received_cuda();
 
   public native @Cast("c10::impl::PyObjectSlot*") Pointer pyobj_slot();
+
+  public native void set_throw_on_mutable_data_ptr();
+
+  public native void set_warn_deprecated_on_mutable_data_ptr();
 }

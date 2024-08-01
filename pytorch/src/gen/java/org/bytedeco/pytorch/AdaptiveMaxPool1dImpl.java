@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ AdaptiveMaxPool1d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies adaptive maxpool over a 1-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.AdaptiveMaxPool1d to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.AdaptiveMaxPool1d to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::AdaptiveMaxPool1dOptions} class to

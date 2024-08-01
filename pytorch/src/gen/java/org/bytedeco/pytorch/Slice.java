@@ -35,13 +35,13 @@ public class Slice extends Pointer {
     }
 
   public Slice(
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index) { super((Pointer)null); allocate(start_index, stop_index, step_index); }
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index) { super((Pointer)null); allocate(start_index, stop_index, step_index); }
   private native void allocate(
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index);
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index);
   public Slice() { super((Pointer)null); allocate(); }
   private native void allocate();
 

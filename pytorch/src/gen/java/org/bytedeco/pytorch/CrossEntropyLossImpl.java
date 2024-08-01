@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Creates a criterion that computes cross entropy loss between input and
  *  target. See
- *  https://pytorch.org/docs/master/nn.html#torch.nn.CrossEntropyLoss to learn
+ *  https://pytorch.org/docs/main/nn.html#torch.nn.CrossEntropyLoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::CrossEntropyLossOptions} class to

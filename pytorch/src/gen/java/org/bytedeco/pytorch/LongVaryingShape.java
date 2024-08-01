@@ -33,8 +33,8 @@ public class LongVaryingShape extends Pointer {
   public LongVaryingShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... vec);
 
-  public LongVaryingShape(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
-  private native void allocate(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional size);
+  public LongVaryingShape(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
+  private native void allocate(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional size);
   public LongVaryingShape() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -50,7 +50,7 @@ public class LongVaryingShape extends Pointer {
 
   public native @ByVal SizeTOptional size();
 
-  public native @Cast("const c10::optional<c10::VaryingShape<int64_t>::ListOfOptionalElements>*") @ByRef Pointer sizes();
+  public native @Cast("const std::optional<c10::VaryingShape<int64_t>::ListOfOptionalElements>*") @ByRef Pointer sizes();
 
   public native @ByVal LongVaryingShape merge(@Const @ByRef LongVaryingShape other);
 

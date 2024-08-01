@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Creates a criterion that measures the loss given an input tensor :math:{@code x}
  *  and a labels tensor :math:{@code y} (containing 1 or -1).
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.HingeEmbeddingLoss to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.HingeEmbeddingLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::HingeEmbeddingLossOptions} class to

@@ -26,7 +26,7 @@ public class SymFloatType extends Type {
 
   public native @Cast("bool") boolean equals(@Const @ByRef Type rhs);
   public native @StdString BytePointer str();
-  public native @StdString BytePointer annotation_str_impl(@ByVal(nullValue = "c10::TypePrinter(nullptr)") TypePrinter printer);
+  public native @StdString BytePointer annotation_str_impl(@Const @ByRef(nullValue = "c10::TypePrinter(nullptr)") TypePrinter printer);
   public native @StdString BytePointer annotation_str_impl();
   @MemberGetter public static native TypeKind Kind();
   // global singleton

@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** TransformerEncoderLayer module.
  *  See
- *  https://pytorch.org/docs/master/generated/torch.nn.TransformerEncoderLayer.html
+ *  https://pytorch.org/docs/main/generated/torch.nn.TransformerEncoderLayer.html
  *  to learn abouut the exact behavior of this encoder layer model
  * 
  *  See the documentation for {@code torch::nn::TransformerEncoderLayer} class to

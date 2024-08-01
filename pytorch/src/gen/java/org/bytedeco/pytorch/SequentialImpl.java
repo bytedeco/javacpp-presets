@@ -112,7 +112,7 @@ public class SequentialImpl extends SequentialImplCloneable {
   /** Special cloning function for {@code Sequential} because it does not use
    *  {@code reset()}. */
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
-        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @Const @ByRef(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 
   /** {@code reset()} is empty for {@code Sequential}, since it does not have parameters of
@@ -164,9 +164,9 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
-  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
-  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @Const @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
-  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @Const @ByRef(nullValue = "c10::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
+  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @Const @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
+  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
   public native @ByVal @Name("forward<std::tuple<torch::Tensor,std::tuple<torch::Tensor,torch::Tensor>>>") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input);
   public native @ByVal @Name("forward<std::tuple<torch::Tensor,std::tuple<torch::Tensor,torch::Tensor>>>") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::optional<std::tuple<torch::Tensor,torch::Tensor> >{}") T_TensorTensor_TOptional hx_opt);
   public native @ByVal @Name("forward<std::tuple<torch::Tensor,torch::Tensor>>") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);

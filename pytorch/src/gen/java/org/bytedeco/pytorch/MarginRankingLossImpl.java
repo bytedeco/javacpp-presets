@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Creates a criterion that measures the loss given
  *  inputs :math:{@code x1}, :math:{@code x2}, two 1D mini-batch {@code Tensors},
  *  and a label 1D mini-batch tensor :math:{@code y} (containing 1 or -1).
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.MarginRankingLoss to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.MarginRankingLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MarginRankingLossOptions} class to

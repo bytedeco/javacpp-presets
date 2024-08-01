@@ -31,8 +31,8 @@ public class StrideVaryingShape extends Pointer {
   public StrideVaryingShape(@ByVal StrideArrayRef vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@ByVal StrideArrayRef vec);
 
-  public StrideVaryingShape(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
-  private native void allocate(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional size);
+  public StrideVaryingShape(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
+  private native void allocate(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional size);
   public StrideVaryingShape() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -48,7 +48,7 @@ public class StrideVaryingShape extends Pointer {
 
   public native @ByVal SizeTOptional size();
 
-  public native @Cast("const c10::optional<c10::VaryingShape<c10::Stride>::ListOfOptionalElements>*") @ByRef Pointer sizes();
+  public native @Cast("const std::optional<c10::VaryingShape<c10::Stride>::ListOfOptionalElements>*") @ByRef Pointer sizes();
 
   
 

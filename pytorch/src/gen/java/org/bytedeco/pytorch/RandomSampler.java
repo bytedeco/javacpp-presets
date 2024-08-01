@@ -37,7 +37,7 @@ public class RandomSampler extends Sampler {
   private native void allocate(@Cast("int64_t") long size);
 
   /** Resets the {@code RandomSampler} to a new set of indices. */
-  public native void reset(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
+  public native void reset(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
   public native void reset();
 
   /** Returns the next batch of indices. */

@@ -36,7 +36,7 @@ public class StreamSampler extends BatchSizeSampler {
   private native void allocate(@Cast("size_t") long epoch_size);
 
   /** Resets the internal state of the sampler. */
-  public native void reset(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
+  public native void reset(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
   public native void reset();
 
   /** Returns a {@code BatchSize} object with the number of elements to fetch in the

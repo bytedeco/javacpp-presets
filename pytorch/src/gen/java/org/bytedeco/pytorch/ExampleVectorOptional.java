@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("c10::optional<std::vector<torch::data::Example<torch::Tensor,torch::Tensor> > >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@NoOffset @Name("std::optional<std::vector<torch::data::Example<torch::Tensor,torch::Tensor> > >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ExampleVectorOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

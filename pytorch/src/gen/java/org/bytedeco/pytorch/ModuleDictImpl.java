@@ -132,7 +132,7 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
   /** Special cloning function for {@code ModuleDict} because it does not use
    *  {@code reset()}. */
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
-        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @Const @ByRef(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 
   /** {@code reset()} is empty for {@code ModuleDict}, since it does not have parameters of

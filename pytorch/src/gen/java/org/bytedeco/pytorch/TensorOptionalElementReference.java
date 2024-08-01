@@ -19,13 +19,13 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Name("c10::impl::ListElementReference<c10::optional<at::Tensor>,c10::detail::ListImpl::list_type::iterator>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::impl::ListElementReference<std::optional<at::Tensor>,c10::detail::ListImpl::list_type::iterator>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorOptionalElementReference extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorOptionalElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<c10::optional<at::Tensor> >::type>::value,const c10::optional<at::Tensor>&,c10::optional<at::Tensor> >") @ByVal TensorOptional getTensorOptional();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<std::optional<at::Tensor> >::type>,const std::optional<at::Tensor>&,std::optional<at::Tensor> >") @ByVal TensorOptional getTensorOptional();
 
   
 
@@ -36,7 +36,7 @@ public class TensorOptionalElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) TensorOptionalElementReference lhs, @ByRef(true) TensorOptionalElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) TensorOptionalElementReference lhs, @ByRef(true) TensorOptionalElementReference rhs);
   public void swap(TensorOptionalElementReference rhs) { swap(this, rhs); }
 
   

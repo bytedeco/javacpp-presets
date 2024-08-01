@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CTCLoss ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** The Connectionist Temporal Classification loss.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.CTCLoss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.CTCLoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::CTCLossOptions} class to learn what

@@ -29,7 +29,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  Polosukhin. 2017. Attention is all you need. In Advances in Neural
  *  Information Processing Systems, pages 6000-6010. Users may modify or
  *  implement in a different way during application. See
- *  https://pytorch.org/docs/master/nn.html#transformer-layers to learn about
+ *  https://pytorch.org/docs/main/nn.html#transformer-layers to learn about
  *  the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::TransformerDecoderLayerOptions} class

@@ -59,9 +59,9 @@ public class SymIntSmallVectorImpl extends SymIntSmallVectorBase {
 
   public native void assign(@Const @ByRef SymIntSmallVectorImpl RHS);
 
-  public native @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt erase(@ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::const_iterator*") SymInt CI);
+  public native @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt erase(@ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt I);
 
-  public native @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt erase(@ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::const_iterator*") SymInt CS, @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::const_iterator*") SymInt CE);
+  public native @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt erase(@ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt S, @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt E);
   public native @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt insert(@ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt I, @ByRef(true) SymInt Elt);
 
   public native @ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt insert(@ByVal @Cast("c10::SmallVectorImpl<c10::SymInt>::iterator*") SymInt I, long NumToInsert, @ByVal SymInt Elt);

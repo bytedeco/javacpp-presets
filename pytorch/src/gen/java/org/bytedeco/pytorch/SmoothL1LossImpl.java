@@ -26,7 +26,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  element-wise error falls below beta and an L1 term otherwise.
  *  It is less sensitive to outliers than the {@code MSELoss} and in some cases
  *  prevents exploding gradients (e.g. see the paper {@code Fast R-CNN} by Ross
- *  Girshick). See https://pytorch.org/docs/master/nn.html#torch.nn.SmoothL1Loss
+ *  Girshick). See https://pytorch.org/docs/main/nn.html#torch.nn.SmoothL1Loss
  *  to learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::SmoothL1LossOptions} class to learn

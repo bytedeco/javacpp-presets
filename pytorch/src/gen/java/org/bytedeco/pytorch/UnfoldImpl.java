@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ============================================================================
 
 /** Applies unfold over a 4-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Unfold to learn about
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Unfold to learn about
  *  the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::UnfoldOptions} class to learn what

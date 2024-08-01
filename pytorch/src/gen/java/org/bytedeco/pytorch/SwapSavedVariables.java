@@ -18,10 +18,77 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Namespace("torch::dynamo::autograd") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+
+@Namespace("torch::dynamo::autograd") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SwapSavedVariables extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public SwapSavedVariables() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwapSavedVariables(Pointer p) { super(p); }
+
+  public native void before(@ByRef Tensor t);
+  public native void after(@ByRef Tensor t);
+
+  public native void before(@ByRef SymInt t);
+  public native void after(@ByRef SymInt t);
+
+  public native void before(@ByRef IValue t);
+
+  public native void after(@ByRef IValue t);
+
+  public native void before(@ByRef Edge t);
+  public native void after(@ByRef Edge t);
+  public native void before(@ByRef TensorGeometry t);
+  public native void after(@ByRef TensorGeometry t);
+  public native void before(@ByRef VariableInfo t);
+  public native void after(@ByRef VariableInfo t);
+
+// #define NO_OP_VISIT(T)
+//   void before(const T&) {}
+//   void after(const T&) {}
+  public native void before(@Const @ByRef TypeMeta arg0);
+  public native void after(@Const @ByRef TypeMeta arg0);
+  public native void before(@Const @ByRef Device arg0);
+  public native void after(@Const @ByRef Device arg0);
+  public native void before(DeviceType arg0);
+  public native void before(@Cast("c10::DeviceType") byte arg0);
+  public native void after(DeviceType arg0);
+  public native void after(@Cast("c10::DeviceType") byte arg0);
+  public native void before(Layout arg0);
+  public native void after(Layout arg0);
+  public native void before(MemoryFormat arg0);
+  public native void after(MemoryFormat arg0);
+  public native void before(ScalarType arg0);
+  public native void after(ScalarType arg0);
+  public native void before(@Const @ByRef Scalar arg0);
+  public native void after(@Const @ByRef Scalar arg0);
+  public native void before(@Const @ByRef TensorOptions arg0);
+  public native void after(@Const @ByRef TensorOptions arg0);
+  public native void before(@StdString BytePointer arg0);
+  public native void before(@StdString String arg0);
+  public native void after(@StdString BytePointer arg0);
+  public native void after(@StdString String arg0);
+  public native void before(@Cast("const int64_t") long arg0);
+  public native void after(@Cast("const int64_t") long arg0);
+  public native void before(@Cast("const bool") boolean arg0);
+  public native void after(@Cast("const bool") boolean arg0);
+  public native void before(double arg0);
+  public native void after(double arg0);
+// #undef NO_OP_VISIT
+
+  public SwapSavedVariables(
+        @ByRef AutogradCompilerCall c,
+        @ByRef TraceState s,
+        @Cast("PyObject*") Pointer p,
+        @Const @ByRef NodeCall n) { super((Pointer)null); allocate(c, s, p, n); }
+  private native void allocate(
+        @ByRef AutogradCompilerCall c,
+        @ByRef TraceState s,
+        @Cast("PyObject*") Pointer p,
+        @Const @ByRef NodeCall n);
+
+  public native @Cast("PyObject*") Pointer get_py_compiler();
+
+  public native @Const @ByRef NodeCall get_curr_node_call();
+
+  public native void debug_asserts();
 }

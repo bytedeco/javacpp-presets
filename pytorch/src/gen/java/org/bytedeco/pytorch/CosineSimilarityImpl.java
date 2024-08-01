@@ -21,7 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Returns the cosine similarity between :math:{@code x_1} and :math:{@code x_2}, computed
  *  along {@code dim}.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.CosineSimilarity to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.CosineSimilarity to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::CosineSimilarityOptions} class to

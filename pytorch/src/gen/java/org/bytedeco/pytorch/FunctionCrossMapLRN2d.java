@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  {@code forward} can take as many arguments as you want and should return either a
  *  variable list or a Variable. Use of any direct Variable arguments will be
  *  registered in the graph but no vectors/sets or any other data structures
- *  will be traversed. You can use c10::optional<Tensor> as one of the arguments
+ *  will be traversed. You can use std::optional<Tensor> as one of the arguments
  *  and it will be registered as a variable in the graph if the argument has a
  *  value. It should take a pointer to {@code torch::autograd::AutogradContext} as the
  *  first argument. Variables can be saved in the {@code ctx} using
@@ -43,11 +43,16 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  {@code ctx->get_saved_variables} (see
  *  {@code torch::autograd::AutogradContext::get_saved_variables}) and other saved
  *  data can be accessed from {@code ctx->saved_data}.
+ *  To enable compiled autograd support (torch.compile for backward) for your
+ *  custom autograd operation, you can set MyFunction::is_traceable
+ *  (see Function::istraceable notes below).
  * 
  *  For example:
  *  <pre>{@code
  *  class MyFunction : public Function<MyFunction> {
  *    public:
+ *    static constexpr bool is_traceable = true;
+ * 
  *    static variable_list forward(AutogradContext *ctx, int n, Variable var) {
  *       // Save data for backward in context
  *       ctx->saved_data["n"] = n;
@@ -96,4 +101,14 @@ public class FunctionCrossMapLRN2d extends Pointer {
   // is not declared yet.
   // The enable_if check is to ensure that the user doesn't explicitly provide
   // the parameter X.
+
+  // This flag is for an experimental feature: compiled autograd. Not all
+  // built-in APIs are supported at the moment e.g. mark_dirty and
+  // mark_non_differentiable. Before setting this flag to enable tracing for
+  // your custom function <T>, you need to ensure that the backward function is
+  // traceable i.e. any variables accessed in the backward other than the input
+  // arguments must be handled in a similar manner to built-ins in
+  // CppNode::compiled_args and CppNode::apply_with_saved.
+  @MemberGetter public static native @Cast("const bool") boolean is_traceable();
+  public static final boolean is_traceable = is_traceable();
 }

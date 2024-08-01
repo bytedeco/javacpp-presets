@@ -25,7 +25,7 @@ public class GenericElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GenericElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<c10::IValue>::type>::value,const c10::IValue&,c10::IValue>") @ByVal IValue getGeneric();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<c10::IValue>::type>,const c10::IValue&,c10::IValue>") @ByVal IValue getGeneric();
 
   
 
@@ -36,7 +36,7 @@ public class GenericElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) GenericElementReference lhs, @ByRef(true) GenericElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) GenericElementReference lhs, @ByRef(true) GenericElementReference rhs);
   public void swap(GenericElementReference rhs) { swap(this, rhs); }
 
   

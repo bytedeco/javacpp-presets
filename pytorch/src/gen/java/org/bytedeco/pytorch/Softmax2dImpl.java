@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Softmax2d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies the Softmax2d function element-wise.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Softmax2d to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Softmax2d to learn
  *  about the exact behavior of this module. */
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Softmax2dImpl extends Softmax2dImplCloneable {

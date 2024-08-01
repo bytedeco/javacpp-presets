@@ -25,7 +25,7 @@ public class FutureElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FutureElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<c10::intrusive_ptr<c10::ivalue::Future> >::type>::value,const c10::intrusive_ptr<c10::ivalue::Future>&,c10::intrusive_ptr<c10::ivalue::Future> >") @IntrusivePtr("c10::ivalue::Future") Future getFuture();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<c10::intrusive_ptr<c10::ivalue::Future> >::type>,const c10::intrusive_ptr<c10::ivalue::Future>&,c10::intrusive_ptr<c10::ivalue::Future> >") @IntrusivePtr("c10::ivalue::Future") Future getFuture();
 
   
 
@@ -36,7 +36,7 @@ public class FutureElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) FutureElementReference lhs, @ByRef(true) FutureElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) FutureElementReference lhs, @ByRef(true) FutureElementReference rhs);
   public void swap(FutureElementReference rhs) { swap(this, rhs); }
 
   

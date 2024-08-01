@@ -25,7 +25,7 @@ public class TensorElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<at::Tensor>::type>::value,const at::Tensor&,at::Tensor>") @ByVal Tensor getTensor();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<at::Tensor>::type>,const at::Tensor&,at::Tensor>") @ByVal Tensor getTensor();
 
   
 
@@ -36,7 +36,7 @@ public class TensorElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) TensorElementReference lhs, @ByRef(true) TensorElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) TensorElementReference lhs, @ByRef(true) TensorElementReference rhs);
   public void swap(TensorElementReference rhs) { swap(this, rhs); }
 
   

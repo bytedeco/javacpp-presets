@@ -43,7 +43,7 @@ public class DistributedRandomSampler extends DistributedSampler {
         @Cast("size_t") long size);
 
   /** Resets the {@code DistributedRandomSampler} to a new set of indices. */
-  public native void reset(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
+  public native void reset(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
   public native void reset();
 
   /** Returns the next batch of indices. */

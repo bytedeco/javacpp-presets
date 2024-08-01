@@ -295,7 +295,7 @@ public class IValue extends Pointer {
   
   public native @IntrusivePtr("c10::ivalue::ConstantString") @Name("toString") @Cast({"", "c10::intrusive_ptr<c10::ivalue::ConstantString>&"}) ConstantString toConstantString();
   public native @StdString BytePointer toStringRef();
-  public native @ByVal @Cast("c10::optional<std::reference_wrapper<const std::string> >*") Pointer toOptionalStringRef();
+  public native @ByVal @Cast("std::optional<std::reference_wrapper<const std::string> >*") Pointer toOptionalStringRef();
   public native @StringView BytePointer toStringView();
 
   // DoubleList
@@ -498,6 +498,46 @@ public class IValue extends Pointer {
 
   // Detect aliased tensors.
 
+  public static class HashIdentityIValue extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public HashIdentityIValue() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public HashIdentityIValue(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public HashIdentityIValue(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public HashIdentityIValue position(long position) {
+          return (HashIdentityIValue)super.position(position);
+      }
+      @Override public HashIdentityIValue getPointer(long i) {
+          return new HashIdentityIValue((Pointer)this).offsetAddress(i);
+      }
+  
+    public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef IValue val);
+  }
+
+  public static class CompIdentityIValues extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public CompIdentityIValues() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public CompIdentityIValues(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public CompIdentityIValues(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public CompIdentityIValues position(long position) {
+          return (CompIdentityIValues)super.position(position);
+      }
+      @Override public CompIdentityIValues getPointer(long i) {
+          return new CompIdentityIValues((Pointer)this).offsetAddress(i);
+      }
+  
+    public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef IValue lhs, @Const @ByRef IValue rhs);
+  }
+
   // Chechs if this and rhs has a subvalues in common.
   // [t1,t2] and [t2, t3] returns true.
   public native @Cast("bool") boolean overlaps(@Const @ByRef IValue rhs);
@@ -509,13 +549,13 @@ public class IValue extends Pointer {
   // TODO: There are several places that recurse over IValue. This is fragile.
   // This visitor should be used to recurse over ivalues.
   
-  public native @ByVal IValue deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal IValue deepcopy(@ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy();
   public native @ByVal IValue deepcopy(
-        @ByRef HashAliasedIValueMap memo,
-        @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+        @ByRef HashIdentityIValueMap memo,
+        @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy(
-        @ByRef HashAliasedIValueMap memo);
+        @ByRef HashIdentityIValueMap memo);
   // Don't edit this just to add results for new tags; edit
   // isIntrusivePtrConstexpr above.
   public native @Cast("bool") boolean isIntrusivePtr();

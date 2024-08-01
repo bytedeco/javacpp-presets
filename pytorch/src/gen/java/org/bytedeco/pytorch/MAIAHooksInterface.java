@@ -22,21 +22,21 @@ import static org.bytedeco.pytorch.global.torch.*;
 // NB: Class must live in `at` due to limitations of Registry.h.
 
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ORTHooksInterface extends Pointer {
+public class MAIAHooksInterface extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public ORTHooksInterface() { super((Pointer)null); allocate(); }
+    public MAIAHooksInterface() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ORTHooksInterface(long size) { super((Pointer)null); allocateArray(size); }
+    public MAIAHooksInterface(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ORTHooksInterface(Pointer p) { super(p); }
+    public MAIAHooksInterface(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public ORTHooksInterface position(long position) {
-        return (ORTHooksInterface)super.position(position);
+    @Override public MAIAHooksInterface position(long position) {
+        return (MAIAHooksInterface)super.position(position);
     }
-    @Override public ORTHooksInterface getPointer(long i) {
-        return new ORTHooksInterface((Pointer)this).offsetAddress(i);
+    @Override public MAIAHooksInterface getPointer(long i) {
+        return new MAIAHooksInterface((Pointer)this).offsetAddress(i);
     }
 
   // This should never actually be implemented, but it is used to

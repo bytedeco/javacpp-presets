@@ -26,7 +26,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  loss (margin-based loss) between input :math:{@code x} (a 2D mini-batch {@code Tensor})
  *  and output :math:{@code y} (which is a 1D tensor of target class indices, :math:{@code 0
  *  \leq y \leq \text{x.size}(1)-1}). See
- *  https://pytorch.org/docs/master/nn.html#torch.nn.MultiMarginLoss to learn
+ *  https://pytorch.org/docs/main/nn.html#torch.nn.MultiMarginLoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MultiMarginLossOptions} class to learn

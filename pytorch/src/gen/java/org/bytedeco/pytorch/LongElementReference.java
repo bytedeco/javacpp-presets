@@ -25,7 +25,7 @@ public class LongElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<int64_t>::type>::value,const int64_t&,int64_t>") long getLong();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<int64_t>::type>,const int64_t&,int64_t>") long getLong();
 
   
 
@@ -36,7 +36,7 @@ public class LongElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) LongElementReference lhs, @ByRef(true) LongElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) LongElementReference lhs, @ByRef(true) LongElementReference rhs);
   public void swap(LongElementReference rhs) { swap(this, rhs); }
 
   

@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MultiheadAttention ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies the MultiheadAttention function element-wise.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.MultiheadAttention
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.MultiheadAttention
  *  to learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MultiheadAttentionOptions} class to

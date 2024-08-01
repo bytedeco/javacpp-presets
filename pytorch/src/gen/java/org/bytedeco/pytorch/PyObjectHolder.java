@@ -30,7 +30,7 @@ public class PyObjectHolder extends Pointer {
 
   public native @Cast("PyObject*") Pointer getPyObject();
   public native @ByVal InferredType tryToInferType();
-  public native @ByVal IValue toIValue(@Const @ByRef Type.TypePtr type, @ByVal(nullValue = "c10::optional<int32_t>(c10::nullopt)") IntOptional N);
+  public native @ByVal IValue toIValue(@Const @ByRef Type.TypePtr type, @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N);
   public native @ByVal IValue toIValue(@Const @ByRef Type.TypePtr type);
   public native @StdString BytePointer toStr();
   public native @ByVal TensorVector extractTensors();

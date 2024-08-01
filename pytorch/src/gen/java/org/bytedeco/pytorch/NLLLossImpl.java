@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** The negative log likelihood loss. It is useful to train a classification
  *  problem with {@code C} classes.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.NLLLoss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.NLLLoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::NLLLossOptions} class to learn what

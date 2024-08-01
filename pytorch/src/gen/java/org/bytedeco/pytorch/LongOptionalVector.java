@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("std::vector<c10::optional<int64_t> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("std::vector<std::optional<int64_t> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LongOptionalVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

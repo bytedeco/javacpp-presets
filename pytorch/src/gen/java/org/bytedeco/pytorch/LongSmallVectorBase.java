@@ -26,5 +26,7 @@ public class LongSmallVectorBase extends LongSmallVectorCommon {
 
   public native void push_back(@Cast("const int64_t") long Elt);
 
+  // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
+
   public native void pop_back();
 }

@@ -28,7 +28,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  samples. A triplet is composed by {@code a}, {@code p} and {@code n} (i.e., {@code anchor},
  *  {@code positive examples} and {@code negative examples} respectively). The
  *  shapes of all input tensors should be :math:{@code (N, D)}.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.TripletMarginLoss to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.TripletMarginLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::TripletMarginLossOptions} class to

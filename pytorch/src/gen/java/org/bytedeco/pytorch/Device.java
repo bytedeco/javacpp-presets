@@ -116,8 +116,8 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of Metal type. */
   public native @Cast("bool") @NoException(true) boolean is_metal();
 
-  /** Return true if the device is of ORT type. */
-  public native @Cast("bool") @NoException(true) boolean is_ort();
+  /** Return true if the device is of MAIA type. */
+  public native @Cast("bool") @NoException(true) boolean is_maia();
 
   /** Return true if the device is of META type. */
   public native @Cast("bool") @NoException(true) boolean is_meta();

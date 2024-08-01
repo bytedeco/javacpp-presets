@@ -93,12 +93,12 @@ public class InputArchive extends Pointer {
    *  is not specified, the module is loaded to the original device. */
   public native void load_from(
         @StdString BytePointer filename,
-        @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
         @StdString BytePointer filename);
   public native void load_from(
         @StdString String filename,
-        @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
         @StdString String filename);
 
@@ -107,7 +107,7 @@ public class InputArchive extends Pointer {
    *  is not specified, the module is loaded to the original device. */
   public native void load_from(
         @Cast("std::istream*") @ByRef Pointer stream,
-        @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
         @Cast("std::istream*") @ByRef Pointer stream);
 
@@ -115,14 +115,14 @@ public class InputArchive extends Pointer {
   public native void load_from(
         @Cast("const char*") BytePointer data,
         @Cast("size_t") long size,
-        @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
         @Cast("const char*") BytePointer data,
         @Cast("size_t") long size);
   public native void load_from(
         String data,
         @Cast("size_t") long size,
-        @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
         String data,
         @Cast("size_t") long size);
@@ -131,7 +131,7 @@ public class InputArchive extends Pointer {
   public native void load_from(
         @Const @ByRef Reader read_func,
         @Const @ByRef SizeTSupplier size_func,
-        @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
         @Const @ByRef Reader read_func,
         @Const @ByRef SizeTSupplier size_func);

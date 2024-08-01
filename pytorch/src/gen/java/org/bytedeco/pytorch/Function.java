@@ -42,11 +42,8 @@ public class Function extends Pointer {
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future runAsync(
         @ByRef IValueVector arg0);
 
-  public native @ByVal @Name("operator ()") IValue apply(
-      @ByVal IValueVector stack,
-      @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") StringIValueMap kwargs);
-  public native @ByVal @Name("operator ()") IValue apply(
-      @ByVal IValueVector stack);
+  public native @ByVal @Name("operator ()") IValue apply(@ByVal IValueVector stack, @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") StringIValueMap kwargs);
+  public native @ByVal @Name("operator ()") IValue apply(@ByVal IValueVector stack);
 
   public native @Const @ByRef QualifiedName qualname();
 
@@ -72,7 +69,8 @@ public class Function extends Pointer {
   // If call() returns true, then callback completes successfully, otherwise
   // call() returns false.
 
-  // Overload for server interpreter, a bailout size is needed for graph executor.
+  // Overload for server interpreter, a bailout size is needed for graph
+  // executor.
   
 
   // Overload for mobile interpreter.

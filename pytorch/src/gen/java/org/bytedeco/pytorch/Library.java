@@ -142,13 +142,19 @@ public class Library extends Pointer {
   
 
   /** Declares that for all operators that are subsequently def'ed, their
-   *  abstract impls may be found in the given Python module (pymodule).
-   *  This registers some help text that is used if the abstract impl
+   *  fake impls may be found in the given Python module (pymodule).
+   *  This registers some help text that is used if the fake impl
    *  cannot be found.
    * 
    *  Args:
    *  - pymodule: the python module
    *  - context: We may include this in the error message. */
+  public native @ByRef Library set_python_module(@Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context/*=""*/);
+  public native @ByRef Library set_python_module(@Cast("const char*") BytePointer pymodule);
+  public native @ByRef Library set_python_module(String pymodule, String context/*=""*/);
+  public native @ByRef Library set_python_module(String pymodule);
+
+  /** Deprecated; use set_python_module instead */
   
   ///
   ///

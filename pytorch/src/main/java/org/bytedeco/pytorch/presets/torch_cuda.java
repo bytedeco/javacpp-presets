@@ -151,12 +151,12 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         // We need to help namespace resolution and to redefine names of template instances.
         infoMap
             .put(new Info("c10::Stream"))
-            .put(new Info("c10::optional<c10::Stream>").pointerTypes("StreamOptional"))
-            .put(new Info("c10::optional<c10::Device>", "c10::optional<at::Device>", "optional<at::Device>").pointerTypes("DeviceOptional"))
+            .put(new Info("std::optional<c10::Stream>").pointerTypes("StreamOptional"))
+            .put(new Info("std::optional<c10::Device>", "std::optional<at::Device>", "optional<at::Device>").pointerTypes("DeviceOptional"))
             .put(new Info("c10::Device"))
             .put(new Info("c10::impl::PyInterpreter"))
             .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T"))
-            .put(new Info("c10::optional<c10::DeviceIndex>").pointerTypes("ByteOptional"))
+            .put(new Info("std::optional<c10::DeviceIndex>").pointerTypes("ByteOptional"))
             .put(new Info("c10::IntArrayRef", "at::IntArrayRef").pointerTypes("LongArrayRef"))
             .put(new Info("std::vector<at::DataPtr>").pointerTypes("DataPtrVector"))
             .put(new Info("c10::Allocator"))
@@ -271,12 +271,12 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
         //// Help namespace resolution
         infoMap
-            .put(new Info("c10::optional", "c10d::WorkInfo"))
+            .put(new Info("std::optional", "c10d::WorkInfo"))
         ;
 
         //// No way to map
         infoMap
-            .put(new Info("c10::optional<std::function<std::string()> >").skip())
+            .put(new Info("std::optional<std::function<std::string()> >").skip())
         ;
     }
 }

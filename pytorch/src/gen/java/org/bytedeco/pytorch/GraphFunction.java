@@ -30,12 +30,12 @@ public class GraphFunction extends Function {
         @ByVal QualifiedName name,
         @SharedPtr("torch::jit::Graph") @ByVal Graph graph,
         @ByVal GraphFunctionCreator function_creator,
-        @ByVal(nullValue = "c10::optional<torch::jit::ExecutorExecutionMode>(c10::nullopt)") ExecutorExecutionModeOptional executor_execution_mode) { super((Pointer)null); allocate(name, graph, function_creator, executor_execution_mode); }
+        @ByVal(nullValue = "std::optional<torch::jit::ExecutorExecutionMode>(c10::nullopt)") ExecutorExecutionModeOptional executor_execution_mode) { super((Pointer)null); allocate(name, graph, function_creator, executor_execution_mode); }
   private native void allocate(
         @ByVal QualifiedName name,
         @SharedPtr("torch::jit::Graph") @ByVal Graph graph,
         @ByVal GraphFunctionCreator function_creator,
-        @ByVal(nullValue = "c10::optional<torch::jit::ExecutorExecutionMode>(c10::nullopt)") ExecutorExecutionModeOptional executor_execution_mode);
+        @ByVal(nullValue = "std::optional<torch::jit::ExecutorExecutionMode>(c10::nullopt)") ExecutorExecutionModeOptional executor_execution_mode);
   public GraphFunction(
         @ByVal QualifiedName name,
         @SharedPtr("torch::jit::Graph") @ByVal Graph graph,

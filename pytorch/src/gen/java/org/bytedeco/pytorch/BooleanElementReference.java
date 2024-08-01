@@ -25,7 +25,7 @@ public class BooleanElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BooleanElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<bool>::type>::value,const bool&,bool>") boolean getBoolean();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<bool>::type>,const bool&,bool>") boolean getBoolean();
 
   
 
@@ -36,7 +36,7 @@ public class BooleanElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) BooleanElementReference lhs, @ByRef(true) BooleanElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) BooleanElementReference lhs, @ByRef(true) BooleanElementReference rhs);
   public void swap(BooleanElementReference rhs) { swap(this, rhs); }
 
   

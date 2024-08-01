@@ -39,6 +39,6 @@ public class WeakOrStrongCompilationUnit extends Pointer {
 
   public native @Cast("bool") boolean holdingEmptyStrongRef();
 
-  public native @ByRef @Cast("c10::optional<std::shared_ptr<torch::jit::CompilationUnit> >*") Pointer strong_ptr_(); public native WeakOrStrongCompilationUnit strong_ptr_(Pointer setter);
-  public native @ByRef @Cast("c10::optional<std::weak_ptr<torch::jit::CompilationUnit> >*") Pointer weak_ptr_(); public native WeakOrStrongCompilationUnit weak_ptr_(Pointer setter);
+  public native @ByRef @Cast("std::optional<std::shared_ptr<torch::jit::CompilationUnit> >*") Pointer strong_ptr_(); public native WeakOrStrongCompilationUnit strong_ptr_(Pointer setter);
+  public native @ByRef @Cast("std::optional<std::weak_ptr<torch::jit::CompilationUnit> >*") Pointer weak_ptr_(); public native WeakOrStrongCompilationUnit weak_ptr_(Pointer setter);
 }

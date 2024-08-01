@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Creates a criterion that measures the mean absolute error (MAE) between each
  *  element in the input : math :{@code x} and target : {@code y}.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.L1Loss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.L1Loss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::L1LossOptions} class to learn what

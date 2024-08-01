@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Upsamples a given multi-channel 1D (temporal), 2D (spatial) or 3D
  *  (volumetric) data.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Upsample to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Upsample to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::UpsampleOptions} class to learn what

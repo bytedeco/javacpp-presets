@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Creates a criterion that optimizes a multi-label one-versus-all
  *  loss based on max-entropy, between input :math:{@code x} and target :math:{@code y} of
  *  size :math:{@code (N, C)}. See
- *  https://pytorch.org/docs/master/nn.html#torch.nn.MultiLabelSoftMarginLoss to
+ *  https://pytorch.org/docs/main/nn.html#torch.nn.MultiLabelSoftMarginLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MultiLabelSoftMarginLossOptions} class

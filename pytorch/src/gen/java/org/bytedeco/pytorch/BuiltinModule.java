@@ -25,12 +25,12 @@ public class BuiltinModule extends SugaredValue {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BuiltinModule(Pointer p) { super(p); }
 
-  public BuiltinModule(@StdString BytePointer name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
-  private native void allocate(@StdString BytePointer name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version);
+  public BuiltinModule(@StdString BytePointer name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
+  private native void allocate(@StdString BytePointer name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version);
   public BuiltinModule(@StdString BytePointer name) { super((Pointer)null); allocate(name); }
   private native void allocate(@StdString BytePointer name);
-  public BuiltinModule(@StdString String name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
-  private native void allocate(@StdString String name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version);
+  public BuiltinModule(@StdString String name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
+  private native void allocate(@StdString String name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version);
   public BuiltinModule(@StdString String name) { super((Pointer)null); allocate(name); }
   private native void allocate(@StdString String name);
 

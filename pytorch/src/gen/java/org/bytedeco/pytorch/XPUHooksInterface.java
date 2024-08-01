@@ -59,4 +59,8 @@ public class XPUHooksInterface extends Pointer {
   public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
   public native void deviceSynchronize(@Cast("c10::DeviceIndex") byte arg0);
+
+  public native Allocator getPinnedMemoryAllocator();
+
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 }

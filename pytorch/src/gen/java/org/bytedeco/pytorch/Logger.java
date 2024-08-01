@@ -112,8 +112,8 @@ public class Logger extends Pointer {
         @Cast("int64_t*") @ByRef LongBuffer avg_time,
         @Cast("int64_t*") @ByRef LongBuffer time_duration,
         @ByRef Timer timer,
-        @Cast("c10d::Timer::Event") int start_event,
-        @Cast("c10d::Timer::Event") int end_event);
+        @Cast("c10d::Timer::Event") byte start_event,
+        @Cast("c10d::Timer::Event") byte end_event);
   public native void calculate_avg_time(
         @Cast("int64_t*") @ByRef long[] avg_time,
         @Cast("int64_t*") @ByRef long[] time_duration,
@@ -124,8 +124,8 @@ public class Logger extends Pointer {
         @Cast("int64_t*") @ByRef LongPointer avg_time,
         @Cast("int64_t*") @ByRef LongPointer time_duration,
         @ByRef Timer timer,
-        @Cast("c10d::Timer::Event") int start_event,
-        @Cast("c10d::Timer::Event") int end_event);
+        @Cast("c10d::Timer::Event") byte start_event,
+        @Cast("c10d::Timer::Event") byte end_event);
   public native void calculate_avg_time(
         @Cast("int64_t*") @ByRef LongBuffer avg_time,
         @Cast("int64_t*") @ByRef LongBuffer time_duration,
@@ -136,16 +136,16 @@ public class Logger extends Pointer {
         @Cast("int64_t*") @ByRef long[] avg_time,
         @Cast("int64_t*") @ByRef long[] time_duration,
         @ByRef Timer timer,
-        @Cast("c10d::Timer::Event") int start_event,
-        @Cast("c10d::Timer::Event") int end_event);
+        @Cast("c10d::Timer::Event") byte start_event,
+        @Cast("c10d::Timer::Event") byte end_event);
 
   // Set the absolute time of the event that has been recorded in reducer.
   public native void set_event_time(@Cast("int64_t*") @ByRef LongPointer event_time, @ByRef Timer timer, Timer.Event event);
-  public native void set_event_time(@Cast("int64_t*") @ByRef LongBuffer event_time, @ByRef Timer timer, @Cast("c10d::Timer::Event") int event);
+  public native void set_event_time(@Cast("int64_t*") @ByRef LongBuffer event_time, @ByRef Timer timer, @Cast("c10d::Timer::Event") byte event);
   public native void set_event_time(@Cast("int64_t*") @ByRef long[] event_time, @ByRef Timer timer, Timer.Event event);
-  public native void set_event_time(@Cast("int64_t*") @ByRef LongPointer event_time, @ByRef Timer timer, @Cast("c10d::Timer::Event") int event);
+  public native void set_event_time(@Cast("int64_t*") @ByRef LongPointer event_time, @ByRef Timer timer, @Cast("c10d::Timer::Event") byte event);
   public native void set_event_time(@Cast("int64_t*") @ByRef LongBuffer event_time, @ByRef Timer timer, Timer.Event event);
-  public native void set_event_time(@Cast("int64_t*") @ByRef long[] event_time, @ByRef Timer timer, @Cast("c10d::Timer::Event") int event);
+  public native void set_event_time(@Cast("int64_t*") @ByRef long[] event_time, @ByRef Timer timer, @Cast("c10d::Timer::Event") byte event);
   // Set stats that can be collected only during
   // training loop. It is called at the beginning of forward call
   // to record the run time stats of sampled iterations that previously ran.

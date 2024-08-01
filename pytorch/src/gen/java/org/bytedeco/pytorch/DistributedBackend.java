@@ -58,6 +58,7 @@ public class DistributedBackend extends CustomClassHolder {
     public native @ByRef Milliseconds timeout(); public native Options timeout(Milliseconds setter);
 
     // backend name
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     @MemberGetter public native @StdString BytePointer backend();
   }
 
@@ -262,6 +263,11 @@ public class DistributedBackend extends CustomClassHolder {
   public native void setGroupName(@StdString String name);
 
   public native @StdString BytePointer getGroupName();
+
+  public native void setGroupDesc(@StdString BytePointer desc);
+  public native void setGroupDesc(@StdString String desc);
+
+  public native @StdString BytePointer getGroupDesc();
 
   // See similar functions in ProcessGroup.hpp for context.
   public native @ByVal DeviceOptional getBoundDeviceId();

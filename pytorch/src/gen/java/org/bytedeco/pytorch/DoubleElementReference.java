@@ -25,7 +25,7 @@ public class DoubleElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<double>::type>::value,const double&,double>") double getDouble();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<double>::type>,const double&,double>") double getDouble();
 
   
 
@@ -36,7 +36,7 @@ public class DoubleElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) DoubleElementReference lhs, @ByRef(true) DoubleElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) DoubleElementReference lhs, @ByRef(true) DoubleElementReference rhs);
   public void swap(DoubleElementReference rhs) { swap(this, rhs); }
 
   

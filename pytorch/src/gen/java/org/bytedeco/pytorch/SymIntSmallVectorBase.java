@@ -38,5 +38,7 @@ public class SymIntSmallVectorBase extends SymIntSmallVectorCommon {
 
   public native void push_back(@Const @ByRef SymInt Elt);
 
+  // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
+
   public native void pop_back();
 }

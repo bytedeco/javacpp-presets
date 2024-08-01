@@ -42,6 +42,9 @@ public class GeneratorImpl extends Pointer {
   public native @Cast("uint64_t") long seed();
   public native void set_state(@Const @ByRef TensorImpl new_state);
   public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl get_state();
+  public native void graphsafe_set_state(
+        @IntrusivePtr("c10::GeneratorImpl") @Cast({"", "c10::intrusive_ptr<c10::GeneratorImpl>&"}) GeneratorImpl new_state);
+  public native @IntrusivePtr("c10::GeneratorImpl") @Cast({"", "c10::intrusive_ptr<c10::GeneratorImpl>&"}) GeneratorImpl graphsafe_get_state();
   public native @ByVal Device device();
 
   // See Note [Acquire lock when using random generators]

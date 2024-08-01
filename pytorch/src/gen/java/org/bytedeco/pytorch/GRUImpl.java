@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GRU ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A multi-layer gated recurrent unit (GRU) module.
- *  See https://pytorch.org/docs/master/generated/torch.nn.GRU.html to learn
+ *  See https://pytorch.org/docs/main/generated/torch.nn.GRU.html to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::GRUOptions} class to learn what

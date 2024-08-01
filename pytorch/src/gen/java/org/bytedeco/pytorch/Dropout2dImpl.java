@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Dropout2d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies dropout over a 2-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Dropout2d to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Dropout2d to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::Dropout2dOptions} class to learn what

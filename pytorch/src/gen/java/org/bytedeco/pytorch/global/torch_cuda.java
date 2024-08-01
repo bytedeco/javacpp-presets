@@ -455,16 +455,13 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 
 // cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
 // added bf16 support
-// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
 // #include <cublasLt.h>
-// #endif
 
 // #ifdef CUDART_VERSION
 // #include <cusolverDn.h>
 // #endif
 
-// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
-// #include <hipsolver/hipsolver.h>
+// #if defined(USE_ROCM)
 // #endif
 
 // #include <c10/core/Allocator.h>
@@ -519,13 +516,11 @@ manage their own state. There is only a single CUDA context/state.
 /* Handles */
 @Namespace("at::cuda") public static native cusparseContext getCurrentCUDASparseHandle();
 @Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle();
-// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
 
-// #endif
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
 
-// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
+// #if defined(CUDART_VERSION) || defined(USE_ROCM)
 @Namespace("at::cuda") public static native cusolverDnContext getCurrentCUDASolverDnHandle();
 // #endif
 
@@ -535,9 +530,6 @@ manage their own state. There is only a single CUDA context/state.
 // Parsed from c10/cuda/CUDAStream.h
 
 // #pragma once
-
-// #include <cstdint>
-// #include <utility>
 
 // #include <cuda_runtime_api.h>
 
@@ -890,12 +882,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Targeting ../cuda/CUDAStreamCaptureModeGuard.java
 
 
-// #endif
 
-// #if !defined(USE_ROCM) || ROCM_VERSION >= 50300
 // Protects against enum cudaStreamCaptureStatus implementation changes.
 // Some compilers seem not to like static_assert without the messages.
-// #endif
 
 
 
@@ -1119,8 +1108,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <c10/core/impl/InlineStreamGuard.h>
 // #include <c10/cuda/CUDAMacros.h>
 // #include <c10/cuda/impl/CUDAGuardImpl.h>
-
-// #include <cstddef>
 // Targeting ../cuda/CUDAGuard.java
 
 

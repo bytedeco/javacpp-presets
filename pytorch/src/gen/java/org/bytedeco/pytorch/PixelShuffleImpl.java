@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Rearranges elements in a tensor of shape :math:{@code (*, C \times r^2, H, W)}
  *  to a tensor of shape :math:{@code (*, C, H \times r, W \times r)}, where r is an
  *  upscale factor. See
- *  https://pytorch.org/docs/master/nn.html#torch.nn.PixelShuffle to learn about
+ *  https://pytorch.org/docs/main/nn.html#torch.nn.PixelShuffle to learn about
  *  the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::PixelShuffleOptions} class to learn

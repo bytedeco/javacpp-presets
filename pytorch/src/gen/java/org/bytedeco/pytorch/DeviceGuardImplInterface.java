@@ -99,6 +99,14 @@ public class DeviceGuardImplInterface extends Pointer {
   public native @ByVal Stream getStreamFromGlobalPool(@ByVal Device arg0);
 
   /**
+   * Return a new stream for a given device and priority. The stream will be
+   * copied and shared around, device backend should be able to correctly handle
+   * the lifetime of the stream.
+   */
+  public native @ByVal Stream getNewStream(@ByVal Device arg0, int priority/*=0*/);
+  public native @ByVal Stream getNewStream(@ByVal Device arg0);
+
+  /**
    * Set a stream to be the thread local current stream for its device.
    * Return the previous stream for that device. You are NOT required
    * to set the current device to match the device of this stream.
@@ -170,11 +178,25 @@ public class DeviceGuardImplInterface extends Pointer {
   public native void synchronizeStream(@Const @ByRef Stream arg0);
 
   /**
+   * Wait (by blocking the calling thread) until all the work previously
+   * recorded on the event has completed running on the device.
+   */
+  public native void synchronizeEvent(Pointer arg0);
+
+  /**
    * Ensure the caching allocator (if any) is aware that the given DataPtr is
    * being used on the given stream, and that it should thus avoid recycling the
    * DataPtr until all work on that stream is done.
    */
   public native void recordDataPtrOnStream(@StdMove DataPtr arg0, @Const @ByRef Stream arg1);
+
+  /**
+   * Fetch the elapsed time between two recorded events.
+   */
+  public native double elapsedTime(
+        Pointer arg0,
+        Pointer arg1,
+        @Cast("const c10::DeviceIndex") byte arg2);
 
   /**
    * Intended use of this class is to leak the DeviceGuardImpl at program end.

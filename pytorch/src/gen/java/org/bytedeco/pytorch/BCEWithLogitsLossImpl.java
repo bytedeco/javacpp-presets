@@ -26,7 +26,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  class. This version is more numerically stable than using a plain {@code Sigmoid}
  *  followed by a {@code BCELoss} as, by combining the operations into one layer,
  *  we take advantage of the log-sum-exp trick for numerical stability.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.BCEWithLogitsLoss to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.BCEWithLogitsLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::BCEWithLogitsLossOptions} class to

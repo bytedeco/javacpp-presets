@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch_cuda.*;
 
 // RAII guard for "cudaStreamCaptureMode", a thread-local value
 // that controls the error-checking strictness of a capture.
-// #if !defined(USE_ROCM) || ROCM_VERSION >= 50300
 @Namespace("c10::cuda") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class CUDAStreamCaptureModeGuard extends Pointer {
     static { Loader.load(); }

@@ -47,11 +47,11 @@ public class SegmentInfo extends Pointer {
     }
 
   public native byte device(); public native SegmentInfo device(byte setter);
-  public native @Cast("int64_t") @Name("address") long _address(); public native SegmentInfo _address(long setter);
-  public native @Cast("int64_t") long total_size(); public native SegmentInfo total_size(long setter);
-  public native @Cast("int64_t") long requested_size(); public native SegmentInfo requested_size(long setter); // unrounded, actually requested size
-  public native @Cast("int64_t") long allocated_size(); public native SegmentInfo allocated_size(long setter);
-  public native @Cast("int64_t") long active_size(); public native SegmentInfo active_size(long setter);
+  public native @Cast("size_t") @Name("address") long _address(); public native SegmentInfo _address(long setter);
+  public native @Cast("size_t") long total_size(); public native SegmentInfo total_size(long setter);
+  public native @Cast("size_t") long requested_size(); public native SegmentInfo requested_size(long setter); // unrounded, actually requested size
+  public native @Cast("size_t") long allocated_size(); public native SegmentInfo allocated_size(long setter);
+  public native @Cast("size_t") long active_size(); public native SegmentInfo active_size(long setter);
   public native CUstream_st stream(); public native SegmentInfo stream(CUstream_st setter);
   public native @Cast("bool") boolean is_large(); public native SegmentInfo is_large(boolean setter);
   public native @Cast("bool") boolean is_expandable(); public native SegmentInfo is_expandable(boolean setter);

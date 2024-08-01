@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ConstantPad3d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies ConstantPad over a 3-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.ConstantPad3d to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.ConstantPad3d to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::ConstantPad3dOptions} class to learn

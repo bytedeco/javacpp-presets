@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** The Kullback-Leibler divergence loss measure
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.KLDivLoss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.KLDivLoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::KLDivLossOptions} class to learn what

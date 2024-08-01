@@ -86,7 +86,7 @@ public class InlinedCallStack extends Pointer {
         @StdString @ByRef BytePointer function_name);
 
   // Return next element in the callstack list.
-  public native @ByVal @Cast("c10::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional callee();
+  public native @ByVal @Cast("std::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional callee();
 
   // Return module instance associated with the current element.
   public native @ByVal ModuleInstanceInfoOptional module_instance();
@@ -101,7 +101,7 @@ public class InlinedCallStack extends Pointer {
   // Return callstack as a vector of [Function, SourceRange] pairs.
   public native @Cast("torch::jit::InlinedCallStackEntry*") @StdVector LongVector vec();
 
-  public native void setCallee(@ByVal @Cast("c10::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional arg0);
+  public native void setCallee(@ByVal @Cast("std::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional arg0);
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef InlinedCallStack rhs);
 

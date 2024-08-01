@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ELU ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies elu over a given input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.ELU to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.ELU to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::ELUOptions} class to learn what

@@ -230,16 +230,16 @@ public class FunctionSchema extends Pointer {
   public native @StdString BytePointer formatTypeMismatchMsg(
         @Const @ByRef Argument expected,
         @StdString BytePointer actual_type,
-        @ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional _position,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional value);
+        @ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional _position,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional value);
   public native @StdString BytePointer formatTypeMismatchMsg(
         @Const @ByRef Argument expected,
         @StdString BytePointer actual_type);
   public native @StdString String formatTypeMismatchMsg(
         @Const @ByRef Argument expected,
         @StdString String actual_type,
-        @ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional _position,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional value);
+        @ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional _position,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional value);
   public native @StdString String formatTypeMismatchMsg(
         @Const @ByRef Argument expected,
         @StdString String actual_type);

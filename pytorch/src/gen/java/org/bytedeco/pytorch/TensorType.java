@@ -35,7 +35,7 @@ public class TensorType extends SharedType {
         @Const @ByRef LongVaryingShape sizes,
         @Const @ByRef LongVaryingShape strides,
         @ByVal BoolOptional requires_grad,
-        @ByVal(nullValue = "c10::optional<bool>(false)") BoolOptional undefined,
+        @ByVal(nullValue = "std::optional<bool>(false)") BoolOptional undefined,
         @Cast("bool") boolean tensor_contiguity/*=false*/);
   public static native @SharedPtr("c10::TensorType") @ByVal TensorType create(
         @ByVal ScalarTypeOptional scalar_type,
@@ -50,7 +50,7 @@ public class TensorType extends SharedType {
         @Const @ByRef SymbolicShape sizes,
         @Const @ByRef StrideVaryingShape stride_,
         @ByVal BoolOptional requires_grad,
-        @ByVal(nullValue = "c10::optional<bool>(false)") BoolOptional undefined);
+        @ByVal(nullValue = "std::optional<bool>(false)") BoolOptional undefined);
   public static native @SharedPtr("c10::TensorType") @ByVal TensorType create(
         @ByVal ScalarTypeOptional scalar_type,
         @ByVal DeviceOptional device,

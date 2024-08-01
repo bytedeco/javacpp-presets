@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Conv1d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies convolution over a 1-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Conv1d to learn about
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Conv1d to learn about
  *  the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::Conv1dOptions} class to learn what

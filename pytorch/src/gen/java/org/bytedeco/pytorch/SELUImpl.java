@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SELU ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies the selu function element-wise.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.SELU to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.SELU to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::SELUOptions} class to learn what

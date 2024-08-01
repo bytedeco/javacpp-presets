@@ -81,8 +81,7 @@ public class ReduceOp extends CustomClassHolder {
   // c10::intrusive_ptr, so constructors and operator= can be simple
   public ReduceOp(@Const @ByRef ReduceOp other) { super((Pointer)null); allocate(other); }
   private native void allocate(@Const @ByRef ReduceOp other);
-
-  public native @Const @ByRef @Name("operator =") ReduceOp put(@Const @ByRef ReduceOp other);
+  public native @ByRef @Name("operator =") ReduceOp put(@Const @ByRef ReduceOp other);
 
   public native @Name("operator c10d::ReduceOp::RedOpType") RedOpType asRedOpType();
 

@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::ArrayRef<c10::optional<int64_t> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::ArrayRef<std::optional<int64_t> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LongOptionalArrayRef extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

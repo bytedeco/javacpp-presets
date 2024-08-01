@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A long short-term memory (LSTM) cell.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.LSTMCell to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.LSTMCell to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::LSTMCellOptions} class to learn what

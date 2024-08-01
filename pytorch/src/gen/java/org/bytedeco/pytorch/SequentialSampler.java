@@ -32,7 +32,7 @@ public class SequentialSampler extends Sampler {
   private native void allocate(@Cast("size_t") long size);
 
   /** Resets the {@code SequentialSampler} to zero. */
-  public native void reset(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
+  public native void reset(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional new_size);
   public native void reset();
 
   /** Returns the next batch of indices. */

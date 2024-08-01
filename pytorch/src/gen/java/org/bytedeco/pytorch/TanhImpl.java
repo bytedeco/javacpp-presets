@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Tanh ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies Tanh over a given input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Tanh to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Tanh to learn
  *  about the exact behavior of this module. */
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TanhImpl extends TanhImplCloneable {

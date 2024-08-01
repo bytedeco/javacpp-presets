@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ RNN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A multi-layer Elman RNN module with Tanh or ReLU activation.
- *  See https://pytorch.org/docs/master/generated/torch.nn.RNN.html to learn
+ *  See https://pytorch.org/docs/main/generated/torch.nn.RNN.html to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::RNNOptions} class to learn what

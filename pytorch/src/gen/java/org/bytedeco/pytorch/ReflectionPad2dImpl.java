@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies ReflectionPad over a 2-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.ReflectionPad2d to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.ReflectionPad2d to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::ReflectionPad2dOptions} class to learn

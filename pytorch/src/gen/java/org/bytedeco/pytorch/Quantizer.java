@@ -49,6 +49,7 @@ public class Quantizer extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Quantizer(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
   @MemberGetter public native ScalarType scalar_type_();
 
   // Copied from torch/csrc/jit/ir/scope.h

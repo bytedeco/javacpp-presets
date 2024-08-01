@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Returns the batchwise pairwise distance between vectors :math:{@code v_1},
  *  :math:{@code v_2} using the p-norm.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.PairwiseDistance to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.PairwiseDistance to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::PairwiseDistanceOptions} class to

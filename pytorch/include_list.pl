@@ -30,7 +30,8 @@ sub go {
     my ($roots, $opts) = @_;
     my $path = join ' ', @$roots, @$opts;
 
-    my $exe = "g++ -I. -I torch/csrc/api/include/ -DUSE_UCC -DUSE_C10D_GLOO -DUSE_C10D_MPI -DUSE_DISTRIBUTED -D_WIN32 -H $path -E 2>&1 > /dev/null";
+    my $exe = "g++ -I. -I torch/csrc/api/include/ -DUSE_UCC -DUSE_C10D_GLOO -DUSE_C10D_MPI -DUSE_DISTRIBUTED -H $path -E 2>&1 > /dev/null";
+    #my $exe = "g++ -I. -I torch/csrc/api/include/ -DUSE_UCC -DUSE_C10D_GLOO -DUSE_C10D_MPI -DUSE_DISTRIBUTED -D_WIN32 -H $path -E 2>&1 > /dev/null";
     my @inc = `$exe`;
     if ($? != 0) {
       print STDERR "Failed:\n$exe\nError: $?: $!\n";

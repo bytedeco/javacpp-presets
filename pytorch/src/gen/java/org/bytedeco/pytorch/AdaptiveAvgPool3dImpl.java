@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ AdaptiveAvgPool3d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies adaptive avgpool over a 3-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.AdaptiveAvgPool3d to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.AdaptiveAvgPool3d to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::AdaptiveAvgPool3dOptions} class to

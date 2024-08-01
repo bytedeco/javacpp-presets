@@ -39,7 +39,7 @@ public class Context extends Pointer {
 
   public native @Const @ByRef Generator defaultGenerator(@ByVal Device device);
   public native @Const @ByRef AcceleratorHooksInterface getAcceleratorHooksInterface(
-        @ByVal(nullValue = "c10::optional<c10::DeviceType>(c10::nullopt)") DeviceTypeOptional opt_device_type);
+        @ByVal(nullValue = "std::optional<c10::DeviceType>(c10::nullopt)") DeviceTypeOptional opt_device_type);
   public native @Const @ByRef AcceleratorHooksInterface getAcceleratorHooksInterface();
   public native @ByVal Device getDeviceFromPtr(Pointer data, DeviceType device_type);
   public native @ByVal Device getDeviceFromPtr(Pointer data, @Cast("c10::DeviceType") byte device_type);
@@ -56,18 +56,20 @@ public class Context extends Pointer {
   public static native @Cast("bool") boolean hasCuDNN();
   public static native long versionCuDNN();
   public static native @Cast("bool") boolean hasCuSOLVER();
+  public static native @Cast("bool") boolean hasCuBLASLt();
   public static native @Cast("bool") boolean hasHIP();
   public static native @Cast("bool") boolean hasMPS();
   public static native @Cast("bool") boolean hasIPU();
   public static native @Cast("bool") boolean hasXLA();
   public static native @Cast("bool") boolean hasXPU();
   public static native @Cast("bool") boolean hasLazy();
-  public static native @Cast("bool") boolean hasORT();
+  public static native @Cast("bool") boolean hasMAIA();
   // defined in header so that getNonVariableType has ability to inline
   // call_once check. getNonVariableType is called fairly frequently
   public native void lazyInitCUDA();
   public native void lazyInitHIP();
   public native void lazyInitXPU();
+  public native void lazyInitMTIA();
   public native void lazyInitPrivateUse1();
   public static native @Cast("const at::cuda::NVRTC*") @ByRef Pointer getNVRTC();
 
@@ -116,6 +118,10 @@ public class Context extends Pointer {
   public native LinalgBackend linalgPreferredBackend();
   public native void setLinalgPreferredBackend(LinalgBackend arg0);
   public native void setLinalgPreferredBackend(@Cast("at::LinalgBackend") byte arg0);
+
+  public native BlasBackend blasPreferredBackend();
+  public native void setBlasPreferredBackend(BlasBackend arg0);
+  public native void setBlasPreferredBackend(@Cast("at::BlasBackend") byte arg0);
 
   // Note [Enabling Deterministic Operations]
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

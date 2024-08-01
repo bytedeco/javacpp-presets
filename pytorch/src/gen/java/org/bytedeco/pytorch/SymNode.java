@@ -41,9 +41,17 @@ public class SymNode extends Pointer {
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode add(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode sub(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode mul(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  // NB: legacy, prefer float_truediv or int_truediv
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode truediv(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode float_truediv(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode int_truediv(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  // NB: legacy, prefer float_pow or pow_by_natural
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode pow(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode float_pow(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode pow_by_natural(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  // NB: legacy, prefer int_floordiv
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode floordiv(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode int_floordiv(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode mod(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode eq(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);
   public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode ne(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode other);

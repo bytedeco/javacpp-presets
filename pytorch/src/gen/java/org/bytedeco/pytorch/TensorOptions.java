@@ -159,7 +159,7 @@ private native void allocate(MemoryFormat memory_format);
   public native @ByVal @NoException(true) TensorOptions device(@ByVal DeviceOptional device);
 
   /** Return a copy of {@code TensorOptions} with {@code device} set to the given one.
-   *  (This overload ensures that variadic template c10::optional constructor
+   *  (This overload ensures that variadic template std::optional constructor
    *  for Device work correctly.) */
 
   /** Return a copy of {@code TensorOptions}, but with device set to CUDA, and the

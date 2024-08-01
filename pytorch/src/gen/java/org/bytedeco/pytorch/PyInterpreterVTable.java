@@ -140,11 +140,15 @@ public class PyInterpreterVTable extends Pointer {
   public native void python_op_registration_trampoline(
         @Const @ByRef OperatorHandle op,
         DispatchKey arg1,
-        IValueVector stack);
+        @ByVal DispatchKeySet keyset,
+        IValueVector stack,
+        @Cast("bool") boolean with_keyset);
   public native void python_op_registration_trampoline(
         @Const @ByRef OperatorHandle op,
         @Cast("c10::DispatchKey") short arg1,
-        IValueVector stack);
+        @ByVal DispatchKeySet keyset,
+        IValueVector stack,
+        @Cast("bool") boolean with_keyset);
 
   public native void throw_abstract_impl_not_imported_error(
         @StdString BytePointer opname,
@@ -175,16 +179,68 @@ public class PyInterpreterVTable extends Pointer {
   public native @ByVal SymIntArrayRef sym_strides(@Const TensorImpl self);
   public native @ByVal SymInt sym_storage_offset(@Const TensorImpl self);
 
-  public native void trace_gpu_event_creation(@Cast("uintptr_t") long event);
-  public native void trace_gpu_event_deletion(@Cast("uintptr_t") long event);
-  public native void trace_gpu_event_record(@Cast("uintptr_t") long event, @Cast("uintptr_t") long stream);
-  public native void trace_gpu_event_wait(@Cast("uintptr_t") long event, @Cast("uintptr_t") long stream);
-  public native void trace_gpu_memory_allocation(@Cast("uintptr_t") long ptr);
-  public native void trace_gpu_memory_deallocation(@Cast("uintptr_t") long ptr);
-  public native void trace_gpu_stream_creation(@Cast("uintptr_t") long stream);
-  public native void trace_gpu_device_synchronization();
-  public native void trace_gpu_stream_synchronization(@Cast("uintptr_t") long stream);
-  public native void trace_gpu_event_synchronization(@Cast("uintptr_t") long event);
+  public native void trace_gpu_event_creation(
+        DeviceType device_type,
+        @Cast("uintptr_t") long event);
+  public native void trace_gpu_event_creation(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long event);
+  public native void trace_gpu_event_deletion(
+        DeviceType device_type,
+        @Cast("uintptr_t") long event);
+  public native void trace_gpu_event_deletion(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long event);
+  public native void trace_gpu_event_record(
+        DeviceType device_type,
+        @Cast("uintptr_t") long event,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_event_record(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long event,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_event_wait(
+        DeviceType device_type,
+        @Cast("uintptr_t") long event,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_event_wait(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long event,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_memory_allocation(
+        DeviceType device_type,
+        @Cast("uintptr_t") long ptr);
+  public native void trace_gpu_memory_allocation(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long ptr);
+  public native void trace_gpu_memory_deallocation(
+        DeviceType device_type,
+        @Cast("uintptr_t") long ptr);
+  public native void trace_gpu_memory_deallocation(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long ptr);
+  public native void trace_gpu_stream_creation(
+        DeviceType device_type,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_stream_creation(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_device_synchronization(
+        DeviceType device_type);
+  public native void trace_gpu_device_synchronization(
+        @Cast("c10::DeviceType") byte device_type);
+  public native void trace_gpu_stream_synchronization(
+        DeviceType device_type,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_stream_synchronization(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long stream);
+  public native void trace_gpu_event_synchronization(
+        DeviceType device_type,
+        @Cast("uintptr_t") long event);
+  public native void trace_gpu_event_synchronization(
+        @Cast("c10::DeviceType") byte device_type,
+        @Cast("uintptr_t") long event);
 
   public native void reset_backward_hooks(@Const TensorImpl self);
 }

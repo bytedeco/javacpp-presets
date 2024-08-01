@@ -77,7 +77,7 @@ public class GraphExecutor extends Pointer {
   // current global fusion strategy settings.
   public native @Const @ByRef ExecutionPlan getPlanFor(
         @ByRef IValueVector inputs,
-        @ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional remaining_bailout_depth);
+        @ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional remaining_bailout_depth);
   public native @Const @ByRef ExecutionPlan getPlanFor(
         @ByRef IValueVector inputs);
   public native @ByVal GraphExecutorState getDebugState();

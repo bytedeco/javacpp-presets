@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("std::vector<c10::optional<torch::autograd::Variable> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("std::vector<std::optional<torch::autograd::Variable> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorOptionalVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

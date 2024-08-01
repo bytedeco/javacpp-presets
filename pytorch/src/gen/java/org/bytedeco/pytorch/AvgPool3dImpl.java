@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AvgPool3d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies avgpool over a 3-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.AvgPool3d to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.AvgPool3d to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::AvgPool3dOptions} class to learn what

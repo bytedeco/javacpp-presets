@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GLU ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies glu over a given input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.GLU to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.GLU to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::GLUOptions} class to learn what

@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CELU ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies celu over a given input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.CELU to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.CELU to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::CELUOptions} class to learn what

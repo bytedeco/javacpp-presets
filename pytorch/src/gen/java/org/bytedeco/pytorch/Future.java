@@ -54,7 +54,7 @@ public class Future extends Pointer {
    */
   public native void markCompleted(
         @ByVal IValue value,
-        @ByVal(nullValue = "c10::optional<std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >(c10::nullopt)") WeakStorageVectorOptional storages);
+        @ByVal(nullValue = "std::optional<std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >(c10::nullopt)") WeakStorageVectorOptional storages);
   public native void markCompleted(
         @ByVal IValue value);
 

@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Flatten ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A placeholder for Flatten operator
- *  See https://pytorch.org/docs/master/generated/torch.nn.Flatten.html to learn
+ *  See https://pytorch.org/docs/main/generated/torch.nn.Flatten.html to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::FlattenOptions} class to learn what

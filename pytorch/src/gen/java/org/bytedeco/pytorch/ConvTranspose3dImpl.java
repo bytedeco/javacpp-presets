@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies the ConvTranspose3d function.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.ConvTranspose3d to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.ConvTranspose3d to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::ConvTranspose3dOptions} class to learn
@@ -52,10 +52,10 @@ public class ConvTranspose3dImpl extends ConvTranspose3dImplBase {
   @SharedPtr @Name("std::make_shared<torch::nn::ConvTranspose3dImpl>") private native void allocate(@ByVal ConvTranspose3dOptions options_);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
-        @Const @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
+        @Const @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
-        @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+        @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
 }

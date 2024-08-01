@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("c10::optional<c10::MemoryFormat>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@NoOffset @Name("std::optional<c10::MemoryFormat>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MemoryFormatOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -12,14 +12,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform</artifactId>
-            <version>2.3.1-1.5.11-SNAPSHOT</version>
+            <version>2.4.0-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform-gpu</artifactId>
-            <version>2.3.1-1.5.11-SNAPSHOT</version>
+            <version>2.4.0-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->

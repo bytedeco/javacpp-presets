@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies local response normalization over an input signal composed
  *  of several input planes, where channels occupy the second dimension.
  *  Applies normalization across channels.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.LocalResponseNorm to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.LocalResponseNorm to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::LocalResponseNormOptions} class to

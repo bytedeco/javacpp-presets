@@ -77,6 +77,8 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
 
   public native @Cast("bool") boolean hasCuSOLVER();
 
+  public native @Cast("bool") boolean hasCuBLASLt();
+
   public native @Cast("bool") boolean hasROCM();
 
   public native @Cast("const at::cuda::NVRTC*") @ByRef Pointer nvrtc();

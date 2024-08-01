@@ -130,18 +130,18 @@ public class Dispatcher extends Pointer {
   public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @ByVal FunctionSchema inferred_function_schema, @StdString String debug);
 
   /**
-   * Given an operator, tells the Dispatcher that we have implemented an abstract impl
+   * Given an operator, tells the Dispatcher that we have implemented a fake impl
    * for this op in the given Python module. Call this a "pystub".
    */
-  public native @ByVal RegistrationHandleRAII registerAbstractImplPyStub(@Const @ByRef OperatorName op_name, @Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context);
-  public native @ByVal RegistrationHandleRAII registerAbstractImplPyStub(@Const @ByRef OperatorName op_name, String pymodule, String context);
+  public native @ByVal RegistrationHandleRAII registerPythonModule(@Const @ByRef OperatorName op_name, @Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context);
+  public native @ByVal RegistrationHandleRAII registerPythonModule(@Const @ByRef OperatorName op_name, String pymodule, String context);
 
   /**
-   * Given an operator, throws if we have an abstract impl pystub.
+   * Given an operator, throws if we have a pystub.
    */
-  public native void throwIfHasAbstractImplPyStub(@ByVal OperatorName op_name);
+  public native void throwIfHasPythonModule(@ByVal OperatorName op_name);
 
-  public native @ByVal BytePointerPairOptional getAbstractImplPyStub(@ByVal OperatorName op_name);
+  public native @ByVal BytePointerPairOptional getPyStub(@ByVal OperatorName op_name);
 
   /**
    * Register a new operator by name.

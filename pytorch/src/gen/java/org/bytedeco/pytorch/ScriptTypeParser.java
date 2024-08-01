@@ -47,7 +47,7 @@ public class ScriptTypeParser extends Pointer {
 
   public native @ByVal Type.TypePtr parseTypeFromExpr(@Const @ByRef Expr expr);
 
-  public native @ByVal @Cast("c10::optional<std::pair<c10::TypePtr,int32_t> >*") T_TypePtrLong_TOptional parseBroadcastList(
+  public native @ByVal @Cast("std::optional<std::pair<c10::TypePtr,int32_t> >*") T_TypePtrLong_TOptional parseBroadcastList(
         @Const @ByRef Expr expr);
 
   public native @ByVal Type.TypePtr parseType(@StdString BytePointer str);

@@ -56,9 +56,9 @@ public class LongSmallVectorImpl extends LongSmallVectorBase {
 
   public native void assign(@Const @ByRef LongSmallVectorImpl RHS);
 
-  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::const_iterator*") LongPointer CI);
+  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer I);
 
-  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::const_iterator*") LongPointer CS, @ByVal @Cast("c10::SmallVectorImpl<int64_t>::const_iterator*") LongPointer CE);
+  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer S, @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer E);
   public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer insert(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer I, @Cast("int64_t&&") long Elt);
 
   public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer insert(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer I, long NumToInsert, long Elt);

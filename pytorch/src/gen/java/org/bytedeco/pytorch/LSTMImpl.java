@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LSTM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A multi-layer long-short-term-memory (LSTM) module.
- *  See https://pytorch.org/docs/master/generated/torch.nn.LSTM.html to learn
+ *  See https://pytorch.org/docs/main/generated/torch.nn.LSTM.html to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::LSTMOptions} class to learn what

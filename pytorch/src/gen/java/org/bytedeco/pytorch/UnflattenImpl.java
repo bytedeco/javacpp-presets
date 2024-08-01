@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A placeholder for unflatten operator
- *  See https://pytorch.org/docs/master/generated/torch.nn.Unflatten.html to
+ *  See https://pytorch.org/docs/main/generated/torch.nn.Unflatten.html to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::UnflattenOptions} class to learn what

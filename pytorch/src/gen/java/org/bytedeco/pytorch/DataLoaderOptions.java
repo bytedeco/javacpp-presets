@@ -33,7 +33,7 @@ private native void allocate(@Cast("size_t") long batch_size);
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer batch_size();
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer workers();
   public native @ByRef @NoException(true) SizeTOptional max_jobs();
-  public native @Cast("c10::optional<std::chrono::milliseconds>*") @ByRef @NoException(true) Pointer timeout();
+  public native @Cast("std::optional<std::chrono::milliseconds>*") @ByRef @NoException(true) Pointer timeout();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer enforce_ordering();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer drop_last();
 }

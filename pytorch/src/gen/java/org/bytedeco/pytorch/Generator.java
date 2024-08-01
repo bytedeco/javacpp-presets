@@ -104,6 +104,10 @@ public class Generator extends Pointer {
 
   public native @ByVal Tensor get_state();
 
+  public native void graphsafe_set_state(@Const @ByRef Generator new_state);
+
+  public native @ByVal Generator graphsafe_get_state();
+
   public native @ByVal DispatchKeySet key_set();
 
   public native @ByVal Device device();

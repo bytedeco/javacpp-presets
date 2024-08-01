@@ -27,7 +27,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  -1. This is used for measuring whether two inputs are similar or
  *  dissimilar, using the cosine distance, and is typically used for learning
  *  nonlinear embeddings or semi-supervised learning.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.CosineEmbeddingLoss to
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.CosineEmbeddingLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::CosineEmbeddingLossOptions} class to

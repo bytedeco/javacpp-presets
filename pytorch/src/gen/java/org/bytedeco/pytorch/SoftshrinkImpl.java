@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Softshrink ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies the soft shrinkage function element-wise.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Softshrink to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Softshrink to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::SoftshrinkOptions} class to learn what

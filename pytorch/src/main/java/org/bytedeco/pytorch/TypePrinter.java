@@ -29,6 +29,6 @@ public class TypePrinter extends FunctionPointer {
 
     private native void allocate();
 
-    // std::function<c10::optional<std::string>(const c10::Type&)>
+    // std::function<std::optional<std::string>(const c10::Type&)>
     public native @ByVal StringOptional call(@Const @ByRef Type type);
 }

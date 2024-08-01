@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Creates a criterion that measures the mean squared error (squared L2 norm)
  *  between each element in the input :math:{@code x} and target :math:{@code y}.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.MSELoss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.MSELoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MSELossOptions} class to learn what

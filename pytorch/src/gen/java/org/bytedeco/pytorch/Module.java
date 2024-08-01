@@ -116,7 +116,7 @@ public class Module extends Pointer {
   
   ///
   public native @SharedPtr("torch::nn::Module") @ByVal @Virtual(subclasses=false, method="clone") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) @Const({false, false, true}) Module clone(
-        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @Const @ByRef(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code Module&}.

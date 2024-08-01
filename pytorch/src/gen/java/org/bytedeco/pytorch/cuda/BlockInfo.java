@@ -47,8 +47,8 @@ public class BlockInfo extends Pointer {
         return new BlockInfo((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("int64_t") long size(); public native BlockInfo size(long setter);
-  public native @Cast("int64_t") long requested_size(); public native BlockInfo requested_size(long setter);
+  public native @Cast("size_t") long size(); public native BlockInfo size(long setter);
+  public native @Cast("size_t") long requested_size(); public native BlockInfo requested_size(long setter);
   public native int gc_counter(); public native BlockInfo gc_counter(int setter);
   public native @Cast("bool") boolean allocated(); public native BlockInfo allocated(boolean setter);
   public native @Cast("bool") boolean active(); public native BlockInfo active(boolean setter);

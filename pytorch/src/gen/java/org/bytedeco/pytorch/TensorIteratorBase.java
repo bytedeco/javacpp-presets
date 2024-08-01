@@ -153,6 +153,12 @@ public class TensorIteratorBase extends MetaBase {
   public native void _unsafe_set_arg_strides(@Cast("const int64_t") long arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
   public native void _unsafe_set_arg_data(@Cast("const int64_t") long arg, Pointer data);
 
+  // Helper functions for custom device, custom device can get OperandInfo and
+  // NameVector in their side.
+  public native @ByRef OperandInfo operand(int arg/*=0*/);
+  public native @ByRef OperandInfo operand();
+  public native @Cast("at::NameVector*") @ByRef SymDimVector get_dim_names();
+
   /** true if the stride computation can use 32-bit arithmetic. Used by GPU
    *  kernels */
   public native @Cast("bool") boolean can_use_32bit_indexing();

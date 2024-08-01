@@ -58,6 +58,8 @@ public class RecordFunction extends Pointer {
 
   public native @ByVal IValueArrayRef inputs();
 
+  public native @ByVal StringIValueMap kwinputs();
+
   public native @Const @ByRef IValueVector outputs();
 
   public native void setOutputs(@ByRef(true) IValueVector outputs);

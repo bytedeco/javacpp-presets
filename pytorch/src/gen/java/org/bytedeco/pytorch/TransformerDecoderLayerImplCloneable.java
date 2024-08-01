@@ -33,6 +33,6 @@ public class TransformerDecoderLayerImplCloneable extends Module {
    *  and submodules in the cloned module are different from those in the
    *  original module. */
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
-        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @Const @ByRef(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 }

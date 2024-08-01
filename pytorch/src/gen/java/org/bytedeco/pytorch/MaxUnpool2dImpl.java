@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MaxUnpool2d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies maxunpool over a 2-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.MaxUnpool2d to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.MaxUnpool2d to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MaxUnpool2dOptions} class to learn
@@ -47,7 +47,7 @@ public class MaxUnpool2dImpl extends MaxUnpool2dImplBase {
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef Tensor indices,
-        @Const @ByRef(nullValue = "c10::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
+        @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef Tensor indices);

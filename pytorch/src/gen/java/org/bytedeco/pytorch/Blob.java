@@ -112,5 +112,5 @@ public class Blob extends Pointer {
   /**
    * \brief Swaps the underlying storage of two blobs.
    */
-  public native void swap(@ByRef Blob rhs);
+  public native @NoException(true) void swap(@ByRef Blob rhs);
 }

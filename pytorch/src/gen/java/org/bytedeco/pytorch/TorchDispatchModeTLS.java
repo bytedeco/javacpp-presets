@@ -42,31 +42,28 @@ public class TorchDispatchModeTLS extends Pointer {
   // If you're pushing an infra mode onto the stack, we expect
   // you to use set_mode
   public static native void push_non_infra_mode_onto_stack(
-        @SharedPtr("c10::SafePyObject") @ByVal SafePyObject mode);
+        @SharedPtr("c10::impl::PyObject_TorchDispatchMode") @ByVal PyObject_TorchDispatchMode mode);
   // Pops the top mode of the stack,
   // giving precedence to user modes before attempting to pop
   // any infra modes
-  public static native @Const @SharedPtr("c10::SafePyObject") @ByVal SafePyObject pop_stack();
+  public static native @Const @SharedPtr("c10::impl::PyObject_TorchDispatchMode") @ByVal PyObject_TorchDispatchMode pop_stack();
   // Returns the highest-priority infra mode on the stack,
   // along with its mode key.
-  public static native @Const @ByVal T_SafePyObjectTorchDispatchModeKey_T pop_highest_infra_mode();
+  public static native @Const @ByVal T_PyObject_TorchDispatchModeTorchDispatchModeKey_T pop_highest_infra_mode();
 
-  public static native @Const @SharedPtr("c10::SafePyObject") @ByRef SafePyObject get_stack_at(@Cast("int64_t") long idx);
+  public static native @Const @SharedPtr("c10::impl::PyObject_TorchDispatchMode") @ByRef PyObject_TorchDispatchMode get_stack_at(
+        @Cast("int64_t") long idx);
   public static native @Cast("int64_t") long stack_len();
 
-  public static native @Const @ByVal SafePyObjectOptional get_mode(
-        TorchDispatchModeKey mode_key);
-  public static native @Const @ByVal SafePyObjectOptional get_mode(
-        @Cast("c10::impl::TorchDispatchModeKey") byte mode_key);
-  public static native @Const @ByVal SafePyObjectOptional unset_mode(
-        TorchDispatchModeKey mode_key);
-  public static native @Const @ByVal SafePyObjectOptional unset_mode(
-        @Cast("c10::impl::TorchDispatchModeKey") byte mode_key);
+  public static native @Const @ByVal PyObject_TorchDispatchModeOptional get_mode(TorchDispatchModeKey mode_key);
+  public static native @Const @ByVal PyObject_TorchDispatchModeOptional get_mode(@Cast("c10::impl::TorchDispatchModeKey") byte mode_key);
+  public static native @Const @ByVal PyObject_TorchDispatchModeOptional unset_mode(TorchDispatchModeKey mode_key);
+  public static native @Const @ByVal PyObject_TorchDispatchModeOptional unset_mode(@Cast("c10::impl::TorchDispatchModeKey") byte mode_key);
   public static native void set_mode(
-        @Const @SharedPtr("c10::SafePyObject") @ByRef SafePyObject mode,
+        @Const @SharedPtr("c10::impl::PyObject_TorchDispatchMode") @ByRef PyObject_TorchDispatchMode mode,
         TorchDispatchModeKey mode_key);
   public static native void set_mode(
-        @Const @SharedPtr("c10::SafePyObject") @ByRef SafePyObject mode,
+        @Const @SharedPtr("c10::impl::PyObject_TorchDispatchMode") @ByRef PyObject_TorchDispatchMode mode,
         @Cast("c10::impl::TorchDispatchModeKey") byte mode_key);
 
   public static native @Const @ByRef TorchDispatchModeTLS get_state();

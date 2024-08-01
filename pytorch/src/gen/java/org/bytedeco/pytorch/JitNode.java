@@ -68,7 +68,7 @@ public class JitNode extends Pointer {
   // Copies the source range, scope and callstack from another node.
   public native JitNode copyMetadata(JitNode from);
 
-  public native @ByVal @Cast("c10::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional callstack();
+  public native @ByVal @Cast("std::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional callstack();
   public native void setCallStack(@ByVal @Cast("torch::jit::InlinedCallStackPtr*") Pointer cs);
 
   // NB: This returns an ArrayRef; that means that it will

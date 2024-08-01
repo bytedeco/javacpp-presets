@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MaxUnpool3d ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies maxunpool over a 3-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.MaxUnpool3d to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.MaxUnpool3d to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MaxUnpool3dOptions} class to learn
@@ -47,7 +47,7 @@ public class MaxUnpool3dImpl extends MaxUnpool3dImplBase {
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef Tensor indices,
-        @Const @ByRef(nullValue = "c10::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
+        @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef Tensor indices);

@@ -24,7 +24,18 @@ public class ForceDispatchKeyGuard extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ForceDispatchKeyGuard(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ForceDispatchKeyGuard(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ForceDispatchKeyGuard position(long position) {
+        return (ForceDispatchKeyGuard)super.position(position);
+    }
+    @Override public ForceDispatchKeyGuard getPointer(long i) {
+        return new ForceDispatchKeyGuard((Pointer)this).offsetAddress(i);
+    }
 
+  public ForceDispatchKeyGuard() { super((Pointer)null); allocate(); }
+  private native void allocate();
   public ForceDispatchKeyGuard(@ByVal LocalDispatchKeySet key_set) { super((Pointer)null); allocate(key_set); }
   private native void allocate(@ByVal LocalDispatchKeySet key_set);
   public ForceDispatchKeyGuard(

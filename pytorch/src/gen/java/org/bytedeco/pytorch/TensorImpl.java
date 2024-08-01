@@ -453,7 +453,7 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_mps();
 
-  public native @Cast("bool") boolean is_ort();
+  public native @Cast("bool") boolean is_maia();
 
   public native @Cast("bool") boolean is_nested();
 
@@ -702,7 +702,7 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(
         @ByVal SymIntArrayRef sizes,
         @ByVal SymIntArrayRef strides,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional storage_offset);
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal SymIntArrayRef sizes,
         @ByVal SymIntArrayRef strides);
@@ -758,14 +758,14 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride);
   public native void set_sizes_and_strides(
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_stride,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... new_stride);
@@ -1023,6 +1023,8 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_non_overlapping_and_dense();
 
+  // if this returns true, then it is guaranteed that this tensor has symbolic
+  // sizes/strides
   public native @Cast("bool") boolean has_symbolic_sizes_strides();
   public native void set_storage_access_should_throw();
   public native void set_custom_sizes_strides(SizesStridesPolicy policy);

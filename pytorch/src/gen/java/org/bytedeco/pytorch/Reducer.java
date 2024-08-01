@@ -33,7 +33,7 @@ public class Reducer extends Pointer {
   public Reducer(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
-        @ByVal @Cast("std::vector<size_t>*") SizeTVector per_bucket_size_limits,
+        @Cast("const std::vector<size_t>*") @ByRef SizeTVector per_bucket_size_limits,
         @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
         @ByVal BoolVector expect_sparse_gradients,
         @Cast("int64_t") long bucket_bytes_cap,
@@ -44,7 +44,7 @@ public class Reducer extends Pointer {
   private native void allocate(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
-        @ByVal @Cast("std::vector<size_t>*") SizeTVector per_bucket_size_limits,
+        @Cast("const std::vector<size_t>*") @ByRef SizeTVector per_bucket_size_limits,
         @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
         @ByVal BoolVector expect_sparse_gradients,
         @Cast("int64_t") long bucket_bytes_cap,
@@ -86,7 +86,7 @@ public class Reducer extends Pointer {
   // be called once before calling backward.
   // Cannot combine with the call of `register_comm_hook`.
   public native void register_builtin_comm_hook(BuiltinCommHookType comm_hook_type);
-  public native void register_builtin_comm_hook(@Cast("c10d::BuiltinCommHookType") int comm_hook_type);
+  public native void register_builtin_comm_hook(@Cast("c10d::BuiltinCommHookType") byte comm_hook_type);
 
   // Informs reducer that optimizer is running in backward, so gradients
   // don't need to be copied from buckets as the optimizer would've already

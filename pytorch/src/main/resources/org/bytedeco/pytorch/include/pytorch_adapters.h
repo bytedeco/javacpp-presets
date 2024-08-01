@@ -55,8 +55,8 @@ public:
     /* Necessary because, without it, assigning an adapter to an optional<I> will
      * pick up the T*() conversion operator which will make the type checking
      * in optional fail for some reason. */
-    operator c10::optional<I>() {
-        return c10::optional(intrusivePtr);
+    operator std::optional<I>() {
+        return std::optional(intrusivePtr);
     }
 
     operator I&() { return intrusivePtr; }

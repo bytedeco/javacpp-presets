@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Applies Layer Normalization over a mini-batch of inputs as described in
  *  the paper {@code Layer Normalization}_ .
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.LayerNorm to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.LayerNorm to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::LayerNormOptions} class to learn what

@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Identity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** A placeholder identity operator that is argument-insensitive.
- *  See https://pytorch.org/docs/master/generated/torch.nn.Identity.html to
+ *  See https://pytorch.org/docs/main/generated/torch.nn.Identity.html to
  *  learn about the exact behavior of this module. */
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class IdentityImpl extends IdentityImplCloneable {

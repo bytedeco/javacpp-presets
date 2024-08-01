@@ -26,7 +26,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  hinge loss (margin-based loss) between input :math:{@code x} (a 2D mini-batch
  *  {@code Tensor}) and output :math:{@code y} (which is a 2D {@code Tensor} of target class
  *  indices). See
- *  https://pytorch.org/docs/master/nn.html#torch.nn.MultiLabelMarginLoss to
+ *  https://pytorch.org/docs/main/nn.html#torch.nn.MultiLabelMarginLoss to
  *  learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::MultiLabelMarginLossOptions} class to

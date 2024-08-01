@@ -30,12 +30,12 @@ public class RangeValue extends SugaredValue {
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @ByVal ValueVector input,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional static_len) { super((Pointer)null); allocate(loc, m, input, static_len); }
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional static_len) { super((Pointer)null); allocate(loc, m, input, static_len); }
   private native void allocate(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @ByVal ValueVector input,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional static_len);
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional static_len);
   public RangeValue(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,

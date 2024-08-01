@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Creates a criterion that measures the Binary Cross Entropy
  *  between the target and the output.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.BCELoss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.BCELoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::BCELossOptions} class to learn what

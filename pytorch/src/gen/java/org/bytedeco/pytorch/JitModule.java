@@ -225,7 +225,7 @@ public class JitModule extends JitObject {
 
   public native @ByVal JitModule copy();
 
-  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal JitModule deepcopy();
 
   // Clones both the underlying `ClassType` and the module instance(data), this

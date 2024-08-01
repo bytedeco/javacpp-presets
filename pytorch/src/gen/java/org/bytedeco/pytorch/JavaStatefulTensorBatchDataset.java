@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("torch::data::datasets::BatchDataset<javacpp::StatefulDataset<torch::Tensor,torch::data::example::NoTarget>,c10::optional<std::vector<torch::data::Example<torch::Tensor,torch::data::example::NoTarget> > >,size_t>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::datasets::BatchDataset<javacpp::StatefulDataset<torch::Tensor,torch::data::example::NoTarget>,std::optional<std::vector<torch::data::Example<torch::Tensor,torch::data::example::NoTarget> > >,size_t>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class JavaStatefulTensorBatchDataset extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

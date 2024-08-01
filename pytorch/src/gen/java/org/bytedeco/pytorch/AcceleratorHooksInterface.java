@@ -35,4 +35,14 @@ public class AcceleratorHooksInterface extends Pointer {
 
   // Whether the device at device_index is fully initialized or not.
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+
+  public native @Cast("c10::DeviceIndex") byte deviceCount();
+
+  public native void setCurrentDevice(@Cast("c10::DeviceIndex") byte device);
+
+  public native @Cast("c10::DeviceIndex") byte getCurrentDevice();
+
+  public native @Cast("c10::DeviceIndex") byte exchangeDevice(@Cast("c10::DeviceIndex") byte device);
+
+  public native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte device);
 }

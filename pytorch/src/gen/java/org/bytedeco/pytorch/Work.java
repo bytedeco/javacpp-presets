@@ -33,24 +33,24 @@ public class Work extends CustomClassHolder {
         int rank/*=-1*/,
         OpType opType/*=c10d::OpType::UNKNOWN*/,
         @Cast("const char*") BytePointer profilingTitle/*=nullptr*/,
-        @Const @ByRef(nullValue = "c10::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors) { super((Pointer)null); allocate(rank, opType, profilingTitle, inputTensors); }
+        @Const @ByRef(nullValue = "std::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors) { super((Pointer)null); allocate(rank, opType, profilingTitle, inputTensors); }
   @IntrusivePtr @Name("c10::make_intrusive<c10d::Work>") private native void allocate(
         int rank/*=-1*/,
         OpType opType/*=c10d::OpType::UNKNOWN*/,
         @Cast("const char*") BytePointer profilingTitle/*=nullptr*/,
-        @Const @ByRef(nullValue = "c10::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors);
+        @Const @ByRef(nullValue = "std::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors);
   public Work() { super((Pointer)null); allocate(); }
   @IntrusivePtr @Name("c10::make_intrusive<c10d::Work>") private native void allocate();
   public Work(
         int rank/*=-1*/,
         @Cast("c10d::OpType") byte opType/*=c10d::OpType::UNKNOWN*/,
         String profilingTitle/*=nullptr*/,
-        @Const @ByRef(nullValue = "c10::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors) { super((Pointer)null); allocate(rank, opType, profilingTitle, inputTensors); }
+        @Const @ByRef(nullValue = "std::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors) { super((Pointer)null); allocate(rank, opType, profilingTitle, inputTensors); }
   @IntrusivePtr @Name("c10::make_intrusive<c10d::Work>") private native void allocate(
         int rank/*=-1*/,
         @Cast("c10d::OpType") byte opType/*=c10d::OpType::UNKNOWN*/,
         String profilingTitle/*=nullptr*/,
-        @Const @ByRef(nullValue = "c10::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors);
+        @Const @ByRef(nullValue = "std::optional<std::vector<at::Tensor> >(c10::nullopt)") TensorVectorOptional inputTensors);
 
   // Checks if request has completed. Non-blocking operation.
   public native @Cast("bool") boolean isCompleted();

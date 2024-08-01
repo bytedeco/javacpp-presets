@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ReLU6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies the ReLU6 function element-wise.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.ReLU6 to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.ReLU6 to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::ReLU6Options} class to learn what

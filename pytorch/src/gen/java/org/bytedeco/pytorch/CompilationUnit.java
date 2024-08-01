@@ -72,7 +72,7 @@ public class CompilationUnit extends Pointer {
         @Const @ByRef ResolverVector defResolvers,
         @Const Self self,
         @Cast("bool") boolean shouldMangle/*=false*/,
-        @ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional operator_set_version);
+        @ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional operator_set_version);
   public native @ByVal FunctionVector define(
         @Const @ByRef QualifiedNameOptional prefix,
         @Const @ByRef PropertyVector properties,

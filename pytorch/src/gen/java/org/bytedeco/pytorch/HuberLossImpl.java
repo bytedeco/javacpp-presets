@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** Creates a criterion that uses a squared term if the absolute
  *  element-wise error falls below delta and a delta-scaled L1 term otherwise.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.HuberLoss to learn
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.HuberLoss to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::HuberLossOptions} class to learn what

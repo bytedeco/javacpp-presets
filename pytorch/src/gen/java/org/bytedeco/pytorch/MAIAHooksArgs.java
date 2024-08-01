@@ -22,9 +22,9 @@ import static org.bytedeco.pytorch.global.torch.*;
 // NB: dummy argument to suppress "ISO C++11 requires at least one argument
 // for the "..." in a variadic macro"
 @Namespace("at") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ORTHooksArgs extends Pointer {
+public class MAIAHooksArgs extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ORTHooksArgs() { super((Pointer)null); }
+    public MAIAHooksArgs() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ORTHooksArgs(Pointer p) { super(p); }
+    public MAIAHooksArgs(Pointer p) { super(p); }
 }

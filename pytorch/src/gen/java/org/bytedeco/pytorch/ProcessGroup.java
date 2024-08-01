@@ -78,19 +78,20 @@ public class ProcessGroup extends CustomClassHolder {
     public native @ByRef Milliseconds timeout(); public native Options timeout(Milliseconds setter);
 
     // backend name
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     @MemberGetter public native @StdString BytePointer backend();
   }
 
   public enum BackendType {
-    UNDEFINED(0),
-    GLOO(1),
-    NCCL(2),
-    UCC(3),
-    MPI(4),
-    CUSTOM(5);
+    UNDEFINED((byte)(0)),
+    GLOO((byte)(1)),
+    NCCL((byte)(2)),
+    UCC((byte)(3)),
+    MPI((byte)(4)),
+    CUSTOM((byte)(5));
 
-      public final int value;
-      private BackendType(int v) { this.value = v; }
+      public final byte value;
+      private BackendType(byte v) { this.value = v; }
       private BackendType(BackendType e) { this.value = e.value; }
       public BackendType intern() { for (BackendType e : values()) if (e.value == value) return e; return this; }
       @Override public String toString() { return intern().name(); }
@@ -122,7 +123,7 @@ public class ProcessGroup extends CustomClassHolder {
   // Returns an unique opaque ID of a backend for the specific backend type
   // that can correlate with this process group's collectives.
   public native @Cast("int64_t") long getBackendID(BackendType backend_type);
-  public native @Cast("int64_t") long getBackendID(@Cast("c10d::ProcessGroup::BackendType") int backend_type);
+  public native @Cast("int64_t") long getBackendID(@Cast("c10d::ProcessGroup::BackendType") byte backend_type);
 
   public native @StdString BytePointer getBackendName();
 
@@ -308,7 +309,7 @@ public class ProcessGroup extends CustomClassHolder {
         @Const @ByRef DistributedBackendOptional backend);
   public native void setBackend(
         @Cast("c10::DeviceType") byte deviceType,
-        @Cast("c10d::ProcessGroup::BackendType") int backendType,
+        @Cast("c10d::ProcessGroup::BackendType") byte backendType,
         @Const @ByRef DistributedBackendOptional backend);
 
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getDefaultBackend();
@@ -317,7 +318,6 @@ public class ProcessGroup extends CustomClassHolder {
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getBackend(@Cast("c10::DeviceType") byte deviceType);
 
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getBackend(BackendType backendType);
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getBackend(@Cast("c10d::ProcessGroup::BackendType") int backendType);
 
   // Return device types supported by this ProcessGroup.
   // Note: the return type is `Device` rather than `DeviceType` for the purpose
@@ -335,6 +335,9 @@ public class ProcessGroup extends CustomClassHolder {
   public native @StdString BytePointer getGroupName();
   public native void setGroupName(@StdString BytePointer name);
   public native void setGroupName(@StdString String name);
+  public native @StdString BytePointer getGroupDesc();
+  public native void setGroupDesc(@StdString BytePointer name);
+  public native void setGroupDesc(@StdString String name);
   public native void enableCollectivesTiming();
 
   public native void release_resources();

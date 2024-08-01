@@ -31,7 +31,7 @@ public class SugaredTupleValue extends SugaredValue {
   public native @ByVal SharedSugaredValueVector asTuple(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
-        @Const @ByRef(nullValue = "c10::optional<size_t>{}") SizeTOptional size_hint);
+        @Const @ByRef(nullValue = "std::optional<size_t>{}") SizeTOptional size_hint);
   public native @ByVal SharedSugaredValueVector asTuple(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m);

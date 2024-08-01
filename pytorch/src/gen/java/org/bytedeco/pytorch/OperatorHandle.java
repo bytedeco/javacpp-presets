@@ -48,6 +48,9 @@ public class OperatorHandle extends Pointer {
   public native @Cast("bool") boolean hasKernelForDispatchKey(DispatchKey k);
   public native @Cast("bool") boolean hasKernelForDispatchKey(@Cast("c10::DispatchKey") short k);
 
+  public native @Cast("bool") boolean isKernelFallthroughKernel(DispatchKey k);
+  public native @Cast("bool") boolean isKernelFallthroughKernel(@Cast("c10::DispatchKey") short k);
+
   public native @Cast("bool") boolean hasKernelForAnyDispatchKey(@ByVal DispatchKeySet k);
 
   public native @Cast("bool") boolean hasComputedKernelForDispatchKey(DispatchKey k);

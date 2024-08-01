@@ -20,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 /** Applies fold over a 3-D input.
- *  See https://pytorch.org/docs/master/nn.html#torch.nn.Fold to learn about
+ *  See https://pytorch.org/docs/main/nn.html#torch.nn.Fold to learn about
  *  the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::FoldOptions} class to learn what

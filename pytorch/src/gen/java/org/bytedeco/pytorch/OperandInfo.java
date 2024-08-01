@@ -71,6 +71,17 @@ public class OperandInfo extends Pointer {
 
   public native @Cast("bool") boolean is_output(); public native OperandInfo is_output(boolean setter);
 
+  // will_resize is only for output tensor.
+  // 1) Functional call(like torch.add(self, other)): output tensor is
+  //    undefined, and pytorch creates a new tensor by using common shape
+  //    and computed stride in TensorIterator;
+  // 2) Inplace call(like torch.add_(self, other)): output tensor is same
+  //    with input tensor, and can't to modify tensor's size and stride;
+  // 3) Op call with output(like torch.add(self, other, out = output)):
+  //    output tensor is defined, but tensor shape maybe different with common
+  //    shape. If tensor shape is not same with common shape, this output
+  //    tensor will be resized by using common shape and computed stride in
+  //    TensorIterator. Otherwise can't modify tensor's size and stride.
   public native @Cast("bool") boolean will_resize(); public native OperandInfo will_resize(boolean setter);
 
   public native @Cast("bool") boolean is_read_write(); public native OperandInfo is_read_write(boolean setter);

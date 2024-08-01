@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Linear ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /** Applies a linear transformation with optional bias.
- *  See https://pytorch.org/docs/master/generated/torch.nn.Linear.html to learn
+ *  See https://pytorch.org/docs/main/generated/torch.nn.Linear.html to learn
  *  about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::LinearOptions} class to learn what

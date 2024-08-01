@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("c10::optional<std::vector<c10::Stride> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@NoOffset @Name("std::optional<std::vector<c10::Stride> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class StrideVectorOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
