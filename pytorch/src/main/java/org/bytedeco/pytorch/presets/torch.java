@@ -1982,6 +1982,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         for (String n : new String[]{
             "c10::DDPLoggingData::strs_map",
             "c10::DDPLoggingData::ints_map",
+            "torch::dynamo::autograd::TensorArgs::inputs",
+            "torch::dynamo::autograd::AutogradCompilerCall::all_size_inputs",
+            "torch::dynamo::autograd::AutogradCompilerCall::dyn_size_inputs",
+            "torch::dynamo::autograd::AutogradCompilerCall::node_calls",
+            "torch::dynamo::autograd::AutogradCompilerCall::default_dyn_type",
             "torch::jit::Object::Property::setter_func",
             "torch::jit::Object::Property::getter_func",
             "torch::jit::Object::Property::name",
@@ -2006,14 +2011,15 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10d::AllreduceOptions::timeout",
             "c10d::AllreduceOptions::reduceOp",
             "c10d::AllreduceOptions::sparseIndices",
+            "c10d::C10dLoggingData::strings",
+            "c10d::C10dLoggingData::integers",
             "c10d::ReduceOptions::timeout",
             "c10d::ReduceOptions::reduceOp",
             "c10d::ReduceOptions::rootRank",
             "c10d::ReduceOptions::rootTensor",
             "c10d::ReduceScatterOptions::reduceOp",
             "c10d::ReduceScatterOptions::timeout",
-            "c10d::ReduceScatterOptions::asyncOp",
-
+            "c10d::ReduceScatterOptions::asyncOp"
         }) {
             Info i = infoMap.getFirst(n, false);
             if (i == null) {
