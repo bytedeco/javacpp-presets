@@ -47,5 +47,5 @@ public class TensorArgs extends Pointer {
   public native @ByRef DynamoTensorArg add(@Const @ByRef Tensor tensor);
 
   // the concrete tensors that will get passed into the graph as inputs
-  public native @ByRef TensorVector inputs(); public native TensorArgs inputs(TensorVector setter);
+  public native @ByRef @NoOffset TensorVector inputs(); public native TensorArgs inputs(TensorVector setter);
 }

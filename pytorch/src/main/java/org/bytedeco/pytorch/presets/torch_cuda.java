@@ -21,6 +21,9 @@
  */
 package org.bytedeco.pytorch.presets;
 
+import org.bytedeco.cuda.presets.cudnn;
+import org.bytedeco.cuda.presets.cusolver;
+import org.bytedeco.cuda.presets.cusparse;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.*;
@@ -33,7 +36,7 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
  * @author Hervé Guillemet
  */
 @Properties(
-    inherit = torch.class,
+    inherit = { torch.class, cudnn.class, cusparse.class, cusolver.class },
     value = {
         @Platform(
             extension = "-gpu",
@@ -46,6 +49,10 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
 
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
+            },
+            exclude = {
+                "<cublas.h>", // pytorch includes cublas_v2, which is not compatible with cublas included from inherited cudnn presets
+                "<driver_functions.h>" // causes #warning
             },
             library = "jnitorch"
         ),
@@ -71,12 +78,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.helper.*;"))
-            .put(new Info().javaText("import org.bytedeco.cuda.cudart.*;"))
-            .put(new Info().javaText("import org.bytedeco.cuda.cusparse.*;"))
-            .put(new Info().javaText("import org.bytedeco.cuda.cublas.*;"))
-            .put(new Info().javaText("import org.bytedeco.cuda.cusolver.*;"))
-            .put(new Info().javaText("import org.bytedeco.cuda.cudnn.*;"))
-            // .put(new Info().javaText("import org.bytedeco.cuda.nccl.*;")) // Not on Windows
             .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
@@ -206,15 +207,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
         //// CUDA types
         infoMap
-            .put(new Info("cudaStream_t").valueTypes("CUstream_st").pointerTypes("@ByPtrPtr CUstream_st"))
-            .put(new Info("cudaEvent_t").valueTypes("CUevent_st").pointerTypes("@ByPtrPtr CUevent_st"))
-            .put(new Info("cusparseHandle_t").valueTypes("cusparseContext").pointerTypes("@ByPtrPtr cusparseContext"))
-            .put(new Info("cublasHandle_t").valueTypes("cublasContext").pointerTypes("@ByPtrPtr cublasContext"))
-            .put(new Info("cublasLtHandle_t").valueTypes("cublasLtContext").pointerTypes("@ByPtrPtr cublasLtContext"))
-            .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
-            .put(new Info("cudnnHandle_t").valueTypes("cudnnContext").pointerTypes("@ByPtrPtr cudnnContext"))
-            // .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer")) // Not on Windows
-
             .put(new Info( // Enums, cuda presets doesn't use Info.enumerate
                 "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t", "cudnnRNNDataLayout_t",
                 "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudaStreamCaptureMode", "cudnnDataType_t", "cudnnNanPropagation_t",

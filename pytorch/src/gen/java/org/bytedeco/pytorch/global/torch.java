@@ -59866,8 +59866,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/irange.h>
 @Namespace("at::native") public static native @Cast("bool") boolean nested_tensor_impl_is_contiguous(@Const NestedTensorImpl nt);
 
-@Namespace("at::native") public static native @ByVal Tensor construct_nested_strides(@Const @ByRef Tensor nested_size);
-@Namespace("at::native") public static native @ByVal Tensor construct_offsets(@Const @ByRef Tensor nested_size);
+
+
 // Targeting ../NestedTensorImpl.java
 
 
@@ -80409,7 +80409,6 @@ public static final int C10D_ENV_NOT_SET = -2;
 
 
 // Targeting ../JavaStatefulTensorDataset.java
-
 
 
 

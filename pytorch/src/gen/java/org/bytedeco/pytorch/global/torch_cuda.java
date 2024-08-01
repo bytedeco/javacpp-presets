@@ -6,11 +6,6 @@ import org.bytedeco.pytorch.cuda.*;
 
 import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.helper.*;
-import org.bytedeco.cuda.cudart.*;
-import org.bytedeco.cuda.cusparse.*;
-import org.bytedeco.cuda.cublas.*;
-import org.bytedeco.cuda.cusolver.*;
-import org.bytedeco.cuda.cudnn.*;
 import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
@@ -25,6 +20,16 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
 
 public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
     static { Loader.load(); }

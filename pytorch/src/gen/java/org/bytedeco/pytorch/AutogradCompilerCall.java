@@ -42,9 +42,9 @@ public class AutogradCompilerCall extends Pointer {
   public native @Cast("size_t") long emplace_hook(@ByRef(true) SafePyObject fn);
 
   public native @ByRef TensorArgs tensor_args(); public native AutogradCompilerCall tensor_args(TensorArgs setter);
-  public native @StdVector SizeInput all_size_inputs(); public native AutogradCompilerCall all_size_inputs(SizeInput setter);
-  public native @ByRef @Cast("std::vector<int64_t>*") LongVector dyn_size_inputs(); public native AutogradCompilerCall dyn_size_inputs(LongVector setter);
+  public native @StdVector @NoOffset SizeInput all_size_inputs(); public native AutogradCompilerCall all_size_inputs(SizeInput setter);
+  public native @ByRef @Cast("std::vector<int64_t>*") @NoOffset LongVector dyn_size_inputs(); public native AutogradCompilerCall dyn_size_inputs(LongVector setter);
   
-  public native @ByRef NodeCalls node_calls(); public native AutogradCompilerCall node_calls(NodeCalls setter);
-  public native SizeInput.DynType default_dyn_type(); public native AutogradCompilerCall default_dyn_type(SizeInput.DynType setter);
+  public native @ByRef @NoOffset NodeCalls node_calls(); public native AutogradCompilerCall node_calls(NodeCalls setter);
+  public native @NoOffset SizeInput.DynType default_dyn_type(); public native AutogradCompilerCall default_dyn_type(SizeInput.DynType setter);
 }

@@ -41,7 +41,7 @@ public class C10dLoggingData extends Pointer {
     }
 
   // logging fields that are string types.
-  public native @ByRef StringStringMap strings(); public native C10dLoggingData strings(StringStringMap setter);
+  public native @ByRef @NoOffset StringStringMap strings(); public native C10dLoggingData strings(StringStringMap setter);
   // logging fields that are int64_t types.
-  public native @ByRef StringLongMap integers(); public native C10dLoggingData integers(StringLongMap setter);
+  public native @ByRef @NoOffset StringLongMap integers(); public native C10dLoggingData integers(StringLongMap setter);
 }
