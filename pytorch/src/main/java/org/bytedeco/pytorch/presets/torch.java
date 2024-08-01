@@ -81,7 +81,10 @@ import org.bytedeco.openblas.presets.openblas;
                 "pytorch_adapters.h",
 
 		        // Fix link error on Windows:
-		        "gloo/common/logging.cc"
+		        "gloo/common/logging.cc",
+
+                // Fix compilation error on MacOS-12:
+                "<unordered_map>"
 
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
