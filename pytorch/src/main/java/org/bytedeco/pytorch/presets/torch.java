@@ -2573,7 +2573,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10::ivalue::Future::operator <<",
             "c10::merge_primitive", // templated function with some specializations. Will have to figure what instances to create if needed.
             "c10::operator <<(std::ostream&, c10::SourceLocation&)",
-            "c10d::checkForNaN", // Not exported
+            "c10d::checkForNan", // Not exported
             "c10d::Logger::operator <<(std::ostream&, const c10d::Logger&)", // No definition
             "c10d::ProcessGroupGloo::createProcessGroupGloo", // No definition
             "caffe2::serialize::detail::getPadding",
