@@ -70,160 +70,160 @@ import static org.bytedeco.llvm.global.clang.clang_visitChildren;
  * @author Andrey Shcheglov
  */
 public final class ClangMemoryMgmtExample {
-	private ClangMemoryMgmtExample() {
-		assert false;
-	}
+    private ClangMemoryMgmtExample() {
+        assert false;
+    }
 
-	public static void main(final String... args) throws URISyntaxException {
-		final URL codeUrl = requireNonNull(ClangMemoryMgmtExample.class.getResource("/sample1.cc"));
-		final Path absoluteFile = Paths.get(codeUrl.toURI()).toAbsolutePath().normalize();
-		parse(absoluteFile, asList("-std=gnu++20", "-fparse-all-comments"));
-	}
+    public static void main(final String... args) throws URISyntaxException {
+        final URL codeUrl = requireNonNull(ClangMemoryMgmtExample.class.getResource("/sample1.cc"));
+        final Path absoluteFile = Paths.get(codeUrl.toURI()).toAbsolutePath().normalize();
+        parse(absoluteFile, asList("-std=gnu++20", "-fparse-all-comments"));
+    }
 
-	private static void parse(
-			final Path absoluteFile,
-			final List<String> commandLineArgs
-	) {
-		withPointerScope(() -> {
-			withIndex(clang_createIndex(1, 0), index -> {
-				withTranslationUnit(CXTranslationUnit::new, translationUnit -> {
-					try (final BytePointer sourceFilename = new BytePointer(absoluteFile.toString())) {
-						try (final PointerPointer<Pointer> commandLineArgsPtr = new PointerPointer<>(commandLineArgs.toArray(new String[0]))) {
-							try (final CXUnsavedFile unsavedFiles = new CXUnsavedFile()) {
-								final int unsavedFilesCount = 0;
+    private static void parse(
+            final Path absoluteFile,
+            final List<String> commandLineArgs
+    ) {
+        withPointerScope(() -> {
+            withIndex(clang_createIndex(1, 0), index -> {
+                withTranslationUnit(CXTranslationUnit::new, translationUnit -> {
+                    try (final BytePointer sourceFilename = new BytePointer(absoluteFile.toString())) {
+                        try (final PointerPointer<Pointer> commandLineArgsPtr = new PointerPointer<>(commandLineArgs.toArray(new String[0]))) {
+                            try (final CXUnsavedFile unsavedFiles = new CXUnsavedFile()) {
+                                final int unsavedFilesCount = 0;
 
-								final int errorCode = clang_parseTranslationUnit2(
-										index,
-										sourceFilename,
-										commandLineArgsPtr,
-										commandLineArgs.size(),
-										unsavedFiles,
-										unsavedFilesCount,
-										CXTranslationUnit_None,
-										translationUnit
-								);
+                                final int errorCode = clang_parseTranslationUnit2(
+                                        index,
+                                        sourceFilename,
+                                        commandLineArgsPtr,
+                                        commandLineArgs.size(),
+                                        unsavedFiles,
+                                        unsavedFilesCount,
+                                        CXTranslationUnit_None,
+                                        translationUnit
+                                );
 
-								if (errorCode == CXError_Success) {
-									try (final CXCursor rootCursor = clang_getTranslationUnitCursor(translationUnit)) {
-										clang_visitChildren(rootCursor, new AstVisitor(), null);
-									}
-								} else {
-									out.printf("Failed to parse %s; parser returned code %d%n", absoluteFile, errorCode);
-								}
-							}
-						}
-					}
-				});
-			});
-		});
-	}
+                                if (errorCode == CXError_Success) {
+                                    try (final CXCursor rootCursor = clang_getTranslationUnitCursor(translationUnit)) {
+                                        clang_visitChildren(rootCursor, new AstVisitor(), null);
+                                    }
+                                } else {
+                                    out.printf("Failed to parse %s; parser returned code %d%n", absoluteFile, errorCode);
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    }
 
-	private static void withPointerScope(final Runnable block) {
-		try (final PointerScope ignored = new PointerScope()) {
-			block.run();
-		}
-	}
+    private static void withPointerScope(final Runnable block) {
+        try (final PointerScope ignored = new PointerScope()) {
+            block.run();
+        }
+    }
 
-	private static void withIndex(
-			final CXIndex index,
-			final Consumer<CXIndex> block
-	) {
-		try (final CXIndex ignored = index) {
-			try {
-				block.accept(index);
-			} finally {
-				clang_disposeIndex(index);
-			}
-		}
-	}
+    private static void withIndex(
+            final CXIndex index,
+            final Consumer<CXIndex> block
+    ) {
+        try (final CXIndex ignored = index) {
+            try {
+                block.accept(index);
+            } finally {
+                clang_disposeIndex(index);
+            }
+        }
+    }
 
-	private static void withTranslationUnit(
-			final Supplier<CXTranslationUnit> lazyTranslationUnit,
-			final Consumer<CXTranslationUnit> block
-	) {
-		try (final CXTranslationUnit translationUnit = lazyTranslationUnit.get()) {
-			try {
-				block.accept(translationUnit);
-			} finally {
-				clang_disposeTranslationUnit(translationUnit);
-			}
-		}
-	}
+    private static void withTranslationUnit(
+            final Supplier<CXTranslationUnit> lazyTranslationUnit,
+            final Consumer<CXTranslationUnit> block
+    ) {
+        try (final CXTranslationUnit translationUnit = lazyTranslationUnit.get()) {
+            try {
+                block.accept(translationUnit);
+            } finally {
+                clang_disposeTranslationUnit(translationUnit);
+            }
+        }
+    }
 
-	private static void forEachToken(
-			final CXCursor cursor,
-			final Consumer<? super CXToken> action
-	) {
-		try (final CXSourceRange extent = clang_getCursorExtent(cursor)) {
-			try (final CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor)) {
-				try (final CXToken tokens = new CXToken()) {
-					final int[] tokenCountRef = new int[1];
-					clang_tokenize(translationUnit, extent, tokens, tokenCountRef);
-					final int tokenCount = tokenCountRef[0];
-					try {
-						IntStream.range(0, tokenCount)
-							 .mapToObj(tokens::position)
-							 .forEach(action);
-					} finally {
-						tokens.position(0L);
-						clang_disposeTokens(translationUnit, tokens, tokenCount);
-					}
-				}
-			}
-		}
-	}
+    private static void forEachToken(
+            final CXCursor cursor,
+            final Consumer<? super CXToken> action
+    ) {
+        try (final CXSourceRange extent = clang_getCursorExtent(cursor)) {
+            try (final CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor)) {
+                try (final CXToken tokens = new CXToken()) {
+                    final int[] tokenCountRef = new int[1];
+                    clang_tokenize(translationUnit, extent, tokens, tokenCountRef);
+                    final int tokenCount = tokenCountRef[0];
+                    try {
+                        IntStream.range(0, tokenCount)
+                             .mapToObj(tokens::position)
+                             .forEach(action);
+                    } finally {
+                        tokens.position(0L);
+                        clang_disposeTokens(translationUnit, tokens, tokenCount);
+                    }
+                }
+            }
+        }
+    }
 
-	private static final class AstVisitor extends CXCursorVisitor {
-		@Override
-		public int call(final CXCursor cursor, final CXCursor parent, final CXClientData clientData) {
-			try (final CXCursor c = cursor; final CXCursor p = parent; final CXClientData d = clientData) {
-				/*-
-				 * Entering a new `PointerScope` here is 100% necessary,
-				 * probably because the outer ("lower") stack frame is a
-				 * native one (i.e. `call()` is directly invoked by the
-				 * native code).
-				 *
-				 * Despite previously registered ("outer") pointer scopes
-				 * are still visible, having only a single scope per
-				 * translation unit (i.e., AST tree) rather than per cursor
-				 * eventually results in 100% usage of all CPU cores -- in
-				 * the native code.
-				 */
-				withPointerScope(() -> {
-					try (final CXString spelling = clang_getCursorKindSpelling(clang_getCursorKind(cursor))) {
-						out.println(spelling.getString());
-					}
+    private static final class AstVisitor extends CXCursorVisitor {
+        @Override
+        public int call(final CXCursor cursor, final CXCursor parent, final CXClientData clientData) {
+            try (final CXCursor c = cursor; final CXCursor p = parent; final CXClientData d = clientData) {
+                /*-
+                 * Entering a new `PointerScope` here is 100% necessary,
+                 * probably because the outer ("lower") stack frame is a
+                 * native one (i.e. `call()` is directly invoked by the
+                 * native code).
+                 *
+                 * Despite previously registered ("outer") pointer scopes
+                 * are still visible, having only a single scope per
+                 * translation unit (i.e., AST tree) rather than per cursor
+                 * eventually results in 100% usage of all CPU cores -- in
+                 * the native code.
+                 */
+                withPointerScope(() -> {
+                    try (final CXString spelling = clang_getCursorKindSpelling(clang_getCursorKind(cursor))) {
+                        out.println(spelling.getString());
+                    }
 
-					try (final CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor)) {
-						forEachToken(cursor, token -> {
-							final TokenKind kind = TokenKind.valueOf(clang_getTokenKind(token));
-							try (final CXString spelling = clang_getTokenSpelling(translationUnit, token)) {
-								out.printf("\t%s(\"%s\")%n", kind, spelling.getString());
-							}
-						});
-					}
+                    try (final CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor)) {
+                        forEachToken(cursor, token -> {
+                            final TokenKind kind = TokenKind.valueOf(clang_getTokenKind(token));
+                            try (final CXString spelling = clang_getTokenSpelling(translationUnit, token)) {
+                                out.printf("\t%s(\"%s\")%n", kind, spelling.getString());
+                            }
+                        });
+                    }
 
-				});
-			}
+                });
+            }
 
-			return CXChildVisit_Recurse;
-		}
-	}
+            return CXChildVisit_Recurse;
+        }
+    }
 
-	private enum TokenKind {
-		Punctuation,
+    private enum TokenKind {
+        Punctuation,
 
-		Keyword,
+        Keyword,
 
-		Identifier,
+        Identifier,
 
-		Literal,
+        Literal,
 
-		Comment,
-		;
+        Comment,
+        ;
 
-		private static TokenKind valueOf(final int ordinal) {
-			return values()[ordinal];
-		}
-	}
+        private static TokenKind valueOf(final int ordinal) {
+            return values()[ordinal];
+        }
+    }
 }
