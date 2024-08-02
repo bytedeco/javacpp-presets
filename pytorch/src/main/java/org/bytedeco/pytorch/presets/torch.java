@@ -124,7 +124,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = "linux",
             extension = "-gpu",
-            link = { "c10", "torch", "torch_cpu", "c10_cuda", "torch_cuda", "cudart", "cusparse", "cudnn" } // cupti@.12 needed ?
+            link = { "c10", "torch", "torch_cpu", "c10_cuda", "torch_cuda", "torch_cuda_linalg", "cudart", "cusparse", "cudnn" } // cupti@.12 needed ? cuda_linalg built as separate lib on linux only
         ),
         @Platform(
             value = "windows",
