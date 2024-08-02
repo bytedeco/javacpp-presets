@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.pytorch.helper.*;
@@ -15,6 +14,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.chrono.Chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -37,7 +38,7 @@ public class FullDataLoaderOptions extends Pointer {
   public native @Cast("size_t") long batch_size(); public native FullDataLoaderOptions batch_size(long setter);
   public native @Cast("size_t") long workers(); public native FullDataLoaderOptions workers(long setter);
   public native @Cast("size_t") long max_jobs(); public native FullDataLoaderOptions max_jobs(long setter);
-  public native @ByRef @Cast("std::optional<std::chrono::milliseconds>*") Pointer timeout(); public native FullDataLoaderOptions timeout(Pointer setter);
+  public native @Optional Milliseconds timeout(); public native FullDataLoaderOptions timeout(Milliseconds setter);
   public native @Cast("bool") boolean enforce_ordering(); public native FullDataLoaderOptions enforce_ordering(boolean setter);
   public native @Cast("bool") boolean drop_last(); public native FullDataLoaderOptions drop_last(boolean setter);
 }

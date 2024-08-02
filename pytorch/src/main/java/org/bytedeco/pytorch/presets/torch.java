@@ -42,6 +42,7 @@ import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 
+import org.bytedeco.javacpp.presets.chrono;
 import org.bytedeco.javacpp.tools.BuildEnabled;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
@@ -54,7 +55,7 @@ import org.bytedeco.openblas.presets.openblas;
  * @author Samuel Audet, Hervé Guillemet
  */
 @Properties(
-    inherit = openblas.class,
+    inherit = { openblas.class, chrono.class },
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -343,7 +344,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
             .put(new Info().javaText("import org.bytedeco.pytorch.Allocator;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Function;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
             .put(new Info().javaText("import org.bytedeco.javacpp.annotation.Cast;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.helper.*;"))
@@ -1067,12 +1067,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::pair<int,int>").pointerTypes("IntPair").define())
         ;
 
-        //// std::chrono
-        infoMap
-            .put(new Info("std::chrono::time_point<std::chrono::system_clock>").pointerTypes("TimePoint"))
-            .put(new Info("std::chrono::duration<long int, std::ratio<1, 1000> >", "std::chrono::milliseconds").pointerTypes("Milliseconds"))
-            .put(new Info("std::chrono::duration<float>").pointerTypes("FloatDuration"))
-        ;
 
         //// c10::intrusive_ptr
         /* We cannot define an adapter working like SharedPtrAdapter since there is no public constructor of
@@ -2596,7 +2590,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// Classes kept but passed as generic pointer
                .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::impl::PyObjectSlot",
                    "_object",
-                   "PyObject", "THPObjectPtr", "pyobj_list", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
+                   "PyObject", "THPObjectPtr", "pyobj_list", "std::exception_ptr", "std::type_info",
                    "std::pair<PyObject*,PyObject*>", "std::stack<std::pair<PyObject*,PyObject*> >", "torch::autograd::utils::DelayWarningHandler",
                    "std::is_same<torch::detail::pack<true>,torch::detail::pack<true> >", "at::cuda::NVRTC", "at::RecordFunctionCallback", "at::StepCallbacks", "THCState", "THHState",
                    "torch::jit::InlinedCallStackPtr", "InlinedCallStackPtr", "torch::jit::ScopePtr", "torch::jit::BackendDebugInfoRecorder",
@@ -2604,7 +2598,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                    "std::shared_ptr<caffe2::serialize::PyTorchStreamReader>", "caffe2::serialize::PyTorchStreamWriter",
                    "c10::detail::DictImpl::dict_map_type::iterator",
                    "std::iterator<std::forward_iterator_tag,c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator> >",
-                   "std::optional<PyObject*>", "std::optional<std::chrono::milliseconds>",
+                   "std::optional<PyObject*>",
                    "c10::intrusive_ptr<torch::CustomClassHolder>", "c10::intrusive_ptr<caffe2::Blob>",
                    "c10::ArrayRef<c10::intrusive_ptr<c10::ivalue::Object> >",
                    "torch::jit::DetachedBuffer::UniqueDetachedBuffer", "std::optional<at::StepCallbacks>",

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.pytorch.helper.*;
@@ -15,6 +14,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.chrono.Chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -33,7 +34,7 @@ private native void allocate(@Cast("size_t") long batch_size);
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer batch_size();
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer workers();
   public native @ByRef @NoException(true) SizeTOptional max_jobs();
-  public native @Cast("std::optional<std::chrono::milliseconds>*") @ByRef @NoException(true) Pointer timeout();
+  public native @Optional @NoException(true) Milliseconds timeout();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer enforce_ordering();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer drop_last();
 }

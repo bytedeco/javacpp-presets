@@ -2,7 +2,6 @@
 
 package org.bytedeco.pytorch.gloo;
 
-import org.bytedeco.pytorch.chrono.*;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -10,6 +9,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.chrono.Chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -36,10 +37,12 @@ public class ReductionFunctionFloat extends Pointer {
   
   
 
+  public ReductionFunctionFloat(ReductionType type, Function fn) { super((Pointer)null); allocate(type, fn); }
+  private native void allocate(ReductionType type, Function fn);
   public ReductionFunctionFloat(@Cast("gloo::ReductionType") int type, Function fn) { super((Pointer)null); allocate(type, fn); }
   private native void allocate(@Cast("gloo::ReductionType") int type, Function fn);
 
-  public native @Cast("gloo::ReductionType") int type();
+  public native ReductionType type();
 
   public native void call(FloatPointer x, @Const FloatPointer y, @Cast("size_t") long n);
   public native void call(FloatBuffer x, @Const FloatBuffer y, @Cast("size_t") long n);

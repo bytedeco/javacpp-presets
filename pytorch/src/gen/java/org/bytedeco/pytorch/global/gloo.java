@@ -4,7 +4,6 @@ package org.bytedeco.pytorch.global;
 
 import org.bytedeco.pytorch.gloo.*;
 
-import org.bytedeco.pytorch.chrono.*;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -12,6 +11,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.chrono.Chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -330,15 +331,21 @@ public static final long kOnDeviceThreshold = 256 * 1024;
 // SUM is passed to CUDA aware Allreduce, it knows it can
 // use a NCCL implementation instead of the specified function.
 //
-/** enum gloo::ReductionType */
-public static final int
-  SUM = 1,
-  PRODUCT = 2,
-  MAX = 3,
-  MIN = 4,
+@Namespace("gloo") public enum ReductionType {
+  SUM(1),
+  PRODUCT(2),
+  MAX(3),
+  MIN(4),
 
   // Use larger number so we have plenty of room to add built-ins
-  CUSTOM = 1000;
+  CUSTOM(1000);
+
+    public final int value;
+    private ReductionType(int v) { this.value = v; }
+    private ReductionType(ReductionType e) { this.value = e.value; }
+    public ReductionType intern() { for (ReductionType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 // Targeting ../gloo/ReductionFunctionFloat.java
 
 

@@ -25,6 +25,7 @@ import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.chrono;
 import org.bytedeco.javacpp.tools.*;
 
 import static org.bytedeco.pytorch.presets.torch.template;
@@ -33,7 +34,7 @@ import static org.bytedeco.pytorch.presets.torch.template;
  * @author Hervé Guillemet
  */
 @Properties(
-    inherit = torch.class,
+    inherit =  { torch.class, chrono.class },
     value = {
         @Platform(
             library = "jnitorch"
@@ -51,10 +52,6 @@ public class gloo implements LoadEnabled, InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-
-        infoMap
-            .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
-        ;
 
         //// Instantiation of class templates.
         infoMap

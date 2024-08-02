@@ -6,7 +6,6 @@ import org.bytedeco.pytorch.*;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.chrono.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.pytorch.helper.*;
@@ -17,6 +16,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.chrono.Chrono.*;
 
 public class torch extends org.bytedeco.pytorch.presets.torch {
     static { Loader.load(); }
@@ -79937,7 +79938,7 @@ public static final int C10D_ENV_NOT_SET = -2;
 // Since SOCKET_ERROR = -1 in MSVC, so also leverage SYSCHECK_ERR_RETURN_NEG1
 // #define SYSCHECK_ERR_RETURN_NEG1(expr) SYSCHECK(expr, __output != -1)
 
-@Namespace("c10d") public static native void checkForNan(@Const @ByRef Tensor tensor);
+
 
 // Send and receive
 

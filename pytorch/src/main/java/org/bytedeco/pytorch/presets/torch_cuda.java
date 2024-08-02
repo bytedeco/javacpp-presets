@@ -78,7 +78,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.helper.*;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.chrono.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.MemoryFormat;"))
