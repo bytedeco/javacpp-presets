@@ -272,8 +272,8 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "spinnaker" ]]; then
           echo Installing Spinnaker amd64
-          python3 -m gdown.cli https://drive.google.com/uc?id=1B91OxuFgT-T29fNlBc2gsgr-K2l2LNtw
-          tar -xzvf spinnaker-3.0.0.118-amd64-pkg.tar.gz
+          python3 -m gdown.cli https://drive.google.com/file/d/1Xapzvxrgx1w3RCbAOFILaNCZwpusB_VA
+          tar -xzvf spinnaker-4.0.0.116-amd64-pkg-22.04.tar.gz
           find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xvf data.tar.xz -C /; done;
         fi
 

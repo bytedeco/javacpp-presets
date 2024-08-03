@@ -180,17 +180,17 @@ runs:
           python -m gdown.cli https://drive.google.com/uc?id=17GagcVjj2Gv6WswJR86_DKw9jLEfHHdo
           python -m gdown.cli https://drive.google.com/uc?id=1i93o2rFPtRKrCGBH2bUL5FQZchrDzrDe
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_Binaries_v140_x86.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_SourceCode_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-4.0.0.116_Binaries_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-4.0.0.116_SourceCode_v140_x86.msi ADDLOCAL=ALL"
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
           echo Installing Spinnaker x64
-          python -m gdown.cli https://drive.google.com/uc?id=12AkFMckbDqxFudYGWwaSLT7omOTtuRJt
-          python -m gdown.cli https://drive.google.com/uc?id=1_SUnBQnv4czISJWVFnbxxWRZM6d2yzZK
+          python -m gdown.cli https://drive.google.com/file/d/1d0HHDHsPcgs-Pnw0u8KeeFlK79T1DQhf
+          python -m gdown.cli https://drive.google.com/file/d/18cWXUhL6aFs57Q73aVWT1BF_--pzoMha
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_Binaries_v140_x64.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker_4.0.0.116_Binaries_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker_4.0.0.116_SourceCode_v140_x64.msi ADDLOCAL=ALL"
         )
 
         set GRADLE_TASK=publishToMavenLocal

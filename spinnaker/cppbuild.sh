@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SPINNAKER_VERSION=3.0.0.118
+SPINNAKER_VERSION=4.0.0.116
 
 case $PLATFORM in
     linux-arm*)
@@ -29,8 +29,7 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/Spinnaker/" ]] &&
-           [[ ! -d "/C/Program Files/FLIR Systems/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/FLIR Systems/Spinnaker/" ]]; then
+        if [[ ! -d "/C/Program Files/Teledyne/Spinnaker/" ]]; then
             echo "Please install Spinnaker under the default installation directory"
             exit 1
         fi
