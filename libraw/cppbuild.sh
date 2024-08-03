@@ -9,7 +9,7 @@ fi
 
 # Compilation instructions at https://www.libraw.org/docs/Install-LibRaw.html
 
-LIBRAW_VERSION=0.21.1
+LIBRAW_VERSION=0.21.2
 download https://github.com/LibRaw/LibRaw/archive/refs/tags/$LIBRAW_VERSION.zip LibRaw-$LIBRAW_VERSION.zip
 unzip -o LibRaw-$LIBRAW_VERSION.zip
 

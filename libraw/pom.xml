@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.9</version>
+    <version>1.5.11-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>libraw</artifactId>
-  <version>0.21.1-${project.parent.version}</version>
+  <version>0.21.2-${project.parent.version}</version>
   <name>JavaCPP Presets for LibRaw</name>
 
   <dependencies>

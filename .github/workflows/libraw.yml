@@ -19,15 +19,14 @@ env:
 jobs:
   linux-x86_64:
     runs-on: ubuntu-20.04
-    container: centos:7
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-arm64:
-    runs-on: macos-11
+    runs-on: macos-14
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86_64:
