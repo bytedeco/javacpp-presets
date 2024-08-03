@@ -109,6 +109,7 @@ runs:
         $SUDO apt-get update
         $SUDO apt-get -y install gcc-multilib g++-multilib gfortran-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH
         $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
+        $SUDO apt-get -y install zstd
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -272,10 +273,9 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "spinnaker" ]]; then
           echo Installing Spinnaker amd64
-          python3 -m gdown -V
           python3 -m gdown 1Xapzvxrgx1w3RCbAOFILaNCZwpusB_VA
           tar -xzvf spinnaker-4.0.0.116-amd64-pkg-22.04.tar.gz
-          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xvf data.tar.xz -C /; done;
+          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals --use-compress-program=unzstd -xvf data.tar.zst -C /; done;
         fi
 
         GRADLE_TASK=publishToMavenLocal
