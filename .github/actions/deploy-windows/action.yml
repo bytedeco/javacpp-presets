@@ -177,8 +177,9 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
           echo Installing Spinnaker x64
-          python -m gdown https://drive.google.com/file/d/1d0HHDHsPcgs-Pnw0u8KeeFlK79T1DQhf
-          python -m gdown https://drive.google.com/file/d/18cWXUhL6aFs57Q73aVWT1BF_--pzoMha
+          python -m gdown -V 
+          python -m gdown 1d0HHDHsPcgs-Pnw0u8KeeFlK79T1DQhf
+          python -m gdown 18cWXUhL6aFs57Q73aVWT1BF_--pzoMha
           rem We can get these msi files by starting the installation from the exe file
           cmd.exe /c "msiexec /quiet /i Spinnaker_4.0.0.116_Binaries_v140_x64.msi ADDLOCAL=ALL"
           cmd.exe /c "msiexec /quiet /i Spinnaker_4.0.0.116_SourceCode_v140_x64.msi ADDLOCAL=ALL"
