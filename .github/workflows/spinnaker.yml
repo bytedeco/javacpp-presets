@@ -20,13 +20,13 @@ jobs:
   linux-x86_64:
     runs-on: ubuntu-20.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: jpsacha/javacpp-presets/.github/actions/deploy-ubuntu@Spinnaker_4.0.0.116
   windows-x86_64:
     runs-on: windows-2019
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+      - uses: jpsacha/javacpp-presets/.github/actions/deploy-windows@Spinnaker_4.0.0.116
   redeploy:
     needs: [linux-x86_64, windows-x86_64]
     runs-on: ubuntu-20.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions
+      - uses: jpsacha/javacpp-presets/.github/actions/redeploy@Spinnaker_4.0.0.116
