@@ -63,11 +63,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                "/usr/include/spinnaker/spinc/"}),
         @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140", "SpinVideoC_v140", "SpinVideo_v140"},
                 includepath = {"C:/Program Files/Teledyne/Spinnaker/include/spinc/",
+                               // CI installation skips "Teledyne" dir
                                "C:/Program Files/Spinnaker/include/spinc/"}),
         @Platform(value = "windows-x86_64",
                 linkpath    = {"C:/Program Files/Teledyne/Spinnaker/lib64/vs2015/",
+                               // CI installation skips "Teledyne" dir
                                "C:/Program Files/Spinnaker/lib64/vs2015/"},
                 preloadpath = {"C:/Program Files/Teledyne/Spinnaker/lib64/vs2015/",
+                               // CI installation skips "Teledyne" dir
                                "C:/Program Files/Spinnaker/lib64/vs2015/"})})
 public class Spinnaker_C implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "spinnaker"); }
