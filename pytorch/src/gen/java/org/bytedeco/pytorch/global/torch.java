@@ -17,7 +17,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 import org.bytedeco.javacpp.chrono.*;
-import static org.bytedeco.javacpp.chrono.Chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 public class torch extends org.bytedeco.pytorch.presets.torch {
     static { Loader.load(); }
