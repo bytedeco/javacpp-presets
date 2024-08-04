@@ -29,11 +29,10 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files/Teledyne/Spinnaker/" ]]; then
+        if [[ ! -d "/C/Program Files/Teledyne/Spinnaker/" ]] && [[ ! -d "/C/Program Files/Spinnaker/" ]]; then
             echo "Please install Spinnaker under the default installation directory"
-            ls "/C"
-            ls "/C/Program Files"
-            ls "/C/Program Files/Teledyne"
+            echo "Content of C:/Program Files"
+            ls -l "/C/Program Files"
             exit 1
         fi
         ;;
