@@ -7,7 +7,6 @@ import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.SharedPtr;
-import org.bytedeco.pytorch.Module;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SharedModuleApplyFunction extends FunctionPointer {

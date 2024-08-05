@@ -5,7 +5,6 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByPtr;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.IValue;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class IValueSupplier extends FunctionPointer {

@@ -6,7 +6,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.SharedPtr;
-import org.bytedeco.pytorch.WorkInfo;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class WorkInfoConsumer extends FunctionPointer {

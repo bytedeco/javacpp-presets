@@ -6,7 +6,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.TensorBase;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorTensorRefHook extends FunctionPointer {

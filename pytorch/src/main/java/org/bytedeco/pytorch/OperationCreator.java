@@ -6,8 +6,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.Const;
-import org.bytedeco.pytorch.Operation;
-import org.bytedeco.pytorch.JitNode;
 
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)

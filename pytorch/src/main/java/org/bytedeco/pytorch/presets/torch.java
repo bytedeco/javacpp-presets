@@ -346,7 +346,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info().javaText("import org.bytedeco.pytorch.Function;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Module;"))
             .put(new Info().javaText("import org.bytedeco.javacpp.annotation.Cast;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.helper.*;"))
 
             .put(new Info("std::nullptr_t").cast().pointerTypes("PointerPointer"))
 

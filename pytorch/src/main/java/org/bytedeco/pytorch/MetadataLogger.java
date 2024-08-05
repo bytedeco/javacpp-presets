@@ -8,8 +8,6 @@ import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.StdString;
-import org.bytedeco.pytorch.DDPLoggingData;
-import org.bytedeco.pytorch.StringStringMap;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MetadataLogger extends FunctionPointer {

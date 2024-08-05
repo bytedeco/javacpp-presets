@@ -7,7 +7,6 @@ import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.Tensor;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorMapper extends FunctionPointer {

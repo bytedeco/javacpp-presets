@@ -5,11 +5,6 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.*;
 
-import org.bytedeco.pytorch.Obj;
-import org.bytedeco.pytorch.StrongTypePtr;
-import org.bytedeco.pytorch.IValue;
-import org.bytedeco.pytorch.helper.IntrusivePtr;
-
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ObjLoader extends FunctionPointer {
     static {

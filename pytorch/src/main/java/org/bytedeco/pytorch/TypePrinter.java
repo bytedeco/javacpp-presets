@@ -7,8 +7,6 @@ import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.StringOptional;
-import org.bytedeco.pytorch.Type;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TypePrinter extends FunctionPointer {
