@@ -3,7 +3,6 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.helper.*;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 import org.bytedeco.pytorch.global.torch.MemoryFormat;

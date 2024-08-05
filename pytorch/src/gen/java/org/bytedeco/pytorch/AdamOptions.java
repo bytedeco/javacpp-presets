@@ -6,7 +6,6 @@ import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
-import org.bytedeco.pytorch.helper.*;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
