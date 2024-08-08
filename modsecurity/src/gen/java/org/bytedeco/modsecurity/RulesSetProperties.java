@@ -152,6 +152,7 @@ public class RulesSetProperties extends Pointer {
     public native @ByRef ConfigDouble m_requestBodyLimit(); public native RulesSetProperties m_requestBodyLimit(ConfigDouble setter);
     public native @ByRef ConfigDouble m_requestBodyNoFilesLimit(); public native RulesSetProperties m_requestBodyNoFilesLimit(ConfigDouble setter);
     public native @ByRef ConfigDouble m_responseBodyLimit(); public native RulesSetProperties m_responseBodyLimit(ConfigDouble setter);
+    public native @ByRef ConfigInt m_pcreMatchLimit(); public native RulesSetProperties m_pcreMatchLimit(ConfigInt setter);
     public native @ByRef ConfigInt m_uploadFileLimit(); public native RulesSetProperties m_uploadFileLimit(ConfigInt setter);
     public native @ByRef ConfigInt m_uploadFileMode(); public native RulesSetProperties m_uploadFileMode(ConfigInt setter);
     public native DebugLog m_debugLog(); public native RulesSetProperties m_debugLog(DebugLog setter);
