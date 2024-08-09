@@ -101,7 +101,7 @@ runs:
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.2/local_installers/cuda_12.3.2_546.12_windows.exe
           rem curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn_8.8.0.121_windows.exe
-          rem python -m gdown.cli https://drive.google.com/uc?id=135Z7zfwguQe6vn7p013HtVkHFu9-_rru
+          rem python -m gdown 135Z7zfwguQe6vn7p013HtVkHFu9-_rru
           curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/cudnn-windows-x86_64-8.9.7.29_cuda12-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
           curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.5/local_installers/nvcomp_3.0.5_windows_12.x.zip
@@ -142,14 +142,14 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
+          python -m gdown 13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
           unzip Video_Codec_SDK_12.1.14.zip
           move Video_Codec_SDK_12.1.14 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          rem python -m gdown.cli https://drive.google.com/uc?id=1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
+          rem python -m gdown 1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
           curl -LO https://developer.download.nvidia.com/compute/machine-learning/tensorrt/10.0.1/zip/TensorRT-10.0.1.6.Windows10.win10.cuda-12.4.zip
           unzip TensorRT-10.0.1.6.Windows10.win10.cuda-12.4.zip
           move TensorRT-10.0.1.6 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
@@ -163,34 +163,25 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
           echo Installing FlyCapture x86
-          python -m gdown.cli https://drive.google.com/uc?id=1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr
+          python -m gdown 1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr
           rem We can get this msi file by starting the installation from the exe file
           cmd.exe /c "msiexec /quiet /i FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL"
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="flycapture" (
           echo Installing FlyCapture x64
-          python -m gdown.cli https://drive.google.com/uc?id=14QM7W5RHhvZanF1UBobgEIvwdy6VwTht
+          python -m gdown 14QM7W5RHhvZanF1UBobgEIvwdy6VwTht
           rem We can get this msi file by starting the installation from the exe file
           cmd.exe /c "msiexec /quiet /i FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL"
         )
 
-        if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
-          echo Installing Spinnaker x86
-          python -m gdown.cli https://drive.google.com/uc?id=17GagcVjj2Gv6WswJR86_DKw9jLEfHHdo
-          python -m gdown.cli https://drive.google.com/uc?id=1i93o2rFPtRKrCGBH2bUL5FQZchrDzrDe
-          rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_Binaries_v140_x86.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_SourceCode_v140_x86.msi ADDLOCAL=ALL"
-        )
-
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
           echo Installing Spinnaker x64
-          python -m gdown.cli https://drive.google.com/uc?id=12AkFMckbDqxFudYGWwaSLT7omOTtuRJt
-          python -m gdown.cli https://drive.google.com/uc?id=1_SUnBQnv4czISJWVFnbxxWRZM6d2yzZK
+          python -m gdown 1d0HHDHsPcgs-Pnw0u8KeeFlK79T1DQhf
+          python -m gdown 18cWXUhL6aFs57Q73aVWT1BF_--pzoMha
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_Binaries_v140_x64.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-3.0.0.118_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker_4.0.0.116_Binaries_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker_4.0.0.116_SourceCode_v140_x64.msi ADDLOCAL=ALL"
         )
 
         set GRADLE_TASK=publishToMavenLocal
@@ -202,7 +193,7 @@ runs:
           set GRADLE_TASK=publish
           set MAVEN_PHASE=deploy
           if "%DEPLOY%"=="RELEASE" (
-            python -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=%CI_DEPLOY_SETTINGS%
+            python -m gdown -q -O settings.tar.gz %CI_DEPLOY_SETTINGS%
             bash -c "tar -xzf settings.tar.gz -C $HOME"
             set "MAVEN_OPTIONS=%MAVEN_OPTIONS% -DperformRelease -DstagingRepositoryId=%STAGING_REPOSITORY%"
           )
