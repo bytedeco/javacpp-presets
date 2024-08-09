@@ -85,7 +85,7 @@ runs:
           GRADLE_TASK=publish
           MAVEN_PHASE=deploy
           if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
-            python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
+            python3 -m gdown -q -O settings.tar.gz $CI_DEPLOY_SETTINGS
             tar -xzf settings.tar.gz
             MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
           fi

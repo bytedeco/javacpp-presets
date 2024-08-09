@@ -122,14 +122,14 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
+          python3 -m gdown 13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
           unzip Video_Codec_SDK_12.1.14.zip -d /usr/local
           ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
           tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
@@ -142,21 +142,21 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture i386
-          python3 -m gdown.cli https://drive.google.com/uc?id=1BOpSik1Fndagzjf4ykwzermt2qlTzsWI
+          python3 -m gdown 1BOpSik1Fndagzjf4ykwzermt2qlTzsWI
           tar -xzvf flycapture2-2.13.3.31-i386-pkg_xenial.tgz
           find -name *.deb | while read f; do ar -xv $f; tar --totals -xf data.tar.xz -C /; done;
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amd64
-          python3 -m gdown.cli https://drive.google.com/uc?id=1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd
+          python3 -m gdown 1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd
           tar -xzvf flycapture2-2.13.3.31-amd64-pkg_xenial.tgz
           find -name *.deb | while read f; do ar -xv $f; tar --totals -xf data.tar.xz -C /; done;
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "spinnaker" ]]; then
           echo Installing Spinnaker amd64
-          python3 -m gdown.cli https://drive.google.com/file/d/1Xapzvxrgx1w3RCbAOFILaNCZwpusB_VA
+          python3 -m gdown 1Xapzvxrgx1w3RCbAOFILaNCZwpusB_VA
           tar -xzvf spinnaker-4.0.0.116-amd64-pkg-22.04.tar.gz
           find -name *.deb | while read f; do ar -xv $f; tar --totals -xvf data.tar.xz -C /; done;
         fi
@@ -174,7 +174,7 @@ runs:
           GRADLE_TASK=publish
           MAVEN_PHASE=deploy
           if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
-            python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
+            python3 -m gdown -q -O settings.tar.gz $CI_DEPLOY_SETTINGS
             tar -xzf settings.tar.gz
             MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
           fi

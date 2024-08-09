@@ -18,7 +18,7 @@
     <module>../opencv/platform</module>
     <module>../ffmpeg/platform</module>
 <!--    <module>../flycapture/platform</module>-->
-<!--    <module>../spinnaker/platform</module>-->
+    <module>../spinnaker/platform</module>
 <!--    <module>../libdc1394/platform</module>-->
 <!--    <module>../libfreenect/platform</module>-->
 <!--    <module>../libfreenect2/platform</module>-->
@@ -99,11 +99,11 @@
 <!--      <artifactId>flycapture-platform</artifactId>-->
 <!--      <version>2.13.3.31-${project.version}</version>-->
 <!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.bytedeco</groupId>-->
-<!--      <artifactId>spinnaker-platform</artifactId>-->
-<!--      <version>4.0.0.116-${project.version}</version>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>spinnaker-platform</artifactId>
+      <version>4.0.0.116-${project.version}</version>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
 <!--      <artifactId>libdc1394-platform</artifactId>-->

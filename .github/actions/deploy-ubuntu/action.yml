@@ -108,8 +108,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install gcc-multilib g++-multilib gfortran-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH
-        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
-        $SUDO apt-get -y install zstd
+        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev zstd-dev
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -215,14 +214,14 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
+          python3 -m gdown 13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
           $SUDO unzip Video_Codec_SDK_12.1.14.zip -d /usr/local
           $SUDO ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          # python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
+          # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
           curl -LO https://developer.download.nvidia.com/compute/machine-learning/tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Ubuntu-22.04.aarch64-gnu.cuda-12.4.tar.gz
           $SUDO tar -hxvf TensorRT-10.0.1.6.Ubuntu-22.04.aarch64-gnu.cuda-12.4.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
@@ -230,7 +229,7 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          # python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
           curl -LO https://developer.download.nvidia.com/compute/machine-learning/tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Linux.x86_64-gnu.cuda-12.4.tar.gz
           $SUDO tar -hxvf TensorRT-10.0.1.6.Linux.x86_64-gnu.cuda-12.4.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
@@ -245,28 +244,28 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amdhf
-          python3 -m gdown.cli https://drive.google.com/uc?id=16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI
+          python3 -m gdown 16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI
           mkdir -p $GITHUB_WORKSPACE/downloads
           ln -s $(pwd)/flycapture.2.13.3.31_armhf_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_armhf.tar.gz
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amd64
-          python3 -m gdown.cli https://drive.google.com/uc?id=1LhnuRMT3urYsApCcuBEcaotGRK8h4kJv
+          python3 -m gdown 1LhnuRMT3urYsApCcuBEcaotGRK8h4kJv
           mkdir -p $GITHUB_WORKSPACE/downloads
           ln -s $(pwd)/flycapture.2.13.3.31_arm64_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_arm64.tar.gz
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture i386
-          python3 -m gdown.cli https://drive.google.com/uc?id=1BOpSik1Fndagzjf4ykwzermt2qlTzsWI
+          python3 -m gdown 1BOpSik1Fndagzjf4ykwzermt2qlTzsWI
           tar -xzvf flycapture2-2.13.3.31-i386-pkg_xenial.tgz
           find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xf data.tar.xz -C /; done;
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amd64
-          python3 -m gdown.cli https://drive.google.com/uc?id=1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd
+          python3 -m gdown 1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd
           tar -xzvf flycapture2-2.13.3.31-amd64-pkg_xenial.tgz
           find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xf data.tar.xz -C /; done;
         fi
@@ -284,7 +283,7 @@ runs:
           GRADLE_TASK=publish
           MAVEN_PHASE=deploy
           if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
-            python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
+            python3 -m gdown -q -O settings.tar.gz $CI_DEPLOY_SETTINGS
             tar -xzf settings.tar.gz
             MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"
           fi
