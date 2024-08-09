@@ -56,35 +56,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                            "<TransportLayerStreamC.h>",
                            "<TransportLayerSystemC.h>",
                 },
-                link = {"SpinVideo_C@.3", "Spinnaker_C@.3"},
+                link = {"SpinVideo_C@.4", "Spinnaker_C@.4"},
                 linkpath = {"/opt/spinnaker/lib/",
                             "/usr/lib/"},
                 includepath = {"/opt/spinnaker/include/spinc/",
                                "/usr/include/spinnaker/spinc/"}),
         @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140", "SpinVideoC_v140", "SpinVideo_v140"},
-                includepath = {"C:/Program Files/FLIR Systems/Spinnaker/include/spinc/",
-                               "C:/Program Files (x86)/FLIR Systems/Spinnaker/include/spinc/",
-                               // CI installation skips "FLIR Systems" dir
-                               "C:/Program Files/Spinnaker/include/spinc/",
-                               "C:/Program Files (x86)/Spinnaker/include/spinc"}),
-        @Platform(value = "windows-x86",
-                linkpath    = {"C:/Program Files/FLIR Systems/Spinnaker/lib/vs2015/",
-                               "C:/Program Files (x86)/FLIR Systems/Spinnaker/lib/vs2015/",
-                               // CI installation skips "FLIR Systems" dir
-                               "C:/Program Files/Spinnaker/lib/vs2015",
-                               "C:/Program Files (x86)/Spinnaker/lib/vs2015"},
-                preloadpath = {"C:/Program Files/FLIR Systems/Spinnaker/bin/vs2015/",
-                               "C:/Program Files (x86)/FLIR Systems/Spinnaker/bin/vs2015/",
-                               // CI installation skips "FLIR Systems" dir
-                               "C:/Program Files/Spinnaker/bin/vs2015/",
-                               "C:/Program Files (x86)/Spinnaker/bin/vs2015/",}),
+                includepath = {"C:/Program Files/Teledyne/Spinnaker/include/spinc/",
+                               // CI installation skips "Teledyne" dir
+                               "C:/Program Files/Spinnaker/include/spinc/"}),
         @Platform(value = "windows-x86_64",
-                linkpath    = {"C:/Program Files/FLIR Systems/Spinnaker/lib64/vs2015/",
-                               // CI automatic installation skips "LIR Systems" dir?
+                linkpath    = {"C:/Program Files/Teledyne/Spinnaker/lib64/vs2015/",
+                               // CI installation skips "Teledyne" dir
                                "C:/Program Files/Spinnaker/lib64/vs2015/"},
-                preloadpath = {"C:/Program Files/FLIR Systems/Spinnaker/bin64/vs2015/",
-                               // CI automatic installation skips "LIR Systems" dir?
-                               "C:/Program Files/Spinnaker/bin64/vs2015/"})})
+                preloadpath = {"C:/Program Files/Teledyne/Spinnaker/lib64/vs2015/",
+                               // CI installation skips "Teledyne" dir
+                               "C:/Program Files/Spinnaker/lib64/vs2015/"})})
 public class Spinnaker_C implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "spinnaker"); }
 
