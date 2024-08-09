@@ -5,9 +5,6 @@ package org.bytedeco.pytorch.global;
 import org.bytedeco.pytorch.cuda.*;
 
 import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
