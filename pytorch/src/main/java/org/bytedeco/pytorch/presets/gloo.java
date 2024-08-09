@@ -23,23 +23,15 @@ package org.bytedeco.pytorch.presets;
 
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
-import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.presets.chrono;
 import org.bytedeco.javacpp.tools.*;
-
-import static org.bytedeco.pytorch.presets.torch.template;
 
 /**
  * @author Hervé Guillemet
  */
 @Properties(
     inherit =  { torch.class, chrono.class },
-    value = {
-        @Platform(
-            library = "jnitorch"
-        )
-    },
     target = "org.bytedeco.pytorch.gloo",
     global = "org.bytedeco.pytorch.global.gloo"
 )

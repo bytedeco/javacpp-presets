@@ -53,8 +53,7 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
             exclude = {
                 "<cublas.h>", // pytorch includes cublas_v2, which is not compatible with cublas included from inherited cudnn presets
                 "<driver_functions.h>" // causes #warning
-            },
-            library = "jnitorch"
+            }
         ),
     },
     target = "org.bytedeco.pytorch.cuda",
