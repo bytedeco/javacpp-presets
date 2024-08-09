@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -129,18 +130,18 @@ public class Dispatcher extends Pointer {
   public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @ByVal FunctionSchema inferred_function_schema, @StdString String debug);
 
   /**
-   * Given an operator, tells the Dispatcher that we have implemented an abstract impl
+   * Given an operator, tells the Dispatcher that we have implemented a fake impl
    * for this op in the given Python module. Call this a "pystub".
    */
-  public native @ByVal RegistrationHandleRAII registerAbstractImplPyStub(@Const @ByRef OperatorName op_name, @Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context);
-  public native @ByVal RegistrationHandleRAII registerAbstractImplPyStub(@Const @ByRef OperatorName op_name, String pymodule, String context);
+  public native @ByVal RegistrationHandleRAII registerPythonModule(@Const @ByRef OperatorName op_name, @Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context);
+  public native @ByVal RegistrationHandleRAII registerPythonModule(@Const @ByRef OperatorName op_name, String pymodule, String context);
 
   /**
-   * Given an operator, throws if we have an abstract impl pystub.
+   * Given an operator, throws if we have a pystub.
    */
-  public native void throwIfHasAbstractImplPyStub(@ByVal OperatorName op_name);
+  public native void throwIfHasPythonModule(@ByVal OperatorName op_name);
 
-  public native @ByVal BytePointerPairOptional getAbstractImplPyStub(@ByVal OperatorName op_name);
+  public native @ByVal BytePointerPairOptional getPyStub(@ByVal OperatorName op_name);
 
   /**
    * Register a new operator by name.

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace functional
@@ -30,7 +31,7 @@ public class FractionalMaxPool1dOptions extends Pointer {
   public FractionalMaxPool1dOptions(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);
   public native @Cast("torch::ExpandingArray<1>*") @ByRef @NoException(true) LongPointer kernel_size();
-  public native @Cast("c10::optional<torch::ExpandingArray<1> >*") @ByRef @NoException(true) LongExpandingArrayOptional output_size();
-  public native @Cast("c10::optional<torch::nn::FractionalMaxPoolOptions<1>::ExpandingArrayDouble>*") @ByRef @NoException(true) DoubleExpandingArrayOptional output_ratio();
+  public native @Cast("std::optional<torch::ExpandingArray<1> >*") @ByRef @NoException(true) LongExpandingArrayOptional output_size();
+  public native @Cast("std::optional<torch::nn::FractionalMaxPoolOptions<1>::ExpandingArrayDouble>*") @ByRef @NoException(true) DoubleExpandingArrayOptional output_ratio();
   public native @ByRef @NoException(true) Tensor _random_samples();
 }

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -173,8 +174,8 @@ public class Graph extends Pointer {
   // Insert constant IValue into the graph.
   public native Value insertConstant(
         @Const @ByRef IValue val,
-        @ByVal(nullValue = "c10::optional<torch::jit::SourceRange>(c10::nullopt)") SourceRangeOptional loc,
-        @ByVal(nullValue = "c10::optional<torch::jit::ScopePtr>(c10::nullopt)") @Cast("c10::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
+        @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(c10::nullopt)") SourceRangeOptional loc,
+        @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(c10::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
   public native Value insertConstant(
         @Const @ByRef IValue val);
 
@@ -189,7 +190,7 @@ public class Graph extends Pointer {
         @ByVal Symbol opname,
         @ByVal NamedValueArrayRef args,
         @ByVal(nullValue = "at::ArrayRef<torch::jit::NamedValue>{}") NamedValueArrayRef kwargs,
-        @Const @ByRef(nullValue = "c10::optional<torch::jit::SourceRange>{}") SourceRangeOptional range);
+        @Const @ByRef(nullValue = "std::optional<torch::jit::SourceRange>{}") SourceRangeOptional range);
   public native Value insert(
         @ByVal Symbol opname,
         @ByVal NamedValueArrayRef args);

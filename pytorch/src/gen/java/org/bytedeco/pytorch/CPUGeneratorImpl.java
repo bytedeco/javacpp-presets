@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -38,7 +39,7 @@ public class CPUGeneratorImpl extends GeneratorImpl {
   public native @Cast("uint64_t") long current_seed();
   public native @Cast("uint64_t") long seed();
   public native void set_state(@Const @ByRef TensorImpl new_state);
-  public native @ByVal TensorImplPtr get_state();
+  public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl get_state();
   public static native DeviceType device_type();
   public native @Cast("uint32_t") int random();
   public native @Cast("uint64_t") long random64();

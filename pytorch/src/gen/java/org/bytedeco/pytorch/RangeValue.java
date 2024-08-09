@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -29,12 +30,12 @@ public class RangeValue extends SugaredValue {
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @ByVal ValueVector input,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional static_len) { super((Pointer)null); allocate(loc, m, input, static_len); }
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional static_len) { super((Pointer)null); allocate(loc, m, input, static_len); }
   private native void allocate(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @ByVal ValueVector input,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional static_len);
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional static_len);
   public RangeValue(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,

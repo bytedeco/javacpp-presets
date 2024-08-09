@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,10 +13,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::List<c10::optional<at::Tensor> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::List<std::optional<at::Tensor> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorOptionalList extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -108,13 +109,13 @@ public class TensorOptionalList extends Pointer {
    * Returns an iterator to the first element of the container.
    * If the container is empty, the returned iterator will be equal to end().
    */
-  public native @ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator begin();
+  public native @ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator begin();
 
   /**
    * Returns an iterator to the element following the last element of the container.
    * This element acts as a placeholder; attempting to access it results in undefined behavior.
    */
-  public native @ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator end();
+  public native @ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator end();
 
   /**
    * Checks if the container has no elements.
@@ -141,7 +142,7 @@ public class TensorOptionalList extends Pointer {
    * Inserts value before pos.
    * May invalidate any references, pointers, or iterators referring to contained elements. Any past-the-end iterators may also be invalidated.
    */
-  public native @ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator insert(@ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator pos, @Const @ByRef TensorOptional value);
+  public native @ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator insert(@ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator pos, @Const @ByRef TensorOptional value);
 
   /**
    * Inserts value before pos.
@@ -181,13 +182,13 @@ public class TensorOptionalList extends Pointer {
    * Removes the element at pos.
    * May invalidate any references, pointers, or iterators referring to contained elements. Any past-the-end iterators may also be invalidated.
    */
-  public native @ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator erase(@ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator pos);
+  public native @ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator erase(@ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator pos);
 
   /**
    * Removes the elements in the range [first, last).
    * May invalidate any references, pointers, or iterators referring to contained elements. Any past-the-end iterators may also be invalidated.
    */
-  public native @ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator erase(@ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator first, @ByVal @Cast("c10::List<c10::optional<at::Tensor> >::iterator*") TensorOptionalListIterator last);
+  public native @ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator erase(@ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator first, @ByVal @Cast("c10::List<std::optional<at::Tensor> >::iterator*") TensorOptionalListIterator last);
 
   /**
    * Removes the last element of the container.

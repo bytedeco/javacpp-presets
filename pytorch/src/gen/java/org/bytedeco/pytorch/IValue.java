@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -188,11 +189,11 @@ public class IValue extends Pointer {
   
 
   // Tuple
-  public IValue(@ByVal TuplePtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal TuplePtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple v);
   public native @Cast("bool") boolean isTuple();
   
-  public native @ByVal TuplePtr toTuple();
+  public native @IntrusivePtr("c10::ivalue::Tuple") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Tuple>&"}) Tuple toTuple();
   public native @ByRef Tuple toTupleRef();
 
   // Double
@@ -206,31 +207,31 @@ public class IValue extends Pointer {
   public native @ByVal DoubleComplex toComplexDouble();
 
   // Future
-  public IValue(@ByVal FuturePtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal FuturePtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future v);
   public native @Cast("bool") boolean isFuture();
   
-  public native @ByVal FuturePtr toFuture();
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future toFuture();
 
-  public IValue(@ByVal AwaitPtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal AwaitPtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::Await") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Await>&"}) Await v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::Await") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Await>&"}) Await v);
   public native @Cast("bool") boolean isAwait();
   
-  public native @ByVal AwaitPtr toAwait();
+  public native @IntrusivePtr("c10::ivalue::Await") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Await>&"}) Await toAwait();
 
   // RRef
-  public IValue(@ByVal RRefInterfacePtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal RRefInterfacePtr v);
+  public IValue(@IntrusivePtr("c10::RRefInterface") @Cast({"", "c10::intrusive_ptr<c10::RRefInterface>&"}) RRefInterface v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::RRefInterface") @Cast({"", "c10::intrusive_ptr<c10::RRefInterface>&"}) RRefInterface v);
   public native @Cast("bool") boolean isRRef();
   
-  public native @ByVal RRefInterfacePtr toRRef();
+  public native @IntrusivePtr("c10::RRefInterface") @Cast({"", "c10::intrusive_ptr<c10::RRefInterface>&"}) RRefInterface toRRef();
 
   // Quantizer
-  public IValue(@ByVal QuantizerPtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal QuantizerPtr v);
+  public IValue(@IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer v);
   public native @Cast("bool") boolean isQuantizer();
   
-  public native @ByVal QuantizerPtr toQuantizer();
+  public native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer toQuantizer();
 
   // Int
   public IValue(@Cast("int64_t") long i) { super((Pointer)null); allocate(i); }
@@ -284,17 +285,17 @@ public class IValue extends Pointer {
   public native @ByVal DimVector toDimVector();
 
   // ConstantString
-  public IValue(@ByVal ConstantStringPtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal ConstantStringPtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::ConstantString") @Cast({"", "c10::intrusive_ptr<c10::ivalue::ConstantString>&"}) ConstantString v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::ConstantString") @Cast({"", "c10::intrusive_ptr<c10::ivalue::ConstantString>&"}) ConstantString v);
   public IValue(@StdString BytePointer v) { super((Pointer)null); allocate(v); }
   private native void allocate(@StdString BytePointer v);
   public IValue(@StdString String v) { super((Pointer)null); allocate(v); }
   private native void allocate(@StdString String v);
   public native @Cast("bool") boolean isString();
   
-  public native @ByVal @Name("toString") ConstantStringPtr toConstantString();
+  public native @IntrusivePtr("c10::ivalue::ConstantString") @Name("toString") @Cast({"", "c10::intrusive_ptr<c10::ivalue::ConstantString>&"}) ConstantString toConstantString();
   public native @StdString BytePointer toStringRef();
-  public native @ByVal @Cast("c10::optional<std::reference_wrapper<const std::string> >*") Pointer toOptionalStringRef();
+  public native @ByVal @Cast("std::optional<std::reference_wrapper<const std::string> >*") Pointer toOptionalStringRef();
   public native @StringView BytePointer toStringView();
 
   // DoubleList
@@ -358,30 +359,30 @@ public class IValue extends Pointer {
   public native @ByVal GenericDict toGenericDict();
 
   // ClassType
-  public IValue(@ByVal ObjPtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal ObjPtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj v);
   public native @Cast("bool") boolean isObject();
   
-  public native @ByVal ObjPtr toObject();
-  public native @ByRef Object toObjectRef();
+  public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj toObject();
+  public native @ByRef Obj toObjectRef();
 
   
   public native @Cast("bool") boolean isModule();
 
   // PyObject
-  public IValue(@ByVal PyObjectHolderPtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal PyObjectHolderPtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::PyObjectHolder") @Cast({"", "c10::intrusive_ptr<c10::ivalue::PyObjectHolder>&"}) PyObjectHolder v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::PyObjectHolder") @Cast({"", "c10::intrusive_ptr<c10::ivalue::PyObjectHolder>&"}) PyObjectHolder v);
   public native @Cast("bool") boolean isPyObject();
   
-  public native @ByVal PyObjectHolderPtr toPyObjectHolder();
+  public native @IntrusivePtr("c10::ivalue::PyObjectHolder") @Cast({"", "c10::intrusive_ptr<c10::ivalue::PyObjectHolder>&"}) PyObjectHolder toPyObjectHolder();
   public native @Cast("PyObject*") Pointer toPyObject();
 
   // Enum
-  public IValue(@ByVal EnumHolderPtr v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal EnumHolderPtr v);
+  public IValue(@IntrusivePtr("c10::ivalue::EnumHolder") @Cast({"", "c10::intrusive_ptr<c10::ivalue::EnumHolder>&"}) EnumHolder v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::EnumHolder") @Cast({"", "c10::intrusive_ptr<c10::ivalue::EnumHolder>&"}) EnumHolder v);
   public native @Cast("bool") boolean isEnum();
   
-  public native @ByVal EnumHolderPtr toEnumHolder();
+  public native @IntrusivePtr("c10::ivalue::EnumHolder") @Cast({"", "c10::intrusive_ptr<c10::ivalue::EnumHolder>&"}) EnumHolder toEnumHolder();
 
   // None
   public IValue() { super((Pointer)null); allocate(); }
@@ -497,6 +498,46 @@ public class IValue extends Pointer {
 
   // Detect aliased tensors.
 
+  public static class HashIdentityIValue extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public HashIdentityIValue() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public HashIdentityIValue(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public HashIdentityIValue(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public HashIdentityIValue position(long position) {
+          return (HashIdentityIValue)super.position(position);
+      }
+      @Override public HashIdentityIValue getPointer(long i) {
+          return new HashIdentityIValue((Pointer)this).offsetAddress(i);
+      }
+  
+    public native @Cast("size_t") @Name("operator ()") long apply(@Const @ByRef IValue val);
+  }
+
+  public static class CompIdentityIValues extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public CompIdentityIValues() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public CompIdentityIValues(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public CompIdentityIValues(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public CompIdentityIValues position(long position) {
+          return (CompIdentityIValues)super.position(position);
+      }
+      @Override public CompIdentityIValues getPointer(long i) {
+          return new CompIdentityIValues((Pointer)this).offsetAddress(i);
+      }
+  
+    public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef IValue lhs, @Const @ByRef IValue rhs);
+  }
+
   // Chechs if this and rhs has a subvalues in common.
   // [t1,t2] and [t2, t3] returns true.
   public native @Cast("bool") boolean overlaps(@Const @ByRef IValue rhs);
@@ -508,13 +549,13 @@ public class IValue extends Pointer {
   // TODO: There are several places that recurse over IValue. This is fragile.
   // This visitor should be used to recurse over ivalues.
   
-  public native @ByVal IValue deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal IValue deepcopy(@ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy();
   public native @ByVal IValue deepcopy(
-        @ByRef HashAliasedIValueMap memo,
-        @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+        @ByRef HashIdentityIValueMap memo,
+        @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy(
-        @ByRef HashAliasedIValueMap memo);
+        @ByRef HashIdentityIValueMap memo);
   // Don't edit this just to add results for new tags; edit
   // isIntrusivePtrConstexpr above.
   public native @Cast("bool") boolean isIntrusivePtr();

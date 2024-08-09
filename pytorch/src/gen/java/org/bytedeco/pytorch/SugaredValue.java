@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -75,7 +76,7 @@ public class SugaredValue extends Pointer {
   public native @ByVal SharedSugaredValueVector asTuple(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
-        @Const @ByRef(nullValue = "c10::optional<size_t>{}") SizeTOptional size_hint);
+        @Const @ByRef(nullValue = "std::optional<size_t>{}") SizeTOptional size_hint);
   public native @ByVal SharedSugaredValueVector asTuple(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m);

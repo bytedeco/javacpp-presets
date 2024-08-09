@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -69,8 +70,8 @@ public class Generator extends Pointer {
   public Generator() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public Generator(@ByVal GeneratorImplPtr gen_impl) { super((Pointer)null); allocate(gen_impl); }
-  private native void allocate(@ByVal GeneratorImplPtr gen_impl);
+  public Generator(@IntrusivePtr("c10::GeneratorImpl") @Cast({"", "c10::intrusive_ptr<c10::GeneratorImpl>&"}) GeneratorImpl gen_impl) { super((Pointer)null); allocate(gen_impl); }
+  private native void allocate(@IntrusivePtr("c10::GeneratorImpl") @Cast({"", "c10::intrusive_ptr<c10::GeneratorImpl>&"}) GeneratorImpl gen_impl);
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Generator rhs);
 
@@ -82,7 +83,7 @@ public class Generator extends Pointer {
 
   public native GeneratorImpl unsafeReleaseGeneratorImpl();
 
-  public native @Const @ByRef GeneratorImplPtr getIntrusivePtr();
+  public native @IntrusivePtr("c10::GeneratorImpl") @Cast({"", "c10::intrusive_ptr<c10::GeneratorImpl>&"}) GeneratorImpl getIntrusivePtr();
 
   public native void set_current_seed(@Cast("uint64_t") long seed);
   // Sets the offset of Generator state to the desired offset. This is currently
@@ -102,6 +103,10 @@ public class Generator extends Pointer {
   public native void set_state(@Const @ByRef Tensor new_state);
 
   public native @ByVal Tensor get_state();
+
+  public native void graphsafe_set_state(@Const @ByRef Generator new_state);
+
+  public native @ByVal Generator graphsafe_get_state();
 
   public native @ByVal DispatchKeySet key_set();
 
