@@ -40,6 +40,8 @@ runs:
           echo Removing "fixed" header files that are actually broken
           rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed)
           FORMULAE+="gcc@13"
+        else
+          brew link --force libomp
         fi
 
         # Change rpath and resign all brew libraries that could be bundled in presets
