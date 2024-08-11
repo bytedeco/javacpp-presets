@@ -150,7 +150,8 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  @param groups Scaling factors correspondence groups that define the
      *      correspondence between the tensor dimensions and the scales array.
      *      The set i-th dimension indicates a number of groups of scaling
-     *      factors used for that logical dimension in a memory indicated by \p arg. */
+     *      factors used for that logical dimension in a memory indicated by \p arg.
+     *  @param data_type Scaling factors data_type. */
     
     ///
     ///
@@ -198,7 +199,8 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  @param groups Zero point factors correspondence groups that define the
      *      correspondence between the tensor dimensions and the zero_points array.
      *      The set i-th dimension indicates a number of groups of zero point
-     *      factors used for that logical dimension in a memory indicated by \p arg. */
+     *      factors used for that logical dimension in a memory indicated by \p arg.
+     *  @param data_type Zero point factors data_type. */
     
     ///
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,

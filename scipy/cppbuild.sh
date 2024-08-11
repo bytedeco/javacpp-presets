@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.14.0rc2
+SCIPY_VERSION=1.14.0
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/data-apis/array-api-compat/archive/fd22a73.tar.gz array-api-compat-fd22a73.tar.gz
 download https://github.com/cobyqa/cobyqa/archive/7f40b6d.tar.gz cobyqa-7f40b6d.tar.gz
@@ -124,7 +124,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.12"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.4 numpy==2.0.0 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.4 numpy==2.0.1 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.12" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.12/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.12/include" "$PYTHON_LIB_PATH"

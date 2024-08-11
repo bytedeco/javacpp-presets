@@ -902,7 +902,7 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #endif
 
 // TVM version
-public static final String TVM_VERSION = "0.16.0";
+public static final String TVM_VERSION = "0.17.0";
 
 // TVM Runtime is DLPack compatible.
 // #include <dlpack/dlpack.h>
@@ -1952,6 +1952,10 @@ public static final int TVM_OBJECT_ATOMIC_REF_COUNTER = 1;
  * }</pre>
  */
 // #define TVM_DEFINE_OBJECT_REF_COW_METHOD(ObjectName)
+//   static_assert(ObjectName::_type_final,
+//                 "TVM's CopyOnWrite may only be used for "
+//                 "Object types that are declared as final, "
+//                 "using the TVM_DECLARE_FINAL_OBJECT_INFO macro.");
 //   ObjectName* CopyOnWrite() {
 //     ICHECK(data_ != nullptr);
 //     if (!data_.nique()) {
@@ -2774,6 +2778,14 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 
 
 
+
+/**
+ * \brief Get the preferred host device from the input device.
+ * - For CUDA and ROCm, CUDAHost and ROCMHost will be returned for pinned memory,
+ * since pinned memory reduces copy overhead.
+ * - For other devices, CPU is returned as a fallback.
+ */
+@Namespace("tvm::runtime") public static native @ByVal @Cast("tvm::Device*") DLDevice GetPreferredHostDevice(@ByVal @Cast("tvm::Device*") DLDevice device);
 
   // namespace runtime
   // namespace tvm

@@ -506,6 +506,12 @@ public static final int NPY_SIZEOF_HASH_T = NPY_SIZEOF_HASH_T();
 
 // #include <complex.h>
 
+// Downstream libraries like sympy would like to use I
+// see https://github.com/numpy/numpy/issues/26787
+// #ifdef I
+// #undef I
+// #endif
+
 // #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 // #else /* !defined(_MSC_VER) || defined(__INTEL_COMPILER) */
 // #endif
