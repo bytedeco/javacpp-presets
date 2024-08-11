@@ -229,7 +229,18 @@ ln -sf pytorch/torch/bin ../bin
 
 case $PLATFORM in
     macosx-*)
-        cp $(brew ls libomp|grep libomp.dylib) ../lib
+        # Disguise libomp as libiomp5 (they share the same codebase and have the same symbols)
+        # This helps if user wants to link with MKL.
+        # On linux, user linking with mkl would need to set
+        # MKL_THREADING_LAYER=GNU
+        cp "$(brew ls libomp|grep libomp.dylib)" ../lib/libiomp5.dylib
+        chmod +w ../lib/libiomp5.dylib
+        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
+        codesign --force -s - ../lib/libiomp5.dylib
+        old=$(otool -L ../lib/libtorch_cpu.dylib|grep libomp.dylib|awk '{print $1}')
+        echo install_name_tool -change $old @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
+        install_name_tool -change $old @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
+        codesign --force -s - ../lib/libtorch_cpu.dylib
         ;;
     windows-*)
         cp ../libuv/dist/lib/Release/* ../lib
