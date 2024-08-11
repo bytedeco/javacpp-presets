@@ -55,6 +55,24 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
                 "<driver_functions.h>" // causes #warning
             }
         ),
+        @Platform(
+            value = "linux",
+            extension = "-gpu",
+            link = { "c10", "torch_cpu", "c10_cuda", "torch_cuda", "torch_cuda_linalg", "cudart", "cupti", "cusparse", "cudnn" }, // cuda_linalg built as separate lib on linux only
+            linkpath = {
+                "/usr/local/cuda-12.3/lib64/",
+                "/usr/local/cuda/lib64/",
+                "/usr/lib64/"
+            }
+        ),
+        @Platform(
+            value = "windows",
+            extension = "-gpu",
+            link = { "c10", "torch_cpu", "uv", "c10_cuda", "torch_cuda", "cudart", "cupti", "cusparse", "cudnn" },
+            linkpath = {
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/"
+            }
+        )
     },
     target = "org.bytedeco.pytorch.cuda",
     global = "org.bytedeco.pytorch.global.torch_cuda"

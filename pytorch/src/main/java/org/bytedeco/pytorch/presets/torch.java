@@ -101,36 +101,20 @@ import org.bytedeco.openblas.presets.openblas;
                 "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
-            linkpath = {
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
-                "/usr/local/cuda-12.3/lib64/",
-                "/usr/local/cuda/lib64/",
-                "/usr/lib64/"
-            },
             extension = "-gpu"
         ),
         @Platform(
             value = {"linux"},
-            link = { "c10", "torch", "torch_cpu" }
+            link = { "c10", "torch_cpu" }
         ),
         @Platform(
             value = {"macosx"},
-            link = { "c10", "torch", "torch_cpu", "omp" }
+            link = { "c10", "torch_cpu", "omp" }
         ),
         @Platform(
             value = "windows",
-            link = { "c10", "torch", "torch_cpu", "uv" }
+            link = { "c10", "torch_cpu", "uv" }
         ),
-        @Platform(
-            value = "linux",
-            extension = "-gpu",
-            link = { "c10", "torch", "torch_cpu", "c10_cuda", "torch_cuda", "torch_cuda_linalg", "cudart", "cusparse", "cudnn" } // cupti@.12 needed ? cuda_linalg built as separate lib on linux only
-        ),
-        @Platform(
-            value = "windows",
-            extension = "-gpu",
-            link = { "c10", "torch", "torch_cpu", "uv", "c10_cuda", "torch_cuda", "cudart", "cusparse", "cudnn" }
-        )
     },
     target = "org.bytedeco.pytorch",
     global = "org.bytedeco.pytorch.global.torch"
@@ -180,11 +164,13 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         if (!Loader.isLoadLibraries() || extension == null || !extension.endsWith("-gpu")) {
             return;
         }
+
+        // when built for CUDA, even torch_cpu links with at least cupti and cudart, for some reason
         int i = 0;
         if (platform.startsWith("windows")) {
             preloads.add(i++, "zlibwapi");
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "nvJitLink", "cusparse", "cusolver",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "cupti", "curand", "nvJitLink", "cusparse", "cusolver",
             "cudnn", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer", "cudnn_ops_infer", "cudnn_ops_train",
             "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
