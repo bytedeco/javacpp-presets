@@ -154,7 +154,11 @@ public class memory extends dnnl_memory_handle {
         /** 8-bit signed integer. */
         s8(dnnl_s8),
         /** 8-bit unsigned integer. */
-        u8(dnnl_u8);
+        u8(dnnl_u8),
+        /** 4-bit signed integer. */
+        s4(dnnl_s4),
+        /** 4-bit unsigned integer. */
+        u4(dnnl_u4);
 
         public final int value;
         private data_type(int v) { this.value = v; }
@@ -1979,7 +1983,20 @@ public class memory extends dnnl_memory_handle {
         gIhwO8i4o(dnnl_gIhwO8i4o),
         gIhwO24i4o(dnnl_gIhwO24i4o),
         gIdhwO8i4o(dnnl_gIdhwO8i4o),
-        gIdhwO24i4o(dnnl_gIdhwO24i4o);
+        gIdhwO24i4o(dnnl_gIdhwO24i4o),
+        BA2a24b(dnnl_BA2a24b),
+        aCB2b24c(dnnl_aCB2b24c),
+        BA2a8b(dnnl_BA2a8b),
+        aCB2b8c(dnnl_aCB2b8c),
+        BA8a24b(dnnl_BA8a24b),
+        aCB8b24c(dnnl_aCB8b24c),
+        BA8a16b(dnnl_BA8a16b),
+        aCB8b16c(dnnl_aCB8b16c),
+        BA8a8b(dnnl_BA8a8b),
+        aCB8b8c(dnnl_aCB8b8c),
+        bcad(dnnl_bcad),
+        cabd(dnnl_cabd),
+        dabc(dnnl_dabc);
 
         public final int value;
         private format_tag(int v) { this.value = v; }

@@ -144,12 +144,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        12;
-public static final int PY_MICRO_VERSION =        4;
+public static final int PY_MICRO_VERSION =        5;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.12.4";
+public static final String PY_VERSION =              "3.12.5";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -2932,11 +2932,11 @@ public static final long PY_DWORD_MAX = 4294967295L;
 // MSVC makes static_assert a keyword in C11-17, contrary to the standards.
 //
 // In C++11 and C2x, static_assert is a keyword, redefining is undefined
-// behaviour. So only define if building as C (if __STDC_VERSION__ is defined),
-// not C++, and only for C11-17.
+// behaviour. So only define if building as C, not C++ (if __cplusplus is
+// not defined), and only for C11-17.
 // #if !defined(static_assert) && (defined(__GNUC__) || defined(__clang__))
-//      && defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-//      && __STDC_VERSION__ <= 201710L
+//      && !defined(__cplusplus) && defined(__STDC_VERSION__)
+//      && __STDC_VERSION__ >= 201112L && __STDC_VERSION__ <= 201710L
 // #  define static_assert _Static_assert
 // #endif
 
@@ -8277,7 +8277,7 @@ public static native @ByRef PyLongObject _Py_TrueStruct(); public static native 
 /* Float object interface */
 
 /*
-PyFloatObject represents a (double precision) floating point number.
+PyFloatObject represents a (double precision) floating-point number.
 */
 
 // #ifndef Py_FLOATOBJECT_H

@@ -105,6 +105,9 @@ public class DataType extends Pointer {
   public native @Cast("bool") boolean is_float();
   /** @return whether type is a float8 type. */
   public native @Cast("bool") boolean is_float8();
+  public native @Cast("bool") boolean is_e4m3_float8();
+
+  public native @Cast("bool") boolean is_e5m2_float8();
   /** @return whether type is a float16 type. */
   public native @Cast("bool") boolean is_float16();
   /** @return whether type is a bfloat16 type. */

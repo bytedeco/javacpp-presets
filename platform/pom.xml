@@ -182,12 +182,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>3.4.1-${project.version}</version>
+      <version>3.5.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.27-${project.version}</version>
+      <version>0.3.28-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -212,12 +212,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.12.4-${project.version}</version>
+      <version>3.12.5-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>2.0.0-${project.version}</version>
+      <version>2.0.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -232,7 +232,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>18.1.4-${project.version}</version>
+      <version>18.1.8-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -332,7 +332,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnx-platform</artifactId>
-      <version>1.16.1-${project.version}</version>
+      <version>1.16.2-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -342,12 +342,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.18.0-${project.version}</version>
+      <version>1.18.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tvm-platform</artifactId>
-      <version>0.16.0-${project.version}</version>
+      <version>0.17.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TVM 0.16.0  http://tvm.apache.org/
+ * TVM 0.17.0  http://tvm.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -49,14 +49,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tvm-platform</artifactId>
-            <version>0.16.0-1.5.11-SNAPSHOT</version>
+            <version>0.17.0-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tvm-platform-gpu</artifactId>
-            <version>0.16.0-1.5.11-SNAPSHOT</version>
+            <version>0.17.0-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->

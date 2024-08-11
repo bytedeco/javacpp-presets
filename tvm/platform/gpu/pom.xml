@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tvm-platform-gpu</artifactId>
-  <version>0.16.0-${project.parent.version}</version>
+  <version>0.17.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for TVM</name>
 
   <properties>
@@ -29,12 +29,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>18.1.4-${project.parent.version}</version>
+      <version>18.1.8-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.27-${project.parent.version}</version>
+      <version>0.3.28-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
