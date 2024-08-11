@@ -109,7 +109,7 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"macosx"},
-            link = { "c10", "torch_cpu", "omp" }
+            link = { "c10", "torch_cpu", "iomp5" }
         ),
         @Platform(
             value = "windows",
