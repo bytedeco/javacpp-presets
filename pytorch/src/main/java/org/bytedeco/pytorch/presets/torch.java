@@ -1963,6 +1963,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "torch::dynamo::autograd::AutogradCompilerCall::dyn_size_inputs",
             "torch::dynamo::autograd::AutogradCompilerCall::node_calls",
             "torch::dynamo::autograd::AutogradCompilerCall::default_dyn_type",
+            "torch::dynamo::autograd::AutogradCompilerCall::tensor_args",
             "torch::jit::Object::Property::setter_func",
             "torch::jit::Object::Property::getter_func",
             "torch::jit::Object::Property::name",
