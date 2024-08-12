@@ -62,6 +62,7 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
             linkpath = {
                 "/usr/local/cuda-12.3/lib64/",
                 "/usr/local/cuda/lib64/",
+                "/usr/local/cuda-12.3/extras/CUPTI/lib64/",
                 "/usr/lib64/"
             }
         ),
@@ -70,7 +71,8 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
             extension = "-gpu",
             link = { "c10", "torch_cpu", "uv", "c10_cuda", "torch_cuda", "cudart", "cupti", "cusparse", "cudnn" },
             linkpath = {
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/"
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/extras/CUPTI/lib64/"
             }
         )
     },
