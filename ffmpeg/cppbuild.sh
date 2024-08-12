@@ -33,22 +33,22 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.3.0
+OPENSSL=openssl-3.3.1
 OPENH264_VERSION=2.4.1
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.14.0
-ALSA_VERSION=1.2.11
+VPX_VERSION=1.14.1
+ALSA_VERSION=1.2.12
 FREETYPE_VERSION=2.13.2
 MFX_VERSION=1.35.1
 NVCODEC_VERSION=12.2.72.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.3
 WEBP_VERSION=1.4.0
-AOMAV1_VERSION=3.8.2
-SVTAV1_VERSION=2.0.0
+AOMAV1_VERSION=3.9.1
+SVTAV1_VERSION=2.1.2
 ZIMG_VERSION=3.0.5
-FFMPEG_VERSION=7.0
+FFMPEG_VERSION=7.0.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -123,7 +123,7 @@ patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.txt
-sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
+# sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
 sedinplace '/ANativeWindow_release/d' ffmpeg-*/libavutil/hwcontext_mediacodec.c
 sedinplace 's/#define MAX_SLICES 32/#define MAX_SLICES 256/g' ffmpeg-*/libavcodec/h264dec.h
 
@@ -1767,7 +1767,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG -DCOMPILE_C_ONLY=ON ..
         make -j $MAKEJ
         make install
         cd ..

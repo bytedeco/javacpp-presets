@@ -78,6 +78,32 @@ public class FlatBufferModel extends Pointer {
   public static native @UniquePtr FlatBufferModel VerifyAndBuildFromFile(
         String filename);
 
+  /** Builds a model based on a file descriptor.
+   *  Caller retains ownership of {@code error_reporter} and must ensure its lifetime
+   *  is longer than the FlatBufferModel instance. Caller retains ownership of
+   *  {@code fd} and must ensure it is closed after BuildFromFile returns.
+   *  Returns a nullptr in case of failure. */
+  public static native @UniquePtr FlatBufferModel BuildFromFileDescriptor(
+        int fd,
+        ErrorReporter error_reporter/*=tflite::DefaultErrorReporter()*/);
+  public static native @UniquePtr FlatBufferModel BuildFromFileDescriptor(
+        int fd);
+
+  /** Verifies whether the content of the file descriptor is legit, then builds
+   *  a model based on the file.
+   *  The extra_verifier argument is an additional optional verifier for the
+   *  file contents. By default, we always check with tflite::VerifyModelBuffer.
+   *  If extra_verifier is supplied, the file contents is also checked against
+   *  the extra_verifier after the check against tflite::VerifyModelBuilder.
+   *  Caller retains ownership of {@code error_reporter} and must ensure its lifetime
+   *  is longer than the FlatBufferModel instance.
+   *  Returns a nullptr in case of failure. */
+  public static native @UniquePtr FlatBufferModel VerifyAndBuildFromFileDescriptor(
+        int fd, TfLiteVerifier extra_verifier/*=nullptr*/,
+        ErrorReporter error_reporter/*=tflite::DefaultErrorReporter()*/);
+  public static native @UniquePtr FlatBufferModel VerifyAndBuildFromFileDescriptor(
+        int fd);
+
   /** Builds a model based on a pre-loaded flatbuffer.
    *  Caller retains ownership of the buffer and should keep it alive until
    *  the returned object is destroyed. Caller also retains ownership of

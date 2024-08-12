@@ -15,7 +15,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  *  It is a struct containing "methods" (C function pointers) that will be
  *  invoked by the TF Lite runtime to evaluate instances of the operation.
  * 
- *  See also {@code TfLiteRegistrationExternal} which is a more ABI-stable equivalent. */
+ *  See also {@code TfLiteOperator} which is a more ABI-stable equivalent. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteRegistration extends Pointer {
     static { Loader.load(); }
@@ -152,14 +152,14 @@ public class TfLiteRegistration extends Pointer {
    *  properly. */
   public native int version(); public native TfLiteRegistration version(int setter);
 
-  /** The external version of {@code TfLiteRegistration}. Since we can't use internal
-   *  types (such as {@code TfLiteContext}) for C API to maintain ABI stability.
-   *  C API user will provide {@code TfLiteRegistrationExternal} to implement custom
-   *  ops. We keep it inside of {@code TfLiteRegistration} and use it to route
-   *  callbacks properly. */
+  /** The external (i.e. ABI-stable) version of {@code TfLiteRegistration}.
+   *  Since we can't use internal types (such as {@code TfLiteContext}) for C API to
+   *  maintain ABI stability.  C API user will provide {@code TfLiteOperator} to
+   *  implement custom ops.  We keep it inside of {@code TfLiteRegistration} and use
+   *  it to route callbacks properly. */
   
   ///
-  public native TfLiteRegistrationExternal registration_external(); public native TfLiteRegistration registration_external(TfLiteRegistrationExternal setter);
+  public native TfLiteOperator registration_external(); public native TfLiteRegistration registration_external(TfLiteOperator setter);
 
   /** Retrieves asynchronous kernel.
    * 
