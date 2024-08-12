@@ -10,14 +10,22 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 // #endif  // __cplusplus
 
-// TfLiteRegistrationExternal is an external version of TfLiteRegistration to
-// use custom op registration API.
-//
-// \warning This is an experimental type and subject to change.
+/** TfLiteOperator is an opaque version of TfLiteRegistration,
+ *  and is used for registering custom ops.  It represents a definition of a
+ *  custom op or a builtin op.
+ * 
+ *  \warning This is an experimental type and subject to change. */
+
+///
+///
+///
+///
+///
+///
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class TfLiteRegistrationExternal extends Pointer {
+public class TfLiteOperator extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public TfLiteRegistrationExternal() { super((Pointer)null); }
+    public TfLiteOperator() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TfLiteRegistrationExternal(Pointer p) { super(p); }
+    public TfLiteOperator(Pointer p) { super(p); }
 }

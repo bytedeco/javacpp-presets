@@ -52,7 +52,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/core/c/c_api_types.h",
                 "tensorflow/lite/c/c_api.h",
                 "tensorflow/lite/core/c/c_api.h",
-                "tensorflow/lite/core/c/registration_external.h",
+                "tensorflow/lite/core/c/operator.h",
                 "tensorflow/lite/c/common.h",
                 "tensorflow/lite/core/c/common.h",
                 "tensorflow/lite/c/c_api_experimental.h",
@@ -110,23 +110,25 @@ public class tensorflowlite implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK", "TFL_CAPI_EXPORT", "TFLITE_NOINLINE").cppTypes().annotations())
+               .put(new Info("DOYXGEN_SKIP").define(true))
                .put(new Info("FLATBUFFERS_LITTLEENDIAN == 0").define(false))
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
                .put(new Info("tflite::ops::builtin::BuiltinOpResolver").pointerTypes("BuiltinOpResolver"))
                .put(new Info("tflite::ops::builtin::BuiltinOpResolverWithoutDefaultDelegates").pointerTypes("BuiltinOpResolverWithoutDefaultDelegates"))
-               .put(new Info("std::initializer_list", "tflite::BuildTfLiteTensor", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
+               .put(new Info("auto", "std::initializer_list", "tflite::BuildTfLiteTensor", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
                              "tflite::OpResolver::GetOpaqueDelegateCreators", "tflite::MutableOpResolver::GetOpaqueDelegateCreators", "IntArrayUniquePtr",
                              "tflite::InterpreterBuilder::PreserveAllTensorsExperimental", "tflite::async::AsyncSignatureRunner", "TfLiteAsyncKernel").skip())
-               .put(new Info("kTfLiteInplaceOpMaxValue").translate(false))
+               .put(new Info("kTfLiteInplaceOpMaxValue", "kTfLiteNoBufferIdentifier").translate(false))
                .put(new Info("tflite::Model", "tflite::ModelT", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators",
                              "tflite::internal::SignatureDef").cast().pointerTypes("Pointer"))
                .put(new Info("tflite::Subgraph").valueTypes("@StdMove Subgraph").pointerTypes("Subgraph"))
-               .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator",
+               .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator", "TfLiteBuiltinOperator",
                              "tflite::profiling::RootProfiler::EventType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("String", "BytePointer").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<const std::string*>").pointerTypes("StringVector").define())
                .put(new Info("std::map<std::string,uint32_t>").pointerTypes("StringIntMap").define())
                .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
+               .put(new Info("std::unordered_map<size_t,size_t>").pointerTypes("SizeTSizeTMap").define())
                .put(new Info("std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)>").annotations("@UniquePtr(\"TfLiteDelegate,void(*)(TfLiteDelegate*)\")").pointerTypes("TfLiteDelegate"))
                .put(new Info("std::unique_ptr<TfLiteIntArray,tflite::TfLiteArrayDeleter>").annotations("@UniquePtr(\"TfLiteIntArray,tflite::TfLiteArrayDeleter\")").pointerTypes("TfLiteIntArray"))
                .put(new Info("std::unique_ptr<tflite::Subgraph>").annotations("@UniquePtr").pointerTypes("Subgraph")
@@ -141,8 +143,8 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("std::vector<std::pair<TfLiteNode,TfLiteRegistration> >").valueTypes("@StdMove RegistrationNodePairVector").pointerTypes("RegistrationNodePairVector").define())
                .put(new Info("const std::vector<std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)> >", "tflite::OpResolver::TfLiteDelegatePtrVector").pointerTypes("TfLiteDelegatePtrVector").define())
                .put(new Info("std::unordered_map<std::int32_t,std::unique_ptr<tflite::resource::ResourceBase> >").valueTypes("@StdMove IntResourceBaseMap").pointerTypes("IntResourceBaseMap").define())
-               .put(new Info("const TfLiteRegistrationExternal* (*)(void*, int, int)").pointerTypes("Find_builtin_op_external_Pointer_int_int"))
-               .put(new Info("const TfLiteRegistrationExternal* (*)(void*, const char*, int)").pointerTypes("Find_custom_op_external_Pointer_String_int"))
+               .put(new Info("const TfLiteOperator* (*)(void*, int, int)").pointerTypes("Find_builtin_op_external_Pointer_int_int"))
+               .put(new Info("const TfLiteOperator* (*)(void*, const char*, int)").pointerTypes("Find_custom_op_external_Pointer_String_int"))
 
                .put(new Info("tflite::impl::Interpreter::typed_tensor<int8_t>").javaNames("typed_tensor_byte"))
                .put(new Info("tflite::impl::Interpreter::typed_tensor<int16_t>").javaNames("typed_tensor_short"))

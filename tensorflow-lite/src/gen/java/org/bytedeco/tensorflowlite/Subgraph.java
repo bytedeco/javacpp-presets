@@ -23,40 +23,40 @@ public class Subgraph extends Pointer {
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             @Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap initialization_status_map,
              int subgraph_index/*=kInvalidSubgraphIndex*/) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map, subgraph_index); }
   @UniquePtr @Name("std::make_unique<tflite::Subgraph>") private native void allocate(ErrorReporter error_reporter,
              @Cast("TfLiteExternalContext**") PointerPointer external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             @Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap initialization_status_map,
              int subgraph_index/*=kInvalidSubgraphIndex*/);
   public Subgraph(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map); }
+             @Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap initialization_status_map) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map); }
   @UniquePtr @Name("std::make_unique<tflite::Subgraph>") private native void allocate(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map);
+             @Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap initialization_status_map);
   public Subgraph(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             @Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap initialization_status_map,
              int subgraph_index/*=kInvalidSubgraphIndex*/) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map, subgraph_index); }
   @UniquePtr @Name("std::make_unique<tflite::Subgraph>") private native void allocate(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             @Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap initialization_status_map,
              int subgraph_index/*=kInvalidSubgraphIndex*/);
 
   
@@ -189,7 +189,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name,
         @StdVector IntPointer dims, @ByVal TfLiteQuantization quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name,
         @StdVector IntPointer dims, @ByVal TfLiteQuantization quantization,
@@ -198,7 +199,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector IntBuffer dims, @ByVal TfLiteQuantization quantization,
         String buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector IntBuffer dims, @ByVal TfLiteQuantization quantization,
@@ -207,7 +209,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name,
         @StdVector int[] dims, @ByVal TfLiteQuantization quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name,
         @StdVector int[] dims, @ByVal TfLiteQuantization quantization,
@@ -216,7 +219,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector IntPointer dims, @ByVal TfLiteQuantization quantization,
         String buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector IntPointer dims, @ByVal TfLiteQuantization quantization,
@@ -225,7 +229,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name,
         @StdVector IntBuffer dims, @ByVal TfLiteQuantization quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name,
         @StdVector IntBuffer dims, @ByVal TfLiteQuantization quantization,
@@ -234,7 +239,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector int[] dims, @ByVal TfLiteQuantization quantization,
         String buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector int[] dims, @ByVal TfLiteQuantization quantization,
@@ -243,7 +249,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
@@ -252,7 +259,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, String buffer,
@@ -261,7 +269,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
@@ -270,7 +279,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, String buffer,
@@ -279,7 +289,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
@@ -288,7 +299,8 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
-        TfLiteSparsity sparsity/*=nullptr*/);
+        TfLiteSparsity sparsity/*=nullptr*/,
+        @Cast("size_t") long buffer_identifier/*=kTfLiteNoBufferIdentifier*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, String buffer,
@@ -422,7 +434,7 @@ public class Subgraph extends Pointer {
 
   // WARNING: Experimental interface, subject to change.
   // TODO(b/149099381): Move this function to an external context interface.
-  public native @Cast("tflite::resource::InitializationStatusMap*") @ByRef IntResourceBaseMap initialization_status_map();
+  public native @Cast("tflite::resource::InitializationStatusMap*") @ByRef SizeTSizeTMap initialization_status_map();
 
   public native @Cast("size_t") long tensors_size();
 
@@ -446,9 +458,19 @@ public class Subgraph extends Pointer {
   public native @Const RegistrationNodePair node_and_registration(
         int node_index);
 
-  // Change the dimensionality of a given tensor. Note, this is only acceptable
-  // for tensor indices that are inputs.
-  // Returns status of failure or success.
+  // Change the dimensionality of a given tensor.
+  //
+  // Note, this is only acceptable for tensor indices that are inputs.
+  public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index, @Const IntPointer dims_data,
+                                   int rank);
+  public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index, @Const IntBuffer dims_data,
+                                   int rank);
+  public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index, @Const int[] dims_data,
+                                   int rank);
+
+  // Change the dimensionality of a given tensor.
+  //
+  // Note, this is only acceptable for tensor indices that are inputs.
   public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index,
                                    @StdVector IntPointer dims);
   public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index,
@@ -794,4 +816,12 @@ public class Subgraph extends Pointer {
         @Const TfLiteNode node, int[] fd,
         @Cast("int64_t*") long[] custom_initial_data_offset_in_file,
         @Cast("int64_t*") long[] custom_initial_data_size);
+
+  // Returns true if the subgraph has delegates applied.
+  public native @Cast("bool") boolean HasDelegates();
+
+  // Returns true if the subgraph has been fully delegated.
+  public native @Cast("bool") boolean IsFullyDelegated();
+
+  public native @Const @ByRef SizeTSizeTMap GetTensorBufferIdentifiers();
 }

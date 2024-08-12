@@ -9,12 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class Find_custom_op_external_Pointer_String_int extends FunctionPointer {
+public class Init_Pointer_TfLiteOpaqueContext_String_long extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Find_custom_op_external_Pointer_String_int(Pointer p) { super(p); }
-    protected Find_custom_op_external_Pointer_String_int() { allocate(); }
+    public    Init_Pointer_TfLiteOpaqueContext_String_long(Pointer p) { super(p); }
+    protected Init_Pointer_TfLiteOpaqueContext_String_long() { allocate(); }
     private native void allocate();
-    public native @Const TfLiteOperator call(Pointer user_data,
-                                            @Cast("const char*") BytePointer custom_op, int version);
+    public native Pointer call(Pointer user_data, TfLiteOpaqueContext context,
+                  String buffer, @Cast("size_t") long length);
 }

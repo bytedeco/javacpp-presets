@@ -24,7 +24,7 @@ runs:
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
         $SUDO mkswap /swapfile
-        $SUDO swapon /swapfile
+        $SUDO swapon /swapfile || true
 
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
@@ -139,6 +139,7 @@ runs:
           $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.280-focal.list https://packages.lunarg.com/vulkan/1.3.280/lunarg-vulkan-1.3.280-focal.list
         fi
         $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk
+        $SUDO apt-get clean
 
         if [[ -n ${USERLAND_BUILDME:-} ]]; then
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz

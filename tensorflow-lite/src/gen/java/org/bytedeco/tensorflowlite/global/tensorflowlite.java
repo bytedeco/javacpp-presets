@@ -41,6 +41,9 @@ public class tensorflowlite extends org.bytedeco.tensorflowlite.presets.tensorfl
 // Targeting ../RegistrationNodePair.java
 
 
+// Targeting ../SizeTSizeTMap.java
+
+
 // Targeting ../IntResourceBaseMap.java
 
 
@@ -280,7 +283,8 @@ public static final int
   kTfLiteBuiltinStablehloTranspose = 202,
   kTfLiteBuiltinDilate = 203,
   kTfLiteBuiltinStablehloRngBitGenerator = 204,
-  kTfLiteBuiltinReduceWindow = 205;
+  kTfLiteBuiltinReduceWindow = 205,
+  kTfLiteBuiltinStablehloComposite = 206;
 
 // #ifdef __cplusplus  // extern "C"
 // #endif  // __cplusplus
@@ -456,7 +460,8 @@ public static final int
   kTfLiteVariant = 15,
   kTfLiteUInt32 = 16,
   kTfLiteUInt16 = 17,
-  kTfLiteInt4 = 18;
+  kTfLiteInt4 = 18,
+  kTfLiteBFloat16 = 19;
 // Targeting ../TfLiteQuantizationParams.java
 
 
@@ -523,6 +528,9 @@ limitations under the License.
 
 // #include "tensorflow/lite/core/c/c_api.h"
 
+// #ifndef DOYXGEN_SKIP
+// #endif  // DOYXGEN_SKIP
+
 // #endif  // TENSORFLOW_LITE_C_C_API_H_
 
 
@@ -568,7 +576,7 @@ limitations under the License.
 ///
 ///
 ///
-// #include "tensorflow/lite/core/c/registration_external.h"  // IWYU pragma: export
+// #include "tensorflow/lite/core/c/operator.h"  // IWYU pragma: export
 
 /** C API for TensorFlow Lite.
  * 
@@ -810,21 +818,20 @@ public static native void TfLiteInterpreterOptionsSetErrorReporter(
 
 /** Adds an op registration to be applied during {@code TfLiteInterpreter} creation.
  * 
- *  The {@code TfLiteRegistrationExternal} object is needed to implement custom op of
+ *  The {@code TfLiteOperator} object is needed to implement custom op of
  *  TFLite Interpreter via C API. Calling this function ensures that any
  *  {@code TfLiteInterpreter} created with the specified {@code options} can execute models
  *  that use the custom operator specified in {@code registration}.
  *  Please refer https://www.tensorflow.org/lite/guide/ops_custom for custom op
  *  support.
- *  \note The caller retains ownership of the TfLiteRegistrationExternal object
+ *  \note The caller retains ownership of the TfLiteOperator object
  *  and should ensure that it remains valid for the duration of any created
  *  interpreter's lifetime.
  *  \warning This is an experimental API and subject to change. */
 
 ///
-public static native void TfLiteInterpreterOptionsAddRegistrationExternal(
-    TfLiteInterpreterOptions options,
-    TfLiteRegistrationExternal registration);
+public static native void TfLiteInterpreterOptionsAddOperator(
+    TfLiteInterpreterOptions options, TfLiteOperator registration);
 
 /** Enables users to cancel in-flight invocations with
  *  {@code TfLiteInterpreterCancel}.
@@ -1283,7 +1290,7 @@ public static native void TfLiteSignatureRunnerDelete(
 // #endif  // TENSORFLOW_LITE_CORE_C_C_API_H_
 
 
-// Parsed from tensorflow/lite/core/c/registration_external.h
+// Parsed from tensorflow/lite/core/c/operator.h
 
 /* Copyright 2023 The TensorFlow Authors. All Rights Reserved.
 
@@ -1302,10 +1309,18 @@ limitations under the License.
 /** \warning Users of TensorFlow Lite should not include this file directly,
 /** but should instead include "third_party/tensorflow/lite/c/c_api.h".
 /** Only the TensorFlow Lite implementation itself should include this
-/** file directly. */
-// #ifndef TENSORFLOW_LITE_CORE_C_REGISTRATION_EXTERNAL_H_
-// #define TENSORFLOW_LITE_CORE_C_REGISTRATION_EXTERNAL_H_
+/** file directly.
+/**
+/** The types and functions declared in operator.h are
+/** part of the TensorFlow Lite Extension APIs.
+/** We reserve the right to make changes to this API in future releases,
+/** potentially including non-backwards-compatible changes, on a different
+/** schedule than for the other TensorFlow Lite APIs. See
+/** https://www.tensorflow.org/guide/versions#separate_version_number_for_tensorflow_lite_extension_apis. */
+// #ifndef TENSORFLOW_LITE_CORE_C_OPERATOR_H_
+// #define TENSORFLOW_LITE_CORE_C_OPERATOR_H_
 
+// #include <stdint.h>
 // #include <stdlib.h>
 
 // #include "tensorflow/lite/builtin_ops.h"
@@ -1313,83 +1328,222 @@ limitations under the License.
 // #include "tensorflow/lite/core/c/c_api_types.h"
 
 // #ifdef __cplusplus
-// Targeting ../TfLiteRegistrationExternal.java
+// Targeting ../TfLiteOperator.java
 
 
 
-// Returns a new TfLiteRegistrationExternal instance.
-//
-// \note The caller retains ownership and should ensure that
-// the lifetime of the `TfLiteRegistrationExternal` must be at least as long as
-// the lifetime of the `TfLiteInterpreter`.
-//
-// \warning This is an experimental API and subject to change.
-public static native TfLiteRegistrationExternal TfLiteRegistrationExternalCreate(@Cast("TfLiteBuiltinOperator") int builtin_code,
-                                 @Cast("const char*") BytePointer custom_name, int version);
-public static native TfLiteRegistrationExternal TfLiteRegistrationExternalCreate(@Cast("TfLiteBuiltinOperator") int builtin_code,
-                                 String custom_name, int version);
-
-// Destroys the TfLiteRegistrationExternal instance.
-//
-// \warning This is an experimental API and subject to change.
-public static native void TfLiteRegistrationExternalDelete(
-    TfLiteRegistrationExternal registration);
-
-// Return the builtin op code of the provided external 'registration'.
-//
-// \warning This is an experimental API and subject to change.
+/** Returns a new TfLiteOperator instance.
+ * 
+ *  The returned TfLiteOperator instance represents a definition
+ *  of an operator with the identity (builtin_code/custom_name and
+ *  version) specified by the parameters, but with all callbacks initially
+ *  unset.
+ * 
+ *  Evaluation of any operation using this operator will be done using
+ *  the "prepare" and "invoke" callbacks, which can be set using
+ *  {@code TfLiteOperatorSetPrepare} and
+ *  {@code TfLiteOperatorSetInvoke}, or for async execution
+ *  the "prepare", "eval", and "wait" callbacks of the {@code TfLiteAsyncKernel},
+ *  which can be set using {@code TfLiteOperatorSetAsyncKernel}.
+ *  If the relevant callbacks are not set, then such evaluation will result
+ *  in an error status.  So normally any use of this function should be followed
+ *  by appropriate calls to set those callbacks.
+ * 
+ *  \note The caller retains ownership and should ensure that
+ *  the lifetime of the {@code TfLiteOperator} must be at least as long as
+ *  the lifetime of any {@code TfLiteInterpreter} or {@code tflite::Interpreter} that it is
+ *  used in.
+ * 
+ *  @param builtin_code Enumeration code specifying which builtin operator this
+ *                      defines, or {@code TfLiteBuiltinCustom} to define a custom op.
+ *  @param custom_name  Name of the custom op, or {@code nullptr} for a builtin op.
+ *                      If {@code custom_name} is non-null, then {@code builtin_code} should
+ *                      be {@code TfLiteBuiltinCustom}.
+ *  @param version      Version of the op.  See
+ *                      https://www.tensorflow.org/lite/guide/ops_version
+ * 
+ *  @return \a newly created TfLiteOperator on success, \a nullptr on failure
+ * 
+ *  Deprecated: Use {@code TfLiteOperatorCreateWithData} */
 
 ///
-public static native @Cast("TfLiteBuiltinOperator") int TfLiteRegistrationExternalGetBuiltInCode(
-    @Const TfLiteRegistrationExternal registration);
+///
+///
+///
+///
+public static native TfLiteOperator TfLiteOperatorCreate(
+    @Cast("TfLiteBuiltinOperator") int builtin_code, @Cast("const char*") BytePointer custom_name, int version);
+public static native TfLiteOperator TfLiteOperatorCreate(
+    @Cast("TfLiteBuiltinOperator") int builtin_code, String custom_name, int version);
+
+/** Returns a new TfLiteOperator instance.
+ * 
+ *  The returned TfLiteOperator instance represents a definition
+ *  of an operator with the identity (builtin_code/custom_name and
+ *  version) specified by the parameters, but with all callbacks initially
+ *  unset.
+ * 
+ *  Evaluation of any operation using this operator will be done using
+ *  the "prepare" and "invoke" callbacks, which can be set using
+ *  {@code TfLiteOperatorSetPrepare} and
+ *  {@code TfLiteOperatorSetInvoke}, or for async execution
+ *  the "prepare", "eval", and "wait" callbacks of the {@code TfLiteAsyncKernel},
+ *  which can be set using {@code TfLiteOperatorSetAsyncKernel}.
+ *  If the relevant callbacks are not set, then such evaluation will result
+ *  in an error status.  So normally any use of this function should be followed
+ *  by appropriate calls to set those callbacks.
+ * 
+ *  \note The caller retains ownership and should ensure that
+ *  the lifetime of the {@code TfLiteOperator} must be at least as long as
+ *  the lifetime of any {@code TfLiteInterpreter} or {@code tflite::Interpreter} that it is
+ *  used in.
+ * 
+ *  @param builtin_code Enumeration code specifying which builtin operator this
+ *                      defines, or {@code TfLiteBuiltinCustom} to define a custom op.
+ *  @param custom_name  Name of the custom op, or {@code nullptr} for a builtin op.
+ *                      If {@code custom_name} is non-null, then {@code builtin_code} should
+ *                      be {@code TfLiteBuiltinCustom}.
+ *  @param version      Version of the op.  See
+ *                      https://www.tensorflow.org/lite/guide/ops_version
+ *  @param user_data    Opaque pointer passed to the operator's callbacks set
+ *                      with functions such as {@code TfLiteOperatorSetXXXWithData}.
+ *                      The user is expected to manage the memory pointed by
+ *                      this field and the lifetime of that memory should extend
+ *                      at least from the call to {@code TfLiteOperatorCreateWithData}
+ *                      to the invocation of the callback set with
+ *                      {@code TfLiteOperatorSetFreeWithData}.
+ * 
+ *  @return a newly created TfLiteOperator on success, or a nullptr on failure */
+
+///
+public static native TfLiteOperator TfLiteOperatorCreateWithData(
+    @Cast("TfLiteBuiltinOperator") int builtin_code, @Cast("const char*") BytePointer custom_name, int version,
+    Pointer user_data);
+public static native TfLiteOperator TfLiteOperatorCreateWithData(
+    @Cast("TfLiteBuiltinOperator") int builtin_code, String custom_name, int version,
+    Pointer user_data);
+
+/** Destroys the TfLiteOperator instance.
+ *  */
+
+///
+public static native void TfLiteOperatorDelete(TfLiteOperator registration);
+
+/** Return the builtin op code of the provided external 'registration'.
+ *  */
+
+///
+public static native @Cast("TfLiteBuiltinOperator") int TfLiteOperatorGetBuiltInCode(
+    @Const TfLiteOperator registration);
 
 /** Returns the custom name of the provided 'registration'. The returned pointer
  *  will be non-null iff the op is a custom op.
- * 
- *  \warning This is an experimental API and subject to change. */
+ *  */
 
 ///
-public static native @Cast("const char*") BytePointer TfLiteRegistrationExternalGetCustomName(
-    @Const TfLiteRegistrationExternal registration);
+public static native @Cast("const char*") BytePointer TfLiteOperatorGetCustomName(
+    @Const TfLiteOperator registration);
 
 /** Return the OP version of the provided external 'registration'.  Return -1
  *  in case of error, or if the provided address is null.
- * 
- *  \warning This is an experimental API and subject to change. */
-public static native int TfLiteRegistrationExternalGetVersion(
-    @Const TfLiteRegistrationExternal registration);
+ *  */
+
+///
+public static native int TfLiteOperatorGetVersion(
+    @Const TfLiteOperator registration);
+
+/** Return the user data field of the provided external 'registration', or
+ *  nullptr if none was set.
+ *  */
+
+///
+///
+public static native Pointer TfLiteOperatorGetUserData(
+    @Const TfLiteOperator registration);
 // Targeting ../Init_TfLiteOpaqueContext_BytePointer_long.java
 
 
-public static native void TfLiteRegistrationExternalSetInit(
-    TfLiteRegistrationExternal registration,
+
+///
+///
+public static native void TfLiteOperatorSetInit(
+    TfLiteOperator registration,
     Init_TfLiteOpaqueContext_BytePointer_long init);
 // Targeting ../Init_TfLiteOpaqueContext_String_long.java
 
 
-public static native void TfLiteRegistrationExternalSetInit(
-    TfLiteRegistrationExternal registration,
+public static native void TfLiteOperatorSetInit(
+    TfLiteOperator registration,
     Init_TfLiteOpaqueContext_String_long init);
+// Targeting ../Init_Pointer_TfLiteOpaqueContext_BytePointer_long.java
+
+
+
+///
+///
+public static native @Cast("TfLiteStatus") int TfLiteOperatorSetInitWithData(
+    TfLiteOperator registration,
+    Init_Pointer_TfLiteOpaqueContext_BytePointer_long init);
+// Targeting ../Init_Pointer_TfLiteOpaqueContext_String_long.java
+
+
+public static native @Cast("TfLiteStatus") int TfLiteOperatorSetInitWithData(
+    TfLiteOperator registration,
+    Init_Pointer_TfLiteOpaqueContext_String_long init);
 // Targeting ../Free_TfLiteOpaqueContext_Pointer.java
 
 
-public static native void TfLiteRegistrationExternalSetFree(
-    TfLiteRegistrationExternal registration,
+
+///
+///
+public static native void TfLiteOperatorSetFree(
+    TfLiteOperator registration,
     Free_TfLiteOpaqueContext_Pointer _free);
+// Targeting ../Free_Pointer_TfLiteOpaqueContext_Pointer.java
+
+
+
+///
+///
+public static native @Cast("TfLiteStatus") int TfLiteOperatorSetFreeWithData(
+    TfLiteOperator registration,
+    Free_Pointer_TfLiteOpaqueContext_Pointer _free);
 // Targeting ../Prepare_TfLiteOpaqueContext_TfLiteOpaqueNode.java
 
 
-public static native void TfLiteRegistrationExternalSetPrepare(
-    TfLiteRegistrationExternal registration,
+
+///
+///
+public static native void TfLiteOperatorSetPrepare(
+    TfLiteOperator registration,
     Prepare_TfLiteOpaqueContext_TfLiteOpaqueNode prepare);
+// Targeting ../Prepare_Pointer_TfLiteOpaqueContext_TfLiteOpaqueNode.java
+
+
+
+///
+///
+public static native @Cast("TfLiteStatus") int TfLiteOperatorSetPrepareWithData(
+    TfLiteOperator registration,
+    Prepare_Pointer_TfLiteOpaqueContext_TfLiteOpaqueNode prepare);
 // Targeting ../Invoke_TfLiteOpaqueContext_TfLiteOpaqueNode.java
 
 
 
 ///
-public static native void TfLiteRegistrationExternalSetInvoke(
-    TfLiteRegistrationExternal registration,
+///
+public static native void TfLiteOperatorSetInvoke(
+    TfLiteOperator registration,
     Invoke_TfLiteOpaqueContext_TfLiteOpaqueNode invoke);
+// Targeting ../Invoke_Pointer_TfLiteOpaqueContext_TfLiteOpaqueNode.java
+
+
+
+///
+///
+public static native @Cast("TfLiteStatus") int TfLiteOperatorSetInvokeWithData(
+    TfLiteOperator registration,
+    Invoke_Pointer_TfLiteOpaqueContext_TfLiteOpaqueNode invoke);
 
 /** Sets the async kernel accessor callback for the registration.
  * 
@@ -1398,21 +1552,35 @@ public static native void TfLiteRegistrationExternalSetInvoke(
  *  should not be called, or {@code async_kernel} needs to be nullptr.
  *  {@code node} is the delegate TfLiteNode created by {@code ModifyGraphWithDelegate}.
  *  Please refer {@code async_kernel} of {@code TfLiteRegistration} for the detail.
+ * 
+ *  \warning This is an experimental API and subject to change.
+ *  Deprecated: Use {@code TfLiteOperatorSetAsyncKernelWithData} */
+
+/** Sets the async kernel accessor callback for the registration. The function
+ *  returns an error upon failure.
+ * 
+ *  The callback is called to retrieve the async kernel if the delegate supports
+ *  it. If the delegate does not support async execution, either this function
+ *  should not be called, or {@code async_kernel} needs to be nullptr.  {@code node} is the
+ *  delegate TfLiteNode created by {@code ModifyGraphWithDelegate}.  The value passed
+ *  in the {@code user_data} parameter is the value that was passed to
+ *  {@code TfLiteOperatorCreate}.  Please refer {@code async_kernel} of {@code TfLiteRegistration}
+ *  for the detail.
+ * 
  *  \warning This is an experimental API and subject to change. */
 
 /** Sets the inplace_operator field of the external registration.
  * 
  *  This is a bitmask. Please refer to {@code inplace_operator} field of
  *  {@code TfLiteRegistration} for details.
- * 
- *  \warning This is an experimental API and subject to change. */
-public static native void TfLiteRegistrationExternalSetInplaceOperator(
-    TfLiteRegistrationExternal registration, @Cast("uint64_t") long inplace_operator);
+ *  */
+public static native void TfLiteOperatorSetInplaceOperator(
+    TfLiteOperator registration, @Cast("uint64_t") long inplace_operator);
 
 // #ifdef __cplusplus  // extern "C"
 // #endif  // __cplusplus
 
-// #endif  // TENSORFLOW_LITE_CORE_C_REGISTRATION_EXTERNAL_H_
+// #endif  // TENSORFLOW_LITE_CORE_C_OPERATOR_H_
 
 
 // Parsed from tensorflow/lite/c/common.h
@@ -1706,6 +1874,9 @@ public static native void TfLiteFloatArrayFree(TfLiteFloatArray a);
 // Targeting ../TfLiteFloat16.java
 
 
+// Targeting ../TfLiteBFloat16.java
+
+
 
 /** Return the name of a given type, for error reporting purposes. */
 public static native @Cast("const char*") BytePointer TfLiteTypeGetName(@Cast("TfLiteType") int type);
@@ -1817,6 +1988,11 @@ public static final int
    *  NOTE: Setting this flag can cause crashes when calling Invoke().
    *  Use with caution. */
   kTfLiteCustomAllocationFlagsSkipAlignCheck = 1;
+
+/** enum  */
+
+public static native @MemberGetter int kTfLiteNoBufferIdentifier();
+public static final int kTfLiteNoBufferIdentifier = kTfLiteNoBufferIdentifier();
 // Targeting ../TfLiteTensor.java
 
 
@@ -1938,10 +2114,18 @@ public static native @Cast("TfLiteStatus") int TfLiteTensorRealloc(@Cast("size_t
 
 
 
-/** {@code TfLiteRegistrationExternal} is an external version of {@code TfLiteRegistration}
+/** {@code TfLiteOperator} is an external version of {@code TfLiteRegistration}
  *  for C API which doesn't use internal types (such as {@code TfLiteContext}) but
  *  only uses stable API types (such as {@code TfLiteOpaqueContext}). The purpose of
  *  each field is the exactly the same as with {@code TfLiteRegistration}. */
+
+// #ifndef DOXYGEN_SKIP
+// For backwards compatibility.
+// Deprecated. Use TfLiteOperator instead.
+
+///
+///
+// #endif
 
 /** The valid values of the {@code inplace_operator} field in {@code TfLiteRegistration}.
  *  This allow an op to signal to the runtime that the same data pointer
@@ -2730,12 +2914,12 @@ limitations under the License.
   // For friend declaration below.
 // Targeting ../CommonOpaqueConversionUtil.java
 
-  // For friend declaration below.  // Forward decl.
+  // For friend declaration below.              // Forward decl.
 
 // Targeting ../OpResolver.java
 
 
-// Targeting ../RegistrationExternalsCache.java
+// Targeting ../OperatorsCache.java
 
 
   // namespace internal
@@ -2895,7 +3079,7 @@ limitations under the License.
 
 /** WARNING: Experimental interface, subject to change. */
 
-@Namespace("tflite::resource") public static native InitializationStatus GetInitializationStatus(@Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap map,
+@Namespace("tflite::resource") public static native InitializationStatus GetInitializationStatus(@Cast("tflite::resource::InitializationStatusMap*") SizeTSizeTMap map,
                                               int subgraph_id);
 
   // namespace resource
@@ -3396,6 +3580,9 @@ public static final int TFLITE_HAS_ATTRIBUTE_WEAK = 1;
 // field for minimum runtime version, string
 @MemberGetter public static native @Cast("const char") byte tflite_metadata_min_runtime_version(int i);
 @MemberGetter public static native @Cast("const char*") BytePointer tflite_metadata_min_runtime_version();
+// the stablehlo op version is supported by the tflite runtime
+@MemberGetter public static native @Cast("const char") byte tflite_supported_stablehlo_version(int i);
+@MemberGetter public static native @Cast("const char*") BytePointer tflite_supported_stablehlo_version();
 // #endif
 
 // #endif  // TENSORFLOW_LITE_CORE_MACROS_H_
@@ -3428,11 +3615,13 @@ limitations under the License.
 // #include <map>
 // #include <memory>
 // #include <string>
+// #include <unordered_map>
 // #include <unordered_set>
 // #include <utility>
 // #include <vector>
 
 // #include "tensorflow/lite/allocation.h"
+// #include "tensorflow/lite/array.h"
 // #include "tensorflow/lite/c/common_internal.h"
 // #include "tensorflow/lite/core/api/error_reporter.h"
 // #include "tensorflow/lite/core/api/op_resolver.h"
