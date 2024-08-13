@@ -143,9 +143,9 @@ public class INormalizationLayer extends ILayer {
      * 
      *  @param type The datatype used for the compute precision of this layer.
      * 
-     *  By default, to avoid overflow errors, TensorRT will run the normalization computation in DataType::kFLOAT32
-     *  even in mixed precision mode regardless of builder flags. To override this default, use this method
-     *  to set the desired compute precision.
+     *  The method is used to avoid overflow errors by controlling the normalization computation in
+     *  mixed precision mode. The compute precision defaults to DataType::kFLOAT32.
+     *  To override this default, use this method to set the desired compute precision.
      * 
      *  For a weakly typed network:
      * 
@@ -154,7 +154,8 @@ public class INormalizationLayer extends ILayer {
      *  * Method setPrecision() can still be called. The input data is cast to that precision before
      *    being cast to the compute precision.
      * 
-     *  Neither of these two methods are allowed for a strongly typed network.
+     *  Strongly typed network rejects calls to this method since the compute precision is typically
+     *  controlled by casting the input tensors to the desired type.
      * 
      *  Only DataType::kFLOAT32 and DataType::kHALF are valid types for \p type.
      *  */

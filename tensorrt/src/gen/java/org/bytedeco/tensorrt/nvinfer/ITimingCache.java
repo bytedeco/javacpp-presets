@@ -25,7 +25,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief Class to handle tactic timing info collected from builder.
  * 
  *  The timing cache is created or initialized by IBuilderConfig. It can be shared across builder instances
- *  to accelerate the builder wallclock time.
+ *  to reduce the builder wallclock time.
+ * 
+ *  \warning It is a known issue that the same timing cache doesn't guarantee stable engine build reproducibility
+ *           at optimization level 4 and higher. This issue will be fixed by 2024.
  * 
  *  @see IBuilderConfig
  *  */

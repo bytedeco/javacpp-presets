@@ -140,6 +140,7 @@ public class IRefitter extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) int getAll(int size, @Cast("const char**") PointerPointer layerNames, @Cast("nvinfer1::WeightsRole*") IntPointer roles);
     public native @NoException(true) int getAll(int size, @Cast("const char**") @ByPtrPtr BytePointer layerNames, @Cast("nvinfer1::WeightsRole*") IntPointer roles);
     public native @NoException(true) int getAll(int size, @Cast("const char**") @ByPtrPtr ByteBuffer layerNames, @Cast("nvinfer1::WeightsRole*") IntBuffer roles);
@@ -159,6 +160,8 @@ public class IRefitter extends INoCopy {
      *  may report that some weights need to be supplied.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -167,8 +170,9 @@ public class IRefitter extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean setDynamicRange(String tensorName, float min, float max);
-    public native @Cast("bool") @NoException(true) boolean setDynamicRange(@Cast("const char*") BytePointer tensorName, float min, float max);
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setDynamicRange(String tensorName, float min, float max);
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setDynamicRange(@Cast("const char*") BytePointer tensorName, float min, float max);
 
     /**
      *  \brief Get minimum of dynamic range.
@@ -178,6 +182,8 @@ public class IRefitter extends INoCopy {
      *  If the dynamic range was never set, returns the minimum computed during calibration.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -186,8 +192,9 @@ public class IRefitter extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) float getDynamicRangeMin(String tensorName);
-    public native @NoException(true) float getDynamicRangeMin(@Cast("const char*") BytePointer tensorName);
+    //!
+    public native @Deprecated @NoException(true) float getDynamicRangeMin(String tensorName);
+    public native @Deprecated @NoException(true) float getDynamicRangeMin(@Cast("const char*") BytePointer tensorName);
 
     /**
      *  \brief Get maximum of dynamic range.
@@ -197,6 +204,8 @@ public class IRefitter extends INoCopy {
      *  If the dynamic range was never set, returns the maximum computed during calibration.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -205,8 +214,9 @@ public class IRefitter extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) float getDynamicRangeMax(String tensorName);
-    public native @NoException(true) float getDynamicRangeMax(@Cast("const char*") BytePointer tensorName);
+    //!
+    public native @Deprecated @NoException(true) float getDynamicRangeMax(String tensorName);
+    public native @Deprecated @NoException(true) float getDynamicRangeMax(@Cast("const char*") BytePointer tensorName);
 
     /**
      *  \brief Get names of all tensors that have refittable dynamic ranges.
@@ -218,6 +228,8 @@ public class IRefitter extends INoCopy {
      * 
      *  If tensorNames!=nullptr, each written pointer points to a string owned by
      *  the engine being refit, and becomes invalid when the engine is destroyed.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -226,10 +238,10 @@ public class IRefitter extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") PointerPointer tensorNames);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr BytePointer tensorNames);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr ByteBuffer tensorNames);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr byte[] tensorNames);
+    public native @Deprecated @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") PointerPointer tensorNames);
+    public native @Deprecated @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr BytePointer tensorNames);
+    public native @Deprecated @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr ByteBuffer tensorNames);
+    public native @Deprecated @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr byte[] tensorNames);
 
     /**
      *  \brief Set the ErrorRecorder for this interface

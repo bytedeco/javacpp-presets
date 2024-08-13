@@ -26,7 +26,6 @@ runs:
 
         brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 gcc@14 little-cms2 maven openblas r
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
-        brew link --force libomp
 
         # echo Installing an older less buggy version of CMake
         # curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
@@ -41,6 +40,8 @@ runs:
           echo Removing "fixed" header files that are actually broken
           rm -Rf $(find /opt/homebrew/Cellar/gcc@13/ -iname include-fixed)
           FORMULAE+="gcc@13"
+        else
+          brew link --force libomp
         fi
 
         # Change rpath and resign all brew libraries that could be bundled in presets

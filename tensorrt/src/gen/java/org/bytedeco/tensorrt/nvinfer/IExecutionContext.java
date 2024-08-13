@@ -141,6 +141,8 @@ public class IExecutionContext extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) String getName();
 
     /**
@@ -151,7 +153,13 @@ public class IExecutionContext extends INoCopy {
      *  getDeviceMemorySizeForProfile() report upper bounds of the size. Setting memory to nullptr is acceptable if the
      *  reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
      *  enqueueV3() until network execution is complete. If using executeV2(), it is in use until executeV2() returns.
-     *  Releasing or otherwise using the memory for other purposes during this time will result in undefined behavior.
+     *  Releasing or otherwise using the memory for other purposes, including using it in another execution context
+     *  running in parallel, during this time will result in undefined behavior.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superceded by setDeviceMemoryV2().
+     * 
+     *  \warning Weight streaming related scratch memory will be allocated by TensorRT if the memory is set by this API.
+     *           Please use setDeviceMemoryV2() instead.
      * 
      *  @see ICudaEngine::getDeviceMemorySize()
      *  @see ICudaEngine::getDeviceMemorySizeForProfile()
@@ -165,10 +173,35 @@ public class IExecutionContext extends INoCopy {
     //!
     //!
     //!
-    //!
-    //!
-    //!
     public native @NoException(true) void setDeviceMemory(Pointer memory);
+
+    /**
+     *  \brief Set the device memory and its corresponding size for use by this execution context.
+     * 
+     *  The memory must be aligned with cuda memory alignment property (using cudaGetDeviceProperties()), and its size
+     *  must be large enough for performing inference with the given network inputs. getDeviceMemorySize() and
+     *  getDeviceMemorySizeForProfile() report upper bounds of the size. Setting memory to nullptr is acceptable if the
+     *  reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
+     *  enqueueV3() until network execution is complete. If using executeV2(), it is in use until executeV2() returns.
+     *  Releasing or otherwise using the memory for other purposes, including using it in another execution context
+     *  running in parallel, during this time will result in undefined behavior.
+     * 
+     *  @see ICudaEngine::getDeviceMemorySizeV2()
+     *  @see ICudaEngine::getDeviceMemorySizeForProfileV2()
+     *  @see ExecutionContextAllocationStrategy
+     *  @see ICudaEngine::createExecutionContext()
+     *  @see ICudaEngine::createExecutionContextWithoutDeviceMemory()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setDeviceMemoryV2(Pointer memory, @Cast("int64_t") long size);
 
     /**
      *  \brief Return the strides of the buffer for the given tensor name.

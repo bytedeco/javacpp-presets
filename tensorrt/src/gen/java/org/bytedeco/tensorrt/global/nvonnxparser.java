@@ -34,7 +34,7 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 // Parsed from NvOnnxParser.h
 
 /*
- * Copyright (c) 1993-2023, NVIDIA CORPORATION. All rights reserved.
+ * Copyright (c) 1993-2024, NVIDIA CORPORATION. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -193,9 +193,10 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
  // namespace nvonnxparser
 
-public static native Pointer createNvOnnxParser_INTERNAL(Pointer network, Pointer logger, int version);
-public static native Pointer createNvOnnxParserRefitter_INTERNAL(Pointer refitter, Pointer logger, int version);
-public static native int getNvOnnxParserVersion();
+public static native @NoException(true) Pointer createNvOnnxParser_INTERNAL(Pointer network, Pointer logger, int version);
+public static native @NoException(true) Pointer createNvOnnxParserRefitter_INTERNAL(
+    Pointer refitter, Pointer logger, int version);
+public static native @NoException(true) int getNvOnnxParserVersion();
 
 /**
  *  \brief Create a new parser object
@@ -218,7 +219,7 @@ public static native int getNvOnnxParserVersion();
 //!
 //!
 //!
-@Namespace("nvonnxparser") public static native IParser createParser(@ByRef INetworkDefinition network, @ByRef ILogger logger);
+@Namespace("nvonnxparser") public static native @NoException(true) IParser createParser(@ByRef INetworkDefinition network, @ByRef ILogger logger);
 
 /**
  *  \brief Create a new ONNX refitter object
@@ -229,7 +230,7 @@ public static native int getNvOnnxParserVersion();
  * 
  *  @see IParserRefitter
  *  */
-@Namespace("nvonnxparser") public static native IParserRefitter createParserRefitter(@ByRef IRefitter refitter, @ByRef ILogger logger);
+@Namespace("nvonnxparser") public static native @NoException(true) IParserRefitter createParserRefitter(@ByRef IRefitter refitter, @ByRef ILogger logger);
 
  // namespace
 

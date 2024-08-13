@@ -72,7 +72,7 @@ public class IErrorRecorder extends IVersionedInterface {
      *          If the upper bound of errors that can be stored is exceeded, the upper bound value must
      *          be returned.
      * 
-     *  For example, if the error recorder can store up to 16 error descriptions but recordError() has
+     *  For example, if the error recorder can store up to 16 error descriptions but reportError() has
      *  been called 20 times, getNbErrors() must return 16.
      * 
      *  @see clear(), hasOverflowed()

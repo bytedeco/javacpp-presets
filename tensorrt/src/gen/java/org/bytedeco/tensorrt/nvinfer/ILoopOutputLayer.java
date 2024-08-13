@@ -28,7 +28,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  The second input tensor, if present, must be defined outside the loop.
  * 
  *  If getLoopOutput() is kLAST_VALUE, a single input must be provided,
- *  and that input must from a IRecurrenceLayer in the same loop.
+ *  and that input must be from an IRecurrenceLayer in the same loop.
  * 
  *  If getLoopOutput() is kCONCATENATE or kREVERSE, a second input must be provided.
  *  The second input must be a 0D shape tensor, defined before the loop commences,
