@@ -86,7 +86,7 @@ import org.bytedeco.openblas.presets.openblas;
 
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
-            preload = { "asmjit", "fbgemm" }
+            link = { "torch" }
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -105,16 +105,27 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux"},
-            link = { "c10", "torch_cpu" }
+            preload = { "c10", "torch_cpu" },
+
         ),
         @Platform(
             value = {"macosx"},
-            link = { "c10", "torch_cpu", "iomp5" }
+            preload = { "c10", "torch_cpu", "iomp5" }
         ),
         @Platform(
             value = "windows",
-            link = { "c10", "torch_cpu", "uv" }
+            preload = { "c10", "torch_cpu", "uv" }
         ),
+        @Platform(
+            value = "linux",
+            extension = "-gpu",
+            preload = { "c10", "torch_cpu", "c10_cuda", "torch_cuda" }
+        ),
+        @Platform(
+            value = "windows",
+            extension = "-gpu",
+            preload = { "c10", "torch_cpu", "uv", "c10_cuda", "torch_cuda" }
+        )
     },
     target = "org.bytedeco.pytorch",
     global = "org.bytedeco.pytorch.global.torch"
@@ -1959,11 +1970,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10::DDPLoggingData::strs_map",
             "c10::DDPLoggingData::ints_map",
             "torch::dynamo::autograd::TensorArgs::inputs",
+            "torch::dynamo::autograd::AutogradCompilerCall::tensor_args",
             "torch::dynamo::autograd::AutogradCompilerCall::all_size_inputs",
             "torch::dynamo::autograd::AutogradCompilerCall::dyn_size_inputs",
             "torch::dynamo::autograd::AutogradCompilerCall::node_calls",
             "torch::dynamo::autograd::AutogradCompilerCall::default_dyn_type",
-            "torch::dynamo::autograd::AutogradCompilerCall::tensor_args",
             "torch::jit::Object::Property::setter_func",
             "torch::jit::Object::Property::getter_func",
             "torch::jit::Object::Property::name",
