@@ -122,8 +122,7 @@ public class IOptimizationProfile extends INoCopy {
      *  i = 0, ..., nbValues - 1. Execution of the network must be valid for the optVals.
      * 
      *  Shape tensors are tensors that contribute to shape calculations in some way. While input shape tensors can be
-     *  type kBOOL, kINT32, or kINT64, the values used to set the minimum, optimium, and maximum values must fit in int32_t.
-     *  Boolean values are represented as 0 for false and 1 for true.
+     *  type kINT32 or kINT64, the values used to set the minimum, optimium, and maximum values must fit in int32_t.
      * 
      *  Examples:
      * 

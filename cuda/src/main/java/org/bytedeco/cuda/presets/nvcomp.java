@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Institute for Human and Machine Cognition
+ * Copyright (C) 2023-2024 Institute for Human and Machine Cognition, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -29,33 +29,34 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
-@Properties(inherit = {cudart.class}, value = {
+@Properties(inherit = cudart.class, value = {
     @Platform(value = {"linux-x86_64", "linux-arm64", "windows-x86_64"},
-            include = {"<nvcomp.h>", "<nvcomp/shared_types.h>", "<nvcomp/nvcompManager.hpp>", "<nvcomp/nvcompManagerFactory.hpp>",
+            include = {"<nvcomp/shared_types.h>", "<nvcomp.h>", "<nvcomp/nvcompManager.hpp>", "<nvcomp/nvcompManagerFactory.hpp>",
                     "<nvcomp/ans.h>", "<nvcomp/ans.hpp>", "<nvcomp/bitcomp.h>", "<nvcomp/bitcomp.hpp>", "<nvcomp/cascaded.h>",
                     "<nvcomp/CRC32.h>", "<nvcomp/deflate.h>", "<nvcomp/deflate.hpp>", "<nvcomp/gdeflate.h>", "<nvcomp/gdeflate.hpp>",
                     "<nvcomp/gzip.h>", "<nvcomp/lz4.h>", "<nvcomp/lz4.hpp>", "<nvcomp/snappy.h>", "<nvcomp/snappy.hpp>", "<nvcomp/zstd.h>",
-                    "<nvcomp/zstd.hpp>"}, link = {"nvcomp", "nvcomp_device", "nvcomp_bitcomp", "nvcomp_gdeflate"}),
-    @Platform(value = "windows-x86_64", preload = {"nvcomp", "nvcomp_bitcomp", "nvcomp_gdeflate"})},
+                    "<nvcomp/zstd.hpp>"}, link = {"nvcomp@.4", "nvcomp_cpu@.4"}),
+    @Platform(value = "windows-x86_64", preload = {"nvcomp", "nvcomp_cpu"})},
     target = "org.bytedeco.cuda.nvcomp", global = "org.bytedeco.cuda.global.nvcomp")
 @NoException
 public class nvcomp implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("nvcompDecompressGetMetadata",
-                "nvcompDecompressDestroyMetadata",
-                "nvcompDecompressGetTempSize",
-                "nvcompDecompressGetOutputSize",
-                "nvcompDecompressGetType",
-                "nvcompDecompressAsync",
-                "nvcomp::set_scratch_allocators",
-                "PinnedPtrPool",
-                // TODO: Fix bitcomp symbols
-                "nvcompBitcompDecompressConfigure",
-                "nvcompBitcompCompressAsync",
-                "nvcompBitcompCompressConfigure",
-                "nvcompIsBitcompData",
-                "nvcompBitcompDestroyMetadata",
-                "nvcompBitcompDecompressAsync",
-                "nvcompBitcompFormatOpts").skip());
+        infoMap.put(new Info("NVCOMP_EXPORT").cppTypes().annotations())
+               .put(new Info("nvcompDecompressGetMetadata",
+                             "nvcompDecompressDestroyMetadata",
+                             "nvcompDecompressGetTempSize",
+                             "nvcompDecompressGetOutputSize",
+                             "nvcompDecompressGetType",
+                             "nvcompDecompressAsync",
+                             "nvcomp::set_scratch_allocators",
+                             "PinnedPtrPool",
+                             // TODO: Fix bitcomp symbols
+                             "nvcompBitcompDecompressConfigure",
+                             "nvcompBitcompCompressAsync",
+                             "nvcompBitcompCompressConfigure",
+                             "nvcompIsBitcompData",
+                             "nvcompBitcompDestroyMetadata",
+                             "nvcompBitcompDecompressAsync",
+                             "nvcompBitcompFormatOpts").skip());
     }
 }

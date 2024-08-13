@@ -27,6 +27,8 @@ import static org.bytedeco.tensorrt.global.nvonnxparser.*;
  *  \class IParser
  * 
  *  \brief an object for parsing ONNX models into a TensorRT network definition
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvonnxparser") @Properties(inherit = org.bytedeco.tensorrt.presets.nvonnxparser.class)
 public class IParser extends Pointer {
@@ -55,11 +57,11 @@ public class IParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean parse(
+    public native @Cast("bool") @NoException(true) boolean parse(
             @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size, String model_path/*=nullptr*/);
-    public native @Cast("bool") boolean parse(
+    public native @Cast("bool") @NoException(true) boolean parse(
             @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
-    public native @Cast("bool") boolean parse(
+    public native @Cast("bool") @NoException(true) boolean parse(
             @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size, @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
     /**
@@ -73,17 +75,17 @@ public class IParser extends Pointer {
      * 
      *  */
     
-    
     //!
     //!
     //!
-    public native @Cast("bool") boolean parseFromFile(String onnxModelFile, int verbosity);
-    public native @Cast("bool") boolean parseFromFile(@Cast("const char*") BytePointer onnxModelFile, int verbosity);
+    public native @Cast("bool") @NoException(true) boolean parseFromFile(String onnxModelFile, int verbosity);
+    public native @Cast("bool") @NoException(true) boolean parseFromFile(@Cast("const char*") BytePointer onnxModelFile, int verbosity);
 
-    /**
-     * \brief Check whether TensorRT supports a particular ONNX model.
-     *  	       If the function returns True, one can proceed to engine building
-     *  	       without having to call \p parse or \p parseFromFile.
+    /** [DEPRECATED] Deprecated in TensorRT 10.1. See supportsModelV2.
+     * 
+     *  \brief Check whether TensorRT supports a particular ONNX model.
+     *         If the function returns True, one can proceed to engine building
+     *         without having to call \p parse or \p parseFromFile.
      * 
      *  @param serialized_onnx_model Pointer to the serialized ONNX model
      *  @param serialized_onnx_model_size Size of the serialized ONNX model
@@ -97,11 +99,11 @@ public class IParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
+    public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
             @ByRef SubGraphCollection_t sub_graph_collection, String model_path/*=nullptr*/);
-    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
+    public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
             @ByRef SubGraphCollection_t sub_graph_collection);
-    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
+    public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
             @ByRef SubGraphCollection_t sub_graph_collection, @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
     /**
@@ -120,7 +122,8 @@ public class IParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean parseWithWeightDescriptors(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
+    public native @Cast("bool") @NoException(true) boolean parseWithWeightDescriptors(
+            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
 
     /**
      * \brief Returns whether the specified operator may be supported by the
@@ -136,8 +139,8 @@ public class IParser extends Pointer {
     //!
     //!
     //!
-    public native @Cast("bool") boolean supportsOperator(String op_name);
-    public native @Cast("bool") boolean supportsOperator(@Cast("const char*") BytePointer op_name);
+    public native @Cast("bool") @NoException(true) boolean supportsOperator(String op_name);
+    public native @Cast("bool") @NoException(true) boolean supportsOperator(@Cast("const char*") BytePointer op_name);
 
     /**
      * \brief Get the number of errors that occurred during prior calls to
@@ -150,7 +153,7 @@ public class IParser extends Pointer {
     //!
     //!
     //!
-    public native int getNbErrors();
+    public native @NoException(true) int getNbErrors();
 
     /**
      * \brief Get an error that occurred during prior calls to \p parse
@@ -162,14 +165,14 @@ public class IParser extends Pointer {
     //!
     //!
     //!
-    public native @Const IParserError getError(int index);
+    public native @Const @NoException(true) IParserError getError(int index);
 
     /**
      * \brief Clear errors from prior calls to \p parse
      * 
      *  @see getNbErrors() getError() IParserError
      *  */
-    public native void clearErrors();
+    public native @NoException(true) void clearErrors();
 
     /**
      *  \brief Query the plugin libraries needed to implement operations used by the parser in a version-compatible
@@ -292,6 +295,82 @@ public class IParser extends Pointer {
      * 
      *  @param i The index of the output. i must be in range [0, layer.num_outputs).
      *  */
-    public native @Const ITensor getLayerOutputTensor(String name, @Cast("int64_t") long i);
-    public native @Const ITensor getLayerOutputTensor(@Cast("const char*") BytePointer name, @Cast("int64_t") long i);
+    
+    
+    //!
+    //!
+    //!
+    public native @Const @NoException(true) ITensor getLayerOutputTensor(String name, @Cast("int64_t") long i);
+    public native @Const @NoException(true) ITensor getLayerOutputTensor(@Cast("const char*") BytePointer name, @Cast("int64_t") long i);
+
+    /**
+     *  \brief Check whether TensorRT supports a particular ONNX model.
+     *             If the function returns True, one can proceed to engine building
+     *             without having to call \p parse or \p parseFromFile.
+     *             Results can be queried through \p getNbSubgraphs, \p isSubgraphSupported,
+     *             \p getSubgraphNodes.
+     * 
+     *  @param serializedOnnxModel Pointer to the serialized ONNX model
+     *  @param serializedOnnxModelSize Size of the serialized ONNX model in bytes
+     *  @param modelPath Absolute path to the model file for loading external weights if required
+     *  @return true if the model is supported
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean supportsModelV2(
+            @Const Pointer serializedOnnxModel, @Cast("size_t") long serializedOnnxModelSize, String modelPath/*=nullptr*/);
+    public native @Cast("bool") @NoException(true) boolean supportsModelV2(
+            @Const Pointer serializedOnnxModel, @Cast("size_t") long serializedOnnxModelSize);
+    public native @Cast("bool") @NoException(true) boolean supportsModelV2(
+            @Const Pointer serializedOnnxModel, @Cast("size_t") long serializedOnnxModelSize, @Cast("const char*") BytePointer modelPath/*=nullptr*/);
+
+    /**
+     *  \brief Get the number of subgraphs. Calling this function before calling \p supportsModelV2 results in undefined
+     *  behavior.
+     * 
+     * 
+     *  @return Number of subgraphs.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("int64_t") @NoException(true) long getNbSubgraphs();
+
+    /**
+     *  \brief Returns whether the subgraph is supported. Calling this function before calling \p supportsModelV2
+     *  results in undefined behavior.
+     * 
+     * 
+     *  @param index Index of the subgraph.
+     *  @return Whether the subgraph is supported.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean isSubgraphSupported(@Cast("const int64_t") long index);
+
+    /**
+     *  \brief Get the nodes of the specified subgraph. Calling this function before calling \p supportsModelV2 results
+     *  in undefined behavior.
+     * 
+     * 
+     *  @param index Index of the subgraph.
+     *  @param subgraphLength Returns the length of the subgraph as reference.
+     * 
+     *  @return Pointer to the subgraph nodes array. This pointer is owned by the Parser.
+     *  */
+    public native @Cast("int64_t*") @NoException(true) LongPointer getSubgraphNodes(@Cast("const int64_t") long index, @Cast("int64_t*") @ByRef LongPointer subgraphLength);
+    public native @Cast("int64_t*") @NoException(true) LongBuffer getSubgraphNodes(@Cast("const int64_t") long index, @Cast("int64_t*") @ByRef LongBuffer subgraphLength);
+    public native @Cast("int64_t*") @NoException(true) long[] getSubgraphNodes(@Cast("const int64_t") long index, @Cast("int64_t*") @ByRef long[] subgraphLength);
 }

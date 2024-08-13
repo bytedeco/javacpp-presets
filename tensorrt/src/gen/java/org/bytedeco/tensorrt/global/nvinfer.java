@@ -51,11 +51,11 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = 10;
 /** TensorRT minor version. */
-public static final int NV_TENSORRT_MINOR = 0;
+public static final int NV_TENSORRT_MINOR = 3;
 /** TensorRT patch version. */
-public static final int NV_TENSORRT_PATCH = 1;
+public static final int NV_TENSORRT_PATCH = 0;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 6;
+public static final int NV_TENSORRT_BUILD = 26;
 
 /** TensorRT LWS major version. */
 public static final int NV_TENSORRT_LWS_MAJOR = 0;
@@ -156,7 +156,7 @@ public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENE
  *  * NvInferConsistency.h (for consistency checker)
  *  * NvInferPluginUtils.h (for plugin utilities)
  *  */
-// #if !defined(NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE) && !defined(TRT_VCAST_SAFE)
+// #if !defined(NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE)
 // #endif
 
 /** Forward declare some CUDA types to avoid an include dependency. */
@@ -933,7 +933,9 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
     /** INT64 field type. */
     kINT64(10),
     /** FP8 field type. */
-    kFP8(11);
+    kFP8(11),
+    /** INT4 field type. */
+    kINT4(12);
 
     public final int value;
     private PluginFieldType(int v) { this.value = v; }
@@ -1362,6 +1364,8 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
 
  // namespace v_1_0
 
+ // namespace v_2_0
+
 /**
  *  \class IPluginV3OneCore
  * 
@@ -1404,6 +1408,20 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  *  @see IPluginCapability
  *  @see PluginCapabilityType
  *  @see IPluginV3::getCapabilityInterface()
+ *  */
+
+
+//!
+//!
+//!
+//!
+
+/**
+ *  \class IPluginV3OneBuildV2
+ * 
+ *  \brief A plugin capability interface that extends IPluginV3OneBuild by providing I/O aliasing functionality.
+ * 
+ *  @see IPluginV3OneBuild
  *  */
 // Targeting ../nvinfer/IPluginCreatorV3One.java
 
@@ -1591,7 +1609,7 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
      *  @deprecated Deprecated in TensorRT 10.0. */
     kCUBLAS(0),
 
-    /** cuBLAS LT tactics. Enabled by default.
+    /** cuBLAS LT tactics. Disabled by default.
      *  @deprecated Deprecated in TensorRT 9.0. */
     kCUBLAS_LT(1),
 
@@ -2177,8 +2195,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  <pre>{@code
  *  Shorthand:
  *      I = dimensions of input image.
- *      B = prePadding, before the image data. For deconvolution, prePadding is set before output.
- *      A = postPadding, after the image data. For deconvolution, postPadding is set after output.
+ *      B = prePadding, before the image data.
+ *      A = postPadding, after the image data.
  *      P = delta between input and output
  *      S = stride
  *      F = filter
@@ -2580,7 +2598,9 @@ public static native @NoException(true) int getInferLibBuildVersion();
     /** Round to nearest even for floating-point data type. */
     kROUND(22),
     /** Return true if input value equals +/- infinity for floating-point data type. */
-    kISINF(23);
+    kISINF(23),
+    /** Return true if input value is a NaN for floating-point data type. */
+    kISNAN(24);
 
     public final int value;
     private UnaryOperation(int v) { this.value = v; }
@@ -3154,6 +3174,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  \enum CalibrationAlgoType
  * 
  *  \brief Version of calibration algorithm to use.
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 @Namespace("nvinfer1") public enum CalibrationAlgoType {
     /** Legacy calibration */
@@ -3196,6 +3218,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  \note To ensure compatibility of source code with future versions of TensorRT, use IEntropyCalibrator, not
  *        v_1_0::IEntropyCalibrator
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 // Targeting ../nvinfer/IInt8EntropyCalibrator2.java
 
@@ -3212,6 +3236,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  \note To ensure compatibility of source code with future versions of TensorRT, use IEntropyCalibrator2, not
  *         v_1_0::IEntropyCalibrator2
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 // Targeting ../nvinfer/IInt8MinMaxCalibrator.java
 
@@ -3227,6 +3253,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  \note To ensure compatibility of source code with future versions of TensorRT, use IMinMaxCalibrator>, not
  *        v_1_0::IMinMaxCalibrator
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 // Targeting ../nvinfer/IInt8LegacyCalibrator.java
 
@@ -3243,6 +3271,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  \note To ensure compatibility of source code with future versions of TensorRT, use ILegacyCalibrator, not
  *        v_1_0::ILegacyCalibrator
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 
 
@@ -3295,6 +3325,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
 //!
 //!
 //!
+//!
 
 /**
  *  \enum QuantizationFlag
@@ -3302,6 +3333,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  \brief List of valid flags for quantizing the network to int8
  * 
  *  @see IBuilderConfig::setQuantizationFlag(), IBuilderConfig::getQuantizationFlag()
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 @Namespace("nvinfer1") public enum QuantizationFlag {
     /** Run int8 calibration pass before layer fusion. Only valid for IInt8LegacyCalibrator and
@@ -3322,6 +3355,45 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see QuantizationFlag
  *  */
 
+
+/**
+ *  \enum RuntimePlatform
+ * 
+ *  \brief Describes the intended runtime platform (operating system and CPU architecture) for the execution of the
+ *         TensorRT engine. TensorRT provides support for cross-platform engine compatibility when the target runtime
+ *         platform is different from the build platform.
+ * 
+ *  \note The cross-platform engine will not be able to run on the host platform it was built on.
+ * 
+ *  \note When building a cross-platform engine that also requires version forward compatibility,
+ *        kEXCLUDE_LEAN_RUNTIME must be set to exclude the target platform lean runtime.
+ * 
+ *  \note The cross-platform engine might have performance differences compared to the natively built engine on the
+ *        target platform.
+ * 
+ *  @see IBuilderConfig::setRuntimePlatform(), IBuilderConfig::getRuntimePlatform()
+ *  */
+@Namespace("nvinfer1") public enum RuntimePlatform {
+    /** No requirement for cross-platform compatibility. The engine constructed by TensorRT can only run on the
+     *  identical platform it was built on. */
+    kSAME_AS_BUILD(0),
+
+    /** Designates the target platform for engine execution as Windows AMD64 system. Currently this flag can only be
+     *  enabled when building engines on Linux AMD64 platforms. */
+    kWINDOWS_AMD64(1);
+
+    public final int value;
+    private RuntimePlatform(int v) { this.value = v; }
+    private RuntimePlatform(RuntimePlatform e) { this.value = e.value; }
+    public RuntimePlatform intern() { for (RuntimePlatform e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/**
+ *  Maximum number of elements in RuntimePlatform enum.
+ * 
+ *  @see RuntimePlatform
+ *  */
+ // namespace impl
 
 /**
  *  \brief Represents one or more BuilderFlag values using binary OR
@@ -3415,7 +3487,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
 //!
     kEXCLUDE_LEAN_RUNTIME(14),
 
-    /** Enable FP8 layer selection, with FP32 fallback.
+    /** Enable plugins with FP8 input/output.
      * 
      *  This flag is not supported with hardware-compatibility mode.
      * 
@@ -3485,7 +3557,16 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *       ICudaEngine::getMinimumWeightStreamingBudget,
      *       ICudaEngine::setWeightStreamingBudget
      *  */
-    kWEIGHT_STREAMING(21);
+    kWEIGHT_STREAMING(21),
+
+    /** Enable plugins with INT4 input/output. */
+    kINT4(22),
+
+    /** Enable building a refittable engine and provide fine-grained control. This allows
+     *  control over which weights are refittable or not using INetworkDefinition::markWeightsRefittable and
+     *  INetworkDefinition::unmarkWeightsRefittable. By default, all weights are non-refittable when this flag is
+     *  enabled. This flag cannot be used together with kREFIT or kREFIT_IDENTICAL. */
+    kREFIT_INDIVIDUAL(23);
 
     public final int value;
     private BuilderFlag(int v) { this.value = v; }
@@ -3615,7 +3696,16 @@ public static native @NoException(true) int getInferLibBuildVersion();
      * 
      *  @deprecated Deprecated in TensorRT 10.0. The default value for this flag is on and can not be changed.
      *  */
-    kPROFILE_SHARING_0806(0);
+    
+
+//!
+//!
+    kPROFILE_SHARING_0806(0),
+
+    /**
+     *  Allows plugin I/O to be aliased when using IPluginV3OneBuildV2
+     *  */
+    kALIASED_PLUGIN_IO_10_03(1);
 
     public final int value;
     private PreviewFeature(int v) { this.value = v; }
@@ -3932,6 +4022,8 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 /** enum class nvinfer1::HardwareCompatibilityLevel */
 ;
 /** enum class nvinfer1::ExecutionContextAllocationStrategy */
+;
+/** enum class nvinfer1::RuntimePlatform */
 ;
 
 

@@ -28,17 +28,18 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  Output, and a scatter mode. When kELEMENT mode is used an optional axis parameter is available.
  *  * Data is a tensor of rank r >= 1 that stores the values to be duplicated in Output.
  *  * Indices is a tensor of rank q that determines which locations in Output to write new
- *    values to. Constraints on the rank of q depend on the mode:
+ *    values to. Constraints on the rank q depend on the mode:
  *        ScatterMode::kND: q >= 1
  *        ScatterMode::kELEMENT: q must be the same as r
- *  * Updates is atensor of rank s >=1 that provides the data
- *    to write to Output specified by its corresponding location in Index. Constraints the rank of Updates depend on the
- *    mode:
+ *  * Updates is a tensor of rank s >= 1 that provides the data
+ *    to write to Output specified by its corresponding location in Indices.
+ *    Constraints on the rank of Updates depend on the mode:
  *        ScatterMode::kND: s = r + q - shape(Indices)[-1] - 1
  *        Scattermode::kELEMENT: s = q = r
  *  * Output is a tensor with the same dimensions as Data that stores the resulting values of the
  *    transformation. It must not be a shape tensor.
- *  The types of Data, Update, and Output shall be the same, and Indices shall be DataType::kINT32 or DataType::kINT64.
+ *  The types of Data, Update, and Output shall be the same, and Indices shall be of type DataType::kINT32 or
+ *  DataType::kINT64.
  * 
  *  The output is computed by copying the data, and then updating elements of it based on indices.
  *  How Indices are interpreted depends upon the ScatterMode.
@@ -51,7 +52,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *      Given that data dims are {d_0,...,d_{r-1}} and indices dims are {i_0,...,i_{q-1}},
  *      define k = indices[q-1], it follows that updates dims are {i_0,...,i_{q-2},d_k,...,d_{r-1}}
  *      The updating can be computed by:
- *          foreach slice in indices[i_0,...i_{q-2}]
+ *          foreach slice in indices[i_0,...,i_{q-2}]
  *              output[indices[slice]] = updates[slice]
  * 
  *  ScatterMode::kELEMENT

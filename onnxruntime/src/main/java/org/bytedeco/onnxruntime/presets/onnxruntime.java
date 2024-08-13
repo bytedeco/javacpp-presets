@@ -97,13 +97,13 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cudnn",
-                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
-                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cufft") ? "@.11" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.11" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.12" : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cufft") ? "64_11" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_12" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_11" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_12" : "64_12";
             } else {
                 continue; // no CUDA
             }

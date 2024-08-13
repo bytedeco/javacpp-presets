@@ -169,8 +169,7 @@ public class ILayer extends INoCopy {
      *  otherwise it must be either the input or output type.
      * 
      *  Strongly-typed networks reject calls to method setPrecision. In strongly-typed networks, the computation
-     *  precision is typically controlled by casting the input tensors to the desired type. The exception is
-     *  INormalizationLayer, which has a method setComputePrecision().
+     *  precision is typically controlled by casting the input tensors to the desired type.
      * 
      *  @param dataType the computational precision.
      * 

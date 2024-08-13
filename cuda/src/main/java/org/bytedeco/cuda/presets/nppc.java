@@ -40,6 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @NoException
 public class nppc implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("NPP_MAX_64U").translate(false));
+        infoMap.put(new Info("NPP_PLUS").define(false))
+               .put(new Info("NPP_MAX_64U").translate(false));
     }
 }

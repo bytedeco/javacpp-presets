@@ -134,4 +134,10 @@ public class VNetworkDefinition extends VRoot {
     public native @Cast("bool") @NoException(true) boolean markDebug(@ByRef ITensor tensor);
     public native @Cast("bool") @NoException(true) boolean unmarkDebug(@ByRef ITensor tensor);
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(@Const @ByRef ITensor tensor);
+    public native @Cast("bool") @NoException(true) boolean markWeightsRefittable(String name);
+    public native @Cast("bool") @NoException(true) boolean markWeightsRefittable(@Cast("const char*") BytePointer name);
+    public native @Cast("bool") @NoException(true) boolean unmarkWeightsRefittable(String name);
+    public native @Cast("bool") @NoException(true) boolean unmarkWeightsRefittable(@Cast("const char*") BytePointer name);
+    public native @Cast("bool") @NoException(true) boolean areWeightsMarkedRefittable(String name);
+    public native @Cast("bool") @NoException(true) boolean areWeightsMarkedRefittable(@Cast("const char*") BytePointer name);
 }

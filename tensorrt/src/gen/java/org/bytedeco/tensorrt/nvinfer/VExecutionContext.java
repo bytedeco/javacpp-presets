@@ -91,4 +91,7 @@ public class VExecutionContext extends VRoot {
     public native @Cast("bool") @NoException(true) boolean getDebugState(@Cast("const char*") BytePointer name);
     public native @Cast("bool") @NoException(true) boolean setAllTensorsDebugState(@Cast("bool") boolean flag);
     public native @Cast("size_t") @NoException(true) long updateDeviceMemorySizeForShapes();
+
+    // Added in TensorRT 10.1
+    public native @NoException(true) void setDeviceMemoryV2(Pointer memory, @Cast("int64_t") long size);
 }

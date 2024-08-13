@@ -24,8 +24,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief Layer that represents a padding operation.
  * 
- *  The padding layer adds zero-padding at the start and end of the input tensor. It only supports padding along the two
- *  innermost dimensions. Applying negative padding results in cropping of the input.
+ *  The padding layer adds zero-padding at the start and end of the input tensor. It supports padding
+ *  only the last two dimensions. Applying negative padding results in cropping of the input.
+ * 
+ *  To pad across any subset of dimensions, use ISliceLayer with SampleMode::kFILL.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */

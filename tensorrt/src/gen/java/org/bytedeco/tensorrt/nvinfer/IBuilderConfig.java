@@ -105,21 +105,27 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) EngineCapability getEngineCapability();
 
     /**
      *  \brief Set Int8 Calibration interface.
      * 
      *  The calibrator is to minimize the information loss during the INT8 quantization process.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
     //!
     //!
-    public native @NoException(true) void setInt8Calibrator(IInt8Calibrator calibrator);
+    //!
+    public native @Deprecated @NoException(true) void setInt8Calibrator(IInt8Calibrator calibrator);
 
     /**
      *  \brief Get Int8 Calibration interface.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -129,7 +135,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) IInt8Calibrator getInt8Calibrator();
+    public native @Deprecated @NoException(true) IInt8Calibrator getInt8Calibrator();
 
     /**
      *  \brief Set the build mode flags to turn on builder options for this network.
@@ -475,6 +481,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) IAlgorithmSelector getAlgorithmSelector();
 
     /**
@@ -487,18 +494,23 @@ public class IBuilderConfig extends INoCopy {
      *  MIN and MAX values will be overwritten by kOPT.
      * 
      *  @return True if the calibration profile was set correctly.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean setCalibrationProfile(@Const IOptimizationProfile profile);
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setCalibrationProfile(@Const IOptimizationProfile profile);
 
     /**
      *  \brief Get the current calibration profile.
      * 
      *  @return A pointer to the current calibration profile or nullptr if calibration profile is unset.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -508,7 +520,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @Const @NoException(true) IOptimizationProfile getCalibrationProfile();
+    public native @Const @Deprecated @NoException(true) IOptimizationProfile getCalibrationProfile();
 
     /**
      *  \brief Set the quantization flags.
@@ -1027,5 +1039,42 @@ public class IBuilderConfig extends INoCopy {
      * 
      *  @see IBuilderConfig::setProgressMonitor
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) IProgressMonitor getProgressMonitor();
+
+    /**
+     *  \brief Set the target platform for runtime execution.
+     * 
+     *  Cross-platform compatibility allows an engine to be built and executed on different platforms.
+     * 
+     *  The default cross-platform target is RuntimePlatform::kSAME_AS_BUILD.
+     * 
+     *  @param runtimePlatform The target platform for runtime execution.
+     * 
+     *  @see IBuilderConfig::getRuntimePlatform()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setRuntimePlatform(RuntimePlatform runtimePlatform);
+    public native @NoException(true) void setRuntimePlatform(@Cast("nvinfer1::RuntimePlatform") int runtimePlatform);
+
+    /**
+     *  \brief Get the target platform for runtime execution.
+     * 
+     *  @return The target platform for runtime execution.
+     * 
+     *  @see IBuilderConfig::setRuntimePlatform()
+     *  */
+    public native @NoException(true) RuntimePlatform getRuntimePlatform();
 }

@@ -151,29 +151,30 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "nvJitLink", "cusparse", "cusolver",
-            "cudnn", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer", "cudnn_ops_infer", "cudnn_ops_train",
-            "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer",
+                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8"
+                lib += lib.startsWith("cudnn") ? "@.9"
                     : lib.equals("nccl") ? "@.2"
                     : lib.equals("myelin") ? "@.1"
-                    : lib.equals("nvinfer") ? "@.8"
+                    : lib.equals("nvinfer") ? "@.10"
                     : lib.equals("cufft") ? "@.11"
                     : lib.equals("curand") ? "@.10"
                     : lib.equals("cusolver") ? "@.11"
-                    : lib.equals("nvrtc-builtins") ? "@.12.3"
+                    : lib.equals("nvrtc-builtins") ? "@.12.6"
                     : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8"
+                lib += lib.startsWith("cudnn") ? "64_9"
                     : lib.equals("nccl") ? "64_2"
                     : lib.equals("myelin") ? "64_1"
-                    : lib.equals("nvinfer") ? "64_8"
+                    : lib.equals("nvinfer") ? "64_10"
                     : lib.equals("cufft") ? "64_11"
                     : lib.equals("curand") ? "64_10"
                     : lib.equals("cusolver") ? "64_11"
                     : lib.equals("nvrtc") ? "64_120_0"
-                    : lib.equals("nvrtc-builtins") ? "64_123"
+                    : lib.equals("nvrtc-builtins") ? "64_126"
                     : lib.equals("nvJitLink") ? "_120_0"
                     : "64_12";
             } else {

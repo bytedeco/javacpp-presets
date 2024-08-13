@@ -99,4 +99,7 @@ public class VBuilderConfig extends VRoot {
     public native @NoException(true) int getMaxAuxStreams();
     public native @NoException(true) void setProgressMonitor(IProgressMonitor monitor);
     public native @NoException(true) IProgressMonitor getProgressMonitor();
+    public native @NoException(true) void setRuntimePlatform(RuntimePlatform runtimePlatform);
+    public native @NoException(true) void setRuntimePlatform(@Cast("nvinfer1::RuntimePlatform") int runtimePlatform);
+    public native @NoException(true) RuntimePlatform getRuntimePlatform();
 }

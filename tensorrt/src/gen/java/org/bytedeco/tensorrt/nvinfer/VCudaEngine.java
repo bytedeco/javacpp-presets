@@ -99,4 +99,12 @@ public class VCudaEngine extends VRoot {
 
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(String name);
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(@Cast("const char*") BytePointer name);
+
+    // Added in TensorRT 10.1
+    public native @Cast("bool") @NoException(true) boolean setWeightStreamingBudgetV2(@Cast("int64_t") long gpuMemoryBudget);
+    public native @Cast("int64_t") @NoException(true) long getWeightStreamingBudgetV2();
+    public native @Cast("int64_t") @NoException(true) long getWeightStreamingAutomaticBudget();
+    public native @Cast("int64_t") @NoException(true) long getWeightStreamingScratchMemorySize();
+    public native @Cast("int64_t") @NoException(true) long getDeviceMemorySizeV2();
+    public native @Cast("int64_t") @NoException(true) long getDeviceMemorySizeForProfileV2(int profileIndex);
 }

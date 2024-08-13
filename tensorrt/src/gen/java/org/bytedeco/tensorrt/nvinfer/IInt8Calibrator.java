@@ -29,6 +29,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  It must also provide a method for retrieving representative images which the calibration process can use to examine
  *  the distribution of activations. It may optionally implement a method for caching the calibration result for reuse
  *  on subsequent runs.
+ * 
+ *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IInt8Calibrator extends IVersionedInterface {
