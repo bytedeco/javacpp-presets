@@ -86,7 +86,7 @@ import org.bytedeco.openblas.presets.openblas;
 
             },
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
-            link = { "c10", "torch" }
+            link = { "c10", "torch", "torch_cpu" }
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -104,26 +104,25 @@ import org.bytedeco.openblas.presets.openblas;
             extension = "-gpu"
         ),
         @Platform(
-            value = {"linux"},
-            preload = { "torch_cpu" }
+            value = {"linux"}
         ),
         @Platform(
             value = {"macosx"},
-            preload = { "torch_cpu", "iomp5" }
+            preload = { "iomp5" }
         ),
         @Platform(
             value = "windows",
-            preload = { "torch_cpu", "uv" }
+            preload = { "uv" }
         ),
         @Platform(
             value = "linux",
             extension = "-gpu",
-            preload = { "torch_cpu", "c10_cuda", "torch_cuda" }
+            preload = { "c10_cuda", "torch_cuda" }
         ),
         @Platform(
             value = "windows",
             extension = "-gpu",
-            preload = { "torch_cpu", "uv", "c10_cuda", "torch_cuda" }
+            preload = { "uv", "c10_cuda", "torch_cuda" }
         )
     },
     target = "org.bytedeco.pytorch",
