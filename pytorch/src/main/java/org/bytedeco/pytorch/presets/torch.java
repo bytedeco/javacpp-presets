@@ -105,8 +105,7 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux"},
-            preload = { "c10", "torch_cpu" },
-
+            preload = { "c10", "torch_cpu" }
         ),
         @Platform(
             value = {"macosx"},
