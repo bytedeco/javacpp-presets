@@ -341,6 +341,12 @@ runs:
         fi
         df -h
 
+    - name: Attach outputs
+      uses: actions/upload-artifact@v4
+      with:
+        # attach the installed artifacts
+        path: /home/runner/.m2/repository/org/bytedeco/${{ env.CI_DEPLOY_MODULE }}/
+
     - name: Clean up
       shell: bash
       run: |
