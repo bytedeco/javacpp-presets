@@ -50,7 +50,7 @@ jobs:
     strategy:
       matrix:
         ext:
-          - gpu
+          - '-gpu'
           - ''
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
