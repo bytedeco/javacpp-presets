@@ -155,6 +155,7 @@ public class ITensor extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) DataType getType();
 
     /**
@@ -166,12 +167,14 @@ public class ITensor extends INoCopy {
      *  @return Whether the dynamic range was set successfully.
      * 
      *  Requires that min and max be finite, and min <= max.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean setDynamicRange(float min, float max);
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setDynamicRange(float min, float max);
 
     /**
      *  \brief Whether the tensor is a network input.
@@ -269,6 +272,7 @@ public class ITensor extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @Deprecated @NoException(true) void setLocation(TensorLocation location);
     public native @Deprecated @NoException(true) void setLocation(@Cast("nvinfer1::TensorLocation") int location);
 
@@ -276,6 +280,8 @@ public class ITensor extends INoCopy {
      *  \brief Query whether dynamic range is set.
      * 
      *  @return True if dynamic range is set, false otherwise.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
      *  */
     
     
@@ -318,16 +324,19 @@ public class ITensor extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) float getDynamicRangeMax();
 
     /**
-     *  \brief Set allowed formats for this tensor. By default all formats are allowed.
+     *  \brief Set allowed formats for an input or output tensor. By default all formats are allowed.
      *         Shape tensors (for which isShapeTensor() returns true) may only have row-major linear format.
      * 
      *  When running network on DLA and the build option kGPU_FALLBACK is not specified, if DLA format(kCHW4 with Int8,
-     *  kCHW4 with FP16, kCHW16 with FP16, kCHW32 with Int8) is set, the input format is treated as native DLA format with
-     *  line stride requirement. Input/output binding with these format should have correct layout during
+     *  kCHW4 with FP16, kCHW16 with FP16, kCHW32 with Int8) is set, the input format is treated as native DLA format
+     *  with line stride requirement. Input/output binding with these format should have correct layout during
      *  inference.
+     * 
+     *  Tensor formats are determined at build time by TensorRT for tensors not marked as input or output.
      * 
      *  @param formats A bitmask of TensorFormat values that are supported for this tensor.
      * 

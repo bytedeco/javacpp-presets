@@ -218,14 +218,33 @@ public class IPluginV3OneBuild extends IPluginCapability {
     //!
     //!
     //!
+    //!
+    //!
+    //!
     public native @Cast("size_t") @NoException(true) long getWorkspaceSize(@Const DynamicPluginTensorDesc inputs, int nbInputs,
             @Const DynamicPluginTensorDesc outputs, int nbOutputs);
 
     /**
      *  \brief Query for any custom tactics that the plugin intends to use
      * 
-     *  For each format combination supported by the plugin (up to a maximum indicated by getFormatCombinationLimit()),
-     *  the plugin will be timed for each tactic advertised through this method.
+     *  This method queries for the set of tactics T(f) supported by the plugin for the format combination f indicated
+     *  by the immediately preceding call to configurePlugin(). It is guaranteed to be called after configurePlugin().
+     * 
+     *  For each format combination provided through configurePlugin(), up to a maximum of getFormatCombinationLimit(),
+     *  the plugin will be timed for each tactic advertised through this method for that format combination. i.e. The
+     *  plugin will be timed {@code N = sum_{i=0}^{i<getFormatCombinationLimit()} (T(f[i]))} times. If {@code N = 1}, the
+     *  plugin may not be timed. In peudocode, the timing protocol appears as the following:
+     * 
+     *  counter = 0
+     *  for each supported format combination
+     *      ++counter
+     *      if counter > getFormatCombinationLimit()
+     *          goto done
+     *      configurePlugin(...)
+     *      for each tactic in getValidTactics(...)
+     *          time tactic
+     *  done:
+     * 
      * 
      *  @param tactics Pre-allocated buffer to which the tactic values should be written
      *  @param nbTactics The number of tactics advertised through getNbTactics()

@@ -17,7 +17,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  *  The lifetime of the TfLiteRegistration object whose address is
  *  returned by FindOp must exceed the lifetime of any InterpreterBuilder or
  *  Interpreter created with this OpResolver.
- *  Likewise the lifetime of the TfLiteRegistrationExternal object referenced
+ *  Likewise the lifetime of the TfLiteOperator object referenced
  *  from the TfLiteRegistration object, if any, must exceed the lifetime of
  *  any InterpreterBuilder or Interpreter created with this OpResolver. */
 @Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)

@@ -168,7 +168,6 @@ public class IDeconvolutionLayer extends ILayer {
      * 
      *  Default: (0, 0, ..., 0)
      * 
-     *  If executing this layer on DLA, padding must be 0.
      * 
      *  @see getPrePadding()
      *  */
@@ -203,7 +202,6 @@ public class IDeconvolutionLayer extends ILayer {
      * 
      *  Default: (0, 0, ..., 0)
      * 
-     *  If executing this layer on DLA, padding must be 0.
      * 
      *  @see getPostPadding()
      *  */

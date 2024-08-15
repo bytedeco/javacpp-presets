@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2022 Samuel Audet
+ * Copyright (C) 2015-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,9 +34,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cublas.class, value = {
-    @Platform(include = {"<cudnn.h>", "<cudnn_version.h>", "<cudnn_ops_infer.h>", "<cudnn_ops_train.h>", "<cudnn_adv_infer.h>", "<cudnn_adv_train.h>", "<cudnn_cnn_infer.h>", "<cudnn_cnn_train.h>", "<cudnn_backend.h>"},
-        link = {"cudnn@.8", "cudnn_ops_infer@.8", "cudnn_ops_train@.8", "cudnn_adv_infer@.8", "cudnn_adv_train@.8", "cudnn_cnn_infer@.8", "cudnn_cnn_train@.8"}),
-    @Platform(value = "windows-x86_64", preload = {"zlibwapi", "cudnn64_8", "cudnn_ops_infer64_8", "cudnn_ops_train64_8", "cudnn_adv_infer64_8", "cudnn_adv_train64_8", "cudnn_cnn_infer64_8", "cudnn_cnn_train64_8"})},
+    @Platform(include = {"<cudnn.h>", "<cudnn_version.h>", "<cudnn_graph.h>", "<cudnn_ops.h>", "<cudnn_adv.h>", "<cudnn_cnn.h>", "<cudnn_backend.h>"},
+        link = {"cudnn@.9", "cudnn_graph@.9", "cudnn_engines_precompiled@.9", "cudnn_engines_runtime_compiled@.9",
+                "cudnn_heuristic@.9", "cudnn_ops@.9", "cudnn_adv@.9", "cudnn_cnn@.9"}),
+    @Platform(value = "windows-x86_64", preload = {"zlibwapi", "cudnn64_9", "cudnn_graph64_9", "cudnn_engines_precompiled64_9", "cudnn_engines_runtime_compiled64_9",
+                                                   "cudnn_heuristic64_9", "cudnn_ops64_9", "cudnn_adv64_9", "cudnn_cnn64_9"})},
         target = "org.bytedeco.cuda.cudnn", global = "org.bytedeco.cuda.global.cudnn")
 @NoException
 public class cudnn implements InfoMapper {

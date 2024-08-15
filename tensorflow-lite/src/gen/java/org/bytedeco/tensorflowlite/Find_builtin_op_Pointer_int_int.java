@@ -14,8 +14,8 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  * 
  *  This combines the effects of TfLiteInterpreterOptionsSetOpResolverExternal
  *  and TfLiteInterpreterOptionsSetOpResolver.  The callbacks that return
- *  TfLiteRegistrationExternal will be called first, but if they return a
- *  TfLiteRegistrationExternal object that has no methods set, then
+ *  TfLiteOperator will be called first, but if they return a
+ *  TfLiteOperator object that has no methods set, then
  *  the callbacks that return a TfLiteRegistration will be called to get
  *  the methods.
  * 

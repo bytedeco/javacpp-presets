@@ -180,8 +180,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "cupti", "curand", "nvJitLink", "cusparse", "cusolver",
-            "cudnn", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer", "cudnn_ops_infer", "cudnn_ops_train",
-            "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer",
+                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.9"

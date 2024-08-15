@@ -51,7 +51,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h"/*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource@.10.0.1"
+            preload = "nvinfer_builder_resource@.10.3.0"
         ),
         @Platform(
             value = "linux-arm64",
@@ -96,13 +96,13 @@ public class nvinfer implements LoadEnabled, InfoMapper {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
-                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
-                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
             } else {
                 continue; // no CUDA
             }

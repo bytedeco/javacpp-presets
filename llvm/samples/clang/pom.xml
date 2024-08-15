@@ -5,17 +5,30 @@
     <version>1.5.11-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ClangASTVisitorExample</exec.mainClass>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>18.1.4-1.5.11-SNAPSHOT</version>
+            <version>18.1.8-1.5.11-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
-        <sourceDirectory>.</sourceDirectory>
+        <sourceDirectory>${project.basedir}</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>**/*.cc</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                    <exclude>**/pom.xml</exclude>
+                    <exclude>target/**/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
     </build>
 </project>

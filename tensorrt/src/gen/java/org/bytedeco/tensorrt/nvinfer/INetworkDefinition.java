@@ -1592,12 +1592,14 @@ public class INetworkDefinition extends INoCopy {
      *  */
     
     
+    
     //!
     //!
     //!
     //!
     public native @NoException(true) IQuantizeLayer addQuantize(@ByRef ITensor input, @ByRef ITensor scale, DataType outputType);
     public native @NoException(true) IQuantizeLayer addQuantize(@ByRef ITensor input, @ByRef ITensor scale, @Cast("nvinfer1::DataType") int outputType);
+
 
     /**
      *  \brief Add an Einsum layer to the network.
@@ -1725,5 +1727,55 @@ public class INetworkDefinition extends INoCopy {
      *  @see IBuilder::createNetworkV2
      * 
      *  @return the builder */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native @ByRef @NoException(true) IBuilder getBuilder();
+
+    /**
+     *  \brief Mark weights as refittable when the builder flag kREFIT_INDIVIDUAL is set.
+     * 
+     *  @param name The name of the weights.
+     * 
+     *  @return True if the weights were successfully marked as refittable, false if the weights do not exist or cannot
+     *  be refitted.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean markWeightsRefittable(String name);
+    public native @Cast("bool") @NoException(true) boolean markWeightsRefittable(@Cast("const char*") BytePointer name);
+
+    /**
+     *  \brief Unmark weights as refittable when the builder flag kREFIT_INDIVIDUAL is set.
+     * 
+     *  @param name The name of the weights.
+     * 
+     *  @return True if the weights were successfully marked as unrefittable, false if the weights do not exist.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean unmarkWeightsRefittable(String name);
+    public native @Cast("bool") @NoException(true) boolean unmarkWeightsRefittable(@Cast("const char*") BytePointer name);
+
+    /**
+     *  \brief Whether the weight has been marked as refittable.
+     * 
+     *  @param name The name of the weights to check.
+     * 
+     *  @return True if the weights are marked as refittable, false if the weights do not exist or are marked as
+     *  non-refittable.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean areWeightsMarkedRefittable(String name);
+    public native @Cast("bool") @NoException(true) boolean areWeightsMarkedRefittable(@Cast("const char*") BytePointer name);
 }

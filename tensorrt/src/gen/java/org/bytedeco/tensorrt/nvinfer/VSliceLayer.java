@@ -34,4 +34,6 @@ public class VSliceLayer extends VRoot {
     public native @NoException(true) void setMode(SampleMode mode);
     public native @NoException(true) void setMode(@Cast("nvinfer1::SampleMode") int mode);
     public native @NoException(true) SampleMode getMode();
+    public native @NoException(true) void setAxes(@Cast("const nvinfer1::Dims*") @ByRef Dims64 axes);
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getAxes();
 }

@@ -31,16 +31,17 @@ public class Stream extends Pointer {
   /**
    * \brief reads data from a stream
    * @param ptr pointer to a memory buffer
-   * @param size block size
-   * @return the size of data read
+   * @param size The maximum number of bytes to read
+   * @return The number of bytes read from the stream
    */
   public native @Cast("size_t") long Read(Pointer ptr, @Cast("size_t") long size);
   /**
    * \brief writes data to a stream
    * @param ptr pointer to a memory buffer
-   * @param size block size
+   * @param size The maximum number of bytes to write
+   * @return The number of bytes written
    */
-  public native void Write(@Const Pointer ptr, @Cast("size_t") long size);
+  public native @Cast("size_t") long Write(@Const Pointer ptr, @Cast("size_t") long size);
   /** \brief virtual destructor */
   /**
    * \brief generic factory function

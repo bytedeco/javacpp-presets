@@ -35,6 +35,7 @@ public class IOutputAllocator extends IVersionedInterface {
     //!
     //!
     //!
+    //!
     public native @ByVal @NoException(true) InterfaceInfo getInterfaceInfo();
 
     /**
@@ -48,6 +49,7 @@ public class IOutputAllocator extends IVersionedInterface {
      *  @param alignment required alignment of the allocation.
      * 
      *  @return A pointer to memory to use for the output tensor or nullptr.
+     * 
      * 
      *  To preallocate memory and have the engine fail if the preallocation is not big enough,
      *  use IExecutionContext::setTensorAddress to set a pointer to the preallocated memory,

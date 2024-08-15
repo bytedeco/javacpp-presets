@@ -15,7 +15,6 @@ public class Find_custom_op_external_Pointer_String_int extends FunctionPointer 
     public    Find_custom_op_external_Pointer_String_int(Pointer p) { super(p); }
     protected Find_custom_op_external_Pointer_String_int() { allocate(); }
     private native void allocate();
-    public native @Const TfLiteRegistrationExternal call(Pointer user_data,
-                                                        @Cast("const char*") BytePointer custom_op,
-                                                        int version);
+    public native @Const TfLiteOperator call(Pointer user_data,
+                                            @Cast("const char*") BytePointer custom_op, int version);
 }

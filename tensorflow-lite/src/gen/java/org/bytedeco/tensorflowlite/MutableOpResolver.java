@@ -53,7 +53,10 @@ public class MutableOpResolver extends OpResolver {
                     int max_version);
 
   /** Registers the specified {@code version} of the specified builtin operator {@code op}.
-   *  Replaces any previous registration for the same operator version. */
+   *  Replaces any previous registration for the same operator version.
+   *  Warning: use of this method in new code is discouraged: for new code,
+   *  we recommend using tflite::AddOp (from mutable_op_resolver_utils.h)
+   *  rather than tflite::MutableOpResolver::AddCustom. */
   public native void AddCustom(@Cast("const char*") BytePointer name, @Const TfLiteRegistration registration,
                    int version/*=1*/);
   public native void AddCustom(@Cast("const char*") BytePointer name, @Const TfLiteRegistration registration);
@@ -63,7 +66,10 @@ public class MutableOpResolver extends OpResolver {
 
   /** Registers the specified version range (versions {@code min_version} to
    *  {@code max_version}, inclusive) of the specified custom operator {@code name}.
-   *  Replaces any previous registration for the same operator version. */
+   *  Replaces any previous registration for the same operator version.
+   *  Warning: use of this method in new code is discouraged: for new code,
+   *  we recommend using tflite::AddOp (from mutable_op_resolver_utils.h)
+   *  rather than tflite::MutableOpResolver::AddCustom. */
   public native void AddCustom(@Cast("const char*") BytePointer name, @Const TfLiteRegistration registration,
                    int min_version, int max_version);
   public native void AddCustom(String name, @Const TfLiteRegistration registration,
@@ -71,8 +77,8 @@ public class MutableOpResolver extends OpResolver {
 
   /** Registers all operator versions supported by another MutableOpResolver.
    *  Replaces any previous registrations for the same operator versions,
-   *  except that registrations made with {@code AddBuiltin} or {@code AddCustom} always
-   *  take precedence over registrations made with {@code ChainOpResolver}. */
+   *  except that registrations made with {@code AddOp}, {@code AddBuiltin} or {@code AddCustom}
+   *  always take precedence over registrations made with {@code ChainOpResolver}. */
   public native void AddAll(@Const @ByRef MutableOpResolver other);
 
   public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();

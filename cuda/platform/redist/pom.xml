@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cuda-platform-redist</artifactId>
-  <version>12.3-8.9-${project.parent.version}</version>
+  <version>12.6-9.3-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for CUDA</name>
 
   <properties>
@@ -38,12 +38,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-ppc64le}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-ppc64le}</classifier>-->
+<!--    </dependency>-->
 <!--    <dependency>-->
 <!--      <groupId>${project.groupId}</groupId>-->
 <!--      <artifactId>${javacpp.moduleId}</artifactId>-->
@@ -115,7 +115,7 @@
                     module org.bytedeco.${javacpp.moduleId}.platform.redist {
                       requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.redist;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.redist;
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.redist;
 //                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.redist;
                     }

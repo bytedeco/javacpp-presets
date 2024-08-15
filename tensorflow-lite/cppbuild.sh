@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.16.1
+TENSORFLOW_VERSION=2.17.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -71,7 +71,7 @@ case $PLATFORM in
         export CXX="clang++"
         ;;
     windows-x86_64)
-        sedinplace 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 20/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
+        sedinplace 's/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c/CMakeLists.txt
         sedinplace 's/__PRETTY_FUNCTION__/__func__/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/depthwiseconv*.h ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/integer_ops/depthwise_conv.h
         export CC="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
         export CXX="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"

@@ -223,22 +223,13 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @Deprecated @NoException(true) IExecutionContext createExecutionContextWithoutDeviceMemory();
 
     /**
      *  \brief Return the maximum device memory required by the context over all profiles.
      * 
-     *  @see IExecutionContext::setDeviceMemory()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("size_t") @NoException(true) long getDeviceMemorySize();
-
-    /**
-     *  \brief Return the maximum device memory required by the context for a profile.
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by getDeviceMemorySizeV2().
      * 
      *  @see IExecutionContext::setDeviceMemory()
      *  */
@@ -247,7 +238,60 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("size_t") @NoException(true) long getDeviceMemorySizeForProfile(int profileIndex);
+    //!
+    public native @Cast("size_t") @Deprecated @NoException(true) long getDeviceMemorySize();
+
+    /**
+     *  \brief Return the maximum device memory required by the context for a profile.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by getDeviceMemorySizeForProfileV2(int32_t).
+     * 
+     *  @see IExecutionContext::setDeviceMemoryV2()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("size_t") @Deprecated @NoException(true) long getDeviceMemorySizeForProfile(int profileIndex);
+
+    /**
+     *  \brief Return the maximum device memory required by the context over all profiles.
+     * 
+     *  This API is stateful, so its call returns different values based on the following calls:
+     *  * setWeightStreamingBudget()
+     *  * setWeightStreamingBudgetV2()
+     * 
+     *  @see IExecutionContext::setDeviceMemoryV2()
+     *  @see setWeightStreamingBudget()
+     *  @see setWeightStreamingBudgetV2()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("int64_t") @NoException(true) long getDeviceMemorySizeV2();
+
+    /**
+     *  \brief Return the maximum device memory required by the context for a profile.
+     * 
+     *  This API is stateful, so its call returns different values based on the following calls:
+     *  * setWeightStreamingBudget()
+     *  * setWeightStreamingBudgetV2()
+     * 
+     *  @see IExecutionContext::setDeviceMemoryV2()
+     *  @see setWeightStreamingBudget()
+     *  @see setWeightStreamingBudgetV2()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("int64_t") @NoException(true) long getDeviceMemorySizeForProfileV2(int profileIndex);
 
     /**
      *  \brief Return true if an engine can be refit.
@@ -265,10 +309,10 @@ public class ICudaEngine extends INoCopy {
     public native @Cast("bool") @NoException(true) boolean isRefittable();
 
     /**
-     *  \brief Return the number of bytes per component of an element, or -1 if the provided name does not map to an
-     *  input or output tensor.
+     *  \brief Return the number of bytes per component of an element, or -1 if the
+     *  tensor is not vectorized or provided name does not map to an input or output tensor.
      * 
-     *  The vector component size is returned if getTensorVectorizedDim() != -1.
+     *  The vector component size is returned if getTensorVectorizedDim(tensorName) != -1.
      * 
      *  @param tensorName The name of an input or output tensor.
      * 
@@ -292,8 +336,8 @@ public class ICudaEngine extends INoCopy {
     public native @NoException(true) int getTensorBytesPerComponent(@Cast("const char*") BytePointer tensorName);
 
     /**
-     *  \brief Return the number of bytes per component of an element of given profile, or -1 if the provided name does
-     *  not map to an input or output tensor.
+     *  \brief Return the number of bytes per component of an element given of given profile, or -1 if the tensor is not
+     *  vectorized or provided name does not map to an input or output tensor.
      * 
      *  The vector component size is returned if getTensorVectorizedDim(tensorName, profileIndex) != -1.
      * 
@@ -316,10 +360,10 @@ public class ICudaEngine extends INoCopy {
     public native @NoException(true) int getTensorBytesPerComponent(@Cast("const char*") BytePointer tensorName, int profileIndex);
 
     /**
-     *  \brief Return the number of components included in one element, or -1 if the provided name does not map to an
-     *  input or output tensor.
+     *  \brief Return the number of components included in one element, or -1 if tensor is
+     *  not vectorized or if the provided name does not map to an input or output tensor.
      * 
-     *  The number of elements in the vectors is returned if getTensorVectorizedDim() != -1.
+     *  The number of elements in the vectors is returned if getTensorVectorizedDim(tensorName) != -1.
      * 
      *  @param tensorName The name of an input or output tensor.
      * 
@@ -343,8 +387,8 @@ public class ICudaEngine extends INoCopy {
     public native @NoException(true) int getTensorComponentsPerElement(@Cast("const char*") BytePointer tensorName);
 
     /**
-     *  \brief Return the number of components included in one element of given profile, or -1 if the provided name does
-     *  not map to an input or output tensor.
+     *  \brief Return the number of components included in one element of given profile, or -1 if tensor is not
+     *  vectorized or the provided name does not map to an input or output tensor.
      * 
      *  The number of elements in the vectors is returned if getTensorVectorizedDim(tensorName, profileIndex) != -1.
      * 
@@ -574,8 +618,9 @@ public class ICudaEngine extends INoCopy {
      * 
      *  @param select Whether to query the minimum, optimum, or maximum values for this input tensor.
      * 
-     *  @return The minimum / optimum / maximum values for an input tensor in this profile.
-     *         If the profileIndex is invalid or the provided name does not map to an input tensor, return nullptr.
+     *  @return The minimum / optimum / maximum values for an input tensor in this profile. If the profileIndex is
+     *  invalid or the provided name does not map to an input tensor, or the tensor is not a shape binding, return
+     *  nullptr.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
      *  */
@@ -798,11 +843,14 @@ public class ICudaEngine extends INoCopy {
      *  @return An IHostMemory object that contains the serialized engine.
      * 
      *  The network may be deserialized with IRuntime::deserializeCudaEngine().
+     *  Serializing plan file with SerializationFlag::kEXCLUDE_WEIGHTS requires building the engine with kREFIT,
+     *  kREFIT_IDENTICAL or kREFIT_INDIVIDUAL.
      * 
      *  @see IRuntime::deserializeCudaEngine()
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -821,16 +869,17 @@ public class ICudaEngine extends INoCopy {
      * 
      *  @param gpuMemoryBudget  This parameter may take on 3 types of values:
      *   -1: Allows TensorRT to choose the budget according to the streamable weights size.
-     *       Free CUDA memory will be queried at ::createExecutionContext and accordingly:
+     *       Free CUDA memory will be queried at createExecutionContext() and accordingly:
      *        * If streamable weights all fit: weight streaming is not required and disabled.
      *        * Otherwise: Budget is set to getMinimumWeightStreamingBudget
      *    0: (default) Disables weight streaming. The execution may fail if the network is too large for GPU memory.
      *   >0: The maximum bytes of GPU memory that weights can occupy. It must be bounded by
-     *       [getMinimumWeightStreamingBudget, min(getStreamableWeightsSize - 1, free GPU memory)].
+     *       [getMinimumWeightStreamingBudget, free GPU memory)].
      * 
      *  By setting a weight limit, users can expect a GPU memory usage reduction
-     *  of |network weights| - gpuMemoryBudget bytes. Maximum memory savings occur
-     *  when gpuMemoryBudget is set to getMinimumWeightStreamingBudget.
+     *  of (total bytes for network weights) - gpuMemoryBudget bytes. Maximum memory savings occur
+     *  when gpuMemoryBudget is set to getMinimumWeightStreamingBudget(). Creating additional
+     *  IExecutionContexts will increase memory usage by O(getMinimumStreamingBudget()).
      * 
      *  Streaming larger amounts of memory will likely result in lower performance
      *  except in some boundary cases where streaming weights allows the user to
@@ -838,20 +887,21 @@ public class ICudaEngine extends INoCopy {
      *  latency in these cases. Tuning the value of the memory limit is
      *  recommended for best performance.
      * 
-     *  \warning If weight streaming is active, then multiple concurrent IExecutionContexts will forced to run serially.
-     * 
-     *  \warning GPU memory for the weights is allocated upon the first IExecutionContext's creation
-     *           and deallocated upon the last one's destruction.
+     *  \warning GPU memory for the weights is allocated in this call and will be deallocated by enabling weight
+     *           streaming or destroying the ICudaEngine.
      * 
      *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
      * 
-     *  @return true if the memory limit is valid and the call was successful
-     *          otherwise false.
+     *  \warning The weights streaming budget cannot be modified while there are active IExecutionContexts.
      * 
-     *  @see BuilderFlag::kWEIGHT_STREAMING,
-     *       ICudaEngine::getWeightStreamingBudget
-     *       ICudaEngine::getMinimumWeightStreamingBudget,
-     *       ICudaEngine::getStreamableWeightsSize
+     *  @return true if the memory limit is valid and the call was successful, false otherwise.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superceded by setWeightStreamingBudgetV2().
+     * 
+     *  @see BuilderFlag::kWEIGHT_STREAMING
+     *  @see getWeightStreamingBudget()
+     *  @see getMinimumWeightStreamingBudget()
+     *  @see getStreamableWeightsSize()
      *  */
     
     
@@ -860,20 +910,23 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean setWeightStreamingBudget(@Cast("int64_t") long gpuMemoryBudget);
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setWeightStreamingBudget(@Cast("int64_t") long gpuMemoryBudget);
 
     /**
      *  \brief Returns the current weight streaming device memory budget in bytes.
      * 
      *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
      * 
-     *  @return The weight streaming budget in bytes. Please see ::setWeightStreamingBudget for the possible
+     *  @return The weight streaming budget in bytes. Please see setWeightStreamingBudget() for the possible
      *           values.
      * 
+     *  @deprecated Deprecated in TensorRT 10.1. Superceded by getWeightStreamingBudgetV2().
+     * 
      *  @see BuilderFlag::kWEIGHT_STREAMING,
-     *       ICudaEngine::setWeightStreamingBudget,
-     *       ICudaEngine::getMinimumWeightStreamingBudget,
-     *       ICudaEngine::getStreamableWeightsSize
+     *  @see setWeightStreamingBudget()
+     *  @see getMinimumWeightStreamingBudget()
+     *  @see getStreamableWeightsSize()
      *  */
     
     
@@ -884,7 +937,7 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("int64_t") @NoException(true) long getWeightStreamingBudget();
+    public native @Cast("int64_t") @Deprecated @NoException(true) long getWeightStreamingBudget();
 
     /**
      *  \brief The minimum number of bytes of GPU memory required by network
@@ -898,10 +951,11 @@ public class ICudaEngine extends INoCopy {
      * 
      *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
      * 
-     * 
      *  @return The minimum number of bytes of GPU memory required for streaming.
      * 
-     *  @see ICudaEngine::setWeightStreamingBudget
+     *  @deprecated Deprecated in TensorRT 10.1. The minimum budget is 0 in the V2 APIs.
+     * 
+     *  @see setWeightStreamingBudget()
      *  */
     
     
@@ -910,9 +964,7 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    //!
-    //!
-    public native @Cast("int64_t") @NoException(true) long getMinimumWeightStreamingBudget();
+    public native @Cast("int64_t") @Deprecated @NoException(true) long getMinimumWeightStreamingBudget();
 
     /**
      *  \brief Get the total size in bytes of all streamable weights.
@@ -920,12 +972,10 @@ public class ICudaEngine extends INoCopy {
      *  The set of streamable weights is a subset of all network weights. The
      *  total size may exceed free GPU memory.
      * 
-     *  Returns 0 if BuilderFlag::kWEIGHT_STREAMING is unset during engine building.
-     * 
-     * 
      *  @return The total size in bytes of all streamable weights.
+     *           Returns 0 if BuilderFlag::kWEIGHT_STREAMING is unset during engine building.
      * 
-     *  @see ICudaEngine::setWeightStreamingBudget
+     *  @see setWeightStreamingBudget()
      *  */
     
     
@@ -934,7 +984,146 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Cast("int64_t") @NoException(true) long getStreamableWeightsSize();
+
+    /**
+     *  \brief Limit the maximum amount of GPU memory usable for network weights in bytes.
+     * 
+     *  @param gpuMemoryBudget This parameter must be a non-negative value.
+     *    0: Only small amounts of scratch memory will required to run the model.
+     *   >= getStreamableWeightsSize (default): Disables weight streaming.
+     *        The execution may fail if the network is too large for GPU memory.
+     * 
+     *  By setting a weight limit, users can expect a GPU memory usage reduction on the order
+     *  of (total bytes for network weights) - gpuMemoryBudget bytes. Maximum memory savings occur
+     *  when gpuMemoryBudget is set to 0. Each IExecutionContext will require getWeightStreamingScratchMemorySize()
+     *  bytes of additional device memory if the engine is streaming its weights (budget < getStreamableWeightsSize()).
+     * 
+     *  Streaming larger amounts of memory will likely result in lower performance
+     *  except in some boundary cases where streaming weights allows the user to
+     *  run larger batch sizes. The higher throughput offsets the increased
+     *  latency in these cases. Tuning the value of the memory limit is
+     *  recommended for best performance.
+     * 
+     *  \warning GPU memory for the weights is allocated in this call and will be deallocated by enabling weight
+     *  streaming or destroying the ICudaEngine.
+     * 
+     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
+     * 
+     *  \warning The weights streaming budget cannot be modified while there are active IExecutionContexts.
+     * 
+     *  \warning Using the V2 weight streaming APIs with V1 APIs (setWeightStreamingBudget(),
+     *           getWeightStreamingBudget(), getWeightStreamingMinimumBudget()) leads to undefined behavior.
+     * 
+     *  @return true if the memory limit is valid and the call was successful, false otherwise.
+     * 
+     *  @see BuilderFlag::kWEIGHT_STREAMING
+     *  @see getWeightStreamingBudgetV2()
+     *  @see getWeightStreamingScratchMemorySize()
+     *  @see getWeightStreamingAutomaticBudget()
+     *  @see getStreamableWeightsSize()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setWeightStreamingBudgetV2(@Cast("int64_t") long gpuMemoryBudget);
+
+    /**
+     *  \brief Returns the current weight streaming device memory budget in bytes.
+     * 
+     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
+     * 
+     *  @return The weight streaming budget in bytes. Please see setWeightStreamingBudgetV2() for the possible
+     *           return values. Returns getStreamableWeightsSize() if weight streaming is disabled.
+     * 
+     *  @see BuilderFlag::kWEIGHT_STREAMING
+     *  @see setWeightStreamingBudget()
+     *  @see getMinimumWeightStreamingBudget()
+     *  @see getStreamableWeightsSize()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("int64_t") @NoException(true) long getWeightStreamingBudgetV2();
+
+    /**
+     *  \brief TensorRT automatically determines a device memory budget for the model to run. The budget is close to the
+     *  current free memory size, leaving some space for other memory needs in the user's application. If the budget
+     *  exceeds the size obtained from getStreamableWeightsSize(), it is capped to that size, effectively disabling
+     *  weight streaming. Since TensorRT lacks information about the user's allocations, the remaining memory size might
+     *  be larger than required, leading to wasted memory, or smaller than required, causing an out-of-memory error. For
+     *  optimal memory allocation, it is recommended to manually calculate and set the budget.
+     * 
+     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
+     * 
+     *  \warning The return value may change between TensorRT minor versions.
+     * 
+     *  \warning Setting the returned budget with V1 APIs (setWeightStreamingBudget()) will lead to undefined behavior.
+     *  Please use V2 APIs.
+     * 
+     *  @return The weight streaming budget in bytes. Please set with setWeightStreamingBudgetV2().
+     * 
+     *  @see BuilderFlag::kWEIGHT_STREAMING
+     *  @see setWeightStreamingBudgetV2()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("int64_t") @NoException(true) long getWeightStreamingAutomaticBudget();
+
+    /**
+     *  \brief Returns the size of the scratch memory required by the current weight streaming budget.
+     * 
+     *  Weight streaming requires small amounts of scratch memory on the GPU to stage CPU weights right before
+     *  execution. This value is typically much smaller than the total streamable weights size. Each IExecutionContext
+     *  will then allocate this additional memory or the user can provide the additional memory through
+     *  getDeviceMemorySizeV2() and IExecutionContext::setDeviceMemoryV2().
+     * 
+     *  The return value of this call depends on
+     *     1. setWeightStreamingBudget()
+     *     2. setWeightStreamingBudgetV2()
+     * 
+     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
+     * 
+     *  @return The weight streaming scratch memory in bytes. Returns 0 if weight streaming is disabled.
+     * 
+     *  @see BuilderFlag::kWEIGHT_STREAMING
+     *  @see setWeightStreamingBudgetV2()
+     *  @see getStreamableWeightsSize()
+     *  @see getDeviceMemorySizeV2()
+     *  @see getDeviceMemorySizeForProfileV2()
+     *  @see IExecutionContext::setDeviceMemoryV2()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("int64_t") @NoException(true) long getWeightStreamingScratchMemorySize();
 
     /**
      *  \brief Check if a tensor is marked as a debug tensor.

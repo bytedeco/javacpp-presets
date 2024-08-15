@@ -45,7 +45,7 @@ public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 65536;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.27 ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.28 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -150,6 +150,25 @@ public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.27 ";
 
 
 /*Get the CPU corename on runtime.*/
+
+
+/*Set the threading backend to a custom callback.*/
+public static class openblas_dojob_callback extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    openblas_dojob_callback(Pointer p) { super(p); }
+    protected openblas_dojob_callback() { allocate(); }
+    private native void allocate();
+    public native void call(int thread_num, Pointer jobdata, int dojob_data);
+}
+public static class openblas_threads_callback extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    openblas_threads_callback(Pointer p) { super(p); }
+    protected openblas_threads_callback() { allocate(); }
+    private native void allocate();
+    public native void call(int sync, openblas_dojob_callback dojob, int numjobs, @Cast("size_t") long jobdata_elsize, Pointer jobdata, int dojob_data);
+}
 
 
 // #ifdef OPENBLAS_OS_LINUX
@@ -723,6 +742,14 @@ public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Ca
  
  
 
+
+
+
+
+
+
+
+
 /*** BFLOAT16 and INT8 extensions ***/
 /* convert float array to BFLOAT16 array by rounding */
 
@@ -733,6 +760,8 @@ public static native void cblas_zher2k(@Cast("const CBLAS_ORDER") int Order, @Ca
 /* convert BFLOAT16 array to double array */
 
 /* dot production of BFLOAT16 input arrays, and output as float */
+
+
 
 
 

@@ -87,5 +87,5 @@ public class TfLiteRegistration_V2 extends Pointer {
   public native int builtin_code(); public native TfLiteRegistration_V2 builtin_code(int setter);
   public native @Cast("const char*") BytePointer custom_name(); public native TfLiteRegistration_V2 custom_name(BytePointer setter);
   public native int version(); public native TfLiteRegistration_V2 version(int setter);
-  public native TfLiteRegistrationExternal registration_external(); public native TfLiteRegistration_V2 registration_external(TfLiteRegistrationExternal setter);
+  public native TfLiteOperator registration_external(); public native TfLiteRegistration_V2 registration_external(TfLiteOperator setter);
 }

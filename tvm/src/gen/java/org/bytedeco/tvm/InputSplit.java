@@ -62,9 +62,8 @@ public class InputSplit extends Pointer {
    *  this is a hint so may not be enforced,
    *  but InputSplit will try adjust its internal buffer
    *  size to the hinted value
-   * @param chunk_size the chunk size
    */
-  public native void HintChunkSize(@Cast("size_t") long chunk_size);
+  public native void HintChunkSize(@Cast("size_t") long arg0);
   /** \brief get the total size of the InputSplit */
   public native @Cast("size_t") long GetTotalSize();
   /** \brief reset the position of InputSplit to beginning */
@@ -116,13 +115,12 @@ public class InputSplit extends Pointer {
    *
    *
    * @param out_chunk used to store the result
-   * @param n_records used as a hint for how many records should be returned, may be ignored
    * @return true if we can successfully get next record
    *     false if we reached end of split
    * @see InputSplit::Create for definition of record
    * @see RecordIOChunkReader to parse recordio content from out_chunk
    */
-  public native @Cast("bool") boolean NextBatch(Blob out_chunk, @Cast("size_t") long n_records);
+  public native @Cast("bool") boolean NextBatch(Blob out_chunk, @Cast("size_t") long arg1);
   /** \brief destructor*/
   /**
    * \brief reset the Input split to a certain part id,

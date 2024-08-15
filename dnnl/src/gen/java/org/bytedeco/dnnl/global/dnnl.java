@@ -33,7 +33,7 @@ public class dnnl extends org.bytedeco.dnnl.presets.dnnl {
 // Parsed from oneapi/dnnl/dnnl_common_types.h
 
 /*******************************************************************************
-* Copyright 2022-2023 Intel Corporation
+* Copyright 2022-2024 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -132,6 +132,10 @@ public static final int
     /** [OFP8 standard 8-bit floating-point](https://www.opencompute.org/documents/ocp-8-bit-floating-point-specification-ofp8-revision-1-0-2023-06-20-pdf)
      *  with a 4-bit exponent and a 3-bit mantissa. */
     dnnl_f8_e4m3 = 10,
+    /** 4-bit signed integer. */
+    dnnl_s4 = 11,
+    /** 4-bit unsigned integer. */
+    dnnl_u4 = 12,
 
     /** Parameter to allow internal only data_types without undefined behavior.
      *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
@@ -1314,10 +1318,23 @@ public static final int
     dnnl_Ab8a = 822,
     dnnl_BA4b4a = 823,
     dnnl_BA8b4a = 824,
+    dnnl_BA2a24b = 825,
+    dnnl_aCB2b24c = 826,
+    dnnl_BA2a8b = 827,
+    dnnl_aCB2b8c = 828,
+    dnnl_BA8a24b = 829,
+    dnnl_aCB8b24c = 830,
+    dnnl_BA8a16b = 831,
+    dnnl_aCB8b16c = 832,
+    dnnl_BA8a8b = 833,
+    dnnl_aCB8b8c = 834,
+    dnnl_bcad = 835,
+    dnnl_cabd = 836,
+    dnnl_dabc = 837,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 825,
+    dnnl_format_tag_last = 838,
 
     // Aliases
 
@@ -2687,6 +2704,8 @@ public static final int
 /** A primitive handle. */
 /** A constant primitive handle. */
 
+/** Undefined argument. */
+public static final int DNNL_ARG_UNDEF = 0;
 /** Source argument #0. */
 public static final int DNNL_ARG_SRC_0 = 1;
 /** A special mnemonic for source argument for primitives that have a
@@ -3147,15 +3166,24 @@ public static final int
     /** Intel AVX-512 with float16, Intel DL Boost and bfloat16 support
      *  for Intel Xeon Scalable processor family
      *  and Intel Core processor family. */
-    dnnl_cpu_isa_avx512_core_fp16 = 0x1ef,
+    // TODO: Align avx10_1 values to internal representation.
+    dnnl_cpu_isa_avx10_1_512 = 0x1ef,
+    /** \copydoc dnnl_cpu_isa_avx10_1_512 */
+    dnnl_cpu_isa_avx512_core_fp16 = dnnl_cpu_isa_avx10_1_512,
 
     /** Intel AVX-512 with float16, Intel DL Boost and bfloat16 support and
      *  Intel AMX with 8-bit integer and bfloat16 support */
-    dnnl_cpu_isa_avx512_core_amx = 0xfef,
+    // TODO: Align avx10_1 values to internal representation.
+    dnnl_cpu_isa_avx10_1_512_amx = 0xfef,
+    /** \copydoc dnnl_cpu_isa_avx10_1_512_amx */
+    dnnl_cpu_isa_avx512_core_amx = dnnl_cpu_isa_avx10_1_512_amx,
 
     /** Intel AVX-512 with float16, Intel DL Boost and bfloat16 support and
      *  Intel AMX with 8-bit integer, bfloat16 and float16 support */
-    dnnl_cpu_isa_avx512_core_amx_fp16 = 0x1fef;
+    // TODO: Align avx10_1 values to internal representation.
+    dnnl_cpu_isa_avx10_1_512_amx_fp16 = 0x1fef,
+    /** \copydoc dnnl_cpu_isa_avx10_1_512_amx_fp16 */
+    dnnl_cpu_isa_avx512_core_amx_fp16 = dnnl_cpu_isa_avx10_1_512_amx_fp16;
 
 /** CPU ISA hints flags */
 /** enum dnnl_cpu_isa_hints_t */
@@ -3389,7 +3417,7 @@ public static native @Const dnnl_version_t dnnl_version();
 // Parsed from oneapi/dnnl/dnnl_config.h
 
 /*******************************************************************************
-* Copyright 2019-2023 Intel Corporation
+* Copyright 2019-2024 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3535,6 +3563,9 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // When defined, experimental functionality for sparse domain is enabled.
 /* #undef DNNL_EXPERIMENTAL_SPARSE */
 
+// When defined, experimental functionality for ukernels is enabled.
+/* #undef DNNL_EXPERIMENTAL_UKERNEL */
+
 // When defined, graph component is enabled.
 /* #undef ONEDNN_BUILD_GRAPH */
 
@@ -3581,6 +3612,7 @@ public static final int BUILD_XELP = 0;
 public static final int BUILD_XEHP = 0;
 public static final int BUILD_XEHPG = 0;
 public static final int BUILD_XEHPC = 0;
+public static final int BUILD_XE2 = 0;
 // GeMM kernels ISA controls
 public static final int BUILD_GEMM_KERNELS_ALL = 1;
 public static final int BUILD_GEMM_KERNELS_NONE = 0;
@@ -3617,10 +3649,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 4;
+public static final int DNNL_VERSION_MINOR = 5;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 1;
+public static final int DNNL_VERSION_PATCH = 3;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -8502,8 +8534,12 @@ public static native @Cast("dnnl_status_t") int dnnl_set_jit_profiling_jitdumpdi
  *      The ISAs are only partially ordered:
  *          - SSE41 < AVX < AVX2 < AVX2_VNNI < AVX2_VNNI_2,
  *          - AVX2 < AVX512_CORE < AVX512_CORE_VNNI < AVX512_CORE_BF16
- *            < AVX512_CORE_FP16 < AVX512_CORE_AMX < AVX512_CORE_AMX_FP16,
- *          - AVX2_VNNI < AVX512_CORE_FP16.
+ *            < AVX10_1_512 < AVX10_1_512_AMX < AVX10_1_512_AMX_FP16,
+ *          - AVX2_VNNI < AVX10_1_512.
+ *      Aliases:
+ *          - AVX512_CORE_FP16 = AVX10_1_512
+ *          - AVX512_CORE_AMX = AVX10_1_512_AMX
+ *          - AVX512_CORE_AMX_FP16 = AVX10_1_512_AMX_FP16
  * 
  *  @see \ref dev_guide_cpu_dispatcher_control for more details
  * 
@@ -9948,10 +9984,16 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     avx512_core_vnni(dnnl_cpu_isa_avx512_core_vnni),
     /** \copydoc dnnl_cpu_isa_avx512_core_bf16 */
     avx512_core_bf16(dnnl_cpu_isa_avx512_core_bf16),
+    /** \copydoc dnnl_cpu_isa_avx10_1_512 */
+    avx10_1_512(dnnl_cpu_isa_avx10_1_512),
     /** \copydoc dnnl_cpu_isa_avx512_core_fp16 */
     avx512_core_fp16(dnnl_cpu_isa_avx512_core_fp16),
+    /** \copydoc dnnl_cpu_isa_avx10_1_512_amx */
+    avx10_1_512_amx(dnnl_cpu_isa_avx10_1_512_amx),
     /** \copydoc dnnl_cpu_isa_avx512_core_amx */
     avx512_core_amx(dnnl_cpu_isa_avx512_core_amx),
+    /** \copydoc dnnl_cpu_isa_avx10_1_512_amx_fp16 */
+    avx10_1_512_amx_fp16(dnnl_cpu_isa_avx10_1_512_amx_fp16),
     /** \copydoc dnnl_cpu_isa_avx512_core_amx_fp16 */
     avx512_core_amx_fp16(dnnl_cpu_isa_avx512_core_amx_fp16);
 

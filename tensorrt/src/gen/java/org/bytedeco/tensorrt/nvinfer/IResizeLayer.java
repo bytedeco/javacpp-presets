@@ -26,8 +26,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  Resize layer can be used for resizing a N-D tensor.
  * 
  *  Resize layer currently supports the following configurations:
- *      -   InterpolationMode::kNEAREST - resizes innermost {@code m} dimensions of N-D, where 0 < m <= min(8, N) and N > 0
- *      -   InterpolationMode::kLINEAR - resizes innermost {@code m} dimensions of N-D, where 0 < m <= min(3, N) and N > 0
+ *      -   InterpolationMode::kNEAREST - resizes last {@code m} dimensions of N-D, where 0 < m <= min(8, N) and N > 0
+ *      -   InterpolationMode::kLINEAR - resizes last {@code m} dimensions of N-D, where 0 < m <= min(3, N) and N > 0
  * 
  *  Default resize mode is InterpolationMode::kNEAREST.
  * 
