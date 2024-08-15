@@ -47,6 +47,11 @@ jobs:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        ext:
+          - gpu
+          - ''
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-x86_64:
