@@ -342,9 +342,11 @@ runs:
         df -h
 
     - name: Attach outputs
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         # attach the installed artifacts
+        name: "${{ env.CI_DEPLOY_MODULE }}-${{ env.CI_DEPLOY_PLATFORM }}-${{ matrix.ext }}"
         path: /home/runner/.m2/repository/org/bytedeco/${{ env.CI_DEPLOY_MODULE }}/
 
     - name: Clean up

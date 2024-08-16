@@ -7,17 +7,18 @@
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
     <version>1.5.10</version>
-    <relativePath>../../</relativePath>
+    <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorflow-lite-platform-gpu</artifactId>
   <version>2.15.0-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform for TensorFlow Lite</name>
+  <name>JavaCPP Presets Platform GPU for TensorFlow Lite</name>
 
   <properties>
     <javacpp.moduleId>tensorflow-lite</javacpp.moduleId>
     <javacpp.packageName>tensorflowlite</javacpp.packageName>
+    <javacpp.platform.extension>-gpu</javacpp.platform.extension>
   </properties>
 
   <dependencies>
@@ -98,7 +99,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-armhf-gpu.jar ${javacpp.moduleId}-linux-arm64-gpu.jar ${javacpp.moduleId}-linux-x86-gpu.jar ${javacpp.moduleId}-linux-x86_64-gpu.jar ${javacpp.moduleId}-macosx-x86_64-gpu.jar ${javacpp.moduleId}-windows-x86_64-gpu.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -143,16 +144,16 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.packageName}.platform {
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm;
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm64;
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86;
-//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86_64;
-//                      requires static org.bytedeco.${javacpp.packageName}.linux.armhf;
-                      requires static org.bytedeco.${javacpp.packageName}.linux.arm64;
-//                      requires static org.bytedeco.${javacpp.packageName}.linux.x86;
-                      requires static org.bytedeco.${javacpp.packageName}.linux.x86_64;
-                      requires static org.bytedeco.${javacpp.packageName}.macosx.x86_64;
-                      requires static org.bytedeco.${javacpp.packageName}.windows.x86_64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm.gpu;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.arm64.gpu;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86.gpu;
+//                      requires static org.bytedeco.${javacpp.moduleId}.android.x86_64.gpu;
+//                      requires static org.bytedeco.${javacpp.packageName}.linux.armhf.gpu;
+                      requires static org.bytedeco.${javacpp.packageName}.linux.arm64.gpu;
+//                      requires static org.bytedeco.${javacpp.packageName}.linux.x86.gpu;
+                      requires static org.bytedeco.${javacpp.packageName}.linux.x86_64.gpu;
+                      requires static org.bytedeco.${javacpp.packageName}.macosx.x86_64.gpu;
+                      requires static org.bytedeco.${javacpp.packageName}.windows.x86_64.gpu;
                     }
                   </moduleInfoSource>
                 </module>
