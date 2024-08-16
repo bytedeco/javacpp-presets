@@ -99,14 +99,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
                 "tensorflow/lite/profiling/telemetry/telemetry_status.h",
                 "tensorflow/lite/profiling/telemetry/profiler.h",
-                "tensorflow/lite/delegates/gpu/delegate.h",
-                "tensorflow/lite/delegates/gpu/delegate_options.h",
             }
 //            link = "tensorflowlite_c"
-        ),
+        ),         @Platform(
+            value = {"android", "linux"},
+            extension = "-gpu",
+            define = "UNIQUE_PTR_NAMESPACE std",
+            include = {
+                    "tensorflow/lite/delegates/gpu/delegate.h",
+//                    "tensorflow/lite/delegates/gpu/delegate_options.h",
+            }
+//            link = "tensorflowlite_c"
+    )
     },
     target = "org.bytedeco.tensorflowlite",
     global = "org.bytedeco.tensorflowlite.global.tensorflowlite")
+
 public class tensorflowlite implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tensorflow-lite"); }
 
