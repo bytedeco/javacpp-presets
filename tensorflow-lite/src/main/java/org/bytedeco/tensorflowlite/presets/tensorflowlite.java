@@ -99,6 +99,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
                 "tensorflow/lite/profiling/telemetry/telemetry_status.h",
                 "tensorflow/lite/profiling/telemetry/profiler.h",
+                "tensorflow/lite/delegates/gpu/delegate.h",
+                "tensorflow/lite/delegates/gpu/delegate_options.h",
             }
 //            link = "tensorflowlite_c"
         ),
