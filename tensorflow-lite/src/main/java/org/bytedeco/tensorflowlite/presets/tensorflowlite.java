@@ -107,7 +107,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             define = "UNIQUE_PTR_NAMESPACE std",
             include = {
                     "tensorflow/lite/delegates/gpu/delegate.h",
-//                    "tensorflow/lite/delegates/gpu/delegate_options.h",
+                    "tensorflow/lite/delegates/gpu/delegate_options.h",
             }
 //            link = "tensorflowlite_c"
     )
