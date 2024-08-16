@@ -58,12 +58,12 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
         @Platform(
             value = "linux",
             extension = "-gpu",
-            link = { "c10", "torch" , "c10_cuda", "torch_cuda_linalg" } // cuda_linalg built as separate lib on linux only
+            link = { "c10", "torch" , "c10_cuda", "torch_cuda", "torch_cuda_linalg" } // cuda_linalg built as separate lib on linux only
         ),
         @Platform(
             value = "windows",
             extension = "-gpu",
-            link = { "c10", "torch" , "c10_cuda" }
+            link = { "c10", "torch" , "c10_cuda", "torch_cuda" }
         )
     },
     target = "org.bytedeco.pytorch.cuda",
