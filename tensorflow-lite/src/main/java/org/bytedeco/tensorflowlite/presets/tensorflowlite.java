@@ -99,77 +99,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
                                 "tensorflow/lite/profiling/telemetry/telemetry_status.h",
                                 "tensorflow/lite/profiling/telemetry/profiler.h",
+
+                                "tensorflow/lite/delegates/gpu/delegate.h",
+                                "tensorflow/lite/delegates/gpu/delegate_options.h",
                         }
 //            link = "tensorflowlite_c"
-                ), @Platform(
-                value = {"android", "linux"},
-                extension = "-gpu",
-                define = "UNIQUE_PTR_NAMESPACE std",
-                include = {
-
-
-                        "tensorflow/lite/builtin_ops.h",
-                        "tensorflow/lite/c/c_api_types.h",
-                        "tensorflow/lite/core/c/c_api_types.h",
-                        "tensorflow/lite/c/c_api.h",
-                        "tensorflow/lite/core/c/c_api.h",
-                        "tensorflow/lite/core/c/registration_external.h",
-                        "tensorflow/lite/c/c_api_experimental.h",
-                        "tensorflow/lite/core/c/c_api_experimental.h",
-                        "tensorflow/lite/c/common.h",
-                        "tensorflow/lite/core/c/common.h",
-                        "tensorflow/lite/core/api/error_reporter.h",
-                        "tensorflow/lite/core/api/op_resolver.h",
-                        "tensorflow/lite/core/api/profiler.h",
-                        "tensorflow/lite/core/api/verifier.h",
-                        "tensorflow/lite/experimental/resource/initialization_status.h",
-                        "tensorflow/lite/experimental/resource/resource_base.h",
-                        "tensorflow/lite/allocation.h",
-                        "tensorflow/lite/stderr_reporter.h",
-                        "tensorflow/lite/graph_info.h",
-                        "tensorflow/lite/interpreter_options.h",
-                        "tensorflow/lite/memory_planner.h",
-                        "tensorflow/lite/util.h",
-//                "tensorflow/lite/array.h",
-                        "tensorflow/lite/core/macros.h",
-                        "tensorflow/lite/core/subgraph.h",
-                        "tensorflow/lite/external_cpu_backend_context.h",
-                        "tensorflow/lite/portable_type_to_tflitetype.h",
-                        "tensorflow/lite/profiling/root_profiler.h",
-                        "tensorflow/lite/signature_runner.h",
-                        "tensorflow/lite/core/signature_runner.h",
-                        "tensorflow/lite/type_to_tflitetype.h",
-                        "tensorflow/lite/string_type.h",
-                        "tensorflow/lite/mutable_op_resolver.h",
-                        "tensorflow/lite/interpreter.h",
-                        "tensorflow/lite/core/interpreter.h",
-                        "tensorflow/lite/model_builder.h",
-                        "tensorflow/lite/core/model_builder.h",
-                        "tensorflow/lite/interpreter_builder.h",
-                        "tensorflow/lite/core/interpreter_builder.h",
-                        "tensorflow/lite/model.h",
-                        "tensorflow/lite/kernels/register.h",
-                        "tensorflow/lite/core/kernels/register.h",
-                        "tensorflow/lite/optional_debug_tools.h",
-//                "tensorflow/lite/core/async/c/types.h",
-//                "tensorflow/lite/core/async/interop/c/types.h",
-//                "tensorflow/lite/core/async/interop/c/attribute_map.h",
-//                "tensorflow/lite/core/async/async_signature_runner.h",
-//                "tensorflow/lite/core/async/c/async_signature_runner.h",
-                        "tensorflow/lite/profiling/telemetry/c/profiler.h",
-                        "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
-                        "tensorflow/lite/profiling/telemetry/telemetry_status.h",
-                        "tensorflow/lite/profiling/telemetry/profiler.h",
-
-
-
-                        "tensorflow/lite/delegates/gpu/delegate.h",
-                        "tensorflow/lite/delegates/gpu/delegate_options.h",
-                }
-
-//            link = "tensorflowlite_c"
-        )
-        },
+                )        },
         target = "org.bytedeco.tensorflowlite",
         global = "org.bytedeco.tensorflowlite.global.tensorflowlite")
 
@@ -244,6 +179,17 @@ public class tensorflowlite implements InfoMapper {
                 // Classes passed to some native functions as unique_ptr and that can be allocated Java-side
                 .put(new Info("tflite::impl::Interpreter::Interpreter").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::impl::Interpreter>\")"))
                 .put(new Info("tflite::Subgraph::Subgraph").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::Subgraph>\")"))
+
+                // GPU support
+                // skip lines
+                .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip())
+
+                // skip variables
+//                .put(new Info("FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL", "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL").skip())
+
+                .put(new Info("#ifdef TFLITE_DEBUG_DELEGATE").define(false))
+                .put(new Info("#if defined(__ANDROID__)").define(false))
+
         ;
     }
 }
