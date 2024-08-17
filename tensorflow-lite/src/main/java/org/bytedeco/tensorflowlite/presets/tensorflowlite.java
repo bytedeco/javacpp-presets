@@ -30,9 +30,7 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.tools.Info;
-import org.bytedeco.javacpp.tools.InfoMap;
-import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.javacpp.tools.*;
 
 /**
  * @author Samuel Audet
@@ -108,9 +106,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.tensorflowlite",
         global = "org.bytedeco.tensorflowlite.global.tensorflowlite")
 
-public class tensorflowlite implements InfoMapper {
+public class tensorflowlite implements InfoMapper, BuildEnabled {
     static {
         Loader.checkVersion("org.bytedeco", "tensorflow-lite");
+    }
+
+    private boolean android;
+
+    @Override
+    public void init(Logger logger, java.util.Properties properties, String encoding) {
+        this.android = properties.getProperty("platform").startsWith("android-");
     }
 
     public void map(InfoMap infoMap) {
@@ -188,7 +193,7 @@ public class tensorflowlite implements InfoMapper {
 //                .put(new Info("FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL", "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL").skip())
 
                 .put(new Info("#ifdef TFLITE_DEBUG_DELEGATE").define(false))
-                .put(new Info("#if defined(__ANDROID__)").define())
+                .put(new Info("__ANDROID__").define(android))
 
 
         ;
