@@ -188,7 +188,7 @@ public class tensorflowlite implements InfoMapper {
 //                .put(new Info("FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL", "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL").skip())
 
                 .put(new Info("#ifdef TFLITE_DEBUG_DELEGATE").define(false))
-//                .put(new Info("#if defined(__ANDROID__)").define(false))
+                .put(new Info("#if defined(__ANDROID__)").define())
 
 
         ;
