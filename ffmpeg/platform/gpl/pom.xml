@@ -79,12 +79,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-arm64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-ppc64le}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-ppc64le}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -174,7 +174,7 @@
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.gpl;
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf.gpl;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.gpl;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.gpl;
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.gpl;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.arm64.gpl;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.gpl;
 //                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86.gpl;
