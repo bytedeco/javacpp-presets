@@ -108,9 +108,9 @@ import org.bytedeco.openblas.presets.openblas;
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"},
-     define = {"__GSL_CBLAS_H__", "GSL_COMPLEX_LEGACY"}, link = "gsl@.25"),
+     define = {"__GSL_CBLAS_H__", "GSL_COMPLEX_LEGACY"}, link = "gsl@.28"),
     @Platform(value = "android", link = "gsl"),
-    @Platform(value = "windows", preload = "libgsl-25") })
+    @Platform(value = "windows", preload = "libgsl-28") })
 @NoException
 public class gsl implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "gsl"); }

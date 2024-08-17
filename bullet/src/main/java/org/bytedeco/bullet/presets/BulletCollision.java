@@ -220,7 +220,7 @@ public class BulletCollision implements InfoMapper {
             .put(new Info("btDbvt::sStkNPS").pointerTypes("btDbvt.sStkNPS"))
 
             .put(new Info("btCollisionObjectWrapper").purify(true))
-            .put(new Info("btCollisionWorld", "btOverlapFilterCallback", "btOverlapCallback").virtualize())
+            .put(new Info(/*"btCollisionWorld",*/ "btOverlapFilterCallback", "btOverlapCallback").virtualize())
 
             .put(new Info("btCollisionWorldImporter.h").linePatterns("struct btContactSolverInfo;").skip())
             .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
