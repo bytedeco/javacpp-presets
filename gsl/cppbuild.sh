@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GSL_VERSION=2.7
+GSL_VERSION=2.8
 download http://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
 mkdir -p $PLATFORM

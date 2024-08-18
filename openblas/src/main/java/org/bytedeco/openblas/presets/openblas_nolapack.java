@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2023 Samuel Audet
+ * Copyright (C) 2016-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
     @Override public void map(InfoMap infoMap) {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
-                             "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "lapack_int", "lapack_logical").cppTypes().annotations())
+                             "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "FORTRAN_STRLEN", "lapack_int", "lapack_logical").cppTypes().annotations())
                .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT",
                              "defined(LAPACK_COMPLEX_STRUCTURE)", "defined(LAPACK_COMPLEX_C99)", "OPENBLAS_OS_LINUX").define(false).translate(true))
                .put(new Info("((defined(__STDC_IEC_559_COMPLEX__) || __STDC_VERSION__ >= 199901L ||"
@@ -130,7 +130,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
         String[] functions = {
             // not available in Accelerate
-            "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
+            "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
+            "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
+            "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
+            "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
             // not exported by OpenBLAS
             "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
             "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
@@ -138,9 +142,9 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
             "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
-            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu", "cblas_cgeadd",
-            "cblas_cimatcopy", "cblas_comatcopy", "cblas_dgeadd", "cblas_dimatcopy", "cblas_domatcopy", "cblas_sgeadd",
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function", "cblas_cdotc", "cblas_cdotu",
+            "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
             "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
             "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "lapack_make_complex_double", "lapack_make_complex_float",
@@ -154,7 +158,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
             "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf",
             // extended
-            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm",
+            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
             "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};

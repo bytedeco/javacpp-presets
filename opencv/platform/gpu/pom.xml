@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>opencv-platform-gpu</artifactId>
-  <version>4.9.0-${project.parent.version}</version>
+  <version>4.10.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for OpenCV</name>
 
   <properties>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.26-${project.parent.version}</version>
+      <version>0.3.28-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

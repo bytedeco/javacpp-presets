@@ -34,12 +34,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             not = "macosx",
             include = "<opencv2/cudacodec.hpp>",
-            link = "opencv_cudacodec@.409",
+            link = "opencv_cudacodec@.410",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudacodec490",
+            link = "opencv_cudacodec4100",
             extension = "-gpu"
         )
     },

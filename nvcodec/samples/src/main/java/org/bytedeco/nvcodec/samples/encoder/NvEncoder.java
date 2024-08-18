@@ -494,7 +494,7 @@ public abstract class NvEncoder implements Disposable {
             }
             initializeParams.encodeConfig().encodeCodecConfig().h264Config().idrPeriod(initializeParams.encodeConfig().gopLength());
         } else if (initializeParams.encodeGUID().Data1() == NV_ENC_CODEC_HEVC_GUID().Data1()) {
-            initializeParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8((this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV420_10BIT || this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444_10BIT) ? 2 : 0);
+//            initializeParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8((this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV420_10BIT || this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444_10BIT) ? 2 : 0);
 
             if (bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444 || this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444_10BIT) {
                 initializeParams.encodeConfig().encodeCodecConfig().hevcConfig().chromaFormatIDC(3);
@@ -535,9 +535,9 @@ public abstract class NvEncoder implements Disposable {
 
         if (compareGUID(encoderParams.encodeGUID(), NV_ENC_CODEC_HEVC_GUID())) {
             boolean yuv10BitFormat = (this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV420_10BIT || this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444_10BIT);
-            if (yuv10BitFormat && encoderParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8() != 2) {
-                System.err.println("Invalid PixelBitdepth");
-            }
+//            if (yuv10BitFormat && encoderParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8() != 2) {
+//                System.err.println("Invalid PixelBitdepth");
+//            }
 
             if ((this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444 || this.bufferFormat == NV_ENC_BUFFER_FORMAT_YUV444_10BIT) && (encoderParams.encodeConfig().encodeCodecConfig().hevcConfig().chromaFormatIDC() != 3)) {
                 System.err.println("Invalid ChromaFormatIDC");

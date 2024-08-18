@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnxruntime-platform-gpu</artifactId>
-  <version>1.16.3-${project.parent.version}</version>
+  <version>1.18.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for ONNX Runtime</name>
 
   <properties>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>3.3.4-${project.parent.version}</version>
+      <version>3.5.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

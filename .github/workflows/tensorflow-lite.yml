@@ -55,7 +55,7 @@ jobs:
     steps:
       - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@v1.5.10-GPU
   macosx-x86_64:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - uses: barrypitman/javacpp-presets/.github/actions/deploy-macosx@v1.5.10-GPU
   windows-x86_64:

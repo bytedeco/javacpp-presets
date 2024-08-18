@@ -11,7 +11,7 @@ export DNNL_CPU_RUNTIME="OMP" # or TBB
 export DNNL_GPU_RUNTIME="OCL"
 
 TBB_VERSION=2020.3
-MKLDNN_VERSION=3.3.4
+MKLDNN_VERSION=3.5.3
 download https://github.com/oneapi-src/oneTBB/archive/v$TBB_VERSION.tar.gz oneTBB-$TBB_VERSION.tar.bz2
 download https://github.com/oneapi-src/oneDNN/archive/v$MKLDNN_VERSION.tar.gz oneDNN-$MKLDNN_VERSION.tar.bz2
 
@@ -65,9 +65,9 @@ case $PLATFORM in
             strip ../lib/libtbb.so.*
             cd ../oneDNN-$MKLDNN_VERSION
         fi
-        sedinplace 's/constexpr GRF     getBase/GRF getBase/g' src/gpu/jit/ngen/ngen_core.hpp
-        sedinplace 's/constexpr int32_t getDisp/int32_t getDisp/g' src/gpu/jit/ngen/ngen_core.hpp
-        sedinplace '/immintrin.h/d' src/gpu/jit/ngen/ngen_utils.hpp
+        # sedinplace 's/constexpr GRF     getBase/GRF getBase/g' src/gpu/jit/ngen/ngen_core.hpp
+        # sedinplace 's/constexpr int32_t getDisp/int32_t getDisp/g' src/gpu/jit/ngen/ngen_core.hpp
+        # sedinplace '/immintrin.h/d' src/gpu/jit/ngen/ngen_utils.hpp
         "$CMAKE" -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=AARCH64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME -DONEDNN_BUILD_GRAPH=OFF .
         make -j $MAKEJ
         make install/strip

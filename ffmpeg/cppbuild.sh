@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib"
-ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1"
+ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1 --enable-libzimg"
 ENABLE_VULKAN="--enable-vulkan --enable-hwaccel=h264_vulkan --enable-hwaccel=hevc_vulkan --enable-hwaccel=av1_vulkan"
 
 if [[ "$EXTENSION" == *gpl ]]; then
@@ -33,21 +33,22 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.2.0
-OPENH264_VERSION=2.4.0
+OPENSSL=openssl-3.3.1
+OPENH264_VERSION=2.4.1
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.13.1
-ALSA_VERSION=1.2.10
+VPX_VERSION=1.14.1
+ALSA_VERSION=1.2.12
 FREETYPE_VERSION=2.13.2
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=12.1.14.0
+NVCODEC_VERSION=12.2.72.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.3
-WEBP_VERSION=1.3.2
-AOMAV1_VERSION=3.8.0
-SVTAV1_VERSION=1.8.0
-FFMPEG_VERSION=6.1.1
+WEBP_VERSION=1.4.0
+AOMAV1_VERSION=3.9.1
+SVTAV1_VERSION=2.1.2
+ZIMG_VERSION=3.0.5
+FFMPEG_VERSION=7.0.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -69,6 +70,7 @@ download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.ta
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
+download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -95,6 +97,7 @@ tar --totals -xzf ../$XML2.tar.gz
 tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
 tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
 tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
+tar --totals -xzf ../zimg-release-$ZIMG_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -115,11 +118,12 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.txt
-sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
+# sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
 sedinplace '/ANativeWindow_release/d' ffmpeg-*/libavutil/hwcontext_mediacodec.c
 sedinplace 's/#define MAX_SLICES 32/#define MAX_SLICES 256/g' ffmpeg-*/libavcodec/h264dec.h
 
@@ -132,10 +136,20 @@ case $PLATFORM in
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=arm-linux
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j $MAKEJ V=0
         make install
@@ -278,10 +292,20 @@ EOF
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=aarch64-linux
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
         make -j $MAKEJ V=0
         make install
@@ -423,10 +447,20 @@ EOF
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
         make -j $MAKEJ V=0
         make install
@@ -565,10 +599,20 @@ EOF
         export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic  --host=x86_64-linux
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
         make -j $MAKEJ V=0
         make install
@@ -702,10 +746,20 @@ EOF
         export AS="nasm"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -832,7 +886,7 @@ EOF
         make install
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-libdrm --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-libdrm --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="gcc -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -841,10 +895,20 @@ EOF
         export AS="nasm"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -972,7 +1036,7 @@ EOF
         make install
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-libdrm --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-libdrm --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -995,10 +1059,20 @@ EOF
 
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1176,9 +1250,9 @@ EOF
           if [[ ! -d $USERLAND_PATH ]]; then
             USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
           fi
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" || cat ffbuild/config.log
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --enable-libxcb --enable-libpulse --cc="arm-linux-gnueabihf-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" || cat ffbuild/config.log
         else
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" || cat ffbuild/config.log
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --enable-libxcb --enable-libpulse --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" || cat ffbuild/config.log
         fi
         make -j $MAKEJ
         make install
@@ -1193,10 +1267,20 @@ EOF
         HOST_ARCH="$(uname -m)"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux-gnu
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1286,7 +1370,11 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-linux-arm.patch
+        sedinplace '/neon_i8mm/d' ./configure
         CROSS=aarch64-linux-gnu- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=armv8-linux-gcc
+        sedinplace 's/HAS_NEON_I8MM (1 << 2)/HAS_NEON_I8MM 0/g' vpx_ports/*.h
+        sedinplace 's/#if HAVE_NEON_I8MM/#if 0/g' test/*.c* vpx_ports/*.c*
+        sedinplace 's/flags & HAS_NEON_I8MM/0/g' *.h
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
@@ -1321,7 +1409,7 @@ EOF
         if [[ ! -d $USERLAND_PATH ]]; then
           USERLAND_PATH="$(which aarch64-linux-gnu-gcc | grep -o '.*/tools/')../userland"
         fi
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-omx `#--enable-mmal` --enable-omx-rpi --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm `#-lvcsm` -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-omx `#--enable-mmal` --enable-omx-rpi --enable-pthreads --enable-libxcb --enable-libpulse --cc="aarch64-linux-gnu-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm `#-lvcsm` -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -1330,10 +1418,24 @@ EOF
         MACHINE_TYPE=$( uname -m )
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        else
+          CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu
+        fi
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         else
@@ -1530,10 +1632,10 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
         else
           echo "configure ffmpeg cross compile"
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --enable-libpulse --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
         fi
         make -j $MAKEJ
         make install
@@ -1545,10 +1647,20 @@ EOF
         export CPPFLAGS="$CFLAGS"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="clang -arch arm64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1655,7 +1767,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG -DCOMPILE_C_ONLY=ON ..
         make -j $MAKEJ
         make install
         cd ..
@@ -1670,10 +1782,20 @@ EOF
         export AS="nasm"
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
@@ -1793,10 +1915,20 @@ EOF
     windows-x86)
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         echo ""
         echo "--------------------"
@@ -1924,10 +2056,20 @@ EOF
     windows-x86_64)
         echo ""
         echo "--------------------"
+        echo "Building zimg"
+        echo "--------------------"
+        echo ""
+        cd zimg-release-$ZIMG_VERSION
+        autoreconf -iv
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        make -j $MAKEJ V=0
+        make install
+        echo ""
+        echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
-        cd $ZLIB
+        cd ../$ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         echo ""
         echo "--------------------"

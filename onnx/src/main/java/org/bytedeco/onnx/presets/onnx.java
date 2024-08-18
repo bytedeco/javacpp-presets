@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Alexander Merritt, Samuel Audet
+ * Copyright (C) 2018-2024 Alexander Merritt, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -185,6 +185,7 @@ public class onnx implements InfoMapper {
 
                .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::OpSchema::SetContextDependentFunctionBodyBuilder",
                              "onnx::OpSchema::GetDataPropagationFunction", "onnx::RegisterSchema", "onnx::ReplaceAll", "onnx::DbgOperatorSetTracker::Instance",
+                             "onnx::OpSchema::Attr(std::string, std::string, std::string, onnx::AttributeProto::AttributeType)",
                              "onnx::shape_inference::checkShapesAndTypes(const onnx::TypeProto_Sequence&, const onnx::TypeProto_Sequence&)",
                              "onnx::shape_inference::mergeShapesAndTypes(const onnx::TypeProto_Sequence&, onnx::TypeProto_Tensor*)").skip())
 

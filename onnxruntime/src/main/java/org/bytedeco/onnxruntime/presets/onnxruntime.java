@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2023 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2019-2024 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -64,16 +64,16 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
             },
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.16.3"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.18.1"}
         ),
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.16.3", "onnxruntime_providers_dnnl"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.18.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             extension = "-gpu",
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.16.3", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.18.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
     },
     target = "org.bytedeco.onnxruntime",
@@ -97,13 +97,13 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cudnn",
-                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
-                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cufft") ? "@.11" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.11" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.12" : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cufft") ? "64_11" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_12" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_11" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_12" : "64_12";
             } else {
                 continue; // no CUDA
             }
@@ -126,6 +126,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "std::vector<Ort::AllocatedStringPtr>").skip())
                .put(new Info("Ort::AllocatedStringPtr").valueTypes("@UniquePtr(\"char, Ort::detail::AllocatedFree\") @Cast(\"char*\") BytePointer"))
 //               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
+               .put(new Info("std::vector<float>", "Ort::ShapeInferContext::Floats").pointerTypes("FloatVector").define())
+               .put(new Info("std::vector<int64_t>", "Ort::ShapeInferContext::Ints").pointerTypes("LongVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<Ort::Value>").valueTypes("@StdMove ValueVector").pointerTypes("ValueVector").define())
                .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("StringStringMap").define())
@@ -157,10 +159,9 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
                .put(new Info("Ort::detail::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
                .put(new Info("Ort::detail::Unowned<Ort::MapTypeInfo>").pointerTypes("UnownedMapTypeInfo").purify())
-               .put(new Info("Ort::MemoryAllocation", "OrtApi").purify())
-               .put(new Info("Ort::MemoryAllocation::operator =").skip())
-               .put(new Info("Ort::RunOptions::GetRunLogSeverityLevel").skip())
                .put(new Info("Ort::Exception").pointerTypes("OrtException").purify())
+               .put(new Info("Ort::MemoryAllocation", "OrtApi").purify())
+               .put(new Info("Ort::MemoryAllocation::operator =", "Ort::RunOptions::GetRunLogSeverityLevel", "ShapeInferFn").skip())
 
                .put(new Info("Ort::detail::ConstValueImpl<detail::Unowned<const OrtValue> >").pointerTypes("ConstValue"))
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >").pointerTypes("BaseConstValue"))
@@ -223,7 +224,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::Base<OrtKernelInfo>").pointerTypes("BaseKernelInfo"))
                .put(new Info("Ort::detail::Base<OrtThreadingOptions>").pointerTypes("BaseThreadingOptions"))
 
-               .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX",
+               .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX", "OrtSessionOptionsAppendExecutionProvider_Tensorrt",
                              "OrtSessionOptionsAppendExecutionProvider_ROCM", "Ort::detail::OptionalTypeInfoImpl<OrtTypeInfo>::GetOptionalElementType").skip())
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
     }

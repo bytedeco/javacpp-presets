@@ -353,7 +353,7 @@ public class NvEncoderInitParam {
 
         sb.append("\n").append("\tprofile      : ").append(this.convertGUIDToString(this.profiles, this.profileNames, pParams.encodeConfig().profileGUID()))
                 .append("\n").append("\tchroma       : ").append(this.convertValueToString(chromaTypes, chromaNames, (NvCodecUtil.compareGUID(pParams.encodeGUID(), NV_ENC_CODEC_H264_GUID())) ? pParams.encodeConfig().encodeCodecConfig().h264Config().chromaFormatIDC() : pParams.encodeConfig().encodeCodecConfig().hevcConfig().chromaFormatIDC()))
-                .append("\n").append("\tbitdepth     : ").append((NvCodecUtil.compareGUID(pParams.encodeGUID(), NV_ENC_CODEC_H264_GUID()) ? 0 : pParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8()) + 8)
+//                .append("\n").append("\tbitdepth     : ").append((NvCodecUtil.compareGUID(pParams.encodeGUID(), NV_ENC_CODEC_H264_GUID()) ? 0 : pParams.encodeConfig().encodeCodecConfig().hevcConfig().pixelBitDepthMinus8()) + 8)
                 .append("\n").append("\trc           : ").append(this.convertValueToString(this.rcModes, this.rcModeNames, pParams.encodeConfig().rcParams().rateControlMode()));
 
         if (pParams.encodeConfig().rcParams().rateControlMode() == NV_ENC_PARAMS_RC_CONSTQP) {
@@ -578,7 +578,7 @@ public class NvEncoderInitParam {
 
         if (this.isCodecHEVC()) {
             if (eBufferFormat == NV_ENC_BUFFER_FORMAT_YUV420_10BIT || eBufferFormat == NV_ENC_BUFFER_FORMAT_YUV444_10BIT) {
-                config.encodeCodecConfig().hevcConfig().pixelBitDepthMinus8(2);
+//                config.encodeCodecConfig().hevcConfig().pixelBitDepthMinus8(2);
             }
         }
 
@@ -720,7 +720,7 @@ public class NvEncoderInitParam {
                     .append("    repeatSPSPPS: ").append(pConfig.encodeCodecConfig().hevcConfig().repeatSPSPPS()).append("\n")
                     .append("    enableIntraRefresh: ").append(pConfig.encodeCodecConfig().hevcConfig().enableIntraRefresh()).append("\n")
                     .append("    chromaFormatIDC: ").append(pConfig.encodeCodecConfig().hevcConfig().chromaFormatIDC()).append("\n")
-                    .append("    pixelBitDepthMinus8: ").append(pConfig.encodeCodecConfig().hevcConfig().pixelBitDepthMinus8()).append("\n")
+//                    .append("    pixelBitDepthMinus8: ").append(pConfig.encodeCodecConfig().hevcConfig().pixelBitDepthMinus8()).append("\n")
                     .append("    idrPeriod: ").append(pConfig.encodeCodecConfig().hevcConfig().idrPeriod()).append("\n")
                     .append("    intraRefreshPeriod: ").append(pConfig.encodeCodecConfig().hevcConfig().intraRefreshPeriod()).append("\n")
                     .append("    intraRefreshCnt: ").append(pConfig.encodeCodecConfig().hevcConfig().intraRefreshCnt()).append("\n")

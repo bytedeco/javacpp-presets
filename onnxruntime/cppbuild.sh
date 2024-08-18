@@ -10,6 +10,7 @@ fi
 export ARCH_FLAGS="--allow_running_as_root"
 export DNNL_FLAGS="--use_dnnl"
 export OPENMP_FLAGS= # "--use_openmp"
+export CUDAFLAGS="-v"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
 export CUDA_HOME="/usr/local/cuda"
 export CUDNN_HOME="/usr/local/cuda"
@@ -21,7 +22,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.16.3
+ONNXRUNTIME=1.18.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -75,6 +76,12 @@ sedinplace '/WX/d' cmake/CMakeLists.txt
 
 # allow cross compilation for linux-arm64
 sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
+sedinplace 's/is_linux() and platform.machine() == "x86_64"/False/g' tools/ci_build/build.py
+sedinplace 's/onnxruntime_target_platform STREQUAL "aarch64"/FALSE/g' cmake/CMakeLists.txt
+sedinplace 's/if (NOT APPLE)/if (FALSE)/g' cmake/onnxruntime_mlas.cmake
+sedinplace 's/!defined(__APPLE__)/0/g' onnxruntime/core/mlas/inc/mlas.h
+sedinplace 's/defined(__aarch64__) && defined(__linux__)/0/g' `find . -name *.cpp -o -name *.cc -o -name *.h`
+sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
@@ -82,12 +89,12 @@ patch -p1 < ../../../onnxruntime.patch
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
 sedinplace "s/return 'ON'/return 'OFF'/g" tools/ci_build/build.py
 sedinplace "s/Visual Studio 1. 20../Ninja/g" tools/ci_build/build.py
-sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_compile_flags.cmake cmake/onnxruntime_providers.cmake
-sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
-sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
-sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.3.4)/g' cmake/external/dnnl.cmake
+sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_compile_flags.cmake cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.5.3)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=SEQ/g' cmake/external/dnnl.cmake

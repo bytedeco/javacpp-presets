@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch</artifactId>
-  <version>2.1.2-${project.parent.version}</version>
+  <version>2.3.0-${project.parent.version}</version>
   <name>JavaCPP Presets for PyTorch</name>
 
   <dependencies>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.26-${project.parent.version}</version>
+      <version>0.3.28-${project.parent.version}</version>
     </dependency>
   </dependencies>
 
@@ -41,17 +41,17 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.26-${project.parent.version}</version>
+            <version>0.3.28-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.26.3-${project.parent.version}</version>
+            <version>2.0.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.12.1-${project.parent.version}</version>
+            <version>3.12.5-${project.parent.version}</version>
             <classifier>${os.name}-${os.arch}</classifier>
           </dependency>
         </dependencies>

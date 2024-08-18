@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Samuel Audet
+ * Copyright (C) 2018-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,9 +48,10 @@ import org.bytedeco.cuda.presets.nvrtc;
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeBase.h", "NvInferRuntimePlugin.h", "NvInferRuntimeCommon.h",
-                       "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
-            link = "nvinfer@.8",
-            preload = "nvinfer_builder_resource@.8.6.1"
+                       "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h"/*, "NvUtils.h"*/},
+            exclude = "NvInferRuntimeBase.h",
+            link = "nvinfer@.10",
+            preload = "nvinfer_builder_resource@.10.3.0"
         ),
         @Platform(
             value = "linux-arm64",
@@ -69,6 +70,8 @@ import org.bytedeco.cuda.presets.nvrtc;
         ),
         @Platform(
             value = "windows-x86_64",
+            link = "nvinfer_10",
+            preload = "nvinfer_builder_resource_10",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",
             linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/"
         )
@@ -93,13 +96,13 @@ public class nvinfer implements LoadEnabled, InfoMapper {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
-                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
-                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
             } else {
                 continue; // no CUDA
             }
@@ -123,10 +126,12 @@ public class nvinfer implements LoadEnabled, InfoMapper {
 
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char", "nvinfer1::AsciiChar").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
-               .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc", "nvinfer1::InterfaceKind",
+                             "nvinfer1::v_1_0::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("nvinfer1::NetworkDefinitionCreationFlags").cast().valueTypes("int"))
                .put(new Info("nvinfer1::PluginFormat").cast().valueTypes("TensorFormat", "int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("nvinfer1::safe::IPluginRegistry").pointerTypes("SafeIPluginRegistry"))
-               .put(new Info("nvinfer1::EnumMax", "nvinfer1::EnumMaxImpl").skip())
+               .put(new Info("nvinfer1::EnumMax", "nvinfer1::EnumMaxImpl", "nvinfer1::v_1_0::IPluginResource::operator =").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IDimensionExpr", "nvinfer1::IExprBuilder", "nvinfer1::IOptimizationProfile", "nvinfer1::ITensor", "nvinfer1::ILayer",
                              "nvinfer1::IConvolutionLayer", "nvinfer1::IFullyConnectedLayer", "nvinfer1::IActivationLayer", "nvinfer1::IPoolingLayer",
@@ -140,12 +145,15 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IAssertionLayer", "nvinfer1::IConditionLayer", "nvinfer1::IEinsumLayer", "nvinfer1::IIfConditional",
                              "nvinfer1::IIfConditionalBoundaryLayer", "nvinfer1::IIfConditionalInputLayer", "nvinfer1::IIfConditionalOutputLayer", "nvinfer1::IScatterLayer",
                              "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
-                             "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer").purify())
+                             "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer",
+                             "nvinfer1::IPluginV3Layer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
-                             "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator").virtualize())
+                             "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator", "nvinfer1::IVersionedInterface").virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
                              "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
+               .put(new Info("nvinfer1::IPluginRegistry::getAllCreators").javaText(
+                             "public native @Cast(\"nvinfer1::IPluginCreatorInterface*const*\") @NoException(true) PointerPointer getAllCreators(IntPointer numCreators);"))
         ;
     }
 }

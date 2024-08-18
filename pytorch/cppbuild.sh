@@ -35,7 +35,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.1.2
+PYTORCH_VERSION=2.3.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -52,9 +52,6 @@ git reset --hard
 git checkout v$PYTORCH_VERSION
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
-
-# https://github.com/pytorch/pytorch/pull/66219
-#patch -Np1 < ../../../pytorch.patch
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
@@ -74,7 +71,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             fi
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
-        elif [[ -f "$P/python/numpy/core/include/numpy/numpyconfig.h" ]]; then
+        elif [[ -f "$P/python/numpy/_core/include/numpy/numpyconfig.h" ]]; then
             NUMPY_PATH="$P"
         fi
     done
@@ -165,24 +162,11 @@ sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
 
-# work around some compiler bugs
-sedinplace 's/!defined(__INTEL_COMPILER))/!defined(__INTEL_COMPILER) \&\& (__GNUC__ < 11))/g' third_party/XNNPACK/src/xnnpack/intrinsics-polyfill.h
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
-sedinplace 's/typedef c10::variant/public: typedef c10::variant/g' ./torch/csrc/api/include/torch/nn/options/upsampling.h
-sedinplace 's/std::copysign/copysignf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/std::trunc/truncf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/std::floor/floorf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/std::ceil/ceilf/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/round(/roundf(/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/floor(/floorf(/g' aten/src/ATen/native/cuda/*.cu
-sedinplace 's/ceil(/ceilf(/g' aten/src/ATen/native/cuda/*.cu
-sedinplace '/#include <thrust\/device_vector.h>/a\
-#include <thrust\/host_vector.h>\
-' caffe2/utils/math_gpu.cu
 
 # allow setting the build directory and passing CUDA options
 sedinplace "s/BUILD_DIR = .build./BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
-sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
+sedinplace 's/var.startswith(("BUILD_", "USE_", "CMAKE_"))/var.startswith(("BUILD_", "USE_", "CMAKE_", "CUDA_"))/g' tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
 sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
