@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: HGuillemet/javacpp-presets/.github/actions/deploy-macosx@hg_pytorch
   macosx-x86_64:
-    runs-on: macos-13
+    runs-on: macos-12
     steps:
       - uses: HGuillemet/javacpp-presets/.github/actions/deploy-macosx@hg_pytorch
   windows-x86_64:

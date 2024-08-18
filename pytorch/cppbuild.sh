@@ -206,6 +206,11 @@ sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 # some windows header defines a macro named "interface"
 sedinplace 's/const std::string& interface)/const std::string\& interface_name)/g' torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
 
+# fix missing #include (Pytorch 2.4.0)
+sedinplace 's/#include <stdexcept>/#include <stdexcept>\
+#include <vector>\
+#include <unordered_map>/'  torch/csrc/distributed/c10d/control_plane/Handlers.cpp
+
 # Remove pytorch adaptations of FindOpenMP.cmake that.
 # On Windows without iomp and with new versions of VS 2019, including -openmp:experimental and libomp, causes
 # final binary to be linked to both libomp and vcomp and produce incorrect results.
