@@ -182,9 +182,14 @@ public class tensorflowlite implements InfoMapper, BuildEnabled {
 
                 // GPU support
                 // skip lines
-                .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip()
+                .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip())
 
-                );
+            // Define the macro to include the guarded code
+//                .put(new Info("TFLITE_GPU_ENABLE_INVOKE_LOOP").define(true))
+
+            // Map the field to make sure it is included in the generated JNI code
+            .put(new Info("gpu_invoke_loop_times").javaText("public int gpu_invoke_loop_times;"))
+            ;
 
                 if (!android) {
                     infoMap.put(new Info("delegate.h").linePatterns("#if defined\\(__ANDROID__\\)", "#endif").skip());
