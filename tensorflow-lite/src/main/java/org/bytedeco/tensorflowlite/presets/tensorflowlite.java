@@ -22,11 +22,7 @@
 
 package org.bytedeco.tensorflowlite.presets;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.*;
