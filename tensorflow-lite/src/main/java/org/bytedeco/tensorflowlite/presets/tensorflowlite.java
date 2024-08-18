@@ -188,14 +188,14 @@ public class tensorflowlite implements InfoMapper, BuildEnabled {
                 // GPU support
                 // skip lines
                 .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip())
-                .put(new Info("delegate.h").linePatterns("#if defined(__ANDROID__)", "#endif").skip())
+                .put(new Info("delegate.h").linePatterns("#if defined\\(__ANDROID__\\)", "#endif").skip())
 
                 // skip variables
 //                .put(new Info("FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL", "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL").skip())
 
-                .put(new Info("#ifdef TFLITE_DEBUG_DELEGATE").define(false))
+//                .put(new Info("#ifdef TFLITE_DEBUG_DELEGATE").define(false))
 //                .put(new Info("__ANDROID__").define(android))
-                .put(new Info("defined(__ANDROID__)").define(true))
+//                .put(new Info("defined(__ANDROID__)").define(true))
 
 
         ;
