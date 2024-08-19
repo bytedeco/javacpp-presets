@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>fr.apteryx</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>cpython-platform</artifactId>
   <version>3.12.5-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for CPython</name>
