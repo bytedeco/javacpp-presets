@@ -34,11 +34,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {cudart.class}, value = {
-    @Platform(include = {"cupti_result.h", "cupti_version.h", "cupti_activity.h", "cupti_callbacks.h", "cupti_events.h", "cupti_metrics.h", "cupti_driver_cbid.h", "cupti_runtime_cbid.h", "cupti_nvtx_cbid.h"}
-    ),
-    @Platform(value = "windows-x86_64", includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/include/"}),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, includepath = {"/usr/local/cuda-12.6/extras/CUPTI/include/", "/usr/local/cuda/extras/CUPTI/include/"}),
-    @Platform(value = "macosx-x86_64", includepath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/include/"),
+    @Platform(include = {"cupti_result.h", "cupti_version.h", "cupti_activity.h", "cupti_callbacks.h", "cupti_events.h", "cupti_metrics.h", "cupti_driver_cbid.h", "cupti_runtime_cbid.h", "cupti_nvtx_cbid.h"},
+              link = "cupti@.12"),
+    @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/include/", linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/lib64/"),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, includepath = {"/usr/local/cuda-12.6/extras/CUPTI/include/", "/usr/local/cuda/extras/CUPTI/include/"}, linkpath = {"/usr/local/cuda-12.6/extras/CUPTI/lib64/", "/usr/local/cuda/extras/CUPTI/lib64/"}),
+    @Platform(value = "macosx-x86_64", includepath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/include/", linkpath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/lib64/"),
 },
     target = "org.bytedeco.cuda.cupti", global = "org.bytedeco.cuda.global.cupti")
 @NoException
