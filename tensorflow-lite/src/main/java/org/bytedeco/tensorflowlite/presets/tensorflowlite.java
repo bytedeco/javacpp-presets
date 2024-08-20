@@ -179,20 +179,12 @@ public class tensorflowlite implements InfoMapper, BuildEnabled {
                 // Classes passed to some native functions as unique_ptr and that can be allocated Java-side
                .put(new Info("tflite::impl::Interpreter::Interpreter").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::impl::Interpreter>\")"))
                .put(new Info("tflite::Subgraph::Subgraph").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::Subgraph>\")"))
-
-                // GPU support
-                // skip lines
-                .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip())
-
-            // Define the macro to include the guarded code
-//                .put(new Info("TFLITE_GPU_ENABLE_INVOKE_LOOP").define(true))
-
-            // Map the field to make sure it is included in the generated JNI code
-            .put(new Info("gpu_invoke_loop_times").javaText("public int gpu_invoke_loop_times;"))
+               .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip())
+               .put(new Info("gpu_invoke_loop_times").javaText("public int gpu_invoke_loop_times;"))
             ;
 
-                if (!android) {
-                    infoMap.put(new Info("delegate.h").linePatterns("#if defined\\(__ANDROID__\\)", "#endif").skip());
-                }
+               if (!android) {
+                   infoMap.put(new Info("delegate.h").linePatterns("#if defined\\(__ANDROID__\\)", "#endif").skip());
+               }
     }
 }
