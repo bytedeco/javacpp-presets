@@ -185,6 +185,12 @@ public class tensorflowlite implements InfoMapper, BuildEnabled {
 
                if (!android) {
                    infoMap.put(new Info("delegate.h").linePatterns("#if defined\\(__ANDROID__\\)", "#endif").skip());
+               } else {
+                   infoMap.put(new Info("TfLiteGpuDelegateV2CreateAsync").cppTypes("TfLiteDelegate*").javaText(
+                           "#if defined(__ANDROID__)\n" +
+                                   "public static native @ByVal Pointer TfLiteGpuDelegateV2CreateAsync(@Const @ByRef TfLiteGpuDelegateOptionsV2 options);\n" +
+                                   "#endif"
+                   ));
                }
     }
 }
