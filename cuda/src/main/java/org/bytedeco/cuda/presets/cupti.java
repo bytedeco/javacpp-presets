@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2022 Samuel Audet
+ * Copyright (C) 2024 Hervé Guillemet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
  *
- * @author Samuel Audet
+ * @author Hervé Guillemet
  */
 @Properties(inherit = {cudart.class}, value = {
     @Platform(include = {"cupti_result.h", "cupti_version.h", "cupti_activity.h", "cupti_callbacks.h", "cupti_events.h", "cupti_metrics.h", "cupti_driver_cbid.h", "cupti_runtime_cbid.h", "cupti_nvtx_cbid.h"},
