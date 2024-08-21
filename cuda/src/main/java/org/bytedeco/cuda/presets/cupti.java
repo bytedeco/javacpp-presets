@@ -38,7 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               link = "cupti@.12"),
     @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/include/", linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/lib64/"),
     @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, includepath = {"/usr/local/cuda-12.6/extras/CUPTI/include/", "/usr/local/cuda/extras/CUPTI/include/"}, linkpath = {"/usr/local/cuda-12.6/extras/CUPTI/lib64/", "/usr/local/cuda/extras/CUPTI/lib64/"}),
-    @Platform(value = "macosx-x86_64", includepath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/include/", linkpath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/lib64/"),
+    @Platform(value = "macosx-x86_64", includepath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/include/", linkpath = "/Developer/NVIDIA/CUDA-12.6/extras/CUPTI/lib64/",
+              preload = "cupti64_2024.3.0", preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib64/"),
 },
     target = "org.bytedeco.cuda.cupti", global = "org.bytedeco.cuda.global.cupti")
 @NoException
