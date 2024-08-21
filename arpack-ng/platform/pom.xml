@@ -55,12 +55,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-arm64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-ppc64le}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-ppc64le}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -140,7 +140,7 @@
                       requires static org.bytedeco.${javacpp.packageName}.linux.x86_64;
 //                      requires static org.bytedeco.${javacpp.packageName}.linux.armhf;
                       requires static org.bytedeco.${javacpp.packageName}.linux.arm64;
-                      requires static org.bytedeco.${javacpp.packageName}.linux.ppc64le;
+//                      requires static org.bytedeco.${javacpp.packageName}.linux.ppc64le;
                       requires static org.bytedeco.${javacpp.packageName}.macosx.x86_64;
 //                      requires static org.bytedeco.${javacpp.packageName}.windows.x86;
                       requires static org.bytedeco.${javacpp.packageName}.windows.x86_64;
