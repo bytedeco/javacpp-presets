@@ -235,6 +235,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         ).skip())
         ;
 
+        // compile-time only constexpr
+        infoMap.put(new Info("c10::cuda::max_compile_time_stream_priorities").skip());
+
         infoMap
             .put(new Info("USE_CUDNN_RNN_V8_API").define()) // Using CuDNN 8.9.7 or more recent
             .put(new Info("defined(IS_NCCL_EXP) && defined(NCCL_COMM_DUMP)").define(false))
