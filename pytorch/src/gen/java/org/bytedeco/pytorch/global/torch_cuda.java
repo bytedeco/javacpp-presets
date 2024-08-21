@@ -4,7 +4,6 @@ package org.bytedeco.pytorch.global;
 
 import org.bytedeco.pytorch.cuda.*;
 
-import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -27,6 +26,8 @@ import org.bytedeco.cuda.cusparse.*;
 import static org.bytedeco.cuda.global.cusparse.*;
 import org.bytedeco.cuda.cusolver.*;
 import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
     static { Loader.load(); }
@@ -582,8 +583,7 @@ manage their own state. There is only a single CUDA context/state.
  * a kernel on the same stream from two different threads.
  */
 
-@Namespace("c10::cuda") @MemberGetter public static native int max_compile_time_stream_priorities();
-public static final int max_compile_time_stream_priorities = max_compile_time_stream_priorities();
+
 // Targeting ../cuda/CUDAStream.java
 
 

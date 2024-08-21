@@ -50,7 +50,7 @@ public class StrideVaryingShape extends Pointer {
 
   public native @Cast("const std::optional<c10::VaryingShape<c10::Stride>::ListOfOptionalElements>*") @ByRef Pointer sizes();
 
-  
+  public native @ByVal StrideVaryingShape merge(@Const @ByRef StrideVaryingShape other);
 
   public native @ByVal StrideVectorOptional concrete_sizes();
 

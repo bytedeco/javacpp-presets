@@ -2,7 +2,6 @@
 
 package org.bytedeco.pytorch.cuda;
 
-import org.bytedeco.pytorch.*;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -25,6 +24,8 @@ import org.bytedeco.cuda.cusparse.*;
 import static org.bytedeco.cuda.global.cusparse.*;
 import org.bytedeco.cuda.cusolver.*;
 import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
