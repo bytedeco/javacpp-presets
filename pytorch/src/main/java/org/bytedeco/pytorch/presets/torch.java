@@ -205,6 +205,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("nvrtc") ? "64_120_0"
                     : lib.equals("nvrtc-builtins") ? "64_126"
                     : lib.equals("nvJitLink") ? "_120_0"
+                    : lib.equals("cupti") ? "64_2024.3.0"
                     : "64_12";
             } else {
                 continue; // no CUDA

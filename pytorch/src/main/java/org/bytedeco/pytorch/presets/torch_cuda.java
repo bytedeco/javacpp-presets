@@ -22,6 +22,7 @@
 package org.bytedeco.pytorch.presets;
 
 import org.bytedeco.cuda.presets.cudnn;
+import org.bytedeco.cuda.presets.cupti;
 import org.bytedeco.cuda.presets.cusolver;
 import org.bytedeco.cuda.presets.cusparse;
 import org.bytedeco.javacpp.ClassProperties;
@@ -36,7 +37,7 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
  * @author Hervé Guillemet
  */
 @Properties(
-    inherit = { torch.class, cudnn.class, cusparse.class, cusolver.class },
+    inherit = { torch.class, cudnn.class, cusparse.class, cusolver.class, cupti.class },
     value = {
         @Platform(
             extension = "-gpu",
