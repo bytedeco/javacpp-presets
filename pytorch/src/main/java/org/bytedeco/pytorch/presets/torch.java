@@ -2726,8 +2726,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
         infoMap.put(new Info("caffe2::TypeMeta::deleteFn").javaText("public native @NoException(true) PointerConsumer deleteFn();")); // Parser picks up the wrong Delete
 
-        infoMap.put(new Info("c10::VaryingShape<c10::Stride>::merge").skip()); // https://github.com/pytorch/pytorch/issues/123248, waiting for the fix in 2.3.1 or 2.4
-
         //// Different C++ API between platforms
         // This will produce different Java codes, but as long as the differences only concern
         // JavaCPP annotations, we don't care.
