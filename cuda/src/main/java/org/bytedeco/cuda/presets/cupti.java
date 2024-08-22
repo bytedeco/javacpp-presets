@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Hervé Guillemet
  */
-@Properties(inherit = {cudart.class}, value = {
+@Properties(inherit = cudart.class, value = {
     @Platform(include = {"cupti_result.h", "cupti_version.h", "cupti_activity.h", "cupti_callbacks.h", "cupti_events.h", "cupti_metrics.h", "cupti_driver_cbid.h", "cupti_runtime_cbid.h", "cupti_nvtx_cbid.h"},
               link = "cupti@.12"),
     @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/include/", linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/lib64/",
