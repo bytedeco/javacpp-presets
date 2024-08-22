@@ -1,4 +1,5 @@
 
+ * Add presets for the CUPTI module of CUDA ([pull #1531](https://github.com/bytedeco/javacpp-presets/pull/1531))
  * Add new `ClangMemoryMgmtExample` in samples for LLVM ([pull #1522](https://github.com/bytedeco/javacpp-presets/pull/1522))
  * Enable `opencv_python3` module for `macosx-arm64` as well ([pull #1517](https://github.com/bytedeco/javacpp-presets/pull/1517))
  * Introduce `macosx-arm64` builds for CPython ([pull #1511](https://github.com/bytedeco/javacpp-presets/pull/1511)), NumPy ([pull #1515](https://github.com/bytedeco/javacpp-presets/pull/1515)), SciPy ([pull #1516](https://github.com/bytedeco/javacpp-presets/pull/1516))

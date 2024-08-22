@@ -6,6 +6,7 @@ module org.bytedeco.cuda {
   exports org.bytedeco.cuda.cudart;
   exports org.bytedeco.cuda.cudnn;
   exports org.bytedeco.cuda.cufftw;
+  exports org.bytedeco.cuda.cupti;
   exports org.bytedeco.cuda.curand;
   exports org.bytedeco.cuda.cusolver;
   exports org.bytedeco.cuda.cusparse;
