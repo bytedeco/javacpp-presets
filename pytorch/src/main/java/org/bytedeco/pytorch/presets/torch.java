@@ -112,7 +112,7 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = "windows",
-            preload = { "uv" }
+            preload = { "uv", "asmjit", "fbgemm" }
         ),
         @Platform(
             value = "linux",
@@ -122,7 +122,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = "windows",
             extension = "-gpu",
-            preload = { "uv", "c10_cuda", "torch_cuda" }
+            preload = { "uv", "asmjit", "fbgemm", "c10_cuda", "torch_cuda" }
         )
     },
     target = "org.bytedeco.pytorch",
