@@ -104,10 +104,11 @@ import org.bytedeco.openblas.presets.openblas;
             extension = "-gpu"
         ),
         @Platform(
-            value = {"linux"}
+            value = "linux",
+            preload = { "gomp@.1" }
         ),
         @Platform(
-            value = {"macosx"},
+            value = "macosx",
             preload = { "iomp5" }
         ),
         @Platform(
@@ -117,7 +118,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = "linux",
             extension = "-gpu",
-            preload = { "c10_cuda", "torch_cuda" }
+            preload = { "gomp@.1", "c10_cuda", "torch_cuda" }
         ),
         @Platform(
             value = "windows",
