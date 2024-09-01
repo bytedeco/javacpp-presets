@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -24,7 +25,7 @@ public class DoubleComplexElementReference extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleComplexElementReference(Pointer p) { super(p); }
 
-  public native @Name("operator std::conditional_t<std::is_reference<c10::detail::ivalue_to_const_ref_overload_return<c10::complex<double> >::type>::value,const c10::complex<double>&,c10::complex<double> >") @ByVal DoubleComplex getDoubleComplex();
+  public native @Name("operator std::conditional_t<std::is_reference_v<c10::detail::ivalue_to_const_ref_overload_return<c10::complex<double> >::type>,const c10::complex<double>&,c10::complex<double> >") @ByVal DoubleComplex getDoubleComplex();
 
   
 
@@ -35,7 +36,7 @@ public class DoubleComplexElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace void swap(@ByRef(true) DoubleComplexElementReference lhs, @ByRef(true) DoubleComplexElementReference rhs);
+  private static native @Namespace @NoException(true) void swap(@ByRef(true) DoubleComplexElementReference lhs, @ByRef(true) DoubleComplexElementReference rhs);
   public void swap(DoubleComplexElementReference rhs) { swap(this, rhs); }
 
   

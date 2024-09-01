@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -34,4 +35,14 @@ public class AcceleratorHooksInterface extends Pointer {
 
   // Whether the device at device_index is fully initialized or not.
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+
+  public native @Cast("c10::DeviceIndex") byte deviceCount();
+
+  public native void setCurrentDevice(@Cast("c10::DeviceIndex") byte device);
+
+  public native @Cast("c10::DeviceIndex") byte getCurrentDevice();
+
+  public native @Cast("c10::DeviceIndex") byte exchangeDevice(@Cast("c10::DeviceIndex") byte device);
+
+  public native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte device);
 }

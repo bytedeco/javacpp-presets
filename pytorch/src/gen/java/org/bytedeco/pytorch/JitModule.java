@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -35,8 +36,8 @@ public class JitModule extends JitObject {
 
   public JitModule(@ByVal QualifiedName class_name) { super((Pointer)null); allocate(class_name); }
   private native void allocate(@ByVal QualifiedName class_name);
-  public JitModule(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }
-  private native void allocate(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
+  public JitModule(@SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }
+  private native void allocate(@SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   public JitModule() { super((Pointer)null); allocate(); }
   private native void allocate();
   public JitModule(@Const @ByRef JitModule arg0) { super((Pointer)null); allocate(arg0); }
@@ -44,20 +45,20 @@ public class JitModule extends JitObject {
   public native @ByRef @Name("operator =") JitModule put(@Const @ByRef JitModule arg0);
   public JitModule(
         @ByVal QualifiedName arg0,
-        @SharedPtr CompilationUnit cu,
+        @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
         @Cast("bool") boolean shouldMangle/*=false*/) { super((Pointer)null); allocate(arg0, cu, shouldMangle); }
   private native void allocate(
         @ByVal QualifiedName arg0,
-        @SharedPtr CompilationUnit cu,
+        @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
         @Cast("bool") boolean shouldMangle/*=false*/);
   public JitModule(
         @ByVal QualifiedName arg0,
-        @SharedPtr CompilationUnit cu) { super((Pointer)null); allocate(arg0, cu); }
+        @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu) { super((Pointer)null); allocate(arg0, cu); }
   private native void allocate(
         @ByVal QualifiedName arg0,
-        @SharedPtr CompilationUnit cu);
-  public JitModule(@ByVal @Cast("torch::jit::ModulePtr*") ObjPtr module_value) { super((Pointer)null); allocate(module_value); }
-  private native void allocate(@ByVal @Cast("torch::jit::ModulePtr*") ObjPtr module_value);
+        @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu);
+  public JitModule(@IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj module_value) { super((Pointer)null); allocate(module_value); }
+  private native void allocate(@IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj module_value);
 
   public native void set_optimized(@Cast("bool") boolean o);
 
@@ -224,7 +225,7 @@ public class JitModule extends JitObject {
 
   public native @ByVal JitModule copy();
 
-  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal JitModule deepcopy();
 
   // Clones both the underlying `ClassType` and the module instance(data), this

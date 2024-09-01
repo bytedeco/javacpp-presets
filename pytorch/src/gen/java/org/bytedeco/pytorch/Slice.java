@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -34,13 +35,13 @@ public class Slice extends Pointer {
     }
 
   public Slice(
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index) { super((Pointer)null); allocate(start_index, stop_index, step_index); }
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index) { super((Pointer)null); allocate(start_index, stop_index, step_index); }
   private native void allocate(
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index);
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index);
   public Slice() { super((Pointer)null); allocate(); }
   private native void allocate();
 

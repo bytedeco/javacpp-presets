@@ -2,12 +2,6 @@
 
 package org.bytedeco.pytorch.cuda;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -16,8 +10,22 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
@@ -42,12 +50,12 @@ public class SegmentInfo extends Pointer {
     }
 
   public native byte device(); public native SegmentInfo device(byte setter);
-  public native @Cast("int64_t") @Name("address") long _address(); public native SegmentInfo _address(long setter);
-  public native @Cast("int64_t") long total_size(); public native SegmentInfo total_size(long setter);
-  public native @Cast("int64_t") long requested_size(); public native SegmentInfo requested_size(long setter); // unrounded, actually requested size
-  public native @Cast("int64_t") long allocated_size(); public native SegmentInfo allocated_size(long setter);
-  public native @Cast("int64_t") long active_size(); public native SegmentInfo active_size(long setter);
-  public native @Cast("cudaStream_t") Pointer stream(); public native SegmentInfo stream(Pointer setter);
+  public native @Cast("size_t") @Name("address") long _address(); public native SegmentInfo _address(long setter);
+  public native @Cast("size_t") long total_size(); public native SegmentInfo total_size(long setter);
+  public native @Cast("size_t") long requested_size(); public native SegmentInfo requested_size(long setter); // unrounded, actually requested size
+  public native @Cast("size_t") long allocated_size(); public native SegmentInfo allocated_size(long setter);
+  public native @Cast("size_t") long active_size(); public native SegmentInfo active_size(long setter);
+  public native CUstream_st stream(); public native SegmentInfo stream(CUstream_st setter);
   public native @Cast("bool") boolean is_large(); public native SegmentInfo is_large(boolean setter);
   public native @Cast("bool") boolean is_expandable(); public native SegmentInfo is_expandable(boolean setter);
   public native @ByRef @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair owner_private_pool_id(); public native SegmentInfo owner_private_pool_id(DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair setter);

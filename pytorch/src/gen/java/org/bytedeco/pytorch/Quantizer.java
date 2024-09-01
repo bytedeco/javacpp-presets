@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -48,10 +49,11 @@ public class Quantizer extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Quantizer(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
   @MemberGetter public native ScalarType scalar_type_();
 
   // Copied from torch/csrc/jit/ir/scope.h
-  public native @ByVal QuantizerPtr intrusive_from_this();
+  public native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer intrusive_from_this();
 
   /**
    * Each concrete Quantizer type should have a unique QScheme type.
@@ -78,5 +80,5 @@ public class Quantizer extends Pointer {
   /**
    * Compare against {@code other} for equality.
    */
-  public native @Cast("bool") boolean equalTo(@ByVal QuantizerPtr other);
+  public native @Cast("bool") boolean equalTo(@IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer other);
 }

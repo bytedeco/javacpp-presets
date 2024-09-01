@@ -2,12 +2,6 @@
 
 package org.bytedeco.pytorch.cuda;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -16,8 +10,22 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
@@ -40,6 +48,6 @@ public class trace_time_ extends Pointer {
         return new trace_time_((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("c10::time_t") long t_(); public native trace_time_ t_(long setter);
+  public native @ByRef @Cast("time_t*") Pointer t_(); public native trace_time_ t_(Pointer setter);
   public native @Cast("c10::approx_time_t") long approx_t_(); public native trace_time_ approx_t_(long setter);
 }

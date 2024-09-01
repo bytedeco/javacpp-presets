@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -52,8 +53,8 @@ public class SymInt extends Pointer {
 private native void allocate(@Cast("int64_t") long d);
   public SymInt() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public SymInt(@ByVal SymNode n) { super((Pointer)null); allocate(n); }
-  private native void allocate(@ByVal SymNode n);
+  public SymInt(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode n) { super((Pointer)null); allocate(n); }
+  private native void allocate(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode n);
 
   // unchecked c-tor accepting raw `data_`
   // One appropriate use for this is when you are constructing a symint
@@ -71,17 +72,17 @@ private native void allocate(@Cast("int64_t") long d);
 
   public native @ByRef @Name("operator =") SymInt put(@Const @ByRef SymInt s);
 
-  public native SymNodeImpl toSymNodeImplUnowned();
+  public native SymNode toSymNodeImplUnowned();
 
   public native void release_();
 
   
 
   // Only valid if is_heap_allocated()
-  public native @ByVal SymNode toSymNode();
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode toSymNode();
 
   // Guaranteed to return a SymNode, wrapping using base if necessary
-  public native @ByVal SymNode wrap_node(@Const @ByRef SymNode base);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode wrap_node(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode base);
 
   // Require the int to be non-symbolic, and if it is symbolic raise an
   // error.  This is safe to use for C++ code that doesn't work for symbolic

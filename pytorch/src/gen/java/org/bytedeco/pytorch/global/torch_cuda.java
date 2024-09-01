@@ -4,12 +4,6 @@ package org.bytedeco.pytorch.global;
 
 import org.bytedeco.pytorch.cuda.*;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -18,8 +12,22 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
     static { Loader.load(); }
@@ -110,231 +118,23 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
  // namespace c10
 
 
-// Parsed from ATen/cuda/CUDAContextLight.h
-
-// #pragma once
-// Light-weight version of CUDAContext.h with fewer transitive includes
-
-// #include <cstdint>
-
-// #include <cuda_runtime_api.h>
-// #include <cusparse.h>
-// #include <cublas_v2.h>
-
-// cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
-// added bf16 support
-// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
-// #include <cublasLt.h>
-// #endif
-
-// #ifdef CUDART_VERSION
-// #include <cusolverDn.h>
-// #endif
-
-// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
-// #include <hipsolver/hipsolver.h>
-// #endif
-
-// #include <c10/core/Allocator.h>
-// #include <c10/cuda/CUDAFunctions.h>
-
-
-/*
-A common CUDA interface for ATen.
-
-This interface is distinct from CUDAHooks, which defines an interface that links
-to both CPU-only and CUDA builds. That interface is intended for runtime
-dispatch and should be used from files that are included in both CPU-only and
-CUDA builds.
-
-CUDAContext, on the other hand, should be preferred by files only included in
-CUDA builds. It is intended to expose CUDA functionality in a consistent
-manner.
-
-This means there is some overlap between the CUDAContext and CUDAHooks, but
-the choice of which to use is simple: use CUDAContext when in a CUDA-only file,
-use CUDAHooks otherwise.
-
-Note that CUDAContext simply defines an interface with no associated class.
-It is expected that the modules whose functions compose this interface will
-manage their own state. There is only a single CUDA context/state.
-*/
-
-/**
- * DEPRECATED: use device_count() instead
- */
-@Namespace("at::cuda") public static native @Cast("int64_t") long getNumGPUs();
-
-/**
- * CUDA is available if we compiled with CUDA, and there are one or more
- * devices.  If we compiled with CUDA but there is a driver problem, etc.,
- * this function will report CUDA is not available (rather than raise an error.)
- */
-@Namespace("at::cuda") public static native @Cast("bool") boolean is_available();
-
-@Namespace("at::cuda") public static native Pointer getCurrentDeviceProperties();
-
-@Namespace("at::cuda") public static native int warp_size();
-
-@Namespace("at::cuda") public static native Pointer getDeviceProperties(byte device);
-
-@Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
-    byte device,
-    byte peer_device);
-
-@Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
-
-/* Handles */
-@Namespace("at::cuda") public static native @Cast("cusparseHandle_t") Pointer getCurrentCUDASparseHandle();
-@Namespace("at::cuda") public static native @Cast("cublasHandle_t") Pointer getCurrentCUDABlasHandle();
-// #if (!defined(USE_ROCM) && !defined(_MSC_VER)) || (defined(USE_ROCM) && ROCM_VERSION >= 50700)
-
-// #endif
-
-@Namespace("at::cuda") public static native void clearCublasWorkspaces();
-
-// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
-@Namespace("at::cuda") public static native @Cast("cusolverDnHandle_t") Pointer getCurrentCUDASolverDnHandle();
-// #endif
-
- // namespace at::cuda
-
-
-// Parsed from c10/cuda/CUDAStream.h
+// Parsed from ATen/cudnn/cudnn-wrapper.h
 
 // #pragma once
 
-// #include <cstdint>
-// #include <utility>
+// #include <cudnn.h>
 
-// #include <cuda_runtime_api.h>
+// #define STRINGIFY(x) #x
+// #define STRING(x) STRINGIFY(x)
 
-// #include <c10/core/DeviceGuard.h>
-// #include <c10/core/Stream.h>
-// #include <c10/cuda/CUDAFunctions.h>
-// #include <c10/util/Exception.h>
+// #if CUDNN_MAJOR < 6
+// #pragma message ("CuDNN v" STRING(CUDNN_MAJOR) " found, but need at least CuDNN v6. You can get the latest version of CuDNN from https://developer.nvidia.com/cudnn or disable CuDNN with USE_CUDNN=0")
+// #pragma message "We strongly encourage you to move to 6.0 and above."
+// #pragma message "This message is intended to annoy you enough to update."
+// #endif
 
-/*
- * Stream pool note.
- *
- * A CUDAStream is an abstraction of an actual cuStream on the GPU. CUDAStreams
- * are backed by cuStreams, but they use several pools to minimize the costs
- * associated with creating, retaining, and destroying cuStreams.
- *
- * There are three pools per device, and a device's pools are lazily created.
- *
- * The first pool contains only the default stream. When the default stream
- * is requested it's returned.
- *
- * The second pool is the "low priority" or "default priority" streams. In
- * HIP builds there is no distinction between streams in this pool and streams
- * in the third pool (below). There are 32 of these streams per device, and
- * when a stream is requested one of these streams is returned round-robin.
- * That is, the first stream requested is at index 0, the second at index 1...
- * to index 31, then index 0 again.
- *
- * This means that if 33 low priority streams are requested, the first and
- * last streams requested are actually the same stream (under the covers)
- * and kernels enqueued on them cannot run concurrently.
- *
- * The third pool is the "high priority" streams. The third pool acts like
- * the second pool except the streams are created with a higher priority.
- *
- * These pools suggest that stream users should prefer many short-lived streams,
- * as the cost of acquiring and releasing streams is effectively zero. If
- * many longer-lived streams are required in performance critical scenarios
- * then the functionality here may need to be extended to allow, for example,
- * "reserving" a subset of the pool so that other streams do not accidentally
- * overlap the performance critical streams.
- *
- * Note: although the notion of "current stream for device" is thread local
- * (every OS thread has a separate current stream, as one might expect),
- * the stream pool is global across all threads; stream 0 is always stream 0
- * no matter which thread you use it on.  Multiple threads can synchronize
- * on the same stream.  Although the CUDA documentation is not very clear
- * on the matter, streams are thread safe; e.g., it is safe to enqueue
- * a kernel on the same stream from two different threads.
- */
-
-@Namespace("c10::cuda") @MemberGetter public static native int max_compile_time_stream_priorities();
-public static final int max_compile_time_stream_priorities = max_compile_time_stream_priorities();
-// Targeting ../cuda/CUDAStream.java
-
-
-
-/**
- * Get a new stream from the CUDA stream pool.  You can think of this
- * as "creating" a new stream, but no such creation actually happens;
- * instead, streams are preallocated from the pool and returned in a
- * round-robin fashion.
- *
- * You can request a stream from the high priority pool by setting
- * isHighPriority to true, or a stream for a specific device by setting device
- * (defaulting to the current CUDA stream.)
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(@Cast("const bool") boolean isHighPriority/*=false*/, byte device/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool();
-// no default priority to disambiguate overloads
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority, byte device/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority);
-
-/**
- * Get a CUDAStream from a externally allocated one.
- *
- * This is mainly for interoperability with different libraries where we
- * want to operate on a non-torch allocated stream for data exchange or similar
- * purposes
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromExternal(@Cast("cudaStream_t") Pointer ext_stream, byte device_index);
-
-/**
- * Get the default CUDA stream, for the passed CUDA device, or for the
- * current device if no device index is passed.  The default stream is
- * where most computation occurs when you aren't explicitly using
- * streams.
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream(byte device_index/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream();
-
-/**
- * Get the current CUDA stream, for the passed CUDA device, or for the
- * current device if no device index is passed.  The current CUDA stream
- * will usually be the default CUDA stream for the device, but it may
- * be different if someone called 'setCurrentCUDAStream' or used 'StreamGuard'
- * or 'CUDAStreamGuard'.
- */
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream(byte device_index/*=-1*/);
-@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream();
-
-/**
- * Set the current stream on the device of the passed in stream to be
- * the passed in stream.  Yes, you read that right: this function
- * has *nothing* to do with the current device: it toggles the current
- * stream of the device of the passed stream.
- *
- * Confused?  Avoid using this function; prefer using 'CUDAStreamGuard' instead
- * (which will switch both your current device and current stream in the way you
- * expect, and reset it back to its original state afterwards).
- */
-@Namespace("c10::cuda") public static native void setCurrentCUDAStream(@ByVal CUDAStream stream);
-
-@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef CUDAStream s);
-
- // namespace c10::cuda
- // namespace std
-
-
-// Parsed from ATen/cuda/CUDAContext.h
-
-// #pragma once
-
-// #include <ATen/cuda/CUDAContextLight.h>
-
-// Preserved for BC, as many files depend on these includes
-// #include <ATen/Context.h>
-// #include <c10/cuda/CUDAStream.h>
-// #include <c10/util/Logging.h>
-// #include <ATen/cuda/Exceptions.h>
+// #undef STRINGIFY
+// #undef STRING
 
 
 // Parsed from c10/core/impl/GPUTrace.h
@@ -344,6 +144,53 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 // #include <c10/core/impl/PyInterpreter.h>
 
  // namespace c10::impl
+
+
+// Parsed from c10/cuda/CUDAMacros.h
+
+// #pragma once
+
+// #ifndef C10_USING_CUSTOM_GENERATED_MACROS
+
+// We have not yet modified the AMD HIP build to generate this file so
+// we add an extra option to specifically ignore it.
+// #ifndef C10_CUDA_NO_CMAKE_CONFIGURE_FILE
+// #include <c10/cuda/impl/cuda_cmake_macros.h>
+// #endif // C10_CUDA_NO_CMAKE_CONFIGURE_FILE
+
+// #endif
+
+// See c10/macros/Export.h for a detailed explanation of what the function
+// of these macros are.  We need one set of macros for every separate library
+// we build.
+
+// #ifdef _WIN32
+// #else // _WIN32
+// #if defined(__GNUC__)
+// #define C10_CUDA_EXPORT __attribute__((__visibility__("default")))
+// #else // defined(__GNUC__)
+// #define C10_CUDA_EXPORT
+// #endif // defined(__GNUC__)
+// #define C10_CUDA_IMPORT C10_CUDA_EXPORT
+// #endif // _WIN32
+
+// This one is being used by libc10_cuda.so
+// #ifdef C10_CUDA_BUILD_MAIN_LIB
+// #define C10_CUDA_API C10_CUDA_EXPORT
+// #else
+// #define C10_CUDA_API C10_CUDA_IMPORT
+// #endif
+
+/**
+ * The maximum number of GPUs that we recognizes. Increasing this beyond the
+ * initial limit of 16 broke Caffe2 testing, hence the ifdef guards.
+ * This value cannot be more than 128 because our DeviceIndex is a uint8_t.
+o */
+// #ifdef FBCODE_CAFFE2
+// fbcode depends on this value being 16
+public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
+// #else
+// #endif
 
 
 // Parsed from c10/cuda/CUDADeviceAssertionHost.h
@@ -396,63 +243,6 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
 // #define TORCH_DSA_KERNEL_ARGS_PASS assertions_data, assertion_caller_id
 
 
-// Parsed from c10/cuda/CUDAMacros.h
-
-// #pragma once
-
-// #ifndef C10_USING_CUSTOM_GENERATED_MACROS
-
-// We have not yet modified the AMD HIP build to generate this file so
-// we add an extra option to specifically ignore it.
-// #ifndef C10_CUDA_NO_CMAKE_CONFIGURE_FILE
-// #include <c10/cuda/impl/cuda_cmake_macros.h>
-// #endif // C10_CUDA_NO_CMAKE_CONFIGURE_FILE
-
-// #endif
-
-// See c10/macros/Export.h for a detailed explanation of what the function
-// of these macros are.  We need one set of macros for every separate library
-// we build.
-
-// #ifdef _WIN32
-// #else // _WIN32
-// #if defined(__GNUC__)
-// #define C10_CUDA_EXPORT __attribute__((__visibility__("default")))
-// #else // defined(__GNUC__)
-// #define C10_CUDA_EXPORT
-// #endif // defined(__GNUC__)
-// #define C10_CUDA_IMPORT C10_CUDA_EXPORT
-// #endif // _WIN32
-
-// This one is being used by libc10_cuda.so
-// #ifdef C10_CUDA_BUILD_MAIN_LIB
-// #define C10_CUDA_API C10_CUDA_EXPORT
-// #else
-// #define C10_CUDA_API C10_CUDA_IMPORT
-// #endif
-
-/**
- * The maximum number of GPUs that we recognizes. Increasing this beyond the
- * initial limit of 16 broke Caffe2 testing, hence the ifdef guards.
- * This value cannot be more than 128 because our DeviceIndex is a uint8_t.
-o */
-// #ifdef FBCODE_CAFFE2
-// fbcode depends on this value being 16
-public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
-// #else
-// #endif
-
-
-// Parsed from c10/cuda/impl/cuda_cmake_macros.h
-
-// #pragma once
-
-// Automatically generated header file for the C10 CUDA library.  Do not
-// include this file directly.  Instead, include c10/cuda/CUDAMacros.h
-
-// #define C10_CUDA_BUILD_SHARED_LIBS
-
-
 // Parsed from c10/cuda/CUDAMiscFunctions.h
 
 // #pragma once
@@ -477,9 +267,17 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <c10/util/Exception.h>
 // #include <c10/util/irange.h>
 // #include <cuda.h>
-// Targeting ../cuda/CUDAError.java
 
+// Note [CHECK macro]
+// ~~~~~~~~~~~~~~~~~~
+// This is a macro so that AT_ERROR can get accurate __LINE__
+// and __FILE__ information.  We could split this into a short
+// macro and a function implementation if we pass along __LINE__
+// and __FILE__, but no one has found this worth doing.
 
+// Used to denote errors from CUDA framework.
+// This needs to be declared here instead util/Exception.h for proper conversion
+// during hipify.
  // namespace c10
 
 // #define C10_CUDA_CHECK(EXPR)
@@ -637,14 +435,219 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
     @Const Pointer src,
     @Cast("int64_t") long nbytes,
     @Cast("cudaMemcpyKind") int kind,
-    @Cast("cudaStream_t") Pointer stream);
+    CUstream_st stream);
 
-@Namespace("c10::cuda") public static native void stream_synchronize(@Cast("cudaStream_t") Pointer stream);
+@Namespace("c10::cuda") public static native void stream_synchronize(CUstream_st stream);
 
 @Namespace("c10::cuda") public static native @Cast("bool") boolean hasPrimaryContext(byte device_index);
 @Namespace("c10::cuda") public static native @ByVal ByteOptional getDeviceIndexWithPrimaryContext();
 
  // namespace c10::cuda
+
+
+// Parsed from ATen/cuda/CUDAContextLight.h
+
+// #pragma once
+// Light-weight version of CUDAContext.h with fewer transitive includes
+
+// #include <cstdint>
+
+// #include <cuda_runtime_api.h>
+// #include <cusparse.h>
+// #include <cublas_v2.h>
+
+// cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
+// added bf16 support
+// #include <cublasLt.h>
+
+// #ifdef CUDART_VERSION
+// #include <cusolverDn.h>
+// #endif
+
+// #if defined(USE_ROCM)
+// #endif
+
+// #include <c10/core/Allocator.h>
+// #include <c10/cuda/CUDAFunctions.h>
+
+
+/*
+A common CUDA interface for ATen.
+
+This interface is distinct from CUDAHooks, which defines an interface that links
+to both CPU-only and CUDA builds. That interface is intended for runtime
+dispatch and should be used from files that are included in both CPU-only and
+CUDA builds.
+
+CUDAContext, on the other hand, should be preferred by files only included in
+CUDA builds. It is intended to expose CUDA functionality in a consistent
+manner.
+
+This means there is some overlap between the CUDAContext and CUDAHooks, but
+the choice of which to use is simple: use CUDAContext when in a CUDA-only file,
+use CUDAHooks otherwise.
+
+Note that CUDAContext simply defines an interface with no associated class.
+It is expected that the modules whose functions compose this interface will
+manage their own state. There is only a single CUDA context/state.
+*/
+
+/**
+ * DEPRECATED: use device_count() instead
+ */
+@Namespace("at::cuda") public static native @Cast("int64_t") long getNumGPUs();
+
+/**
+ * CUDA is available if we compiled with CUDA, and there are one or more
+ * devices.  If we compiled with CUDA but there is a driver problem, etc.,
+ * this function will report CUDA is not available (rather than raise an error.)
+ */
+@Namespace("at::cuda") public static native @Cast("bool") boolean is_available();
+
+@Namespace("at::cuda") public static native cudaDeviceProp getCurrentDeviceProperties();
+
+@Namespace("at::cuda") public static native int warp_size();
+
+@Namespace("at::cuda") public static native cudaDeviceProp getDeviceProperties(byte device);
+
+@Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
+    byte device,
+    byte peer_device);
+
+@Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
+
+/* Handles */
+@Namespace("at::cuda") public static native cusparseContext getCurrentCUDASparseHandle();
+@Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle();
+
+
+@Namespace("at::cuda") public static native void clearCublasWorkspaces();
+
+// #if defined(CUDART_VERSION) || defined(USE_ROCM)
+@Namespace("at::cuda") public static native cusolverDnContext getCurrentCUDASolverDnHandle();
+// #endif
+
+ // namespace at::cuda
+
+
+// Parsed from c10/cuda/CUDAStream.h
+
+// #pragma once
+
+// #include <cuda_runtime_api.h>
+
+// #include <c10/core/DeviceGuard.h>
+// #include <c10/core/Stream.h>
+// #include <c10/cuda/CUDAFunctions.h>
+// #include <c10/util/Exception.h>
+
+/*
+ * Stream pool note.
+ *
+ * A CUDAStream is an abstraction of an actual cuStream on the GPU. CUDAStreams
+ * are backed by cuStreams, but they use several pools to minimize the costs
+ * associated with creating, retaining, and destroying cuStreams.
+ *
+ * There are three pools per device, and a device's pools are lazily created.
+ *
+ * The first pool contains only the default stream. When the default stream
+ * is requested it's returned.
+ *
+ * The second pool is the "low priority" or "default priority" streams. In
+ * HIP builds there is no distinction between streams in this pool and streams
+ * in the third pool (below). There are 32 of these streams per device, and
+ * when a stream is requested one of these streams is returned round-robin.
+ * That is, the first stream requested is at index 0, the second at index 1...
+ * to index 31, then index 0 again.
+ *
+ * This means that if 33 low priority streams are requested, the first and
+ * last streams requested are actually the same stream (under the covers)
+ * and kernels enqueued on them cannot run concurrently.
+ *
+ * The third pool is the "high priority" streams. The third pool acts like
+ * the second pool except the streams are created with a higher priority.
+ *
+ * These pools suggest that stream users should prefer many short-lived streams,
+ * as the cost of acquiring and releasing streams is effectively zero. If
+ * many longer-lived streams are required in performance critical scenarios
+ * then the functionality here may need to be extended to allow, for example,
+ * "reserving" a subset of the pool so that other streams do not accidentally
+ * overlap the performance critical streams.
+ *
+ * Note: although the notion of "current stream for device" is thread local
+ * (every OS thread has a separate current stream, as one might expect),
+ * the stream pool is global across all threads; stream 0 is always stream 0
+ * no matter which thread you use it on.  Multiple threads can synchronize
+ * on the same stream.  Although the CUDA documentation is not very clear
+ * on the matter, streams are thread safe; e.g., it is safe to enqueue
+ * a kernel on the same stream from two different threads.
+ */
+
+
+// Targeting ../cuda/CUDAStream.java
+
+
+
+/**
+ * Get a new stream from the CUDA stream pool.  You can think of this
+ * as "creating" a new stream, but no such creation actually happens;
+ * instead, streams are preallocated from the pool and returned in a
+ * round-robin fashion.
+ *
+ * You can request a stream from the high priority pool by setting
+ * isHighPriority to true, or a stream for a specific device by setting device
+ * (defaulting to the current CUDA stream.)
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(@Cast("const bool") boolean isHighPriority/*=false*/, byte device/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool();
+// no default priority to disambiguate overloads
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority, byte device/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority);
+
+/**
+ * Get a CUDAStream from a externally allocated one.
+ *
+ * This is mainly for interoperability with different libraries where we
+ * want to operate on a non-torch allocated stream for data exchange or similar
+ * purposes
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromExternal(CUstream_st ext_stream, byte device_index);
+
+/**
+ * Get the default CUDA stream, for the passed CUDA device, or for the
+ * current device if no device index is passed.  The default stream is
+ * where most computation occurs when you aren't explicitly using
+ * streams.
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream(byte device_index/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getDefaultCUDAStream();
+
+/**
+ * Get the current CUDA stream, for the passed CUDA device, or for the
+ * current device if no device index is passed.  The current CUDA stream
+ * will usually be the default CUDA stream for the device, but it may
+ * be different if someone called 'setCurrentCUDAStream' or used 'StreamGuard'
+ * or 'CUDAStreamGuard'.
+ */
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream(byte device_index/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getCurrentCUDAStream();
+
+/**
+ * Set the current stream on the device of the passed in stream to be
+ * the passed in stream.  Yes, you read that right: this function
+ * has *nothing* to do with the current device: it toggles the current
+ * stream of the device of the passed stream.
+ *
+ * Confused?  Avoid using this function; prefer using 'CUDAStreamGuard' instead
+ * (which will switch both your current device and current stream in the way you
+ * expect, and reset it back to its original state afterwards).
+ */
+@Namespace("c10::cuda") public static native void setCurrentCUDAStream(@ByVal CUDAStream stream);
+
+@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef CUDAStream s);
+
+ // namespace c10::cuda
+ // namespace std
 
 
 // Parsed from ATen/cuda/Exceptions.h
@@ -662,9 +665,6 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <ATen/Context.h>
 // #include <c10/util/Exception.h>
 // #include <c10/cuda/CUDAException.h>
-// Targeting ../cuda/CuDNNError.java
-
-
 
   // namespace c10
 
@@ -813,23 +813,17 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //   } while (0)
 
 
-// Parsed from ATen/cudnn/cudnn-wrapper.h
+// Parsed from ATen/cuda/CUDAContext.h
 
 // #pragma once
 
-// #include <cudnn.h>
+// #include <ATen/cuda/CUDAContextLight.h>
 
-// #define STRINGIFY(x) #x
-// #define STRING(x) STRINGIFY(x)
-
-// #if CUDNN_MAJOR < 6
-// #pragma message ("CuDNN v" STRING(CUDNN_MAJOR) " found, but need at least CuDNN v6. You can get the latest version of CuDNN from https://developer.nvidia.com/cudnn or disable CuDNN with USE_CUDNN=0")
-// #pragma message "We strongly encourage you to move to 6.0 and above."
-// #pragma message "This message is intended to annoy you enough to update."
-// #endif
-
-// #undef STRINGIFY
-// #undef STRING
+// Preserved for BC, as many files depend on these includes
+// #include <ATen/Context.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/util/Logging.h>
+// #include <ATen/cuda/Exceptions.h>
 
 
 // Parsed from ATen/cuda/ATenCUDAGeneral.h
@@ -843,6 +837,17 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <c10/macros/Export.h>
 
 // Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
+
+
+// Parsed from ATen/cudnn/Handle.h
+
+// #pragma once
+
+// #include <ATen/cudnn/cudnn-wrapper.h>
+// #include <ATen/cuda/ATenCUDAGeneral.h>
+
+@Namespace("at::native") public static native cudnnContext getCudnnHandle();
+ // namespace at::native
 
 
 // Parsed from ATen/cudnn/Utils.h
@@ -863,17 +868,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
-// Parsed from ATen/cudnn/Handle.h
-
-// #pragma once
-
-// #include <ATen/cudnn/cudnn-wrapper.h>
-// #include <ATen/cuda/ATenCUDAGeneral.h>
-
-@Namespace("at::native") public static native @Cast("cudnnHandle_t") Pointer getCudnnHandle();
- // namespace at::native
-
-
 // Parsed from c10/cuda/CUDAGraphsC10Utils.h
 
 // #pragma once
@@ -890,12 +884,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Targeting ../cuda/CUDAStreamCaptureModeGuard.java
 
 
-// #endif
 
-// #if !defined(USE_ROCM) || ROCM_VERSION >= 50300
 // Protects against enum cudaStreamCaptureStatus implementation changes.
 // Some compilers seem not to like static_assert without the messages.
-// #endif
 
 
 
@@ -905,59 +896,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 @Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int currentStreamCaptureStatusMayInitCtx();
 
  // namespace c10::cuda
-
-
-// Parsed from c10/util/ApproximateClock.h
-
-// Copyright 2023-present Facebook. All Rights Reserved.
-
-// #pragma once
-
-// #include <c10/macros/Export.h>
-// #include <array>
-// #include <chrono>
-// #include <cstddef>
-// #include <cstdint>
-// #include <ctime>
-// #include <functional>
-// #include <type_traits>
-
-// #if defined(C10_IOS) && defined(C10_MOBILE)
-// #include <sys/time.h> // for gettimeofday()
-// #endif
-
-// #if defined(__i386__) || defined(__x86_64__) || defined(__amd64__)
-// #define C10_RDTSC
-// #if defined(_MSC_VER)
-// #elif defined(__CUDACC__) || defined(__HIPCC__)
-// #elif defined(__clang__)
-// `__rdtsc` is available by default.
-// NB: This has to be first, because Clang will also define `__GNUC__`
-// #elif defined(__GNUC__)
-// #include <x86intrin.h>
-// #else
-// #undef C10_RDTSC
-// #endif
-// #endif
-
-@Namespace("c10") public static native @Cast("c10::time_t") long getTimeSinceEpoch();
-
-@Namespace("c10") public static native @Cast("c10::time_t") long getTime(@Cast("bool") boolean allow_monotonic/*=false*/);
-@Namespace("c10") public static native @Cast("c10::time_t") long getTime();
-
-// We often do not need to capture true wall times. If a fast mechanism such
-// as TSC is available we can use that instead and convert back to epoch time
-// during post processing. This greatly reduce the clock's contribution to
-// profiling.
-//   http://btorpey.github.io/blog/2014/02/18/clock-sources-in-linux/
-//   https://quick-bench.com/q/r8opkkGZSJMu9wM_XTbDouq-0Io
-// TODO: We should use
-// `https://github.com/google/benchmark/blob/main/src/cycleclock.h`
-// Targeting ../cuda/ApproximateClockToUnixTimeConverter.java
-
-
-
- // namespace c10
 
 
 // Parsed from c10/cuda/CUDACachingAllocator.h
@@ -1163,6 +1101,49 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
  // namespace c10::cuda::impl
 
 
+// Parsed from c10/cuda/CUDAGuard.h
+
+// #pragma once
+
+// #include <c10/core/DeviceType.h>
+// #include <c10/core/impl/InlineDeviceGuard.h>
+// #include <c10/core/impl/InlineStreamGuard.h>
+// #include <c10/cuda/CUDAMacros.h>
+// #include <c10/cuda/impl/CUDAGuardImpl.h>
+// Targeting ../cuda/CUDAGuard.java
+
+
+
+/** A variant of OptionalDeviceGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
+// Targeting ../cuda/CUDAStreamGuard.java
+
+
+
+/** A variant of OptionalStreamGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
+// Targeting ../cuda/CUDAMultiStreamGuard.java
+
+
+
+ // namespace c10::cuda
+
+
+// Parsed from ATen/cudnn/Types.h
+
+// #pragma once
+
+// #include <ATen/cudnn/cudnn-wrapper.h>
+// #include <ATen/Tensor.h>
+
+@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(ScalarType dtype);
+
+
+
+
+  // namespace at::cudnn
+
+
 // Parsed from ATen/cudnn/Descriptors.h
 
 // #pragma once
@@ -1243,49 +1224,27 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
   // namespace
 
 
-// Parsed from ATen/cudnn/Types.h
+// Parsed from ATen/cuda/CUDAEvent.h
 
 // #pragma once
 
-// #include <ATen/cudnn/cudnn-wrapper.h>
-// #include <ATen/Tensor.h>
+// #include <ATen/cuda/ATenCUDAGeneral.h>
+// #include <ATen/cuda/CUDAContext.h>
+// #include <c10/core/impl/GPUTrace.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/cuda/CUDAGuard.h>
+// #include <ATen/cuda/Exceptions.h>
+// #include <c10/util/Exception.h>
 
-@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(ScalarType dtype);
+// #include <cuda_runtime_api.h>
 
-
-
-
-  // namespace at::cudnn
-
-
-// Parsed from c10/cuda/CUDAGuard.h
-
-// #pragma once
-
-// #include <c10/core/DeviceType.h>
-// #include <c10/core/impl/InlineDeviceGuard.h>
-// #include <c10/core/impl/InlineStreamGuard.h>
-// #include <c10/cuda/CUDAMacros.h>
-// #include <c10/cuda/impl/CUDAGuardImpl.h>
-
-// #include <cstddef>
-// Targeting ../cuda/CUDAGuard.java
+// #include <cstdint>
+// #include <utility>
+// Targeting ../cuda/CUDAEvent.java
 
 
 
-/** A variant of OptionalDeviceGuard that is specialized for CUDA.  See
- *  CUDAGuard for when you can use this. */
-// Targeting ../cuda/CUDAStreamGuard.java
-
-
-
-/** A variant of OptionalStreamGuard that is specialized for CUDA.  See
- *  CUDAGuard for when you can use this. */
-// Targeting ../cuda/CUDAMultiStreamGuard.java
-
-
-
- // namespace c10::cuda
+ // namespace at::cuda
 
 
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h

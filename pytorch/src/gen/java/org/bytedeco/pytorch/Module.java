@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -115,7 +116,7 @@ public class Module extends Pointer {
   
   ///
   public native @SharedPtr("torch::nn::Module") @ByVal @Virtual(subclasses=false, method="clone") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) @Const({false, false, true}) Module clone(
-        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @Const @ByRef(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code Module&}.

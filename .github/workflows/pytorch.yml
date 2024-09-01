@@ -33,7 +33,7 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
         timeout-minutes: 350
   macosx-arm64:
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:

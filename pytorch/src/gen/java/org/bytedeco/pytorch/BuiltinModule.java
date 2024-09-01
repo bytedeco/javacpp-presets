@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -24,12 +25,12 @@ public class BuiltinModule extends SugaredValue {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BuiltinModule(Pointer p) { super(p); }
 
-  public BuiltinModule(@StdString BytePointer name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
-  private native void allocate(@StdString BytePointer name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version);
+  public BuiltinModule(@StdString BytePointer name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
+  private native void allocate(@StdString BytePointer name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version);
   public BuiltinModule(@StdString BytePointer name) { super((Pointer)null); allocate(name); }
   private native void allocate(@StdString BytePointer name);
-  public BuiltinModule(@StdString String name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
-  private native void allocate(@StdString String name, @ByVal(nullValue = "c10::optional<int64_t>(at::nullopt)") LongOptional version);
+  public BuiltinModule(@StdString String name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version) { super((Pointer)null); allocate(name, version); }
+  private native void allocate(@StdString String name, @ByVal(nullValue = "std::optional<int64_t>(at::nullopt)") LongOptional version);
   public BuiltinModule(@StdString String name) { super((Pointer)null); allocate(name); }
   private native void allocate(@StdString String name);
 

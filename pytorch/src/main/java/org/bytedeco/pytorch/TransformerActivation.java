@@ -1,6 +1,5 @@
 package org.bytedeco.pytorch;
 
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 

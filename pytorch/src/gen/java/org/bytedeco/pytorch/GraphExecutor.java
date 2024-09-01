@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -57,10 +58,10 @@ public class GraphExecutor extends Pointer {
         @Cast("torch::jit::ExecutorExecutionMode") int executor_mode);
 
   public native void run(@ByRef IValueVector inputs);
-  public native @ByVal FuturePtr runAsync(
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future runAsync(
         @ByRef IValueVector stack,
         @ByVal(nullValue = "torch::jit::TaskLauncher(at::launch)") @Cast("torch::jit::TaskLauncher*") Pointer taskLauncher);
-  public native @ByVal FuturePtr runAsync(
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future runAsync(
         @ByRef IValueVector stack);
 
   // `remaining_bailout_depth` stands for the maximum number of profiled and
@@ -76,7 +77,7 @@ public class GraphExecutor extends Pointer {
   // current global fusion strategy settings.
   public native @Const @ByRef ExecutionPlan getPlanFor(
         @ByRef IValueVector inputs,
-        @ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional remaining_bailout_depth);
+        @ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional remaining_bailout_depth);
   public native @Const @ByRef ExecutionPlan getPlanFor(
         @ByRef IValueVector inputs);
   public native @ByVal GraphExecutorState getDebugState();

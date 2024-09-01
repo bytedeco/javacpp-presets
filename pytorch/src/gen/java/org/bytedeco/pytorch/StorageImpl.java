@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -60,7 +61,7 @@ public class StorageImpl extends Pointer {
         @StdMove DataPtr data_ptr,
         Allocator allocator,
         @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr, allocator, resizable); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::StorageImpl>") private native void allocate(
         @ByVal use_byte_size_t arg0,
         @ByVal SymInt size_bytes,
         @StdMove DataPtr data_ptr,
@@ -72,7 +73,7 @@ public class StorageImpl extends Pointer {
         @Const @ByRef SymInt size_bytes,
         Allocator allocator,
         @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, allocator, resizable); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::StorageImpl>") private native void allocate(
         @ByVal use_byte_size_t arg0,
         @Const @ByRef SymInt size_bytes,
         Allocator allocator,
@@ -101,9 +102,12 @@ public class StorageImpl extends Pointer {
 
   public native @Cast("bool") boolean resizable();
 
+  public native @StdMove DataPtr data_ptr();
+
   public native @ByRef DataPtr mutable_data_ptr();
 
-  public native @StdMove DataPtr data_ptr();
+  // Returns the data_ptr. Bypasses all checks.
+  public native @ByRef DataPtr _mutable_data_ptr_no_checks();
 
   // Returns the previous data_ptr
   public native @StdMove DataPtr set_data_ptr(@StdMove DataPtr data_ptr);
@@ -151,4 +155,8 @@ public class StorageImpl extends Pointer {
   public native @Cast("bool") boolean received_cuda();
 
   public native @Cast("c10::impl::PyObjectSlot*") Pointer pyobj_slot();
+
+  public native void set_throw_on_mutable_data_ptr();
+
+  public native void set_warn_deprecated_on_mutable_data_ptr();
 }

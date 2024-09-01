@@ -2,12 +2,6 @@
 
 package org.bytedeco.pytorch.cuda;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -16,8 +10,22 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
@@ -53,68 +61,68 @@ public class TraceEntry extends Pointer {
   public TraceEntry(
         Action action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/) { super((Pointer)null); allocate(action, device, addr, size, stream, time, context); }
   private native void allocate(
         Action action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/);
   public TraceEntry(
         Action action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time) { super((Pointer)null); allocate(action, device, addr, size, stream, time); }
   private native void allocate(
         Action action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time);
   public TraceEntry(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/) { super((Pointer)null); allocate(action, device, addr, size, stream, time, context); }
   private native void allocate(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/);
   public TraceEntry(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time) { super((Pointer)null); allocate(action, device, addr, size, stream, time); }
   private native void allocate(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
         byte device,
-        @Cast("int64_t") long addr,
+        @Cast("size_t") long addr,
         @Cast("size_t") long size,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("c10::approx_time_t") long time);
   public native Action action_(); public native TraceEntry action_(Action setter);
   public native byte device_(); public native TraceEntry device_(byte setter);
-  public native @Cast("int64_t") long addr_(); public native TraceEntry addr_(long setter); // for OOM, this is the amount of free bytes reported by cuda
+  public native @Cast("size_t") long addr_(); public native TraceEntry addr_(long setter); // for OOM, this is the amount of free bytes reported by cuda
   public native @SharedPtr GatheredContext context_(); public native TraceEntry context_(GatheredContext setter);
-  public native @Cast("cudaStream_t") Pointer stream_(); public native TraceEntry stream_(Pointer setter);
-  public native @Cast("int64_t") long size_(); public native TraceEntry size_(long setter);
+  public native CUstream_st stream_(); public native TraceEntry stream_(CUstream_st setter);
+  public native @Cast("size_t") long size_(); public native TraceEntry size_(long setter);
   public native @ByRef trace_time_ time_(); public native TraceEntry time_(trace_time_ setter);
 }

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -35,20 +36,20 @@ public class SymBool extends Pointer {
 
   /*implicit*/ public SymBool(@Cast("bool") boolean b) { super((Pointer)null); allocate(b); }
 private native void allocate(@Cast("bool") boolean b);
-  public SymBool(@ByVal SymNode ptr) { super((Pointer)null); allocate(ptr); }
-  private native void allocate(@ByVal SymNode ptr);
+  public SymBool(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode ptr) { super((Pointer)null); allocate(ptr); }
+  private native void allocate(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode ptr);
   public SymBool() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native SymNodeImpl toSymNodeImplUnowned();
+  public native SymNode toSymNodeImplUnowned();
 
   
 
   // Only valid if is_heap_allocated()
-  public native @ByVal SymNode toSymNodeImpl();
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode toSymNodeImpl();
 
   // Guaranteed to return a SymNode, wrapping using base if necessary
-  public native @ByVal SymNode wrap_node(@Const @ByRef SymNode base);
+  public native @IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode wrap_node(@IntrusivePtr("c10::SymNodeImpl") @Cast({"", "c10::intrusive_ptr<c10::SymNodeImpl>&"}) SymNode base);
 
   public native @Cast("bool") boolean expect_bool();
 

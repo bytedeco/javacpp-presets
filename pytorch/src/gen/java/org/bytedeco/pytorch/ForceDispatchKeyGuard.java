@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -23,7 +24,18 @@ public class ForceDispatchKeyGuard extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ForceDispatchKeyGuard(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ForceDispatchKeyGuard(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ForceDispatchKeyGuard position(long position) {
+        return (ForceDispatchKeyGuard)super.position(position);
+    }
+    @Override public ForceDispatchKeyGuard getPointer(long i) {
+        return new ForceDispatchKeyGuard((Pointer)this).offsetAddress(i);
+    }
 
+  public ForceDispatchKeyGuard() { super((Pointer)null); allocate(); }
+  private native void allocate();
   public ForceDispatchKeyGuard(@ByVal LocalDispatchKeySet key_set) { super((Pointer)null); allocate(key_set); }
   private native void allocate(@ByVal LocalDispatchKeySet key_set);
   public ForceDispatchKeyGuard(

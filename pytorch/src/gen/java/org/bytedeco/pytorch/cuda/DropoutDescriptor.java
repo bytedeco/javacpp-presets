@@ -2,12 +2,6 @@
 
 package org.bytedeco.pytorch.cuda;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -16,8 +10,22 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
@@ -44,11 +52,11 @@ public class DropoutDescriptor extends Pointer {
 
   // Initialize a dropout descriptor's RNG state.
   // WARNING: This function is very expensive, avoid calling this function!
-  public native void initialize_rng(@Cast("cudnnHandle_t") Pointer handle, float dropout, long seed, @Const @ByRef TensorOptions options);
+  public native void initialize_rng(cudnnContext handle, float dropout, long seed, @Const @ByRef TensorOptions options);
 
   // Restore a dropout descriptor given a dropout probability and existing RNG state.
-  public native void set(@Cast("cudnnHandle_t") Pointer handle, float dropout, @ByVal Tensor state_);
+  public native void set(cudnnContext handle, float dropout, @ByVal Tensor state_);
 
   // Restore a dropout descriptor corresponding to no dropout
-  public native void set_no_dropout(@Cast("cudnnHandle_t") Pointer handle);
+  public native void set_no_dropout(cudnnContext handle);
 }

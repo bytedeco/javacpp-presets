@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -35,9 +36,9 @@ public class AOTIModelContainerRunner extends Pointer {
 
   public native @ByVal ExtraFilesMap getConstantNamesToOriginalFQNs();
   public native @ByVal StringIntMap getConstantNamesToDtypes();
-  public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map);
+  public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map);
   public native void update_constant_buffer(
-        @Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map,
+        @Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map,
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean validate_full_updates);
   public native void run_const_fold(

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -151,6 +152,12 @@ public class TensorIteratorBase extends MetaBase {
   public native void _unsafe_set_arg_strides(@Cast("const int64_t") long arg, @ByVal LongArrayRef strides);
   public native void _unsafe_set_arg_strides(@Cast("const int64_t") long arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
   public native void _unsafe_set_arg_data(@Cast("const int64_t") long arg, Pointer data);
+
+  // Helper functions for custom device, custom device can get OperandInfo and
+  // NameVector in their side.
+  public native @ByRef OperandInfo operand(int arg/*=0*/);
+  public native @ByRef OperandInfo operand();
+  public native @Cast("at::NameVector*") @ByRef SymDimVector get_dim_names();
 
   /** true if the stride computation can use 32-bit arithmetic. Used by GPU
    *  kernels */
