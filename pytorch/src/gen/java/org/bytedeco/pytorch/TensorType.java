@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -34,7 +35,7 @@ public class TensorType extends SharedType {
         @Const @ByRef LongVaryingShape sizes,
         @Const @ByRef LongVaryingShape strides,
         @ByVal BoolOptional requires_grad,
-        @ByVal(nullValue = "c10::optional<bool>(false)") BoolOptional undefined,
+        @ByVal(nullValue = "std::optional<bool>(false)") BoolOptional undefined,
         @Cast("bool") boolean tensor_contiguity/*=false*/);
   public static native @SharedPtr("c10::TensorType") @ByVal TensorType create(
         @ByVal ScalarTypeOptional scalar_type,
@@ -49,7 +50,7 @@ public class TensorType extends SharedType {
         @Const @ByRef SymbolicShape sizes,
         @Const @ByRef StrideVaryingShape stride_,
         @ByVal BoolOptional requires_grad,
-        @ByVal(nullValue = "c10::optional<bool>(false)") BoolOptional undefined);
+        @ByVal(nullValue = "std::optional<bool>(false)") BoolOptional undefined);
   public static native @SharedPtr("c10::TensorType") @ByVal TensorType create(
         @ByVal ScalarTypeOptional scalar_type,
         @ByVal DeviceOptional device,

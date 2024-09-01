@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace detail
@@ -141,13 +142,19 @@ public class Library extends Pointer {
   
 
   /** Declares that for all operators that are subsequently def'ed, their
-   *  abstract impls may be found in the given Python module (pymodule).
-   *  This registers some help text that is used if the abstract impl
+   *  fake impls may be found in the given Python module (pymodule).
+   *  This registers some help text that is used if the fake impl
    *  cannot be found.
    * 
    *  Args:
    *  - pymodule: the python module
    *  - context: We may include this in the error message. */
+  public native @ByRef Library set_python_module(@Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context/*=""*/);
+  public native @ByRef Library set_python_module(@Cast("const char*") BytePointer pymodule);
+  public native @ByRef Library set_python_module(String pymodule, String context/*=""*/);
+  public native @ByRef Library set_python_module(String pymodule);
+
+  /** Deprecated; use set_python_module instead */
   
   ///
   ///

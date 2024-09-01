@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -42,13 +43,13 @@ public class Source extends Pointer {
 
   public Source(
         @StringView BytePointer text_view,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
         @StringView BytePointer text_view,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/);
@@ -58,13 +59,13 @@ public class Source extends Pointer {
         @StringView BytePointer text_view);
   public Source(
         @StringView String text_view,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
         @StringView String text_view,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/);
@@ -75,12 +76,12 @@ public class Source extends Pointer {
 
   public Source(
         @ByVal StringCordView str,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(str, filename, starting_line_no, gen_ranges); }
   private native void allocate(
         @ByVal StringCordView str,
-        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @ByVal(nullValue = "std::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
   public Source(

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -119,7 +120,7 @@ public class TensorImpl extends Pointer {
         @ByRef(true) Storage storage,
         @ByVal DispatchKeySet arg1,
         @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, arg1, data_type); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         @ByRef(true) Storage storage,
         @ByVal DispatchKeySet arg1,
         @Const @ByVal TypeMeta data_type);
@@ -130,7 +131,7 @@ public class TensorImpl extends Pointer {
         @ByRef(true) Storage storage,
         @ByVal DispatchKeySet arg2,
         @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(arg0, storage, arg2, data_type); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         ImplType arg0,
         @ByRef(true) Storage storage,
         @ByVal DispatchKeySet arg2,
@@ -140,7 +141,7 @@ public class TensorImpl extends Pointer {
         @ByRef(true) Storage storage,
         @ByVal DispatchKeySet arg2,
         @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(arg0, storage, arg2, data_type); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         @Cast("c10::TensorImpl::ImplType") int arg0,
         @ByRef(true) Storage storage,
         @ByVal DispatchKeySet arg2,
@@ -153,7 +154,7 @@ public class TensorImpl extends Pointer {
         @ByVal DispatchKeySet arg0,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(arg0, data_type, device_opt); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         @ByVal DispatchKeySet arg0,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt);
@@ -164,7 +165,7 @@ public class TensorImpl extends Pointer {
         @ByRef(true) Storage storage,
         DispatchKey dispatch_key,
         @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         @ByRef(true) Storage storage,
         DispatchKey dispatch_key,
         @Const @ByVal TypeMeta data_type);
@@ -172,7 +173,7 @@ public class TensorImpl extends Pointer {
         @ByRef(true) Storage storage,
         @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         @ByRef(true) Storage storage,
         @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type);
@@ -180,7 +181,7 @@ public class TensorImpl extends Pointer {
         DispatchKey dispatch_key,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         DispatchKey dispatch_key,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt);
@@ -188,7 +189,7 @@ public class TensorImpl extends Pointer {
         @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
-  private native void allocate(
+  @IntrusivePtr @Name("c10::make_intrusive<c10::TensorImpl>") private native void allocate(
         @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt);
@@ -452,7 +453,7 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_mps();
 
-  public native @Cast("bool") boolean is_ort();
+  public native @Cast("bool") boolean is_maia();
 
   public native @Cast("bool") boolean is_nested();
 
@@ -683,11 +684,11 @@ public class TensorImpl extends Pointer {
    */
   public native @Cast("size_t") long itemsize();
 
-  public native void set_backend_meta(@ByVal BackendMetaRef backend_meta);
+  public native void set_backend_meta(@IntrusivePtr("c10::BackendMeta") @Cast({"", "c10::intrusive_ptr<c10::BackendMeta>&"}) BackendMeta backend_meta);
 
   public native BackendMeta get_backend_meta();
 
-  public native @ByVal BackendMetaRef get_backend_meta_intrusive_ptr();
+  public native @IntrusivePtr("c10::BackendMeta") @Cast({"", "c10::intrusive_ptr<c10::BackendMeta>&"}) BackendMeta get_backend_meta_intrusive_ptr();
 
   public native void release_storage_and_set_meta_custom_data_ptr_error_msg_(
         @ByVal StringOptional s);
@@ -701,7 +702,7 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(
         @ByVal SymIntArrayRef sizes,
         @ByVal SymIntArrayRef strides,
-        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional storage_offset);
+        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal SymIntArrayRef sizes,
         @ByVal SymIntArrayRef strides);
@@ -757,14 +758,14 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride);
   public native void set_sizes_and_strides(
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_stride,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... new_stride);
@@ -859,7 +860,7 @@ public class TensorImpl extends Pointer {
    * compatible with SparseCUDA.
    */
   public native @Cast("bool") boolean has_compatible_shallow_copy_type(@ByVal DispatchKeySet from);
-  public native @ByVal TensorImplPtr shallow_copy_and_detach(
+  public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl shallow_copy_and_detach(
         @Const @ByRef VariableVersion version_counter,
         @Cast("bool") boolean allow_tensor_metadata_change);
 
@@ -876,7 +877,7 @@ public class TensorImpl extends Pointer {
    * For why this function doesn't check this TensorImpl's
    * {@code allow_tensor_metadata_change_}, see NOTE [ TensorImpl Shallow-Copying ].
    */
-  public native void shallow_copy_from(@Const @ByRef TensorImplPtr impl);
+  public native void shallow_copy_from(@IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl impl);
 
   // Inference tensor doesn't have version counter,
   // set_version_counter is no-op for them.
@@ -1022,6 +1023,8 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_non_overlapping_and_dense();
 
+  // if this returns true, then it is guaranteed that this tensor has symbolic
+  // sizes/strides
   public native @Cast("bool") boolean has_symbolic_sizes_strides();
   public native void set_storage_access_should_throw();
   public native void set_custom_sizes_strides(SizesStridesPolicy policy);

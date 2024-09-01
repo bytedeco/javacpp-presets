@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -35,17 +36,14 @@ public class Function extends Pointer {
 
   public native void run(@ByRef IValueVector stack);
 
-  public native @ByVal FuturePtr runAsync(
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future runAsync(
         @ByRef IValueVector arg0,
         @ByVal(nullValue = "torch::jit::TaskLauncher(at::launch)") @Cast("torch::jit::TaskLauncher*") Pointer taskLauncher);
-  public native @ByVal FuturePtr runAsync(
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future runAsync(
         @ByRef IValueVector arg0);
 
-  public native @ByVal @Name("operator ()") IValue apply(
-      @ByVal IValueVector stack,
-      @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") StringIValueMap kwargs);
-  public native @ByVal @Name("operator ()") IValue apply(
-      @ByVal IValueVector stack);
+  public native @ByVal @Name("operator ()") IValue apply(@ByVal IValueVector stack, @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") StringIValueMap kwargs);
+  public native @ByVal @Name("operator ()") IValue apply(@ByVal IValueVector stack);
 
   public native @Const @ByRef QualifiedName qualname();
 
@@ -71,7 +69,8 @@ public class Function extends Pointer {
   // If call() returns true, then callback completes successfully, otherwise
   // call() returns false.
 
-  // Overload for server interpreter, a bailout size is needed for graph executor.
+  // Overload for server interpreter, a bailout size is needed for graph
+  // executor.
   
 
   // Overload for mobile interpreter.

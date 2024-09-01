@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace detail
@@ -106,7 +107,7 @@ private native void allocate(@ByVal SingletonTypePtr p);
   //
   // Takes a custom printer that users can pass in to customize the output of
   // this method.
-  public native @StdString BytePointer annotation_str(@ByVal TypePrinter printer);
+  public native @StdString BytePointer annotation_str(@Const @ByRef TypePrinter printer);
   public native @StdString BytePointer annotation_str();
 
   // Returns a human readable string that includes additional information like

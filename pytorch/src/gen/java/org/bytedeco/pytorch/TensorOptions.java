@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -158,7 +159,7 @@ private native void allocate(MemoryFormat memory_format);
   public native @ByVal @NoException(true) TensorOptions device(@ByVal DeviceOptional device);
 
   /** Return a copy of {@code TensorOptions} with {@code device} set to the given one.
-   *  (This overload ensures that variadic template c10::optional constructor
+   *  (This overload ensures that variadic template std::optional constructor
    *  for Device work correctly.) */
 
   /** Return a copy of {@code TensorOptions}, but with device set to CUDA, and the

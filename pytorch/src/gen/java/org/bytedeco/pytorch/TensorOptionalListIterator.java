@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,10 +13,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::impl::ListIterator<c10::optional<at::Tensor>,c10::detail::ListImpl::list_type::iterator>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::impl::ListIterator<std::optional<at::Tensor>,c10::detail::ListImpl::list_type::iterator>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorOptionalListIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -57,7 +58,7 @@ public class TensorOptionalListIterator extends Pointer {
 
   public native @ByVal @Name("operator -") TensorOptionalListIterator subtract(long offset);
 
-  private static native @Namespace @Cast("c10::impl::ListIterator<c10::optional<at::Tensor>,c10::detail::ListImpl::list_type::iterator>::difference_type") @Name("operator -") long subtract(@Const @ByRef TensorOptionalListIterator lhs, @Const @ByRef TensorOptionalListIterator rhs);
+  private static native @Namespace @Cast("c10::impl::ListIterator<std::optional<at::Tensor>,c10::detail::ListImpl::list_type::iterator>::difference_type") @Name("operator -") long subtract(@Const @ByRef TensorOptionalListIterator lhs, @Const @ByRef TensorOptionalListIterator rhs);
   public long subtract(TensorOptionalListIterator rhs) { return subtract(this, rhs); }
 
   

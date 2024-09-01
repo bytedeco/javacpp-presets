@@ -2,12 +2,6 @@
 
 package org.bytedeco.pytorch.cuda;
 
-import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.cuda.functions.*;
-import org.bytedeco.pytorch.Error;
-import org.bytedeco.pytorch.global.torch.DeviceType;
-import org.bytedeco.pytorch.global.torch.ScalarType;
-import org.bytedeco.pytorch.global.torch.MemoryFormat;
 import org.bytedeco.pytorch.Allocator;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -16,8 +10,22 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
+import org.bytedeco.cuda.cudart.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import org.bytedeco.cuda.cublas.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cudnn.*;
+import org.bytedeco.cuda.cusparse.*;
+import static org.bytedeco.cuda.global.cusparse.*;
+import org.bytedeco.cuda.cusolver.*;
+import static org.bytedeco.cuda.global.cusolver.*;
+import org.bytedeco.cuda.cupti.*;
+import static org.bytedeco.cuda.global.cupti.*;
 
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
@@ -29,7 +37,7 @@ public class CUDAAllocator extends Allocator {
     public CUDAAllocator(Pointer p) { super(p); }
 
   public native Pointer raw_alloc(@Cast("size_t") long nbytes);
-  public native Pointer raw_alloc_with_stream(@Cast("size_t") long nbytes, @Cast("cudaStream_t") Pointer stream);
+  public native Pointer raw_alloc_with_stream(@Cast("size_t") long nbytes, CUstream_st stream);
   public native void raw_delete(Pointer ptr);
   public native void init(int device_count);
   public native @Cast("bool") boolean initialized();
@@ -68,7 +76,7 @@ public class CUDAAllocator extends Allocator {
         @ByVal @Cast("c10::cuda::CUDACachingAllocator::CreateContextFn*") Pointer context_recorder,
         @Cast("size_t") long alloc_trace_max_entries,
         @Cast("c10::cuda::CUDACachingAllocator::RecordContext") int when);
-  public native void attachOutOfMemoryObserver(@ByVal OutOfMemoryObserver observer);
+  public native void attachOutOfMemoryObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OutOfMemoryObserver*") AllocatorTraceTracker observer);
 
   // Attached AllocatorTraceTracker callbacks will be called while the
   // per-device allocator lock is held. Any additional locks taken from within
@@ -99,7 +107,7 @@ public class CUDAAllocator extends Allocator {
         @Const Pointer src,
         int srcDevice,
         @Cast("size_t") long count,
-        @Cast("cudaStream_t") Pointer stream,
+        CUstream_st stream,
         @Cast("bool") boolean p2p_enabled);
   public native @SharedPtr("c10::cuda::CUDACachingAllocator::AllocatorState") @ByVal AllocatorState getCheckpointState(
         byte device,

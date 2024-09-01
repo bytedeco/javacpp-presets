@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -25,7 +26,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  {@code Efficient softmax approximation for GPUs}_ by Edouard Grave, Armand Joulin,
  *  Moustapha Cissé, David Grangier, and Hervé Jégou.
  *  See
- *  https://pytorch.org/docs/master/nn.html#torch.nn.AdaptiveLogSoftmaxWithLoss
+ *  https://pytorch.org/docs/main/nn.html#torch.nn.AdaptiveLogSoftmaxWithLoss
  *  to learn about the exact behavior of this module.
  * 
  *  See the documentation for {@code torch::nn::AdaptiveLogSoftmaxWithLossOptions}

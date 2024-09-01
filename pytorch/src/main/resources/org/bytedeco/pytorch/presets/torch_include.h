@@ -2,6 +2,9 @@
 // #include <torch/torch.h>
 // #include <torch/script.h>
 // #include <torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h>
+// torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+// torch/csrc/distributed/c10d/PrefixStore.hpp
+// torch/csrc/distributed/c10d/logger.hpp
 // as listed by g++ -H torch/torch.h torch/script.h
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
@@ -13,6 +16,8 @@
 #include "c10/macros/Export.h"
 #include "torch/csrc/Export.h"
 #include "c10/macros/Macros.h"
+#include "c10/util/Lazy.h"
+#include "c10/util/Backtrace.h"
 #include "c10/core/DeviceType.h"
 #include "c10/util/Deprecated.h"
 // #include "c10/util/string_utils.h" // Android only
@@ -156,7 +161,7 @@
 #include "c10/core/impl/InlineStreamGuard.h"
 #include "c10/core/StreamGuard.h"
 #include "c10/util/FunctionRef.h"
-#include "c10/util/intrusive_ptr.h"  // Moved after the definition or its template args
+//#include "c10/util/intrusive_ptr.h"  // Moved after the definition or its template args
 #include "ATen/core/ivalue_inl.h"
 #include "ATen/core/ivalue.h"
 #include "ATen/core/List_inl.h"
@@ -227,6 +232,7 @@
 #include "torch/csrc/autograd/input_buffer.h"
 #include "torch/csrc/autograd/utils/warnings.h"
 #include "torch/csrc/autograd/graph_task.h"
+#include "ATen/BlasBackend.h"
 #include "ATen/core/MT19937RNGEngine.h"
 #include "ATen/CPUGeneratorImpl.h"
 #include "ATen/detail/AcceleratorHooksInterface.h"
@@ -239,7 +245,7 @@
 #include "ATen/detail/HIPHooksInterface.h"
 #include "ATen/detail/IPUHooksInterface.h"
 #include "ATen/detail/MPSHooksInterface.h"
-#include "ATen/detail/ORTHooksInterface.h"
+#include "ATen/detail/MAIAHooksInterface.h"
 #include "ATen/detail/PrivateUse1HooksInterface.h"
 #include "ATen/detail/XPUHooksInterface.h"
 #include "c10/core/QEngine.h"
@@ -324,6 +330,7 @@
 #include "ATen/ops/baddbmm.h"
 #include "ATen/ops/bartlett_window.h"
 #include "ATen/ops/batch_norm.h"
+#include "ATen/ops/batch_norm_backward.h"
 #include "ATen/ops/batch_norm_backward_elemt.h"
 #include "ATen/ops/batch_norm_backward_reduce.h"
 #include "ATen/ops/batch_norm_elemt.h"
@@ -936,6 +943,7 @@
 #include "ATen/ops/result_type.h"
 #include "ATen/ops/retain_grad.h"
 #include "ATen/ops/retains_grad.h"
+#include "ATen/ops/rms_norm.h"
 #include "ATen/ops/rnn_relu.h"
 #include "ATen/ops/rnn_relu_cell.h"
 #include "ATen/ops/rnn_tanh.h"
@@ -1197,6 +1205,8 @@
 #include "torch/csrc/utils/variadic.h"
 #include "torch/csrc/autograd/function.h"
 #include "torch/csrc/autograd/variable_info.h"
+#include "torch/csrc/utils/torch_dispatch_mode.h"
+#include "torch/csrc/dynamo/compiled_autograd.h"
 #include "torch/csrc/autograd/custom_function.h"
 #include "torch/csrc/api/include/torch/autograd.h"
 #include "torch/csrc/api/include/torch/cuda.h"
@@ -1403,6 +1413,7 @@
 #include "torch/csrc/api/include/torch/optim/rmsprop.h"
 #include "torch/csrc/api/include/torch/optim/sgd.h"
 #include "torch/csrc/api/include/torch/optim/schedulers/lr_scheduler.h"
+#include "torch/csrc/api/include/torch/optim/schedulers/reduce_on_plateau_scheduler.h"
 #include "torch/csrc/api/include/torch/optim/schedulers/step_lr.h"
 #include "torch/csrc/api/include/torch/optim.h"
 #include "torch/csrc/api/include/torch/sparse.h"
@@ -1436,5 +1447,31 @@
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
 #include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
+
+#include "torch/csrc/distributed/c10d/Store.hpp"
+#include "torch/csrc/distributed/c10d/Types.hpp"
+#include "torch/csrc/distributed/c10d/Utils.hpp"
+#include "torch/csrc/distributed/c10d/Work.hpp"
+#include "torch/csrc/distributed/c10d/debug.h"
+#include "torch/csrc/distributed/c10d/Backend.hpp"
+#include "torch/csrc/distributed/c10d/ProcessGroup.hpp"
+#include "torch/csrc/distributed/c10d/comm.hpp"
+#include "torch/csrc/distributed/c10d/default_comm_hooks.hpp"
+#include "c10/util/ApproximateClock.h"
+#include "torch/csrc/distributed/c10d/reducer_timer.hpp"
+// #include "torch/csrc/autograd/functions/basic_ops.h" // Not on Windows
+// #include "torch/csrc/autograd/engine.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/message.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/request_callback.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/types.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/rpc_agent.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/functions/recvrpc_backward.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/functions/sendrpc_backward.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/context/context.h" // Not on Windows
+#include "torch/csrc/distributed/c10d/reducer.hpp"
+#include "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp"
+#include "torch/csrc/distributed/c10d/PrefixStore.hpp"
+#include "torch/csrc/distributed/c10d/logger.hpp"
 
 #include "datasets.h"

@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace torch
@@ -32,8 +33,8 @@ public class OutputArchive extends Pointer {
         return new OutputArchive((Pointer)this).offsetAddress(i);
     }
 
-  public OutputArchive(@SharedPtr CompilationUnit cu) { super((Pointer)null); allocate(cu); }
-  private native void allocate(@SharedPtr CompilationUnit cu);
+  public OutputArchive(@SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu) { super((Pointer)null); allocate(cu); }
+  private native void allocate(@SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu);
   public OutputArchive() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -46,7 +47,7 @@ public class OutputArchive extends Pointer {
   
   
 
-  public native @SharedPtr CompilationUnit compilation_unit();
+  public native @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit compilation_unit();
 
   /** Writes an {@code IValue} to the {@code OutputArchive}. */
   public native void write(@StdString BytePointer key, @Const @ByRef IValue ivalue);

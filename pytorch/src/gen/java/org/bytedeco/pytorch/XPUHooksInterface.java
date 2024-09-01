@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -58,4 +59,8 @@ public class XPUHooksInterface extends Pointer {
   public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
   public native void deviceSynchronize(@Cast("c10::DeviceIndex") byte arg0);
+
+  public native Allocator getPinnedMemoryAllocator();
+
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 }

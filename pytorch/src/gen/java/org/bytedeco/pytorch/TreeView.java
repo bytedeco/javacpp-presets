@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -111,11 +112,11 @@ public class TreeView extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TreeView(Pointer p) { super(p); }
 
-  public TreeView(@ByVal TreeRef tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@ByVal TreeRef tree);
-  public native @ByVal TreeRef tree();
+  public TreeView(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree);
+  public native @IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree tree();
   public native @Const @ByRef SourceRange range();
-  public native @ByVal @Name("operator torch::jit::TreeRef") TreeRef asTreeRef();
+  public native @Name("operator torch::jit::TreeRef") @IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree asTree();
   
   public native int kind();
   public native void dump();

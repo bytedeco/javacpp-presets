@@ -4,7 +4,6 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
-import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
 import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
@@ -14,6 +13,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -55,9 +56,9 @@ public class LongSmallVectorImpl extends LongSmallVectorBase {
 
   public native void assign(@Const @ByRef LongSmallVectorImpl RHS);
 
-  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::const_iterator*") LongPointer CI);
+  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer I);
 
-  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::const_iterator*") LongPointer CS, @ByVal @Cast("c10::SmallVectorImpl<int64_t>::const_iterator*") LongPointer CE);
+  public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer erase(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer S, @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer E);
   public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer insert(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer I, @Cast("int64_t&&") long Elt);
 
   public native @ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer insert(@ByVal @Cast("c10::SmallVectorImpl<int64_t>::iterator*") LongPointer I, long NumToInsert, long Elt);
