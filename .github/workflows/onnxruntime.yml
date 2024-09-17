@@ -38,6 +38,7 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86_64:
     runs-on: windows-2019
+    timeout-minutes: 720
     strategy:
       matrix:
         ext: ["", -gpu]
