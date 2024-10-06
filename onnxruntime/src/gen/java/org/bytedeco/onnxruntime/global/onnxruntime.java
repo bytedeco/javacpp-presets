@@ -74,7 +74,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 18;
+public static final int ORT_API_VERSION = 19;
 
 // #ifdef __cplusplus
 // #endif
@@ -232,7 +232,10 @@ public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E4M3FN = 17,    // Non-IEEE floating-point format based on IEEE754 single-precision
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E4M3FNUZ = 18,  // Non-IEEE floating-point format based on IEEE754 single-precision
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E5M2 = 19,      // Non-IEEE floating-point format based on IEEE754 single-precision
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E5M2FNUZ = 20;   // Non-IEEE floating-point format based on IEEE754 single-precision
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E5M2FNUZ = 20,  // Non-IEEE floating-point format based on IEEE754 single-precision
+  // Int4 types were introduced in ONNX 1.16. See https://onnx.ai/onnx/technical/int4.html
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT4 = 21,  // maps to a pair of packed uint4 values (size == 1 byte)
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT4 = 22;    // maps to a pair of packed int4 values (size == 1 byte)
 
 // Synced with onnx TypeProto oneof
 /** enum ONNXType */

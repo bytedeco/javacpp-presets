@@ -22,7 +22,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.18.1
+ONNXRUNTIME=1.19.2
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -37,7 +37,6 @@ git reset --hard
 git checkout v$ONNXRUNTIME
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
-git checkout v1.15.1 onnxruntime/core/platform/windows/stacktrace.cc # revert https://github.com/microsoft/onnxruntime/pull/17173
 
 case $PLATFORM in
     linux-arm64)
@@ -48,7 +47,7 @@ case $PLATFORM in
         ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
-            export CUDACXX="$CUDA_PATH/bin/nvcc"
+            export CUDACXX="$CUDA_PATH/bin/nvcc.exe"
             export CUDA_HOME="$CUDA_PATH"
             export CUDNN_HOME="$CUDA_PATH"
         fi
@@ -87,6 +86,7 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 patch -p1 < ../../../onnxruntime.patch
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
+sedinplace '/-DCMAKE_CUDA_COMPILER=/d' tools/ci_build/build.py
 sedinplace "s/return 'ON'/return 'OFF'/g" tools/ci_build/build.py
 sedinplace "s/Visual Studio 1. 20../Ninja/g" tools/ci_build/build.py
 sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake

@@ -101,6 +101,7 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // #include <ostream>
 // #include <set>
 // #include <string>
+// #include <string_view>
 // #include <tuple>
 // #include <unordered_map>
 // #include <unordered_set>
@@ -1817,6 +1818,153 @@ support).
 
 
 // Targeting ../OpSet_Onnx_ver21.java
+
+
+// Targeting ../EyeLike_Onnx_ver22.java
+
+
+// Targeting ../RandomUniform_Onnx_ver22.java
+
+
+// Targeting ../RandomNormal_Onnx_ver22.java
+
+
+// Targeting ../RandomUniformLike_Onnx_ver22.java
+
+
+// Targeting ../RandomNormalLike_Onnx_ver22.java
+
+
+// Targeting ../Multinomial_Onnx_ver22.java
+
+
+// Targeting ../Bernoulli_Onnx_ver22.java
+
+
+// Targeting ../ThresholdedRelu_Onnx_ver22.java
+
+
+// Targeting ../Selu_Onnx_ver22.java
+
+
+// Targeting ../Elu_Onnx_ver22.java
+
+
+// Targeting ../Mish_Onnx_ver22.java
+
+
+// Targeting ../HardSigmoid_Onnx_ver22.java
+
+
+// Targeting ../HardSwish_Onnx_ver22.java
+
+
+// Targeting ../Softsign_Onnx_ver22.java
+
+
+// Targeting ../Softplus_Onnx_ver22.java
+
+
+// Targeting ../Sin_Onnx_ver22.java
+
+
+// Targeting ../Cos_Onnx_ver22.java
+
+
+// Targeting ../Tan_Onnx_ver22.java
+
+
+// Targeting ../Asin_Onnx_ver22.java
+
+
+// Targeting ../Acos_Onnx_ver22.java
+
+
+// Targeting ../Atan_Onnx_ver22.java
+
+
+// Targeting ../Sinh_Onnx_ver22.java
+
+
+// Targeting ../Cosh_Onnx_ver22.java
+
+
+// Targeting ../Asinh_Onnx_ver22.java
+
+
+// Targeting ../Acosh_Onnx_ver22.java
+
+
+// Targeting ../Atanh_Onnx_ver22.java
+
+
+// Targeting ../Round_Onnx_ver22.java
+
+
+// Targeting ../Det_Onnx_ver22.java
+
+
+// Targeting ../NegativeLogLikelihoodLoss_Onnx_ver22.java
+
+
+// Targeting ../AveragePool_Onnx_ver22.java
+
+
+// Targeting ../MaxPool_Onnx_ver22.java
+
+
+// Targeting ../MaxUnpool_Onnx_ver22.java
+
+
+// Targeting ../LpPool_Onnx_ver22.java
+
+
+// Targeting ../MaxRoiPool_Onnx_ver22.java
+
+
+// Targeting ../Conv_Onnx_ver22.java
+
+
+// Targeting ../ConvTranspose_Onnx_ver22.java
+
+
+// Targeting ../DeformConv_Onnx_ver22.java
+
+
+// Targeting ../GlobalAveragePool_Onnx_ver22.java
+
+
+// Targeting ../GlobalMaxPool_Onnx_ver22.java
+
+
+// Targeting ../GlobalLpPool_Onnx_ver22.java
+
+
+// Targeting ../InstanceNormalization_Onnx_ver22.java
+
+
+// Targeting ../LpNormalization_Onnx_ver22.java
+
+
+// Targeting ../Dropout_Onnx_ver22.java
+
+
+// Targeting ../RoiAlign_Onnx_ver22.java
+
+
+// Targeting ../RNN_Onnx_ver22.java
+
+
+// Targeting ../GRU_Onnx_ver22.java
+
+
+// Targeting ../LSTM_Onnx_ver22.java
+
+
+// Targeting ../GridSample_Onnx_ver22.java
+
+
+// Targeting ../OpSet_Onnx_ver22.java
 
 
 

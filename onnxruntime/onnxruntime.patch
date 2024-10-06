@@ -1,5 +1,5 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index 690b6d4e66..cc99e69580 100644
+index 6eb784a406..64c6ee243d 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
 @@ -20,8 +20,8 @@ endif()
@@ -14,26 +14,26 @@ index 690b6d4e66..cc99e69580 100644
  
  if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index e15c8a046d..0504f81348 100644
+index 927b4ac84b..307d4a4fd1 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -117,9 +117,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
+@@ -127,9 +127,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
  
  if(UNIX)
    if (APPLE)
 -    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker -dead_strip")
 +    set(ONNXRUNTIME_SO_LINK_FLAG " -L/usr/local/lib -lomp")
-   else()
+   elseif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "AIX")
 -    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker --version-script=${SYMBOL_FILE} -Xlinker --no-undefined -Xlinker --gc-sections -z noexecstack")
 +    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker --no-undefined -Xlinker -z -Xlinker noexecstack")
    endif()
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 80bd301c20..e7e4b1ce4f 100644
+index 62e9cfe24c..300a5f176f 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1365,13 +1365,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1576,13 +1576,33 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -67,7 +67,7 @@ index 80bd301c20..e7e4b1ce4f 100644
      ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1390,7 +1410,7 @@ struct ProviderSharedLibrary {
+@@ -1601,7 +1621,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -76,7 +76,7 @@ index 80bd301c20..e7e4b1ce4f 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1423,6 +1443,18 @@ struct ProviderLibrary {
+@@ -1634,6 +1654,18 @@ struct ProviderLibrary {
          s_library_shared.Ensure();
  
          auto full_path = Env::Default().GetRuntimePath() + filename_;
@@ -96,7 +96,7 @@ index 80bd301c20..e7e4b1ce4f 100644
  
          Provider* (*PGetProvider)();
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index 575434d19b..272893301a 100644
+index 7fb9fd3c8c..e0487e67f0 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 @@ -114,10 +114,11 @@ struct OnUnload {
@@ -113,7 +113,7 @@ index 575434d19b..272893301a 100644
    return g_host->CreateAllocator(info);
  }
  
-@@ -252,19 +253,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
+@@ -260,19 +261,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -137,7 +137,7 @@ index 575434d19b..272893301a 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -272,16 +276,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -280,16 +284,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -157,7 +157,7 @@ index 575434d19b..272893301a 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -292,6 +299,7 @@ int64_t TensorShape::Size() const {
+@@ -300,6 +307,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -165,7 +165,7 @@ index 575434d19b..272893301a 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -301,84 +309,98 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -309,80 +317,93 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -225,19 +225,14 @@ index 575434d19b..272893301a 100644
  #endif
  
  #ifdef USE_MIGRAPHX
- std::unique_ptr<IAllocator> CreateROCMAllocator(int16_t device_id, const char* name) {
+ std::unique_ptr<IAllocator> CreateMIGraphXAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
-   return g_host->CreateROCMAllocator(device_id, name);
+   return g_host->CreateMIGraphXAllocator(device_id, name);
  }
  
- std::unique_ptr<IAllocator> CreateROCMPinnedAllocator(const char* name) {
+ std::unique_ptr<IAllocator> CreateMIGraphXPinnedAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
-   return g_host->CreateROCMPinnedAllocator(name);
- }
- 
- std::unique_ptr<IDataTransfer> CreateGPUDataTransfer() {
-+  g_host = Provider_GetHost();
-   return g_host->CreateGPUDataTransfer();
+   return g_host->CreateMIGraphXPinnedAllocator(device_id, name);
  }
  #endif
  
@@ -271,7 +266,7 @@ index 575434d19b..272893301a 100644
  
  const char* Category::onnxruntime = "onnxruntime";
  
-@@ -461,10 +483,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -465,10 +486,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -285,10 +280,10 @@ index 575434d19b..272893301a 100644
  }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 3df351711a..6a75127088 100644
+index 587d035541..812dc850a4 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -1003,6 +1003,9 @@ def generate_build_tree(
+@@ -993,6 +993,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -298,7 +293,7 @@ index 3df351711a..6a75127088 100644
          # There are two ways of locating python C API header file. "find_package(PythonLibs 3.5 REQUIRED)"
          # and "find_package(Python 3.5 COMPONENTS Development.Module)". The first one is deprecated and it
          # depends on the "PYTHON_EXECUTABLE" variable. The second needs "Python_EXECUTABLE". Here we set both
-@@ -2795,6 +2798,9 @@ def main():
+@@ -2811,6 +2814,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
@@ -306,5 +301,5 @@ index 3df351711a..6a75127088 100644
 +            cmake_extra_args = ["-DCMAKE_SYSTEM_NAME=Linux", "-DCMAKE_SYSTEM_PROCESSOR=aarch64"]
 +
          if args.enable_pybind and is_windows():
-             install_python_deps(args.numpy_version)
- 
+             run_subprocess(
+                 [sys.executable, "-m", "pip", "install", "-r", "requirements/pybind/requirements.txt"],

@@ -28,4 +28,6 @@ public class InferenceContext extends Pointer {
   public native @Const SparseTensorProto getInputSparseData(@Cast("size_t") long index);
   // Gets the shape inputs computed by partial data propagation.
   public native @Const TensorShapeProto getSymbolicInput(@Cast("size_t") long index);
+  // To display a name the user can use to narrow its search.
+  public native @StdString BytePointer getDisplayName();
 }

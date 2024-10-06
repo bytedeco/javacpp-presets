@@ -599,7 +599,11 @@ public class OpSchema extends Pointer {
 
   public static native @Const @ByRef StringVector all_tensor_types_ir4();
 
+  public static native @Const @ByRef StringVector all_non_complex_numeric_types_plus_bool_ir4();
+
   public static native @Const @ByRef StringVector all_float_types_ir4();
+
+  public static native @Const @ByRef StringVector all_float_types_plus_Xint8_ir4();
 
   public static native @Const @ByRef StringVector all_float_types_ir9();
 
@@ -608,6 +612,8 @@ public class OpSchema extends Pointer {
   public static native @Const @ByRef StringVector all_tensor_types_ir9();
 
   public static native @Const @ByRef StringVector all_tensor_types_ir10();
+
+  public static native @Const @ByRef StringVector all_non_complex_tensor_types_ir10();
 
   public static native @Const @ByRef StringVector all_tensor_sequence_types();
 
