@@ -15,7 +15,6 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
-
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyUFuncObject extends Pointer {
     static { Loader.load(); }
@@ -159,5 +158,11 @@ public class PyUFuncObject extends Pointer {
         public native Pointer _dispatch_cache(); public native PyUFuncObject _dispatch_cache(Pointer setter);
         /* A PyListObject of `(tuple of DTypes, ArrayMethod/Promoter)` */
         public native PyObject _loops(); public native PyUFuncObject _loops(PyObject setter);
+//     #endif
+//     #if NPY_FEATURE_VERSION >= NPY_2_1_API_VERSION
+        /*
+         * Optional function to process core dimensions of a gufunc.
+         */
+        public native PyUFunc_ProcessCoreDimsFunc process_core_dims_func(); public native PyUFuncObject process_core_dims_func(PyUFunc_ProcessCoreDimsFunc setter);
 //     #endif
 }

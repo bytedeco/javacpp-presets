@@ -1340,8 +1340,8 @@ public class OrtApi extends Pointer {
    * and not present, the function returns success and out is set to nullptr.
    *
    * @param context [in] ::OrtKernelContext instance
-   * @param input [in] index. See KernelContext_GetInputCount for boundaries check.
-   * @param returns [in, out] a ptr to OrtValue if the input is present
+   * @param index [in] See KernelContext_GetInputCount for boundaries check.
+   * @param out [out] OrtValue if the input is present otherwise is set nullptr
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -1356,8 +1356,10 @@ public class OrtApi extends Pointer {
    * and not present, the function returns success and out is set to nullptr.
    *
    * @param context [in] ::OrtKernelContext instance
-   * @param output [in] index. See KernelContext_GetOutputCount for boundaries check.
-   * @param returns [in, out] a ptr to OrtValue if the output is present
+   * @param index [in] See KernelContext_GetOutputCount for boundaries check.
+   * @param dim_values [in] output dimensions
+   * @param dim_count [in] number of dimensions
+   * @param out [out] a ptr to OrtValue to output otherwise set to nullptr
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -2439,7 +2441,7 @@ public class OrtApi extends Pointer {
    * "initial_growth_chunk_size_bytes": (Possible) Size of the second allocation in the arena.
    *  Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
    * "max_power_of_two_extend_bytes": The maximum enxtend size if arena strategy is {@code kNextPowerOfTwo}.
-   *  It is not an allocation limit, it is only a limit for extention when requested byte is less than the limit.
+   *  It is not an allocation limit, it is only a limit for extension when requested byte is less than the limit.
    *  When requested bytes is more than the limit, allocator will still return as requested.
    *  Use -1 to allow ORT to choose the default 1GB for max_power_of_two_extend_bytes.
    *  Ultimately, the allocation size is determined by the allocation memory request.
@@ -4572,14 +4574,16 @@ public class OrtApi extends Pointer {
    * E.g. a cuda stream or a cublas handle
    *
    * @param context - Kernel context
-   * @param resouce_version - Version of the resource
+   * @param resource_version - Version of the resource
    * @param resource_id - Type of resource
    * @param resource - A pointer to returned resource
    *
    * @since Version 1.16.
    */
-  public native OrtStatus KernelContext_GetResource( @Const OrtKernelContext context, int resouce_version, int resource_id, @Cast("void**") PointerPointer resource);
-  public native OrtStatus KernelContext_GetResource( @Const OrtKernelContext context, int resouce_version, int resource_id, @Cast("void**") @ByPtrPtr Pointer resource);
+  public native OrtStatus KernelContext_GetResource( @Const OrtKernelContext context, int resource_version,
+                    int resource_id, @Cast("void**") PointerPointer resource);
+  public native OrtStatus KernelContext_GetResource( @Const OrtKernelContext context, int resource_version,
+                    int resource_id, @Cast("void**") @ByPtrPtr Pointer resource);
 
   /** \brief Set user logging function
    *
@@ -4637,10 +4641,10 @@ public class OrtApi extends Pointer {
   public native OrtStatus ShapeInferContext_GetAttribute( @Const OrtShapeInferContext context, String attr_name, @Const @ByPtrPtr OrtOpAttr attr);
 
   /**
-   * Set type and shape info of an ouput
+   * Set type and shape info of an output
    *
    * @param context [in]
-   * @param index [in] The index of the ouput
+   * @param index [in] The index of the output
    * @param info [out] Type shape info of the output
    *
    * @since Version 1.17.
@@ -4802,7 +4806,7 @@ public class OrtApi extends Pointer {
    * will occur before any of the optimizations take place. The data will be copied into the graph
    * since TensorProto can't refer to the user provided buffers.
    *
-   * @param session [in] options
+   * @param options [in]
    * @param external_initializer_file_names [in] Array of null terminated UTF-8 encoded strings of the file names
    *            which holds the external initializers.
    * @param external_initializer_file_buffer_array [in] Array of pointers to the buffer of the file content.

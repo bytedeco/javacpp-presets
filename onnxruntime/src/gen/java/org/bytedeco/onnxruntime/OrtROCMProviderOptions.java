@@ -90,13 +90,13 @@ public class OrtROCMProviderOptions extends Pointer {
 
   /** \brief Enable TunableOp for using.
    *   Set it to 1/0 to enable/disable TunableOp. Otherwise, it is disabled by default.
-   *   This option can be overriden by environment variable ORT_ROCM_TUNABLE_OP_ENABLE.
+   *   This option can be overridden by environment variable ORT_ROCM_TUNABLE_OP_ENABLE.
    */
   public native int tunable_op_enable(); public native OrtROCMProviderOptions tunable_op_enable(int setter);
 
   /** \brief Enable TunableOp for tuning.
    *   Set it to 1/0 to enable/disable TunableOp tuning. Otherwise, it is disabled by default.
-   *   This option can be overriden by environment variable ORT_ROCM_TUNABLE_OP_TUNING_ENABLE.
+   *   This option can be overridden by environment variable ORT_ROCM_TUNABLE_OP_TUNING_ENABLE.
    */
   public native int tunable_op_tuning_enable(); public native OrtROCMProviderOptions tunable_op_tuning_enable(int setter);
 

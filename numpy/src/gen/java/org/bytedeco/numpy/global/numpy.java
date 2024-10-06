@@ -50,7 +50,7 @@ public static final int NPY_NO_SMP = 0;
 
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x02000000;
-public static final int NPY_API_VERSION = 0x00000012;
+public static final int NPY_API_VERSION = 0x00000013;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -132,6 +132,7 @@ public static final int NPY_1_23_API_VERSION = 0x00000010;
 public static final int NPY_1_24_API_VERSION = 0x00000010;
 public static final int NPY_1_25_API_VERSION = 0x00000011;
 public static final int NPY_2_0_API_VERSION = 0x00000012;
+public static final int NPY_2_1_API_VERSION = 0x00000013;
 
 
 /*
@@ -169,8 +170,8 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
     /* user provided a target version, use it */
 //     #define NPY_FEATURE_VERSION NPY_TARGET_VERSION
 // #else
-    /* Use the default (increase when dropping Python 3.9 support) */
-//     #define NPY_FEATURE_VERSION NPY_1_19_API_VERSION
+    /* Use the default (increase when dropping Python 3.10 support) */
+//     #define NPY_FEATURE_VERSION NPY_1_21_API_VERSION
 // #endif
 
 /* Sanity check the (requested) feature version */
@@ -198,6 +199,7 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 // #elif NPY_FEATURE_VERSION == NPY_1_23_API_VERSION  /* also 1.24 */
 // #elif NPY_FEATURE_VERSION == NPY_1_25_API_VERSION
 // #elif NPY_FEATURE_VERSION == NPY_2_0_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_2_1_API_VERSION
 // #else
 //     #error "Missing version string define for new NumPy version."
 // #endif
@@ -322,14 +324,18 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 //     #define NPY_NOINLINE static
 // #endif
 
-// #ifdef HAVE___THREAD
+// #ifdef __cplusplus
+//     #define NPY_TLS thread_local
+// #elif defined(HAVE_THREAD_LOCAL)
+//     #define NPY_TLS thread_local
+// #elif defined(HAVE__THREAD_LOCAL)
+//     #define NPY_TLS _Thread_local
+// #elif defined(HAVE___THREAD)
 //     #define NPY_TLS __thread
+// #elif defined(HAVE___DECLSPEC_THREAD_)
+//     #define NPY_TLS __declspec(thread)
 // #else
-//     #ifdef HAVE___DECLSPEC_THREAD_
-//         #define NPY_TLS __declspec(thread)
-//     #else
-//         #define NPY_TLS
-//     #endif
+//     #define NPY_TLS
 // #endif
 
 // #ifdef WITH_CPYCHECKER_RETURNS_BORROWED_REF_ATTRIBUTE
@@ -506,11 +512,6 @@ public static final int NPY_SIZEOF_HASH_T = NPY_SIZEOF_HASH_T();
 
 // #include <complex.h>
 
-// Downstream libraries like sympy would like to use I
-// see https://github.com/numpy/numpy/issues/26787
-// #ifdef I
-// #undef I
-// #endif
 
 // #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 // #else /* !defined(_MSC_VER) || defined(__INTEL_COMPILER) */
@@ -4262,6 +4263,11 @@ public static native PyObject PyDataMem_DefaultHandler(); public static native v
 // #if defined(PY_ARRAY_UNIQUE_SYMBOL)
 // #endif
 
+/* By default do not export API in an .so (was never the case on windows) */
+// #ifndef NPY_API_SYMBOL_ATTRIBUTE
+//     #define NPY_API_SYMBOL_ATTRIBUTE NPY_VISIBILITY_HIDDEN
+// #endif
+
 // #if defined(NO_IMPORT) || defined(NO_IMPORT_ARRAY)
 public static native Pointer PyArray_API(int i); public static native void PyArray_API(int i, Pointer setter);
 public static native @Cast("void**") PointerPointer PyArray_API(); public static native void PyArray_API(PointerPointer setter);
@@ -4519,6 +4525,11 @@ public static native @ByRef PyTypeObject PyUFunc_Type(); public static native vo
 // #if defined(PY_UFUNC_UNIQUE_SYMBOL)
 // #endif
 
+/* By default do not export API in an .so (was never the case on windows) */
+// #ifndef NPY_API_SYMBOL_ATTRIBUTE
+//     #define NPY_API_SYMBOL_ATTRIBUTE NPY_VISIBILITY_HIDDEN
+// #endif
+
 // #if defined(NO_IMPORT) || defined(NO_IMPORT_UFUNC)
 public static native Pointer PyUFunc_API(int i); public static native void PyUFunc_API(int i, Pointer setter);
 public static native @Cast("void**") PointerPointer PyUFunc_API(); public static native void PyUFunc_API(PointerPointer setter);
@@ -4548,6 +4559,9 @@ public static native @Cast("void**") PointerPointer PyUFunc_API(); public static
 
 /* Forward declaration for the type resolver and loop selector typedefs */
 // Targeting ../PyUFunc_TypeResolutionFunc.java
+
+
+// Targeting ../PyUFunc_ProcessCoreDimsFunc.java
 
 
 // Targeting ../PyUFuncObject.java

@@ -57,6 +57,7 @@ public class ShapeInferContext extends Pointer {
 
   public native @Cast("size_t") long GetInputCount();
 
+  public native @ByVal Status SetOutputShape(@Cast("size_t") long indice, @StdVector SymbolicInteger shape, @Cast("ONNXTensorElementDataType") int type/*=ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT*/);
   public native @ByVal Status SetOutputShape(@Cast("size_t") long indice, @StdVector SymbolicInteger shape);
 
   public native @Cast("int64_t") long GetAttrInt(@Cast("const char*") BytePointer attr_name);
