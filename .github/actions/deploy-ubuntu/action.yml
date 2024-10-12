@@ -53,6 +53,9 @@ runs:
           export CUDA=cuda-repo-rhel8-12-6-local-12.6.0_560.28.03-1.ppc64le.rpm
           export CUDNN=cuda-12-9.3.0.75-1.ppc64le
           export NCCL=2.22.3-1+cuda12.5.ppc64le
+        elif [[ "$CI_DEPLOY_PLATFORM" == "linux-riscv64" ]]; then
+          export ARCH=riscv64
+          export PREFIX=riscv64-linux-gnu
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]]; then
           export ARCH=i386
           export PREFIX=i686-linux-gnu
