@@ -62,7 +62,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.12.7-${project.parent.version}</version>
+            <version>3.13.0-${project.parent.version}</version>
             <classifier>${os.name}-${os.arch}</classifier>
           </dependency>
         </dependencies>

@@ -57,14 +57,19 @@ public class AVCodec extends Pointer {
     public native int capabilities(); public native AVCodec capabilities(int setter);
     /** maximum value for lowres supported by the decoder */
     public native @Cast("uint8_t") byte max_lowres(); public native AVCodec max_lowres(byte setter);
-    /** array of supported framerates, or NULL if any, array is terminated by {0,0} */
-    public native @Const AVRational supported_framerates(); public native AVCodec supported_framerates(AVRational setter);
-    /** array of supported pixel formats, or NULL if unknown, array is terminated by -1 */
-    public native @Cast("const AVPixelFormat*") IntPointer pix_fmts(); public native AVCodec pix_fmts(IntPointer setter);
-    /** array of supported audio samplerates, or NULL if unknown, array is terminated by 0 */
-    public native @Const IntPointer supported_samplerates(); public native AVCodec supported_samplerates(IntPointer setter);
-    /** array of supported sample formats, or NULL if unknown, array is terminated by -1 */
-    public native @Cast("const AVSampleFormat*") IntPointer sample_fmts(); public native AVCodec sample_fmts(IntPointer setter);
+
+    /**
+     * Deprecated codec capabilities.
+     */
+    /** @deprecated use avcodec_get_supported_config() */
+    public native @Const @Deprecated AVRational supported_framerates(); public native AVCodec supported_framerates(AVRational setter);
+    /** @deprecated use avcodec_get_supported_config() */
+    public native @Cast("const AVPixelFormat*") @Deprecated IntPointer pix_fmts(); public native AVCodec pix_fmts(IntPointer setter);
+    /** @deprecated use avcodec_get_supported_config() */
+    public native @Const @Deprecated IntPointer supported_samplerates(); public native AVCodec supported_samplerates(IntPointer setter);
+    /** @deprecated use avcodec_get_supported_config() */
+    public native @Cast("const AVSampleFormat*") @Deprecated IntPointer sample_fmts(); public native AVCodec sample_fmts(IntPointer setter);
+
     /** AVClass for the private context */
     public native @Const AVClass priv_class(); public native AVCodec priv_class(AVClass setter);
     /** array of recognized profiles, or NULL if unknown, array is terminated by {AV_PROFILE_UNKNOWN} */
@@ -84,6 +89,7 @@ public class AVCodec extends Pointer {
 
     /**
      * Array of supported channel layouts, terminated with a zeroed layout.
+     * @deprecated use avcodec_get_supported_config()
      */
-    public native @Const AVChannelLayout ch_layouts(); public native AVCodec ch_layouts(AVChannelLayout setter);
+    public native @Const @Deprecated AVChannelLayout ch_layouts(); public native AVCodec ch_layouts(AVChannelLayout setter);
 }

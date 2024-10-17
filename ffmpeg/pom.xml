@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ffmpeg</artifactId>
-  <version>7.0.2-${project.parent.version}</version>
+  <version>7.1-${project.parent.version}</version>
   <name>JavaCPP Presets for FFmpeg</name>
 
   <dependencies>

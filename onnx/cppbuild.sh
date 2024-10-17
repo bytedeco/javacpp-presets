@@ -53,13 +53,13 @@ fi
 
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 
-if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.13/Python.h" ]]; then
     export LD_LIBRARY_PATH="$CPYTHON_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.13"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.13/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.13/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.13/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.13/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)

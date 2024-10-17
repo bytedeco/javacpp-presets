@@ -12,7 +12,6 @@ import static org.bytedeco.cpython.global.python.*;
 
 
 /* Tables of which tools are active for each monitored event. */
-/* For 3.12 ABI compatibility this is over sized */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _Py_LocalMonitors extends Pointer {
     static { Loader.load(); }
@@ -31,7 +30,6 @@ public class _Py_LocalMonitors extends Pointer {
         return new _Py_LocalMonitors((Pointer)this).offsetAddress(i);
     }
 
-    /* Only _PY_MONITORING_LOCAL_EVENTS of these are used */
     public native @Cast("uint8_t") byte tools(int i); public native _Py_LocalMonitors tools(int i, byte setter);
     @MemberGetter public native @Cast("uint8_t*") BytePointer tools();
 }

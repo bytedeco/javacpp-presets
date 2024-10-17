@@ -83,8 +83,9 @@ public class PyCodeObject extends Pointer {
     public native PyObject co_qualname(); public native PyCodeObject co_qualname(PyObject setter);        /* unicode (qualname, for reference) */
     public native PyObject co_linetable(); public native PyCodeObject co_linetable(PyObject setter);       /* bytes object that holds location info */
     public native PyObject co_weakreflist(); public native PyCodeObject co_weakreflist(PyObject setter);     /* to support weakrefs to code objects */
+    public native _PyExecutorArray co_executors(); public native PyCodeObject co_executors(_PyExecutorArray setter);      /* executors from optimizer */
     public native _PyCoCached _co_cached(); public native PyCodeObject _co_cached(_PyCoCached setter);      /* cached co_* attributes */
-    public native @Cast("uint64_t") long _co_instrumentation_version(); public native PyCodeObject _co_instrumentation_version(long setter); /* current instrumentation version */
+    public native @Cast("uintptr_t") long _co_instrumentation_version(); public native PyCodeObject _co_instrumentation_version(long setter); /* current instrumentation version */
     public native _PyCoMonitoringData _co_monitoring(); public native PyCodeObject _co_monitoring(_PyCoMonitoringData setter); /* Monitoring data */
     public native int _co_firsttraceable(); public native PyCodeObject _co_firsttraceable(int setter);       /* index of first traceable instruction */
     /* Scratch space for extra data relating to the code object.               \

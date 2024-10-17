@@ -1,16 +1,16 @@
-diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
---- ffmpeg-7.0/configure	2024-04-05 08:22:59.000000000 +0900
-+++ ffmpeg-7.0-patch/configure	2024-04-20 00:59:06.473315424 +0900
-@@ -6823,7 +6823,7 @@
+diff -ruN ffmpeg-7.1/configure ffmpeg-7.1-patch/configure
+--- ffmpeg-7.1/configure	2024-09-30 08:31:47.000000000 +0900
++++ ffmpeg-7.1-patch/configure	2024-10-13 20:41:25.648732122 +0900
+@@ -6865,7 +6865,7 @@
  enabled jni               && { [ $target_os = "android" ] && check_headers jni.h && enabled pthreads || die "ERROR: jni not found"; }
  enabled ladspa            && require_headers "ladspa.h dlfcn.h"
  enabled lcms2             && require_pkg_config lcms2 "lcms2 >= 2.13" lcms2.h cmsCreateContext
--enabled libaom            && require_pkg_config libaom "aom >= 1.0.0" aom/aom_codec.h aom_codec_version
+-enabled libaom            && require_pkg_config libaom "aom >= 2.0.0" aom/aom_codec.h aom_codec_version
 +enabled libaom            && require libaom aom/aom_codec.h aom_codec_version -laom
  enabled libaribb24        && { check_pkg_config libaribb24 "aribb24 > 1.0.3" "aribb24/aribb24.h" arib_instance_new ||
                                 { enabled gpl && require_pkg_config libaribb24 aribb24 "aribb24/aribb24.h" arib_instance_new; } ||
                                 die "ERROR: libaribb24 requires version higher than 1.0.3 or --enable-gpl."; }
-@@ -6851,7 +6851,7 @@
+@@ -6893,7 +6893,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
  enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
@@ -19,7 +19,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
  enabled libharfbuzz       && require_pkg_config libharfbuzz harfbuzz hb.h hb_buffer_create
  enabled libglslang && { check_lib spirv_compiler glslang/Include/glslang_c_interface.h glslang_initialize_process \
-@@ -6881,15 +6881,7 @@
+@@ -6925,15 +6925,7 @@
  # pkg-config support.  Instead, users should make sure that the build
  # can find the libraries and headers through other means.
  elif enabled libmfx; then
@@ -36,7 +36,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
      warn "libmfx is deprecated. Please run configure with --enable-libvpl to use libvpl instead."
  elif enabled libvpl; then
  # Consider pkg-config only. The name of libmfx is still passed to check_pkg_config function for --enable-libvpl option
-@@ -6917,21 +6909,14 @@
+@@ -6962,21 +6954,14 @@
                                 { check_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -60,7 +60,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
  enabled libplacebo        && require_pkg_config libplacebo "libplacebo >= 4.192.0" libplacebo/vulkan.h pl_vulkan_create
  enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
  enabled libqrencode       && require_pkg_config libqrencode libqrencode qrencode.h QRcode_encodeString
-@@ -6949,9 +6934,9 @@
+@@ -6994,9 +6979,9 @@
  enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy -lstdc++
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh "libssh >= 0.6.0" libssh/sftp.h sftp_init
@@ -73,7 +73,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
  enabled libtensorflow     && require libtensorflow tensorflow/c/c_api.h TF_Version -ltensorflow
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
-@@ -6971,19 +6956,15 @@
+@@ -7016,19 +7001,15 @@
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -93,9 +93,9 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs $pthreads_extralibs"
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -6992,27 +6973,27 @@
- }
+@@ -7038,27 +7019,27 @@
  
+ enabled libvvenc          && require_pkg_config libvvenc "libvvenc >= 1.6.1" "vvenc/vvenc.h" vvenc_get_version
  enabled libwebp           && {
 -    enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
 -    enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
@@ -103,7 +103,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
 +    enabled libwebp_encoder      && require libwebp webp/encode.h WebPGetEncoderVersion -lwebp -lsharpyuv
 +    enabled libwebp_anim_encoder && require libwebp_anim_encoder webp/mux.h WebPAnimEncoderOptionsInit -lwebpmux -lwebp -lsharpyuv; }
 +enabled libx264           && require libx264 "stdint.h x264.h" x264_encoder_encode -lx264 $pthreads_extralibs &&
-                              require_cpp_condition libx264 x264.h "X264_BUILD >= 122" && {
+                              require_cpp_condition libx264 x264.h "X264_BUILD >= 155" && {
                               [ "$toolchain" != "msvc" ] ||
                               require_cpp_condition libx264 x264.h "X264_BUILD >= 158"; } &&
                               check_cpp_condition libx264_hdr10 x264.h "X264_BUILD >= 163" &&
@@ -114,7 +114,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
  enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode "-lxavs $pthreads_extralibs $libm_extralibs"
  enabled libxavs2          && require_pkg_config libxavs2 "xavs2 >= 1.3.0" "stdint.h xavs2.h" xavs2_api_get
  enabled libxevd           && require_pkg_config libxevd "xevd >= 0.4.1" "xevd.h" xevd_decode
- enabled libxeve           && require_pkg_config libxeve "xeve >= 0.4.3" "xeve.h" xeve_encode
+ enabled libxeve           && require_pkg_config libxeve "xeve >= 0.5.1" "xeve.h" xeve_encode
  enabled libxvid           && require libxvid xvid.h xvid_global -lxvidcore
 -enabled libzimg           && require_pkg_config libzimg "zimg >= 2.7.0" zimg.h zimg_get_api_version
 +enabled libzimg           && require libzimg zimg.h zimg_get_api_version -lzimg
@@ -127,7 +127,7 @@ diff -ruN ffmpeg-7.0/configure ffmpeg-7.0-patch/configure
  enabled mbedtls           && { check_pkg_config mbedtls mbedtls mbedtls/x509_crt.h mbedtls_x509_crt_init ||
                                 check_pkg_config mbedtls mbedtls mbedtls/ssl.h mbedtls_ssl_init ||
                                 check_lib mbedtls mbedtls/ssl.h mbedtls_ssl_init -lmbedtls -lmbedx509 -lmbedcrypto ||
-@@ -7051,15 +7032,13 @@
+@@ -7097,15 +7078,13 @@
                                 die "ERROR: OpenMAX IL headers from raspberrypi/firmware not found"; } &&
                               enable omx
  enabled omx               && require_headers OMX_Core.h

@@ -126,6 +126,9 @@ public class avfilter extends org.bytedeco.ffmpeg.presets.avfilter {
  * @return type of the pad_idx'th pad in pads
  */
 @NoException public static native @Cast("AVMediaType") int avfilter_pad_get_type(@Const AVFilterPad pads, int pad_idx);
+// Targeting ../avfilter/AVFilterFormatsConfig.java
+
+
 
 /**
  * The number of the filter inputs is not determined just by AVFilter.inputs.
@@ -201,9 +204,6 @@ public static final int AVFILTER_FLAG_SUPPORT_TIMELINE = (AVFILTER_FLAG_SUPPORT_
  */
 public static final int AVFILTER_THREAD_SLICE = (1 << 0);
 // Targeting ../avfilter/AVFilterContext.java
-
-
-// Targeting ../avfilter/AVFilterFormatsConfig.java
 
 
 // Targeting ../avfilter/AVFilterLink.java
@@ -1241,7 +1241,7 @@ public static final boolean FF_API_LINK_PUBLIC =     (LIBAVFILTER_VERSION_MAJOR 
 
 // #include "version_major.h"
 
-public static final int LIBAVFILTER_VERSION_MINOR =   1;
+public static final int LIBAVFILTER_VERSION_MINOR =   4;
 public static final int LIBAVFILTER_VERSION_MICRO = 100;
 
 

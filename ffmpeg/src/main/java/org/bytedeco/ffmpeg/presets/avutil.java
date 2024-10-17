@@ -82,13 +82,13 @@ public class avutil implements InfoMapper {
                              "av_ceil_log2", "av_clip", "av_clip64", "av_clip_uint8", "av_clip_int8", "av_clip_uint16", "av_clip_int16",
                              "av_clipl_int32", "av_clip_intp2", "av_clip_uintp2", "av_mod_uintp2", "av_sat_add32", "av_sat_dadd32",
                              "av_sat_sub32", "av_sat_dsub32", "av_clipf", "av_clipd", "av_popcount", "av_popcount64", "av_parity",
-                             "av_sat_add64", "av_sat_sub64", "LIBAVUTIL_VERSION").cppTypes().translate())
+                             "av_sat_add64", "av_sat_sub64", "av_zero_extend", "LIBAVUTIL_VERSION").cppTypes().translate())
                .put(new Info("LIBAVUTIL_VERSION_INT", "LIBAVUTIL_IDENT").translate(false))
                .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY", "FF_API_FIFO_PEEK2",
                              "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8", "FF_API_PKT_DURATION",
                              "FF_API_REORDERED_OPAQUE", "FF_API_FRAME_PICTURE_NUMBER", "FF_API_HDR_VIVID_THREE_SPLINE", "FF_API_FRAME_PKT",
                              "FF_API_INTERLACED_FRAME", "FF_API_FRAME_KEY", "FF_API_PALETTE_HAS_CHANGED", "FF_API_VULKAN_CONTIGUOUS_MEMORY",
-                             "FF_API_H274_FILM_GRAIN_VCS").define().translate().cppTypes("bool"))
+                             "FF_API_H274_FILM_GRAIN_VCS", "FF_API_MOD_UINTP2", "FF_API_RISCV_FD_ZBA", "FF_API_VULKAN_FIXED_QUEUES").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
@@ -133,6 +133,10 @@ public class avutil implements InfoMapper {
                              "AV_CH_BOTTOM_FRONT_CENTER",
                              "AV_CH_BOTTOM_FRONT_LEFT",
                              "AV_CH_BOTTOM_FRONT_RIGHT",
+                             "AV_CH_SIDE_SURROUND_LEFT",
+                             "AV_CH_SIDE_SURROUND_RIGHT",
+                             "AV_CH_TOP_SURROUND_LEFT",
+                             "AV_CH_TOP_SURROUND_RIGHT",
                              "AV_CH_LAYOUT_NATIVE",
                              "AV_CH_LAYOUT_MONO",
                              "AV_CH_LAYOUT_STEREO",

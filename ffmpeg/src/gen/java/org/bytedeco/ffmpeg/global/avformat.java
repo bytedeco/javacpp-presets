@@ -1362,6 +1362,11 @@ public static final int AV_DISPOSITION_DEPENDENT =            (1 << 19);
  * The video stream contains still images.
  */
 public static final int AV_DISPOSITION_STILL_IMAGE =          (1 << 20);
+/**
+ * The video stream contains multiple layers, e.g. stereoscopic views (cf. H.264
+ * Annex G/H, or HEVC Annex F).
+ */
+public static final int AV_DISPOSITION_MULTILAYER =           (1 << 21);
 
 /**
  * @return The AV_DISPOSITION_* flag corresponding to disp or a negative error
@@ -1393,13 +1398,17 @@ public static final int AV_PTS_WRAP_SUB_OFFSET =  -1;
 // Targeting ../avformat/AVStreamGroupTileGrid.java
 
 
+// Targeting ../avformat/AVStreamGroupLCEVC.java
+
+
 
 /** enum AVStreamGroupParamsType */
 public static final int
     AV_STREAM_GROUP_PARAMS_NONE = 0,
     AV_STREAM_GROUP_PARAMS_IAMF_AUDIO_ELEMENT = 1,
     AV_STREAM_GROUP_PARAMS_IAMF_MIX_PRESENTATION = 2,
-    AV_STREAM_GROUP_PARAMS_TILE_GRID = 3;
+    AV_STREAM_GROUP_PARAMS_TILE_GRID = 3,
+    AV_STREAM_GROUP_PARAMS_LCEVC = 4;
 // Targeting ../avformat/AVIAMFAudioElement.java
 
 
@@ -2742,6 +2751,7 @@ public static final int AV_FRAME_FILENAME_FLAGS_MULTIPLE = 1;
 
 @NoException public static native int avformat_queue_attached_pictures(AVFormatContext s);
 
+// #if FF_API_INTERNAL_TIMING
 /** enum AVTimebaseSource */
 public static final int
     AVFMT_TBCF_AUTO = -1,
@@ -2752,25 +2762,18 @@ public static final int
 // #endif
 
 /**
- * Transfer internal timing information from one stream to another.
- *
- * This function is useful when doing stream copy.
- *
- * @param ofmt     target output format for ost
- * @param ost      output stream which needs timings copy and adjustments
- * @param ist      reference input stream to copy timings from
- * @param copy_tb  define from where the stream codec timebase needs to be imported
+ * @deprecated do not call this function
  */
-@NoException public static native int avformat_transfer_internal_stream_timing_info(@Const AVOutputFormat ofmt,
+@NoException public static native @Deprecated int avformat_transfer_internal_stream_timing_info(@Const AVOutputFormat ofmt,
                                                   AVStream ost, @Const AVStream ist,
                                                   @Cast("AVTimebaseSource") int copy_tb);
 
 /**
- * Get the internal codec timebase from a stream.
- *
- * @param st  input stream to extract the timebase from
+ * @deprecated do not call this function
  */
-@NoException public static native @ByVal AVRational av_stream_get_codec_timebase(@Const AVStream st);
+@NoException public static native @Deprecated @ByVal AVRational av_stream_get_codec_timebase(@Const AVStream st);
+// #endif
+
 
 /**
  * \}
@@ -2830,6 +2833,7 @@ public static final boolean FF_API_ALLOW_FLUSH =              (LIBAVFORMAT_VERSI
 public static final boolean FF_API_AVSTREAM_SIDE_DATA =       (LIBAVFORMAT_VERSION_MAJOR < 62);
 
 public static final boolean FF_API_GET_DUR_ESTIMATE_METHOD =  (LIBAVFORMAT_VERSION_MAJOR < 62);
+public static final boolean FF_API_INTERNAL_TIMING =          (LIBAVFORMAT_VERSION_MAJOR < 62);
 
 public static final int FF_API_R_FRAME_RATE =            1;
 
@@ -2871,7 +2875,7 @@ public static final int FF_API_R_FRAME_RATE =            1;
 
 // #include "version_major.h"
 
-public static final int LIBAVFORMAT_VERSION_MINOR =   1;
+public static final int LIBAVFORMAT_VERSION_MINOR =   7;
 public static final int LIBAVFORMAT_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVFORMAT_VERSION_INT();

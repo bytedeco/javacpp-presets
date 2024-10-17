@@ -12,6 +12,9 @@ import static org.bytedeco.cpython.global.python.*;
 
 // #endif
 
+// #if !defined(Py_LIMITED_API) && defined(Py_GIL_DISABLED)
+// #endif
+
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyModuleDef extends Pointer {
     static { Loader.load(); }

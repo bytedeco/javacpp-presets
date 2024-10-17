@@ -11,9 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-// #ifdef Py_DEBUG
-// #endif
-
 
 /* hash function definition */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)

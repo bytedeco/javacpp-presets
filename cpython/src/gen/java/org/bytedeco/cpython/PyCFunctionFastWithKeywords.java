@@ -10,16 +10,14 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-
-/* cross-interpreter data registry */
-
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class crossinterpdatafunc extends FunctionPointer {
+public class PyCFunctionFastWithKeywords extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    crossinterpdatafunc(Pointer p) { super(p); }
-    protected crossinterpdatafunc() { allocate(); }
+    public    PyCFunctionFastWithKeywords(Pointer p) { super(p); }
+    protected PyCFunctionFastWithKeywords() { allocate(); }
     private native void allocate();
-    public native int call(PyThreadState tstate, PyObject arg1,
-                                   _PyCrossInterpreterData arg2);
+    public native PyObject call(PyObject arg0,
+                                                  @Cast("PyObject*const*") PointerPointer arg1, @Cast("Py_ssize_t") long arg2,
+                                                  PyObject arg3);
 }

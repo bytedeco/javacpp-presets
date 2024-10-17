@@ -56,7 +56,7 @@ public class avcodec implements InfoMapper {
                              "FF_API_AYUV_CODECID", "FF_API_VT_OUTPUT_CALLBACK", "FF_API_AVCODEC_CHROMA_POS", "FF_API_VT_HWACCEL_CONTEXT",
                              "FF_API_AVCTX_FRAME_NUMBER", "FF_CODEC_CRYSTAL_HD", "FF_API_SLICE_OFFSET", "FF_API_SUBFRAMES", "FF_API_TICKS_PER_FRAME",
                              "FF_API_DROPCHANGED", "FF_API_AVFFT", "FF_API_FF_PROFILE_LEVEL", "FF_API_AVCODEC_CLOSE", "FF_API_BUFFER_MIN_SIZE",
-                             "FF_API_VDPAU_ALLOC_GET_SET").define().translate().cppTypes("bool"))
+                             "FF_API_VDPAU_ALLOC_GET_SET", "FF_API_QUALITY_FACTOR").define().translate().cppTypes("bool"))
                .put(new Info("AVCodecInternal", "AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
                .put(new Info("av_jni_get_android_app_ctx").annotations("@Platform(\"android\")").javaNames("av_jni_get_android_app_ctx"))
                .put(new Info("av_jni_set_android_app_ctx").annotations("@Platform(\"android\")").javaNames("av_jni_set_android_app_ctx"))

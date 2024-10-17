@@ -116,4 +116,5 @@ public class PyTypeObject extends Pointer {
 
     /* bitset of which type-watchers care about this type */
     public native @Cast("unsigned char") byte tp_watched(); public native PyTypeObject tp_watched(byte setter);
+    public native @Cast("uint16_t") short tp_versions_used(); public native PyTypeObject tp_versions_used(short setter);
 }

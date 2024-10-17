@@ -62,15 +62,15 @@ echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
 echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 
-if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.13/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
-    export PATH="$CPYTHON_PATH/lib/python3.12/bin/:$PATH"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.13/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.13"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.13/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.13/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.13/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.13/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -88,17 +88,17 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 TOOLS="setuptools==67.6.1 cython==3.0.10"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    chmod +x "$CPYTHON_HOST_PATH/bin/python3.12"
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.13"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
 
     # crossenv 1.4 for python 3.11+ support.
     # See https://github.com/bytedeco/javacpp-presets/issues/1381
-    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.4 $TOOLS
-    "$CPYTHON_HOST_PATH/bin/python3.12" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    "$CPYTHON_HOST_PATH/bin/python3.13" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.13/" crossenv==1.4 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.13" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
     cross-expose cython
-    chmod +x $CPYTHON_HOST_PATH/lib/python3.12/bin/*
-    export PATH="$CPYTHON_HOST_PATH/lib/python3.12/bin/:$PATH"
+    chmod +x $CPYTHON_HOST_PATH/lib/python3.13/bin/*
+    export PATH="$CPYTHON_HOST_PATH/lib/python3.13/bin/:$PATH"
     export PYTHON_BIN_PATH="python"
 fi
 

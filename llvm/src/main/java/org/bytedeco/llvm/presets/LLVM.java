@@ -38,9 +38,9 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", /*"<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",*/
                "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp17", link = {"LLVM@.18.1", "LTO@.18.1", "Remarks@.18.1"}, resource = {"include", "lib", "libexec", "share"}),
+    compiler = "cpp17", link = {"LLVM@.19.1", "LTO@.19.1", "Remarks@.19.1"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
-        @Platform(value = "windows", link = {"Ws2_32", "LLVM", "LTO", "Remarks"})})
+        @Platform(value = "windows", link = {"ntdll", "Ws2_32", "LLVM", "LTO", "Remarks"})})
 @NoException
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
@@ -58,6 +58,7 @@ public class LLVM implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))
+               .put(new Info("LLVMOpaqueDbgRecord").pointerTypes("LLVMDbgRecordRef"))
                .put(new Info("LLVMOpaqueModule").pointerTypes("LLVMModuleRef"))
                .put(new Info("LLVMOpaqueType").pointerTypes("LLVMTypeRef"))
                .put(new Info("LLVMOpaqueValue").pointerTypes("LLVMValueRef"))
@@ -124,6 +125,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaquePassBuilderOptions").pointerTypes("LLVMPassBuilderOptionsRef"))
 
                .put(new Info("LLVMContextRef").valueTypes("LLVMContextRef").pointerTypes("@ByPtrPtr LLVMContextRef", "@Cast(\"LLVMContextRef*\") PointerPointer"))
+               .put(new Info("LLVMDbgRecordRef").valueTypes("LLVMDbgRecordRef").pointerTypes("@ByPtrPtr LLVMDbgRecordRef", "@Cast(\"LLVMDbgRecordRef*\") PointerPointer"))
                .put(new Info("LLVMModuleRef").valueTypes("LLVMModuleRef").pointerTypes("@ByPtrPtr LLVMModuleRef", "@Cast(\"LLVMModuleRef*\") PointerPointer"))
                .put(new Info("LLVMTypeRef").valueTypes("LLVMTypeRef").pointerTypes("@ByPtrPtr LLVMTypeRef", "@Cast(\"LLVMTypeRef*\") PointerPointer"))
                .put(new Info("LLVMValueRef").valueTypes("LLVMValueRef").pointerTypes("@ByPtrPtr LLVMValueRef", "@Cast(\"LLVMValueRef*\") PointerPointer"))

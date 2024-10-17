@@ -547,7 +547,7 @@ public static final boolean FF_API_SDL2_DEVICE = (LIBAVDEVICE_VERSION_MAJOR < 62
 
 // #include "version_major.h"
 
-public static final int LIBAVDEVICE_VERSION_MINOR =   1;
+public static final int LIBAVDEVICE_VERSION_MINOR =   3;
 public static final int LIBAVDEVICE_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVDEVICE_VERSION_INT();

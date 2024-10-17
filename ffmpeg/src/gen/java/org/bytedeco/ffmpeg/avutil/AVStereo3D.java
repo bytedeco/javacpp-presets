@@ -50,4 +50,26 @@ public class AVStereo3D extends Pointer {
      * Determines which views are packed.
      */
     public native @Cast("AVStereo3DView") int view(); public native AVStereo3D view(int setter);
+
+    /**
+     * Which eye is the primary eye when rendering in 2D.
+     */
+    public native @Cast("AVStereo3DPrimaryEye") int primary_eye(); public native AVStereo3D primary_eye(int setter);
+
+    /**
+     * The distance between the centres of the lenses of the camera system,
+     * in micrometers. Zero if unset.
+     */
+    public native @Cast("uint32_t") int baseline(); public native AVStereo3D baseline(int setter);
+
+    /**
+     * Relative shift of the left and right images, which changes the zero parallax plane.
+     * Range is -1.0 to 1.0. Zero if unset.
+     */
+    public native @ByRef AVRational horizontal_disparity_adjustment(); public native AVStereo3D horizontal_disparity_adjustment(AVRational setter);
+
+    /**
+     * Horizontal field of view, in degrees. Zero if unset.
+     */
+    public native @ByRef AVRational horizontal_field_of_view(); public native AVStereo3D horizontal_field_of_view(AVRational setter);
 }

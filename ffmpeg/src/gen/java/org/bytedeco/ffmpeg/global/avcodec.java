@@ -572,6 +572,7 @@ public static final int
     AV_CODEC_ID_AC4 = 0x15000 + 103,
     AV_CODEC_ID_OSQ = 0x15000 + 104,
     AV_CODEC_ID_QOA = 0x15000 + 105,
+    AV_CODEC_ID_LC3 = 0x15000 + 106,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -621,6 +622,7 @@ public static final int
     AV_CODEC_ID_TIMED_ID3 = 0x18000 + 9,
     AV_CODEC_ID_BIN_DATA = 0x18000 + 10,
     AV_CODEC_ID_SMPTE_2038 = 0x18000 + 11,
+    AV_CODEC_ID_LCEVC = 0x18000 + 12,
 
 
     /** codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it */
@@ -894,6 +896,7 @@ public static final int AV_PROFILE_AAC_HE =           4;
 public static final int AV_PROFILE_AAC_HE_V2 =       28;
 public static final int AV_PROFILE_AAC_LD =          22;
 public static final int AV_PROFILE_AAC_ELD =         38;
+public static final int AV_PROFILE_AAC_USAC =        41;
 public static final int AV_PROFILE_MPEG2_AAC_LOW =  128;
 public static final int AV_PROFILE_MPEG2_AAC_HE =   131;
 
@@ -980,6 +983,7 @@ public static final int AV_PROFILE_HEVC_MAIN =                        1;
 public static final int AV_PROFILE_HEVC_MAIN_10 =                     2;
 public static final int AV_PROFILE_HEVC_MAIN_STILL_PICTURE =          3;
 public static final int AV_PROFILE_HEVC_REXT =                        4;
+public static final int AV_PROFILE_HEVC_MULTIVIEW_MAIN =              6;
 public static final int AV_PROFILE_HEVC_SCC =                         9;
 
 public static final int AV_PROFILE_VVC_MAIN_10 =                      1;
@@ -1237,10 +1241,6 @@ public static final int
      * An AV_PKT_DATA_PARAM_CHANGE side data packet is laid out as follows:
      * <pre>{@code
      * u32le param_flags
-     * if (param_flags & AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT)
-     *     s32le channel_count
-     * if (param_flags & AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT)
-     *     u64le channel_layout
      * if (param_flags & AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE)
      *     s32le sample_rate
      * if (param_flags & AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS)
@@ -1509,6 +1509,25 @@ public static final int
     AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT = 35,
 
     /**
+     * The number of pixels to discard from the top/bottom/left/right border of the
+     * decoded frame to obtain the sub-rectangle intended for presentation.
+     *
+     * <pre>{@code
+     * u32le crop_top
+     * u32le crop_bottom
+     * u32le crop_left
+     * u32le crop_right
+     * }</pre>
+     */
+    AV_PKT_DATA_FRAME_CROPPING = 36,
+
+    /**
+     * Raw LCEVC payload data, as a uint8_t array, with NAL emulation
+     * bytes intact.
+     */
+    AV_PKT_DATA_LCEVC = 37,
+
+    /**
      * The number of side data types.
      * This is not part of the public API/ABI in the sense that it may
      * change when new side data types are added.
@@ -1516,8 +1535,9 @@ public static final int
      * If its value becomes huge, some code using it
      * needs to be updated as it assumes it to be smaller than other limits.
      */
-    AV_PKT_DATA_NB = 36;
+    AV_PKT_DATA_NB = 38;
 
+// #if FF_API_QUALITY_FACTOR
 public static final int AV_PKT_DATA_QUALITY_FACTOR = AV_PKT_DATA_QUALITY_STATS;
 // Targeting ../avcodec/AVPacketSideData.java
 
@@ -2913,6 +2933,12 @@ public static final int AV_CODEC_EXPORT_DATA_VIDEO_ENC_PARAMS = (1 << 2);
 public static final int AV_CODEC_EXPORT_DATA_FILM_GRAIN = (1 << 3);
 
 /**
+ * Decoding only.
+ * Do not apply picture enhancement layers, export them instead.
+ */
+public static final int AV_CODEC_EXPORT_DATA_ENHANCEMENTS = (1 << 4);
+
+/**
  * The decoder will keep a reference to the frame and may reuse it later.
  */
 public static final int AV_GET_BUFFER_FLAG_REF = (1 << 0);
@@ -3483,6 +3509,55 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
                                      @Cast("AVPixelFormat") int hw_pix_fmt,
                                      @ByPtrPtr AVBufferRef out_frames_ref);
 
+/** enum AVCodecConfig */
+public static final int
+    /** AVPixelFormat, terminated by AV_PIX_FMT_NONE */
+    AV_CODEC_CONFIG_PIX_FORMAT = 0,
+    /** AVRational, terminated by {0, 0} */
+    AV_CODEC_CONFIG_FRAME_RATE = 1,
+    /** int, terminated by 0 */
+    AV_CODEC_CONFIG_SAMPLE_RATE = 2,
+    /** AVSampleFormat, terminated by AV_SAMPLE_FMT_NONE */
+    AV_CODEC_CONFIG_SAMPLE_FORMAT = 3,
+    /** AVChannelLayout, terminated by {0} */
+    AV_CODEC_CONFIG_CHANNEL_LAYOUT = 4,
+    /** AVColorRange, terminated by AVCOL_RANGE_UNSPECIFIED */
+    AV_CODEC_CONFIG_COLOR_RANGE = 5,
+    /** AVColorSpace, terminated by AVCOL_SPC_UNSPECIFIED */
+    AV_CODEC_CONFIG_COLOR_SPACE = 6;
+
+/**
+ * Retrieve a list of all supported values for a given configuration type.
+ *
+ * @param avctx An optional context to use. Values such as
+ *              {@code strict_std_compliance} may affect the result. If NULL,
+ *              default values are used.
+ * @param codec The codec to query, or NULL to use avctx->codec.
+ * @param config The configuration to query.
+ * @param flags Currently unused; should be set to zero.
+ * @param out_configs On success, set to a list of configurations, terminated
+ *                    by a config-specific terminator, or NULL if all
+ *                    possible values are supported.
+ * @param out_num_configs On success, set to the number of elements in
+                          *out_configs, excluding the terminator. Optional.
+ */
+@NoException public static native int avcodec_get_supported_config(@Const AVCodecContext avctx,
+                                 @Const AVCodec codec, @Cast("AVCodecConfig") int config,
+                                 @Cast("unsigned") int flags, @Cast("const void**") PointerPointer out_configs,
+                                 IntPointer out_num_configs);
+@NoException public static native int avcodec_get_supported_config(@Const AVCodecContext avctx,
+                                 @Const AVCodec codec, @Cast("AVCodecConfig") int config,
+                                 @Cast("unsigned") int flags, @Cast("const void**") @ByPtrPtr Pointer out_configs,
+                                 IntPointer out_num_configs);
+@NoException public static native int avcodec_get_supported_config(@Const AVCodecContext avctx,
+                                 @Const AVCodec codec, @Cast("AVCodecConfig") int config,
+                                 @Cast("unsigned") int flags, @Cast("const void**") @ByPtrPtr Pointer out_configs,
+                                 IntBuffer out_num_configs);
+@NoException public static native int avcodec_get_supported_config(@Const AVCodecContext avctx,
+                                 @Const AVCodec codec, @Cast("AVCodecConfig") int config,
+                                 @Cast("unsigned") int flags, @Cast("const void**") @ByPtrPtr Pointer out_configs,
+                                 int[] out_num_configs);
+
 
 
 /**
@@ -4031,6 +4106,7 @@ public static final boolean FF_API_FF_PROFILE_LEVEL =    (LIBAVCODEC_VERSION_MAJ
 public static final boolean FF_API_AVCODEC_CLOSE =       (LIBAVCODEC_VERSION_MAJOR < 62);
 public static final boolean FF_API_BUFFER_MIN_SIZE =     (LIBAVCODEC_VERSION_MAJOR < 62);
 public static final boolean FF_API_VDPAU_ALLOC_GET_SET = (LIBAVCODEC_VERSION_MAJOR < 62);
+public static final boolean FF_API_QUALITY_FACTOR =      (LIBAVCODEC_VERSION_MAJOR < 62);
 
 // #endif /* AVCODEC_VERSION_MAJOR_H */
 
@@ -4068,7 +4144,7 @@ public static final boolean FF_API_VDPAU_ALLOC_GET_SET = (LIBAVCODEC_VERSION_MAJ
 
 // #include "version_major.h"
 
-public static final int LIBAVCODEC_VERSION_MINOR =   3;
+public static final int LIBAVCODEC_VERSION_MINOR =  19;
 public static final int LIBAVCODEC_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVCODEC_VERSION_INT();

@@ -14,6 +14,7 @@ import static org.bytedeco.ffmpeg.global.swresample.*;
 
 import static org.bytedeco.ffmpeg.global.avcodec.*;
  //DEPRECATED
+// #endif
 
 /**
  * This structure stores auxiliary information for decoding, presenting, or

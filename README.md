@@ -180,7 +180,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 4.10.x  https://opencv.org/releases/
- * FFmpeg 7.0.x  http://ffmpeg.org/download.html
+ * FFmpeg 7.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 4.0.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -204,11 +204,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CMINPACK 1.3.9  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.12.x  https://www.python.org/downloads/
+ * CPython 3.13.x  https://www.python.org/downloads/
  * NumPy 2.1.x  https://github.com/numpy/numpy
  * SciPy 1.14.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
- * LLVM 18.1.x  http://llvm.org/releases/download.html
+ * LLVM 19.1.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
