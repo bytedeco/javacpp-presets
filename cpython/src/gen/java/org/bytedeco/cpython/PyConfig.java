@@ -80,6 +80,10 @@ public class PyConfig extends Pointer {
     public native int safe_path(); public native PyConfig safe_path(int setter);
     public native int int_max_str_digits(); public native PyConfig int_max_str_digits(int setter);
 
+    public native int cpu_count(); public native PyConfig cpu_count(int setter);
+// #ifdef Py_GIL_DISABLED
+// #endif
+
     /* --- Path configuration inputs ------------ */
     public native int pathconfig_warnings(); public native PyConfig pathconfig_warnings(int setter);
     public native @Cast("wchar_t*") Pointer program_name(); public native PyConfig program_name(Pointer setter);
@@ -104,6 +108,9 @@ public class PyConfig extends Pointer {
     public native @Cast("wchar_t*") Pointer run_module(); public native PyConfig run_module(Pointer setter);
     public native @Cast("wchar_t*") Pointer run_filename(); public native PyConfig run_filename(Pointer setter);
 
+    /* --- Set by Py_Main() -------------------------- */
+    public native @Cast("wchar_t*") Pointer sys_path_0(); public native PyConfig sys_path_0(Pointer setter);
+
     /* --- Private fields ---------------------------- */
 
     // Install importlib? If equals to 0, importlib is not initialized at all.
@@ -115,4 +122,10 @@ public class PyConfig extends Pointer {
 
     // If non-zero, we believe we're running from a source tree.
     public native int _is_python_build(); public native PyConfig _is_python_build(int setter);
+
+// #ifdef Py_STATS
+// #endif
+
+// #ifdef Py_DEBUG
+// #endif
 }

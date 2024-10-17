@@ -38,8 +38,7 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * to the end with a minor bump.
  *
  * Fields can be accessed through AVOptions, the name string used, matches the
- * C structure field name for fields accessible through AVOptions. The AVClass
- * for AVFrame can be obtained from avcodec_get_frame_class()
+ * C structure field name for fields accessible through AVOptions.
  */
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVFrame extends Pointer {

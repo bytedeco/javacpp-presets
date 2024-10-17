@@ -12,7 +12,6 @@ import static org.bytedeco.cpython.global.python.*;
 
 
 
-// #if !defined(Py_LIMITED_API)
 /* Visit all live GC-capable objects, similar to gc.get_objects(None). The
  * supplied callback is called on every such object with the void* arg set
  * to the supplied arg. Returning 0 from the callback ends iteration, returning

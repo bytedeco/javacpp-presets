@@ -483,6 +483,8 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * Skip duration calcuation in estimate_timings_from_pts.
      * - encoding: unused
      * - decoding: set by user
+     *
+     * @see duration_probesize
      */
     public native int skip_estimate_duration_from_pts(); public native AVFormatContext skip_estimate_duration_from_pts(int setter);
 
@@ -702,4 +704,14 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
         public native int call(AVFormatContext s, AVIOContext pb);
     }
     public native Io_close2_AVFormatContext_AVIOContext io_close2(); public native AVFormatContext io_close2(Io_close2_AVFormatContext_AVIOContext setter);
+
+    /**
+     * Maximum number of bytes read from input in order to determine stream durations
+     * when using estimate_timings_from_pts in avformat_find_stream_info().
+     * Demuxing only, set by the caller before avformat_find_stream_info().
+     * Can be set to 0 to let avformat choose using a heuristic.
+     *
+     * @see skip_estimate_duration_from_pts
+     */
+    public native @Cast("int64_t") long duration_probesize(); public native AVFormatContext duration_probesize(long setter);
 }

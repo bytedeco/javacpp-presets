@@ -13,6 +13,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 // #endif /* !Py_BUILD_CORE */
 
+
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyNumberMethods extends Pointer {
     static { Loader.load(); }

@@ -11,11 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class xid_freefunc extends FunctionPointer {
+public class PyCFunctionFast extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    xid_freefunc(Pointer p) { super(p); }
-    protected xid_freefunc() { allocate(); }
+    public    PyCFunctionFast(Pointer p) { super(p); }
+    protected PyCFunctionFast() { allocate(); }
     private native void allocate();
-    public native void call(Pointer arg0);
+    public native PyObject call(PyObject arg0, @Cast("PyObject*const*") PointerPointer arg1, @Cast("Py_ssize_t") long arg2);
 }

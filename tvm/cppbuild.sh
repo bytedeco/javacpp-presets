@@ -104,6 +104,9 @@ sedinplace 's/find_opencl(${USE_OPENCL})/find_package(OpenCL REQUIRED)/g' cmake/
 # https://github.com/apache/tvm/pull/6752
 #patch -Np1 < ../../../tvm.patch
 
+# https://github.com/apache/tvm/pull/17199
+patch -Np1 < ../../../tvm-llvm.patch
+
 patch -Np1 < ../../../tvm-python.patch
 
 # Work around issues with llvm-config
@@ -114,24 +117,24 @@ if [[ -f $f ]]; then
     chmod +x $LLVM_PATH/bin/llvm-config*
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.dylib" ]]; then
-    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-18.dylib
+    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-19.dylib
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.so" ]]; then
-    ln -sf libLLVM.so $LLVM_PATH/lib/libLLVM-18.so
+    ln -sf libLLVM.so $LLVM_PATH/lib/libLLVM-19.so
 fi
 if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
 fi
 
-if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.13/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PATH="$CPYTHON_PATH/lib/python3.12/bin/:$PATH"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.13/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.13"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.13/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.13/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.13/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.13/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)

@@ -12,7 +12,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 
 /* This struct is used by the specializer
- * It should should be treated as an opaque blob
+ * It should be treated as an opaque blob
  * by code other than the specializer and interpreter. */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _specialization_cache extends Pointer {
@@ -44,4 +44,5 @@ public class _specialization_cache extends Pointer {
     //   *args nor **kwargs (as required by BINARY_SUBSCR_GETITEM):
     public native PyObject getitem(); public native _specialization_cache getitem(PyObject setter);
     public native @Cast("uint32_t") int getitem_version(); public native _specialization_cache getitem_version(int setter);
+    public native PyObject init(); public native _specialization_cache init(PyObject setter);
 }

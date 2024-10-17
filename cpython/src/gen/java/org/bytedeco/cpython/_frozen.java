@@ -33,13 +33,4 @@ public class _frozen extends Pointer {
     public native @Cast("const unsigned char*") BytePointer code(); public native _frozen code(BytePointer setter);
     public native int size(); public native _frozen size(int setter);
     public native int is_package(); public native _frozen is_package(int setter);
-    public static class PyObject_Get_code extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    PyObject_Get_code(Pointer p) { super(p); }
-        protected PyObject_Get_code() { allocate(); }
-        private native void allocate();
-        public native PyObject call();
-    }
-    public native PyObject_Get_code get_code(); public native _frozen get_code(PyObject_Get_code setter);
 }

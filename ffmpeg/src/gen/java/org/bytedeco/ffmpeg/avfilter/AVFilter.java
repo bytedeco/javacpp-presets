@@ -236,6 +236,29 @@ public class AVFilter extends Pointer {
             public native int call(AVFilterContext arg0);
         }
         @Name("formats.query_func") public native Query_func_AVFilterContext formats_query_func(); public native AVFilter formats_query_func(Query_func_AVFilterContext setter);
+
+        /**
+         * Same as query_func(), except this function writes the results into
+         * provided arrays.
+         *
+         * @param cfg_in  array of input format configurations with as many
+         *                members as the filters has inputs (NULL when there are
+         *                no inputs);
+         * @param cfg_out array of output format configurations with as many
+         *                members as the filters has outputs (NULL when there
+         *                are no outputs);
+         */
+        public static class Query_func2_AVFilterContext_PointerPointer_PointerPointer extends FunctionPointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public    Query_func2_AVFilterContext_PointerPointer_PointerPointer(Pointer p) { super(p); }
+            protected Query_func2_AVFilterContext_PointerPointer_PointerPointer() { allocate(); }
+            private native void allocate();
+            public native int call(@Const AVFilterContext arg0,
+                                   @Cast("AVFilterFormatsConfig**") PointerPointer cfg_in,
+                                   @Cast("AVFilterFormatsConfig**") PointerPointer cfg_out);
+        }
+        @Name("formats.query_func2") public native Query_func2_AVFilterContext_PointerPointer_PointerPointer formats_query_func2(); public native AVFilter formats_query_func2(Query_func2_AVFilterContext_PointerPointer_PointerPointer setter);
         /**
          * A pointer to an array of admissible pixel formats delimited
          * by AV_PIX_FMT_NONE. The generic code will use this list

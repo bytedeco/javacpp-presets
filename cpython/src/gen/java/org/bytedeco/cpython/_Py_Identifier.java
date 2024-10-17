@@ -11,9 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-// #ifdef Py_TRACE_REFS
-// #endif
-
 // #ifdef Py_REF_DEBUG
 // #endif
 
@@ -60,4 +57,6 @@ public class _Py_Identifier extends Pointer {
     // Index in PyInterpreterState.unicode.ids.array. It is process-wide
     // unique and must be initialized to -1.
     public native @Cast("Py_ssize_t") long index(); public native _Py_Identifier index(long setter);
+    // Hidden PyMutex struct for non free-threaded build.
+        @Name("mutex.v") public native @Cast("uint8_t") byte mutex_v(); public native _Py_Identifier mutex_v(byte setter);
 }

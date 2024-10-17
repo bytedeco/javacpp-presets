@@ -68,8 +68,8 @@ public class swresample extends org.bytedeco.ffmpeg.presets.swresample {
  * matrix). This is using the swr_alloc() function.
  * <pre>{@code
  * SwrContext *swr = swr_alloc();
- * av_opt_set_channel_layout(swr, "in_channel_layout",  AV_CH_LAYOUT_5POINT1, 0);
- * av_opt_set_channel_layout(swr, "out_channel_layout", AV_CH_LAYOUT_STEREO,  0);
+ * av_opt_set_chlayout(swr, "in_chlayout", &(AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1, 0);
+ * av_opt_set_chlayout(swr, "out_chlayout", &(AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO, 0);
  * av_opt_set_int(swr, "in_sample_rate",     48000,                0);
  * av_opt_set_int(swr, "out_sample_rate",    44100,                0);
  * av_opt_set_sample_fmt(swr, "in_sample_fmt",  AV_SAMPLE_FMT_FLTP, 0);
@@ -702,7 +702,7 @@ public static final int LIBSWRESAMPLE_VERSION_MAJOR =   5;
 
 // #include "version_major.h"
 
-public static final int LIBSWRESAMPLE_VERSION_MINOR =   1;
+public static final int LIBSWRESAMPLE_VERSION_MINOR =   3;
 public static final int LIBSWRESAMPLE_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBSWRESAMPLE_VERSION_INT();

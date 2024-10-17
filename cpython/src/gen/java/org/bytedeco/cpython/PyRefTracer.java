@@ -10,12 +10,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
+
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class Innerfunc_String_long_Pointer extends FunctionPointer {
+public class PyRefTracer extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Innerfunc_String_long_Pointer(Pointer p) { super(p); }
-    protected Innerfunc_String_long_Pointer() { allocate(); }
+    public    PyRefTracer(Pointer p) { super(p); }
+    protected PyRefTracer() { allocate(); }
     private native void allocate();
-    public native PyObject call(String arg0, @Cast("Py_ssize_t") long arg1, Pointer arg2);
+    public native int call(PyObject arg0, @Cast("PyRefTracerEvent") int event, Pointer arg2);
 }

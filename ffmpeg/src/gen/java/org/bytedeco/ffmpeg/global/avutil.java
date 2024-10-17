@@ -518,6 +518,8 @@ public static native @MemberGetter int AVERROR_HTTP_FORBIDDEN();
 public static final int AVERROR_HTTP_FORBIDDEN = AVERROR_HTTP_FORBIDDEN();
 public static native @MemberGetter int AVERROR_HTTP_NOT_FOUND();
 public static final int AVERROR_HTTP_NOT_FOUND = AVERROR_HTTP_NOT_FOUND();
+public static native @MemberGetter int AVERROR_HTTP_TOO_MANY_REQUESTS();
+public static final int AVERROR_HTTP_TOO_MANY_REQUESTS = AVERROR_HTTP_TOO_MANY_REQUESTS();
 public static native @MemberGetter int AVERROR_HTTP_OTHER_4XX();
 public static final int AVERROR_HTTP_OTHER_4XX = AVERROR_HTTP_OTHER_4XX();
 public static native @MemberGetter int AVERROR_HTTP_SERVER_ERROR();
@@ -3288,8 +3290,14 @@ public static final int
     AVCOL_SPC_CHROMA_DERIVED_CL = 13,
     /** ITU-R BT.2100-0, ICtCp */
     AVCOL_SPC_ICTCP       = 14,
+    /** SMPTE ST 2128, IPT-C2 */
+    AVCOL_SPC_IPT_C2      = 15,
+    /** YCgCo-R, even addition of bits */
+    AVCOL_SPC_YCGCO_RE    = 16,
+    /** YCgCo-R, odd addition of bits */
+    AVCOL_SPC_YCGCO_RO    = 17,
     /** Not part of ABI */
-    AVCOL_SPC_NB = 15;
+    AVCOL_SPC_NB = 18;
 
 /**
  * Visual content value range.
@@ -3615,7 +3623,22 @@ public static final int
      * applications which know this information in advance to speed up
      * encoding.
      */
-    AV_FRAME_DATA_VIDEO_HINT = 27;
+    AV_FRAME_DATA_VIDEO_HINT = 27,
+
+    /**
+     * Raw LCEVC payload data, as a uint8_t array, with NAL emulation
+     * bytes intact.
+     */
+    AV_FRAME_DATA_LCEVC = 28,
+
+    /**
+     * This side data must be associated with a video frame.
+     * The presence of this side data indicates that the video stream is
+     * composed of multiple views (e.g. stereoscopic 3D content,
+     * cf. H.264 Annex H or H.265 Annex G).
+     * The data is an int storing the view ID.
+     */
+    AV_FRAME_DATA_VIEW_ID = 29;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3627,6 +3650,24 @@ public static final int
     AV_AFD_16_9_SP_14_9 = 14,
     AV_AFD_SP_4_3       = 15;
 // Targeting ../avutil/AVFrameSideData.java
+
+
+
+/** enum AVSideDataProps */
+public static final int
+    /**
+     * The side data type can be used in stream-global structures.
+     * Side data types without this property are only meaningful on per-frame
+     * basis.
+     */
+    AV_SIDE_DATA_PROP_GLOBAL = (1 << 0),
+
+    /**
+     * Multiple instances of this side data type can be meaningfully present in
+     * a single side data array.
+     */
+    AV_SIDE_DATA_PROP_MULTI  = (1 << 1);
+// Targeting ../avutil/AVSideDataDescriptor.java
 
 
 // Targeting ../avutil/AVRegionOfInterest.java
@@ -3880,6 +3921,12 @@ public static final int
 @NoException public static native @Cast("const char*") BytePointer av_frame_side_data_name(@Cast("AVFrameSideDataType") int type);
 
 /**
+ * @return side data descriptor corresponding to a given side data type, NULL
+ *         when not available.
+ */
+@NoException public static native @Const AVSideDataDescriptor av_frame_side_data_desc(@Cast("AVFrameSideDataType") int type);
+
+/**
  * Free all side data entries and their contents, then zeroes out the
  * values which the pointers are pointing to.
  *
@@ -3892,7 +3939,15 @@ public static final int
 @NoException public static native void av_frame_side_data_free(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntBuffer nb_sd);
 @NoException public static native void av_frame_side_data_free(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, int[] nb_sd);
 
+/**
+ * Remove existing entries before adding new ones.
+ */
 public static final int AV_FRAME_SIDE_DATA_FLAG_UNIQUE = (1 << 0);
+/**
+ * Don't add a new entry if another of the same type exists.
+ * Applies only for side data types without the AV_SIDE_DATA_PROP_MULTI prop.
+ */
+public static final int AV_FRAME_SIDE_DATA_FLAG_REPLACE = (1 << 1);
 
 /**
  * Add new side data entry to an array.
@@ -3905,10 +3960,12 @@ public static final int AV_FRAME_SIDE_DATA_FLAG_UNIQUE = (1 << 0);
  * @param size  size of the side data
  * @param flags Some combination of AV_FRAME_SIDE_DATA_FLAG_* flags, or 0.
  *
- * @return newly added side data on success, NULL on error. In case of
- *         AV_FRAME_SIDE_DATA_FLAG_UNIQUE being set, entries of matching
- *         AVFrameSideDataType will be removed before the addition is
- *         attempted.
+ * @return newly added side data on success, NULL on error.
+ * \note In case of AV_FRAME_SIDE_DATA_FLAG_UNIQUE being set, entries of
+ *       matching AVFrameSideDataType will be removed before the addition
+ *       is attempted.
+ * \note In case of AV_FRAME_SIDE_DATA_FLAG_REPLACE being set, if an
+ *       entry of the same type already exists, it will be replaced instead.
  */
 @NoException public static native AVFrameSideData av_frame_side_data_new(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntPointer nb_sd,
                                         @Cast("AVFrameSideDataType") int type,
@@ -3919,6 +3976,41 @@ public static final int AV_FRAME_SIDE_DATA_FLAG_UNIQUE = (1 << 0);
 @NoException public static native AVFrameSideData av_frame_side_data_new(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, int[] nb_sd,
                                         @Cast("AVFrameSideDataType") int type,
                                         @Cast("size_t") long size, @Cast("unsigned int") int flags);
+
+/**
+ * Add a new side data entry to an array from an existing AVBufferRef.
+ *
+ * @param sd    pointer to array of side data to which to add another entry,
+ *              or to NULL in order to start a new array.
+ * @param nb_sd pointer to an integer containing the number of entries in
+ *              the array.
+ * @param type  type of the added side data
+ * @param buf   Pointer to AVBufferRef to add to the array. On success,
+ *              the function takes ownership of the AVBufferRef and *buf is
+ *              set to NULL, unless AV_FRAME_SIDE_DATA_FLAG_NEW_REF is set
+ *              in which case the ownership will remain with the caller.
+ * @param flags Some combination of AV_FRAME_SIDE_DATA_FLAG_* flags, or 0.
+ *
+ * @return newly added side data on success, NULL on error.
+ * \note In case of AV_FRAME_SIDE_DATA_FLAG_UNIQUE being set, entries of
+ *       matching AVFrameSideDataType will be removed before the addition
+ *       is attempted.
+ * \note In case of AV_FRAME_SIDE_DATA_FLAG_REPLACE being set, if an
+ *       entry of the same type already exists, it will be replaced instead.
+ *
+ */
+@NoException public static native AVFrameSideData av_frame_side_data_add(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntPointer nb_sd,
+                                        @Cast("AVFrameSideDataType") int type,
+                                        @Cast("AVBufferRef**") PointerPointer buf, @Cast("unsigned int") int flags);
+@NoException public static native AVFrameSideData av_frame_side_data_add(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntPointer nb_sd,
+                                        @Cast("AVFrameSideDataType") int type,
+                                        @ByPtrPtr AVBufferRef buf, @Cast("unsigned int") int flags);
+@NoException public static native AVFrameSideData av_frame_side_data_add(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntBuffer nb_sd,
+                                        @Cast("AVFrameSideDataType") int type,
+                                        @ByPtrPtr AVBufferRef buf, @Cast("unsigned int") int flags);
+@NoException public static native AVFrameSideData av_frame_side_data_add(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, int[] nb_sd,
+                                        @Cast("AVFrameSideDataType") int type,
+                                        @ByPtrPtr AVBufferRef buf, @Cast("unsigned int") int flags);
 
 /**
  * Add a new side data entry to an array based on existing side data, taking
@@ -3932,10 +4024,12 @@ public static final int AV_FRAME_SIDE_DATA_FLAG_UNIQUE = (1 << 0);
  *              for the buffer.
  * @param flags Some combination of AV_FRAME_SIDE_DATA_FLAG_* flags, or 0.
  *
- * @return negative error code on failure, >=0 on success. In case of
- *         AV_FRAME_SIDE_DATA_FLAG_UNIQUE being set, entries of matching
- *         AVFrameSideDataType will be removed before the addition is
- *         attempted.
+ * @return negative error code on failure, >=0 on success.
+ * \note In case of AV_FRAME_SIDE_DATA_FLAG_UNIQUE being set, entries of
+ *       matching AVFrameSideDataType will be removed before the addition
+ *       is attempted.
+ * \note In case of AV_FRAME_SIDE_DATA_FLAG_REPLACE being set, if an
+ *       entry of the same type already exists, it will be replaced instead.
  */
 @NoException public static native int av_frame_side_data_clone(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntPointer nb_sd,
                              @Const AVFrameSideData src, @Cast("unsigned int") int flags);
@@ -3974,6 +4068,15 @@ public static final int AV_FRAME_SIDE_DATA_FLAG_UNIQUE = (1 << 0);
                                               int nb_sd,
                                               @Cast("AVFrameSideDataType") int type);
 
+/**
+ * Remove and free all side data instances of the given type from an array.
+ */
+@NoException public static native void av_frame_side_data_remove(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntPointer nb_sd,
+                               @Cast("AVFrameSideDataType") int type);
+@NoException public static native void av_frame_side_data_remove(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, IntBuffer nb_sd,
+                               @Cast("AVFrameSideDataType") int type);
+@NoException public static native void av_frame_side_data_remove(@Cast("AVFrameSideData***") @ByPtrPtr PointerPointer sd, int[] nb_sd,
+                               @Cast("AVFrameSideDataType") int type);
 /**
  * \}
  */
@@ -4394,6 +4497,14 @@ public static final int
     AV_CHAN_BOTTOM_FRONT_CENTER = 38,
     AV_CHAN_BOTTOM_FRONT_LEFT = 39,
     AV_CHAN_BOTTOM_FRONT_RIGHT = 40,
+    /**  +90 degrees, Lss, SiL */
+    AV_CHAN_SIDE_SURROUND_LEFT = 41,
+    /**  -90 degrees, Rss, SiR */
+    AV_CHAN_SIDE_SURROUND_RIGHT = 42,
+    /** +110 degrees, Lvs, TpLS */
+    AV_CHAN_TOP_SURROUND_LEFT = 43,
+    /** -110 degrees, Rvs, TpRS */
+    AV_CHAN_TOP_SURROUND_RIGHT = 44,
 
     /** Channel is empty can be safely skipped. */
     AV_CHAN_UNUSED = 0x200,
@@ -4509,6 +4620,10 @@ public static final long AV_CH_TOP_SIDE_RIGHT =         (1L << AV_CHAN_TOP_SIDE_
 public static final long AV_CH_BOTTOM_FRONT_CENTER =    (1L << AV_CHAN_BOTTOM_FRONT_CENTER  );
 public static final long AV_CH_BOTTOM_FRONT_LEFT =      (1L << AV_CHAN_BOTTOM_FRONT_LEFT    );
 public static final long AV_CH_BOTTOM_FRONT_RIGHT =     (1L << AV_CHAN_BOTTOM_FRONT_RIGHT   );
+public static final long AV_CH_SIDE_SURROUND_LEFT =     (1L << AV_CHAN_SIDE_SURROUND_LEFT   );
+public static final long AV_CH_SIDE_SURROUND_RIGHT =    (1L << AV_CHAN_SIDE_SURROUND_RIGHT  );
+public static final long AV_CH_TOP_SURROUND_LEFT =      (1L << AV_CHAN_TOP_SURROUND_LEFT    );
+public static final long AV_CH_TOP_SURROUND_RIGHT =     (1L << AV_CHAN_TOP_SURROUND_RIGHT   );
 
 /**
  * \}
@@ -4939,6 +5054,16 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
 @NoException public static native int av_channel_layout_compare(@Const AVChannelLayout chl, @Const AVChannelLayout chl1);
 
 /**
+ * Return the order if the layout is n-th order standard-order ambisonic.
+ * The presence of optional extra non-diegetic channels at the end is not taken
+ * into account.
+ *
+ * @param channel_layout input channel layout
+ * @return the order of the layout, a negative error code otherwise.
+ */
+@NoException public static native int av_channel_layout_ambisonic_order(@Const AVChannelLayout channel_layout);
+
+/**
  * The conversion must be lossless.
  */
 public static final int AV_CHANNEL_LAYOUT_RETYPE_FLAG_LOSSLESS = (1 << 0);
@@ -5018,6 +5143,7 @@ public static final int AV_CHANNEL_LAYOUT_RETYPE_FLAG_CANONICAL = (1 << 1);
 // #define AVUTIL_CPU_H
 
 // #include <stddef.h>
+// #include "version.h"
 
 public static final int AV_CPU_FLAG_FORCE =    0x80000000; /* force usage of selected flags (OR) */
 
@@ -5111,10 +5237,12 @@ public static final int AV_CPU_FLAG_LASX =         (1 << 1);
 // RISC-V extensions
 /** I (full GPR bank) */
 public static final int AV_CPU_FLAG_RVI =          (1 << 0);
+// #if FF_API_RISCV_FD_ZBA
 /** F (single precision FP) */
 public static final int AV_CPU_FLAG_RVF =          (1 << 1);
 /** D (double precision FP) */
 public static final int AV_CPU_FLAG_RVD =          (1 << 2);
+// #endif
 /** Vectors of 8/16/32-bit int's */
 public static final int AV_CPU_FLAG_RVV_I32 =      (1 << 3);
 /** Vectors of float's */
@@ -5125,8 +5253,16 @@ public static final int AV_CPU_FLAG_RVV_I64 =      (1 << 5);
 public static final int AV_CPU_FLAG_RVV_F64 =      (1 << 6);
 /** Basic bit-manipulations */
 public static final int AV_CPU_FLAG_RVB_BASIC =    (1 << 7);
+// #if FF_API_RISCV_FD_ZBA
 /** Address bit-manipulations */
 public static final int AV_CPU_FLAG_RVB_ADDR =     (1 << 8);
+// #endif
+/** Vector basic bit-manipulations */
+public static final int AV_CPU_FLAG_RV_ZVBB =      (1 << 9);
+/** Fast misaligned accesses */
+public static final int AV_CPU_FLAG_RV_MISALIGNED = (1 <<10);
+/** B (bit manipulations) */
+public static final int AV_CPU_FLAG_RVB =          (1 <<11);
 
 /**
  * Return the flags which specify extensions supported by the CPU.
@@ -5504,6 +5640,16 @@ public static final int AV_DICT_MULTIKEY =       64;
  * question is allowed to access the field. This allows us to extend the
  * semantics of those fields without breaking API compatibility.
  *
+ * \section avoptions_scope Scope of AVOptions
+ *
+ * AVOptions is designed to support any set of multimedia configuration options
+ * that can be defined at compile-time.  Although it is mainly used to expose
+ * FFmpeg options, you are welcome to adapt it to your own use case.
+ *
+ * No single approach can ever fully solve the problem of configuration,
+ * but please submit a patch if you believe you have found a problem
+ * that is best solved by extending AVOptions.
+ *
  * \section avoptions_implement Implementing AVOptions
  * This section describes how to add AVOptions capabilities to a struct.
  *
@@ -5681,30 +5827,100 @@ public static final int AV_DICT_MULTIKEY =       64;
  * before the file is actually opened.
  */
 
+/**
+ * An option type determines:
+ * - for native access, the underlying C type of the field that an AVOption
+ *   refers to;
+ * - for foreign access, the semantics of accessing the option through this API,
+ *   e.g. which av_opt_get_*() and av_opt_set_*() functions can be called, or
+ *   what format will av_opt_get()/av_opt_set() expect/produce.
+ */
 /** enum AVOptionType */
 public static final int
+    /**
+     * Underlying C type is unsigned int.
+     */
     AV_OPT_TYPE_FLAGS = 1,
+    /**
+     * Underlying C type is int.
+     */
     AV_OPT_TYPE_INT = 2,
+    /**
+     * Underlying C type is int64_t.
+     */
     AV_OPT_TYPE_INT64 = 3,
+    /**
+     * Underlying C type is double.
+     */
     AV_OPT_TYPE_DOUBLE = 4,
+    /**
+     * Underlying C type is float.
+     */
     AV_OPT_TYPE_FLOAT = 5,
+    /**
+     * Underlying C type is a uint8_t* that is either NULL or points to a C
+     * string allocated with the av_malloc() family of functions.
+     */
     AV_OPT_TYPE_STRING = 6,
+    /**
+     * Underlying C type is AVRational.
+     */
     AV_OPT_TYPE_RATIONAL = 7,
-    /** offset must point to a pointer immediately followed by an int for the length */
+    /**
+     * Underlying C type is a uint8_t* that is either NULL or points to an array
+     * allocated with the av_malloc() family of functions. The pointer is
+     * immediately followed by an int containing the array length in bytes.
+     */
     AV_OPT_TYPE_BINARY = 8,
+    /**
+     * Underlying C type is AVDictionary*.
+     */
     AV_OPT_TYPE_DICT = 9,
+    /**
+     * Underlying C type is uint64_t.
+     */
     AV_OPT_TYPE_UINT64 = 10,
+    /**
+     * Special option type for declaring named constants. Does not correspond to
+     * an actual field in the object, offset must be 0.
+     */
     AV_OPT_TYPE_CONST = 11,
-    /** offset must point to two consecutive integers */
+    /**
+     * Underlying C type is two consecutive integers.
+     */
     AV_OPT_TYPE_IMAGE_SIZE = 12,
+    /**
+     * Underlying C type is enum AVPixelFormat.
+     */
     AV_OPT_TYPE_PIXEL_FMT = 13,
+    /**
+     * Underlying C type is enum AVSampleFormat.
+     */
     AV_OPT_TYPE_SAMPLE_FMT = 14,
-    /** offset must point to AVRational */
+    /**
+     * Underlying C type is AVRational.
+     */
     AV_OPT_TYPE_VIDEO_RATE = 15,
+    /**
+     * Underlying C type is int64_t.
+     */
     AV_OPT_TYPE_DURATION = 16,
+    /**
+     * Underlying C type is uint8_t[4].
+     */
     AV_OPT_TYPE_COLOR = 17,
+    /**
+     * Underlying C type is int.
+     */
     AV_OPT_TYPE_BOOL = 18,
+    /**
+     * Underlying C type is AVChannelLayout.
+     */
     AV_OPT_TYPE_CHLAYOUT = 19,
+    /**
+     * Underlying C type is unsigned int.
+     */
+    AV_OPT_TYPE_UINT = 20,
 
     /**
      * May be combined with another regular option type to declare an array
@@ -5844,6 +6060,12 @@ public static final int AV_OPT_SEARCH_FAKE_OBJ =   (1 << 1);
  *  rather than returning an empty string.
  */
 public static final int AV_OPT_ALLOW_NULL = (1 << 2);
+
+/**
+ * May be used with av_opt_set_array() to signal that new elements should
+ * replace the existing ones in the indicated range.
+ */
+public static final int AV_OPT_ARRAY_REPLACE = (1 << 3);
 
 /**
  *  Allows av_opt_query_ranges and av_opt_query_ranges_default to return more than
@@ -6161,6 +6383,10 @@ public static final int
 @NoException public static native int av_opt_set_sample_fmt(Pointer obj, String name, @Cast("AVSampleFormat") int fmt, int search_flags);
 @NoException public static native int av_opt_set_video_rate(Pointer obj, @Cast("const char*") BytePointer name, @ByVal AVRational val, int search_flags);
 @NoException public static native int av_opt_set_video_rate(Pointer obj, String name, @ByVal AVRational val, int search_flags);
+/**
+ * \note Any old chlayout present is discarded and replaced with a copy of the new one. The
+ * caller still owns layout and is responsible for uninitializing it.
+ */
 @NoException public static native int av_opt_set_chlayout(Pointer obj, @Cast("const char*") BytePointer name, @Const AVChannelLayout layout, int search_flags);
 @NoException public static native int av_opt_set_chlayout(Pointer obj, String name, @Const AVChannelLayout layout, int search_flags);
 /**
@@ -6185,6 +6411,59 @@ public static final int
 //      AVERROR(EINVAL) :
 //      av_opt_set_bin(obj, name, (const uint8_t *)(val),
 //                     av_int_list_length(val, term) * sizeof(*(val)), flags))
+
+/**
+ * Add, replace, or remove elements for an array option. Which of these
+ * operations is performed depends on the values of val and search_flags.
+ *
+ * @param start_elem Index of the first array element to modify; must not be
+ *                   larger than array size as returned by
+ *                   av_opt_get_array_size().
+ * @param nb_elems number of array elements to modify; when val is NULL,
+ *                 start_elem+nb_elems must not be larger than array size as
+ *                 returned by av_opt_get_array_size()
+ *
+ * @param val_type Option type corresponding to the type of val, ignored when val is
+ *                 NULL.
+ *
+ *                 The effect of this function will will be as if av_opt_setX()
+ *                 was called for each element, where X is specified by type.
+ *                 E.g. AV_OPT_TYPE_STRING corresponds to av_opt_set().
+ *
+ *                 Typically this should be the same as the scalarized type of
+ *                 the AVOption being set, but certain conversions are also
+ *                 possible - the same as those done by the corresponding
+ *                 av_opt_set*() function. E.g. any option type can be set from
+ *                 a string, numeric types can be set from int64, double, or
+ *                 rational, etc.
+ *
+ * @param val Array with nb_elems elements or NULL.
+ *
+ *            When NULL, nb_elems array elements starting at start_elem are
+ *            removed from the array. Any array elements remaining at the end
+ *            are shifted by nb_elems towards the first element in order to keep
+ *            the array contiguous.
+ *
+ *            Otherwise (val is non-NULL), the type of val must match the
+ *            underlying C type as documented for val_type.
+ *
+ *            When AV_OPT_ARRAY_REPLACE is not set in search_flags, the array is
+ *            enlarged by nb_elems, and the contents of val are inserted at
+ *            start_elem. Previously existing array elements from start_elem
+ *            onwards (if present) are shifted by nb_elems away from the first
+ *            element in order to make space for the new elements.
+ *
+ *            When AV_OPT_ARRAY_REPLACE is set in search_flags, the contents
+ *            of val replace existing array elements from start_elem to
+ *            start_elem+nb_elems (if present). New array size is
+ *            max(start_elem + nb_elems, old array size).
+ */
+@NoException public static native int av_opt_set_array(Pointer obj, @Cast("const char*") BytePointer name, int search_flags,
+                     @Cast("unsigned int") int start_elem, @Cast("unsigned int") int nb_elems,
+                     @Cast("AVOptionType") int val_type, @Const Pointer val);
+@NoException public static native int av_opt_set_array(Pointer obj, String name, int search_flags,
+                     @Cast("unsigned int") int start_elem, @Cast("unsigned int") int nb_elems,
+                     @Cast("AVOptionType") int val_type, @Const Pointer val);
 
 /**
  * \}
@@ -6257,6 +6536,10 @@ public static final int
 @NoException public static native int av_opt_get_sample_fmt(Pointer obj, String name, int search_flags, @Cast("AVSampleFormat*") int[] out_fmt);
 @NoException public static native int av_opt_get_video_rate(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, AVRational out_val);
 @NoException public static native int av_opt_get_video_rate(Pointer obj, String name, int search_flags, AVRational out_val);
+/**
+ * @param layout [out] The returned layout is a copy of the actual value and must
+ * be freed with av_channel_layout_uninit() by the caller
+ */
 @NoException public static native int av_opt_get_chlayout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, AVChannelLayout layout);
 @NoException public static native int av_opt_get_chlayout(Pointer obj, String name, int search_flags, AVChannelLayout layout);
 /**
@@ -6266,6 +6549,59 @@ public static final int
 @NoException public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("AVDictionary**") PointerPointer out_val);
 @NoException public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @ByPtrPtr AVDictionary out_val);
 @NoException public static native int av_opt_get_dict_val(Pointer obj, String name, int search_flags, @ByPtrPtr AVDictionary out_val);
+
+/**
+ * For an array-type option, get the number of elements in the array.
+ */
+@NoException public static native int av_opt_get_array_size(Pointer obj, @Cast("const char*") BytePointer name, int search_flags,
+                          @Cast("unsigned int*") IntPointer out_val);
+@NoException public static native int av_opt_get_array_size(Pointer obj, String name, int search_flags,
+                          @Cast("unsigned int*") IntBuffer out_val);
+@NoException public static native int av_opt_get_array_size(Pointer obj, @Cast("const char*") BytePointer name, int search_flags,
+                          @Cast("unsigned int*") int[] out_val);
+@NoException public static native int av_opt_get_array_size(Pointer obj, String name, int search_flags,
+                          @Cast("unsigned int*") IntPointer out_val);
+@NoException public static native int av_opt_get_array_size(Pointer obj, @Cast("const char*") BytePointer name, int search_flags,
+                          @Cast("unsigned int*") IntBuffer out_val);
+@NoException public static native int av_opt_get_array_size(Pointer obj, String name, int search_flags,
+                          @Cast("unsigned int*") int[] out_val);
+
+/**
+ * For an array-type option, retrieve the values of one or more array elements.
+ *
+ * @param start_elem index of the first array element to retrieve
+ * @param nb_elems number of array elements to retrieve; start_elem+nb_elems
+ *                 must not be larger than array size as returned by
+ *                 av_opt_get_array_size()
+ *
+ * @param out_type Option type corresponding to the desired output.
+ *
+ *                 The array elements produced by this function will
+ *                 will be as if av_opt_getX() was called for each element,
+ *                 where X is specified by out_type. E.g. AV_OPT_TYPE_STRING
+ *                 corresponds to av_opt_get().
+ *
+ *                 Typically this should be the same as the scalarized type of
+ *                 the AVOption being retrieved, but certain conversions are
+ *                 also possible - the same as those done by the corresponding
+ *                 av_opt_get*() function. E.g. any option type can be retrieved
+ *                 as a string, numeric types can be retrieved as int64, double,
+ *                 or rational, etc.
+ *
+ * @param out_val  Array with nb_elems members into which the output will be
+ *                 written. The array type must match the underlying C type as
+ *                 documented for out_type, and be zeroed on entry to this
+ *                 function.
+ *
+ *                 For dynamically allocated types (strings, binary, dicts,
+ *                 etc.), the result is owned and freed by the caller.
+ */
+@NoException public static native int av_opt_get_array(Pointer obj, @Cast("const char*") BytePointer name, int search_flags,
+                     @Cast("unsigned int") int start_elem, @Cast("unsigned int") int nb_elems,
+                     @Cast("AVOptionType") int out_type, Pointer out_val);
+@NoException public static native int av_opt_get_array(Pointer obj, String name, int search_flags,
+                     @Cast("unsigned int") int start_elem, @Cast("unsigned int") int nb_elems,
+                     @Cast("AVOptionType") int out_type, Pointer out_val);
 /**
  * \}
  */
@@ -6296,6 +6632,12 @@ public static final int
 @NoException public static native int av_opt_eval_int(Pointer obj, @Const AVOption o, String val, IntPointer int_out);
 @NoException public static native int av_opt_eval_int(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, IntBuffer int_out);
 @NoException public static native int av_opt_eval_int(Pointer obj, @Const AVOption o, String val, int[] int_out);
+@NoException public static native int av_opt_eval_uint(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("unsigned*") IntPointer uint_out);
+@NoException public static native int av_opt_eval_uint(Pointer obj, @Const AVOption o, String val, @Cast("unsigned*") IntBuffer uint_out);
+@NoException public static native int av_opt_eval_uint(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("unsigned*") int[] uint_out);
+@NoException public static native int av_opt_eval_uint(Pointer obj, @Const AVOption o, String val, @Cast("unsigned*") IntPointer uint_out);
+@NoException public static native int av_opt_eval_uint(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("unsigned*") IntBuffer uint_out);
+@NoException public static native int av_opt_eval_uint(Pointer obj, @Const AVOption o, String val, @Cast("unsigned*") int[] uint_out);
 @NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("int64_t*") LongPointer int64_out);
 @NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, @Cast("int64_t*") LongBuffer int64_out);
 @NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("int64_t*") long[] int64_out);
@@ -6373,6 +6715,8 @@ public static final int
 public static final int AV_OPT_SERIALIZE_SKIP_DEFAULTS =              0x00000001;
 /** Serialize options that exactly match opt_flags only. */
 public static final int AV_OPT_SERIALIZE_OPT_FLAGS_EXACT =            0x00000002;
+/** Serialize options in possible children of the given object. */
+public static final int AV_OPT_SERIALIZE_SEARCH_CHILDREN =            0x00000004;
 
 /**
  * Serialize object's options.
@@ -7579,7 +7923,12 @@ public static final int
      *    ...
      * }</pre>
      */
-    AV_STEREO3D_COLUMNS = 7;
+    AV_STEREO3D_COLUMNS = 7,
+
+    /**
+     * Video is stereoscopic but the packing is unspecified.
+     */
+    AV_STEREO3D_UNSPEC = 8;
 
 /**
  * List of possible view types.
@@ -7599,7 +7948,32 @@ public static final int
     /**
      * Frame contains only the right view.
      */
-    AV_STEREO3D_VIEW_RIGHT = 2;
+    AV_STEREO3D_VIEW_RIGHT = 2,
+
+    /**
+     * Content is unspecified.
+     */
+    AV_STEREO3D_VIEW_UNSPEC = 3;
+
+/**
+ * List of possible primary eyes.
+ */
+/** enum AVStereo3DPrimaryEye */
+public static final int
+    /**
+     * Neither eye.
+     */
+    AV_PRIMARY_EYE_NONE = 0,
+
+    /**
+     * Left eye.
+     */
+    AV_PRIMARY_EYE_LEFT = 1,
+
+    /**
+     * Right eye
+     */
+    AV_PRIMARY_EYE_RIGHT = 2;
 
 /**
  * Inverted views, Right/Bottom represents the left view.
@@ -7616,6 +7990,14 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
  * @return An AVStereo3D filled with default values or NULL on failure.
  */
 @NoException public static native AVStereo3D av_stereo3d_alloc();
+
+/**
+ * Allocate an AVStereo3D structure and set its fields to default values.
+ * The resulting struct can be freed using av_freep().
+ *
+ * @return An AVStereo3D filled with default values or NULL on failure.
+ */
+@NoException public static native AVStereo3D av_stereo3d_alloc_size(@Cast("size_t*") SizeTPointer size);
 
 /**
  * Allocate a complete AVFrameSideData and add it to the frame.
@@ -7646,6 +8028,44 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 @NoException public static native int av_stereo3d_from_name(String name);
 
 /**
+ * Provide a human-readable name of a given stereo3d view.
+ *
+ * @param type The input stereo3d view value.
+ *
+ * @return The name of the stereo3d view value, or "unknown".
+ */
+@NoException public static native @Cast("const char*") BytePointer av_stereo3d_view_name(@Cast("unsigned int") int view);
+
+/**
+ * Get the AVStereo3DView form a human-readable name.
+ *
+ * @param name The input string.
+ *
+ * @return The AVStereo3DView value, or -1 if not found.
+ */
+@NoException public static native int av_stereo3d_view_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_stereo3d_view_from_name(String name);
+
+/**
+ * Provide a human-readable name of a given stereo3d primary eye.
+ *
+ * @param type The input stereo3d primary eye value.
+ *
+ * @return The name of the stereo3d primary eye value, or "unknown".
+ */
+@NoException public static native @Cast("const char*") BytePointer av_stereo3d_primary_eye_name(@Cast("unsigned int") int eye);
+
+/**
+ * Get the AVStereo3DPrimaryEye form a human-readable name.
+ *
+ * @param name The input string.
+ *
+ * @return The AVStereo3DPrimaryEye value, or -1 if not found.
+ */
+@NoException public static native int av_stereo3d_primary_eye_from_name(@Cast("const char*") BytePointer name);
+@NoException public static native int av_stereo3d_primary_eye_from_name(String name);
+
+/**
  * \}
  */
 
@@ -7657,7 +8077,7 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "7.0.2";
+public static final String FFMPEG_VERSION = "7.1";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -7722,10 +8142,6 @@ public static final String FFMPEG_VERSION = "7.0.2";
 // #define AVUTIL_FIFO_H
 
 // #include <stddef.h>
-// #include <stdint.h>
-
-// #include "attributes.h"
-// #include "version.h"
 // Targeting ../avutil/AVFifo.java
 
 
@@ -10994,12 +11410,14 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 // #include "attributes.h"
 // #include "error.h"
 // #include "macros.h"
-// #include "mem.h"
+// #include "version.h"
 
 // #ifdef HAVE_AV_CONFIG_H
 // #   include "config.h"
 // #   include "intmath.h"
 // #   include "internal.h"
+// #else
+// #   include "mem.h"
 // #endif /* HAVE_AV_CONFIG_H */
 
 //rounded division & shift
@@ -11073,9 +11491,6 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 // #ifndef av_clip_uintp2
 // #   define av_clip_uintp2   av_clip_uintp2_c
 // #endif
-// #ifndef av_mod_uintp2
-// #   define av_mod_uintp2    av_mod_uintp2_c
-// #endif
 // #ifndef av_sat_add32
 // #   define av_sat_add32     av_sat_add32_c
 // #endif
@@ -11099,6 +11514,9 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 // #endif
 // #ifndef av_clipd
 // #   define av_clipd         av_clipd_c
+// #endif
+// #ifndef av_zero_extend
+// #   define av_zero_extend   av_zero_extend_c
 // #endif
 // #ifndef av_popcount
 // #   define av_popcount      av_popcount_c
@@ -11190,10 +11608,17 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 /**
  * Clear high bits from an unsigned integer starting with specific bit position
  * @param  a value to clip
- * @param  p bit position to clip at
+ * @param  p bit position to clip at. Must be between 0 and 31.
  * @return clipped value
  */
-@NoException public static native @Cast("unsigned") @Const int av_mod_uintp2_c(@Cast("unsigned") int a, @Cast("unsigned") int p);
+@NoException public static native @Cast("unsigned") @Const int av_zero_extend_c(@Cast("unsigned") int a, @Cast("unsigned") int p);
+
+// #if FF_API_MOD_UINTP2
+// #ifndef av_mod_uintp2
+// #   define av_mod_uintp2 av_mod_uintp2_c
+// #endif
+@NoException public static native @Cast("unsigned") @Deprecated @Const int av_mod_uintp2_c(@Cast("unsigned") int a, @Cast("unsigned") int p);
+// #endif
 
 /**
  * Add two signed 32-bit values with saturation.
@@ -11887,7 +12312,6 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 // #include <stddef.h>
 // #include <stdint.h>
 
-// #include "version.h"
 // #include "attributes.h"
 
 /**
@@ -12360,10 +12784,8 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
 
 // #include "config.h"
 
-// #if   ARCH_ARM
-// #   include "arm/intreadwrite.h"
-// #elif ARCH_AVR32
-// #   include "avr32/intreadwrite.h"
+// #if ARCH_AARCH64
+// #   include "aarch64/intreadwrite.h"
 // #elif ARCH_MIPS
 // #   include "mips/intreadwrite.h"
 // #elif ARCH_PPC
@@ -12834,9 +13256,41 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_RLA(s, p)    av_bswap##s(AV_RN##s##A(p))
 // #   define AV_WLA(s, p, v) AV_WN##s##A(p, av_bswap##s(v))
+// #   define AV_RBA(s, p)    AV_RN##s##A(p)
+// #   define AV_WBA(s, p, v) AV_WN##s##A(p, v)
 // #else
 // #   define AV_RLA(s, p)    AV_RN##s##A(p)
 // #   define AV_WLA(s, p, v) AV_WN##s##A(p, v)
+// #   define AV_RBA(s, p)    av_bswap##s(AV_RN##s##A(p))
+// #   define AV_WBA(s, p, v) AV_WN##s##A(p, av_bswap##s(v))
+// #endif
+
+// #ifndef AV_RL16A
+// #   define AV_RL16A(p) AV_RLA(16, p)
+// #endif
+// #ifndef AV_WL16A
+// #   define AV_WL16A(p, v) AV_WLA(16, p, v)
+// #endif
+
+// #ifndef AV_RB16A
+// #   define AV_RB16A(p) AV_RBA(16, p)
+// #endif
+// #ifndef AV_WB16A
+// #   define AV_WB16A(p, v) AV_WBA(16, p, v)
+// #endif
+
+// #ifndef AV_RL32A
+// #   define AV_RL32A(p) AV_RLA(32, p)
+// #endif
+// #ifndef AV_WL32A
+// #   define AV_WL32A(p, v) AV_WLA(32, p, v)
+// #endif
+
+// #ifndef AV_RB32A
+// #   define AV_RB32A(p) AV_RBA(32, p)
+// #endif
+// #ifndef AV_WB32A
+// #   define AV_WB32A(p, v) AV_WBA(32, p, v)
 // #endif
 
 // #ifndef AV_RL64A
@@ -12844,6 +13298,13 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
 // #endif
 // #ifndef AV_WL64A
 // #   define AV_WL64A(p, v) AV_WLA(64, p, v)
+// #endif
+
+// #ifndef AV_RB64A
+// #   define AV_RB64A(p) AV_RBA(64, p)
+// #endif
+// #ifndef AV_WB64A
+// #   define AV_WB64A(p, v) AV_WBA(64, p, v)
 // #endif
 
 /*
@@ -12970,6 +13431,15 @@ public static final int AV_HDR_PLUS_MAX_PAYLOAD_SIZE = 907;
  *         on failure.
  */
 @NoException public static native AVMasteringDisplayMetadata av_mastering_display_metadata_alloc();
+
+/**
+ * Allocate an AVMasteringDisplayMetadata structure and set its fields to
+ * default values. The resulting struct can be freed using av_freep().
+ *
+ * @return An AVMasteringDisplayMetadata filled with default values or NULL
+ *         on failure.
+ */
+@NoException public static native AVMasteringDisplayMetadata av_mastering_display_metadata_alloc_size(@Cast("size_t*") SizeTPointer size);
 
 /**
  * Allocate a complete AVMasteringDisplayMetadata and add it to the frame.
@@ -13576,7 +14046,23 @@ public static final int
      * using equirectangular projection. The \ref bounding fields indicate
      * the position of the current video in a larger surface.
      */
-    AV_SPHERICAL_EQUIRECTANGULAR_TILE = 2;
+    AV_SPHERICAL_EQUIRECTANGULAR_TILE = 2,
+
+    /**
+     * Video frame displays as a 180 degree equirectangular projection.
+     */
+    AV_SPHERICAL_HALF_EQUIRECTANGULAR = 3,
+
+    /**
+     * Video frame displays on a flat, rectangular 2D surface.
+     */
+    AV_SPHERICAL_RECTILINEAR = 4,
+
+    /**
+     * Fisheye projection (Apple).
+     * See: https://developer.apple.com/documentation/coremedia/cmprojectiontype/fisheye
+     */
+    AV_SPHERICAL_FISHEYE = 5;
 // Targeting ../avutil/AVSphericalMapping.java
 
 
@@ -14454,7 +14940,7 @@ public static final long
  */
 
 public static final int LIBAVUTIL_VERSION_MAJOR =  59;
-public static final int LIBAVUTIL_VERSION_MINOR =   8;
+public static final int LIBAVUTIL_VERSION_MINOR =  39;
 public static final int LIBAVUTIL_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVUTIL_VERSION_INT();
@@ -14487,6 +14973,9 @@ public static final boolean FF_API_FRAME_KEY =                (LIBAVUTIL_VERSION
 public static final boolean FF_API_PALETTE_HAS_CHANGED =      (LIBAVUTIL_VERSION_MAJOR < 60);
 public static final boolean FF_API_VULKAN_CONTIGUOUS_MEMORY = (LIBAVUTIL_VERSION_MAJOR < 60);
 public static final boolean FF_API_H274_FILM_GRAIN_VCS =      (LIBAVUTIL_VERSION_MAJOR < 60);
+public static final boolean FF_API_MOD_UINTP2 =               (LIBAVUTIL_VERSION_MAJOR < 60);
+public static final boolean FF_API_RISCV_FD_ZBA =             (LIBAVUTIL_VERSION_MAJOR < 60);
+public static final boolean FF_API_VULKAN_FIXED_QUEUES =      (LIBAVUTIL_VERSION_MAJOR < 60);
 
 /**
  * \}

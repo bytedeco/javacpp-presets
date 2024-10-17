@@ -16,6 +16,7 @@ import static org.bytedeco.cpython.global.python.*;
  * by hand.  Similarly every pointer to a variable-size Python object can,
  * in addition, be cast to PyVarObject*.
  */
+// #ifndef Py_GIL_DISABLED
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _object extends Pointer {
     static { Loader.load(); }
@@ -34,7 +35,7 @@ public class _object extends Pointer {
         return new _object((Pointer)this).offsetAddress(i);
     }
 
-//     #if (defined(__GNUC__) || defined(__clang__))
+// #if (defined(__GNUC__) || defined(__clang__))
 //         && !(defined __STDC_VERSION__ && __STDC_VERSION__ >= 201112L)
     // On C99 and older, anonymous union is a GCC and clang extension
 // #endif

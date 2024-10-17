@@ -35,6 +35,11 @@ public class PyThreadState extends Pointer {
     public native PyThreadState next(); public native PyThreadState next(PyThreadState setter);
     public native PyInterpreterState interp(); public native PyThreadState interp(PyInterpreterState setter);
 
+    /* The global instrumentation version in high bits, plus flags indicating
+       when to break out of the interpreter loop in lower bits. See details in
+       pycore_ceval.h. */
+    public native @Cast("uintptr_t") long eval_breaker(); public native PyThreadState eval_breaker(long setter);
+
         /* Has been initialized to a safe state.
 
            In order to be effective, this must be set to 0 during or right
@@ -49,6 +54,8 @@ public class PyThreadState extends Pointer {
         @Name("_status.bound_gilstate") public native @Cast("unsigned int") @NoOffset int _status_bound_gilstate(); public native PyThreadState _status_bound_gilstate(int setter);
         /* Currently in use (maybe holds the GIL). */
         @Name("_status.active") public native @Cast("unsigned int") @NoOffset int _status_active(); public native PyThreadState _status_active(int setter);
+        /* Currently holds the GIL. */
+        @Name("_status.holds_gil") public native @Cast("unsigned int") @NoOffset int _status_holds_gil(); public native PyThreadState _status_holds_gil(int setter);
 
         /* various stages of finalization */
         @Name("_status.finalizing") public native @Cast("unsigned int") @NoOffset int _status_finalizing(); public native PyThreadState _status_finalizing(int setter);
@@ -57,6 +64,13 @@ public class PyThreadState extends Pointer {
 
         /* padding to align to 4 bytes */
         
+// #ifdef Py_BUILD_CORE
+// #endif
+    public native int _whence(); public native PyThreadState _whence(int setter);
+
+    /* Thread state (_Py_THREAD_ATTACHED, _Py_THREAD_DETACHED, _Py_THREAD_SUSPENDED).
+       See Include/internal/pycore_pystate.h for more details. */
+    public native int state(); public native PyThreadState state(int setter);
 
     public native int py_recursion_remaining(); public native PyThreadState py_recursion_remaining(int setter);
     public native int py_recursion_limit(); public native PyThreadState py_recursion_limit(int setter);
@@ -70,9 +84,8 @@ public class PyThreadState extends Pointer {
     public native int tracing(); public native PyThreadState tracing(int setter);
     public native int what_event(); public native PyThreadState what_event(int setter); /* The event currently being monitored, if any. */
 
-    /* Pointer to current _PyCFrame in the C stack frame of the currently,
-     * or most recently, executing _PyEval_EvalFrameDefault. */
-    public native _PyCFrame cframe(); public native PyThreadState cframe(_PyCFrame setter);
+    /* Pointer to currently executing frame. */
+    public native @Cast("_PyInterpreterFrame*") Pointer current_frame(); public native PyThreadState current_frame(Pointer setter);
 
     public native Py_tracefunc c_profilefunc(); public native PyThreadState c_profilefunc(Py_tracefunc setter);
     public native Py_tracefunc c_tracefunc(); public native PyThreadState c_tracefunc(Py_tracefunc setter);
@@ -100,41 +113,14 @@ public class PyThreadState extends Pointer {
      */
     public native @Cast("unsigned long") long native_thread_id(); public native PyThreadState native_thread_id(long setter);
 
-    public native @ByRef _py_trashcan trash(); public native PyThreadState trash(_py_trashcan setter);
+    public native PyObject delete_later(); public native PyThreadState delete_later(PyObject setter);
 
-    /* Called when a thread state is deleted normally, but not when it
-     * is destroyed after fork().
-     * Pain:  to prevent rare but fatal shutdown errors (issue 18808),
-     * Thread.join() must wait for the join'ed thread's tstate to be unlinked
-     * from the tstate chain.  That happens at the end of a thread's life,
-     * in pystate.c.
-     * The obvious way doesn't quite work:  create a lock which the tstate
-     * unlinking code releases, and have Thread.join() wait to acquire that
-     * lock.  The problem is that we _are_ at the end of the thread's life:
-     * if the thread holds the last reference to the lock, decref'ing the
-     * lock will delete the lock, and that may trigger arbitrary Python code
-     * if there's a weakref, with a callback, to the lock.  But by this time
-     * _PyRuntime.gilstate.tstate_current is already NULL, so only the simplest
-     * of C code can be allowed to run (in particular it must not be possible to
-     * release the GIL).
-     * So instead of holding the lock directly, the tstate holds a weakref to
-     * the lock:  that's the value of on_delete_data below.  Decref'ing a
-     * weakref is harmless.
-     * on_delete points to _threadmodule.c's static release_sentinel() function.
-     * After the tstate is unlinked, release_sentinel is called with the
-     * weakref-to-lock (on_delete_data) argument, and release_sentinel releases
-     * the indirectly held lock.
+    /* Tagged pointer to top-most critical section, or zero if there is no
+     * active critical section. Critical sections are only used in
+     * `--disable-gil` builds (i.e., when Py_GIL_DISABLED is defined to 1). In the
+     * default build, this field is always zero.
      */
-    public static class On_delete_Pointer extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    On_delete_Pointer(Pointer p) { super(p); }
-        protected On_delete_Pointer() { allocate(); }
-        private native void allocate();
-        public native void call(Pointer arg0);
-    }
-    public native On_delete_Pointer on_delete(); public native PyThreadState on_delete(On_delete_Pointer setter);
-    public native Pointer on_delete_data(); public native PyThreadState on_delete_data(Pointer setter);
+    public native @Cast("uintptr_t") long critical_section(); public native PyThreadState critical_section(long setter);
 
     public native int coroutine_origin_tracking_depth(); public native PyThreadState coroutine_origin_tracking_depth(int setter);
 
@@ -168,6 +154,15 @@ public class PyThreadState extends Pointer {
     /* The thread's exception stack entry.  (Always the last entry.) */
     public native @ByRef _PyErr_StackItem exc_state(); public native PyThreadState exc_state(_PyErr_StackItem setter);
 
-    /* The bottom-most frame on the stack. */
-    public native @ByRef _PyCFrame root_cframe(); public native PyThreadState root_cframe(_PyCFrame setter);
+    public native PyObject previous_executor(); public native PyThreadState previous_executor(PyObject setter);
+
+    public native @Cast("uint64_t") long dict_global_version(); public native PyThreadState dict_global_version(long setter);
+
+    /* Used to store/retrieve `threading.local` keys/values for this thread */
+    public native PyObject threading_local_key(); public native PyThreadState threading_local_key(PyObject setter);
+
+    /* Used by `threading.local`s to be remove keys/values for dying threads.
+       The PyThreadObject must hold the only reference to this value.
+    */
+    public native PyObject threading_local_sentinel(); public native PyThreadState threading_local_sentinel(PyObject setter);
 }
