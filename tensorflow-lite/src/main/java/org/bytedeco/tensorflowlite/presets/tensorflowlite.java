@@ -22,16 +22,10 @@
 
 package org.bytedeco.tensorflowlite.presets;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.tools.Info;
-import org.bytedeco.javacpp.tools.InfoMap;
-import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.javacpp.tools.*;
 
 /**
  *
@@ -99,14 +93,23 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
                 "tensorflow/lite/profiling/telemetry/telemetry_status.h",
                 "tensorflow/lite/profiling/telemetry/profiler.h",
+                "tensorflow/lite/delegates/gpu/delegate.h",
+                "tensorflow/lite/delegates/gpu/delegate_options.h",
             }
 //            link = "tensorflowlite_c"
         ),
     },
     target = "org.bytedeco.tensorflowlite",
     global = "org.bytedeco.tensorflowlite.global.tensorflowlite")
-public class tensorflowlite implements InfoMapper {
+public class tensorflowlite implements InfoMapper, BuildEnabled {
     static { Loader.checkVersion("org.bytedeco", "tensorflow-lite"); }
+
+    private boolean android;
+
+    @Override
+    public void init(Logger logger, java.util.Properties properties, String encoding) {
+        this.android = properties.getProperty("platform").startsWith("android-");
+    }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK", "TFL_CAPI_EXPORT", "TFLITE_NOINLINE").cppTypes().annotations())
@@ -176,6 +179,16 @@ public class tensorflowlite implements InfoMapper {
                 // Classes passed to some native functions as unique_ptr and that can be allocated Java-side
                .put(new Info("tflite::impl::Interpreter::Interpreter").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::impl::Interpreter>\")"))
                .put(new Info("tflite::Subgraph::Subgraph").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::Subgraph>\")"))
-        ;
+               .put(new Info("delegate_options.h").linePatterns("#ifdef TFLITE_DEBUG_DELEGATE", "#endif").skip())
+               .put(new Info("gpu_invoke_loop_times").javaText("public int gpu_invoke_loop_times;"))
+            ;
+
+               if (!android) {
+                   infoMap.put(new Info("delegate.h").linePatterns("#if defined\\(__ANDROID__\\)", "#endif").skip());
+               } else {
+                   infoMap.put(new Info("TfLiteGpuDelegateV2CreateAsync").cppTypes("TfLiteDelegate*").javaText(
+                                   "public static native @ByVal Pointer TfLiteGpuDelegateV2CreateAsync(@Const @ByRef TfLiteGpuDelegateOptionsV2 options);"
+                   ));
+               }
     }
 }
