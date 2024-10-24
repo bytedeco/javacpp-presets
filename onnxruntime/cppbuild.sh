@@ -84,6 +84,7 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
+patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
 sedinplace '/-DCMAKE_CUDA_COMPILER=/d' tools/ci_build/build.py
@@ -167,7 +168,7 @@ sedinplace 's/UTFChars(javaNameStrings/UTFChars((jstring)javaNameStrings/g' java
 sedinplace 's/initializers = allocarray/initializers = (const OrtValue**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $OPENMP_FLAGS $GPU_FLAGS
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $OPENMP_FLAGS $GPU_FLAGS
 
 # install headers and libraries in standard directories
 cp -r include/* ../include
