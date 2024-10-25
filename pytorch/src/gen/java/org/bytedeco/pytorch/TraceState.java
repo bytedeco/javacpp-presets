@@ -25,17 +25,13 @@ public class TraceState extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TraceState(Pointer p) { super(p); }
 
-  public TraceState(
-        @StdVector SymIntOptional ss,
-        @Cast("size_t") long num_outputs) { super((Pointer)null); allocate(ss, num_outputs); }
-  private native void allocate(
-        @StdVector SymIntOptional ss,
-        @Cast("size_t") long num_outputs);
+  public TraceState(@ByRef(true) SymIntOptionalVector ss, @Cast("size_t") long num_outputs) { super((Pointer)null); allocate(ss, num_outputs); }
+  private native void allocate(@ByRef(true) SymIntOptionalVector ss, @Cast("size_t") long num_outputs);
 
   public native void debug_asserts();
   public native @ByVal SymIntOptional next_sym_size();
 
   public native @Cast("size_t") long sym_sizes_index(); public native TraceState sym_sizes_index(long setter);
-  public native @StdVector SymIntOptional sym_sizes(); public native TraceState sym_sizes(SymIntOptional setter);
+  public native @ByRef SymIntOptionalVector sym_sizes(); public native TraceState sym_sizes(SymIntOptionalVector setter);
   public native @ByRef TensorVector outputs(); public native TraceState outputs(TensorVector setter);
 }

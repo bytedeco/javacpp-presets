@@ -29,6 +29,8 @@ public class CompiledNodeArgs extends Pointer {
 
   public native void collect(@Const @ByRef Tensor t);
   public native void collect(@Const @ByRef SymInt t);
+  public native void collect(@Cast("const c10::ArrayRef<torch::autograd::SavedVariable>*") @ByRef Pointer t, @Cast("bool") boolean is_output);
+  public native void collect(@Const @ByRef IValue iv, @Cast("bool") boolean nested/*=false*/);
   public native void collect(@Const @ByRef IValue iv);
   public native void collect(@Const @ByRef Scalar t);
   public native void collect(@Const @ByRef TensorOptions t);

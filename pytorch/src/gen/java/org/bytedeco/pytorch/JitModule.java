@@ -225,7 +225,7 @@ public class JitModule extends JitObject {
 
   public native @ByVal JitModule copy();
 
-  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
   public native @ByVal JitModule deepcopy();
 
   // Clones both the underlying `ClassType` and the module instance(data), this
@@ -261,8 +261,12 @@ public class JitModule extends JitObject {
   // A set of functions to maintain input shapes through torch.jit.save and
   // torch.jit.load. It only works on tensors and lists/dicts of tensors
   // because tracing is only supported by these types.
-  public native void store_traced_inputs(@StdString BytePointer func_name, @ByVal IValueVector inputs);
-  public native void store_traced_inputs(@StdString String func_name, @ByVal IValueVector inputs);
+  public native void store_traced_inputs(
+        @StdString BytePointer func_name,
+        @ByVal IValueVector inputs);
+  public native void store_traced_inputs(
+        @StdString String func_name,
+        @ByVal IValueVector inputs);
 
   public native @ByVal StringGenericListDict retrieve_traced_inputs();
 }

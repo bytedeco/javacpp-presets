@@ -98,8 +98,7 @@ public class SymNode extends Pointer {
   public native @Cast("bool") boolean guard_bool(String file, @Cast("int64_t") long line);
   public native double guard_float(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native double guard_float(String file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean guard_size_oblivious(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean guard_size_oblivious(String file, @Cast("int64_t") long line);
+  
   public native @Cast("bool") boolean expect_true(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean expect_true(String file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean expect_size(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
@@ -108,6 +107,7 @@ public class SymNode extends Pointer {
   public native @Cast("bool") boolean bool_();
   public native @Cast("bool") boolean has_hint();
   public native @StdString BytePointer str();
+  public native @StdString BytePointer _graph_repr();
   public native @ByVal LongOptional nested_int();
   public native @ByVal LongOptional nested_int_coeff();
   public native @ByVal LongOptional constant_int();

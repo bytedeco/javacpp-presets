@@ -117,6 +117,8 @@ public class PyInterpreterVTable extends Pointer {
   // Report the name of this interpreter
   public native @StdString BytePointer name();
 
+  // Run Py_INCREF on a PyObject.
+  public native void incref(@Cast("PyObject*") Pointer pyobj);
   // Run Py_DECREF on a PyObject.  We DO NOT assume the GIL is held on call
   // See NOTE [PyInterpreter::decref takes a `has_pyobj_slot` arg]
   public native void decref(@Cast("PyObject*") Pointer pyobj, @Cast("bool") boolean has_pyobj_slot);
@@ -142,13 +144,15 @@ public class PyInterpreterVTable extends Pointer {
         DispatchKey arg1,
         @ByVal DispatchKeySet keyset,
         IValueVector stack,
-        @Cast("bool") boolean with_keyset);
+        @Cast("bool") boolean with_keyset,
+        @Cast("bool") boolean with_op);
   public native void python_op_registration_trampoline(
         @Const @ByRef OperatorHandle op,
         @Cast("c10::DispatchKey") short arg1,
         @ByVal DispatchKeySet keyset,
         IValueVector stack,
-        @Cast("bool") boolean with_keyset);
+        @Cast("bool") boolean with_keyset,
+        @Cast("bool") boolean with_op);
 
   public native void throw_abstract_impl_not_imported_error(
         @StdString BytePointer opname,

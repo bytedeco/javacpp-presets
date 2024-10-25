@@ -87,6 +87,8 @@ public class Scalar extends Pointer {
   // int64_t
 // #if defined(__APPLE__) || defined(__MACOSX)
 // #endif
+// #if defined(_MSC_VER)
+// #endif
 // #if defined(__linux__) && !defined(__ANDROID__)
 // #endif
 

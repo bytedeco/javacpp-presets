@@ -46,7 +46,8 @@ public class CUDAAllocator extends Allocator {
   public native void cacheInfo(byte device, @Cast("size_t*") SizeTPointer largestBlock);
   public native Pointer getBaseAllocation(Pointer ptr, @Cast("size_t*") SizeTPointer size);
   public native void recordStream(@StdMove DataPtr arg0, @ByVal CUDAStream stream);
-  public native @ByVal DeviceStats getDeviceStats(byte device);
+  public native @ByVal DeviceStats getDeviceStats(
+        byte device);
   public native void resetAccumulatedStats(byte device);
   public native void resetPeakStats(byte device);
   public native @ByVal SnapshotInfo snapshot();
@@ -63,6 +64,7 @@ public class CUDAAllocator extends Allocator {
         byte device,
         @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
         @Const @ByRef PointerSet expected_live_allocations);
+  public native @ByVal ShareableHandle shareIpcHandle(Pointer ptr);
   public native @SharedPtr Pointer getIpcDevPtr(@StdString BytePointer handle);
   public native @SharedPtr Pointer getIpcDevPtr(@StdString String handle);
   public native @Cast("bool") boolean isHistoryEnabled();
@@ -76,6 +78,8 @@ public class CUDAAllocator extends Allocator {
         @ByVal @Cast("c10::cuda::CUDACachingAllocator::CreateContextFn*") Pointer context_recorder,
         @Cast("size_t") long alloc_trace_max_entries,
         @Cast("c10::cuda::CUDACachingAllocator::RecordContext") int when);
+  public native void recordAnnotation(
+        @StdVector StringPair md);
   public native void attachOutOfMemoryObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OutOfMemoryObserver*") AllocatorTraceTracker observer);
 
   // Attached AllocatorTraceTracker callbacks will be called while the

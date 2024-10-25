@@ -78,6 +78,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringSharedModuleDictItemVector.java
 
 
+// Targeting ../SymIntOptionalVector.java
+
+
 // Targeting ../BoolVector.java
 
 
@@ -246,6 +249,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../EnumNameValue.java
 
 
+// Targeting ../StringPair.java
+
+
 // Targeting ../IntPair.java
 
 
@@ -337,6 +343,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../StringIValueMap.java
+
+
+// Targeting ../StringScalarTypeMap.java
 
 
 // Targeting ../StringValueMap.java
@@ -670,7 +679,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #define C10_BUILD_SHARED_LIBS
 /* #undef C10_USE_GLOG */
 /* #undef C10_USE_GFLAGS */
-/* #undef C10_USE_NUMA */
+// #define C10_USE_NUMA
 /* #undef C10_USE_MSVC_STATIC_RUNTIME */
 /* #undef C10_USE_ROCM_KERNEL_ASSERT */
 
@@ -912,6 +921,24 @@ public static final int C10_ASAN_ENABLED = 1;
 // #if !defined(C10_ASAN_ENABLED)
 // #endif
 
+// Detect undefined-behavior sanitizer (UBSAN)
+// #undef C10_UBSAN_ENABLED
+
+// for clang or gcc >= 14
+// NB: gcc 14 adds support for Clang's __has_feature
+//   https://gcc.gnu.org/gcc-14/changes.html
+//   gcc < 14 doesn't have a macro for UBSAN
+//   (e.g. __SANITIZE_UNDEFINED__ does not exist in gcc)
+//   https://github.com/google/sanitizers/issues/765
+// #if defined(__has_feature)
+// #if ((__has_feature(undefined_behavior_sanitizer)))
+public static final int C10_UBSAN_ENABLED = 1;
+// #endif
+// #endif
+
+// #if !defined(C10_UBSAN_ENABLED)
+// #endif
+
 // Disable the copy and assignment operator for a class. Note that this will
 // disable the usage of the class in std containers.
 // #define C10_DISABLE_COPY_AND_ASSIGN(classname)
@@ -1103,6 +1130,7 @@ public static final int C10_ASAN_ENABLED = 1;
 // #if defined(__ANDROID__) || defined(__APPLE__) || defined(__FreeBSD__)
 // Those platforms do not support assert()
 // #define CUDA_KERNEL_ASSERT(cond)
+// #define CUDA_KERNEL_ASSERT_MSG(cond, msg)
 // #define SYCL_KERNEL_ASSERT(cond)
 // #elif defined(_MSC_VER)
 // #else // __APPLE__, _MSC_VER
@@ -1111,12 +1139,18 @@ public static final int C10_ASAN_ENABLED = 1;
 // ROCm disable kernel assert by default
 // #if !defined(C10_USE_ROCM_KERNEL_ASSERT) and defined(USE_ROCM)
 // #define CUDA_KERNEL_ASSERT(cond)
+// #define CUDA_KERNEL_ASSERT_MSG(cond, msg)
 // #define SYCL_KERNEL_ASSERT(cond)
 // #else
 // #define CUDA_KERNEL_ASSERT(cond)
 //   if (C10_UNLIKELY(!(cond))) {
 //     __assert_fail(
 //         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
+//   }
+// #define CUDA_KERNEL_ASSERT_MSG(cond, msg)
+//   if (C10_UNLIKELY(!(cond))) {
+//     __assert_fail(
+//         msg, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
 //   }
 // #define SYCL_KERNEL_ASSERT(cond)
 //   if (C10_UNLIKELY(!(cond))) {
@@ -2285,10 +2319,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // element we can return for cases when a DispatchKeySet contains no elements.
   // You can think a more semantically accurate definition of DispatchKey is:
   //
-  //    using DispatchKey = optional<RealDispatchKey>
+  //    using DispatchKey = std::optional<RealDispatchKey>
   //
   // and Undefined == nullopt.  We didn't actually represent
-  // it this way because optional<RealDispatchKey> would take two
+  // it this way because std::optional<RealDispatchKey> would take two
   // words, when DispatchKey fits in eight bits.
 
   Undefined((short)(0)),
@@ -2505,50 +2539,51 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   AutocastXLA((short)(Undefined.value + 30)),
   // AutocastXLA is only being used for TPUs. XLA GPUs continue to use
   // AutocastCUDA.
-  AutocastCUDA((short)(Undefined.value + 31)),
-  AutocastPrivateUse1((short)(Undefined.value + 32)),
+  AutocastMPS((short)(Undefined.value + 31)),
+  AutocastCUDA((short)(Undefined.value + 32)),
+  AutocastPrivateUse1((short)(Undefined.value + 33)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ WRAPPERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   // There are a number of alternative modes which may want to handle before
   // autograd; for example, error checking, tracing, profiling or vmap.  They
   // go here.
 
-  FuncTorchBatched((short)(Undefined.value + 33)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchBatched((short)(Undefined.value + 34)), // See Note [Out-of-tree vmap+grad prototype]
 
   // Dispatch key for BatchedTensorImpl wrapping a nested tensor.
-  BatchedNestedTensor((short)(Undefined.value + 34)),
+  BatchedNestedTensor((short)(Undefined.value + 35)),
 
-  FuncTorchVmapMode((short)(Undefined.value + 35)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchVmapMode((short)(Undefined.value + 36)), // See Note [Out-of-tree vmap+grad prototype]
 
   // This is the dispatch key for BatchedTensorImpl, which is used to implement
   // batching rules for vmap.
-  Batched((short)(Undefined.value + 36)),
+  Batched((short)(Undefined.value + 37)),
 
   // When we are inside a vmap, all tensors dispatch on this key.
   // See Note: [DispatchKey::VmapMode usage] for more details.
-  VmapMode((short)(Undefined.value + 37)),
+  VmapMode((short)(Undefined.value + 38)),
 
-  FuncTorchGradWrapper((short)(Undefined.value + 38)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchGradWrapper((short)(Undefined.value + 39)), // See Note [Out-of-tree vmap+grad prototype]
 
   // Out-of-core key for Deferred Module Initialization in torchdistx.
   // See https://pytorch.org/torchdistx/latest/deferred_init.html
-  DeferredInit((short)(Undefined.value + 39)),
+  DeferredInit((short)(Undefined.value + 40)),
 
   // Used by Python key logic to know the set of tls on entry to the dispatcher
   // This kernel assumes it is the top-most non-functorch-related DispatchKey.
   // If you add a key above, make sure to update the fallback implementation for
   // this.
-  PythonTLSSnapshot((short)(Undefined.value + 40)),
+  PythonTLSSnapshot((short)(Undefined.value + 41)),
 
   // This key should be at the very top of the dispatcher
-  FuncTorchDynamicLayerFrontMode((short)(Undefined.value + 41)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchDynamicLayerFrontMode((short)(Undefined.value + 42)), // See Note [Out-of-tree vmap+grad prototype]
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a single
   // process test.  Use it by creating a TensorImpl with this DispatchKey, and
   // then registering operators to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp for a usage example.
-  TESTING_ONLY_GenericWrapper((short)(Undefined.value + 42)),
+  TESTING_ONLY_GenericWrapper((short)(Undefined.value + 43)),
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a ingle
@@ -2557,51 +2592,51 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
   // to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp
   // for a usage example
-  TESTING_ONLY_GenericMode((short)(Undefined.value + 43)),
+  TESTING_ONLY_GenericMode((short)(Undefined.value + 44)),
 
   // This key is used for pre-dispatch tracing in make_fx.
   // It has lower priority than the PythonDispatcher key
   // because we use the PythonDispatcher to intercept the key from python,
   // and avoid having to implement it in C++.
-  PreDispatch((short)(Undefined.value + 44)),
+  PreDispatch((short)(Undefined.value + 45)),
 
   // This is a bypass that allows you to skip running the C++ dispatcher
   // entirely
-  PythonDispatcher((short)(Undefined.value + 45)),
+  PythonDispatcher((short)(Undefined.value + 46)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-  EndOfFunctionalityKeys((short)(Undefined.value + 46)),
+  EndOfFunctionalityKeys((short)(Undefined.value + 47)),
 
-  StartOfDenseBackends((short)(Undefined.value + 47)),
-      CPU((short)(Undefined.value + 48)),
+  StartOfDenseBackends((short)(Undefined.value + 48)),
+      CPU((short)(Undefined.value + 49)),
           
-  CUDA((short)(Undefined.value + 49)),
+  CUDA((short)(Undefined.value + 50)),
           
-  HIP((short)(Undefined.value + 50)),
+  HIP((short)(Undefined.value + 51)),
           
-  XLA((short)(Undefined.value + 51)),
+  XLA((short)(Undefined.value + 52)),
           
-  MPS((short)(Undefined.value + 52)),
+  MPS((short)(Undefined.value + 53)),
           
-  IPU((short)(Undefined.value + 53)),
+  IPU((short)(Undefined.value + 54)),
           
-  XPU((short)(Undefined.value + 54)),
+  XPU((short)(Undefined.value + 55)),
           
-  HPU((short)(Undefined.value + 55)),
+  HPU((short)(Undefined.value + 56)),
           
-  VE((short)(Undefined.value + 56)),
+  VE((short)(Undefined.value + 57)),
           
-  Lazy((short)(Undefined.value + 57)),
+  Lazy((short)(Undefined.value + 58)),
           
-  MTIA((short)(Undefined.value + 58)),
+  MTIA((short)(Undefined.value + 59)),
           
-  PrivateUse1((short)(Undefined.value + 59)),
+  PrivateUse1((short)(Undefined.value + 60)),
           
-  PrivateUse2((short)(Undefined.value + 60)),
+  PrivateUse2((short)(Undefined.value + 61)),
           
-  PrivateUse3((short)(Undefined.value + 61)),
+  PrivateUse3((short)(Undefined.value + 62)),
           
-  Meta((short)(Undefined.value + 62)),
+  Meta((short)(Undefined.value + 63)),
           EndOfDenseBackends((short)(0)),
   StartOfQuantizedBackends((short)(1)),
       QuantizedCPU((short)(2)),
@@ -3314,7 +3349,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // for a given backend key, use the associated autograd key.
 // for non-backend keys, use AutogradOther as a default.
 // Note: it's convenient and fast to return a default here rather than (say)
-// returning an optional<DispatchKey>, or throwing. But it makes callers
+// returning an std::optional<DispatchKey>, or throwing. But it makes callers
 // responsible for either a) enforcing the invariant that only backend keys
 // be passed as arguments, or b) interpreting our return value carefully.
 @Namespace("c10") public static native @ByVal DispatchKeySet getAutogradRelatedKeySetFromBackend(BackendComponent t);
@@ -4076,6 +4111,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #if defined(__CUDACC__) && !defined(USE_ROCM)
 // #endif
+// #if defined(__HIPCC__) && defined(USE_ROCM)
+// #endif
 
 // #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
 // #endif
@@ -4121,6 +4158,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // #if defined(__CUDACC__) && !defined(USE_ROCM)
 // #endif
+// #if defined(__HIPCC__) && defined(USE_ROCM)
+// #endif // defined(__HIPCC__) && defined(USE_ROCM)
 
 // #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
 // #endif
@@ -4317,7 +4356,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #pragma once
 
 // #include <c10/macros/Macros.h>
-// #include <cstring>
+// #include <cstdint>
 // #include <limits>
 
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
@@ -4456,9 +4495,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  *  and inspired by Half implementation from pytorch/c10/util/Half.h */
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/TypeSafeSignMath.h>
 // #include <c10/util/floating_point_utils.h>
-// #include <type_traits>
 
 // #if defined(__cplusplus)
 // #include <cmath>
@@ -4473,16 +4510,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #endif
 
 // #include <climits>
-// #include <cstdint>
-// #include <cstring>
-// #include <iosfwd>
-// #include <limits>
-// #include <sstream>
-// #include <stdexcept>
-// #include <string>
-// #include <utility>
-
-// #include <typeinfo> // operator typeid
+// #include <iostream>
 
 /*
  * Convert a 8-bit floating-point number in fp8 E4M3FN format, in bit
@@ -4680,8 +4708,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  *  Implementation based on the paper https://arxiv.org/pdf/2206.02915.pdf and
  *  the existing Float8_e4m3fn implementation. */
 
+// #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
-// #include <c10/util/TypeSafeSignMath.h>
 // #include <c10/util/floating_point_utils.h>
 // #include <type_traits>
 
@@ -4984,7 +5012,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
 // #endif
 
-// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #if defined(__aarch64__) && !defined(__CUDACC__)
 // #else
 
 
@@ -4993,7 +5021,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 
-// #endif /* !defined(__aarch64__) || defined(C10_MOBILE) || defined(__CUDACC__) \
+// #endif /* !defined(__aarch64__) || defined(__CUDACC__) \
 //         */
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)
@@ -5150,7 +5178,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <sycl/sycl.hpp> // for SYCL 2020
 // #endif
 
-// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #if defined(__aarch64__) && !defined(__CUDACC__)
 // #endif
 
 /*
@@ -5184,7 +5212,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  */
 @Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
 
-// #if defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)
+// #if defined(__aarch64__) && !defined(__CUDACC__)
 // #endif
 
 
@@ -5708,6 +5736,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <limits>
 // #include <ostream>
 // #include <type_traits>
+// #include <unordered_map>
 
 // dummy struct for uint1 to uint7, actual functionality
 // of these dtypes will be implemented in python with Tensor subclass
@@ -6101,6 +6130,14 @@ public static final int EXP_BIAS_FP8 = 15;
     @Cast("std::ostream*") @ByRef Pointer stream,
     ScalarType scalar_type);
 
+// Returns a pair of strings representing the names for each dtype.
+// The returned pair is (name, legacy_name_if_applicable)
+@Namespace("c10") public static native @ByVal StringPair getDtypeNames(
+    ScalarType scalarType);
+
+// Returns a map of string name to dtype.
+@Namespace("c10") public static native @Const @ByRef StringScalarTypeMap getStringToDtypeMap();
+
  // namespace c10
 
 
@@ -6142,9 +6179,9 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/macros/Export.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <cstdint>
+// #include <optional>
 // #include <ostream>
 // #include <string>
 // Targeting ../SymNode.java
@@ -6184,9 +6221,9 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/core/SymNodeImpl.h>
 // #include <c10/macros/Export.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <cstdint>
+// #include <optional>
 // #include <ostream>
 // #include <utility>
 // Targeting ../SymBool.java
@@ -6200,17 +6237,9 @@ public static final int EXP_BIAS_FP8 = 15;
 // #define TORCH_SYM_INTERNAL_ASSERT(cond, ...)
 //   TORCH_INTERNAL_ASSERT((cond).expect_true(__FILE__, __LINE__), __VA_ARGS__)
 
-@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(@Cast("bool") boolean b, @Cast("const char*") BytePointer file, @Cast("int64_t") long line);
-@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(@Cast("bool") boolean b, String file, @Cast("int64_t") long line);
 
-@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(
-    @Const @ByRef SymBool b,
-    @Cast("const char*") BytePointer file,
-    @Cast("int64_t") long line);
-@Namespace("c10") public static native @Cast("bool") boolean guard_size_oblivious(
-    @Const @ByRef SymBool b,
-    String file,
-    @Cast("int64_t") long line);
+
+
 
 // #define TORCH_GUARD_SIZE_OBLIVIOUS(cond)
 //   c10::guard_size_oblivious((cond), __FILE__, __LINE__)
@@ -6232,6 +6261,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <cstdint>
 // #include <iterator>
 // #include <numeric>
+// #include <optional>
 // #include <ostream>
 // #include <type_traits>
 // Targeting ../SymInt.java
@@ -7878,9 +7908,11 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #include <c10/core/SymInt.h>
 // #include <c10/util/ArrayRef.h>
+// #include <c10/util/DimVector.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <c10/util/irange.h>
 // #include <cstdint>
+// #include <optional>
 
 @Namespace("c10") public static native @ByVal LongArrayRef asIntArrayRefUnchecked(@ByVal SymIntArrayRef ar);
 
@@ -7895,7 +7927,20 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 
 
+// Even slower than asIntArrayRefSlow, as it forces an allocation for a
+// destination int, BUT it is able to force specialization (it never errors)
+@Namespace("c10") public static native @ByVal DimVector asIntArrayRefSlowAlloc(
+    @ByVal SymIntArrayRef ar,
+    @Cast("const char*") BytePointer file,
+    @Cast("int64_t") long line);
+@Namespace("c10") public static native @ByVal DimVector asIntArrayRefSlowAlloc(
+    @ByVal SymIntArrayRef ar,
+    String file,
+    @Cast("int64_t") long line);
+
 // #define C10_AS_INTARRAYREF_SLOW(a) c10::asIntArrayRefSlow(a, __FILE__, __LINE__)
+// #define C10_AS_INTARRAYREF_SLOW_ALLOC(a)
+//   c10::asIntArrayRefSlowAlloc(a, __FILE__, __LINE__)
 
 // Prefer using a more semantic constructor, like
 // fromIntArrayRefKnownNonNegative
@@ -7942,7 +7987,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #include <cstdint>
 // #include <iosfwd>
@@ -8120,8 +8165,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 
 // #include <c10/core/impl/HermeticPyObjectTLS.h>
 // #include <c10/core/impl/PyInterpreter.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/python_stub.h>
+// #include <optional>
 
 // #include <atomic>
 
@@ -8478,6 +8523,17 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
 //       std::greater<void>(), >, x, y, ##__VA_ARGS__)
 
+// #define C10_LOG_EVENT_SAMPLED(event, ...)
+//   static const std::unique_ptr<::c10::EventSampledHandler>&
+//       _##event##EventSampledHandler = ::c10::GetEventSampledHandler(#event);
+//   if (_##event##EventSampledHandler) {
+//     _##event##EventSampledHandler->log(__VA_ARGS__);
+//   }
+
+// Must be called in the main thread before any other threads are spawned.
+
+
+
 /**
  * Very lightweight logging for the first time API usage. It's beneficial for
  * tracking of individual functionality usage in larger applications.
@@ -8621,12 +8677,12 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <c10/util/DimVector.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/Flags.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/accumulate.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/util/irange.h>
 // #include <c10/util/safe_numerics.h>
 // #include <c10/util/typeid.h>
+// #include <optional>
 
 // #include <algorithm>
 // #include <atomic>
@@ -9050,7 +9106,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 // #include <ATen/core/symbol.h>
 // #include <c10/util/ArrayRef.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <ostream>
 
 @Namespace("at") public enum NameType { BASIC((byte)(0)), WILDCARD((byte)(1));
@@ -9283,7 +9339,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <c10/util/ExclusivelyOwned.h>
 // #include <c10/util/ExclusivelyOwnedTensorTraits.h>
 // #include <c10/util/MaybeOwned.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <c10/util/intrusive_ptr.h>
 
 // #include <ATen/core/NamedTensor.h>
@@ -9800,7 +9856,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <c10/util/ExclusivelyOwned.h>
 // #include <c10/util/Deprecated.h>
 // #include <c10/util/MaybeOwned.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <c10/util/OptionalArrayRef.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/macros/Export.h>
@@ -12746,7 +12802,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <c10/macros/Macros.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #define C10_FORALL_TYPES(_)
 //   _(AnyType)
@@ -12845,7 +12901,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("c10") public static native String typeKindToString(@Cast("c10::TypeKind") int kind);
 
 // Use this to customize how a Type is printed using `annotation_str()`. If
-// c10::nullopt is returned, `annotation_str()` falls through to its default
+// std::nullopt is returned, `annotation_str()` falls through to its default
 // implementation.
  // namespace detail
 // #define TORCH_DECLARE_SINGLETON(Type)
@@ -12956,7 +13012,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <type_traits>
 
 // #include <ATen/core/jit_type_base.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #define DYNAMIC_TYPE_BIT(x) (1 << x)
 
 @Namespace("c10") @MemberGetter public static native @Cast("const c10::DynamicTypeBits") int kDynamicCovariantTypeBit();
@@ -13220,7 +13276,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/util/TypeList.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/util/order_preserving_flat_hash_map.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <ATen/core/TensorBody.h>
 // #include <ATen/core/jit_type_base.h>
 
@@ -13294,7 +13350,7 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/type_factory.h>
 // #include <ATen/core/qualified_name.h>
 // #include <c10/util/TypeList.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <c10/core/SymFloat.h>
 // #include <c10/core/SymBool.h>
 // #include <c10/core/Device.h>
@@ -13833,7 +13889,7 @@ public static final byte min_lookups = min_lookups();
  *  This device guard does NOT have an uninitialized state; it is guaranteed
  *  to reset a device on exit.  If you are in a situation where you *might*
  *  want to setup a guard (i.e., are looking for the moral equivalent
- *  of optional<DeviceGuard>), see OptionalDeviceGuard. */
+ *  of std::optional<DeviceGuard>), see OptionalDeviceGuard. */
 // Targeting ../OptionalDeviceGuard.java
 
 
@@ -14019,6 +14075,7 @@ public static final byte min_lookups = min_lookups();
 
 // #include <condition_variable>
 // #include <memory>
+// #include <optional>
 // #include <type_traits>
 // #include <utility>
 
@@ -14247,7 +14304,7 @@ public static final byte min_lookups = min_lookups();
   
 
 // generic_to<T> converts an IValue from a generic list or generic dict
-// to a concrete list/dict type likelike List<T>, Dict<...> or optional<T>.
+// to a concrete list/dict type likelike List<T>, Dict<...> or std::optional<T>.
 // Note that in the case of lists, this only works for IValue-based lists,
 // i.e. not for int64_t, double, ...
 // generic_to<T> is an implementation detail of IValue::to<T> and not
@@ -14420,7 +14477,7 @@ public static final byte min_lookups = min_lookups();
  // namespace ivalue
 
 // This is an owning wrapper for a std::optional<std::vector<T>>
-// that can be implicitly converted to a (non-owning) optional<ArrayRef<T>>.
+// that can be implicitly converted to a (non-owning) std::optional<ArrayRef<T>>.
 // Its purpose is to be used in generated code to keep the vector alive
 // either until the end of a statement (as a temporary), or as a saved arg
 // in autograd.
@@ -14609,9 +14666,6 @@ public static final byte min_lookups = min_lookups();
 
 
 
-@Namespace("c10::impl") public static native @Const IValue ptr_to_first_element(@Const @ByRef GenericList list);
-
-
 
 
 
@@ -14627,7 +14681,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/util/TypeList.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/util/ArrayRef.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <vector>
 
 
@@ -14679,6 +14733,7 @@ public static final byte min_lookups = min_lookups();
 
 
 // Targeting ../GenericListIterator.java
+
 
 
 
@@ -15233,7 +15288,6 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/DimVector.h>
 // #include <ATen/core/Tensor.h>
-// #include <functional>
 
 @Namespace("at") public static native @Cast("bool") boolean has_names(@Const @ByRef TensorArrayRef tensors);
 @Namespace("at") public static native @Cast("bool") boolean has_names(@Const @ByRef TensorVector tensors);
@@ -15646,7 +15700,7 @@ public static final byte min_lookups = min_lookups();
 @Namespace("torch::autograd") public static native void backward(
     @Const @ByRef TensorVector tensors,
     @Const @ByRef(nullValue = "torch::autograd::variable_list{}") TensorVector grad_tensors,
-    @ByVal(nullValue = "std::optional<bool>(c10::nullopt)") BoolOptional retain_graph,
+    @ByVal(nullValue = "std::optional<bool>(std::nullopt)") BoolOptional retain_graph,
     @Cast("bool") boolean create_graph/*=false*/,
     @Const @ByRef(nullValue = "torch::autograd::variable_list{}") TensorVector inputs);
 @Namespace("torch::autograd") public static native void backward(
@@ -15682,7 +15736,7 @@ public static final byte min_lookups = min_lookups();
     @Const @ByRef TensorVector outputs,
     @Const @ByRef TensorVector inputs,
     @Const @ByRef(nullValue = "torch::autograd::variable_list{}") TensorVector grad_outputs,
-    @ByVal(nullValue = "std::optional<bool>(c10::nullopt)") BoolOptional retain_graph,
+    @ByVal(nullValue = "std::optional<bool>(std::nullopt)") BoolOptional retain_graph,
     @Cast("bool") boolean create_graph/*=false*/,
     @Cast("bool") boolean allow_unused/*=false*/);
 @Namespace("torch::autograd") public static native @ByVal TensorVector grad(
@@ -15732,11 +15786,11 @@ public static final byte min_lookups = min_lookups();
 
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/string_view.h>
+// #include <optional>
+// #include <ostream>
 // #include <string>
 // #include <utility>
-// #include <ostream>
 // Targeting ../OperatorName.java
 
 
@@ -15753,7 +15807,7 @@ public static final byte min_lookups = min_lookups();
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer arg0, @Const @ByRef OperatorName arg1);
 
  // namespace c10
-
+ // namespace std
 
 
 // Parsed from ATen/core/dispatch/OperatorOptions.h
@@ -15849,34 +15903,7 @@ public static final byte min_lookups = min_lookups();
 // #include <ostream>
 // #include <sstream>
 
-// note: windows build doesn't find symbols in operator files unless
-// this is a header file
 
-@Namespace("c10") public static native @Cast("size_t") long findFirstOutArg(@StdVector Argument args);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// covariant subtyping of list of Arguments
-@Namespace("c10") public static native @Cast("bool") boolean isSubtypeOfList(
-    @ByVal ArgumentArrayRef child,
-    @ByVal ArgumentArrayRef parent,
-    @Cast("std::ostream*") Pointer why_not);
 
 
 
@@ -16019,8 +16046,7 @@ public static final byte min_lookups = min_lookups();
 
 // Returns true iff the given op name is on the allowlist
 // and should be registered
-@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_check(@StringView BytePointer op_name);
-@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_check(@StringView String op_name);
+
 
 // Returns true iff the given schema string is on the allowlist
 // and should be registered
@@ -16850,7 +16876,6 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/function_schema.h>
 // #include <c10/util/Metaprogramming.h>
 // #include <c10/util/flat_hash_map.h>
-// #include <c10/util/Optional.h>
 // #include <c10/core/DispatchKey.h>
 // #include <c10/core/PyHandleCache.h>
 // #include <c10/core/SafePyObject.h>
@@ -16863,8 +16888,9 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/dispatch/RegistrationHandleRAII.h>
 // #include <ATen/core/enum_tag.h>
 
-// #include <list>
+// #include <optional>
 // #include <array>
+// #include <list>
 
 // #ifdef C10_MOBILE
 // #endif
@@ -16897,8 +16923,8 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/ivalue.h>
 // #include <ATen/core/operator_name.h>
 // #include <c10/macros/Export.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/SmallVector.h>
+// #include <optional>
 
 // #include <array>
 // #include <functional>
@@ -17282,6 +17308,9 @@ public static final byte min_lookups = min_lookups();
 
 // Handle case where the kernel returns void.
 
+@Namespace("c10::detail") public static native void _print_dispatch_trace(@StdString BytePointer label, @StdString BytePointer op_name, @Const @ByRef DispatchKeySet dispatchKeySet);
+@Namespace("c10::detail") public static native void _print_dispatch_trace(@StdString String label, @StdString String op_name, @Const @ByRef DispatchKeySet dispatchKeySet);
+
  // namespace detail
 
 // See [Note: Argument forwarding in the dispatcher] for why Args doesn't use &&
@@ -17346,14 +17375,15 @@ public static final byte min_lookups = min_lookups();
         core(0),
         data_dependent_output(1),
         dynamic_output_shape(2),
-        generated(3),
-        inplace_view(4),
-        needs_fixed_stride_order(5),
-        nondeterministic_bitwise(6),
-        nondeterministic_seeded(7),
-        pointwise(8),
-        pt2_compliant_tag(9),
-        view_copy(10);
+        flexible_layout(3),
+        generated(4),
+        inplace_view(5),
+        needs_fixed_stride_order(6),
+        nondeterministic_bitwise(7),
+        nondeterministic_seeded(8),
+        pointwise(9),
+        pt2_compliant_tag(10),
+        view_copy(11);
 
         public final int value;
         private Tag(int v) { this.value = v; }
@@ -17443,7 +17473,7 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/ivalue.h>
 // #include <ATen/core/jit_type_base.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
  // namespace torch::jit
 
 // This enumerator represents the 'kind' of an attribute - a buffer, a parameter, or neither.
@@ -17731,7 +17761,7 @@ public static final byte min_lookups = min_lookups();
 //       torch::Library::DEF,
 //       &TORCH_LIBRARY_init_##ns,
 //       #ns,
-//       c10::nullopt,
+//       std::nullopt,
 //       __FILE__,
 //       __LINE__);
 //   void TORCH_LIBRARY_init_##ns(torch::Library& m)
@@ -17770,7 +17800,7 @@ public static final byte min_lookups = min_lookups();
 //       torch::Library::FRAGMENT,
 //       &C10_CONCATENATE(TORCH_LIBRARY_FRAGMENT_init_##ns##_, uid),
 //       #ns,
-//       c10::nullopt,
+//       std::nullopt,
 //       __FILE__,
 //       __LINE__);
 //   void C10_CONCATENATE(
@@ -17836,7 +17866,7 @@ public static final byte min_lookups = min_lookups();
 //            ? &C10_CONCATENATE(TORCH_LIBRARY_IMPL_init_##ns##_##k##_, uid)
 //            : [](torch::Library&) -> void {}),
 //       #ns,
-//       c10::make_optional(c10::DispatchKey::k),
+//       std::make_optional(c10::DispatchKey::k),
 //       __FILE__,
 //       __LINE__);
 //   void C10_CONCATENATE(
@@ -17851,13 +17881,13 @@ public static final byte min_lookups = min_lookups();
 
 /** \private */
 // #define MAKE_TORCH_LIBRARY(ns)
-//   torch::Library(torch::Library::DEF, #ns, c10::nullopt, __FILE__, __LINE__)
+//   torch::Library(torch::Library::DEF, #ns, std::nullopt, __FILE__, __LINE__)
 /** \private */
 // #define MAKE_TORCH_LIBRARY_IMPL(ns, k)
 //   torch::Library(
 //       torch::Library::IMPL,
 //       #ns,
-//       c10::make_optional(c10::DispatchKey::k),
+//       std::make_optional(c10::DispatchKey::k),
 //       __FILE__,
 //       __LINE__)
 
@@ -17982,6 +18012,8 @@ public static final byte min_lookups = min_lookups();
 
 @Namespace("at::impl") public static native @Cast("bool") boolean torch_function_mode_enabled();
 
+@Namespace("at::impl") public static native @Cast("bool") boolean torch_function_all_disabled();
+
  // namespace at::impl
 
 
@@ -17989,9 +18021,10 @@ public static final byte min_lookups = min_lookups();
 
 // #pragma once
 
+// #include <c10/core/SafePyObject.h>
 // #include <c10/macros/Export.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/python_stub.h>
+// #include <optional>
 // #include <stack>
 // #include <string>
 
@@ -18194,8 +18227,8 @@ public static final byte min_lookups = min_lookups();
 // #include <vector>
 
 // #include <c10/core/Stream.h>
-// #include <c10/util/Optional.h>
 // #include <torch/csrc/autograd/variable.h>
+// #include <optional>
 
  // namespace torch::autograd
 
@@ -18212,9 +18245,7 @@ public static final byte min_lookups = min_lookups();
 // all threads into a single queue, then process together at the end
 // in the main thread.
 
- // namespace utils
- // namespace autograd
- // namespace torch
+ // namespace torch::autograd::utils
 
 
 // Parsed from torch/csrc/autograd/graph_task.h
@@ -18312,7 +18343,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/core/Generator.h>
 // #include <ATen/core/MT19937RNGEngine.h>
 // #include <c10/core/GeneratorImpl.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // Targeting ../CPUGeneratorImpl.java
 
 
@@ -18332,6 +18363,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <c10/core/Device.h>
 // #include <c10/core/Stream.h>
+// #include <c10/core/Allocator.h>
 // Targeting ../AcceleratorHooksInterface.java
 
 
@@ -18349,10 +18381,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Stream.h>
 // #include <c10/util/Registry.h>
 
+// #include <c10/core/Allocator.h>
+
+// #include <c10/util/python_stub.h>
 // #include <ATen/detail/AcceleratorHooksInterface.h>
 
 // #include <string>
-
 
 @Namespace("at") @MemberGetter public static native @Cast("const char*") BytePointer MTIA_HELP();
 // Targeting ../MTIAHooksInterface.java
@@ -18383,15 +18417,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // - It provides a set of common APIs as defined by AcceleratorHooksInterface
 //
 // As of today, accelerator devices are (in no particular order):
-// CUDA, MTIA, PrivateUse1
-// We want to add once all the proper APIs are supported and tested:
-// HIP, MPS, XPU
+// CUDA, MTIA, XPU, HIP, MPS, PrivateUse1
 
 // Ensures that only one accelerator is available (at
 // compile time if possible) and return it.
 // When checked is true, the returned optional always has a value.
 @Namespace("at") public static native @ByVal DeviceTypeOptional getAccelerator(@Cast("bool") boolean checked/*=false*/);
 @Namespace("at") public static native @ByVal DeviceTypeOptional getAccelerator();
+
+@Namespace("at") public static native @Cast("bool") boolean isAccelerator(DeviceType d);
+@Namespace("at") public static native @Cast("bool") boolean isAccelerator(@Cast("c10::DeviceType") byte d);
 
  // namespace at
 
@@ -18501,6 +18536,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <c10/util/Registry.h>
 
+// #include <ATen/detail/AcceleratorHooksInterface.h>
+
 // #include <memory>
 
 
@@ -18607,8 +18644,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native void RegisterPrivateUse1HooksInterface(
     PrivateUse1HooksInterface hook_);
 
-@Namespace("at") public static native PrivateUse1HooksInterface GetPrivateUse1HooksInterface();
-
 @Namespace("at") public static native @Cast("bool") boolean isPrivateUse1HooksRegistered();
 
 @Namespace("at::detail") public static native @Const @ByRef PrivateUse1HooksInterface getPrivateUse1Hooks();
@@ -18624,10 +18659,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <c10/core/Device.h>
 // #include <c10/util/Exception.h>
-// #include <ATen/core/Generator.h>
 // #include <c10/util/Registry.h>
 
-@Namespace("at") @MemberGetter public static native @Cast("const char*") BytePointer XPU_HELP();
+// #include <ATen/core/Generator.h>
+// #include <ATen/detail/AcceleratorHooksInterface.h>
 // Targeting ../XPUHooksInterface.java
 
 
@@ -18700,8 +18735,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <cstring>
 // #include <optional>
 // Reads an environment variable and returns
-// - optional<true>,              if set equal to "1"
-// - optional<false>,             if set equal to "0"
+// - std::optional<true>,              if set equal to "1"
+// - std::optional<false>,             if set equal to "0"
 // - nullopt,   otherwise
 //
 // NB:
@@ -18939,7 +18974,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal LongArrayRef size,
     ScalarType dtype,
     @Cast("bool") boolean pin_memory/*=false*/,
-    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format_opt);
+    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(std::nullopt)") MemoryFormatOptional memory_format_opt);
 @Namespace("at::detail") public static native @ByVal TensorBase empty_cpu(
     @ByVal LongArrayRef size,
     ScalarType dtype);
@@ -18947,7 +18982,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size,
     ScalarType dtype,
     @Cast("bool") boolean pin_memory/*=false*/,
-    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format_opt);
+    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(std::nullopt)") MemoryFormatOptional memory_format_opt);
 @Namespace("at::detail") public static native @ByVal TensorBase empty_cpu(
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size,
     ScalarType dtype);
@@ -19016,14 +19051,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at::detail") public static native @ByVal TensorBase empty_meta(
     @ByVal LongArrayRef size,
     ScalarType dtype,
-    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format_opt);
+    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(std::nullopt)") MemoryFormatOptional memory_format_opt);
 @Namespace("at::detail") public static native @ByVal TensorBase empty_meta(
     @ByVal LongArrayRef size,
     ScalarType dtype);
 @Namespace("at::detail") public static native @ByVal TensorBase empty_meta(
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size,
     ScalarType dtype,
-    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format_opt);
+    @ByVal(nullValue = "std::optional<c10::MemoryFormat>(std::nullopt)") MemoryFormatOptional memory_format_opt);
 @Namespace("at::detail") public static native @ByVal TensorBase empty_meta(
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size,
     ScalarType dtype);
@@ -19091,8 +19126,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal SymIntArrayRef stride,
     @ByVal ScalarTypeOptional dtype_opt,
     @ByVal LayoutOptional layout_opt,
-    @ByVal DeviceOptional device_opt,
-    @ByVal BoolOptional pin_memory_opt);
+    @ByVal DeviceOptional device_opt);
 
 @Namespace("at::detail") public static native @ByVal TensorBase empty_strided_symint_meta(
     @ByVal SymIntArrayRef size,
@@ -19169,10 +19203,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/irange.h>
 
 // #include <algorithm>
-// #include <memory>
-// #include <numeric>
-// #include <sstream>
-// #include <typeinfo>
 
 // #define AT_DISALLOW_COPY_AND_ASSIGN(TypeName)
 //   TypeName(const TypeName&) = delete;
@@ -19652,7 +19682,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19690,7 +19720,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19725,7 +19755,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19763,7 +19793,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19801,7 +19831,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19832,7 +19862,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19886,7 +19916,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19940,7 +19970,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -19972,7 +20002,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20003,7 +20033,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20041,7 +20071,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20076,7 +20106,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20114,7 +20144,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20149,7 +20179,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20196,7 +20226,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20233,7 +20263,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20270,7 +20300,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20307,7 +20337,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20344,7 +20374,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20385,7 +20415,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20422,7 +20452,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20452,7 +20482,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20506,7 +20536,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20542,7 +20572,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20572,7 +20602,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20607,7 +20637,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20635,7 +20665,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20666,7 +20696,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20694,7 +20724,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20764,7 +20794,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20795,7 +20825,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20828,7 +20858,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20868,7 +20898,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20908,7 +20938,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20945,7 +20975,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -20978,7 +21008,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21013,7 +21043,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21083,7 +21113,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21138,7 +21168,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21176,7 +21206,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21214,7 +21244,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21252,7 +21282,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21290,7 +21320,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21328,7 +21358,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21363,7 +21393,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21401,7 +21431,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21438,7 +21468,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21475,7 +21505,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21490,15 +21520,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @Cast("bool") boolean stable, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @Cast("bool") boolean stable);
 
-// aten::argsort.dimname(Tensor self, Dimname dim, bool descending=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
-@Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
 // aten::argsort.stable_out(Tensor self, *, bool stable, int dim=-1, bool descending=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor argsort_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("bool") boolean stable, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByRef Tensor argsort_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("bool") boolean stable);
 // aten::argsort.stable_out(Tensor self, *, bool stable, int dim=-1, bool descending=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor argsort_outf(@Const @ByRef Tensor self, @Cast("bool") boolean stable, @Cast("int64_t") long dim, @Cast("bool") boolean descending, @ByRef Tensor out);
+
+// aten::argsort.dimname(Tensor self, Dimname dim, bool descending=False) -> Tensor
+@Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
+@Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
 
@@ -21520,7 +21550,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21550,7 +21580,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21601,7 +21631,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21661,7 +21691,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21721,7 +21751,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21759,7 +21789,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21797,7 +21827,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21835,7 +21865,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21870,7 +21900,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21908,7 +21938,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21942,7 +21972,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -21976,7 +22006,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22010,7 +22040,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22043,7 +22073,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22085,7 +22115,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22123,7 +22153,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22165,7 +22195,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22203,7 +22233,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22240,7 +22270,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22289,7 +22319,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22319,7 +22349,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22349,7 +22379,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22384,7 +22414,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22419,7 +22449,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22454,7 +22484,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22489,7 +22519,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22524,7 +22554,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22559,7 +22589,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22594,7 +22624,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22648,7 +22678,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22679,7 +22709,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22716,7 +22746,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22753,7 +22783,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22790,7 +22820,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22827,7 +22857,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22864,7 +22894,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22915,7 +22945,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -22966,7 +22996,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23001,7 +23031,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23052,7 +23082,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23103,7 +23133,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23154,7 +23184,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23203,7 +23233,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23241,7 +23271,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23276,7 +23306,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23307,7 +23337,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23343,7 +23373,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23390,7 +23420,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23420,7 +23450,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23451,7 +23481,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23504,7 +23534,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23541,7 +23571,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23569,7 +23599,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23604,7 +23634,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23635,7 +23665,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23673,7 +23703,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23714,7 +23744,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23752,7 +23782,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23780,7 +23810,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23831,7 +23861,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23868,7 +23898,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23905,7 +23935,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23942,7 +23972,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -23972,7 +24002,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24003,7 +24033,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24058,7 +24088,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24107,7 +24137,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24156,7 +24186,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24211,7 +24241,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24248,7 +24278,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24276,7 +24306,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24333,7 +24363,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24361,7 +24391,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24396,7 +24426,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24434,7 +24464,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24465,7 +24495,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24500,7 +24530,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24553,7 +24583,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24606,7 +24636,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24636,7 +24666,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24674,7 +24704,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24734,7 +24764,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24762,7 +24792,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24818,7 +24848,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24874,7 +24904,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24930,7 +24960,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -24984,7 +25014,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25021,7 +25051,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25051,7 +25081,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25089,7 +25119,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25127,7 +25157,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25165,7 +25195,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25219,7 +25249,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25279,7 +25309,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25333,7 +25363,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25387,7 +25417,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25424,7 +25454,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25465,7 +25495,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25508,7 +25538,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25538,7 +25568,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25576,7 +25606,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25614,7 +25644,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25645,7 +25675,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25676,7 +25706,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25724,7 +25754,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25755,7 +25785,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25792,7 +25822,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25829,7 +25859,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25857,7 +25887,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25892,7 +25922,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25929,7 +25959,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25964,7 +25994,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -25999,7 +26029,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26034,7 +26064,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26069,7 +26099,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26123,7 +26153,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26177,7 +26207,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26231,7 +26261,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26285,7 +26315,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26320,7 +26350,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26355,7 +26385,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26385,7 +26415,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26428,7 +26458,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26458,7 +26488,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26501,7 +26531,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26548,7 +26578,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26578,7 +26608,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26625,7 +26655,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26660,7 +26690,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26688,7 +26718,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26726,7 +26756,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26754,7 +26784,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26800,7 +26830,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26830,7 +26860,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26863,7 +26893,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26898,7 +26928,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26935,7 +26965,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -26972,7 +27002,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27003,7 +27033,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27038,7 +27068,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27092,7 +27122,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27129,7 +27159,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27166,7 +27196,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27203,7 +27233,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27238,7 +27268,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27275,7 +27305,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27334,7 +27364,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27383,7 +27413,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27418,7 +27448,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27451,7 +27481,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27485,7 +27515,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27523,7 +27553,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27560,7 +27590,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27601,7 +27631,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27636,7 +27666,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27691,7 +27721,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27726,7 +27756,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27760,7 +27790,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27811,7 +27841,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27849,7 +27879,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27879,7 +27909,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -27966,7 +27996,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28005,7 +28035,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28076,7 +28106,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28121,7 +28151,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28187,7 +28217,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28230,7 +28260,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28260,7 +28290,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28298,7 +28328,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28336,7 +28366,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28371,7 +28401,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28409,7 +28439,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28447,7 +28477,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28475,7 +28505,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28503,7 +28533,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28563,7 +28593,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28601,7 +28631,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28638,7 +28668,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28733,7 +28763,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28763,7 +28793,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28798,7 +28828,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28828,7 +28858,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28861,7 +28891,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28896,7 +28926,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28926,7 +28956,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28956,7 +28986,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -28986,7 +29016,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29016,7 +29046,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29046,7 +29076,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29076,7 +29106,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29106,7 +29136,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29139,7 +29169,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29172,7 +29202,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29205,7 +29235,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29260,7 +29290,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29327,7 +29357,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29366,7 +29396,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29427,7 +29457,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29459,7 +29489,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29514,7 +29544,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29581,7 +29611,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29642,7 +29672,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29697,7 +29727,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29764,7 +29794,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29825,7 +29855,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29857,7 +29887,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29912,7 +29942,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -29979,7 +30009,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30040,7 +30070,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30095,7 +30125,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30162,7 +30192,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30223,7 +30253,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30278,7 +30308,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30345,7 +30375,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30384,7 +30414,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30445,7 +30475,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30494,7 +30524,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30522,7 +30552,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30560,7 +30590,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30601,7 +30631,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30632,7 +30662,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30670,7 +30700,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30700,7 +30730,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30730,7 +30760,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30781,7 +30811,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30819,7 +30849,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30862,7 +30892,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30897,7 +30927,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30932,7 +30962,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -30975,7 +31005,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31013,7 +31043,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31051,7 +31081,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31089,7 +31119,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31127,7 +31157,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31165,7 +31195,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31200,7 +31230,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31246,7 +31276,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal LongArrayRef strides,
     PointerConsumer deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+    @Const @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional target_device);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal LongArrayRef sizes,
@@ -31258,7 +31288,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
     PointerConsumer deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+    @Const @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional target_device);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
@@ -31272,7 +31302,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Cast("int64_t") long storage_offset,
     PointerConsumer deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+    @Const @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional target_device);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal LongArrayRef sizes,
@@ -31286,7 +31316,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Cast("int64_t") long storage_offset,
     PointerConsumer deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+    @Const @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional target_device);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
@@ -31299,7 +31329,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal LongArrayRef sizes,
     PointerConsumer deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+    @Const @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional target_device);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal LongArrayRef sizes,
@@ -31309,7 +31339,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
     PointerConsumer deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+    @Const @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional target_device);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
@@ -31369,7 +31399,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31414,7 +31444,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31496,7 +31526,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31535,7 +31565,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31566,7 +31596,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31613,7 +31643,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31643,7 +31673,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31681,7 +31711,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31724,7 +31754,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31769,7 +31799,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31809,7 +31839,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31846,7 +31876,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31881,7 +31911,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31916,7 +31946,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31953,7 +31983,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -31988,7 +32018,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32023,7 +32053,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32058,7 +32088,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32123,7 +32153,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32166,7 +32196,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32209,7 +32239,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32239,7 +32269,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32274,7 +32304,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32309,7 +32339,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32344,7 +32374,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32379,7 +32409,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32410,7 +32440,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32445,7 +32475,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32476,7 +32506,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32519,7 +32549,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32590,7 +32620,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32639,7 +32669,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32676,7 +32706,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32711,7 +32741,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32749,7 +32779,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32784,7 +32814,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32822,7 +32852,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32857,7 +32887,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32898,7 +32928,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32933,7 +32963,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32968,7 +32998,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -32999,7 +33029,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33036,7 +33066,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33086,7 +33116,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33134,7 +33164,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33168,7 +33198,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33203,7 +33233,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33241,7 +33271,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33278,7 +33308,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33313,7 +33343,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33348,7 +33378,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33386,7 +33416,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33421,7 +33451,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33456,7 +33486,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33494,7 +33524,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33524,7 +33554,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33559,7 +33589,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33600,7 +33630,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33638,7 +33668,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33687,7 +33717,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33728,7 +33758,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33770,7 +33800,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33813,7 +33843,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33849,7 +33879,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33877,7 +33907,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33912,7 +33942,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33942,7 +33972,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -33977,7 +34007,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34007,7 +34037,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34042,7 +34072,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34077,7 +34107,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34105,7 +34135,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34135,7 +34165,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34165,7 +34195,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34195,7 +34225,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34225,7 +34255,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34255,7 +34285,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34283,7 +34313,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34313,7 +34343,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34343,7 +34373,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34371,7 +34401,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34401,7 +34431,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34429,7 +34459,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34459,7 +34489,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34489,7 +34519,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34520,7 +34550,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34550,7 +34580,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34607,7 +34637,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34642,7 +34672,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34677,7 +34707,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34712,7 +34742,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34747,7 +34777,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34777,7 +34807,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34808,7 +34838,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34836,7 +34866,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34896,7 +34926,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34927,7 +34957,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -34962,7 +34992,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35009,7 +35039,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35040,7 +35070,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35079,7 +35109,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35117,7 +35147,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35155,7 +35185,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35198,7 +35228,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35239,7 +35269,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35274,7 +35304,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35317,7 +35347,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35360,7 +35390,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35403,7 +35433,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35438,7 +35468,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35473,7 +35503,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35503,7 +35533,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35538,7 +35568,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35575,7 +35605,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35612,7 +35642,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35660,7 +35690,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35697,7 +35727,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35732,7 +35762,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35763,7 +35793,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35798,7 +35828,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35838,7 +35868,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35873,7 +35903,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35913,7 +35943,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35948,7 +35978,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -35983,7 +36013,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36020,7 +36050,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36057,7 +36087,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36094,7 +36124,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36131,7 +36161,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36168,7 +36198,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36205,7 +36235,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36242,7 +36272,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36279,7 +36309,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36316,7 +36346,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36351,7 +36381,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36386,7 +36416,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36445,7 +36475,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36480,7 +36510,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36547,7 +36577,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36585,7 +36615,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36640,7 +36670,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36707,7 +36737,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36747,7 +36777,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36782,7 +36812,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36819,7 +36849,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36856,7 +36886,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36893,7 +36923,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36930,7 +36960,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -36967,7 +36997,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37004,7 +37034,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37044,7 +37074,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37081,7 +37111,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37118,7 +37148,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37158,7 +37188,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37195,7 +37225,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37230,7 +37260,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37301,7 +37331,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37339,7 +37369,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37377,7 +37407,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37415,7 +37445,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37453,7 +37483,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37490,7 +37520,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37525,7 +37555,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37560,7 +37590,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37595,7 +37625,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37636,7 +37666,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37671,7 +37701,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37706,7 +37736,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37749,7 +37779,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37779,7 +37809,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37814,7 +37844,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37849,7 +37879,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37884,7 +37914,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37919,7 +37949,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37960,7 +37990,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -37997,7 +38027,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38072,7 +38102,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38129,7 +38159,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38172,7 +38202,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38207,7 +38237,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38240,7 +38270,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38278,7 +38308,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38321,7 +38351,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38356,7 +38386,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38393,7 +38423,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38421,7 +38451,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38449,7 +38479,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38480,7 +38510,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38523,7 +38553,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38558,7 +38588,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38594,7 +38624,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38629,7 +38659,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38659,7 +38689,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38694,7 +38724,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38729,7 +38759,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38757,7 +38787,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38787,7 +38817,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38817,7 +38847,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38852,7 +38882,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38915,7 +38945,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38948,7 +38978,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -38981,7 +39011,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39014,7 +39044,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39056,7 +39086,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39098,7 +39128,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39136,7 +39166,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39169,7 +39199,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39211,7 +39241,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39249,7 +39279,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39303,7 +39333,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39360,7 +39390,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39395,7 +39425,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39405,6 +39435,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::mean(Tensor self, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self);
+
+// aten::mean.dtype_out(Tensor self, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+// aten::mean.dtype_out(Tensor self, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::mean.dim(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
@@ -39456,7 +39492,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39511,7 +39547,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39548,7 +39584,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39611,7 +39647,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39646,7 +39682,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39681,7 +39717,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39716,7 +39752,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39770,7 +39806,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39806,7 +39842,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39842,7 +39878,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39896,7 +39932,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39950,7 +39986,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -39988,7 +40024,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40026,7 +40062,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40064,7 +40100,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40094,7 +40130,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40132,7 +40168,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40167,7 +40203,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40221,7 +40257,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40258,7 +40294,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40293,7 +40329,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40331,7 +40367,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40366,7 +40402,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40408,7 +40444,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40450,7 +40486,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40492,7 +40528,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40534,7 +40570,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40598,7 +40634,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40662,7 +40698,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40700,7 +40736,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40738,7 +40774,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40773,7 +40809,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40820,7 +40856,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40854,7 +40890,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40888,7 +40924,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40942,7 +40978,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -40996,7 +41032,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41033,7 +41069,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41068,7 +41104,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41103,7 +41139,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41146,7 +41182,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41183,7 +41219,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41220,7 +41256,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41257,7 +41293,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41292,7 +41328,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41327,7 +41363,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41364,7 +41400,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41402,7 +41438,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41437,7 +41473,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41472,7 +41508,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41513,7 +41549,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41553,7 +41589,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41608,7 +41644,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41661,7 +41697,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41701,7 +41737,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41744,7 +41780,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41795,7 +41831,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41830,7 +41866,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41865,7 +41901,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41900,7 +41936,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41935,7 +41971,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -41970,7 +42006,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42021,7 +42057,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42072,7 +42108,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42126,7 +42162,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42180,7 +42216,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42228,7 +42264,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42271,7 +42307,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42309,7 +42345,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42347,7 +42383,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42379,7 +42415,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42427,7 +42463,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42475,7 +42511,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42523,7 +42559,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42571,7 +42607,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42619,7 +42655,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42654,7 +42690,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42709,7 +42745,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42764,7 +42800,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42815,7 +42851,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42866,7 +42902,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42917,7 +42953,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -42968,7 +43004,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43005,7 +43041,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43040,7 +43076,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43070,7 +43106,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43107,7 +43143,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43204,7 +43240,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43235,7 +43271,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43340,7 +43376,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43383,7 +43419,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43435,7 +43471,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43463,7 +43499,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43494,7 +43530,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43576,7 +43612,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43615,7 +43651,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43648,7 +43684,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43683,7 +43719,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43720,7 +43756,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43755,7 +43791,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43783,7 +43819,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43825,18 +43861,20 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
 // #include <ATen/ops/pad_sequence_ops.h>
 
 
-// aten::pad_sequence(Tensor[] sequences, bool batch_first=False, float padding_value=0.0) -> Tensor
-@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/);
+// aten::pad_sequence(Tensor[] sequences, bool batch_first=False, float padding_value=0.0, str padding_side="right") -> Tensor
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/, @StringView BytePointer padding_side/*="right"*/);
 @Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences);
-@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorVector sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorVector sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/, @StringView String padding_side/*="right"*/);
 @Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorVector sequences);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorVector sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/, @StringView BytePointer padding_side/*="right"*/);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/, @StringView String padding_side/*="right"*/);
 
 
 
@@ -43858,7 +43896,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43889,7 +43927,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43920,7 +43958,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43951,7 +43989,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -43989,7 +44027,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44017,7 +44055,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44048,7 +44086,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44083,7 +44121,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44118,7 +44156,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44155,7 +44193,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44185,7 +44223,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44220,7 +44258,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44255,7 +44293,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44285,7 +44323,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44336,7 +44374,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44366,7 +44404,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44423,7 +44461,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44453,7 +44491,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44490,7 +44528,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44520,7 +44558,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44555,7 +44593,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44590,7 +44628,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44620,7 +44658,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44650,7 +44688,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44687,7 +44725,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44715,7 +44753,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44768,7 +44806,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44803,7 +44841,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44857,7 +44895,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44892,7 +44930,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44927,7 +44965,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44957,7 +44995,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -44988,7 +45026,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45030,7 +45068,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45072,7 +45110,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45114,7 +45152,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45144,7 +45182,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45174,7 +45212,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45212,7 +45250,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45395,7 +45433,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45434,7 +45472,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45617,7 +45655,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45716,7 +45754,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45899,7 +45937,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45938,7 +45976,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -45995,7 +46033,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46090,7 +46128,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46137,7 +46175,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46167,7 +46205,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46197,7 +46235,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46235,7 +46273,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46263,7 +46301,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46291,7 +46329,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46345,7 +46383,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46399,7 +46437,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46453,7 +46491,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46507,7 +46545,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46561,7 +46599,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46615,7 +46653,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46653,7 +46691,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46686,7 +46724,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46737,7 +46775,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46765,7 +46803,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46800,7 +46838,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46846,7 +46884,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46921,7 +46959,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -46975,7 +47013,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47029,7 +47067,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47083,7 +47121,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47137,7 +47175,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47191,7 +47229,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47245,7 +47283,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47273,7 +47311,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47309,7 +47347,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47337,7 +47375,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47398,7 +47436,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47439,7 +47477,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47477,7 +47515,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47507,7 +47545,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47537,7 +47575,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47576,7 +47614,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47604,7 +47642,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47632,7 +47670,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47665,7 +47703,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47700,7 +47738,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47731,7 +47769,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47766,7 +47804,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47797,7 +47835,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47860,7 +47898,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47900,7 +47938,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47949,7 +47987,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -47977,7 +48015,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48012,7 +48050,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48050,7 +48088,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48085,7 +48123,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48126,7 +48164,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48161,7 +48199,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48204,7 +48242,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48242,7 +48280,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48289,7 +48327,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48327,15 +48365,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
 // #include <ATen/ops/scaled_dot_product_attention_ops.h>
 
 
-// aten::scaled_dot_product_attention(Tensor query, Tensor key, Tensor value, Tensor? attn_mask=None, float dropout_p=0.0, bool is_causal=False, *, float? scale=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scaled_dot_product_attention(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef(nullValue = "std::optional<at::Tensor>{}") TensorOptional attn_mask, double dropout_p/*=0.0*/, @Cast("bool") boolean is_causal/*=false*/, @ByVal(nullValue = "std::optional<double>(::std::nullopt)") DoubleOptional scale);
+// aten::scaled_dot_product_attention(Tensor query, Tensor key, Tensor value, Tensor? attn_mask=None, float dropout_p=0.0, bool is_causal=False, *, float? scale=None, bool enable_gqa=False) -> Tensor
+@Namespace("at") public static native @ByVal Tensor scaled_dot_product_attention(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef(nullValue = "std::optional<at::Tensor>{}") TensorOptional attn_mask, double dropout_p/*=0.0*/, @Cast("bool") boolean is_causal/*=false*/, @ByVal(nullValue = "std::optional<double>(::std::nullopt)") DoubleOptional scale, @Cast("bool") boolean enable_gqa/*=false*/);
 @Namespace("at") public static native @ByVal Tensor scaled_dot_product_attention(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value);
 
 
@@ -48358,7 +48396,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48429,7 +48467,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48467,7 +48505,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48509,7 +48547,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48556,7 +48594,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48598,7 +48636,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48636,7 +48674,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48690,7 +48728,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48741,7 +48779,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48792,7 +48830,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48825,7 +48863,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48912,7 +48950,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48940,7 +48978,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -48975,7 +49013,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49013,7 +49051,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49048,7 +49086,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49083,7 +49121,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49118,7 +49156,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49156,7 +49194,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49191,7 +49229,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49229,7 +49267,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49267,7 +49305,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49305,7 +49343,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49338,7 +49376,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49375,7 +49413,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49429,7 +49467,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49484,7 +49522,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49521,7 +49559,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49576,7 +49614,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49611,7 +49649,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49671,7 +49709,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49725,7 +49763,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49785,7 +49823,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49845,7 +49883,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49905,7 +49943,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49965,7 +50003,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -49995,7 +50033,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50032,7 +50070,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50067,7 +50105,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50104,7 +50142,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50139,7 +50177,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50180,7 +50218,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50217,7 +50255,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50252,7 +50290,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50289,7 +50327,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50324,7 +50362,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50391,7 +50429,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50430,7 +50468,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50469,7 +50507,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50519,7 +50557,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50575,7 +50613,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50614,7 +50652,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50653,7 +50691,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50681,7 +50719,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50713,7 +50751,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50751,7 +50789,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50789,7 +50827,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50826,7 +50864,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50861,7 +50899,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50896,7 +50934,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50931,7 +50969,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -50966,7 +51004,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51001,7 +51039,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51052,7 +51090,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51103,7 +51141,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51154,7 +51192,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51205,7 +51243,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51240,7 +51278,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51275,7 +51313,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51310,7 +51348,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51345,7 +51383,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51380,7 +51418,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51415,7 +51453,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51450,7 +51488,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51485,7 +51523,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51520,7 +51558,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51555,7 +51593,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51590,7 +51628,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51625,7 +51663,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51676,7 +51714,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51727,7 +51765,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51762,7 +51800,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51797,7 +51835,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51832,7 +51870,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51867,7 +51905,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51918,7 +51956,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -51969,7 +52007,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52004,7 +52042,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52039,7 +52077,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52070,7 +52108,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52107,7 +52145,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52149,7 +52187,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52184,7 +52222,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52219,7 +52257,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52254,7 +52292,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52289,7 +52327,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52324,7 +52362,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52359,7 +52397,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52394,7 +52432,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52429,7 +52467,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52464,7 +52502,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52501,7 +52539,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52536,7 +52574,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52571,7 +52609,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52622,7 +52660,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52673,7 +52711,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52724,7 +52762,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52775,7 +52813,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52810,7 +52848,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52841,7 +52879,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52876,7 +52914,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52927,7 +52965,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -52978,7 +53016,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53029,7 +53067,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53078,7 +53116,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53139,7 +53177,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53178,7 +53216,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53241,7 +53279,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53279,7 +53317,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53317,7 +53355,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53357,7 +53395,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53411,7 +53449,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53448,7 +53486,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53490,7 +53528,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53578,7 +53616,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53639,7 +53677,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53673,7 +53711,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53706,7 +53744,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53753,7 +53791,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53794,7 +53832,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53861,7 +53899,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53889,7 +53927,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53926,7 +53964,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53956,7 +53994,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -53986,7 +54024,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54017,7 +54055,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54048,7 +54086,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54078,7 +54116,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54108,7 +54146,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54138,7 +54176,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54168,7 +54206,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54198,7 +54236,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54233,7 +54271,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54268,7 +54306,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54305,7 +54343,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54343,7 +54381,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54381,7 +54419,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54416,7 +54454,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54553,7 +54591,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54591,7 +54629,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54651,7 +54689,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54689,7 +54727,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54724,7 +54762,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54760,7 +54798,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54788,7 +54826,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54816,7 +54854,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54847,7 +54885,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54880,7 +54918,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54910,7 +54948,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54958,7 +54996,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -54986,7 +55024,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55014,7 +55052,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55042,7 +55080,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55070,7 +55108,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55098,7 +55136,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55153,7 +55191,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55188,7 +55226,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55224,7 +55262,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55257,7 +55295,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55292,7 +55330,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55327,7 +55365,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55362,7 +55400,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55399,7 +55437,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55436,7 +55474,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55475,7 +55513,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55506,7 +55544,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55543,7 +55581,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55582,7 +55620,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55620,7 +55658,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55658,7 +55696,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55686,7 +55724,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55720,7 +55758,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55760,7 +55798,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55806,7 +55844,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55837,7 +55875,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55865,7 +55903,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55919,7 +55957,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55954,7 +55992,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -55991,7 +56029,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56028,7 +56066,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56065,7 +56103,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56102,7 +56140,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56133,7 +56171,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56194,7 +56232,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56257,7 +56295,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56287,7 +56325,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56322,7 +56360,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56392,7 +56430,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56452,7 +56490,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56522,7 +56560,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56582,7 +56620,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56652,7 +56690,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56712,7 +56750,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56782,7 +56820,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56842,7 +56880,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56912,7 +56950,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -56972,7 +57010,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57042,7 +57080,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57102,7 +57140,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57172,7 +57210,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57232,7 +57270,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57268,7 +57306,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57296,7 +57334,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57331,7 +57369,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57362,7 +57400,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57450,7 +57488,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57511,7 +57549,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57546,7 +57584,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57574,7 +57612,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57602,7 +57640,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57632,7 +57670,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57667,7 +57705,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57697,7 +57735,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57732,7 +57770,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57794,7 +57832,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57828,7 +57866,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57866,7 +57904,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57913,7 +57951,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -57970,7 +58008,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -58003,7 +58041,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -58041,7 +58079,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -58123,7 +58161,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 
 
@@ -58217,7 +58255,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <c10/util/OptionalArrayRef.h>
 
 // #include <ATen/ops/from_blob.h>
@@ -58427,6 +58465,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_nested_from_padded_and_nested_example.h>
 // #include <ATen/ops/_nested_get_jagged_dummy.h>
 // #include <ATen/ops/_nested_get_lengths.h>
+// #include <ATen/ops/_nested_get_max_seqlen.h>
+// #include <ATen/ops/_nested_get_min_seqlen.h>
 // #include <ATen/ops/_nested_get_offsets.h>
 // #include <ATen/ops/_nested_get_ragged_idx.h>
 // #include <ATen/ops/_nested_get_values.h>
@@ -58468,9 +58508,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_reshape_from_tensor.h>
 // #include <ATen/ops/_resize_output.h>
 // #include <ATen/ops/_rowwise_prune.h>
+// #include <ATen/ops/_safe_softmax.h>
 // #include <ATen/ops/_sample_dirichlet.h>
 // #include <ATen/ops/_saturate_weight_to_fp16.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math.h>
+// #include <ATen/ops/_scaled_dot_product_attention_math_for_mps.h>
 // #include <ATen/ops/_scaled_dot_product_cudnn_attention.h>
 // #include <ATen/ops/_scaled_dot_product_cudnn_attention_backward.h>
 // #include <ATen/ops/_scaled_dot_product_efficient_attention.h>
@@ -58479,6 +58521,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_scaled_dot_product_flash_attention_backward.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu_backward.h>
+// #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable.h>
+// #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable_backward.h>
 // #include <ATen/ops/_scaled_mm.h>
 // #include <ATen/ops/_segment_reduce_backward.h>
 // #include <ATen/ops/_shape_as_tensor.h>
@@ -58522,6 +58566,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_sparse_sum.h>
 // #include <ATen/ops/_sparse_sum_backward.h>
 // #include <ATen/ops/_spdiags.h>
+// #include <ATen/ops/_spsolve.h>
 // #include <ATen/ops/_stack.h>
 // #include <ATen/ops/_standard_gamma.h>
 // #include <ATen/ops/_standard_gamma_grad.h>
@@ -58564,6 +58609,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_unpack_dual.h>
 // #include <ATen/ops/_unsafe_index.h>
 // #include <ATen/ops/_unsafe_index_put.h>
+// #include <ATen/ops/_unsafe_masked_index.h>
+// #include <ATen/ops/_unsafe_masked_index_put_accumulate.h>
 // #include <ATen/ops/_unsafe_view.h>
 // #include <ATen/ops/_upsample_bicubic2d_aa.h>
 // #include <ATen/ops/_upsample_bicubic2d_aa_backward.h>
@@ -58593,6 +58640,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_weight_norm_differentiable_backward.h>
 // #include <ATen/ops/_weight_norm_interface.h>
 // #include <ATen/ops/_weight_norm_interface_backward.h>
+// #include <ATen/ops/_wrapped_linear_prepack.h>
+// #include <ATen/ops/_wrapped_quantized_linear_prepacked.h>
 // #include <ATen/ops/abs.h>
 // #include <ATen/ops/absolute.h>
 // #include <ATen/ops/acos.h>
@@ -59578,7 +59627,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/irange.h>
 
 // #include <functional>
-// #include <sstream>
 // #include <tuple>
 // #include <utility>
 
@@ -59976,7 +60024,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //===----------------------------------------------------------------------===//
 //                                 Utilities
 //===----------------------------------------------------------------------===//
- // namespace detail
 
  // namespace torch
 
@@ -60117,6 +60164,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // Targeting ../TensorArgs.java
+
+
+// Targeting ../LiftedIValueArg.java
+
+
+// Targeting ../LiftedIValueArgs.java
 
 
 // Targeting ../AutogradCompilerCall.java
@@ -60295,7 +60348,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  * The method should_include_kernel_dtype() returns true/false
  * based on whether the switching code for a specific dtype should be
  * included based on build time constants generated from tracing model
- * execution. This method will be implmeneted via code-generation and
+ * execution. This method will be implemented via code-generation and
  * included in this file when code-gen is ready.
  */
 @Namespace("at") public static native @Cast("const bool") boolean should_include_kernel_dtype(
@@ -61592,7 +61645,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/core/Storage.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/Deprecated.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 // #include <c10/core/QScheme.h>
 // #include <ATen/core/Reduction.h>
 // #include <ATen/core/Tensor.h>
@@ -61803,6 +61856,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_nested_from_padded_and_nested_example_native.h>
 // #include <ATen/ops/_nested_get_jagged_dummy_native.h>
 // #include <ATen/ops/_nested_get_lengths_native.h>
+// #include <ATen/ops/_nested_get_max_seqlen_native.h>
+// #include <ATen/ops/_nested_get_min_seqlen_native.h>
 // #include <ATen/ops/_nested_get_offsets_native.h>
 // #include <ATen/ops/_nested_get_ragged_idx_native.h>
 // #include <ATen/ops/_nested_get_values_native.h>
@@ -61844,9 +61899,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_reshape_from_tensor_native.h>
 // #include <ATen/ops/_resize_output_native.h>
 // #include <ATen/ops/_rowwise_prune_native.h>
+// #include <ATen/ops/_safe_softmax_native.h>
 // #include <ATen/ops/_sample_dirichlet_native.h>
 // #include <ATen/ops/_saturate_weight_to_fp16_native.h>
 // #include <ATen/ops/_scaled_dot_product_attention_math_native.h>
+// #include <ATen/ops/_scaled_dot_product_attention_math_for_mps_native.h>
 // #include <ATen/ops/_scaled_dot_product_cudnn_attention_native.h>
 // #include <ATen/ops/_scaled_dot_product_cudnn_attention_backward_native.h>
 // #include <ATen/ops/_scaled_dot_product_efficient_attention_native.h>
@@ -61855,6 +61912,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_scaled_dot_product_flash_attention_backward_native.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu_native.h>
 // #include <ATen/ops/_scaled_dot_product_flash_attention_for_cpu_backward_native.h>
+// #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable_native.h>
+// #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable_backward_native.h>
 // #include <ATen/ops/_scaled_mm_native.h>
 // #include <ATen/ops/_segment_reduce_backward_native.h>
 // #include <ATen/ops/_shape_as_tensor_native.h>
@@ -61898,6 +61957,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_sparse_sum_native.h>
 // #include <ATen/ops/_sparse_sum_backward_native.h>
 // #include <ATen/ops/_spdiags_native.h>
+// #include <ATen/ops/_spsolve_native.h>
 // #include <ATen/ops/_stack_native.h>
 // #include <ATen/ops/_standard_gamma_native.h>
 // #include <ATen/ops/_standard_gamma_grad_native.h>
@@ -61940,6 +62000,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_unpack_dual_native.h>
 // #include <ATen/ops/_unsafe_index_native.h>
 // #include <ATen/ops/_unsafe_index_put_native.h>
+// #include <ATen/ops/_unsafe_masked_index_native.h>
+// #include <ATen/ops/_unsafe_masked_index_put_accumulate_native.h>
 // #include <ATen/ops/_unsafe_view_native.h>
 // #include <ATen/ops/_upsample_bicubic2d_aa_native.h>
 // #include <ATen/ops/_upsample_bicubic2d_aa_backward_native.h>
@@ -61969,6 +62031,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_weight_norm_differentiable_backward_native.h>
 // #include <ATen/ops/_weight_norm_interface_native.h>
 // #include <ATen/ops/_weight_norm_interface_backward_native.h>
+// #include <ATen/ops/_wrapped_linear_prepack_native.h>
+// #include <ATen/ops/_wrapped_quantized_linear_prepacked_native.h>
 // #include <ATen/ops/abs_native.h>
 // #include <ATen/ops/absolute_native.h>
 // #include <ATen/ops/acos_native.h>
@@ -62913,8 +62977,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/core/Tensor.h>
 // #include <ATen/core/TensorBody.h>
 // #include <c10/core/SymInt.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/irange.h>
+// #include <optional>
 
 // #ifndef AT_PER_OPERATOR_HEADERS
 // #include <ATen/Functions.h>
@@ -62941,8 +63005,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     public TensorIndexType intern() { for (TensorIndexType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-
-@Namespace("at::indexing") @MemberGetter public static native @ByRef @Cast("const c10::nullopt_t*") Pointer None();
 // Targeting ../EllipsisIndexType.java
 
 
@@ -63227,13 +63289,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //   _(!=, x.ne(y), y.ne(x))
 
 // #define DEFINE_OPERATOR(op, body, reverse_scalar_body)
-//   static inline Tensor operator op(const Tensor& x, const Tensor& y) {
+//   inline Tensor operator op(const Tensor& x, const Tensor& y) {
 //     return body;
 //   }
-//   static inline Tensor operator op(const Tensor& x, const Scalar& y) {
+//   inline Tensor operator op(const Tensor& x, const Scalar& y) {
 //     return body;
 //   }
-//   static inline Tensor operator op(const Scalar& x, const Tensor& y) {
+//   inline Tensor operator op(const Scalar& x, const Tensor& y) {
 //     return reverse_scalar_body;
 //   }
   @Namespace("at") public static native @ByVal @Name("operator +") Tensor add(@Const @ByRef Scalar x, @Const @ByRef Tensor y);
@@ -63943,8 +64005,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("torch::jit") public static native @ByVal OperatorName parseName(@StdString BytePointer name);
 @Namespace("torch::jit") public static native @ByVal OperatorName parseName(@StdString String name);
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/api/include/torch/types.h
@@ -63953,7 +64014,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <ATen/ATen.h>
 
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #include <torch/csrc/autograd/generated/variable_factories.h>
 // #include <torch/csrc/autograd/variable.h>
@@ -64047,7 +64108,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <torch/types.h>
 
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #include <chrono>
 // #include <utility>
@@ -64648,8 +64709,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../GraphsAttr.java
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/ir/graph_node_list.h
@@ -64702,8 +64762,7 @@ public static final int kPrevDirection = kPrevDirection();
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
  // namespace std
 
@@ -64712,14 +64771,12 @@ public static final int kPrevDirection = kPrevDirection();
 
 // #pragma once
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #include <algorithm>
 // #include <iterator>
 // #include <memory>
-// #include <numeric>
 // #include <ostream>
-// #include <regex>
 // #include <sstream>
 // #include <unordered_map>
 // Targeting ../SourceRangeUnpickler.java
@@ -64762,10 +64819,10 @@ public static final int kPrevDirection = kPrevDirection();
 // #pragma once
 // #include <ATen/core/jit_type.h>
 // #include <ATen/core/symbol.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/jit/frontend/source_range.h>
+// #include <optional>
 // #include <unordered_map>
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kModuleInstanceInfo();
 
@@ -64823,8 +64880,7 @@ public static final int kPrevDirection = kPrevDirection();
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kDebugInfoTupleSourceRangeIndex();
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kDebugInfoTupleNodeNameIndex();
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kDebugInfoTupleInlinedCSIndex();
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/ir/constants.h
@@ -64846,8 +64902,8 @@ public static final int kPrevDirection = kPrevDirection();
 @Namespace("torch::jit") public static native Value insertConstant(
     @ByRef Graph g,
     @Const @ByRef IValue val,
-    @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(c10::nullopt)") SourceRangeOptional loc,
-    @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(c10::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
+    @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(std::nullopt)") SourceRangeOptional loc,
+    @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(std::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
 @Namespace("torch::jit") public static native Value insertConstant(
     @ByRef Graph g,
     @Const @ByRef IValue val);
@@ -64857,12 +64913,12 @@ public static final int kPrevDirection = kPrevDirection();
 // closely related to the implementation of prim::Constant that is also in
 // constants.cpp.
 //
-// returns a c10::nullopt if the IValue kind cannot be inserted as a constant
+// returns a std::nullopt if the IValue kind cannot be inserted as a constant
 @Namespace("torch::jit") public static native @ByVal ValueOptional tryInsertConstant(
     @ByRef Graph g,
     @Const @ByRef IValue val,
-    @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(c10::nullopt)") SourceRangeOptional loc,
-    @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(c10::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
+    @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(std::nullopt)") SourceRangeOptional loc,
+    @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(std::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
 @Namespace("torch::jit") public static native @ByVal ValueOptional tryInsertConstant(
     @ByRef Graph g,
     @Const @ByRef IValue val);
@@ -64872,13 +64928,12 @@ public static final int kPrevDirection = kPrevDirection();
 ////////////////////////////////////////////////////////////////////////////////
 
 // attempt to convert a (possibly constant) Value* into an interpreter value
-// (IValue). returns c10::nullopt if the Value* was not constant
+// (IValue). returns std::nullopt if the Value* was not constant
 @Namespace("torch::jit") public static native @ByVal IValueOptional toIValue(@Const Value v);
 
 // if a value is a constant then try to turn into type T using the
 // same rules as the interpreter
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/ir/named_value.h
@@ -64892,8 +64947,7 @@ public static final int kPrevDirection = kPrevDirection();
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/runtime/operator_options.h
@@ -65032,7 +65086,7 @@ public static final int kPrevDirection = kPrevDirection();
 // #include <ATen/core/jit_type.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #include <functional>
 // #include <iosfwd>
@@ -65215,8 +65269,7 @@ public static final int kPrevDirection = kPrevDirection();
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/python/update_graph_executor_opt.h
@@ -65284,8 +65337,8 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // Parsed from torch/csrc/jit/runtime/interpreter.h
 
 // #pragma once
-// #include <c10/util/Optional.h>
 // #include <memory>
+// #include <optional>
 // #include <vector>
 
 // #include <ATen/ThreadLocalState.h>
@@ -65469,8 +65522,8 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
 // #include <ATen/core/functional.h>
 // #include <ATen/core/ivalue.h>
-// #include <c10/util/Optional.h>
 // #include <torch/csrc/jit/api/method.h>
+// #include <optional>
 
 // #include <utility>
 
@@ -65595,8 +65648,7 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/api/compilation_unit.h
@@ -65615,7 +65667,7 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // #include <ATen/core/function_schema.h>
 // #include <ATen/core/qualified_name.h>
 // #include <c10/util/ArrayRef.h>
-// #include <c10/util/Optional.h>
+// #include <optional>
 
 // #include <functional>
 // #include <memory>
@@ -65659,8 +65711,8 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // #include <ATen/core/function_schema.h>
 // #include <ATen/core/qualified_name.h>
 // #include <c10/util/ArrayRef.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/irange.h>
+// #include <optional>
 
 // #include <functional>
 // #include <memory>
@@ -65694,7 +65746,7 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // details.
 @Namespace("torch::jit") public static native @ByVal JitModule freeze(
     @Const @ByRef JitModule module,
-    @Const @ByRef(nullValue = "std::optional<std::vector<std::string> >(c10::nullopt)") StringVectorOptional preserved_attrs,
+    @Const @ByRef(nullValue = "std::optional<std::vector<std::string> >(std::nullopt)") StringVectorOptional preserved_attrs,
     @Cast("bool") boolean optimize_numerics/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule freeze(
     @Const @ByRef JitModule module);
@@ -65835,10 +65887,10 @@ apis for specific fusers.
 // #pragma once
 
 // #include <c10/core/Device.h>
-// #include <c10/util/Optional.h>
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/jit/api/module.h>
 // #include <torch/types.h>
+// #include <optional>
 
 // #include <iosfwd>
 // #include <memory>
@@ -66371,7 +66423,7 @@ apis for specific fusers.
 //   }
 
 // #define TORCH_ENUM_PRETTY_PRINT(name)
-//   std::string operator()(const enumtype::k##name& v) const {
+//   std::string operator()(const enumtype::k##name& v [[maybe_unused]]) const {
 //     std::string k("k");
 //     return k + #name;
 //   }
@@ -66581,9 +66633,9 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor fft(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional n,
+    @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fft(
     @Const @ByRef Tensor self);
 
@@ -66599,9 +66651,9 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor ifft(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional n,
+    @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft(
     @Const @ByRef Tensor self);
 
@@ -66617,26 +66669,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the inverse of torch.fft.fft2
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.ifft2.
@@ -66650,26 +66702,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the N dimensional fast Fourier transform over given dimensions.
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.fftn.
@@ -66683,16 +66735,16 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor fftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor fftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the N dimensional fast Fourier transform over given dimensions.
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.ifftn.
@@ -66706,16 +66758,16 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor ifftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ifftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the 1 dimensional FFT of real input with onesided Hermitian output.
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.rfft.
@@ -66731,9 +66783,9 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor rfft(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional n,
+    @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft(
     @Const @ByRef Tensor self);
 
@@ -66752,9 +66804,9 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor irfft(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional n,
+    @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft(
     @Const @ByRef Tensor self);
 
@@ -66770,26 +66822,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the inverse of torch.fft.rfft2.
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.irfft2.
@@ -66803,26 +66855,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the N dimensional FFT of real input with onesided Hermitian output.
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.rfftn
@@ -66836,16 +66888,16 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor rfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor rfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the inverse of torch.fft.rfftn.
  *  See https://pytorch.org/docs/main/fft.html#torch.fft.irfftn.
@@ -66860,16 +66912,16 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor irfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor irfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the 1 dimensional FFT of a onesided Hermitian signal
  * 
@@ -66888,9 +66940,9 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor hfft(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional n,
+    @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft(
     @Const @ByRef Tensor self);
 
@@ -66910,9 +66962,9 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional n,
+    @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft(
     @Const @ByRef Tensor self);
 
@@ -66932,26 +66984,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the 2-dimensional IFFT of a real input signal.
  * 
@@ -66970,26 +67022,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the N-dimensional FFT of a Hermitian symmetric input signal.
  * 
@@ -67007,26 +67059,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the N-dimensional IFFT of a real input signal.
  * 
@@ -67045,26 +67097,26 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "std::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
+    @ByVal(nullValue = "std::optional<c10::string_view>(std::nullopt)") StringViewOptional norm);
 
 /** Computes the discrete Fourier Transform sample frequencies for a signal of
  *  size n.
@@ -67115,12 +67167,12 @@ apis for specific fusers.
 ///
 @Namespace("torch::fft") public static native @ByVal Tensor fftshift(
     @Const @ByRef Tensor x,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional dim);
 @Namespace("torch::fft") public static native @ByVal Tensor fftshift(
     @Const @ByRef Tensor x);
 @Namespace("torch::fft") public static native @ByVal Tensor fftshift(
     @Const @ByRef Tensor x,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 /** Inverse of torch.fft.fftshift
  * 
@@ -67135,12 +67187,12 @@ apis for specific fusers.
  *  }</pre> */
 @Namespace("torch::fft") public static native @ByVal Tensor ifftshift(
     @Const @ByRef Tensor x,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional dim);
 @Namespace("torch::fft") public static native @ByVal Tensor ifftshift(
     @Const @ByRef Tensor x);
 @Namespace("torch::fft") public static native @ByVal Tensor ifftshift(
     @Const @ByRef Tensor x,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
  // namespace fft
  // namespace torch
@@ -67896,14 +67948,14 @@ apis for specific fusers.
 ///
 @Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
     @ByVal TensorArrayRef list,
-    @ByVal(nullValue = "std::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::ScalarType>(std::nullopt)") ScalarTypeOptional dtype,
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
     @ByVal TensorArrayRef list);
 @Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
     @ByVal TensorVector list,
-    @ByVal(nullValue = "std::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::ScalarType>(std::nullopt)") ScalarTypeOptional dtype,
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
     @ByVal TensorVector list);
 
@@ -67916,14 +67968,14 @@ apis for specific fusers.
 @Namespace("torch::nested") public static native @ByVal Tensor to_padded_tensor(
     @Const @ByRef Tensor self,
     double padding,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional output_size);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") LongArrayRefOptional output_size);
 @Namespace("torch::nested") public static native @ByVal Tensor to_padded_tensor(
     @Const @ByRef Tensor self,
     double padding);
 @Namespace("torch::nested") public static native @ByVal Tensor to_padded_tensor(
     @Const @ByRef Tensor self,
     double padding,
-    @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+    @ByVal(nullValue = "at::OptionalIntArrayRef(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
 
  // namespace nested
  // namespace torch
@@ -68160,9 +68212,9 @@ apis for specific fusers.
 
 // #define AT_MKLDNN_ENABLED() 1
 // #define AT_MKLDNN_ACL_ENABLED() 0
-// #define AT_MKL_ENABLED() 0
+// #define AT_MKL_ENABLED() 1
 // #define AT_MKL_SEQUENTIAL() 0
-// #define AT_POCKETFFT_ENABLED() 1
+// #define AT_POCKETFFT_ENABLED() 0
 // #define AT_NNPACK_ENABLED() 1
 // #define CAFFE2_STATIC_LINK_CUDA() 0
 // #define AT_BUILD_WITH_BLAS() 1
@@ -68170,7 +68222,7 @@ apis for specific fusers.
 public static final int AT_PARALLEL_OPENMP = 1;
 public static final int AT_PARALLEL_NATIVE = 0;
 // #define AT_BLAS_F2C() 0
-// #define AT_BLAS_USE_CBLAS_DOT() 1
+// #define AT_BLAS_USE_CBLAS_DOT() 0
 
 
 // Parsed from ATen/Parallel-inl.h
@@ -68334,6 +68386,9 @@ body of your function, only data pointers.
     @Override public String toString() { return intern().name(); }
 }
 
+@Namespace("torch::profiler::impl") public static native @StdString BytePointer actToString(ActivityType t);
+@Namespace("torch::profiler::impl") public static native @StdString String actToString(@Cast("torch::profiler::impl::ActivityType") int t);
+
 @Namespace("torch::profiler::impl") public enum ProfilerState {
   Disabled(0),
   CPU(1), // CPU-only profiling
@@ -68449,10 +68504,10 @@ body of your function, only data pointers.
 
 // #include <ATen/record_function.h>
 // #include <c10/macros/Macros.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/hash.h>
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/jit/frontend/source_range.h>
+// #include <optional>
 
 // TODO: replace with pytorch/rfcs#43 when it is ready.
 // #define SOFT_ASSERT(cond, ...)
@@ -68527,6 +68582,7 @@ body of your function, only data pointers.
 @Namespace("torch::profiler::impl") public static native @StdString BytePointer strListToStr(@Const @ByRef StringVector types);
 @Namespace("torch::profiler::impl") public static native @StdString BytePointer inputOpIdsToStr(
     @Const @ByRef RecordFunctionHandleIntList input_op_ids);
+@Namespace("torch::profiler::impl") public static native @StdString BytePointer ivalueToStr(@Const @ByRef IValue val, @Cast("bool") boolean isString);
 @Namespace("torch::profiler::impl") public static native @StdString BytePointer ivalueListToStr(@Const @ByRef IValueVector list);
 @Namespace("torch::profiler::impl") public static native @ByVal StringVector inputTypes(@Const @ByRef RecordFunction fn);
 
@@ -68631,6 +68687,32 @@ body of your function, only data pointers.
 @Namespace("torch::autograd::profiler") public static native void prepareProfiler(
     @Const @ByRef ProfilerConfig config,
     @Const @ByRef ActivityTypeSet activities);
+
+@Namespace("torch::autograd::profiler") public static native void toggleCollectionDynamic(
+    @Cast("const bool") boolean enable,
+    @Const @ByRef ActivityTypeSet activities);
+
+/**
+ * When a C++ thread really has no control over how the profiler was enabled,
+ * for example, by some unreachable Python code, it can call these functions
+ * to test/join/unjoin itself into the collection set of a profiler, if any.
+ * Without calling these functions, the symptom may be "not seeing GPU events
+ * from some child C++ threads". This is an example on how to use them,
+ *
+ *    using namespace torch::autograd::profiler;
+ *    bool enabled = isProfilerEnabledInMainThread();
+ *    if (enabled != saved_enabled_state) {
+ *      if (enabled) {
+ *        enableProfilerInChildThread();
+ *      } else {
+ *        disableProfilerInChildThread();
+ *      }
+ *      saved_enabled_state = enabled;
+ *    }
+ */
+@Namespace("torch::autograd::profiler") public static native @Cast("bool") boolean isProfilerEnabledInMainThread();
+@Namespace("torch::autograd::profiler") public static native void enableProfilerInChildThread();
+@Namespace("torch::autograd::profiler") public static native void disableProfilerInChildThread();
 
  // namespace autograd::profiler
 
@@ -72024,8 +72106,8 @@ body of your function, only data pointers.
 // #pragma once
 
 // #include <c10/util/ArrayRef.h>
-// #include <c10/util/Optional.h>
 // #include <c10/util/irange.h>
+// #include <optional>
 
 // #include <vector>
 
@@ -75623,6 +75705,8 @@ body of your function, only data pointers.
  *      or in
  *          {@code }T x B x *{@code } otherwise
  *      padding_value (double, optional): value for padded elements. Default: 0.
+ *      padding_side (str, optional): the side to pad the sequences on. Default:
+ *          "right".
  * 
  *  Returns:
  *      Tensor of size {@code }T x B x *{@code } if {@code batch_first} is {@code }false{@code }.
@@ -76207,22 +76291,22 @@ body of your function, only data pointers.
 
 
 /* How do we decide whether to serialize undefined tensors or
-  c10::nullopt values into the output archive?
+  std::nullopt values into the output archive?
 Answer: we strictly follow the behavior of Python API. To be more specific:
 
 For optimizer options:
 a) For undefined tensor: currently no tensor is used as an options argument in
-Python API, so we don't need to worry about it now. b) For c10::nullopt value:
-we serialize c10::nullopt values into the output archive, to follow the exact
+Python API, so we don't need to worry about it now. b) For std::nullopt value:
+we serialize std::nullopt values into the output archive, to follow the exact
 same behavior as Python API.
 
 For optimizer param state:
 a) For undefined tensor: in param state, undefined tensor in C++ impl is
 equivalent to missing key in Python impl. Since we don't serialize missing keys
 in Python API, we skip undefined tensors when serializing the param state. b)
-For c10::nullopt value: in param state, c10::nullopt value in C++ impl is
+For std::nullopt value: in param state, std::nullopt value in C++ impl is
 equivalent to missing key in Python impl. Since we don't serialize missing keys
-in Python API, we skip c10::nullopt values when serializing the param state. */
+in Python API, we skip std::nullopt values when serializing the param state. */
 
 /** Serializes an {@code Optimizer} into an {@code OutputArchive}. */
 @Namespace("torch::optim") public static native @ByRef @Name("operator <<") OutputArchive shiftLeft(
@@ -77737,14 +77821,14 @@ in Python API, we skip c10::nullopt values when serializing the param state. */
 public static final int TORCH_VERSION_MAJOR = 2;
 
 /** Indicates the minor version of LibTorch. */
-public static final int TORCH_VERSION_MINOR = 4;
+public static final int TORCH_VERSION_MINOR = 5;
 
 /** Indicates the patch version of LibTorch. */
 public static final int TORCH_VERSION_PATCH = 0;
 
 /** Indicates the version of LibTorch. */
 public static final String TORCH_VERSION = 
-  "2.4.0";
+  "2.5.0";
 
 
 // Parsed from torch/csrc/api/include/torch/xpu.h
@@ -77969,8 +78053,7 @@ public static final String TORCH_VERSION =
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/script_type_parser.h
@@ -77983,8 +78066,7 @@ public static final String TORCH_VERSION =
 // Targeting ../ScriptTypeParser.java
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/resolver.h
@@ -78002,16 +78084,14 @@ public static final String TORCH_VERSION =
 
 
 @Namespace("torch::jit") public static native @SharedPtr NativeResolver nativeResolver();
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/sugared_value.h
 
 // #pragma once
-// #include <c10/util/Optional.h>
-// #include <functional>
 // #include <memory>
+// #include <optional>
 // #include <string>
 // #include <utility>
 
@@ -78106,22 +78186,19 @@ public static final String TORCH_VERSION =
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/error_report.h
 
 // #pragma once
 
-// #include <c10/util/Optional.h>
 // #include <torch/csrc/jit/frontend/tree.h>
 // Targeting ../Call.java
 
 
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/tree.h
@@ -78168,8 +78245,7 @@ public static final String TORCH_VERSION =
 
 @Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @IntrusivePtr("torch::jit::Tree") @Cast({"", "c10::intrusive_ptr<torch::jit::Tree>&"}) Tree t);
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/lexer.h
@@ -78188,9 +78264,6 @@ public static final String TORCH_VERSION =
 // #include <sstream>
 // #include <string>
 // #include <vector>
-
-// #if C10_CLANG_HAS_WARNING("-Wshorten-64-to-32")
-// #endif
 
 // single character tokens are just the character itself '+'
 // multi-character tokens need an entry here
@@ -78417,9 +78490,7 @@ public static final String TORCH_VERSION =
 // Targeting ../Token.java
 
 
- // namespace jit
- // namespace torch
-
+ // namespace torch::jit
 
 
 // Parsed from caffe2/serialize/inline_container.h
@@ -78544,13 +78615,12 @@ public static final String TORCH_VERSION =
 // #include <torch/csrc/jit/ir/ir.h>
 
 // #include <istream>
- // namespace serialize
- // namespace caffe2
+ // namespace caffe2::serialize
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString BytePointer filename,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
@@ -78558,7 +78628,7 @@ public static final String TORCH_VERSION =
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @StdString String filename,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
@@ -78567,7 +78637,7 @@ public static final String TORCH_VERSION =
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @Cast("std::istream*") @ByRef Pointer in,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
@@ -78576,7 +78646,7 @@ public static final String TORCH_VERSION =
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
     @UniquePtr ReadAdapterInterface rai,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr("torch::jit::CompilationUnit") @ByVal CompilationUnit cu,
@@ -78652,7 +78722,7 @@ public static final String TORCH_VERSION =
  *  {@code torch::jit::ExportModule} in C++. */
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in);
@@ -78676,13 +78746,13 @@ public static final String TORCH_VERSION =
  *  Python or {@code torch::jit::ExportModule} in C++. */
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename);
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename);
@@ -78715,7 +78785,7 @@ public static final String TORCH_VERSION =
  *  Python or {@code torch::jit::ExportModule} in C++. */
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr("caffe2::serialize::ReadAdapterInterface") @ByVal ReadAdapterInterface rai,
-    @ByVal(nullValue = "std::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
+    @ByVal(nullValue = "std::optional<c10::Device>(std::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr("caffe2::serialize::ReadAdapterInterface") @ByVal ReadAdapterInterface rai);
@@ -78740,7 +78810,7 @@ public static final String TORCH_VERSION =
     @Cast("char*") @SharedPtr BytePointer data,
     @Cast("size_t") long size,
     @ByRef ExtraFilesMap extra_files,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::jit") public static native @ByVal JitModule parse_and_initialize_jit_module(
     @Cast("char*") @SharedPtr BytePointer data,
     @Cast("size_t") long size,
@@ -78749,7 +78819,7 @@ public static final String TORCH_VERSION =
     @Cast("char*") @SharedPtr ByteBuffer data,
     @Cast("size_t") long size,
     @ByRef ExtraFilesMap extra_files,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::jit") public static native @ByVal JitModule parse_and_initialize_jit_module(
     @Cast("char*") @SharedPtr ByteBuffer data,
     @Cast("size_t") long size,
@@ -78758,7 +78828,7 @@ public static final String TORCH_VERSION =
     @Cast("char*") @SharedPtr byte[] data,
     @Cast("size_t") long size,
     @ByRef ExtraFilesMap extra_files,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::jit") public static native @ByVal JitModule parse_and_initialize_jit_module(
     @Cast("char*") @SharedPtr byte[] data,
     @Cast("size_t") long size,
@@ -78767,14 +78837,14 @@ public static final String TORCH_VERSION =
 @Namespace("torch::jit") public static native @ByVal JitModule load_jit_module_from_file(
     @StdString BytePointer filename,
     @ByRef ExtraFilesMap extra_files,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::jit") public static native @ByVal JitModule load_jit_module_from_file(
     @StdString BytePointer filename,
     @ByRef ExtraFilesMap extra_files);
 @Namespace("torch::jit") public static native @ByVal JitModule load_jit_module_from_file(
     @StdString String filename,
     @ByRef ExtraFilesMap extra_files,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::jit") public static native @ByVal JitModule load_jit_module_from_file(
     @StdString String filename,
     @ByRef ExtraFilesMap extra_files);
@@ -78782,7 +78852,7 @@ public static final String TORCH_VERSION =
 @Namespace("torch::jit") public static native @ByVal JitModule load_jit_module_from_stream(
     @Cast("std::istream*") @ByRef Pointer in,
     @ByRef ExtraFilesMap extra_files,
-    @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+    @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
 @Namespace("torch::jit") public static native @ByVal JitModule load_jit_module_from_stream(
     @Cast("std::istream*") @ByRef Pointer in,
     @ByRef ExtraFilesMap extra_files);
@@ -78791,8 +78861,7 @@ public static final String TORCH_VERSION =
     @Const @ByRef StrongTypePtr type,
     @ByVal IValue input);
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from c10/util/FbcodeMaps.h
@@ -78976,16 +79045,14 @@ public static final String TORCH_VERSION =
     @Const @ByRef Tensor t,
     @Const @ByRef GenericDict metadata_idict);
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/parser_constants.h
 
 // #pragma once
 @Namespace("torch::jit") public static native @Cast("const char*") BytePointer valid_single_char_tokens(); public static native void valid_single_char_tokens(BytePointer setter);
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/strtod.h
@@ -79009,8 +79076,7 @@ public static final String TORCH_VERSION =
 @Namespace("torch::jit") public static native float strtof_c(@Cast("const char*") BytePointer nptr, @Cast("char**") @ByPtrPtr ByteBuffer endptr);
 @Namespace("torch::jit") public static native float strtof_c(String nptr, @Cast("char**") @ByPtrPtr byte[] endptr);
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/schema_matching.h
@@ -79033,7 +79099,7 @@ public static final String TORCH_VERSION =
     @ByRef Graph graph,
     @ByVal NamedValueArrayRef args,
     @ByVal NamedValueArrayRef kwargs,
-    @Const @ByRef(nullValue = "std::optional<torch::jit::NamedValue>(c10::nullopt)") NamedValueOptional self);
+    @Const @ByRef(nullValue = "std::optional<torch::jit::NamedValue>(std::nullopt)") NamedValueOptional self);
 @Namespace("torch::jit") public static native @ByVal MatchedSchema matchSchema(
     @Const @ByRef FunctionSchema schema,
     @Const @ByRef SourceRange loc,
@@ -79047,7 +79113,7 @@ public static final String TORCH_VERSION =
     @ByRef Graph graph,
     @ByVal NamedValueArrayRef args,
     @ByVal NamedValueArrayRef kwargs,
-    @Const @ByRef(nullValue = "std::optional<torch::jit::NamedValue>(c10::nullopt)") NamedValueOptional self,
+    @Const @ByRef(nullValue = "std::optional<torch::jit::NamedValue>(std::nullopt)") NamedValueOptional self,
     @Cast("bool") boolean render_errors/*=false*/);
 @Namespace("torch::jit") public static native @ByVal SizeTMatchedSchemaPair matchSchemas(
     @Const @ByRef FunctionSchemaVector schemas,
@@ -79068,7 +79134,7 @@ public static final String TORCH_VERSION =
     @ByVal Symbol name,
     @ByVal NamedValueArrayRef args,
     @ByVal NamedValueArrayRef kwargs,
-    @Const @ByRef(nullValue = "std::optional<torch::jit::NamedValue>(c10::nullopt)") NamedValueOptional self);
+    @Const @ByRef(nullValue = "std::optional<torch::jit::NamedValue>(std::nullopt)") NamedValueOptional self);
 @Namespace("torch::jit") public static native Value emitBuiltinCall(
     @Const @ByRef SourceRange loc,
     @ByRef Graph graph,
@@ -79099,8 +79165,7 @@ public static final String TORCH_VERSION =
     @Const @ByRef Type.TypePtr concrete_type,
     Value value,
     @Cast("bool") boolean allow_conversions);
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/versioned_symbols.h
@@ -79120,14 +79185,12 @@ public static final String TORCH_VERSION =
 // Maps the given kind to the minimum version that supports it.
 // See note [Dynamic Versions and torch.jit.save vs. torch.save]
 @Namespace("torch::jit") public static native @Cast("uint64_t") long get_min_version_for_kind(@Cast("const torch::jit::NodeKind*") @ByRef Symbol kind);
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/jit/frontend/tree_views.h
 
 // #pragma once
-// #include <c10/util/string_utils.h>
 // #include <torch/csrc/jit/frontend/error_report.h>
 // #include <torch/csrc/jit/frontend/strtod.h>
 // #include <torch/csrc/jit/frontend/tree.h>
@@ -79363,8 +79426,7 @@ public static final String TORCH_VERSION =
 // For example, ((x | y) | z) is transformed into Union[x, y, z].
 @Namespace("torch::jit") public static native @ByVal Expr pep604union_to_union(@Const @ByRef Expr expr);
 
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
  // namespace std
 
@@ -79442,6 +79504,10 @@ public static final String TORCH_VERSION =
 
 /** Deserialize a {@code torch::IValue} from bytes produced by either
  *  {@code torch::pickle_save} in C++ or {@code torch.save} in Python */
+
+/** Deserialize a {@code torch::IValue} from bytes produced by either
+ *  {@code torch::pickle_save} in C++ or {@code torch.save} in Python with custom object. */
+
 
 /** {@code reader} is a function that takes in a size to read from some pickled
  *  binary. {@code reader} should remember where it last read, and return
@@ -79557,8 +79623,7 @@ public static final String TORCH_VERSION =
 
 // #ifndef C10_MOBILE
 // #endif
- // namespace jit
- // namespace torch
+ // namespace torch::jit
 
 
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner.h
@@ -79568,11 +79633,13 @@ public static final String TORCH_VERSION =
 
 // #include <ATen/Tensor.h>
 // #include <torch/csrc/inductor/aoti_runtime/interface.h>
+// #include <torch/csrc/inductor/aoti_torch/proxy_executor.h>
 // Targeting ../DynamicLibrary.java
 
 
 
 // Targeting ../AOTIModelContainerRunner.java
+
 
 
 
@@ -79606,8 +79673,8 @@ public static final String TORCH_VERSION =
 // #include <c10/macros/Macros.h>
 // #include <torch/custom_class.h>
 
-// callback function will be given arguments (optional<string> oldValue,
-// optional<string> newValue)
+// callback function will be given arguments (std::optional<string> oldValue,
+// std::optional<string> newValue)
 // Targeting ../Store.java
 
 
@@ -79936,8 +80003,6 @@ public static final int C10D_ENV_NOT_SET = -2;
 // this common case with `SYSCHECK`.
 // Since SOCKET_ERROR = -1 in MSVC, so also leverage SYSCHECK_ERR_RETURN_NEG1
 // #define SYSCHECK_ERR_RETURN_NEG1(expr) SYSCHECK(expr, __output != -1)
-
-
 
 // Send and receive
 

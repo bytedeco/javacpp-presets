@@ -227,10 +227,10 @@ public class ClassType extends NamedType {
   public native @Const @ByRef FunctionVector getForwardPreHooks();
 
   public native void checkForwardPreHookSchema(
-        int pre_hook_idx,
+        @Cast("size_t") long pre_hook_idx,
         @Const @ByRef FunctionSchema pre_hook_schema);
   public native void checkForwardHookSchema(
-        int hook_idx,
+        @Cast("size_t") long hook_idx,
         @Const @ByRef FunctionSchema hook_schema);
 
   public native void addMethod(Function method);

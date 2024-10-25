@@ -42,10 +42,14 @@ public class PrivateUse1HooksInterface extends AcceleratorHooksInterface {
 
   public native @ByVal Device getDeviceFromPtr(Pointer data);
 
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+
   public native Allocator getPinnedMemoryAllocator();
 
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
 
   public native void initPrivateUse1();
-  public native void resizePrivateUse1Bytes(@Const @ByRef Storage storage, @Cast("size_t") long newsize);
+  public native void resizePrivateUse1Bytes(
+        @Const @ByRef Storage storage,
+        @Cast("size_t") long newsize);
 }

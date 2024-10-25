@@ -36,6 +36,8 @@ public class Unpickler extends Pointer {
   // type_resolver_ can not return.
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+
   // tensors inside the pickle contain meta-data, the raw tensor
   // dead is retrieved by calling `read_record`.
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)

@@ -127,9 +127,10 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // #define STRINGIFY(x) #x
 // #define STRING(x) STRINGIFY(x)
 
-// #if CUDNN_MAJOR < 6
-// #pragma message ("CuDNN v" STRING(CUDNN_MAJOR) " found, but need at least CuDNN v6. You can get the latest version of CuDNN from https://developer.nvidia.com/cudnn or disable CuDNN with USE_CUDNN=0")
-// #pragma message "We strongly encourage you to move to 6.0 and above."
+// #if CUDNN_MAJOR < 8 || (CUDNN_MAJOR == 8 && CUDNN_MINOR < 5)
+// #pragma message("CuDNN v" STRING(
+//     CUDNN_MAJOR) " found, but need at least CuDNN v8. You can get the latest version of CuDNN from https://developer.nvidia.com/cudnn or disable CuDNN with USE_CUDNN=0")
+// #pragma message "We strongly encourage you to move to 8.5 and above."
 // #pragma message "This message is intended to annoy you enough to update."
 // #endif
 
@@ -464,6 +465,9 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <cusolverDn.h>
 // #endif
 
+// #if defined(USE_CUDSS)
+// #endif
+
 // #if defined(USE_ROCM)
 // #endif
 
@@ -525,6 +529,9 @@ manage their own state. There is only a single CUDA context/state.
 
 // #if defined(CUDART_VERSION) || defined(USE_ROCM)
 @Namespace("at::cuda") public static native cusolverDnContext getCurrentCUDASolverDnHandle();
+// #endif
+
+// #if defined(USE_CUDSS)
 // #endif
 
  // namespace at::cuda
@@ -662,6 +669,9 @@ manage their own state. There is only a single CUDA context/state.
 // #include <cusolver_common.h>
 // #endif
 
+// #if defined(USE_CUDSS)
+// #endif
+
 // #include <ATen/Context.h>
 // #include <c10/util/Exception.h>
 // #include <c10/cuda/CUDAException.h>
@@ -717,6 +727,11 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //                 cusparseGetErrorString(__err),
 //                 " when calling `" #EXPR "`");
 //   } while (0)
+
+// #if defined(USE_CUDSS)
+// #else
+// #define TORCH_CUDSS_CHECK(EXPR) EXPR
+// #endif
 
 // cusolver related headers are only supported on cuda now
 // #ifdef CUDART_VERSION
@@ -843,8 +858,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #pragma once
 
-// #include <ATen/cudnn/cudnn-wrapper.h>
 // #include <ATen/cuda/ATenCUDAGeneral.h>
+// #include <ATen/cudnn/cudnn-wrapper.h>
 
 @Namespace("at::native") public static native cudnnContext getCudnnHandle();
  // namespace at::native
@@ -856,8 +871,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #include <ATen/core/Tensor.h>
 // #include <ATen/cuda/Exceptions.h>
-// #include <ATen/cudnn/cudnn-wrapper.h>
 // #include <ATen/cudnn/Handle.h>
+// #include <ATen/cudnn/cudnn-wrapper.h>
 
 // cuDNN has a buggy check for tensor being contiguous (that is, it does
 // not ignore stride for dimension that is equal to 0).  This function
@@ -865,7 +880,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // strides to 1 as cuDNN likes.
 @Namespace("at::native") public static native @ByVal Tensor contiguousIfZeroInStrides(@Const @ByRef Tensor t);
 
-
+ // namespace at::native
 
 
 // Parsed from c10/cuda/CUDAGraphsC10Utils.h
@@ -898,11 +913,45 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
  // namespace c10::cuda
 
 
-// Parsed from c10/cuda/CUDACachingAllocator.h
+// Parsed from c10/core/CachingDeviceAllocator.h
 
 // #pragma once
 
 // #include <c10/core/Allocator.h>
+// #include <c10/util/irange.h>
+
+// #include <array>
+// Targeting ../cuda/Stat.java
+
+
+
+@Namespace("c10::CachingDeviceAllocator") public enum StatType {
+  AGGREGATE(0),
+  SMALL_POOL(1),
+  LARGE_POOL(2),
+  NUM_TYPES(3);// remember to update this whenever a new stat type is added
+
+    public final long value;
+    private StatType(long v) { this.value = v; }
+    private StatType(StatType e) { this.value = e.value; }
+    public StatType intern() { for (StatType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../cuda/DeviceStats.java
+
+
+
+// Size pretty-printer
+@Namespace("c10::CachingDeviceAllocator") public static native @StdString BytePointer format_size(@Cast("uint64_t") long size);
+
+ // namespace c10::CachingDeviceAllocator
+
+
+// Parsed from c10/cuda/CUDACachingAllocator.h
+
+// #pragma once
+
+// #include <c10/core/CachingDeviceAllocator.h>
 // #include <c10/cuda/CUDAGraphsC10Utils.h>
 // #include <c10/cuda/CUDAMacros.h>
 // #include <c10/cuda/CUDAStream.h>
@@ -941,24 +990,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // not counted as a word boundary, so you would otherwise have to list each
 // of these functions.
 
-
-// Targeting ../cuda/Stat.java
-
-
-
-@Namespace("c10::cuda::CUDACachingAllocator") public enum StatType {
-  AGGREGATE(0),
-  SMALL_POOL(1),
-  LARGE_POOL(2),
-  NUM_TYPES(3);// remember to update this whenever a new stat type is added
-
-    public final long value;
-    private StatType(long v) { this.value = v; }
-    private StatType(StatType e) { this.value = e.value; }
-    public StatType intern() { for (StatType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../cuda/DeviceStats.java
+// Preserved only for BC reasons
+// NOLINTNEXTLINE(misc-unused-using-decls)
 
 
 // Targeting ../cuda/BlockInfo.java
@@ -974,6 +1007,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 // Targeting ../cuda/TraceEntry.java
+
+
+// Targeting ../cuda/AnnotationEntry.java
 
 
 // Targeting ../cuda/AllocatorConfigInfo.java
@@ -998,8 +1034,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
     public RecordContext intern() { for (RecordContext e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+// Targeting ../cuda/ShareableHandle.java
 
-// Size pretty-printer
 
 // Targeting ../cuda/CUDAAllocator.java
 
@@ -1055,6 +1091,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void recordAnnotation(
+    @StdVector StringPair md);
+
 
 
 
@@ -1067,6 +1106,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Not part of CUDA_ALLOCATOR_BACKEND_INTERFACE
 
 
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @ByVal ShareableHandle shareIpcHandle(Pointer ptr);
+
 
 
 
@@ -1074,6 +1115,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
  // namespace c10::cuda::CUDACachingAllocator
+// Targeting ../cuda/MemPool.java
+
+
+// Targeting ../cuda/MemPoolContext.java
+
+
+
+ // namespace c10::cuda
 
 
 // Parsed from c10/cuda/impl/CUDAGuardImpl.h
@@ -1094,9 +1143,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <c10/core/DeviceType.h>
 // #include <c10/core/Stream.h>
 // #include <c10/core/impl/PyInterpreter.h>
-// #include <c10/util/Optional.h>
 // #include <cuda_runtime_api.h>
 // #include <cstdint>
+// #include <optional>
 
  // namespace c10::cuda::impl
 
@@ -1133,15 +1182,15 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #pragma once
 
-// #include <ATen/cudnn/cudnn-wrapper.h>
 // #include <ATen/Tensor.h>
+// #include <ATen/cudnn/cudnn-wrapper.h>
 
 @Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(ScalarType dtype);
 
 
 
 
-  // namespace at::cudnn
+ // namespace at::native
 
 
 // Parsed from ATen/cudnn/Descriptors.h
@@ -1221,7 +1270,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
-  // namespace
+ // namespace
 
 
 // Parsed from ATen/cuda/CUDAEvent.h

@@ -53,7 +53,6 @@ public class Pickler extends Pointer {
         TensorVector tensor_table,
         @ByVal TypeRenamer type_renamer,
         SharedClassTypeVector memoized_class_types);
-  // NOLINTNEXTLINE(bugprone-exception-escape)
 
   // Push protocol onto the stack
   public native void protocol();

@@ -21,7 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // Try to match a list of inputs and keyword 'attributes' to this
 // schema. Return the flat list of positional inputs to the call or
-// `c10::nullopt` on failure (`failure_messages` contains a good error
+// `std::nullopt` on failure (`failure_messages` contains a good error
 // report in this case)
 
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)

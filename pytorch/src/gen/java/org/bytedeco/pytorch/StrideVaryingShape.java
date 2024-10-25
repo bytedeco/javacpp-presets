@@ -31,8 +31,8 @@ public class StrideVaryingShape extends Pointer {
   public StrideVaryingShape(@ByVal StrideArrayRef vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@ByVal StrideArrayRef vec);
 
-  public StrideVaryingShape(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
-  private native void allocate(@ByVal(nullValue = "std::optional<size_t>(c10::nullopt)") SizeTOptional size);
+  public StrideVaryingShape(@ByVal(nullValue = "std::optional<size_t>(std::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
+  private native void allocate(@ByVal(nullValue = "std::optional<size_t>(std::nullopt)") SizeTOptional size);
   public StrideVaryingShape() { super((Pointer)null); allocate(); }
   private native void allocate();
 

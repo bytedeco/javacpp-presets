@@ -20,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // This type represents an optional type. There is one `Optional` for
 // each element type. `Optional[T]` can accept both `T` and
-// `None`(`c10::nullopt` in C++)
+// `None`(`std::nullopt` in C++)
 // Subtype hierarchy for Optional:
 //     - Optional[T] <: Optional[R] iff T <: R
 //     - T <: Optional[R] if T <: R

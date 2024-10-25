@@ -39,9 +39,9 @@ public class IPUHooksInterface extends Pointer {
 
 
   public native @Const @ByRef Generator getDefaultIPUGenerator(
-        @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
+        @Cast("c10::DeviceIndex") byte device_index/*[[maybe_unused]] = -1*/);
   public native @Const @ByRef Generator getDefaultIPUGenerator();
 
-  public native @ByVal Generator newIPUGenerator(@Cast("c10::DeviceIndex") byte device_index/*=-1*/);
+  public native @ByVal Generator newIPUGenerator(@Cast("c10::DeviceIndex") byte device_index/*[[maybe_unused]] = -1*/);
   public native @ByVal Generator newIPUGenerator();
 }

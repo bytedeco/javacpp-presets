@@ -37,50 +37,50 @@ public class Argument extends Pointer {
   public Argument(
         @StdString BytePointer name/*=""*/,
         @Const @ByRef(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, type, N, default_value, kwarg_only, alias_info); }
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, type, N, default_value, kwarg_only, alias_info); }
   private native void allocate(
         @StdString BytePointer name/*=""*/,
         @Const @ByRef(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info);
   public Argument() { super((Pointer)null); allocate(); }
   private native void allocate();
   public Argument(
         @StdString String name/*=""*/,
         @Const @ByRef(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, type, N, default_value, kwarg_only, alias_info); }
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, type, N, default_value, kwarg_only, alias_info); }
   private native void allocate(
         @StdString String name/*=""*/,
         @Const @ByRef(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info);
 
   public Argument(
         @StdString BytePointer name,
         @ByVal Type.TypePtr fake_type,
         @ByVal Type.TypePtr real_type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, fake_type, real_type, N, default_value, kwarg_only, alias_info); }
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, fake_type, real_type, N, default_value, kwarg_only, alias_info); }
   private native void allocate(
         @StdString BytePointer name,
         @ByVal Type.TypePtr fake_type,
         @ByVal Type.TypePtr real_type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info);
   public Argument(
         @StdString BytePointer name,
         @ByVal Type.TypePtr fake_type,
@@ -93,18 +93,18 @@ public class Argument extends Pointer {
         @StdString String name,
         @ByVal Type.TypePtr fake_type,
         @ByVal Type.TypePtr real_type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, fake_type, real_type, N, default_value, kwarg_only, alias_info); }
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, fake_type, real_type, N, default_value, kwarg_only, alias_info); }
   private native void allocate(
         @StdString String name,
         @ByVal Type.TypePtr fake_type,
         @ByVal Type.TypePtr real_type,
-        @ByVal(nullValue = "std::optional<int32_t>(c10::nullopt)") IntOptional N,
-        @ByVal(nullValue = "std::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @ByVal(nullValue = "std::optional<int32_t>(std::nullopt)") IntOptional N,
+        @ByVal(nullValue = "std::optional<c10::IValue>(std::nullopt)") IValueOptional default_value,
         @Cast("bool") boolean kwarg_only/*=false*/,
-        @ByVal(nullValue = "std::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
+        @ByVal(nullValue = "std::optional<c10::AliasInfo>(std::nullopt)") AliasInfoOptional alias_info);
   public Argument(
         @StdString String name,
         @ByVal Type.TypePtr fake_type,

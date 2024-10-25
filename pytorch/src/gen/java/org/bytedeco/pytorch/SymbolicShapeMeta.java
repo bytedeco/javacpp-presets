@@ -45,6 +45,8 @@ public class SymbolicShapeMeta extends Pointer {
   private native void allocate();
   public SymbolicShapeMeta(@Const @ByRef SymbolicShapeMeta other) { super((Pointer)null); allocate(other); }
   private native void allocate(@Const @ByRef SymbolicShapeMeta other);
+  
+  
 
   public native void refresh_numel();
 

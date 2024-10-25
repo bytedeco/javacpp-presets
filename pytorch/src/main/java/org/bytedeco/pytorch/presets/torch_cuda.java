@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Hervé Guillemet
+ * Copyright (C) 2023-2024 Hervé Guillemet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
  * @author Hervé Guillemet
  */
 @Properties(
-    inherit = { torch.class, cudnn.class, cusparse.class, cusolver.class, cupti.class },
+    inherit = {torch.class, cudnn.class, cusparse.class, cusolver.class, cupti.class},
     value = {
         @Platform(
             extension = "-gpu",
@@ -240,7 +240,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
         infoMap
             .put(new Info("USE_CUDNN_RNN_V8_API").define()) // Using CuDNN 8.9.7 or more recent
-            .put(new Info("defined(IS_NCCL_EXP) && defined(NCCL_COMM_DUMP)").define(false))
+            .put(new Info("defined(USE_CUDSS)", "defined(IS_NCCL_EXP) && defined(NCCL_COMM_DUMP)").define(false))
         ;
 
         //// Different C++ API between platforms

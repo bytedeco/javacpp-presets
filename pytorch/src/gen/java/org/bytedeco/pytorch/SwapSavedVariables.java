@@ -31,7 +31,7 @@ public class SwapSavedVariables extends Pointer {
   public native void before(@ByRef SymInt t);
   public native void after(@ByRef SymInt t);
 
-  public native void before(@ByRef IValue t);
+  public native void before(@ByRef IValue iv);
 
   public native void after(@ByRef IValue t);
 

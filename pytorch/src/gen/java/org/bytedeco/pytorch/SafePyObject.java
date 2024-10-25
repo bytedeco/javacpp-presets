@@ -42,11 +42,10 @@ public class SafePyObject extends Pointer {
   @SharedPtr @Name("std::make_shared<c10::SafePyObject>") private native void allocate(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter);
   public SafePyObject(@ByRef(true) SafePyObject other) { super((Pointer)null); allocate(other); }
   @NoException(true) @SharedPtr @Name("std::make_shared<c10::SafePyObject>") private native void allocate(@ByRef(true) SafePyObject other);
+  // For now it's not used, so we just disallow it.
+  
 
-  // In principle this could be copyable if we add an incref to PyInterpreter
-  // but for now it's easier to just disallow it.
-  
-  
+  public native @ByRef @Name("operator =") SafePyObject put(@Const @ByRef SafePyObject other);
 
   public native @ByRef PyInterpreter pyinterpreter();
   public native @Cast("PyObject*") Pointer ptr(@Const PyInterpreter arg0);

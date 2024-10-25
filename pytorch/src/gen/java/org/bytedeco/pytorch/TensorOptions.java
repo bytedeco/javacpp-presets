@@ -195,7 +195,7 @@ private native void allocate(MemoryFormat memory_format);
   /** Returns whether the device is specified. */
   public native @Cast("bool") @NoException(true) boolean has_device();
 
-  /** Returns the device of the {@code TensorOptions}, or {@code c10::nullopt} if
+  /** Returns the device of the {@code TensorOptions}, or {@code std::nullopt} if
    *  device is not specified. */
   public native @ByVal @NoException(true) DeviceOptional device_opt();
 
@@ -208,7 +208,7 @@ private native void allocate(MemoryFormat memory_format);
   /** Returns whether the dtype is specified. */
   public native @Cast("bool") @NoException(true) boolean has_dtype();
 
-  /** Returns the dtype of the {@code TensorOptions}, or {@code c10::nullopt} if
+  /** Returns the dtype of the {@code TensorOptions}, or {@code std::nullopt} if
    *  device is not specified. */
   public native @ByVal @NoException(true) TypeMetaOptional dtype_opt();
 
@@ -218,7 +218,7 @@ private native void allocate(MemoryFormat memory_format);
   /** Returns whether the layout is specified. */
   public native @Cast("bool") @NoException(true) boolean has_layout();
 
-  /** Returns the layout of the {@code TensorOptions}, or {@code c10::nullopt} if
+  /** Returns the layout of the {@code TensorOptions}, or {@code std::nullopt} if
    *  layout is not specified. */
   public native @ByVal @NoException(true) LayoutOptional layout_opt();
 
@@ -229,7 +229,7 @@ private native void allocate(MemoryFormat memory_format);
   public native @Cast("bool") @NoException(true) boolean has_requires_grad();
 
   /** Returns the {@code requires_grad} property of the {@code TensorOptions}, or
-   *  {@code c10::nullopt} if {@code requires_grad} is not specified. */
+   *  {@code std::nullopt} if {@code requires_grad} is not specified. */
   public native @ByVal @NoException(true) BoolOptional requires_grad_opt();
 
   /** Returns the {@code pinned_memory} property of the {@code TensorOptions}. */
@@ -251,7 +251,7 @@ private native void allocate(MemoryFormat memory_format);
   public native @Cast("bool") boolean type_equal(@Const @ByRef TensorOptions other);
 
   /** Returns the {@code pinned_memory} property of the {@code TensorOptions}, or
-   *  {@code c10::nullopt} if {@code pinned_memory} is not specified. */
+   *  {@code std::nullopt} if {@code pinned_memory} is not specified. */
   public native @ByVal @NoException(true) BoolOptional pinned_memory_opt();
 
   /** Returns whether the {@code memory_layout} is specified */
@@ -261,7 +261,7 @@ private native void allocate(MemoryFormat memory_format);
   // behavior of memory_format varies from function to function.
 
   /** Returns the {@code memory_layout} property of {@code TensorOptions, or
-   *  }c10::nullopt{@code  if }memory_format{@code  is not specified. */
+   *  }std::nullopt{@code  if }memory_format{@code  is not specified. */
   public native @ByVal @NoException(true) MemoryFormatOptional memory_format_opt();
 
   // Resolves the ATen backend specified by the current construction axes.

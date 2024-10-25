@@ -40,6 +40,7 @@ public class OptimizerParamGroup extends Pointer {
         @ByVal TensorVector params,
         @UniquePtr @ByVal OptimizerOptions options);
 
+  
   public native @Cast("bool") boolean has_options();
   public native @ByRef OptimizerOptions options();
   public native void set_options(@UniquePtr @ByVal OptimizerOptions options);

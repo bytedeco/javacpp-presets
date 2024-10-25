@@ -39,11 +39,18 @@ public class Context extends Pointer {
 
   public native @Const @ByRef Generator defaultGenerator(@ByVal Device device);
   public native @Const @ByRef AcceleratorHooksInterface getAcceleratorHooksInterface(
-        @ByVal(nullValue = "std::optional<c10::DeviceType>(c10::nullopt)") DeviceTypeOptional opt_device_type);
+        @ByVal(nullValue = "std::optional<c10::DeviceType>(std::nullopt)") DeviceTypeOptional opt_device_type);
   public native @Const @ByRef AcceleratorHooksInterface getAcceleratorHooksInterface();
   public native @ByVal Device getDeviceFromPtr(Pointer data, DeviceType device_type);
   public native @ByVal Device getDeviceFromPtr(Pointer data, @Cast("c10::DeviceType") byte device_type);
-  public static native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+  public native @Cast("bool") boolean isPinnedPtr(
+        @Const Pointer data,
+        @ByVal(nullValue = "std::optional<c10::DeviceType>(std::nullopt)") DeviceTypeOptional device_type);
+  public native @Cast("bool") boolean isPinnedPtr(
+        @Const Pointer data);
+  public native Allocator getPinnedMemoryAllocator(
+        @ByVal(nullValue = "std::optional<c10::DeviceType>(std::nullopt)") DeviceTypeOptional device_type);
+  public native Allocator getPinnedMemoryAllocator();
   public static native @Cast("bool") boolean hasOpenMP();
   public static native @Cast("bool") boolean hasMKL();
   public static native @Cast("bool") boolean hasLAPACK();
@@ -89,6 +96,8 @@ public class Context extends Pointer {
   public native void setBenchmarkLimitCuDNN(int arg0);
   public native @Cast("bool") boolean deterministicCuDNN();
   public native void setDeterministicCuDNN(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean deterministicMkldnn();
+  public native void setDeterministicMkldnn(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledNNPACK();
   public native void setUserEnabledNNPACK(@Cast("bool") boolean e);
 
@@ -114,6 +123,12 @@ public class Context extends Pointer {
 
   public native void setSDPUseCuDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledCuDNNSDP();
+
+  public native void setAllowFP16BF16ReductionMathSDP(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean allowFP16BF16ReductionMathSDP();
+
+  public native void setSDPUseOverrideable(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean userEnabledOverrideableSDP();
 
   public native LinalgBackend linalgPreferredBackend();
   public native void setLinalgPreferredBackend(LinalgBackend arg0);

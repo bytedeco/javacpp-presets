@@ -53,4 +53,10 @@ public class CTCLossDescriptor extends Pointer {
         @Cast("cudnnDataType_t") int datatype,
         @Cast("cudnnLossNormalizationMode_t") int normMode,
         @Cast("cudnnNanPropagation_t") int gradMode);
+  public native void set_v8_v9(
+        @Cast("cudnnDataType_t") int datatype,
+        @Cast("cudnnLossNormalizationMode_t") int normMode,
+        @Cast("cudnnNanPropagation_t") int gradMode,
+        int maxLabelLength);
+
 }

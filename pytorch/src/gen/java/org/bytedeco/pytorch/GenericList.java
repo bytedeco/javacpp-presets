@@ -228,6 +228,4 @@ public class GenericList extends Pointer {
 
   // See [unsafe set type] for why this exists.
   public native void unsafeSetElementType(@ByVal Type.TypePtr t);
-  private static native @Namespace @Const @Name("c10::impl::ptr_to_first_element") IValue ptr_to_first_element(@Const @ByRef GenericList list);
-  public IValue ptr_to_first_element() { return ptr_to_first_element(this); }
 }

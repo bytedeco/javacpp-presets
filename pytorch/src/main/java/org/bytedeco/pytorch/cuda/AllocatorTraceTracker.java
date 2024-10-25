@@ -4,9 +4,8 @@ import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByRef;
-import org.bytedeco.javacpp.annotation.Const;
+import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.pytorch.cuda.TraceEntry;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class AllocatorTraceTracker extends FunctionPointer {
@@ -28,5 +27,5 @@ public class AllocatorTraceTracker extends FunctionPointer {
     private native void allocate();
 
     // std::function<void(const TraceEntry&)>
-    public native void call(@Const @ByRef TraceEntry e);
+    public native void call(@ByRef @Cast("const c10::cuda::CUDACachingAllocator::TraceEntry*") Pointer e);
 }
