@@ -45,4 +45,8 @@ public class AcceleratorHooksInterface extends Pointer {
   public native @Cast("c10::DeviceIndex") byte exchangeDevice(@Cast("c10::DeviceIndex") byte device);
 
   public native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte device);
+
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+
+  public native Allocator getPinnedMemoryAllocator();
 }

@@ -101,12 +101,12 @@ public class Obj extends Pointer {
   public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj copy();
 
   public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj deepcopy(
-        @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
   public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj deepcopy();
 
   public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj deepcopy(
         @ByRef HashIdentityIValueMap memo,
-        @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
   public native @IntrusivePtr("c10::ivalue::Object") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Object>&"}) Obj deepcopy(
         @ByRef HashIdentityIValueMap memo);
 

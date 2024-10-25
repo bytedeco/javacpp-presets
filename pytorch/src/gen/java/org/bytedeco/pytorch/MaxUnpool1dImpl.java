@@ -47,7 +47,7 @@ public class MaxUnpool1dImpl extends MaxUnpool1dImplBase {
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef Tensor indices,
-        @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
+        @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(std::nullopt)") LongVectorOptional output_size);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef Tensor indices);

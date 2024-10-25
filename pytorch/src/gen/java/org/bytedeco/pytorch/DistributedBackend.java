@@ -259,10 +259,10 @@ public class DistributedBackend extends CustomClassHolder {
   public native @Cast("bool") boolean hasHooks();
 
   // Do not call this directly, use ProcessGroup::setGroupName instead.
-  public native void setGroupName(@StdString BytePointer name);
-  public native void setGroupName(@StdString String name);
+  public native void setGroupUid(@StdString BytePointer pg_uid);
+  public native void setGroupUid(@StdString String pg_uid);
 
-  public native @StdString BytePointer getGroupName();
+  public native @StdString BytePointer getGroupUid();
 
   public native void setGroupDesc(@StdString BytePointer desc);
   public native void setGroupDesc(@StdString String desc);

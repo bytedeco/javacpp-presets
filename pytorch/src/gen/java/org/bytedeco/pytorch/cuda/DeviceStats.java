@@ -31,7 +31,7 @@ import static org.bytedeco.pytorch.global.torch_cuda.*;
 
 
 // Struct containing memory allocator summary statistics for a device.
-@Namespace("c10::cuda::CUDACachingAllocator") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
+@Namespace("c10::CachingDeviceAllocator") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class DeviceStats extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -50,31 +50,32 @@ public class DeviceStats extends Pointer {
     }
 
   // COUNT: allocations requested by client code
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat allocation(); public native DeviceStats allocation(Stat setter);
-  // COUNT: number of allocated segments from cudaMalloc().
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat segment(); public native DeviceStats segment(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat allocation(); public native DeviceStats allocation(Stat setter);
+  // COUNT: number of allocated segments from device memory allocation.
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat segment(); public native DeviceStats segment(Stat setter);
   // COUNT: number of active memory blocks (allocated or used by stream)
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat active(); public native DeviceStats active(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat active(); public native DeviceStats active(Stat setter);
   // COUNT: number of inactive, split memory blocks (unallocated but can't be
-  // released via cudaFree)
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat inactive_split(); public native DeviceStats inactive_split(Stat setter);
+  // released via device memory deallocation)
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat inactive_split(); public native DeviceStats inactive_split(Stat setter);
 
   // SUM: bytes allocated by this memory alocator
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat allocated_bytes(); public native DeviceStats allocated_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat allocated_bytes(); public native DeviceStats allocated_bytes(Stat setter);
   // SUM: bytes reserved by this memory allocator (both free and used)
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat reserved_bytes(); public native DeviceStats reserved_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat reserved_bytes(); public native DeviceStats reserved_bytes(Stat setter);
   // SUM: bytes within active memory blocks
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat active_bytes(); public native DeviceStats active_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat active_bytes(); public native DeviceStats active_bytes(Stat setter);
   // SUM: bytes within inactive, split memory blocks
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat inactive_split_bytes(); public native DeviceStats inactive_split_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat inactive_split_bytes(); public native DeviceStats inactive_split_bytes(Stat setter);
   // SUM: bytes requested by client code
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat requested_bytes(); public native DeviceStats requested_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat requested_bytes(); public native DeviceStats requested_bytes(Stat setter);
 
-  // COUNT: total number of failed calls to CUDA malloc necessitating cache
+  // COUNT: total number of failed calls to device malloc necessitating cache
   // flushes.
   public native @Cast("int64_t") long num_alloc_retries(); public native DeviceStats num_alloc_retries(long setter);
 
-  // COUNT: total number of OOMs (i.e. failed calls to CUDA after cache flush)
+  // COUNT: total number of OOMs (i.e. failed calls to device memory allocation
+  // after cache flush)
   public native @Cast("int64_t") long num_ooms(); public native DeviceStats num_ooms(long setter);
 
   // COUNT: total number of oversize blocks allocated from pool
@@ -86,12 +87,12 @@ public class DeviceStats extends Pointer {
   // COUNT: total number of synchronize_and_free_events() calls
   public native @Cast("int64_t") long num_sync_all_streams(); public native DeviceStats num_sync_all_streams(long setter);
 
-  // COUNT: total number of CUDA allocation calls. This includes both cuMemMap
-  // and cudaMalloc.
+  // COUNT: total number of device memory allocation calls. This includes both
+  // mapped and malloced memory.
   public native @Cast("int64_t") long num_device_alloc(); public native DeviceStats num_device_alloc(long setter);
 
-  // COUNT: total number of CUDA free calls. This includes both cuMemUnmap
-  // and cudaFree.
+  // COUNT: total number of device memory deallocation calls. This includes both
+  // un-mapped and free memory.
   public native @Cast("int64_t") long num_device_free(); public native DeviceStats num_device_free(long setter);
 
   // SIZE: maximum block size that is allowed to be split.

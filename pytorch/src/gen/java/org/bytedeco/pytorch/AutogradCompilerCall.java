@@ -43,6 +43,7 @@ public class AutogradCompilerCall extends Pointer {
 
   public native @ByRef @NoOffset TensorArgs tensor_args(); public native AutogradCompilerCall tensor_args(TensorArgs setter);
   public native @StdVector @NoOffset SizeInput all_size_inputs(); public native AutogradCompilerCall all_size_inputs(SizeInput setter);
+  public native @ByRef LiftedIValueArgs lifted_ivalue_args(); public native AutogradCompilerCall lifted_ivalue_args(LiftedIValueArgs setter);
   public native @ByRef @Cast("std::vector<int64_t>*") @NoOffset LongVector dyn_size_inputs(); public native AutogradCompilerCall dyn_size_inputs(LongVector setter);
   
   public native @ByRef @NoOffset NodeCalls node_calls(); public native AutogradCompilerCall node_calls(NodeCalls setter);

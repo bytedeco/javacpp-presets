@@ -549,11 +549,11 @@ public class IValue extends Pointer {
   // TODO: There are several places that recurse over IValue. This is fragile.
   // This visitor should be used to recurse over ivalues.
   
-  public native @ByVal IValue deepcopy(@ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal IValue deepcopy(@ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy();
   public native @ByVal IValue deepcopy(
         @ByRef HashIdentityIValueMap memo,
-        @ByVal(nullValue = "std::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+        @ByVal(nullValue = "std::optional<at::Device>(std::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy(
         @ByRef HashIdentityIValueMap memo);
   // Don't edit this just to add results for new tags; edit

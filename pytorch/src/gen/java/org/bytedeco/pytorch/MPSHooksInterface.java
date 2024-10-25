@@ -56,6 +56,7 @@ public class MPSHooksInterface extends AcceleratorHooksInterface {
   public native void emptyCache();
   public native @Cast("size_t") long getCurrentAllocatedMemory();
   public native @Cast("size_t") long getDriverAllocatedMemory();
+  public native @Cast("size_t") long getRecommendedMaxMemory();
   public native void setMemoryFraction(double arg0);
   public native void profilerStartTrace(@StdString BytePointer mode, @Cast("bool") boolean waitUntilCompleted);
   public native void profilerStartTrace(@StdString String mode, @Cast("bool") boolean waitUntilCompleted);
@@ -68,5 +69,7 @@ public class MPSHooksInterface extends AcceleratorHooksInterface {
   public native @Cast("bool") boolean queryEvent(@Cast("uint32_t") int event_id);
   public native double elapsedTimeOfEvents(@Cast("uint32_t") int start_event_id, @Cast("uint32_t") int end_event_id);
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+  public native Allocator getPinnedMemoryAllocator();
 //   #undef FAIL_MPSHOOKS_FUNC
 }

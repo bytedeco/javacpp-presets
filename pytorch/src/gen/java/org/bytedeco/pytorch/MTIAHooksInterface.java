@@ -67,4 +67,10 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
   public native @ByVal Stream getDefaultStream(@Cast("c10::DeviceIndex") byte device);
 
   public native void setCurrentStream(@Const @ByRef Stream stream);
+
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+
+  public native Allocator getPinnedMemoryAllocator();
+
+  public native @Cast("PyObject*") Pointer memoryStats(@Cast("c10::DeviceIndex") byte device);
 }

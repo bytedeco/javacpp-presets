@@ -391,7 +391,7 @@ public class AnyModule extends Pointer {
 
   /** Creates a deep copy of an {@code AnyModule} if it contains a module, else an
    *  empty {@code AnyModule} if it is empty. */
-  public native @ByVal AnyModule clone(@ByVal(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal AnyModule clone(@ByVal(nullValue = "std::optional<torch::Device>(std::nullopt)") DeviceOptional device);
   public native @ByVal AnyModule clone();
 
   /** Assigns a module to the {@code AnyModule} (to circumvent the explicit

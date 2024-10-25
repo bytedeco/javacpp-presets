@@ -259,7 +259,7 @@ public class Tensor extends TensorBase {
    *  // f requires grad, has no operation creating it
    *  }</pre>
    <p>
-   *  \fn void backward(const Tensor & gradient={}, std::optional<bool> retain_graph=c10::nullopt, bool create_graph=false, std::optional<TensorList> inputs=c10::nullopt) const;
+   *  \fn void backward(const Tensor & gradient={}, std::optional<bool> retain_graph=std::nullopt, bool create_graph=false, std::optional<TensorList> inputs=std::nullopt) const;
    * 
    *  Computes the gradient of current tensor with respect to graph leaves.
    * 
@@ -299,7 +299,7 @@ public class Tensor extends TensorBase {
   ///
   ///
   ///
-  public native void backward(@Const @ByRef(nullValue = "at::Tensor{}") Tensor gradient, @ByVal(nullValue = "std::optional<bool>(c10::nullopt)") BoolOptional retain_graph, @Cast("bool") boolean create_graph/*=false*/, @ByVal(nullValue = "std::optional<at::TensorList>(c10::nullopt)") TensorArrayRefOptional inputs);
+  public native void backward(@Const @ByRef(nullValue = "at::Tensor{}") Tensor gradient, @ByVal(nullValue = "std::optional<bool>(std::nullopt)") BoolOptional retain_graph, @Cast("bool") boolean create_graph/*=false*/, @ByVal(nullValue = "std::optional<at::TensorList>(std::nullopt)") TensorArrayRefOptional inputs);
   public native void backward();
 
   /** \fn Tensor detach() const;

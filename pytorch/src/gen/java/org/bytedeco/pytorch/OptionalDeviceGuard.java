@@ -22,8 +22,8 @@ import static org.bytedeco.pytorch.global.torch.*;
 /**
  * A OptionalDeviceGuard is an RAII class that sets a device to some value on
  * initialization, and resets the device to its original value on destruction.
- * Morally, a OptionalDeviceGuard is equivalent to optional<DeviceGuard>, but
- * with extra constructors and methods as appropriate.
+ * Morally, a OptionalDeviceGuard is equivalent to std::optional<DeviceGuard>,
+ * but with extra constructors and methods as appropriate.
  *
  * Besides its obvious use (optionally applying a DeviceGuard),
  * OptionalDeviceGuard is often also used for the following idiom:
@@ -41,12 +41,12 @@ import static org.bytedeco.pytorch.global.torch.*;
  * when you use the nullary constructor, or pass a nullopt to the constructor.
  * Uninitialized OptionalDeviceGuards do *nothing*; they do not know what the
  * original device was and they do not reset on destruction.  This is why
- * original_device() and current_device() return optional<Device> rather than
- * Device (as they do in DeviceGuard), and also is why we didn't just
+ * original_device() and current_device() return std::optional<Device> rather
+ * than Device (as they do in DeviceGuard), and also is why we didn't just
  * provide OptionalDeviceGuard by default and hide DeviceGuard from users.
  *
  * The semantics of an OptionalDeviceGuard are exactly explained by thinking
- * of it as an optional<DeviceGuard>.  In particular, an initialized
+ * of it as an std::optional<DeviceGuard>.  In particular, an initialized
  * OptionalDeviceGuard doesn't restore device to its value at construction; it
  * restores device to its value *at initialization*.  So if you have the
  * program:

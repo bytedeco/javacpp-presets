@@ -50,5 +50,6 @@ public class SnapshotInfo extends Pointer {
 
   public native @StdVector SegmentInfo segments(); public native SnapshotInfo segments(SegmentInfo setter);
   public native @StdVector TraceEntryVector device_traces(); public native SnapshotInfo device_traces(TraceEntryVector setter);
+  public native @StdVector AnnotationEntry external_annotations(); public native SnapshotInfo external_annotations(AnnotationEntry setter);
   public native @ByRef AllocatorConfigInfo config_metadata(); public native SnapshotInfo config_metadata(AllocatorConfigInfo setter);
 }

@@ -30,7 +30,7 @@ import static org.bytedeco.cuda.global.cupti.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
 
-@Namespace("c10::cuda::CUDACachingAllocator") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
+@Namespace("c10::CachingDeviceAllocator") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class Stat extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -47,6 +47,14 @@ public class Stat extends Pointer {
     @Override public Stat getPointer(long i) {
         return new Stat((Pointer)this).offsetAddress(i);
     }
+
+  public native void increase(@Cast("size_t") long amount);
+
+  public native void decrease(@Cast("size_t") long amount);
+
+  public native void reset_accumulated();
+
+  public native void reset_peak();
 
   public native @Cast("int64_t") long current(); public native Stat current(long setter);
   public native @Cast("int64_t") long peak(); public native Stat peak(long setter);

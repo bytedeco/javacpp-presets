@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // dispatched, to allow for separate compilation of HIP code).  See
 // CUDAHooksInterface for more detailed motivation.
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class HIPHooksInterface extends Pointer {
+public class HIPHooksInterface extends AcceleratorHooksInterface {
     static { Loader.load(); }
     /** Default native constructor. */
     public HIPHooksInterface() { super((Pointer)null); allocate(); }
@@ -53,9 +53,13 @@ public class HIPHooksInterface extends Pointer {
 
   public native @Cast("c10::DeviceIndex") byte current_device();
 
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+
   public native Allocator getPinnedMemoryAllocator();
 
   public native void registerHIPTypes(Context arg0);
 
   public native int getNumGPUs();
+
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
 }

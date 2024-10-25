@@ -38,7 +38,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.4.1
+PYTORCH_VERSION=2.5.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -129,7 +129,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.1 typing_extensions==4.8.0
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.8.0
 
 case $PLATFORM in
     linux-x86)
@@ -184,6 +184,7 @@ sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
 
+sedinplace '/pycore_opcode.h/d' torch/csrc/dynamo/cpython_defs.c functorch/csrc/dim/dim*
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
 
 # allow setting the build directory and passing CUDA options
@@ -192,6 +193,7 @@ sedinplace 's/var.startswith(("BUILD_", "USE_", "CMAKE_"))/var.startswith(("BUIL
 
 # allow resizing std::vector<at::indexing::TensorIndex>
 sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
+sedinplace 's/TensorIndex(std::nullopt_t)/TensorIndex(std::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 
 # add missing declarations
 sedinplace '/using ExampleType = ExampleType_;/a\

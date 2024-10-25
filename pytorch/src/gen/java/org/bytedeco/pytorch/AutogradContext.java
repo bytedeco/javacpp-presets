@@ -43,7 +43,6 @@ public class AutogradContext extends Pointer {
   
 
   /** Can be used to save non-variable data for {@code backward}. */
-  // NOLINTNEXTLINE(cppcoreguidelines-non-private-member-variables-in-classes)
 
   /** Saves the list of variables for a future call to {@code backward}. This
    *  should be called at most once from inside of {@code forward}. */

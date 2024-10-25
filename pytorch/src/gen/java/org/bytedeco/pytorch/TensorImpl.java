@@ -702,7 +702,7 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(
         @ByVal SymIntArrayRef sizes,
         @ByVal SymIntArrayRef strides,
-        @ByVal(nullValue = "std::optional<c10::SymInt>(c10::nullopt)") SymIntOptional storage_offset);
+        @ByVal(nullValue = "std::optional<c10::SymInt>(std::nullopt)") SymIntOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal SymIntArrayRef sizes,
         @ByVal SymIntArrayRef strides);
@@ -758,14 +758,14 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride,
-        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+        @ByVal(nullValue = "std::optional<int64_t>(std::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride);
   public native void set_sizes_and_strides(
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_stride,
-        @ByVal(nullValue = "std::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
+        @ByVal(nullValue = "std::optional<int64_t>(std::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... new_stride);
@@ -775,7 +775,7 @@ public class TensorImpl extends Pointer {
    * storage / storage_offset). See NOTE [ Metadata Change for a Detached Tensor
    * ] for details.
    */
-  public native void set_allow_tensor_metadata_change(@Cast("bool") boolean value);
+  
 
   /**
    * True if a tensor allows changes to its metadata (e.g. sizes / strides /

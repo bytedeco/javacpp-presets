@@ -56,7 +56,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *    static variable_list forward(AutogradContext *ctx, int n, Variable var) {
  *       // Save data for backward in context
  *       ctx->saved_data["n"] = n;
- *       var.mul_(2);
+ *       var.mul_(n);
  *       // Mark var as modified by inplace operation
  *       ctx->mark_dirty({var});
  *       return {var};

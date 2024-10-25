@@ -30,7 +30,8 @@ public class JavaStatefulTensorBatchDataset extends Pointer {
   /** Returns a batch of data given an index. */
   public native @ByVal TensorExampleVectorOptional get_batch(@Cast("size_t") long request);
 
-  /** Returns the size of the dataset, or an empty optional if it is unsized. */
+  /** Returns the size of the dataset, or an empty std::optional if it is
+   *  unsized. */
   public native @ByVal SizeTOptional size();
 
   /** Creates a {@code MapDataset} that applies the given {@code transform} to this dataset. */

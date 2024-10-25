@@ -33,6 +33,8 @@ public class UndefinedTensorImpl extends TensorImpl {
 // #ifdef _WIN32
 // #else
   public static native @Const TensorImpl singleton();
+// #endif
+
 // #ifdef DEBUG
   public native @Cast("bool") boolean has_storage();
 // #endif

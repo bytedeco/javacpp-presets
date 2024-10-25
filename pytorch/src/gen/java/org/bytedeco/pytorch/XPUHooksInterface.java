@@ -20,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class XPUHooksInterface extends Pointer {
+public class XPUHooksInterface extends AcceleratorHooksInterface {
     static { Loader.load(); }
     /** Default native constructor. */
     public XPUHooksInterface() { super((Pointer)null); allocate(); }
@@ -62,5 +62,7 @@ public class XPUHooksInterface extends Pointer {
 
   public native Allocator getPinnedMemoryAllocator();
 
-  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
+
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
 }

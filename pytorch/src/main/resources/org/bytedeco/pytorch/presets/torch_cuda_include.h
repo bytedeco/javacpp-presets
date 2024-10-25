@@ -22,6 +22,7 @@
 #include "ATen/cudnn/Handle.h"
 #include "ATen/cudnn/Utils.h"
 #include "c10/cuda/CUDAGraphsC10Utils.h"
+#include "c10/core/CachingDeviceAllocator.h",
 #include "c10/cuda/CUDACachingAllocator.h",
 #include "c10/cuda/impl/CUDAGuardImpl.h"
 #include "c10/cuda/CUDAGuard.h"

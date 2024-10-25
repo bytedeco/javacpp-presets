@@ -112,7 +112,7 @@ public class SequentialImpl extends SequentialImplCloneable {
   /** Special cloning function for {@code Sequential} because it does not use
    *  {@code reset()}. */
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
-        @Const @ByRef(nullValue = "std::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+        @Const @ByRef(nullValue = "std::optional<torch::Device>(std::nullopt)") DeviceOptional device);
   public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 
   /** {@code reset()} is empty for {@code Sequential}, since it does not have parameters of

@@ -93,7 +93,7 @@ public class TensorBase extends AbstractTensor {
   public native @Const @ByRef TensorBase fill_(@Const @ByRef Scalar scalar);
   public native @Const @ByRef TensorBase zero_();
 
-  public native @ByVal TensorBase to(@ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/, @ByVal(nullValue = "std::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+  public native @ByVal TensorBase to(@ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/, @ByVal(nullValue = "std::optional<at::MemoryFormat>(std::nullopt)") MemoryFormatOptional memory_format);
   public native @ByVal TensorBase to();
 
   public native @Cast("bool") boolean is_complex();
@@ -396,7 +396,7 @@ public class TensorBase extends AbstractTensor {
    *  // f requires grad, has no operation creating it
    *  }</pre>
    <p>
-   *  \fn void backward(const Tensor & gradient={}, std::optional<bool> retain_graph=c10::nullopt, bool create_graph=false, std::optional<TensorList> inputs=c10::nullopt) const;
+   *  \fn void backward(const Tensor & gradient={}, std::optional<bool> retain_graph=std::nullopt, bool create_graph=false, std::optional<TensorList> inputs=std::nullopt) const;
    * 
    *  Computes the gradient of current tensor with respect to graph leaves.
    * 

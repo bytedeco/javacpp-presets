@@ -52,10 +52,10 @@ public class ConvTranspose1dImpl extends ConvTranspose1dImplBase {
   @SharedPtr @Name("std::make_shared<torch::nn::ConvTranspose1dImpl>") private native void allocate(@ByVal ConvTranspose1dOptions options_);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
-        @Const @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
+        @Const @ByRef(nullValue = "std::optional<at::IntArrayRef>(std::nullopt)") LongArrayRefOptional output_size);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
-        @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+        @ByRef(nullValue = "std::optional<at::IntArrayRef>(std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
 }

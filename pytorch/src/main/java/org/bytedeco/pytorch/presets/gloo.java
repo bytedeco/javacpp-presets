@@ -23,6 +23,7 @@ package org.bytedeco.pytorch.presets;
 
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
+import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.presets.chrono;
 import org.bytedeco.javacpp.tools.*;
@@ -31,7 +32,12 @@ import org.bytedeco.javacpp.tools.*;
  * @author Hervé Guillemet
  */
 @Properties(
-    inherit =  { torch.class, chrono.class },
+    inherit = torch.class,
+    value = @Platform(
+        include = {
+            "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
+        }
+    ),
     target = "org.bytedeco.pytorch.gloo",
     global = "org.bytedeco.pytorch.global.gloo"
 )

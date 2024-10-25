@@ -38,7 +38,7 @@ public class SavedTensorDefaultHooksTLS extends Pointer {
     }
 
   // PyObject is defined in c10/util/python_stub.h
-  public native @ByRef @Cast("std::stack<std::pair<PyObject*,PyObject*> >*") Pointer stack(); public native SavedTensorDefaultHooksTLS stack(Pointer setter);
+  public native @ByRef @Cast("std::stack<std::pair<c10::SafePyObject,c10::SafePyObject> >*") Pointer stack(); public native SavedTensorDefaultHooksTLS stack(Pointer setter);
 
   // See NOTE: [Disabling SavedTensorDefaultHooks] for context
   // NOTE: [disabled_error_message invariant]
@@ -46,4 +46,7 @@ public class SavedTensorDefaultHooksTLS extends Pointer {
   // We did this for efficiency (so we didn't have to keep a separate bool
   // around)
   public native @ByRef StringOptional disabled_error_message(); public native SavedTensorDefaultHooksTLS disabled_error_message(StringOptional setter);
+
+  // See NOTE: [Deferring tensor pack/unpack hooks until runtime]
+  public native @Cast("bool") boolean is_tracing(); public native SavedTensorDefaultHooksTLS is_tracing(boolean setter);
 }

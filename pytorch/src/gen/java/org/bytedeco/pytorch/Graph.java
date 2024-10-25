@@ -174,8 +174,8 @@ public class Graph extends Pointer {
   // Insert constant IValue into the graph.
   public native Value insertConstant(
         @Const @ByRef IValue val,
-        @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(c10::nullopt)") SourceRangeOptional loc,
-        @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(c10::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
+        @ByVal(nullValue = "std::optional<torch::jit::SourceRange>(std::nullopt)") SourceRangeOptional loc,
+        @ByVal(nullValue = "std::optional<torch::jit::ScopePtr>(std::nullopt)") @Cast("std::optional<torch::jit::ScopePtr>*") ScopeOptional scope);
   public native Value insertConstant(
         @Const @ByRef IValue val);
 

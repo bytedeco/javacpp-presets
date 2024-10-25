@@ -65,7 +65,7 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
 
   public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
-  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
 
   public native @Cast("bool") boolean hasCUDA();
 
@@ -118,6 +118,9 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
   public native void cuFFTClearPlanCache(@Cast("c10::DeviceIndex") byte arg0);
 
   public native int getNumGPUs();
+
+// #ifdef USE_ROCM
+// #endif
 
   public native void deviceSynchronize(@Cast("c10::DeviceIndex") byte arg0);
 }

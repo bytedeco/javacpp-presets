@@ -47,10 +47,10 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("at::indexing") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorIndex extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorIndex(Pointer p) { super(p); }
 
   // Case 1: `at::indexing::None`
-  public TensorIndex(@ByVal(nullValue = "c10::nullopt_t(at::indexing::None)") @Cast("c10::nullopt_t*") Pointer none) { super((Pointer)null); allocate(none); }
-  private native void allocate(@ByVal(nullValue = "c10::nullopt_t(at::indexing::None)") @Cast("c10::nullopt_t*") Pointer none);
   public TensorIndex() { super((Pointer)null); allocate(); }
   private native void allocate();
 

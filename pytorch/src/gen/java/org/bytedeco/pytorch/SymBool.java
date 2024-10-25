@@ -68,8 +68,7 @@ private native void allocate(@Cast("bool") boolean b);
   public native @Cast("bool") boolean guard_bool(String file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean expect_true(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean expect_true(String file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean guard_size_oblivious(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean guard_size_oblivious(String file, @Cast("int64_t") long line);
+  
 
   public native @Cast("bool") boolean has_hint();
 
