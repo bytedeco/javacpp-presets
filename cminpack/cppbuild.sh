@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-CMINPACK_VERSION=1.3.9
+CMINPACK_VERSION=1.3.11
 download https://github.com/devernay/cminpack/archive/v$CMINPACK_VERSION.tar.gz cminpack-$CMINPACK_VERSION.tar.gz
 
 mkdir -p $PLATFORM

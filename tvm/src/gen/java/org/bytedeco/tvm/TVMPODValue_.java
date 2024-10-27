@@ -30,10 +30,6 @@ public class TVMPODValue_ extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TVMPODValue_(Pointer p) { super(p); }
 
-  public native @Name("operator double") double asDouble();
-  public native @Cast("int64_t") @Name("operator int64_t") long asLong();
-  public native @Name("operator int") int asInt();
-  public native @Cast("bool") @Name("operator bool") boolean asBoolean();
   public native @Name("operator void*") Pointer asPointer();
   public native @Name("operator DLTensor*") DLTensor asDLTensor();
   public native @ByVal @Name("operator tvm::runtime::NDArray") NDArray asNDArray();
@@ -46,5 +42,10 @@ public class TVMPODValue_ extends Pointer {
    * \tparam T the data type.
    * @return The pointer type.
    */
-  // ObjectRef handling
+
+  public native @Cast("bool*") @Optional BoolPointer TryAsBool();
+
+  public native @Cast("int64_t*") @Optional LongPointer TryAsInt();
+
+  public native @Optional DoublePointer TryAsFloat();
 }

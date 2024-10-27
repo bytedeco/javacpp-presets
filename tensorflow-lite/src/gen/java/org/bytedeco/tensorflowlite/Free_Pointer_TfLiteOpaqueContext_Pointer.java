@@ -15,7 +15,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  *  This callback is called to deallocate the data returned by the init
  *  callback. The value passed in the {@code data} parameter is the value that was
  *  returned by the {@code init} callback. The value passed in the {@code user_data}
- *  parameter is the value that was passed to {@code TfLiteOperatorCreateWithData}.
+ *  parameter is the value that was passed to {@code TfLiteOperatorCreate}.
  *  Please refer {@code free} of {@code TfLiteRegistration} for the detail.
  *  */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)

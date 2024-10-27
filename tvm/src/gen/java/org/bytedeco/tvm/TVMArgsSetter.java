@@ -34,6 +34,7 @@ public class TVMArgsSetter extends Pointer {
   public TVMArgsSetter(TVMValue values, int[] type_codes) { super((Pointer)null); allocate(values, type_codes); }
   private native void allocate(TVMValue values, int[] type_codes);
   // setters for POD types
+  public native @Name("operator ()") void apply(@Cast("size_t") long i, @Cast("bool") boolean value);
   public native @Name("operator ()") void apply(@Cast("size_t") long i, @Cast("uint64_t") long value);
   public native @Name("operator ()") void apply(@Cast("size_t") long i, double value);
   public native @Name("operator ()") void apply(@Cast("size_t") long i, @Const @ByRef TVMArgValue value);

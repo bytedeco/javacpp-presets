@@ -33,7 +33,7 @@ public class InitializationStatus extends ResourceBase {
   public InitializationStatus() { super((Pointer)null); allocate(); }
   private native void allocate();
   public InitializationStatus(@ByRef(true) InitializationStatus other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@ByRef(true) InitializationStatus other);
+  @NoException(true) private native void allocate(@ByRef(true) InitializationStatus other);
 
   
   

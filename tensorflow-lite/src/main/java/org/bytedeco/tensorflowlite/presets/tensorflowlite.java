@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Samuel Audet
+ * Copyright (C) 2021-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -47,6 +47,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "flatbuffers/base.h",
 //                "flatbuffers/flatbuffers.h",
 //                "tensorflow/lite/schema/schema_generated.h",
+                "tensorflow/compiler/mlir/lite/allocation.h",
+                "tensorflow/compiler/mlir/lite/core/api/verifier.h",
+                "tensorflow/compiler/mlir/lite/core/api/error_reporter.h",
+                "tensorflow/compiler/mlir/lite/core/model_builder_base.h",
+                "tensorflow/compiler/mlir/lite/utils/control_edges.h",
+                "tensorflow/compiler/mlir/lite/experimental/remat/metadata_util.h",
                 "tensorflow/lite/builtin_ops.h",
                 "tensorflow/lite/c/c_api_types.h",
                 "tensorflow/lite/core/c/c_api_types.h",
@@ -140,6 +146,7 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("std::vector<tflite::NodeSubset>").pointerTypes("NodeSubsetVector").define())
                .put(new Info("std::vector<std::unique_ptr<tflite::Subgraph> >").valueTypes("@StdMove SubgraphVector").pointerTypes("SubgraphVector").define())
                .put(new Info("std::vector<std::pair<int32_t,int32_t> >", "tflite::ControlEdges").cast().pointerTypes("IntIntPairVector").define())
+               .put(new Info("std::vector<std::vector<std::pair<int32_t,int32_t> > >", "tflite::ModelControlDependencies").cast().pointerTypes("IntIntPairVectorVector").define())
                .put(new Info("std::vector<std::pair<TfLiteNode,TfLiteRegistration> >").valueTypes("@StdMove RegistrationNodePairVector").pointerTypes("RegistrationNodePairVector").define())
                .put(new Info("const std::vector<std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)> >", "tflite::OpResolver::TfLiteDelegatePtrVector").pointerTypes("TfLiteDelegatePtrVector").define())
                .put(new Info("std::unordered_map<std::int32_t,std::unique_ptr<tflite::resource::ResourceBase> >").valueTypes("@StdMove IntResourceBaseMap").pointerTypes("IntResourceBaseMap").define())
@@ -172,6 +179,10 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("tflite::impl::Interpreter::typed_output_tensor<double>").javaNames("typed_output_tensor_double"))
                .put(new Info("tflite::impl::Interpreter::typed_output_tensor<bool>").javaNames("typed_output_tensor_bool"))
                .put(new Info("tflite::impl::Interpreter::typed_output_tensor<TfLiteFloat16>").javaNames("typed_input_tensor_float16"))
+
+               .put(new Info("tflite::impl::FlatBufferModel").purify())
+               .put(new Info("tflite::impl::FlatBufferModelBase<tflite::impl::FlatBufferModel>::VerifyAndBuildFromFileDescriptor").skip())
+               .put(new Info("tflite::impl::FlatBufferModelBase<tflite::impl::FlatBufferModel>").javaNames("FlatBufferModelBase"))
 
                 // Classes passed to some native functions as unique_ptr and that can be allocated Java-side
                .put(new Info("tflite::impl::Interpreter::Interpreter").annotations("@UniquePtr", "@Name(\"std::make_unique<tflite::impl::Interpreter>\")"))

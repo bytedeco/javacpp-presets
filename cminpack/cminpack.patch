@@ -1,6 +1,6 @@
-diff -ruN cminpack-1.3.9/cminpack.h cminpack-1.3.9-patch/cminpack.h
---- cminpack-1.3.9/cminpack.h	2024-05-29 06:09:16.000000000 +0900
-+++ cminpack-1.3.9-patch/cminpack.h	2024-06-16 11:16:11.274115743 +0900
+diff -ruN cminpack-1.3.11/cminpack.h cminpack-1.3.11-patch/cminpack.h
+--- cminpack-1.3.11/cminpack.h	2024-09-13 18:04:15.000000000 +0900
++++ cminpack-1.3.11-patch/cminpack.h	2024-10-27 09:09:37.257671690 +0900
 @@ -36,38 +36,7 @@
  extern "C" {
  #endif /* __cplusplus */
@@ -40,34 +40,54 @@ diff -ruN cminpack-1.3.9/cminpack.h cminpack-1.3.9-patch/cminpack.h
  
  #if defined(__CUDA_ARCH__) || defined(__CUDACC__)
  #define __cminpack_attr__ __device__
-diff -ruN cminpack-1.3.9/cminpackP.h cminpack-1.3.9-patch/cminpackP.h
---- cminpack-1.3.9/cminpackP.h	2024-05-29 06:09:16.000000000 +0900
-+++ cminpack-1.3.9-patch/cminpackP.h	2024-06-16 11:17:44.793475898 +0900
-@@ -33,9 +33,9 @@
+diff -ruN cminpack-1.3.11/cminpackP.h cminpack-1.3.11-patch/cminpackP.h
+--- cminpack-1.3.11/cminpackP.h	2024-09-13 18:04:15.000000000 +0900
++++ cminpack-1.3.11-patch/cminpackP.h	2024-10-27 09:10:43.208509151 +0900
+@@ -11,10 +11,10 @@
  #endif
+ 
+ #ifdef USE_BLAS
+-#ifdef __APPLE__
+-#include <Accelerate/Accelerate.h>
+-#define __cminpack_blasint__ int
+-#else /* !__APPLE__ */
++//#ifdef __APPLE__
++//#include <Accelerate/Accelerate.h>
++//#define __cminpack_blasint__ int
++//#else /* !__APPLE__ */
+ #ifndef __cminpack_blasint__
+ #define __cminpack_blasint__ int
+ #endif
+@@ -34,13 +34,13 @@
+   const char *TransA, const char *Diag,
+   const __cminpack_blasint__ *N, const __cminpack_real__ *A, const __cminpack_blasint__ *lda, __cminpack_real__ *X,
+   const __cminpack_blasint__ *incX);
+-#endif /* !__APPLE__ */
++//#endif /* !__APPLE__ */
+ #endif /* USE_BLAS */
  
  #ifdef USE_LAPACK
 -#ifdef __APPLE__
 -#include <Accelerate/Accelerate.h>
--#else
+-#else /* !__APPLE__ */
 +//#ifdef __APPLE__
 +//#include <Accelerate/Accelerate.h>
-+//#else
++//#else /* !__APPLE__ */
  #if defined(__LP64__) /* In LP64 match sizes with the 32 bit ABI */
  typedef int 		__CLPK_integer;
  typedef int 		__CLPK_logical;
-@@ -58,7 +58,7 @@
+@@ -62,7 +62,7 @@
+ void __cminpack_lapack__(geqrf_)(
    __CLPK_integer *m, __CLPK_integer *n, __cminpack_real__ *a, __CLPK_integer * lda,
    __cminpack_real__ *tau, __cminpack_real__ *work, __CLPK_integer *lwork, __CLPK_integer *info);
+-#endif /* !__APPLE__ */
++//#endif /* !__APPLE__ */
  #endif
--#endif
-+//#endif
  
  #include "minpackP.h"
- 
-diff -ruN cminpack-1.3.9/Makefile cminpack-1.3.9-patch/Makefile
---- cminpack-1.3.9/Makefile	2024-05-29 06:09:16.000000000 +0900
-+++ cminpack-1.3.9-patch/Makefile	2024-06-16 11:15:38.626990012 +0900
+diff -ruN cminpack-1.3.11/Makefile cminpack-1.3.11-patch/Makefile
+--- cminpack-1.3.11/Makefile	2024-09-13 18:04:15.000000000 +0900
++++ cminpack-1.3.11-patch/Makefile	2024-10-27 09:09:37.259671695 +0900
 @@ -11,7 +11,7 @@
  #LIBSUFFIX=s
  #CFLAGS="-O3 -g -Wall -Wextra -DUSE_BLAS -DUSE_LAPACK"

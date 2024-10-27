@@ -7,12 +7,12 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-export CMAKE_FLAGS=
+export CMAKE_FLAGS="-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
 if [[ "$EXTENSION" == *gpu ]]; then
-    export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
+    export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON $CMAKE_FLAGS"
 fi
 
-TENSORFLOW_VERSION=2.17.0
+TENSORFLOW_VERSION=2.18.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -23,6 +23,7 @@ echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || true
 # patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
 # sedinplace 's/common.c/common.cc/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c/CMakeLists.txt
+sedinplace 's/!defined TF_LITE_DISABLE_X86_NEON/0/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/neon_check.h
 sedinplace 's/value = 1 << 20/value = (1 << 20)/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/interpreter_options.h
 sedinplace '/${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/profiler.cc/a\
 ${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/telemetry.cc\
@@ -31,6 +32,17 @@ ${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/c\/telemetry_setting_internal.cc\
 sedinplace '/#include <math.h>/a\
 #include <stdint.h>\
 ' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/spectrogram.cc
+
+if [[ ! "$PLATFORM" == windows* ]]; then
+    mkdir -p build_flatc
+    cd build_flatc
+
+    "$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
+    "$CMAKE" --build . --parallel $MAKEJ --target flatbuffers-flatc
+    export CMAKE_FLAGS="-DTFLITE_HOST_TOOLS_DIR=$PWD/flatbuffers-flatc $CMAKE_FLAGS"
+
+    cd ..
+fi
 
 mkdir -p build
 cd build
@@ -75,7 +87,7 @@ case $PLATFORM in
         sedinplace 's/__PRETTY_FUNCTION__/__func__/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/depthwiseconv*.h ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/integer_ops/depthwise_conv.h
         export CC="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
         export CXX="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
-        export CMAKE_FLAGS="-G Ninja $CMAKE_FLAGS"
+        export CMAKE_FLAGS="-G Ninja -DXNNPACK_ENABLE_AVXVNNIINT8=OFF $CMAKE_FLAGS"
         # create a dummy m.lib to satisfy some dependencies somewhere
         touch m.c
         cl.exe //c m.c
@@ -95,6 +107,7 @@ esac
 find -L $(pwd) -iname '*.obj' -o -iname '*.o' -not -path "$(pwd)/CMakeFiles/*" > objs
 # remove files with main() functions as well as duplicate or unresolved symbols in them
 sedinplace '/main.o/d' objs
+sedinplace '/flatbuffers-flatc/d' objs
 sedinplace '/CMakeCCompilerId.o/d' objs
 sedinplace '/CMakeCXXCompilerId.o/d' objs
 sedinplace '/tensorflowlite_c.dir/d' objs

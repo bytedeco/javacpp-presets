@@ -902,13 +902,14 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #endif
 
 // TVM version
-public static final String TVM_VERSION = "0.17.0";
+public static final String TVM_VERSION = "0.18.0";
 
 // TVM Runtime is DLPack compatible.
 // #include <dlpack/dlpack.h>
 
 // #ifdef __cplusplus
 // #endif
+// #include <stdbool.h>
 // #include <stddef.h>
 // #include <stdint.h>
 
@@ -994,11 +995,12 @@ public static final int
   kTVMBytes = 12,
   kTVMNDArrayHandle = 13,
   kTVMObjectRValueRefArg = 14,
+  kTVMArgBool = 15,
   // Extension codes for other frameworks to integrate TVM PackedFunc.
   // To make sure each framework's id do not conflict, use first and
   // last sections to mark ranges.
   // Open an issue at the repo if you need a section of code.
-  kTVMExtBegin = 15,
+  kTVMExtBegin = 16,
   kTVMNNVMFirst = 16,
   kTVMNNVMLast = 20,
   // The following section of code is used for non-reserved types.
@@ -2987,6 +2989,7 @@ public static final int
 
 // #include <tvm/runtime/c_runtime_api.h>
 // #include <tvm/runtime/container/array.h>
+// #include <tvm/runtime/container/boxed_primitive.h>
 // #include <tvm/runtime/container/map.h>
 // #include <tvm/runtime/container/variant.h>
 // #include <tvm/runtime/data_type.h>
@@ -2998,6 +3001,7 @@ public static final int
 // #include <functional>
 // #include <limits>
 // #include <memory>
+// #include <optional>
 // #include <string>
 // #include <tuple>
 // #include <type_traits>
@@ -3071,9 +3075,11 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
   // NOLINT(*)
 
+// #define TVM_LOG_INCORRECT_TYPE_CODE(CODE, T)
+//   "expected " << ArgTypeCode2Str(T) << " but got " << ArgTypeCode2Str(CODE)
+
 // macro to check type code.
-// #define TVM_CHECK_TYPE_CODE(CODE, T)
-//   ICHECK_EQ(CODE, T) << "expected " << ArgTypeCode2Str(T) << " but got " << ArgTypeCode2Str(CODE)
+// #define TVM_CHECK_TYPE_CODE(CODE, T) ICHECK_EQ(CODE, T) << TVM_LOG_INCORRECT_TYPE_CODE(CODE, T)
 
 /**
  * \brief Type traits for runtime type check during FFI conversion.
@@ -3082,6 +3088,15 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
 // Additional overloads for PackedFunc checking.
 // Targeting ../TVMPODValue_.java
+
+
+// Targeting ../TVMPODArgValue.java
+
+
+// Targeting ../TVMPODMovableArgValue_.java
+
+
+// Targeting ../TVMPODRetValue.java
 
 
 // Targeting ../TVMArgValue.java

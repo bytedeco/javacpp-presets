@@ -54,6 +54,18 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  @param attr The C API primitive attributes. */
     
 
+    /** Returns the parameters of a dropout attribute.
+     * 
+     *  @param mask_desc Output memory descriptor of a dropout mask. */
+    
+    ///
+    public native void get_dropout(@ByRef org.bytedeco.dnnl.memory.desc mask_desc);
+
+    /** Sets dropout probability.
+     * 
+     *  @param mask_desc Output memory descriptor of a dropout mask. */
+    public native void set_dropout(@Const @ByRef org.bytedeco.dnnl.memory.desc mask_desc);
+
     /** Returns the fpmath mode */
     
     ///
@@ -100,7 +112,24 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
     /** Sets deterministic attribute value
      * 
      *  @param value Specified deterministic mode. */
+    
+    ///
     public native void set_deterministic(@Cast("bool") boolean value);
+
+    /** Returns the rounding mode attribute value
+     * 
+     *  @param arg Argument for which rounding mode query applies.
+     *  @return The rounding mode applied to the specified argument. */
+    
+    ///
+    public native rounding_mode get_rounding_mode(int arg);
+
+    /** Sets the rounding mode attribute value for a given argument
+     * 
+     *  @param arg Argument for which to set rounding mode.
+     *  @param mode Rounding mode to apply. */
+    public native void set_rounding_mode(int arg, rounding_mode mode);
+    public native void set_rounding_mode(int arg, @Cast("dnnl::rounding_mode") int mode);
 
     /** Returns the scratchpad mode. */
     

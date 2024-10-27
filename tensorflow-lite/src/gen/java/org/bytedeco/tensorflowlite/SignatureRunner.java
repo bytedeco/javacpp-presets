@@ -232,4 +232,42 @@ public class SignatureRunner extends Pointer {
    *  data from buffer handle to CPU memory.
    *  \warning This is an experimental API and subject to change. \n */
   public native void SetAllowBufferHandleOutput(@Cast("bool") boolean allow_buffer_handle_output);
+
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Set the delegate buffer handle to a input tensor.
+   *  TfLiteDelegate should be aware of how to handle the buffer handle.
+   *  {@code release_existing_buffer_handle}: If true, the existing buffer handle */
+  // will be released by TfLiteDelegate::FreeBufferHandle.
+  public native @Cast("TfLiteStatus") int SetInputBufferHandle(@Cast("const char*") BytePointer input_name,
+                                      @Cast("TfLiteBufferHandle") int buffer_handle,
+                                      TfLiteDelegate delegate,
+                                      @Cast("bool") boolean release_existing_buffer_handle/*=true*/);
+  public native @Cast("TfLiteStatus") int SetInputBufferHandle(@Cast("const char*") BytePointer input_name,
+                                      @Cast("TfLiteBufferHandle") int buffer_handle,
+                                      TfLiteDelegate delegate);
+  public native @Cast("TfLiteStatus") int SetInputBufferHandle(String input_name,
+                                      @Cast("TfLiteBufferHandle") int buffer_handle,
+                                      TfLiteDelegate delegate,
+                                      @Cast("bool") boolean release_existing_buffer_handle/*=true*/);
+  public native @Cast("TfLiteStatus") int SetInputBufferHandle(String input_name,
+                                      @Cast("TfLiteBufferHandle") int buffer_handle,
+                                      TfLiteDelegate delegate);
+
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Set the delegate buffer handle to a output tensor.
+   *  TfLiteDelegate should be aware of how to handle the buffer handle.
+   *  {@code release_existing_buffer_handle}: If true, the existing buffer handle
+   *  will be released by TfLiteDelegate::FreeBufferHandle. */
+  public native @Cast("TfLiteStatus") int SetOutputBufferHandle(
+        @Cast("const char*") BytePointer output_name, @Cast("TfLiteBufferHandle") int buffer_handle,
+        TfLiteDelegate delegate, @Cast("bool") boolean release_existing_buffer_handle/*=true*/);
+  public native @Cast("TfLiteStatus") int SetOutputBufferHandle(
+        @Cast("const char*") BytePointer output_name, @Cast("TfLiteBufferHandle") int buffer_handle,
+        TfLiteDelegate delegate);
+  public native @Cast("TfLiteStatus") int SetOutputBufferHandle(
+        String output_name, @Cast("TfLiteBufferHandle") int buffer_handle,
+        TfLiteDelegate delegate, @Cast("bool") boolean release_existing_buffer_handle/*=true*/);
+  public native @Cast("TfLiteStatus") int SetOutputBufferHandle(
+        String output_name, @Cast("TfLiteBufferHandle") int buffer_handle,
+        TfLiteDelegate delegate);
 }

@@ -228,8 +228,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/86d6a4c1-c998-4c6b-9fff-ca004e9f7455/l_onemkl_p_2024.0.0.49673_offline.sh
-          $SUDO bash l_onemkl_p_2024.0.0.49673_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/89a381f6-f85d-4dda-ae62-30d51470f53c/l_onemkl_p_2024.2.2.17_offline.sh
+          $SUDO bash l_onemkl_p_2024.2.2.17_offline.sh -s -a -s --eula accept
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
         fi
 

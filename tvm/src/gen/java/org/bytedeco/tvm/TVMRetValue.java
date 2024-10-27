@@ -29,7 +29,7 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
  *  when it stores a complicated data type.
  */
 @Namespace("tvm::runtime") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
-public class TVMRetValue extends TVMPODValue_ {
+public class TVMRetValue extends TVMPODRetValue {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TVMRetValue(Pointer p) { super(p); }

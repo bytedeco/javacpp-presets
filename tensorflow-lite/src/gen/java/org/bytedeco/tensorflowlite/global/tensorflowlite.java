@@ -32,6 +32,9 @@ public class tensorflowlite extends org.bytedeco.tensorflowlite.presets.tensorfl
 // Targeting ../IntIntPairVector.java
 
 
+// Targeting ../IntIntPairVectorVector.java
+
+
 // Targeting ../RegistrationNodePairVector.java
 
 
@@ -45,6 +48,295 @@ public class tensorflowlite extends org.bytedeco.tensorflowlite.presets.tensorfl
 
 
 // Targeting ../IntResourceBaseMap.java
+
+
+// Parsed from tensorflow/compiler/mlir/lite/allocation.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+/** \file
+/**
+/** Memory management for TF Lite. */
+// #ifndef TENSORFLOW_COMPILER_MLIR_LITE_ALLOCATION_H_
+// #define TENSORFLOW_COMPILER_MLIR_LITE_ALLOCATION_H_
+
+// #include <stddef.h>
+
+// #include <cstdio>
+// #include <cstdlib>
+// #include <memory>
+
+// #include "tensorflow/compiler/mlir/lite/core/api/error_reporter.h"
+// Targeting ../Allocation.java
+
+
+
+/** Note that not all platforms support MMAP-based allocation.
+ *  Use {@code IsSupported()} to check. */
+// Targeting ../FileCopyAllocation.java
+
+
+// Targeting ../MemoryAllocation.java
+
+
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_COMPILER_MLIR_LITE_ALLOCATION_H_
+
+
+// Parsed from tensorflow/compiler/mlir/lite/core/api/verifier.h
+
+/* Copyright 2020 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+/** \file
+/**
+/** Abstract interface for verifying a model. */
+// #ifndef TENSORFLOW_COMPILER_MLIR_LITE_CORE_API_VERIFIER_H_
+// #define TENSORFLOW_COMPILER_MLIR_LITE_CORE_API_VERIFIER_H_
+
+// #include "tensorflow/compiler/mlir/lite/core/api/error_reporter.h"
+// Targeting ../TfLiteVerifier.java
+
+
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_COMPILER_MLIR_LITE_CORE_API_VERIFIER_H_
+
+
+// Parsed from tensorflow/compiler/mlir/lite/core/api/error_reporter.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_COMPILER_MLIR_LITE_CORE_API_ERROR_REPORTER_H_
+// #define TENSORFLOW_COMPILER_MLIR_LITE_CORE_API_ERROR_REPORTER_H_
+
+// #include <cstdarg>
+// Targeting ../ErrorReporter.java
+
+
+
+  // namespace tflite
+
+// You should not make bare calls to the error reporter, instead use the
+// TF_LITE_REPORT_ERROR macro, since this allows message strings to be
+// stripped when the binary size has to be optimized. If you are looking to
+// reduce binary size, define TF_LITE_STRIP_ERROR_STRINGS when compiling and
+// every call will be stubbed out, taking no memory.
+// #ifndef TF_LITE_STRIP_ERROR_STRINGS
+// #define TF_LITE_REPORT_ERROR(reporter, ...)
+//   do {
+//     static_cast<::tflite::ErrorReporter*>(reporter)->Report(__VA_ARGS__);
+//   } while (false)
+// #else  // TF_LITE_STRIP_ERROR_STRINGS
+// #define TF_LITE_REPORT_ERROR(reporter, ...)
+// #endif  // TF_LITE_STRIP_ERROR_STRINGS
+
+// #endif  // TENSORFLOW_COMPILER_MLIR_LITE_CORE_API_ERROR_REPORTER_H_
+
+
+// Parsed from tensorflow/compiler/mlir/lite/core/model_builder_base.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+/** \file
+/**
+/** Deserialization infrastructure for tflite. Provides functionality
+/** to go from a serialized tflite model in flatbuffer format to an
+/** in-memory representation of the model.
+/**
+/** WARNING: Users of TensorFlow Lite should not include this file directly,
+/** but should instead include "third_party/tensorflow/lite/model_builder.h".
+/** Only the TensorFlow Lite implementation itself should include this
+/** file directly. */
+// IWYU pragma: private, include "third_party/tensorflow/lite/model_builder.h"
+
+// #ifndef TENSORFLOW_COMPILER_MLIR_LITE_CORE_MODEL_BUILDER_BASE_H_
+// #define TENSORFLOW_COMPILER_MLIR_LITE_CORE_MODEL_BUILDER_BASE_H_
+
+// #include <stddef.h>
+
+// #include <algorithm>
+// #include <cstdint>
+// #include <map>
+// #include <memory>
+// #include <string>
+// #include <utility>
+
+// #include "flatbuffers/base.h"  // from @flatbuffers
+// #include "flatbuffers/buffer.h"  // from @flatbuffers
+// #include "flatbuffers/vector.h"  // from @flatbuffers
+// #include "flatbuffers/verifier.h"  // from @flatbuffers
+// #include "tensorflow/compiler/mlir/lite/allocation.h"
+// #include "tensorflow/compiler/mlir/lite/core/api/error_reporter.h"
+// #include "tensorflow/compiler/mlir/lite/core/api/verifier.h"
+// #include "tensorflow/compiler/mlir/lite/core/macros.h"
+// #include "tensorflow/compiler/mlir/lite/schema/schema_generated.h"
+
+@Namespace("tflite") public static native @UniquePtr Allocation GetAllocationFromFile(
+    @Cast("const char*") BytePointer filename, ErrorReporter error_reporter);
+@Namespace("tflite") public static native @UniquePtr Allocation GetAllocationFromFile(
+    String filename, ErrorReporter error_reporter);
+
+@Namespace("tflite") public static native @UniquePtr Allocation GetAllocationFromFile(
+    int fd, ErrorReporter error_reporter);
+// Targeting ../FlatBufferModelBase.java
+
+
+
+  // namespace impl
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_COMPILER_MLIR_LITE_CORE_MODEL_BUILDER_BASE_H_
+
+
+// Parsed from tensorflow/compiler/mlir/lite/utils/control_edges.h
+
+/* Copyright 2024 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_COMPILER_MLIR_LITE_UTILS_CONTROL_EDGES_H_
+// #define TENSORFLOW_COMPILER_MLIR_LITE_UTILS_CONTROL_EDGES_H_
+
+// #include <cstdint>
+// #include <utility>
+// #include <vector>
+
+// LINT.IfChange
+
+// LINT.ThenChange(//tensorflow/lite/graph_info.h)
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_COMPILER_MLIR_LITE_UTILS_CONTROL_EDGES_H_
+
+
+// Parsed from tensorflow/compiler/mlir/lite/experimental/remat/metadata_util.h
+
+/* Copyright 2022 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+/** \file
+/**
+/** Functions for serializiation/deserialization of control dependency
+/** information to/from model metadata.
+/** */
+
+// #ifndef TENSORFLOW_COMPILER_MLIR_LITE_EXPERIMENTAL_REMAT_METADATA_UTIL_H_
+// #define TENSORFLOW_COMPILER_MLIR_LITE_EXPERIMENTAL_REMAT_METADATA_UTIL_H_
+
+// #include <cstddef>
+// #include <cstdint>
+// #include <string>
+// #include <vector>
+
+// #include "tensorflow/compiler/mlir/lite/utils/control_edges.h"
+
+/** Control dependencies for the model is the collection of control dependencies
+ *  for its subgraphs. */
+
+/** Serializes {@code in} into the returned string. The result is parseable with
+ *  ParseModelControlDependencies. */
+@Namespace("tflite") public static native @StdString String SerializeModelControlDependencies(
+    @Cast("const tflite::ModelControlDependencies*") @ByRef IntIntPairVectorVector in);
+
+/** Deserializes {@code *out} from a character buffer of size {@code size} at {@code data}.
+ *  Returns true iff successful. {@code *out} needn't be empty before invocation.
+ *  When returning false, {@code *out}'s state is undefined. */
+@Namespace("tflite") public static native @Cast("bool") boolean ParseModelControlDependencies(@Cast("const char*") BytePointer data, @Cast("size_t") long size,
+                                   @Cast("tflite::ModelControlDependencies*") IntIntPairVectorVector out);
+@Namespace("tflite") public static native @Cast("bool") boolean ParseModelControlDependencies(String data, @Cast("size_t") long size,
+                                   @Cast("tflite::ModelControlDependencies*") IntIntPairVectorVector out);
+
+/** The key under which to store the serialized control dependencies in the
+ *  model's metadata. */
+@Namespace("tflite") @MemberGetter public static native @Cast("const char") byte kModelControlDependenciesMetadataKey(int i);
+@Namespace("tflite") @MemberGetter public static native @Cast("const char*") BytePointer kModelControlDependenciesMetadataKey();
+
+/** To allow future changes to the format, serialized control dependency data
+ *  will contain a version; this constant is the version that will be used for
+ *  serialization.  For deserialization, past versions should remain parseable. */
+@Namespace("tflite") @MemberGetter public static native @Cast("const uint32_t") int kModelControlDependenciesMetadataVersion();
+
+@Namespace("tflite") @MemberGetter public static native @Cast("const char") byte kModelUseStablehloTensorKey(int i);
+@Namespace("tflite") @MemberGetter public static native @Cast("const char*") BytePointer kModelUseStablehloTensorKey();
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_COMPILER_MLIR_LITE_EXPERIMENTAL_REMAT_METADATA_UTIL_H_
 
 
 // Parsed from tensorflow/lite/builtin_ops.h
@@ -284,7 +576,9 @@ public static final int
   kTfLiteBuiltinDilate = 203,
   kTfLiteBuiltinStablehloRngBitGenerator = 204,
   kTfLiteBuiltinReduceWindow = 205,
-  kTfLiteBuiltinStablehloComposite = 206;
+  kTfLiteBuiltinStablehloComposite = 206,
+  kTfLiteBuiltinStablehloShiftLeft = 207,
+  kTfLiteBuiltinStablehloCbrt = 208;
 
 // #ifdef __cplusplus  // extern "C"
 // #endif  // __cplusplus
@@ -440,6 +734,7 @@ public static final int
   kTfLiteCancelled = 8;
 
 /** Types supported by tensor */
+// LINT.IfChange
 /** enum TfLiteType */
 public static final int
   kTfLiteNoType = 0,
@@ -1361,65 +1656,21 @@ limitations under the License.
  *                      be {@code TfLiteBuiltinCustom}.
  *  @param version      Version of the op.  See
  *                      https://www.tensorflow.org/lite/guide/ops_version
- * 
- *  @return \a newly created TfLiteOperator on success, \a nullptr on failure
- * 
- *  Deprecated: Use {@code TfLiteOperatorCreateWithData} */
-
-///
-///
-///
-///
-///
-public static native TfLiteOperator TfLiteOperatorCreate(
-    @Cast("TfLiteBuiltinOperator") int builtin_code, @Cast("const char*") BytePointer custom_name, int version);
-public static native TfLiteOperator TfLiteOperatorCreate(
-    @Cast("TfLiteBuiltinOperator") int builtin_code, String custom_name, int version);
-
-/** Returns a new TfLiteOperator instance.
- * 
- *  The returned TfLiteOperator instance represents a definition
- *  of an operator with the identity (builtin_code/custom_name and
- *  version) specified by the parameters, but with all callbacks initially
- *  unset.
- * 
- *  Evaluation of any operation using this operator will be done using
- *  the "prepare" and "invoke" callbacks, which can be set using
- *  {@code TfLiteOperatorSetPrepare} and
- *  {@code TfLiteOperatorSetInvoke}, or for async execution
- *  the "prepare", "eval", and "wait" callbacks of the {@code TfLiteAsyncKernel},
- *  which can be set using {@code TfLiteOperatorSetAsyncKernel}.
- *  If the relevant callbacks are not set, then such evaluation will result
- *  in an error status.  So normally any use of this function should be followed
- *  by appropriate calls to set those callbacks.
- * 
- *  \note The caller retains ownership and should ensure that
- *  the lifetime of the {@code TfLiteOperator} must be at least as long as
- *  the lifetime of any {@code TfLiteInterpreter} or {@code tflite::Interpreter} that it is
- *  used in.
- * 
- *  @param builtin_code Enumeration code specifying which builtin operator this
- *                      defines, or {@code TfLiteBuiltinCustom} to define a custom op.
- *  @param custom_name  Name of the custom op, or {@code nullptr} for a builtin op.
- *                      If {@code custom_name} is non-null, then {@code builtin_code} should
- *                      be {@code TfLiteBuiltinCustom}.
- *  @param version      Version of the op.  See
- *                      https://www.tensorflow.org/lite/guide/ops_version
  *  @param user_data    Opaque pointer passed to the operator's callbacks set
  *                      with functions such as {@code TfLiteOperatorSetXXXWithData}.
  *                      The user is expected to manage the memory pointed by
  *                      this field and the lifetime of that memory should extend
- *                      at least from the call to {@code TfLiteOperatorCreateWithData}
+ *                      at least from the call to {@code TfLiteOperatorCreate}
  *                      to the invocation of the callback set with
  *                      {@code TfLiteOperatorSetFreeWithData}.
  * 
  *  @return a newly created TfLiteOperator on success, or a nullptr on failure */
 
 ///
-public static native TfLiteOperator TfLiteOperatorCreateWithData(
+public static native TfLiteOperator TfLiteOperatorCreate(
     @Cast("TfLiteBuiltinOperator") int builtin_code, @Cast("const char*") BytePointer custom_name, int version,
     Pointer user_data);
-public static native TfLiteOperator TfLiteOperatorCreateWithData(
+public static native TfLiteOperator TfLiteOperatorCreate(
     @Cast("TfLiteBuiltinOperator") int builtin_code, String custom_name, int version,
     Pointer user_data);
 
@@ -1712,6 +1963,7 @@ public static final int
 
 
 
+// LINT.IfChange(optional_tensor)
 public static final int kTfLiteOptionalTensor = (-1);
 // Targeting ../TfLiteIntArray.java
 
@@ -1865,6 +2117,15 @@ public static native void TfLiteFloatArrayFree(TfLiteFloatArray a);
 //       return s;
 //     }
 //   } while (0)
+
+// `std::unreachable` not available until CC23.
+// #ifdef __GNUC__  // GCC, Clang, ICC
+
+// #define TFL_UNREACHABLE() (__builtin_unreachable())
+
+// #elif defined(_MSC_VER)  // MSVC
+
+// #define TFL_UNREACHABLE() (__assume(false))
 // Targeting ../TfLiteComplex64.java
 
 
@@ -2856,26 +3117,7 @@ limitations under the License.
 // #ifndef TENSORFLOW_LITE_CORE_API_ERROR_REPORTER_H_
 // #define TENSORFLOW_LITE_CORE_API_ERROR_REPORTER_H_
 
-// #include <cstdarg>
-// Targeting ../ErrorReporter.java
-
-
-
-  // namespace tflite
-
-// You should not make bare calls to the error reporter, instead use the
-// TF_LITE_REPORT_ERROR macro, since this allows message strings to be
-// stripped when the binary size has to be optimized. If you are looking to
-// reduce binary size, define TF_LITE_STRIP_ERROR_STRINGS when compiling and
-// every call will be stubbed out, taking no memory.
-// #ifndef TF_LITE_STRIP_ERROR_STRINGS
-// #define TF_LITE_REPORT_ERROR(reporter, ...)
-//   do {
-//     static_cast<::tflite::ErrorReporter*>(reporter)->Report(__VA_ARGS__);
-//   } while (false)
-// #else  // TF_LITE_STRIP_ERROR_STRINGS
-// #define TF_LITE_REPORT_ERROR(reporter, ...)
-// #endif  // TF_LITE_STRIP_ERROR_STRINGS
+// #include "tensorflow/compiler/mlir/lite/core/api/error_reporter.h"  // IWYU pragma: export
 
 // #endif  // TENSORFLOW_LITE_CORE_API_ERROR_REPORTER_H_
 
@@ -2906,6 +3148,7 @@ limitations under the License.
 // #include <unordered_map>
 // #include <vector>
 
+// #include "tensorflow/compiler/mlir/lite/core/api/error_reporter.h"
 // #include "tensorflow/lite/core/api/error_reporter.h"
 // #include "tensorflow/lite/core/c/common.h"
 // #include "tensorflow/lite/schema/schema_generated.h"
@@ -3039,12 +3282,7 @@ limitations under the License.
 // #ifndef TENSORFLOW_LITE_CORE_API_VERIFIER_H_
 // #define TENSORFLOW_LITE_CORE_API_VERIFIER_H_
 
-// #include "tensorflow/lite/core/api/error_reporter.h"
-// Targeting ../TfLiteVerifier.java
-
-
-
-  // namespace tflite
+// #include "tensorflow/compiler/mlir/lite/core/api/verifier.h"  // IWYU pragma: export
 
 // #endif  // TENSORFLOW_LITE_CORE_API_VERIFIER_H_
 
@@ -3147,27 +3385,7 @@ limitations under the License.
 // #ifndef TENSORFLOW_LITE_ALLOCATION_H_
 // #define TENSORFLOW_LITE_ALLOCATION_H_
 
-// #include <stddef.h>
-
-// #include <cstdio>
-// #include <cstdlib>
-// #include <memory>
-
-// #include "tensorflow/lite/core/api/error_reporter.h"
-// Targeting ../Allocation.java
-
-
-
-/** Note that not all platforms support MMAP-based allocation.
- *  Use {@code IsSupported()} to check. */
-// Targeting ../FileCopyAllocation.java
-
-
-// Targeting ../MemoryAllocation.java
-
-
-
-  // namespace tflite
+// #include "tensorflow/compiler/mlir/lite/allocation.h"
 
 // #endif  // TENSORFLOW_LITE_ALLOCATION_H_
 
@@ -3194,7 +3412,6 @@ limitations under the License.
 // #include <cstdarg>
 
 // #include "tensorflow/lite/core/api/error_reporter.h"
-// #include "tensorflow/lite/core/c/common.h"
 // Targeting ../StderrReporter.java
 
 
@@ -3240,7 +3457,9 @@ limitations under the License.
 
 
 
+// LINT.IfChange
 // Node edge.second depends on node edge.first.
+// LINT.ThenChange(//tensorflow/compiler/mlir/lite/utils/control_edges.h)
 
 // Partitions a list of node indices `nodes_to_partition` into node subsets.
 // Each node subset is in dependency order internally (i.e. all members of the
@@ -3571,20 +3790,6 @@ public static final int TFLITE_HAS_ATTRIBUTE_WEAK = 1;
 // #define TFLITE_ATTRIBUTE_WEAK
 // #endif
 
-// #ifndef TF_LITE_STATIC_MEMORY
-// maximum size of a valid flatbuffer
-@MemberGetter public static native @Cast("const unsigned int") int flatbuffer_size_max();
-// If none zero then the buffer is stored outside of the flatbuffers, string
-@MemberGetter public static native @Cast("const char") byte tflite_metadata_buffer_location(int i);
-@MemberGetter public static native @Cast("const char*") BytePointer tflite_metadata_buffer_location();
-// field for minimum runtime version, string
-@MemberGetter public static native @Cast("const char") byte tflite_metadata_min_runtime_version(int i);
-@MemberGetter public static native @Cast("const char*") BytePointer tflite_metadata_min_runtime_version();
-// the stablehlo op version is supported by the tflite runtime
-@MemberGetter public static native @Cast("const char") byte tflite_supported_stablehlo_version(int i);
-@MemberGetter public static native @Cast("const char*") BytePointer tflite_supported_stablehlo_version();
-// #endif
-
 // #endif  // TENSORFLOW_LITE_CORE_MACROS_H_
 
 
@@ -3620,6 +3825,7 @@ limitations under the License.
 // #include <utility>
 // #include <vector>
 
+// #include "tensorflow/compiler/mlir/lite/allocation.h"
 // #include "tensorflow/lite/allocation.h"
 // #include "tensorflow/lite/array.h"
 // #include "tensorflow/lite/c/common_internal.h"
@@ -3740,6 +3946,10 @@ limitations under the License.
 //     return TFLITE_TYPE_ENUM;
 //   }
 //   template <>
+//   constexpr TfLiteType typeToTfLiteType<const CPP_TYPE>() {
+//     return TFLITE_TYPE_ENUM;
+//   }
+//   template <>
 //   struct TfLiteTypeToType<TFLITE_TYPE_ENUM> {
 //     using Type = CPP_TYPE;
 //   }
@@ -3747,17 +3957,29 @@ limitations under the License.
 // No string mapping is included here, since the TF Lite packed representation
 // doesn't correspond to a C++ type well.
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
   // namespace tflite
 // #endif  // TENSORFLOW_LITE_PORTABLE_TYPE_TO_TFLITETYPE_H_
@@ -3925,9 +4147,12 @@ limitations under the License.
 // TODO(b/163167649): This string conversion means that only the first entry
 // in a string tensor will be returned as a std::string, so it's deprecated.
 
+  
 
 
+  
 
+  
 
   // namespace tflite
 // #endif  // TENSORFLOW_LITE_TYPE_TO_TFLITETYPE_H_
@@ -4071,9 +4296,11 @@ limitations under the License.
 // #include <map>
 // #include <memory>
 // #include <string>
+// #include <type_traits>
 // #include <utility>
 // #include <vector>
 
+// #include "tensorflow/compiler/mlir/lite/experimental/remat/metadata_util.h"
 // #include "tensorflow/lite/allocation.h"
 // #include "tensorflow/lite/core/api/error_reporter.h"
 // #include "tensorflow/lite/core/api/profiler.h"
@@ -4081,7 +4308,6 @@ limitations under the License.
 // #include "tensorflow/lite/core/c/common.h"  // IWYU pragma: export
 // #include "tensorflow/lite/core/signature_runner.h"
 // #include "tensorflow/lite/core/subgraph.h"
-// #include "tensorflow/lite/experimental/remat/metadata_util.h"
 // #include "tensorflow/lite/experimental/resource/initialization_status.h"
 // #include "tensorflow/lite/experimental/resource/resource_base.h"
 // #include "tensorflow/lite/external_cpu_backend_context.h"
@@ -4208,24 +4434,15 @@ limitations under the License.
 /** but should instead include "third_party/tensorflow/lite/model_builder.h".
 /** Only the TensorFlow Lite implementation itself should include this
 /** file directly. */
+
 // #ifndef TENSORFLOW_LITE_CORE_MODEL_BUILDER_H_
 // #define TENSORFLOW_LITE_CORE_MODEL_BUILDER_H_
 
 // #include <stddef.h>
 
-// #include <map>
-// #include <memory>
-// #include <string>
-
-// #include "tensorflow/lite/allocation.h"
+// #include "tensorflow/compiler/mlir/lite/core/model_builder_base.h"  // IWYU pragma: export
 // #include "tensorflow/lite/core/api/error_reporter.h"
-// #include "tensorflow/lite/core/api/op_resolver.h"
-// #include "tensorflow/lite/core/api/verifier.h"
-// #include "tensorflow/lite/core/c/common.h"
-// #include "tensorflow/lite/mutable_op_resolver.h"
-// #include "tensorflow/lite/schema/schema_generated.h"
 // #include "tensorflow/lite/stderr_reporter.h"
-// #include "tensorflow/lite/string_type.h"
 // Targeting ../FlatBufferModel.java
 
 
@@ -4466,7 +4683,13 @@ limitations under the License.
 // #ifndef TENSORFLOW_LITE_OPTIONAL_DEBUG_TOOLS_H_
 // #define TENSORFLOW_LITE_OPTIONAL_DEBUG_TOOLS_H_
 
+// #include <cstdint>
+// #include <vector>
+
 // #include "tensorflow/lite/core/interpreter.h"
+// #include "tensorflow/lite/core/subgraph.h"
+// Returns the name of the allocation type.
+@Namespace("tflite") public static native @Cast("const char*") BytePointer AllocTypeName(@Cast("TfLiteAllocationType") int type);
 
 // Prints a dump of what tensors and what nodes are in the interpreter.
 @Namespace("tflite") public static native void PrintInterpreterState(@Const Interpreter interpreter,
@@ -4474,6 +4697,12 @@ limitations under the License.
                            int tensor_type_display_length/*=15*/,
                            int alloc_type_display_length/*=18*/);
 @Namespace("tflite") public static native void PrintInterpreterState(@Const Interpreter interpreter);
+// Targeting ../SubgraphDelegationMetadata.java
+
+
+
+// Returns the metadata of the delegation of the subgraph.
+@Namespace("tflite") public static native @ByVal SubgraphDelegationMetadata GetNodeDelegationMetadata(@StdMove Subgraph subgraph);
 
   // namespace tflite
 
