@@ -31,7 +31,7 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
  * \note For internal development purpose only.
  */
 @Namespace("tvm::runtime") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
-public class TVMMovableArgValue_ extends TVMPODValue_ {
+public class TVMMovableArgValue_ extends TVMPODMovableArgValue_ {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TVMMovableArgValue_(Pointer p) { super(p); }

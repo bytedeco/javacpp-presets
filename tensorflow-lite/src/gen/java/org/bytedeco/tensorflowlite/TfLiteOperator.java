@@ -21,7 +21,6 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 ///
 ///
 ///
-///
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteOperator extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

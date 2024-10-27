@@ -523,22 +523,32 @@ public class Interpreter extends Pointer {
   public native @ByVal StringVector signature_keys();
 
   /** \brief Returns a pointer to the SignatureRunner instance to run the part
-   *  of the graph identified by a SignatureDef. The nullptr is returned if the
-   *  given signature key is not valid.
+   *  of the graph identified by a SignatureDef.  If the model does not have any
+   *  signature defs, pass nullptr as signature_key and a SignatureRunner will
+   *  be created using the primary subgraph (0).  A nullptr is returned if the
+   *  given signature_key is not valid.  Note, the returned SignatureRunner
+   *  instance is owned by and has the same lifetime as the Interpreter object;
+   *  additionally, class SignatureRunner is *not* thread-safe.
+   *  This function will additionally apply default delegates unless
+   *  {@code apply_default_delegate} is set to false.
    *  If you need to specify delegates, you have to do that before calling this
-   *  function. This function will additionally apply default delegates. Thus,
-   *  applying delegates after that might lead to undesirable behaviors.
-   *  Note, the pointed instance has lifetime same as the Interpreter object
-   *  and the SignatureRunner class is *not* thread-safe. */
+   *  function or provide {@code apply_default_delegate} as false and applying
+   *  delegates later. */
+  public native SignatureRunner GetSignatureRunner(@Cast("const char*") BytePointer signature_key,
+                                        @Cast("bool") boolean apply_default_delegate/*=true*/);
   public native SignatureRunner GetSignatureRunner(@Cast("const char*") BytePointer signature_key);
+  public native SignatureRunner GetSignatureRunner(String signature_key,
+                                        @Cast("bool") boolean apply_default_delegate/*=true*/);
   public native SignatureRunner GetSignatureRunner(String signature_key);
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns a pointer to the AsyncSignatureRunner instance to run the
-   *  part of the graph identified by a SignatureDef. The nullptr is returned if
-   *  the given signature key is not valid.
-   *  if the model does not have signature def, pass nullptr to signature_key
-   *  and AsyncSignatureRunner will be created using primary subgraph (0).
+  /** \warning Experimental interface, subject to change. \n \brief Returns a
+   *  pointer to the AsyncSignatureRunner instance to run the part of the graph
+   *  identified by a SignatureDef.  If the model does not have any signature
+   *  defs, pass nullptr as signature_key and an AsyncSignatureRunner will be
+   *  created using the primary subgraph (0).  A nullptr is returned if the
+   *  given signature_key is not valid.  Note, the returned AsyncSignatureRunner
+   *  instance is owned by and has the same lifetime as the Interpreter object;
+   *  additionally, class AsyncSignatureRunner is *not* thread-safe.
    *  The async delegate should be applied before calling this function. */
 
   /** \warning Experimental interface, subject to change. \n

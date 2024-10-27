@@ -14,7 +14,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  * 
  *  The callback is called when the inputs of operator have been resized.  The
  *  value passed in the {@code user_data} parameter is the value that was passed to
- *  {@code TfLiteOperatorCreateWithData}.  Please refer {@code prepare} of
+ *  {@code TfLiteOperatorCreate}.  Please refer {@code prepare} of
  *  {@code TfLiteRegistration} for the detail.
  *  */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)

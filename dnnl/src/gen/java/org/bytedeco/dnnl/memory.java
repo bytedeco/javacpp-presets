@@ -134,6 +134,8 @@ public class memory extends dnnl_memory_handle {
     public enum data_type {
         /** Undefined data type (used for empty memory descriptors). */
         undef(dnnl_data_type_undef),
+        /** [MX-compliant 8-bit compliant scale data type](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf) with 8-bit exponent. */
+        e8m0(dnnl_e8m0),
         /** [OFP8 standard 8-bit floating-point](https://www.opencompute.org/documents/ocp-8-bit-floating-point-specification-ofp8-revision-1-0-2023-06-20-pdf)
          *  with a 5-bit exponent and a 2-bit mantissa. */
         f8_e5m2(dnnl_f8_e5m2),
@@ -494,6 +496,7 @@ public class memory extends dnnl_memory_handle {
         AB16b64a2b(dnnl_AB16b64a2b),
         Ab4a(dnnl_Ab4a),
         Ab8a(dnnl_Ab8a),
+        Ab32a(dnnl_Ab32a),
         Abc16a(dnnl_Abc16a),
         ABc16a16b(dnnl_ABc16a16b),
         ABc4a4b(dnnl_ABc4a4b),

@@ -9,6 +9,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
+// #endif
+
 /** Single-precision complex data type compatible with the C99 definition. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteComplex64 extends Pointer {

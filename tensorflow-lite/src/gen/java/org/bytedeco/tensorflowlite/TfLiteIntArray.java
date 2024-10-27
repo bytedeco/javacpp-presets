@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
+// LINT.ThenChange(//tensorflow/compiler/mlir/lite/flatbuffer_export.cc:optional_tensor)
 
 /** Fixed size list of integers. Used for dimensions and inputs/outputs tensor
  *  indices */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2023 Samuel Audet
+ * Copyright (C) 2017-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ public class mkl_rt implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("mkl_lapack.h").linePatterns(".*_\\(.*", ".*\\).*").skip())
+               .put(new Info("mkl_vml_functions.h").linePatterns(".*, VHABS,.*", ".*, vmhYnI_64,.*").skip())
                .put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
                              "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_BF16", "MKL_INT32", "MKL_F16", "NOTHROW",
 

@@ -136,6 +136,8 @@ public static final int
     dnnl_s4 = 11,
     /** 4-bit unsigned integer. */
     dnnl_u4 = 12,
+    /** [MX-compliant 8-bit compliant scale data type](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf) with 8-bit exponent. */
+    dnnl_e8m0 = 13,
 
     /** Parameter to allow internal only data_types without undefined behavior.
      *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
@@ -1331,10 +1333,11 @@ public static final int
     dnnl_bcad = 835,
     dnnl_cabd = 836,
     dnnl_dabc = 837,
+    dnnl_Ab32a = 838,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 838,
+    dnnl_format_tag_last = 839,
 
     // Aliases
 
@@ -2683,6 +2686,15 @@ public static final int
      *  as the scratchpad buffers are not used concurrently by two primitive
      *  executions. */
     dnnl_scratchpad_mode_user = 1;
+
+/** Rounding mode */
+/** enum dnnl_rounding_mode_t */
+public static final int
+    /** rounding mode dictated by the floating-point environment */
+    dnnl_rounding_mode_environment = 0,
+    /** stochastic rounding mode where a random bias is added to the
+     *  trailing mantissa bits before conversion. */
+    dnnl_rounding_mode_stochastic = 1;
 // Targeting ../dnnl_primitive_attr.java
 
 
@@ -2887,6 +2899,19 @@ public static final int DNNL_ARG_DIFF_BIAS = 169;
 public static final int DNNL_ARG_DIFF_SCALE = 255;
 /** A special mnemonic for shift argument of normalization primitives. */
 public static final int DNNL_ARG_DIFF_SHIFT = 256;
+
+/** Rounding mode seed for stochastic rounding
+ *  Single seed needed independently of how many arguments need stochastic rounding */
+public static final int DNNL_ARG_ATTR_ROUNDING_SEED = 508;
+
+/** Dropout mask output buffer. */
+public static final int DNNL_ARG_ATTR_DROPOUT_MASK = 509;
+
+/** Dropout probability value passed via a buffer. */
+public static final int DNNL_ARG_ATTR_DROPOUT_PROBABILITY = 510;
+
+/** Dropout RNG seed value passed via a buffer. */
+public static final int DNNL_ARG_ATTR_DROPOUT_SEED = 511;
 
 /** Output scaling factors provided at execution time. */
 public static final int DNNL_ARG_ATTR_OUTPUT_SCALES = 513;
@@ -3500,6 +3525,21 @@ public static final int DNNL_RUNTIME_SYCL = 512;
 /** DPC++ runtime */
 public static final int DNNL_RUNTIME_DPCPP = DNNL_RUNTIME_SYCL;
 
+/** No vendor (corresponding runtime is disabled) */
+public static final int DNNL_VENDOR_NONE = 0;
+
+/** Intel vendor */
+public static final int DNNL_VENDOR_INTEL = 1;
+
+/** NVIDIA vendor */
+public static final int DNNL_VENDOR_NVIDIA = 2;
+
+/** AMD vendor */
+public static final int DNNL_VENDOR_AMD = 4;
+
+/** Generic vendor */
+public static final int DNNL_VENDOR_GENERIC = 8;
+
 /** \} dnnl_api_service */
 
 // oneDNN CPU threading runtime
@@ -3510,6 +3550,9 @@ public static final int DNNL_CPU_RUNTIME = DNNL_RUNTIME_OMP;
 
 // oneDNN GPU engine runtime
 public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
+
+// oneDNN GPU vendor
+public static final int DNNL_GPU_VENDOR = DNNL_VENDOR_INTEL;
 
 // clang-format on
 
@@ -3554,6 +3597,9 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // When defined, SYCL HIP backend is used.
 /* #undef DNNL_SYCL_HIP */
 
+// When defined, SYCL Generic backend is used.
+/* #undef DNNL_SYCL_GENERIC */
+
 // When defined, stack checker is enabled.
 /* #undef DNNL_ENABLE_STACK_CHECKER */
 
@@ -3571,6 +3617,11 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 
 // When defined, experimental profiling capabilities are enabled.
 /* #undef DNNL_EXPERIMENTAL_PROFILING */
+
+// When defined, experimental logging capabilities are enabled.
+/* #undef DNNL_EXPERIMENTAL_LOGGING */
+// When defined, it disables GPU compute reference kernels.
+/* #undef DNNL_DISABLE_GPU_REF_KERNELS */
 
 // List of configurating build controls
 // Workload controls
@@ -3595,6 +3646,7 @@ public static final int BUILD_REDUCTION = 0;
 public static final int BUILD_REORDER = 0;
 public static final int BUILD_RESAMPLING = 0;
 public static final int BUILD_RNN = 0;
+public static final int BUILD_SDPA = 0;
 public static final int BUILD_SHUFFLE = 0;
 public static final int BUILD_SOFTMAX = 0;
 public static final int BUILD_SUM = 0;
@@ -3625,7 +3677,7 @@ public static final int BUILD_GEMM_AVX512 = 0;
 // Parsed from oneapi/dnnl/dnnl_version.h
 
 /*******************************************************************************
-* Copyright 2019-2020 Intel Corporation
+* Copyright 2019-2024 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3649,14 +3701,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 5;
+public static final int DNNL_VERSION_MINOR = 6;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 3;
-
-/** Git commit hash */
-public static native @MemberGetter String DNNL_VERSION_HASH();
-public static final String DNNL_VERSION_HASH = DNNL_VERSION_HASH();
+public static final int DNNL_VERSION_PATCH = 0;
 
 // clang-format on
 
@@ -4015,6 +4063,32 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_clone(
 ///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_destroy(dnnl_primitive_attr attr);
 
+/** Returns probability for output dropout primitive attribute.
+ * 
+ *  @param attr Primitive attributes.
+ *  @param dropout_desc Output dropout memory descriptor
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout(
+        @Const dnnl_primitive_attr attr,
+        @Cast("const_dnnl_memory_desc_t*") @ByPtrPtr dnnl_memory_desc dropout_desc);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout(
+        @Const dnnl_primitive_attr attr,
+        @Cast("const_dnnl_memory_desc_t*") PointerPointer dropout_desc);
+
+/** Sets probability for output dropout primitive attribute.
+ * 
+ *  @param attr Primitive attributes.
+ *  @param dropout_desc Output dropout memory descriptor
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_dropout(
+        dnnl_primitive_attr attr, @Const dnnl_memory_desc dropout_desc);
+
 /** Returns the floating-point math mode primitive attribute.
  * 
  *  @param attr Primitive attributes.
@@ -4280,7 +4354,6 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_poi
  *      otherwise. */
 
 ///
-///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
         dnnl_primitive_attr attr, int arg, int mask, int ndims,
         @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type);
@@ -4290,6 +4363,35 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_poi
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
         dnnl_primitive_attr attr, int arg, int mask, int ndims,
         @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type);
+
+/** Sets the rounding mode attribute value for a given argument
+ * 
+ *  @param attr Primitive attributes.
+ *  @param arg Argument for which rounding mode should be set.
+ *  @param mode Rounding mode to apply to the argument.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_rounding(
+        dnnl_primitive_attr attr, int arg, @Cast("dnnl_rounding_mode_t") int mode);
+
+/** Returns the rounding mode attribute value for a given argument
+ * 
+ *  @param attr Primitive attributes.
+ *  @param arg Argument for which rounding mode query applies.
+ *  @param mode Output rounding mode.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_rounding(
+        dnnl_primitive_attr attr, int arg, @Cast("dnnl_rounding_mode_t*") IntPointer mode);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_rounding(
+        dnnl_primitive_attr attr, int arg, @Cast("dnnl_rounding_mode_t*") IntBuffer mode);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_rounding(
+        dnnl_primitive_attr attr, int arg, @Cast("dnnl_rounding_mode_t*") int[] mode);
 
 /** Returns primitive attributes post-ops.
  * 
@@ -9228,6 +9330,27 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
  *  @param mode C++ API scratchpad mode enum value.
  *  @return Corresponding C API scratchpad mode enum value. */
 @Namespace("dnnl") public static native @Cast("dnnl_scratchpad_mode_t") int convert_to_c(scratchpad_mode mode);
+
+/** Rounding mode */
+@Namespace("dnnl") public enum rounding_mode {
+    /** rounding mode dictated by the floating-point environment */
+    environment(dnnl_rounding_mode_environment),
+    /** stochastic rounding mode where a random bias is added to the
+     *  trailing mantissa bits before conversion. */
+    stochastic(dnnl_rounding_mode_stochastic);
+
+    public final int value;
+    private rounding_mode(int v) { this.value = v; }
+    private rounding_mode(rounding_mode e) { this.value = e.value; }
+    public rounding_mode intern() { for (rounding_mode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/** Converts a rounding mode enum value from C++ API to C API type.
+ * 
+ *  @param mode C++ API rounding mode enum value.
+ *  @return Corresponding C API rounding mode enum value. */
+@Namespace("dnnl") public static native @Cast("dnnl_rounding_mode_t") int convert_to_c(rounding_mode mode);
 
 /** Propagation kind. */
 @Namespace("dnnl") public enum prop_kind {

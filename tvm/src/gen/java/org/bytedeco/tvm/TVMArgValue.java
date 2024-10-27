@@ -27,7 +27,7 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
  *  Provides utilities to do type cast into other types.
  */
 @Namespace("tvm::runtime") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
-public class TVMArgValue extends TVMPODValue_ {
+public class TVMArgValue extends TVMPODArgValue {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TVMArgValue(Pointer p) { super(p); }

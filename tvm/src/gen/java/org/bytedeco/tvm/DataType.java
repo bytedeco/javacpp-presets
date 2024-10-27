@@ -124,6 +124,8 @@ public class DataType extends Pointer {
   public native @Cast("bool") boolean is_fixed_length_vector();
   /** @return Whether the type is a scalable vector. */
   public native @Cast("bool") boolean is_scalable_vector();
+  /** @return whether type is a vector type. */
+  public native @Cast("bool") boolean is_vector();
   /** @return whether type is a bool vector type. */
   public native @Cast("bool") boolean is_vector_bool();
   /** @return whether type is a Void type. */

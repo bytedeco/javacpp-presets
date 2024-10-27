@@ -14,7 +14,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  * 
  *  The callback is called to initialize the op from serialized data. The value
  *  passed in the {@code user_data} parameter is the value that was passed to
- *  {@code TfLiteOperatorCreateWithData}.  Please refer {@code init} of {@code TfLiteRegistration}
+ *  {@code TfLiteOperatorCreate}.  Please refer {@code init} of {@code TfLiteRegistration}
  *  for the detail.
  *  */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
