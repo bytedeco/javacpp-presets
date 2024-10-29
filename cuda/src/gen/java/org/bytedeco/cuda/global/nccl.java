@@ -33,11 +33,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 22;
-public static final int NCCL_PATCH = 3;
+public static final int NCCL_MINOR = 23;
+public static final int NCCL_PATCH = 4;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 22203;
+public static final int NCCL_VERSION_CODE = 22304;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -193,6 +193,15 @@ public static native @Cast("ncclResult_t") int ncclCommSplit(ncclComm comm, int 
 public static native @Cast("ncclResult_t") int ncclCommSplit(ncclComm comm, int color, int key, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
 public static native @Cast("ncclResult_t") int pncclCommSplit(ncclComm comm, int color, int key, @ByPtrPtr ncclComm newcomm, ncclConfig_t config);
 public static native @Cast("ncclResult_t") int pncclCommSplit(ncclComm comm, int color, int key, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
+
+/* Creates a new communicator (multi thread/process version), similar to ncclCommInitRankConfig.
+ * Allows to use more than one ncclUniqueId (up to one per rank), indicated by nId, to accelerate the init operation.
+ * The number of ncclUniqueIds and their order must be the same for every rank.
+ */
+public static native @Cast("ncclResult_t") int ncclCommInitRankScalable(@ByPtrPtr ncclComm newcomm, int nranks, int myrank, int nId, ncclUniqueId commIds, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int ncclCommInitRankScalable(@Cast("ncclComm**") PointerPointer newcomm, int nranks, int myrank, int nId, ncclUniqueId commIds, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommInitRankScalable(@ByPtrPtr ncclComm newcomm, int nranks, int myrank, int nId, ncclUniqueId commIds, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommInitRankScalable(@Cast("ncclComm**") PointerPointer newcomm, int nranks, int myrank, int nId, ncclUniqueId commIds, ncclConfig_t config);
 
 /* Returns a string for each error code. */
 public static native @Cast("const char*") BytePointer ncclGetErrorString(@Cast("ncclResult_t") int result);

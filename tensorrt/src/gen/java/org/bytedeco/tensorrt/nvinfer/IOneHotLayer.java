@@ -28,8 +28,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  Output, and an axis attribute.
  *  * Indices is an Int32 tensor that determines which locations in Output to set as on_value.
  *  * Values is a two-element (rank=1) tensor that consists of [off_value, on_value]
- *  * Depth is an Int32 shape tensor of rank 0, which contains the depth (number of classes) of the one-hot encoding.
- *    The depth tensor must be a build-time constant, and its value should be positive.
+ *  * Depth is an 0D tensor of type Int32 or Int64, which contains the depth (number of classes) of the one-hot encoding.
+ *    The depth tensor must be a positive build-time constant.
  *  * Output is a tensor with rank = rank(indices)+1, where the added dimension contains the one-hot encoding.
  *    The data types of Output is equal to the Values data type.
  *  * Axis is a scalar specifying to which dimension of the output one-hot encoding is added.

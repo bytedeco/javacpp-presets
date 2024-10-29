@@ -1037,7 +1037,7 @@ public class INetworkDefinition extends INoCopy {
      * 
      *  @see IParametricReLULayer
      * 
-     *  \warning Int32 tensors are not valid input tensors.
+     *  \warning Tensors of type Int32, Int64, Bool, or UInt8 are not allowed as inputs.
      * 
      *  @return The new parametric ReLU layer, or nullptr if it could not be created.
      *  */

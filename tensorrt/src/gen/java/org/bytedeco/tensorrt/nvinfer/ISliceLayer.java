@@ -34,7 +34,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  The slice layer selects for each dimension a start location from within the input tensor, and
  *  copies elements to the output tensor using the specified stride across the input tensor.
- *  Start, size, and stride tensors must be 1D Int32 shape tensors if not specified via Dims.
+ *  Start, size, and stride tensors must be 1D tensors of type Int32 or Int64 if not specified via Dims.
  * 
  *  An example of using slice on a tensor:
  *  input = {{0, 2, 4}, {1, 3, 5}}
@@ -72,10 +72,12 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  The following constraints must be satisfied to execute this layer on DLA:
  *  * start, size, and stride are build time constants, either as static Dims or as constant input tensors.
  *  * axes, if provided, are build time constants, either as static Dims or as a constant input tensor.
- *  * sampleMode is kSTRICT_BOUNDS.
+ *  * sampleMode is kDEFAULT, kWRAP, or kFILL.
  *  * Strides are 1 for all dimensions.
- *  * Slicing is not performed on the first dimension
- *  * The input tensor has four dimensions
+ *  * Slicing is not performed on the first dimension.
+ *  * The input tensor has four dimensions.
+ *  * For kFILL sliceMode, the fill value input is a scalar output of an IConstantLayer with value 0 that is not
+ *    consumed by any other layer.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
@@ -233,15 +235,15 @@ public class ISliceLayer extends ILayer {
      *  The indices are as follows:
      * 
      *  - 0: Tensor to be sliced.
-     *  - 1: The start tensor to begin slicing, as a 1D Int32 shape tensor.
-     *  - 2: The size tensor of the resulting slice, as a 1D Int32 shape tensor.
-     *  - 3: The stride of the slicing operation, as a 1D Int32 shape tensor.
+     *  - 1: The start tensor to begin slicing, as a 1D tensor of type Int32 or Int64.
+     *  - 2: The size tensor of the resulting slice, as a 1D tensor of type Int32 or Int64.
+     *  - 3: The stride of the slicing operation, as a 1D tensor of type Int32 or Int64.
      *  - 4: Value for the kFILL slice mode. The fill value data type should either be the same
      *       or be implicitly convertible to the input data type.
      *       Implicit data type conversion is supported among kFLOAT, kHALF, kINT8, and kFP8 data types.
      *       This input is disallowed for other modes.
      *  - 5: The axes tensor indicating the corresponding axes that start, size, and stride
-     *       should apply to, as a 1D Int32 shape tensor. Negative values for axes
+     *       should apply to, as a 1D tensor or type Int32 or Int64. Negative values for axes
      *       indicate indexing from the back of the input tensor. Values must be unique and be
      *       within the interval of [-rank(input), rank(input)-1].
      * 

@@ -51,11 +51,11 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = 10;
 /** TensorRT minor version. */
-public static final int NV_TENSORRT_MINOR = 3;
+public static final int NV_TENSORRT_MINOR = 5;
 /** TensorRT patch version. */
 public static final int NV_TENSORRT_PATCH = 0;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 26;
+public static final int NV_TENSORRT_BUILD = 18;
 
 /** TensorRT LWS major version. */
 public static final int NV_TENSORRT_LWS_MAJOR = 0;

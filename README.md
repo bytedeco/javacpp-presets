@@ -217,8 +217,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 12.6.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 9.3.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.22.x  https://developer.nvidia.com/nccl
+   * cuDNN 9.5.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.23.x  https://developer.nvidia.com/nccl
    * nvCOMP 4.0.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 12.2.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
@@ -227,8 +227,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * SentencePiece 0.2.0  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.18.x  https://github.com/tensorflow/tensorflow
- * TensorRT 10.3.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.48.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * TensorRT 10.5.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.50.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.17.x  https://github.com/onnx/onnx

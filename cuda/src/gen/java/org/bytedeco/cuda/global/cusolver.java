@@ -89,9 +89,9 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 //   #endif
 
   public static final int CUSOLVER_VER_MAJOR = 11;
-  public static final int CUSOLVER_VER_MINOR = 6;
-  public static final int CUSOLVER_VER_PATCH = 4;
-  public static final int CUSOLVER_VER_BUILD = 38;
+  public static final int CUSOLVER_VER_MINOR = 7;
+  public static final int CUSOLVER_VER_PATCH = 1;
+  public static final int CUSOLVER_VER_BUILD = 2;
   public static final int CUSOLVER_VERSION =                                                     
       (CUSOLVER_VER_MAJOR * 1000 + CUSOLVER_VER_MINOR * 100 + CUSOLVER_VER_PATCH);
 
@@ -370,7 +370,7 @@ public static final int
 //   #include <stdio.h>
 
 //   #include "cuComplex.h" /* import complex data type */
-//   #include "cublas_api.h"
+//   #include "cublas_v2.h"
 //   #include "cusolver_common.h"
 
   /*******************************************************************************/
@@ -12217,6 +12217,78 @@ public static final int
       @Cast("size_t") long workspaceInBytesOnHost,
       int[] info);
 
+  /* 64-bit API for batched SYEVD */
+  public static native @Cast("cusolverStatus_t") int cusolverDnXsyevBatched_bufferSize(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobz,
+      @Cast("cublasFillMode_t") int uplo,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      @Const Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      @Const Pointer W,
+      @Cast("cudaDataType") int computeType,
+      @Cast("size_t*") SizeTPointer workspaceInBytesOnDevice,
+      @Cast("size_t*") SizeTPointer workspaceInBytesOnHost,
+      @Cast("int64_t") long batchSize);
+
+  public static native @Cast("cusolverStatus_t") int cusolverDnXsyevBatched(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobz,
+      @Cast("cublasFillMode_t") int uplo,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      Pointer W,
+      @Cast("cudaDataType") int computeType,
+      Pointer bufferOnDevice,
+      @Cast("size_t") long workspaceInBytesOnDevice,
+      Pointer bufferOnHost,
+      @Cast("size_t") long workspaceInBytesOnHost,
+      IntPointer info,
+      @Cast("int64_t") long batchSize);
+  public static native @Cast("cusolverStatus_t") int cusolverDnXsyevBatched(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobz,
+      @Cast("cublasFillMode_t") int uplo,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      Pointer W,
+      @Cast("cudaDataType") int computeType,
+      Pointer bufferOnDevice,
+      @Cast("size_t") long workspaceInBytesOnDevice,
+      Pointer bufferOnHost,
+      @Cast("size_t") long workspaceInBytesOnHost,
+      IntBuffer info,
+      @Cast("int64_t") long batchSize);
+  public static native @Cast("cusolverStatus_t") int cusolverDnXsyevBatched(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobz,
+      @Cast("cublasFillMode_t") int uplo,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      Pointer W,
+      @Cast("cudaDataType") int computeType,
+      Pointer bufferOnDevice,
+      @Cast("size_t") long workspaceInBytesOnDevice,
+      Pointer bufferOnHost,
+      @Cast("size_t") long workspaceInBytesOnHost,
+      int[] info,
+      @Cast("int64_t") long batchSize);
+
   /* 64-bit API for SYEVDX */
   public static native @Cast("cusolverStatus_t") int cusolverDnXsyevdx_bufferSize(
       cusolverDnContext handle,
@@ -12342,6 +12414,98 @@ public static final int
       @Cast("int64_t*") long[] meig64,
       @Cast("cudaDataType") int dataTypeW,
       Pointer W,
+      @Cast("cudaDataType") int computeType,
+      Pointer bufferOnDevice,
+      @Cast("size_t") long workspaceInBytesOnDevice,
+      Pointer bufferOnHost,
+      @Cast("size_t") long workspaceInBytesOnHost,
+      int[] info);
+
+  /* 64-bit API for GEEV */
+  public static native @Cast("cusolverStatus_t") int cusolverDnXgeev_bufferSize(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobvl,
+      @Cast("cusolverEigMode_t") int jobvr,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      @Const Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      @Const Pointer W,
+      @Cast("cudaDataType") int dataTypeVL,
+      @Const Pointer VL,
+      @Cast("int64_t") long ldvl,
+      @Cast("cudaDataType") int dataTypeVR,
+      @Const Pointer VR,
+      @Cast("int64_t") long ldvr,
+      @Cast("cudaDataType") int computeType,
+      @Cast("size_t*") SizeTPointer workspaceInBytesOnDevice,
+      @Cast("size_t*") SizeTPointer workspaceInBytesOnHost);
+
+  public static native @Cast("cusolverStatus_t") int cusolverDnXgeev(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobvl,
+      @Cast("cusolverEigMode_t") int jobvr,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      Pointer W,
+      @Cast("cudaDataType") int dataTypeVL,
+      Pointer VL,
+      @Cast("int64_t") long ldvl,
+      @Cast("cudaDataType") int dataTypeVR,
+      Pointer VR,
+      @Cast("int64_t") long ldvr,
+      @Cast("cudaDataType") int computeType,
+      Pointer bufferOnDevice,
+      @Cast("size_t") long workspaceInBytesOnDevice,
+      Pointer bufferOnHost,
+      @Cast("size_t") long workspaceInBytesOnHost,
+      IntPointer info);
+  public static native @Cast("cusolverStatus_t") int cusolverDnXgeev(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobvl,
+      @Cast("cusolverEigMode_t") int jobvr,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      Pointer W,
+      @Cast("cudaDataType") int dataTypeVL,
+      Pointer VL,
+      @Cast("int64_t") long ldvl,
+      @Cast("cudaDataType") int dataTypeVR,
+      Pointer VR,
+      @Cast("int64_t") long ldvr,
+      @Cast("cudaDataType") int computeType,
+      Pointer bufferOnDevice,
+      @Cast("size_t") long workspaceInBytesOnDevice,
+      Pointer bufferOnHost,
+      @Cast("size_t") long workspaceInBytesOnHost,
+      IntBuffer info);
+  public static native @Cast("cusolverStatus_t") int cusolverDnXgeev(
+      cusolverDnContext handle,
+      cusolverDnParams params,
+      @Cast("cusolverEigMode_t") int jobvl,
+      @Cast("cusolverEigMode_t") int jobvr,
+      @Cast("int64_t") long n,
+      @Cast("cudaDataType") int dataTypeA,
+      Pointer A,
+      @Cast("int64_t") long lda,
+      @Cast("cudaDataType") int dataTypeW,
+      Pointer W,
+      @Cast("cudaDataType") int dataTypeVL,
+      Pointer VL,
+      @Cast("int64_t") long ldvl,
+      @Cast("cudaDataType") int dataTypeVR,
+      Pointer VR,
+      @Cast("int64_t") long ldvr,
       @Cast("cudaDataType") int computeType,
       Pointer bufferOnDevice,
       @Cast("size_t") long workspaceInBytesOnDevice,
@@ -14227,7 +14391,7 @@ public static final int
 //   #define CUSOLVERSP_H_
 
 //   #include "cusparse.h"
-//   #include "cublas_api.h"
+//   #include "cublas_v2.h"
 //   #include "cusolver_common.h"
 
 //   #if defined(__cplusplus)

@@ -26,7 +26,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  This layer shuffles data by applying in sequence: a transpose operation, a reshape operation
  *  and a second transpose operation. The dimension types of the output are those of the reshape dimension.
  * 
- *  The layer has an optional second input. If present, it must be a 1D Int32 shape tensor,
+ *  The layer has an optional second input. If present, it must be a 1D tensor of type Int32 or Int64,
  *  and the reshape dimensions are taken from it.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
@@ -138,7 +138,7 @@ public class IShuffleLayer extends ILayer {
     /** The indices in the dynamic case are as follows:
     /**
     /** - 0: Data or Shape tensor to be shuffled.
-    /** - 1: The dimensions for the reshape operation, as a 1D Int32 shape tensor.
+    /** - 1: The dimensions for the reshape operation, as a 1D tensor of type Int32 or Int64.
     /**
     /** If this function is called with the value 1, then the function getNbInputs() changes
     /** from returning 1 to 2.
