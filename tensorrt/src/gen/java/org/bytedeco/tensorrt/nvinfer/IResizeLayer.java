@@ -209,7 +209,7 @@ public class IResizeLayer extends ILayer {
      *  The indices in the dynamic case are as follows:
      * 
      *  - 0: Execution tensor to be resized.
-     *  - 1: The output dimensions, as a 1D Int32 shape tensor.
+     *  - 1: The output dimensions, as a 1D tensor of type Int32 or Int64.
      * 
      *  If this function is called with the value 1, then the function getNbInputs() changes
      *  from returning 1 to 2.

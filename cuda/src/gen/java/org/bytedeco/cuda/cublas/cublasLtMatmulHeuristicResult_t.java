@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cublas.*;
 
 
-/** Results structure used by cublasLtMatmulGetAlgo.
+/** Results structure used by cublasLtMatmulAlgoGetHeuristic
  *
  * Holds returned configured algo descriptor and its runtime properties.
  */

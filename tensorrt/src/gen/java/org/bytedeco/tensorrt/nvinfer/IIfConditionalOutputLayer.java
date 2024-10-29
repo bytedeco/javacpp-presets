@@ -24,7 +24,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief This layer represents an output of an IIfConditional.
  * 
- *  An IIfConditionalOutputLayer has exactly one output.
+ *  An IIfConditionalOutputLayer has two inputs and one output.
+ * 
+ *  @see IIfConditional::addOutput
  *  */
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IIfConditionalOutputLayer extends IIfConditionalBoundaryLayer {

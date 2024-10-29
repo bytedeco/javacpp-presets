@@ -24,8 +24,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief A convolution layer in a network definition.
  * 
- *  This layer performs a correlation operation between 3-dimensional filter with a 4-dimensional tensor to produce
- *  another 4-dimensional tensor.
+ *  This layer performs a correlation operation between 3 or 4 dimensional filter with a 4 or 5 dimensional tensor to
+ *  produce another 4 or 5 dimensional tensor.
  * 
  *  An optional bias argument is supported, which adds a per-channel constant to each value in the output.
  * 

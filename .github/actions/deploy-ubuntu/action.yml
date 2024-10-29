@@ -41,18 +41,18 @@ runs:
           export ARCH=arm64
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-6-local-12.6.0_560.28.03-1.aarch64.rpm
-          export CUDNN=cuda-12-9.3.0.75-1.aarch64
-          export NCCL=2.22.3-1+cuda12.5.aarch64
-          export NVCOMP=nvcomp-linux-sbsa-4.0.0-cuda12.5
+          export CUDA=cuda-repo-rhel8-12-6-local-12.6.2_560.35.03-1.aarch64.rpm
+          export CUDNN=cuda-12-9.5.1.17-1.aarch64
+          export NCCL=2.23.4-1+cuda12.6.aarch64
+          export NVCOMP=nvcomp-linux-sbsa-4.0.1-cuda12.x
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export ARCH_CUDA=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-6-local-12.6.0_560.28.03-1.ppc64le.rpm
-          export CUDNN=cuda-12-9.3.0.75-1.ppc64le
-          export NCCL=2.22.3-1+cuda12.5.ppc64le
+          export CUDA=cuda-repo-rhel8-12-6-local-12.6.2_560.35.03-1.ppc64le.rpm
+          export CUDNN=cuda-12-9.5.1.17-1.ppc64le
+          export NCCL=2.23.4-1+cuda12.6.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-riscv64" ]]; then
           export ARCH=riscv64
           export PREFIX=riscv64-linux-gnu
@@ -63,10 +63,10 @@ runs:
           export ARCH=amd64
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-6-local-12.6.0_560.28.03-1.x86_64.rpm
-          export CUDNN=cuda-12-9.3.0.75-1.x86_64
-          export NCCL=2.22.3-1+cuda12.5.x86_64
-          export NVCOMP=nvcomp-linux-x86_64-4.0.0-cuda12.5
+          export CUDA=cuda-repo-rhel8-12-6-local-12.6.2_560.35.03-1.x86_64.rpm
+          export CUDNN=cuda-12-9.5.1.17-1.x86_64
+          export NCCL=2.23.4-1+cuda12.6.x86_64
+          export NVCOMP=nvcomp-linux-x86_64-4.0.1-cuda12.x
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -165,7 +165,7 @@ runs:
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/12.6.0/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.6.2/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-devel-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-$NCCL.rpm
@@ -183,7 +183,7 @@ runs:
           for f in /usr/local/cuda/lib64/libcudnn*so.9.*; do $SUDO ln -sf $f ${f:0:${#f}-4}; $SUDO ln -sf $f ${f:0:${#f}-6}; done
 
           if [[ -n ${NVCOMP:-} ]]; then
-            curl -LO https://developer.download.nvidia.com/compute/nvcomp/4.0.0/local_installers/$NVCOMP.tar.gz
+            curl -LO https://developer.download.nvidia.com/compute/nvcomp/4.0.1/local_installers/$NVCOMP.tar.gz
             $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/lib64/ --strip-components=1 lib/ || $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/lib64/ --strip-components=2 nvcomp/lib/
             $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/include/ --strip-components=1 include/ || $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/include/ --strip-components=2 nvcomp/include/
             rm -f $NVCOMP.tar.gz
@@ -213,16 +213,16 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.3.0/tars/TensorRT-10.3.0.26.Ubuntu-22.04.aarch64-gnu.cuda-12.5.tar.gz
-          $SUDO tar -hxvf TensorRT-10.3.0.26.Ubuntu-22.04.aarch64-gnu.cuda-12.5.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.5.0/tars/TensorRT-10.5.0.18.Ubuntu-24.04.aarch64-gnu.cuda-12.6.tar.gz
+          $SUDO tar -hxvf TensorRT-10.5.0.18.Ubuntu-24.04.aarch64-gnu.cuda-12.6.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.3.0/tars/TensorRT-10.3.0.26.Linux.x86_64-gnu.cuda-12.5.tar.gz
-          $SUDO tar -hxvf TensorRT-10.3.0.26.Linux.x86_64-gnu.cuda-12.5.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.5.0/tars/TensorRT-10.5.0.18.Linux.x86_64-gnu.cuda-12.6.tar.gz
+          $SUDO tar -hxvf TensorRT-10.5.0.18.Linux.x86_64-gnu.cuda-12.6.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

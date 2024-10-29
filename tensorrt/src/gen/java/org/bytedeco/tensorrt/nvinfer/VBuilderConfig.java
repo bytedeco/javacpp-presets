@@ -102,4 +102,6 @@ public class VBuilderConfig extends VRoot {
     public native @NoException(true) void setRuntimePlatform(RuntimePlatform runtimePlatform);
     public native @NoException(true) void setRuntimePlatform(@Cast("nvinfer1::RuntimePlatform") int runtimePlatform);
     public native @NoException(true) RuntimePlatform getRuntimePlatform();
+    public native @NoException(true) void setMaxNbTactics(int maxTactics);
+    public native @NoException(true) int getMaxNbTactics();
 }

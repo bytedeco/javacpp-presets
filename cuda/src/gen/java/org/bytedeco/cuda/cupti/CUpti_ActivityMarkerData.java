@@ -16,6 +16,8 @@ import static org.bytedeco.cuda.global.cupti.*;
 /**
  * \brief The activity record providing detailed information for a marker.
  *
+ * User must enable CUPTI_ACTIVITY_KIND_MARKER as well
+ * to get records for marker data.
  * The marker data contains color, payload, and category.
  * (CUPTI_ACTIVITY_KIND_MARKER_DATA).
  */

@@ -777,8 +777,9 @@ public static final int
   CUPTI_ACTIVITY_KIND_MARKER = 12,
 
   /**
-   * Extended, optional, data about a marker. The corresponding
-   * activity record structure is \ref CUpti_ActivityMarkerData.
+   * Extended, optional, data about a marker. User must enable
+   * CUPTI_ACTIVITY_KIND_MARKER as well to get records for marker data.
+   * The corresponding activity record structure is \ref CUpti_ActivityMarkerData.
    */
   CUPTI_ACTIVITY_KIND_MARKER_DATA = 13,
 
@@ -4105,7 +4106,7 @@ public static final int
   /**
    * Domain containing callback points for various states.
    */
-  CUPTI_CB_DOMAIN_STATE = 6,
+  CUPTI_CB_DOMAIN_STATE             = 6,
 
   CUPTI_CB_DOMAIN_SIZE = 7,
 
@@ -4293,6 +4294,7 @@ public static final int
 
 
 // Targeting ../cupti/CUpti_StateData.java
+
 
 
 /**

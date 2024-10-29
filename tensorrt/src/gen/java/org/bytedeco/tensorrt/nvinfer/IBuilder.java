@@ -47,22 +47,27 @@ public class IBuilder extends INoCopy {
 
     /**
      *  \brief Determine whether the platform has fast native fp16.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.5. Please query data type support from CUDA directly.
      *  */
     
     
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean platformHasFastFp16();
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean platformHasFastFp16();
 
     /**
      *  \brief Determine whether the platform has fast native int8.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.5. Please query data type support from CUDA directly.
      *  */
     
     
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean platformHasFastInt8();
+    public native @Cast("bool") @Deprecated @NoException(true) boolean platformHasFastInt8();
 
     /**
      *  \brief Get the maximum batch size DLA can support.
@@ -216,10 +221,13 @@ public class IBuilder extends INoCopy {
     
     //!
     //!
+    //!
     public native @NoException(true) void reset();
 
     /**
      *  \brief Determine whether the platform has TF32 support.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.5. Please query data type support from CUDA directly.
      *  */
     
     
@@ -230,7 +238,7 @@ public class IBuilder extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean platformHasTf32();
+    public native @Cast("bool") @Deprecated @NoException(true) boolean platformHasTf32();
 
     /**
      *  \brief Builds and serializes a network for the given INetworkDefinition and IBuilderConfig.

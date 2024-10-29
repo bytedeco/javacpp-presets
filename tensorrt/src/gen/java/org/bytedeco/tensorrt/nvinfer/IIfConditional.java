@@ -64,6 +64,7 @@ public class IIfConditional extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) IConditionLayer setCondition(@ByRef ITensor condition);
 
     /**
@@ -74,6 +75,8 @@ public class IIfConditional extends INoCopy {
      * 
      *  Each output layer of an IIfConditional represents a single output of either the true-subgraph or the
      *  false-subgraph of an IIfConditional, depending on which subgraph was executed.
+     * 
+     *  The shapes of the two tensors must be equal unless the condition is a build-time constant.
      * 
      *  @see IIfConditionalOutputLayer
      *  */

@@ -12,19 +12,19 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.3-1.5.11-SNAPSHOT</version>
+            <version>10.5-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.6-9.3-1.5.11-SNAPSHOT</version>
+            <version>12.6-9.5-1.5.11-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.3-1.5.11-SNAPSHOT</version>
+            <version>10.5-1.5.11-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

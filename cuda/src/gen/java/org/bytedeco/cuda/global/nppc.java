@@ -88,7 +88,7 @@ public static final int NPP_VER_PATCH = 1;
 /**
  * Build version
  */
-public static final int NPP_VER_BUILD = 23;
+public static final int NPP_VER_BUILD = 54;
 
 /**
  * Full version

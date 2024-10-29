@@ -100,7 +100,7 @@ public class ILoopOutputLayer extends ILoopBoundaryLayer {
     /** The indices in the kCONCATENATE or kREVERSE cases are as follows:
     /**
     /** - 0: Contribution to the output tensor.  The contribution must come from inside the loop.
-    /** - 1: The concatenation length scalar value, must come from outside the loop, as a 0D Int32 or Int64 shape tensor.
+    /** - 1: The concatenation length scalar value, must come from outside the loop, as a 0D shape tensor of type Int32 or Int64.
     /**
     /** If this function is called with the value 1, then the function getNbInputs() changes
     /** from returning 1 to 2.

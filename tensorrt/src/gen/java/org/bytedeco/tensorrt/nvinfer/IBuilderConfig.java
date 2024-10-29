@@ -1076,5 +1076,35 @@ public class IBuilderConfig extends INoCopy {
      * 
      *  @see IBuilderConfig::setRuntimePlatform()
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) RuntimePlatform getRuntimePlatform();
+
+    /**
+     *  \brief Set the maximum number of tactics to time when there is a choice of tactics.
+     * 
+     *  This function controls the number of tactics timed when there are multiple tactics to choose from.
+     * 
+     *  @see getMaxNbTactics()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setMaxNbTactics(int maxNbTactics);
+
+    /**
+     *  \brief Query the maximum number of tactics timed when there is a choice.
+     * 
+     *  By default the value is -1, indicating TensorRT can determine the number of tactics based on its own heuristic.
+     * 
+     *  @see setMaxNbTactics()
+     *  */
+    public native @NoException(true) int getMaxNbTactics();
 }

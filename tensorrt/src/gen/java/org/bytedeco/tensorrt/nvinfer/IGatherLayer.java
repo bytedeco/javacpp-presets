@@ -37,7 +37,6 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *      * GatherMode::kDEFAULT: s = q + r - 1 - nbElementwiseDims
  *      * GatherMode::kND:      s = q + r - indices.d[q-1] - 1 - nbElementwiseDims
  *      * GatherMode::kELEMENT: s = q = r.
- *  The output can be a shape tensor only if the mode is GatherMode::kDEFAULT.
  * 
  *  The dimensions of the output likewise depends on the mode:
  * 
