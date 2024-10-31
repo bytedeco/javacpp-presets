@@ -51,6 +51,10 @@ public class nvcomp implements InfoMapper {
                              "nvcomp::set_scratch_allocators",
                              "PinnedPtrPool",
                              // TODO: Fix bitcomp symbols
+                             "nvcompBatchedGzipCompressAsync",
+                             "nvcompBatchedGzipCompressGetTempSize",
+                             "nvcompBatchedGzipCompressGetTempSizeEx",
+                             "nvcompBatchedGzipCompressGetMaxOutputChunkSize",
                              "nvcompBitcompDecompressConfigure",
                              "nvcompBitcompCompressAsync",
                              "nvcompBitcompCompressConfigure",

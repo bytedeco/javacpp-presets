@@ -31,6 +31,8 @@ public class nvcomp extends org.bytedeco.cuda.presets.nvcomp {
 
 // #pragma once
 
+// #include <stddef.h>
+
 /** enum nvcompStatus_t */
 public static final int
   nvcompSuccess = 0,
@@ -45,6 +47,9 @@ public static final int
   nvcompErrorChunkSizeTooLarge = 18,
   nvcompErrorCudaError = 1000,
   nvcompErrorInternal = 10000;
+// Targeting ../nvcomp/nvcompAlignmentRequirements_t.java
+
+
 
 
 // Parsed from <nvcomp.h>
@@ -291,6 +296,7 @@ public static final int
 // #include "cascaded.hpp"
 // #include "zstd.hpp"
 // #include "deflate.hpp"
+// #include "gzip.hpp"
 
 // #include <cassert>
 // #include <stdint.h>
@@ -371,7 +377,7 @@ public static final int
 /** enum nvcompANSDataType_t */
 public static final int
     uint8 = 0,
-    float16 = 1; // requires uncomp chunk size to be multiple of 2
+    float16 = 1;
 // Targeting ../nvcomp/nvcompBatchedANSOpts_t.java
 
 
@@ -381,11 +387,24 @@ public static final int
 @MemberGetter public static native @Cast("const size_t") long nvcompANSCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompANSRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedANSOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -446,13 +465,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxO
 /**
  * \brief Perform batched asynchronous compression.
  *
- * The caller is responsible for passing device_compressed_chunk_bytes of size
- * sufficient to hold compressed data
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
  * should reside in device-accessible memory.
- * Each pointer must be aligned to an 8-byte boundary.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedANSCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
@@ -460,6 +482,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxO
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] The temporary GPU workspace, could be NULL in case
  * temporary memory is not needed.
+ * Must be aligned to the value in the {@code temp} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedANSCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
  * {@code device_temp_ptr}.
  * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
@@ -467,7 +493,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxO
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedANSCompressGetMaxOutputChunkSize}.
- * Each pointer must be aligned to an 8-byte boundary.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedANSCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -498,6 +527,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressAsync(
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
     @ByVal nvcompBatchedANSOpts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedANSDecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -535,15 +569,20 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTe
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedANSDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
  * If there is an error when retrieving the size of a chunk, the
  * uncompressed size of that chunk will be set to 0. This argument needs to
- * be prealloated in device-accessible memory.
+ * be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -565,13 +604,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSi
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * NOTE: This function is used to decompress compressed buffers produced by
+ * This function is used to decompress compressed buffers produced by
  * {@code nvcompBatchedANSCompressAsync}.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory and start at a location with
- * 8-byte alignment.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedANSDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -585,12 +627,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSi
  * This argument needs to be preallocated.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space, could be NULL in case temporary space is not needed.
+ * Must be aligned to the value in {@code nvcompBatchedANSDecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes,
- * and start at a location with 8-byte alignment.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedANSDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -704,20 +748,35 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync
 // #include <stdint.h>
 
 // #ifdef __cplusplus
-// Targeting ../nvcomp/nvcompBatchedBitcompFormatOpts.java
+// Targeting ../nvcomp/nvcompBatchedBitcompOpts_t.java
 
 
 
-@MemberGetter public static native @Const @ByRef nvcompBatchedBitcompFormatOpts nvcompBatchedBitcompDefaultOpts();
+/** Legacy alias for \ref nvcompBatchedBitcompOpts_t. */
+
+@MemberGetter public static native @Const @ByRef nvcompBatchedBitcompOpts_t nvcompBatchedBitcompDefaultOpts();
 
 @MemberGetter public static native @Cast("const size_t") long nvcompBitcompCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompBitcompRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedBitcompOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -726,7 +785,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
- * batch.
+ * batch. This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param format_opts [in] Compression options.
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily
  * required during compression.
@@ -736,7 +796,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetTempSize(
     @Cast("size_t") long num_chunks,
     @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompFormatOpts format_opts,
+    @ByVal nvcompBatchedBitcompOpts_t format_opts,
     @Cast("size_t*") SizeTPointer temp_bytes);
 
 /**
@@ -746,8 +806,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * NOTE: Bitcomp currently doesn't use any temp memory.
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
- * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
- * batch.
+ * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk 
+ * in the batch. This parameter is currently unused. Set it to either
+ * the actual value or zero.
  * @param format_opts [in] Compression options.
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily
  * required during compression.
@@ -759,7 +820,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetTempSizeEx(
     @Cast("size_t") long num_chunks,
     @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompFormatOpts format_opts,
+    @ByVal nvcompBatchedBitcompOpts_t format_opts,
     @Cast("size_t*") SizeTPointer temp_bytes,
     @Cast("const size_t") long max_total_uncompressed_bytes);
 
@@ -776,24 +837,30 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGetMaxOutputChunkSize(
     @Cast("size_t") long max_uncompressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompFormatOpts format_opts,
+    @ByVal nvcompBatchedBitcompOpts_t format_opts,
     @Cast("size_t*") SizeTPointer max_compressed_chunk_bytes);
 
 /**
  * \brief Perform batched asynchronous compression.
  *
- * NOTE: The maximum number of chunks allowed is 2^31.
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
- * should reside in device-accessible memory. The uncompressed data must start
- * at locations with alignments of the data type size.
+ * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedBitcompCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
- * Each chunk size MUST be a multiple of the size of the data type specified by
- * format_opts.data_type, else this may crash or produce invalid output.
- * @param max_uncompressed_chunk_bytes [in] This argument is not used.
+ * Each chunk size must be a multiple of the size of the data type specified by
+ * format_opts.data_type.
+ * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
+ * batch. This parameter is currently unused. 
+ * Set it to either the actual value or zero.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] This argument is not used.
  * @param temp_bytes [in] This argument is not used.
@@ -802,7 +869,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedBitcompCompressGetMaxOutputChunkSize}.
- * Each compressed buffer should start at a location with 8-byte alignment.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedBitcompCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -820,7 +890,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsy
     @Cast("size_t") long temp_bytes,
     @Cast("void*const*") PointerPointer device_compressed_chunk_ptrs,
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompFormatOpts format_opts,
+    @ByVal nvcompBatchedBitcompOpts_t format_opts,
     CUstream_st stream);
 public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsync(
     @Cast("const void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
@@ -831,8 +901,13 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressAsy
     @Cast("size_t") long temp_bytes,
     @Cast("void*const*") @ByPtrPtr Pointer device_compressed_chunk_ptrs,
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
-    @ByVal nvcompBatchedBitcompFormatOpts format_opts,
+    @ByVal nvcompBatchedBitcompOpts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedBitcompDecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -871,14 +946,19 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressG
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedBitcompDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] This argument is not used.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
  * If there is an error when retrieving the size of a chunk, the
  * uncompressed size of that chunk will be set to 0. This argument needs to
- * be prealloated in device-accessible memory.
+ * be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -900,19 +980,25 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompre
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * NOTE: This function is used to decompress compressed buffers produced by
+ * This function is used to decompress compressed buffers produced by
  * {@code nvcompBatchedBitcompCompressAsync}. It can also decompress buffers
  * compressed with the standalone Bitcomp library.
  * 
- * NOTE: The function is not completely asynchronous, as it needs to look
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
+ * \note The function is not completely asynchronous, as it needs to look
  * at the compressed data in order to create the proper bitcomp handle.
  * The stream is synchronized, the data is examined, then the asynchronous
  * decompression is launched.
+ * 
+ * \note An asynchronous, faster version of batched Bitcomp asynchrnous decompression
+ * is available, and can be launched via the HLIF manager.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory and start at a location with
- * 8-byte alignment.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedBitcompDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] This argument is not used.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
  * in bytes, of the output buffers to be filled with uncompressed data for each chunk.
@@ -929,7 +1015,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompre
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedBitcompDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -1041,9 +1129,6 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressA
 // #include <stdint.h>
 
 // #ifdef __cplusplus
-// Targeting ../nvcomp/nvcompCascadedFormatOpts.java
-
-
 // Targeting ../nvcomp/nvcompBatchedCascadedOpts_t.java
 
 
@@ -1054,11 +1139,24 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressA
 @MemberGetter public static native @Cast("const size_t") long nvcompCascadedCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompCascadedRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedCascadedOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -1068,7 +1166,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressA
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
- * batch.
+ * batch. This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param format_opts [in] The Cascaded compression options and datatype to use.
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily
  * required during compression.
@@ -1090,7 +1189,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
- * batch.
+ * batch. This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param format_opts [in] The Cascaded compression options and datatype to use.
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily
  * required during compression.
@@ -1128,16 +1228,24 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * \note The current implementation does not support uncompressed size larger
  * than 4,294,967,295 bytes (max uint32_t).
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
- * should reside in device-accessible memory. The uncompressed data must start
- * at locations with alignments of the data type size.
+ * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedCascadedCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
- * Each chunk size MUST be a multiple of the size of the data type specified by
+ * Each chunk size must be a multiple of the size of the data type specified by
  * format_opts.type, else this may crash or produce invalid output.
- * @param max_uncompressed_chunk_bytes [in] This argument is not used.
+ * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
+ * This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] This argument is not used.
  * @param temp_bytes [in] This argument is not used.
@@ -1145,9 +1253,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * to the output compressed buffers. Both the pointers and the compressed
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
- * {@code nvcompBatchedCascadedCompressGetMaxOutputChunkSize}. Each
- * compressed buffer should start at a location with alignment of both 4B and
- * the data type.
+ * {@code nvcompBatchedCascadedCompressGetMaxOutputChunkSize}.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedCascadedCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -1178,6 +1288,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressAs
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
     @ByVal nvcompBatchedCascadedOpts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedCascadedDecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -1215,15 +1330,20 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedCascadedDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
  * If there is an error when retrieving the size of a chunk, the
  * uncompressed size of that chunk will be set to 0. This argument needs to
- * be prealloated in device-accessible memory.
+ * be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -1245,13 +1365,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompr
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note This function is used to decompress compressed buffers produced by
+ * This function is used to decompress compressed buffers produced by
  * {@code nvcompBatchedCascadedCompressAsync}.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory and start at a location with
- * alignment of both 4B and the data type.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedCascadedDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -1269,8 +1392,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompr
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes,
- * and start at a location with alignment of the data type.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedCascadedDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -1325,7 +1449,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
     @Cast("void*const*") @ByPtrPtr Pointer device_uncompressed_chunk_ptrs,
     @Cast("nvcompStatus_t*") int[] device_statuses,
     CUstream_st stream);
-
+    
 // #ifdef __cplusplus
 // #endif
 
@@ -1440,11 +1564,24 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCRC32Async(
 @MemberGetter public static native @Cast("const size_t") long nvcompDeflateCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompDeflateRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedDeflateOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -1517,19 +1654,28 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
 /**
  * \brief Perform batched asynchronous compression.
  *
- * The individual chunk size must not exceed
- * 65536 bytes. For best performance, a chunk size of 65536 bytes is
- * recommended. The output buffers must be 8-byte aligned.
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
  * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedDeflateCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
+ * Chunk sizes must not exceed 65536 bytes. For best performance, a chunk size
+ * of 65536 bytes is recommended.
  * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] The temporary GPU workspace.
+ * Must be aligned to the value in the {@code temp} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedDeflateCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
  * {@code device_temp_ptr}.
  * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
@@ -1537,6 +1683,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedDeflateCompressGetMaxOutputChunkSize}.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedDeflateCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -1567,6 +1717,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressAsy
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
     @ByVal nvcompBatchedDeflateOpts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedDeflateDecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -1605,10 +1760,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressG
  * each compressed chunk.
  *
  * This is needed when we do not know the expected output size.
- * NOTE: If the stream is corrupt, the sizes will be garbage.
+ *
+ * \note If the stream is corrupt, the calculated sizes will be invalid.
+ *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedDeflateDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
@@ -1634,13 +1795,17 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompre
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * In the case where a chunk of compressed data is not a valid Deflate
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
+ * \note In the case where a chunk of compressed data is not a valid Deflate
  * stream, 0 will be written for the size of the invalid chunk and
  * nvcompStatusCannotDecompress will be flagged for that chunk.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedDeflateDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -1655,11 +1820,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompre
  * in which case the actual sizes are not reported.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space.
+ * Must be aligned to the value in {@code nvcompBatchedDeflateDecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedDeflateDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -1781,11 +1949,24 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressA
 @MemberGetter public static native @Cast("const size_t") long nvcompGdeflateCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompGdeflateRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedGdeflateOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -1858,19 +2039,28 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
 /**
  * \brief Perform batched asynchronous compression.
  *
- * The individual chunk size must not exceed
- * 65536 bytes. For best performance, a chunk size of 65536 bytes is
- * recommended. The output buffers must be 8-byte aligned.
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
  * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedGdeflateCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
+ * Chunk sizes must not exceed 65536 bytes. For best performance, a chunk size
+ * of 65536 bytes is recommended.
  * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] The temporary GPU workspace.
+ * Must be aligned to the value in the {@code temp} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedGdeflateCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
  * {@code device_temp_ptr}.
  * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
@@ -1878,6 +2068,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedGdeflateCompressGetMaxOutputChunkSize}.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedGdeflateCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -1908,6 +2102,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressAs
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
     @ByVal nvcompBatchedGdeflateOpts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedGdeflateDecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -1946,10 +2145,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  * each compressed chunk.
  *
  * This is needed when we do not know the expected output size.
- * NOTE: If the stream is corrupt, the sizes will be garbage.
+ *
+ * \note If the stream is corrupt, the calculated sizes will be invalid.
+ *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedGdeflateDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
@@ -1975,13 +2180,17 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompr
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * In the case where a chunk of compressed data is not a valid GDeflate
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
+ * \note In the case where a chunk of compressed data is not a valid GDeflate
  * stream, 0 will be written for the size of the invalid chunk and
  * nvcompStatusCannotDecompress will be flagged for that chunk.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedGdeflateDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -1996,11 +2205,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompr
  * in which case the actual sizes are not reported.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space.
+ * Must be aligned to the value in {@code nvcompBatchedGdeflateDecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedGdeflateDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -2123,6 +2335,105 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  *****************************************************************************/
 
 /**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedGzipDecompressRequiredAlignments();
+// Targeting ../nvcomp/nvcompBatchedGzipOpts_t.java
+
+
+
+@MemberGetter public static native @Const @ByRef nvcompBatchedGzipOpts_t nvcompBatchedGzipDefaultOpts();
+
+/**
+ * \brief Get the amount of temporary memory required on the GPU for compression.
+ *
+ * Chunk size must not exceed
+ * 65536 bytes. For best performance, a chunk size of 65536 bytes is
+ * recommended.
+ *
+ * @param num_chunks [in] The number of chunks of memory in the batch.
+ * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
+ * batch.
+ * @param format_opts [in] The Gzip compression options to use.
+ * @param temp_bytes [out] The amount of GPU memory that will be temporarily
+ * required during compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+
+
+/**
+ * \brief Get the amount of temporary memory required on the GPU for compression
+ * with extra total bytes argument.
+ *
+ * Chunk size must not exceed
+ * 65536 bytes. For best performance, a chunk size of 65536 bytes is
+ * recommended.
+ *
+ * @param num_chunks [in] The number of chunks of memory in the batch.
+ * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
+ * batch.
+ * @param format_opts [in] The Gzip compression options to use.
+ * @param temp_bytes [out] The amount of GPU memory that will be temporarily
+ * required during compression.
+ * @param max_total_uncompressed_bytes [in] Upper bound on the total uncompressed
+ * size of all chunks
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+
+
+/**
+ * \brief Get the maximum size that a chunk of size at most max_uncompressed_chunk_bytes
+ * could compress to. That is, the minimum amount of output memory required to be given
+ * nvcompBatchedGzipCompressAsync() for each chunk.
+ *
+ * Chunk size must not exceed
+ * 65536 bytes. For best performance, a chunk size of 65536 bytes is
+ * recommended.
+ *
+ * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk before compression.
+ * @param format_opts [in] The Gzip compression options to use.
+ * @param max_compressed_chunk_bytes [out] The maximum possible compressed size of the chunk.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+
+
+/**
+ * \brief Perform batched asynchronous compression.
+ *
+ * The individual chunk size must not exceed
+ * 65536 bytes. For best performance, a chunk size of 65536 bytes is
+ * recommended. The output buffers must be 8-byte aligned.
+ *
+ * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
+ * to the uncompressed data chunks. Both the pointers and the uncompressed data
+ * should reside in device-accessible memory.
+ * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
+ * sizes of the uncompressed chunks in bytes.
+ * The sizes should reside in device-accessible memory.
+ * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
+ * @param num_chunks [in] Number of chunks of data to compress.
+ * @param device_temp_ptr [in] The temporary GPU workspace.
+ * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
+ * {@code device_temp_ptr}.
+ * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
+ * to the output compressed buffers. Both the pointers and the compressed
+ * buffers should reside in device-accessible memory. Each compressed buffer
+ * should be preallocated with the size given by
+ * {@code nvcompBatchedGzipCompressGetMaxOutputChunkSize}.
+ * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks,
+ * to be filled with the compressed sizes of each chunk.
+ * The buffer should be preallocated in device-accessible memory.
+ * @param format_opts [in] The Gzip compression options to use.
+ * @param stream [in] The CUDA stream to operate on.
+ *
+ * @return nvcompSuccess if successfully launched, and an error code otherwise.
+ */
+
+
+/**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
  *
  * @param num_chunks [in] Number of chunks of data to be decompressed.
@@ -2159,10 +2470,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetT
  * each compressed chunk.
  *
  * This is needed when we do not know the expected output size.
- * NOTE: If the stream is corrupt, the sizes will be garbage.
+ *
+ * \note If the stream is corrupt, the calculated sizes will be invalid.
+ *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedGzipDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
@@ -2188,13 +2505,17 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressS
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * In the case where a chunk of compressed data is not a valid gzip
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
+ * \note In the case where a chunk of compressed data is not a valid Deflate
  * stream, 0 will be written for the size of the invalid chunk and
  * nvcompStatusCannotDecompress will be flagged for that chunk.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedGzipDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -2209,11 +2530,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressS
  * in which case the actual sizes are not reported.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space.
+ * Must be aligned to the value in {@code nvcompBatchedGzipDecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedGzipDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -2299,9 +2623,6 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressAsyn
 // #include <stdint.h>
 
 // #ifdef __cplusplus
-// Targeting ../nvcomp/nvcompLZ4FormatOpts.java
-
-
 // Targeting ../nvcomp/nvcompBatchedLZ4Opts_t.java
 
 
@@ -2311,15 +2632,28 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressAsyn
 @MemberGetter public static native @Cast("const size_t") long nvcompLZ4CompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompLZ4RequiredAlignment();
 
 /******************************************************************************
  * Batched compression/decompression interface
  *****************************************************************************/
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetRequiredAlignments(
+    @ByVal nvcompBatchedLZ4Opts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -2389,23 +2723,30 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetMaxO
 /**
  * \brief Perform batched asynchronous compression.
  *
- * The individual chunk size must not exceed 16777216 bytes.
- * For best performance, a chunk size of 65536 bytes is recommended.
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
  * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedLZ4CompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
- * Each chunk size MUST be a multiple of the size of the data type specified by
- * format_opts.data_type, else this may crash or produce invalid output.
+ * Each chunk size must be a multiple of the size of the data type specified by
+ * format_opts.data_type.
+ * Chunk sizes must not exceed 16777216 bytes. For best performance, a chunk size
+ * of 65536 bytes is recommended.
  * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
- * This parameter is currently unused, so if it is not set
- * with the maximum size, it should be set to zero. If a future version makes
- * use of it, it will return an error if it is set to zero.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] The temporary GPU workspace.
+ * Must be aligned to the value in the {@code temp} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedLZ4CompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
  * {@code device_temp_ptr}.
  * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
@@ -2413,6 +2754,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetMaxO
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedLZ4CompressGetMaxOutputChunkSize}.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedLZ4CompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -2443,6 +2788,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressAsync(
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
     @ByVal nvcompBatchedLZ4Opts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedLZ4DecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -2481,15 +2831,21 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTe
  * each compressed chunk.
  *
  * This is needed when we do not know the expected output size.
- * NOTE: If the stream is corrupt, the sizes will be garbage.
+ *
+ * \note If the stream is corrupt, the calculated sizes will be invalid.
+ *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedLZ4DecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
- * This argument needs to be prealloated in device-accessible memory.
+ * This argument needs to be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -2511,13 +2867,17 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSi
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * In the case where a chunk of compressed data is not a valid LZ4
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
+ * \note In the case where a chunk of compressed data is not a valid LZ4
  * block, 0 will be written for the size of the invalid chunk and
  * nvcompStatusCannotDecompress will be flagged for that chunk.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedLZ4DecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -2532,11 +2892,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSi
  * in which case the actual sizes are not reported.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space.
+ * Must be aligned to the value in {@code nvcompBatchedLZ4DecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedLZ4DecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -2660,20 +3023,32 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressAsync
 @MemberGetter public static native @Cast("const size_t") long nvcompSnappyCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
- *
- * The Snappy compressor supports unaligned data, so this value is 1.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompSnappyRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedSnappyOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
- * batch.
+ * batch. This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param format_opts [in] Snappy compression options.
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily
  * required during compression.
@@ -2692,7 +3067,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetT
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
- * batch.
+ * batch. This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param format_opts [in] Snappy compression options.
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily
  * required during compression.
@@ -2727,19 +3103,29 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetM
 /**
  * \brief Perform batched asynchronous compression.
  *
- * The caller is responsible for passing device_compressed_chunk_bytes of size
- * sufficient to hold compressed data
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
  * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedSnappyCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
  * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
+ * This parameter is currently unused. Set it to either the actual value 
+ * or zero.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] The temporary GPU workspace, could be NULL in case
  * temporary memory is not needed.
+ * Must be aligned to the value in the {@code temp} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedSnappyCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
  * {@code device_temp_ptr}.
  * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
@@ -2747,6 +3133,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetM
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedSnappyCompressGetMaxOutputChunkSize}.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedSnappyCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -2779,11 +3169,16 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressAsyn
     CUstream_st stream);
 
 /**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedSnappyDecompressRequiredAlignments();
+
+/**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
  *
  * @param num_chunks [in] Number of chunks of data to be decompressed.
  * @param max_uncompressed_chunk_bytes [in] The size of the largest chunk in bytes
- * when uncompressed.
+ * when uncompressed. 
  * @param temp_bytes [out] The amount of GPU memory that will be temporarily required
  * during decompression.
  *
@@ -2814,15 +3209,20 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedSnappyDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
  * If there is an error when retrieving the size of a chunk, the
  * uncompressed size of that chunk will be set to 0. This argument needs to
- * be prealloated in device-accessible memory.
+ * be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -2844,9 +3244,13 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompres
 /**
  * \brief Perform batched asynchronous decompression.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedSnappyDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -2861,11 +3265,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompres
  * in which case the actual sizes are not reported.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space, could be NULL in case temporary space is not needed.
+ * Must be aligned to the value in {@code nvcompBatchedSnappyDecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedSnappyDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
@@ -2991,11 +3398,24 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressAs
 @MemberGetter public static native @Cast("const size_t") long nvcompZstdCompressionMaxAllowedChunkSize();
 
 /**
- * This is the minimum alignment required for void type CUDA memory buffers
- * passed to compression or decompression functions.  Typed memory buffers must
- * still be aligned to their type's size, e.g. 8 bytes for size_t.
+ * The most restrictive of minimum alignment requirements for void-type CUDA memory buffers
+ * used for input, output, or temporary memory, passed to compression or decompression functions.
+ * In all cases, typed memory buffers must still be aligned to their type's size, e.g., 4 bytes for {@code int}.
  */
 @MemberGetter public static native @Cast("const size_t") long nvcompZstdRequiredAlignment();
+
+/**
+ * \brief Get the minimum buffer alignment requirements for compression.
+ *
+ * @param format_opts [in] Compression options.
+ * @param alignment_requirements [out] The minimum buffer alignment requirements
+ * for compression.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetRequiredAlignments(
+    @ByVal nvcompBatchedZstdOpts_t format_opts,
+    nvcompAlignmentRequirements_t alignment_requirements);
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for compression.
@@ -3069,22 +3489,29 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMax
 /**
  * \brief Perform batched asynchronous compression.
  *
- * The individual chunk size must not exceed 16 MB.
- * For best performance, a chunk size of 64 KB is recommended.
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * to the uncompressed data chunks. Both the pointers and the uncompressed data
  * should reside in device-accessible memory.
+ * Each chunk must be aligned to the value in the {@code input} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedZstdCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_uncompressed_chunk_bytes [in] Array with size \p num_chunks of
  * sizes of the uncompressed chunks in bytes.
  * The sizes should reside in device-accessible memory.
+ * Chunk sizes must not exceed 16 MB. For best performance, a chunk size of
+ * 64 KB is recommended.
  * @param max_uncompressed_chunk_bytes [in] The size of the largest uncompressed chunk.
- * This parameter is currently unused, so if it is not set
- * with the maximum size, it should be set to zero. If a future version makes
- * use of it, it will return an error if it is set to zero.
  * @param num_chunks [in] Number of chunks of data to compress.
  * @param device_temp_ptr [in] The temporary GPU workspace, could be NULL in case
  * temporary memory is not needed.
+ * Must be aligned to the value in the {@code temp} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedZstdCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param temp_bytes [in] The size of the temporary GPU memory pointed to by
  * {@code device_temp_ptr}.
  * @param device_compressed_chunk_ptrs [out] Array with size \p num_chunks of pointers
@@ -3092,6 +3519,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMax
  * buffers should reside in device-accessible memory. Each compressed buffer
  * should be preallocated with the size given by
  * {@code nvcompBatchedZstdCompressGetMaxOutputChunkSize}.
+ * Each compressed buffer must be aligned to the value in the {@code output} member of the
+ * \ref nvcompAlignmentRequirements_t object output by
+ * {@code nvcompBatchedZstdCompressGetRequiredAlignments} when called with the same
+ * \p format_opts.
  * @param device_compressed_chunk_bytes [out] Array with size \p num_chunks, 
  * to be filled with the compressed sizes of each chunk.
  * The buffer should be preallocated in device-accessible memory.
@@ -3122,6 +3553,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressAsync(
     @Cast("size_t*") SizeTPointer device_compressed_chunk_bytes,
     @ByVal nvcompBatchedZstdOpts_t format_opts,
     CUstream_st stream);
+
+/**
+ * Minimum buffer alignment requirements for decompression.
+ */
+@MemberGetter public static native @Const @ByRef nvcompAlignmentRequirements_t nvcompBatchedZstdDecompressRequiredAlignments();
 
 /**
  * \brief Get the amount of temporary memory required on the GPU for decompression.
@@ -3158,15 +3594,20 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetT
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
  * pointers in device-accessible memory to compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedZstdDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
  * If there is an error when retrieving the size of a chunk, the
  * uncompressed size of that chunk will be set to 0. This argument needs to
- * be prealloated in device-accessible memory.
+ * be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -3188,9 +3629,13 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressS
 /**
  * \brief Perform batched asynchronous decompression.
  *
+ * \note Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour.
+ *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
- * in device-accessible memory to compressed buffers. Each compressed buffer
- * should reside in device-accessible memory.
+ * in device-accessible memory to device-accessible compressed buffers.
+ * Each buffer must be aligned to the value in
+ * {@code nvcompBatchedZstdDecompressRequiredAlignments.input}.
  * @param device_compressed_chunk_bytes [in] Array with size \p num_chunks of sizes of
  * the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_buffer_bytes [in] Array with size \p num_chunks of sizes,
@@ -3203,11 +3648,14 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressS
  * be filled with the actual number of bytes decompressed for every chunk.
  * @param num_chunks [in] Number of chunks of data to decompress.
  * @param device_temp_ptr [in] The temporary GPU space, could be NULL in case temporary space is not needed.
+ * Must be aligned to the value in {@code nvcompBatchedZstdDecompressRequiredAlignments.temp}.
  * @param temp_bytes [in] The size of the temporary GPU space.
  * @param device_uncompressed_chunk_ptrs [out] Array with size \p num_chunks of
  * pointers in device-accessible memory to decompressed data. Each uncompressed
  * buffer needs to be preallocated in device-accessible memory, have the size
- * specified by the corresponding entry in device_uncompressed_buffer_bytes.
+ * specified by the corresponding entry in \p device_uncompressed_buffer_bytes,
+ * and be aligned to the value in
+ * {@code nvcompBatchedZstdDecompressRequiredAlignments.output}.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to

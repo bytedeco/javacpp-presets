@@ -12,6 +12,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 
 import static org.bytedeco.cuda.global.nvcomp.*;
 
+// #endif
 
 /******************************************************************************
  * Batched compression/decompression interface
@@ -39,7 +40,7 @@ public class nvcompBatchedCascadedOpts_t extends Pointer {
     }
 
   /**
-   * \brief The size of each internal chunk of data to decompress indepentently with
+   * \brief The size of each internal chunk of data to decompress independently with
    * 
    * Cascaded compression. The value should be in the range of [512, 16384]
    * depending on the datatype of the input and the shared memory size of

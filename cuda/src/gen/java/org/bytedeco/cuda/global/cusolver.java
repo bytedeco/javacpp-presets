@@ -370,7 +370,7 @@ public static final int
 //   #include <stdio.h>
 
 //   #include "cuComplex.h" /* import complex data type */
-//   #include "cublas_v2.h"
+//   #include "cublas_api.h"
 //   #include "cusolver_common.h"
 
   /*******************************************************************************/
@@ -14391,7 +14391,7 @@ public static final int
 //   #define CUSOLVERSP_H_
 
 //   #include "cusparse.h"
-//   #include "cublas_v2.h"
+//   #include "cublas_api.h"
 //   #include "cusolver_common.h"
 
 //   #if defined(__cplusplus)

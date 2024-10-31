@@ -196,7 +196,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.14.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
- * MKL 2024.x  https://software.intel.com/mkl
+ * MKL 2025.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 3.6.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.28  http://www.openblas.net/
@@ -219,7 +219,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 12.6.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 9.5.x  https://developer.nvidia.com/cudnn
    * NCCL 2.23.x  https://developer.nvidia.com/nccl
-   * nvCOMP 4.0.x https://developer.nvidia.com/nvcomp
+   * nvCOMP 4.1.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 12.2.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
@@ -228,7 +228,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.18.x  https://github.com/tensorflow/tensorflow
  * TensorRT 10.5.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.50.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * Triton Inference Server 2.51.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.17.x  https://github.com/onnx/onnx
