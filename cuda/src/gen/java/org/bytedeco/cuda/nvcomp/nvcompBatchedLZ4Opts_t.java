@@ -12,6 +12,11 @@ import static org.bytedeco.cuda.global.cudart.*;
 
 import static org.bytedeco.cuda.global.nvcomp.*;
 
+// #endif
+
+/******************************************************************************
+ * Batched compression/decompression interface for LZ4
+ *****************************************************************************/
 
 /**
  * LZ4 compression options for the low-level API

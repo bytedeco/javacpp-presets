@@ -202,7 +202,7 @@ cp -a 3rdparty/dlpack/include/dlpack 3rdparty/dmlc-core/include/dmlc ../include
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(attr cloudpickle decorator ml_dtypes psutil synr typed_ast tornado typing_extensions tvm)
+export MODULES=(attr cloudpickle decorator ml_dtypes packaging psutil synr typed_ast tornado typing_extensions tvm)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE*/$MODULE* ../python/ || true

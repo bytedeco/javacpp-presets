@@ -44,7 +44,7 @@ runs:
           export CUDA=cuda-repo-rhel8-12-6-local-12.6.2_560.35.03-1.aarch64.rpm
           export CUDNN=cuda-12-9.5.1.17-1.aarch64
           export NCCL=2.23.4-1+cuda12.6.aarch64
-          export NVCOMP=nvcomp-linux-sbsa-4.0.1-cuda12.x
+          export NVCOMP=nvcomp-linux-sbsa-4.1.0.6_cuda12-archive
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
@@ -66,7 +66,7 @@ runs:
           export CUDA=cuda-repo-rhel8-12-6-local-12.6.2_560.35.03-1.x86_64.rpm
           export CUDNN=cuda-12-9.5.1.17-1.x86_64
           export NCCL=2.23.4-1+cuda12.6.x86_64
-          export NVCOMP=nvcomp-linux-x86_64-4.0.1-cuda12.x
+          export NVCOMP=nvcomp-linux-x86_64-4.1.0.6_cuda12-archive
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -183,9 +183,9 @@ runs:
           for f in /usr/local/cuda/lib64/libcudnn*so.9.*; do $SUDO ln -sf $f ${f:0:${#f}-4}; $SUDO ln -sf $f ${f:0:${#f}-6}; done
 
           if [[ -n ${NVCOMP:-} ]]; then
-            curl -LO https://developer.download.nvidia.com/compute/nvcomp/4.0.1/local_installers/$NVCOMP.tar.gz
-            $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/lib64/ --strip-components=1 lib/ || $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/lib64/ --strip-components=2 nvcomp/lib/
-            $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/include/ --strip-components=1 include/ || $SUDO tar -xvf $NVCOMP.tar.gz -C /usr/local/cuda/include/ --strip-components=2 nvcomp/include/
+            curl -LO https://developer.download.nvidia.com/compute/nvcomp/redist/nvcomp/linux-$ARCH_CUDA/$NVCOMP.tar.xz
+            $SUDO tar --wildcards -xvf $NVCOMP.tar.xz -C /usr/local/cuda/lib64/ --strip-components=2 */lib/
+            $SUDO tar --wildcards -xvf $NVCOMP.tar.xz -C /usr/local/cuda/include/ --strip-components=2 */include/
             rm -f $NVCOMP.tar.gz
           fi
 
@@ -228,8 +228,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/89a381f6-f85d-4dda-ae62-30d51470f53c/l_onemkl_p_2024.2.2.17_offline.sh
-          $SUDO bash l_onemkl_p_2024.2.2.17_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/79153e0f-74d7-45af-b8c2-258941adf58a/intel-onemkl-2025.0.0.940_offline.sh
+          $SUDO bash intel-onemkl-2025.0.0.940_offline.sh -s -a -s --eula accept
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
         fi
 

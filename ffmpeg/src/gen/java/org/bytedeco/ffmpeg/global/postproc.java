@@ -217,7 +217,7 @@ public static final int LIBPOSTPROC_VERSION_MAJOR =  58;
 
 // #include "version_major.h"
 
-public static final int LIBPOSTPROC_VERSION_MINOR =   1;
+public static final int LIBPOSTPROC_VERSION_MINOR =   3;
 public static final int LIBPOSTPROC_VERSION_MICRO = 100;
 
 // #define LIBPOSTPROC_VERSION_INT AV_VERSION_INT(LIBPOSTPROC_VERSION_MAJOR,

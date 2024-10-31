@@ -102,7 +102,7 @@ runs:
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.6.2/local_installers/cuda_12.6.2_560.94_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-x86_64/cudnn-windows-x86_64-9.5.1.17_cuda12-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
-          curl -LO https://developer.download.nvidia.com/compute/nvcomp/4.0.1/local_installers/nvcomp-windows-x86_64-4.0.1-cuda12.x.zip
+          curl -LO https://developer.download.nvidia.com/compute/nvcomp/redist/nvcomp/windows-x86_64/nvcomp-windows-x86_64-4.1.0.6_cuda12-archive.zip
           cuda_11.8.0_522.06_windows.exe -s
           bash -c "rm -Rf 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8'"
           bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt' 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old'"
@@ -111,17 +111,15 @@ runs:
           bash -c "ls 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
           unzip cudnn-windows-x86_64-9.5.1.17_cuda12-archive.zip
           unzip zlib123dllx64.zip
-          unzip nvcomp-windows-x86_64-4.0.1-cuda12.x.zip
+          unzip nvcomp-windows-x86_64-4.1.0.6_cuda12-archive.zip
           move cudnn-windows-x86_64-9.5.1.17_cuda12-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\bin"
           move cudnn-windows-x86_64-9.5.1.17_cuda12-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
           move cudnn-windows-x86_64-9.5.1.17_cuda12-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\bin"
-          move nvcomp\include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-          move nvcomp\include\device "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-          move nvcomp\include\native "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-          move nvcomp\include\nvcomp "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-          move nvcomp\lib\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\bin"
-          move nvcomp\lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64"
+          move nvcomp-windows-x86_64-4.1.0.6_cuda12-archive\include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
+          move nvcomp-windows-x86_64-4.1.0.6_cuda12-archive\include\nvcomp "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
+          move nvcomp-windows-x86_64-4.1.0.6_cuda12-archive\bin\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\bin"
+          move nvcomp-windows-x86_64-4.1.0.6_cuda12-archive\lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64"
 
           rem echo Applying hotfix to Visual Studio 2019 for CUDA
           rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
@@ -151,8 +149,8 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/9fe96489-78fe-4fea-8cc2-2ddf7de0246a/w_onemkl_p_2024.2.2.16_offline.exe
-          w_onemkl_p_2024.2.2.16_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e0a45889-f395-47d6-811d-0f3d8caae4a0/intel-onemkl-2025.0.0.929_offline.exe
+          intel-onemkl-2025.0.0.929_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
