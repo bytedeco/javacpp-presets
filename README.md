@@ -227,13 +227,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * SentencePiece 0.2.0  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.18.x  https://github.com/tensorflow/tensorflow
- * TensorRT 10.5.x  https://developer.nvidia.com/tensorrt
+ * TensorRT 10.6.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.51.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.17.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.19.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.20.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorRT 10.5.0.18  https://developer.nvidia.com/tensorrt
+ * TensorRT 10.6.0.26  https://developer.nvidia.com/tensorrt
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -54,7 +54,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.5-1.5.11-SNAPSHOT</version>
+            <version>10.6-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
@@ -66,7 +66,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.5-1.5.11-SNAPSHOT</version>
+            <version>10.6-1.5.11-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

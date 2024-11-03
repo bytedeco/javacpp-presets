@@ -18,6 +18,7 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
+
 @Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginCreatorV3One extends IPluginCreatorInterface {
     static { Loader.load(); }
@@ -29,6 +30,7 @@ public class IPluginCreatorV3One extends IPluginCreatorInterface {
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -47,6 +49,10 @@ public class IPluginCreatorV3One extends IPluginCreatorInterface {
      *  runtime interface will be passed as fc.
      * 
      *  \note The returned plugin object must be in an initialized state
+     * 
+     *  \note If invoked by the user (e.g. with TensorRTPhase::kBUILD, to add to the network defintion with
+     *  addPluginV3()), it is the user's responsibility to delete the plugin object. If invoked by TensorRT (e.g. during
+     *  engine deserialization), TensorRT will delete any objects it creates.
      *  */
     
     

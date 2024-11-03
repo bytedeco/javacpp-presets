@@ -37,10 +37,12 @@ public class VBuilder extends VRoot {
     public native @NoException(true) IErrorRecorder getErrorRecorder();
     public native @NoException(true) void reset();
     public native @Cast("bool") @NoException(true) boolean platformHasTf32();
-    public native @NoException(true) IHostMemory buildSerializedNetwork(@ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
+    public native @NoException(true) IHostMemory buildSerializedNetwork(
+            @ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
     public native @Cast("bool") @NoException(true) boolean isNetworkSupported(@Const @ByRef INetworkDefinition network, @Const @ByRef IBuilderConfig config);
     public native @NoException(true) ILogger getLogger();
     public native @Cast("bool") @NoException(true) boolean setMaxThreads(int maxThreads);
     public native @NoException(true) int getMaxThreads();
     public native @ByRef @NoException(true) IPluginRegistry getPluginRegistry();
+    public native @NoException(true) ICudaEngine buildEngineWithConfig(@ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
 }

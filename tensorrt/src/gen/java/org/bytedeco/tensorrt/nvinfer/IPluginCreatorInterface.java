@@ -17,6 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
+ // class IPluginResource
 
 @Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginCreatorInterface extends IVersionedInterface {

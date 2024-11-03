@@ -213,16 +213,16 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.5.0/tars/TensorRT-10.5.0.18.Ubuntu-24.04.aarch64-gnu.cuda-12.6.tar.gz
-          $SUDO tar -hxvf TensorRT-10.5.0.18.Ubuntu-24.04.aarch64-gnu.cuda-12.6.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.6.0/tars/TensorRT-10.6.0.26.Ubuntu-24.04.aarch64-gnu.cuda-12.6.tar.gz
+          $SUDO tar -hxvf TensorRT-10.6.0.26.Ubuntu-24.04.aarch64-gnu.cuda-12.6.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.5.0/tars/TensorRT-10.5.0.18.Linux.x86_64-gnu.cuda-12.6.tar.gz
-          $SUDO tar -hxvf TensorRT-10.5.0.18.Linux.x86_64-gnu.cuda-12.6.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.6.0/tars/TensorRT-10.6.0.26.Linux.x86_64-gnu.cuda-12.6.tar.gz
+          $SUDO tar -hxvf TensorRT-10.6.0.26.Linux.x86_64-gnu.cuda-12.6.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

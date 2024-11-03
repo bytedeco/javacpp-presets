@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.5-1.5.11-SNAPSHOT</version>
+            <version>10.6-1.5.11-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.5-1.5.11-SNAPSHOT</version>
+            <version>10.6-1.5.11-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

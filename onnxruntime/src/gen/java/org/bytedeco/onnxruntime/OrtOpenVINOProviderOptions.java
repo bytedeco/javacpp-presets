@@ -43,7 +43,6 @@ public class OrtOpenVINOProviderOptions extends Pointer {
    * Valid settings are one of: "CPU_FP32", "CPU_FP16", "GPU_FP32", "GPU_FP16"
    */
   public native @Cast("const char*") BytePointer device_type(); public native OrtOpenVINOProviderOptions device_type(BytePointer setter);
-  /** 0 = disabled, nonzero = enabled */
   public native @Cast("unsigned char") byte enable_npu_fast_compile(); public native OrtOpenVINOProviderOptions enable_npu_fast_compile(byte setter);
   public native @Cast("const char*") BytePointer device_id(); public native OrtOpenVINOProviderOptions device_id(BytePointer setter);
   /** 0 = Use default number of threads */

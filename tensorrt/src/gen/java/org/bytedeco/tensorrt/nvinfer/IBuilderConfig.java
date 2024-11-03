@@ -365,9 +365,9 @@ public class IBuilderConfig extends INoCopy {
     public native @NoException(true) void reset();
 
     /**
-     *  \brief Set the cuda stream that is used to profile this network.
+     *  \brief Set the CUDA stream that is used to profile this network.
      * 
-     *  @param stream The cuda stream used for profiling by the builder.
+     *  @param stream The CUDA stream used for profiling by the builder.
      * 
      *  @see getProfileStream()
      *  */
@@ -380,9 +380,9 @@ public class IBuilderConfig extends INoCopy {
     public native @NoException(true) void setProfileStream(CUstream_st stream);
 
     /**
-     *  \brief Get the cuda stream that is used to profile this network.
+     *  \brief Get the CUDA stream that is used to profile this network.
      * 
-     *  @return The cuda stream set by setProfileStream, nullptr if setProfileStream has not been called.
+     *  @return The CUDA stream set by setProfileStream, nullptr if setProfileStream has not been called.
      * 
      *  @see setProfileStream()
      *  */

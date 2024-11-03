@@ -74,7 +74,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 19;
+public static final int ORT_API_VERSION = 20;
 
 // #ifdef __cplusplus
 // #endif
@@ -393,6 +393,9 @@ public static final int
 
 
 // Targeting ../OrtShapeInferContext.java
+
+
+// Targeting ../OrtLoraAdapter.java
 
 
 
@@ -736,6 +739,7 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 @Namespace("Ort::detail") public static native void OrtRelease(OrtThreadingOptions ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtEnv ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtRunOptions ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtLoraAdapter ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtSession ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtSessionOptions ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtTensorTypeAndShapeInfo ptr);
@@ -848,6 +852,9 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // Targeting ../BaseThreadingOptions.java
 
 
+// Targeting ../BaseOrtLoraAdapter.java
+
+
 
 // Undefined. For const types use Base<Unowned<const T>>
 
@@ -878,6 +885,9 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 
 
 // Targeting ../CustomOpDomain.java
+
+
+// Targeting ../LoraAdapter.java
 
 
 // Targeting ../RunOptions.java

@@ -142,9 +142,9 @@ runs:
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
           rem python -m gdown 1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.5.0/zip/TensorRT-10.5.0.18.Windows.win10.cuda-12.6.zip
-          unzip TensorRT-10.5.0.18.Windows.win10.cuda-12.6.zip
-          move TensorRT-10.5.0.18 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.6.0/zip/TensorRT-10.6.0.26.Windows.win10.cuda-12.6.zip
+          unzip TensorRT-10.6.0.26.Windows.win10.cuda-12.6.zip
+          move TensorRT-10.6.0.26 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (

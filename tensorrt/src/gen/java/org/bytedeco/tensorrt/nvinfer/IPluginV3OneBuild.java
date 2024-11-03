@@ -47,6 +47,7 @@ public class IPluginV3OneBuild extends IPluginCapability {
     //!
     //!
     //!
+    //!
     public native @ByVal @NoException(true) InterfaceInfo getInterfaceInfo();
 
     /**
@@ -65,6 +66,8 @@ public class IPluginV3OneBuild extends IPluginCapability {
      *  @param nbInputs Number of input tensors.
      *  @param out The output tensors attributes that are used for configuration.
      *  @param nbOutputs Number of output tensors.
+     * 
+     *  @return 0 for success, else non-zero (which will cause engine termination, if invoked by TensorRT).
      *  */
     
     

@@ -46,4 +46,5 @@ public class OrtMIGraphXProviderOptions extends Pointer {
   public native @Cast("const char*") BytePointer migraphx_save_model_path(); public native OrtMIGraphXProviderOptions migraphx_save_model_path(BytePointer setter);              // migraphx model path name
   public native int migraphx_load_compiled_model(); public native OrtMIGraphXProviderOptions migraphx_load_compiled_model(int setter);                  // migraphx int8 cal table. Default 0 = false, noznero = true
   public native @Cast("const char*") BytePointer migraphx_load_model_path(); public native OrtMIGraphXProviderOptions migraphx_load_model_path(BytePointer setter);              // migraphx model path name
+  public native @Cast("bool") boolean migraphx_exhaustive_tune(); public native OrtMIGraphXProviderOptions migraphx_exhaustive_tune(boolean setter);                     // migraphx tuned compile  Default = false
 }

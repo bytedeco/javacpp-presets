@@ -312,7 +312,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>10.5-${project.version}</version>
+      <version>10.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -342,7 +342,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.19.2-${project.version}</version>
+      <version>1.20.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
