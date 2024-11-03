@@ -68,4 +68,12 @@ public class RunOptions extends BaseRunOptions {
    * Wraps OrtApi::RunOptionsUnsetTerminate
    */
   public native @ByRef RunOptions UnsetTerminate();
+
+  /** \brief Add the LoraAdapter to the list of active adapters.
+   *  The setting does not affect RunWithBinding() calls.
+   *
+   * Wraps OrtApi::RunOptionsAddActiveLoraAdapter
+   * @param adapter The LoraAdapter to be used as the active adapter
+   */
+  public native @ByRef RunOptions AddActiveLoraAdapter(@Const @ByRef LoraAdapter adapter);
 }

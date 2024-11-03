@@ -44,7 +44,7 @@ public class IDebugListener extends IVersionedInterface {
      *  @param type data Type of the tensor.
      *  @param shape shape of the tensor.
      *  @param name name of the tensor.
-     *  @param stream Cuda stream object.
+     *  @param stream CUDA stream object.
      * 
      *  @return True on success, false otherwise.
      *  */

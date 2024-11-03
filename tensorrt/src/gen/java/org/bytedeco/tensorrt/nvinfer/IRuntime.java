@@ -182,10 +182,12 @@ public class IRuntime extends INoCopy {
      *  */
     
     
+    
     //!
     //!
     //!
     public native ICudaEngine deserializeCudaEngine(@ByRef IStreamReader streamReader);
+
 
     /**
      *  \brief get the logger with which the runtime was created

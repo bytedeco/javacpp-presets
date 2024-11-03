@@ -111,4 +111,20 @@ public class SessionImpl extends ConstSessionImpl {
    */
   /** Wraps OrtApi::SessionEndProfiling */
   public native @UniquePtr("char, Ort::detail::AllocatedFree") @Cast("char*") BytePointer EndProfilingAllocated(OrtAllocator allocator);
+
+  /** \brief Set DynamicOptions for EPs (Execution Providers)
+   *
+   * Wraps OrtApi::SetEpDynamicOptions
+   *
+   * Valid options can be found in {@code include\onnxruntime\core\session\onnxruntime_session_options_config_keys.h}
+   * Look for {@code kOrtEpDynamicOptions}
+   *
+   * @param keys [in] Array of null terminated UTF8 encoded strings of EP dynamic option keys
+   * @param values [in] Array of null terminated UTF8 encoded string of EP dynamic option values
+   * @param kv_len [in] Number of elements in the keys and values arrays
+   */
+  public native void SetEpDynamicOptions(@Cast("const char*const*") PointerPointer keys, @Cast("const char*const*") PointerPointer values, @Cast("size_t") long kv_len);
+  public native void SetEpDynamicOptions(@Cast("const char*const*") @ByPtrPtr BytePointer keys, @Cast("const char*const*") @ByPtrPtr BytePointer values, @Cast("size_t") long kv_len);
+  public native void SetEpDynamicOptions(@Cast("const char*const*") @ByPtrPtr ByteBuffer keys, @Cast("const char*const*") @ByPtrPtr ByteBuffer values, @Cast("size_t") long kv_len);
+  public native void SetEpDynamicOptions(@Cast("const char*const*") @ByPtrPtr byte[] keys, @Cast("const char*const*") @ByPtrPtr byte[] values, @Cast("size_t") long kv_len);
 }

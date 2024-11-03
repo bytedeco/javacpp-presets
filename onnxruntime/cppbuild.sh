@@ -22,7 +22,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.19.2
+ONNXRUNTIME=1.20.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -84,7 +84,7 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
-patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
+#patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
 sedinplace '/-DCMAKE_CUDA_COMPILER=/d' tools/ci_build/build.py
@@ -113,6 +113,8 @@ sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_
 sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
 sedinplace '/omp_get_max_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
 sedinplace '/omp_set_num_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
+sedinplace '/cvtfp16Avx/d' cmake/onnxruntime_mlas.cmake
+sedinplace 's/MlasCastF16ToF32KernelAvx;/MlasCastF16ToF32KernelAvx2;/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_90,code=sm_90/g' cmake/CMakeLists.txt

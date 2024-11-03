@@ -250,7 +250,7 @@ public class IBuilder extends INoCopy {
      * 
      *  @return A pointer to a IHostMemory object that contains a serialized network.
      * 
-     *  \note This function will synchronize the cuda stream returned by \p config.getProfileStream() before returning.
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
      * 
      *  @see INetworkDefinition, IBuilderConfig, IHostMemory
      *  */
@@ -262,7 +262,33 @@ public class IBuilder extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) IHostMemory buildSerializedNetwork(@ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
+
+    /**
+     *  \brief Builds a network for the given INetworkDefinition and IBuilderConfig.
+     * 
+     *  @param network Network definition.
+     *  @param config Builder configuration.
+     * 
+     *  @return A pointer to a ICudaEngine object that contains an engine.
+     * 
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
+     * 
+     *  \note This function does not support \p BuilderFlag::kVERSION_COMPATIBLE.
+     *  Please use \p buildSerializedNetwork to get a version compatible engine.
+     * 
+     *  @see INetworkDefinition, IBuilderConfig, ICudaEngine
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) ICudaEngine buildEngineWithConfig(@ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
 
     /**
      *  \brief Checks that a network is within the scope of the IBuilderConfig settings.
@@ -279,7 +305,7 @@ public class IBuilder extends INoCopy {
      *  @return True if network is within the scope of the restrictions specified by the builder config,
      *  false otherwise.
      * 
-     *  \note This function will synchronize the cuda stream returned by \p config.getProfileStream() before returning.
+     *  \note This function will synchronize the CUDA stream returned by \p config.getProfileStream() before returning.
      *  */
     
     

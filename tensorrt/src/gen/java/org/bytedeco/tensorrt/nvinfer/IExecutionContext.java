@@ -148,7 +148,7 @@ public class IExecutionContext extends INoCopy {
     /**
      *  \brief Set the device memory for use by this execution context.
      * 
-     *  The memory must be aligned with cuda memory alignment property (using cudaGetDeviceProperties()), and its size
+     *  The memory must be aligned with CUDA memory alignment property (using cudaGetDeviceProperties()), and its size
      *  must be large enough for performing inference with the given network inputs. getDeviceMemorySize() and
      *  getDeviceMemorySizeForProfile() report upper bounds of the size. Setting memory to nullptr is acceptable if the
      *  reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
@@ -178,7 +178,7 @@ public class IExecutionContext extends INoCopy {
     /**
      *  \brief Set the device memory and its corresponding size for use by this execution context.
      * 
-     *  The memory must be aligned with cuda memory alignment property (using cudaGetDeviceProperties()), and its size
+     *  The memory must be aligned with CUDA memory alignment property (using cudaGetDeviceProperties()), and its size
      *  must be large enough for performing inference with the given network inputs. getDeviceMemorySize() and
      *  getDeviceMemorySizeForProfile() report upper bounds of the size. Setting memory to nullptr is acceptable if the
      *  reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
@@ -431,7 +431,7 @@ public class IExecutionContext extends INoCopy {
      *  @param profileIndex Index of the profile. The value must lie between 0 and
      *         getEngine().getNbOptimizationProfiles() - 1
      * 
-     *  @param stream A cuda stream on which the cudaMemcpyAsyncs may be
+     *  @param stream A CUDA stream on which the cudaMemcpyAsyncs may be
      *  enqueued
      * 
      *  When an optimization profile is switched via this API, TensorRT may
@@ -778,7 +778,7 @@ public class IExecutionContext extends INoCopy {
     /**
      *  \brief Mark input as consumed.
      * 
-     *  @param event The cuda event that is triggered after all input tensors have been consumed.
+     *  @param event The CUDA event that is triggered after all input tensors have been consumed.
      * 
      *  \warning The set event must be valid during the inferece.
      * 
@@ -796,7 +796,7 @@ public class IExecutionContext extends INoCopy {
     /**
      *  \brief The event associated with consuming the input.
      * 
-     *  @return The cuda event. Nullptr will be returned if the event is not set yet.
+     *  @return The CUDA event. Nullptr will be returned if the event is not set yet.
      *  */
     
     
@@ -915,7 +915,7 @@ public class IExecutionContext extends INoCopy {
     /**
      *  \brief Enqueue inference on a stream.
      * 
-     *  @param stream A cuda stream on which the inference kernels will be enqueued.
+     *  @param stream A CUDA stream on which the inference kernels will be enqueued.
      * 
      *  @return True if the kernels were enqueued successfully, false otherwise.
      * 

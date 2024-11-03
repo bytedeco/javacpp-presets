@@ -3529,10 +3529,17 @@ public class OrtApi extends Pointer {
    *     - "73"
    *     - "75"
    *   "device_id": The ID of the device to use when setting 'htp_arch'. Defaults to "0" (for single device).
-       "enable_htp_fp16_precision": Only used for float32 model.
-       Enable the float32 model to be inferenced with fp16 precision. Otherwise, it will be fp32 precision.
-         - "0": Default. With fp32 precision.
-         - "1": With fp16 precision.
+   *   "enable_htp_fp16_precision": Used for float32 model for HTP backend.
+   *   Enable the float32 model to be inferenced with fp16 precision. Otherwise, it will be fp32 precision.
+   *     - "0": With fp32 precision.
+   *     - "1": Default. With fp16 precision.
+   *   "enable_htp_weight_sharing": Enable QNN weight sharing feature while compiling multiple graphs into one QNN context.
+   *     - "0": Default. Disabled.
+   *     - "1": Enabled.
+   *   "offload_graph_io_quantization": Offload graph input quantization and graph output dequantization to another
+   *   execution provider (typically CPU EP).
+   *     - "0": Default. Disabled. QNN EP will handle quantization and dequantization of graph I/O.
+   *     - "1": Enabled.
    *
    * SNPE supported keys:
    *   "runtime": SNPE runtime engine, options: "CPU", "CPU_FLOAT32", "GPU", "GPU_FLOAT32_16_HYBRID", "GPU_FLOAT16",
@@ -3718,7 +3725,7 @@ public class OrtApi extends Pointer {
 
   /** \brief Release an OrtCANNProviderOptions
    *
-   * @param the [in] pointer of OrtCANNProviderOptions which will been deleted
+   * @param input [in] The pointer of OrtCANNProviderOptions which will been deleted
    *
    * @since Version 1.13.
    */
@@ -4836,4 +4843,90 @@ public class OrtApi extends Pointer {
                     @Cast("char*const*") @ByPtrPtr byte[] external_initializer_file_buffer_array,
                     @Cast("const size_t*") SizeTPointer external_initializer_file_lengths,
                     @Cast("size_t") long num_external_initializer_files);
+
+  /** \brief Create an OrtLoraAdapter
+   *
+   * The function attempts to locate file specified by adapter_file_path, read it and create an OrtLoraAdapter
+   * instance. The adapter_file_path should be a valid path to a file that contains a valid Lora Adapter
+   * format. The function attempts to validate the format at load time. The file will always be memory mapped, unless
+   * the platform does not support memory mapping, in which case the file will be read into memory.
+   *
+   * @param adapter_file_path [in] adapter file path.
+   * @param allocator [in] optional pointer to a device allocator. If specified
+   *            data is copied to the device at some point before Run() is invoked. If nullptr, data stays on CPU.
+   *            The data would still be copied to device if required by the model at inference time.
+   * @param out [out] A pointer to a newly created OrtLoraAdapter instance. Must be released with
+   *                  OrtApi::ReleaseLoraAdapter.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus CreateLoraAdapter( @Cast("const ORTCHAR_T*") Pointer adapter_file_path, OrtAllocator allocator,
+                    @Cast("OrtLoraAdapter**") PointerPointer out);
+  public native OrtStatus CreateLoraAdapter( @Cast("const ORTCHAR_T*") Pointer adapter_file_path, OrtAllocator allocator,
+                    @ByPtrPtr OrtLoraAdapter out);
+
+  /** \brief Create an OrtLoraAdapter
+   *
+   * The function copies the bytes from the array and creates an OrtLoraAdapter instance.
+   *
+   *
+   * @param bytes [in] pointer to a valid Lora Adapter format buffer.
+   * @param num_bytes [in] length of bytes buffer.
+   * @param allocator [in] optional pointer to a device allocator. If specified
+   *            data is copied to the device at some point before Run() is invoked. If nullptr, data stays on CPU.
+   *            The data would still be copied to device if required by the model at inference time.
+   * @param out [out] A pointer to a newly created OrtLoraAdapter instance. Must be released with
+   *                  OrtApi::ReleaseLoraAdapter.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus CreateLoraAdapterFromArray( @Const Pointer bytes, @Cast("size_t") long num_bytes, OrtAllocator allocator,
+                    @Cast("OrtLoraAdapter**") PointerPointer out);
+  public native OrtStatus CreateLoraAdapterFromArray( @Const Pointer bytes, @Cast("size_t") long num_bytes, OrtAllocator allocator,
+                    @ByPtrPtr OrtLoraAdapter out);
+
+  /** \brief Release an ::OrtLoraAdapter obtained from OrtApi::CreateLoraAdapter
+   */
+  public native void ReleaseLoraAdapter(OrtLoraAdapter input);
+
+  /** \brief Add the Lora Adapter to the list of active adapters.
+   *
+   * The function adds the Lora Adapter to the list of active adapters. The Lora Adapter must be created with
+   * OrtApi::CreateLoraAdapter or FromArray. The Lora Adapter will be used by the session to run the model.
+   * The instance of the OrtRunOptions can then be used to customize the Run() calls.
+   * More than one OrtLoraAdapter can be active at the same time. Lora Parameters that belong to different
+   * Lora adapters that will be active at the same time must not overlap.
+   * This setting does not affect RunWithBinding.
+   *
+   * @param options [in] OrtRunOptions instance
+   * @param adapter [in] OrtLoraAdapter instance
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus RunOptionsAddActiveLoraAdapter( OrtRunOptions options, @Const OrtLoraAdapter adapter);
+
+  /** \}
+   *  \name OrtEpDynamicOptions
+   *  \{
+  <p>
+  /** \brief Set DynamicOptions for EPs (Execution Providers)
+   *
+   * Valid options can be found in {@code include\onnxruntime\core\session\onnxruntime_session_options_config_keys.h}
+   * Look for {@code kOrtEpDynamicOptions}
+   *
+   * @param sess [in] OrtSession
+   * @param keys [in] Array of null terminated UTF8 encoded strings of EP dynamic option keys
+   * @param values [in] Array of null terminated UTF8 encoded string of EP dynamic option values
+   * @param kv_len [in] Number of elements in the keys and values arrays
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus SetEpDynamicOptions( OrtSession sess, @Cast("const char*const*") PointerPointer keys,
+                    @Cast("const char*const*") PointerPointer values, @Cast("size_t") long kv_len);
+  public native OrtStatus SetEpDynamicOptions( OrtSession sess, @Cast("const char*const*") @ByPtrPtr BytePointer keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer values, @Cast("size_t") long kv_len);
+  public native OrtStatus SetEpDynamicOptions( OrtSession sess, @Cast("const char*const*") @ByPtrPtr ByteBuffer keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer values, @Cast("size_t") long kv_len);
+  public native OrtStatus SetEpDynamicOptions( OrtSession sess, @Cast("const char*const*") @ByPtrPtr byte[] keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] values, @Cast("size_t") long kv_len);
 }

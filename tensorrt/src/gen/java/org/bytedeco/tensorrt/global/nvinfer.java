@@ -51,11 +51,11 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = 10;
 /** TensorRT minor version. */
-public static final int NV_TENSORRT_MINOR = 5;
+public static final int NV_TENSORRT_MINOR = 6;
 /** TensorRT patch version. */
 public static final int NV_TENSORRT_PATCH = 0;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 18;
+public static final int NV_TENSORRT_BUILD = 26;
 
 /** TensorRT LWS major version. */
 public static final int NV_TENSORRT_LWS_MAJOR = 0;
@@ -152,11 +152,9 @@ public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENE
  * 
  *  \warning Do not directly include this file. Instead include one of:
  *  * NvInferRuntime.h (for the standard runtime)
- *  * NvInferSafeRuntime.h (for the safety runtime)
- *  * NvInferConsistency.h (for consistency checker)
  *  * NvInferPluginUtils.h (for plugin utilities)
  *  */
-// #if !defined(NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE)
+// #if !defined(NV_INFER_INTERNAL_INCLUDE)
 // #endif
 
 /** Forward declare some CUDA types to avoid an include dependency. */
@@ -263,187 +261,6 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
  *  */
 
 
-//!
-//!
-//!
-//!
-//!
-//!
-//!
-//!
-//!
-//!
-
-/**
- *  \enum TensorFormat
- * 
- *  \brief Format of the input/output tensors.
- * 
- *  This enum is used by both plugins and network I/O tensors.
- * 
- *  @see IPluginV2::supportsFormat(), safe::ICudaEngine::getBindingFormat()
- * 
- *  Many of the formats are **vector-major** or **vector-minor**. These formats specify
- *  a <em>vector dimension</em> and <em>scalars per vector</em>.
- *  For example, suppose that the tensor has has dimensions [M,N,C,H,W],
- *  the vector dimension is C and there are V scalars per vector.
- * 
- *  * A **vector-major** format splits the vectorized dimension into two axes in the
- *    memory layout. The vectorized dimension is replaced by an axis of length ceil(C/V)
- *    and a new dimension of length V is appended. For the example tensor, the memory layout
- *    is equivalent to an array with dimensions [M][N][ceil(C/V)][H][W][V].
- *    Tensor coordinate (m,n,c,h,w) maps to array location [m][n][c/V][h][w][c\%V].
- * 
- *  * A **vector-minor** format moves the vectorized dimension to become the last axis
- *    in the memory layout. For the example tensor, the memory layout is equivalent to an
- *    array with dimensions [M][N][H][W][ceil(C/V)*V]. Tensor coordinate (m,n,c,h,w) maps
- *    array location subscript [m][n][h][w][c].
- * 
- *  In interfaces that refer to "components per element", that's the value of V above.
- * 
- *  For more information about data formats, see the topic "Data Format Description" located in the
- *  TensorRT Developer Guide. https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#data-format-desc
- *  */
-@Namespace("nvinfer1") public enum TensorFormat {
-    /** Memory layout is similar to an array in C or C++.
-     *  The stride of each dimension is the product of the dimensions after it.
-     *  The last dimension has unit stride.
-     * 
-     *  For DLA usage, the tensor sizes are limited to C,H,W in the range [1,8192]. */
-    
-//!
-    kLINEAR(0),
-
-    /** Vector-major format with two scalars per vector.
-     *  Vector dimension is third to last.
-     * 
-     *  This format requires FP16 or BF16 and at least three dimensions. */
-    kCHW2(1),
-
-    /** Vector-minor format with eight scalars per vector.
-     *  Vector dimension is third to last.
-     *  This format requires FP16 or BF16 and at least three dimensions. */
-    
-//!
-//!
-//!
-    kHWC8(2),
-
-    /** Vector-major format with four scalars per vector.
-     *  Vector dimension is third to last.
-     * 
-     *  This format requires INT8 or FP16 and at least three dimensions.
-     *  For INT8, the length of the vector dimension must be a build-time constant.
-     * 
-     *  Deprecated usage:
-     * 
-     *  If running on the DLA, this format can be used for acceleration
-     *  with the caveat that C must be less than or equal to 4.
-     *  If used as DLA input and the build option kGPU_FALLBACK is not specified,
-     *  it needs to meet line stride requirement of DLA format. Column stride in
-     *  bytes must be a multiple of 64 on Orin. */
-    
-//!
-//!
-    kCHW4(3),
-
-    /** Vector-major format with 16 scalars per vector.
-     *  Vector dimension is third to last.
-     * 
-     *  This format requires INT8 or FP16 and at least three dimensions.
-     * 
-     *  For DLA usage, this format maps to the native feature format for FP16,
-     *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
-    
-//!
-//!
-    kCHW16(4),
-
-    /** Vector-major format with 32 scalars per vector.
-     *  Vector dimension is third to last.
-     * 
-     *  This format requires at least three dimensions.
-     * 
-     *  For DLA usage, this format maps to the native feature format for INT8,
-     *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
-    
-//!
-    kCHW32(5),
-
-    /** Vector-minor format with eight scalars per vector.
-     *  Vector dimension is fourth to last.
-     * 
-     *  This format requires FP16 or BF16 and at least four dimensions. */
-    
-//!
-    kDHWC8(6),
-
-    /** Vector-major format with 32 scalars per vector.
-     *  Vector dimension is fourth to last.
-     * 
-     *  This format requires FP16 or INT8 and at least four dimensions. */
-    
-//!
-    kCDHW32(7),
-
-    /** Vector-minor format where channel dimension is third to last and unpadded.
-     * 
-     *  This format requires either FP32 or UINT8 and at least three dimensions. */
-    
-//!
-    kHWC(8),
-
-    /** DLA planar format. For a tensor with dimension {N, C, H, W}, the W axis
-     *  always has unit stride. The stride for stepping along the H axis is
-     *  rounded up to 64 bytes.
-     * 
-     *  The memory layout is equivalent to a C array with dimensions
-     *  [N][C][H][roundUp(W, 64/elementSize)] where elementSize is
-     *  2 for FP16 and 1 for Int8, with the tensor coordinates (n, c, h, w)
-     *  mapping to array subscript [n][c][h][w]. */
-    
-//!
-    kDLA_LINEAR(9),
-
-    /** DLA image format. For a tensor with dimension {N, C, H, W} the C axis
-     *  always has unit stride. The stride for stepping along the H axis is rounded up
-     *  to 64 bytes on Orin. C can only be 1, 3 or 4.
-     *  If C == 1, it will map to grayscale format.
-     *  If C == 3 or C == 4, it will map to color image format. And if C == 3,
-     *  the stride for stepping along the W axis needs to be padded to 4 in elements.
-     * 
-     *  When C is {1, 3, 4}, then C' is {1, 4, 4} respectively,
-     *  the memory layout is equivalent to a C array with dimensions
-     *  [N][H][roundUp(W, 64/C'/elementSize)][C'] on Orin
-     *  where elementSize is 2 for FP16
-     *  and 1 for Int8. The tensor coordinates (n, c, h, w) mapping to array
-     *  subscript [n][h][w][c]. */
-    
-//!
-    kDLA_HWC4(10),
-
-    /** Vector-minor format with 16 scalars per vector.
-     *  Vector dimension is third to last.
-     * 
-     *  This requires FP16 and at least three dimensions. */
-    
-//!
-    kHWC16(11),
-
-    /** Vector-minor format with one scalar per vector.
-     *  Vector dimension is fourth to last.
-     * 
-     *  This format requires FP32 and at least four dimensions. */
-    kDHWC(12);
-
-    public final int value;
-    private TensorFormat(int v) { this.value = v; }
-    private TensorFormat(TensorFormat e) { this.value = e.value; }
-    public TensorFormat intern() { for (TensorFormat e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-
 
 //!
 //!
@@ -472,65 +289,6 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 // Targeting ../nvinfer/IVersionedInterface.java
 
 
-/** Maximum number of elements in TensorFormat enum. @see TensorFormat */
- // namespace impl
-
-
-/**
- *  \enum AllocatorFlag
- * 
- *  \brief Allowed type of memory allocation.
- *  */
-@Namespace("nvinfer1") public enum AllocatorFlag {
-    /** TensorRT may call realloc() on this allocation. */
-    kRESIZABLE(0);
-
-    public final int value;
-    private AllocatorFlag(int v) { this.value = v; }
-    private AllocatorFlag(AllocatorFlag e) { this.value = e.value; }
-    public AllocatorFlag intern() { for (AllocatorFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-/** Maximum number of elements in AllocatorFlag enum. @see AllocatorFlag */
- // namespace impl
-// Targeting ../nvinfer/IGpuAllocator.java
-
-
-
- // namespace v_1_0
-
-/**
- *  \class IGpuAllocator
- * 
- *  \brief Application-implemented class for controlling allocation on the GPU.
- * 
- *  \warning The lifetime of an IGpuAllocator object must exceed that of all objects that use it.
- * 
- *  This class is intended as a base class for allocators that implement synchronous allocation.
- *  If you want the benefits of asynchronous allocation, you can do either of:
- * 
- *  * Derive your class from IGpuAllocator and override all four of its virtual methods
- *    for allocation/deallocation, including the two deprecated methods.
- * 
- *  * Derive your class from IGpuAsyncAllocator and override its two pure virtual
- *    methods for allocation/deallocation.
- * 
- *  The latter style is preferred because it does not tie code to deprecated methods.
- * 
- *  @see IGpuAsyncAllocator.
- *  */
-
-
-//!
-//!
-//!
-//!
-//!
-// Targeting ../nvinfer/ILogger.java
-
-
-/** Maximum number of elements in ILogger::Severity enum. @see ILogger::Severity */
- // namespace impl
 
 /**
  *  \enum ErrorCode
@@ -733,32 +491,6 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
     public TensorIOMode intern() { for (TensorIOMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../nvinfer/IStreamReader.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IStreamReader
- * 
- *  \brief Application-implemented class for reading data in a stream-based manner.
- * 
- *  \note To ensure compatibility of source code with future versions of TensorRT, use IStreamReader, not
- *        v_1_0::IStreamReader
- *  */
-// Targeting ../nvinfer/IPluginResource.java
-
- // class IPluginResource
- // namespace v_1_0
-
-/**
- *  \class IPluginResource
- * 
- *  \brief Interface for plugins to define custom resources that could be shared through the plugin registry
- * 
- *  @see IPluginRegistry::acquirePluginResource
- *  @see IPluginRegistry::releasePluginResource
- *  */
 /** Maximum number of elements in TensorIOMode enum. @see TensorIOMode */
  // namespace impl
  // namespace nvinfer1
@@ -771,259 +503,6 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 public static native @NoException(true) int getInferLibVersion();
 
 // #endif // NV_INFER_RUNTIME_BASE_H
-
-
-// Parsed from NvInferRuntimePlugin.h
-
-/*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// #ifndef NV_INFER_RUNTIME_PLUGIN_H
-// #define NV_INFER_RUNTIME_PLUGIN_H
-
-public static final int NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE = 1;
-// #include "NvInferRuntimeBase.h"
-
-
-//!
-//!
-//!
-//!
-
-//!
-//!
-//!
-// #undef NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE
-
-/**
- *  \file NvInferRuntimePlugin.h
- * 
- *  This file contains common definitions, data structures and interfaces that relate to plugins and are shared
- *  between the standard and safe runtime.
- * 
- *  \warning Do not directly include this file. Instead include either NvInferRuntime.h (for the standard runtime) or
- *  NvInferSafeRuntime.h (for the safety runtime).
- * 
- <p>
- * 
- *  \namespace nvinfer1
- * 
- *  \brief The TensorRT API version 1 namespace.
- *  */
-
-/**
- *  \brief PluginFormat is reserved for backward compatibility.
- * 
- *  @see IPluginV2::supportsFormat()
- *  */
-
-
-//!
-//!
-
-/**
- *  \brief Bit at the plugin version to identify that it is a plugin.
- *  */
-
-
-//!
-//!
-//!
-//!
-//!
-@Namespace("nvinfer1") @MemberGetter public static native int kPLUGIN_VERSION_PYTHON_BIT();
-public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT();
-// Targeting ../nvinfer/PluginTensorDesc.java
-
-
-
-/**
- *  \struct PluginVersion
- * 
- *  \brief Definition of plugin versions.
- * 
- *  Tag for plug-in versions.  Used in upper byte of getTensorRTVersion().
- *  */
-@Namespace("nvinfer1") public enum PluginVersion {
-    /** IPluginV2 */
-    kV2((byte)(0)),
-    /** IPluginV2Ext */
-    kV2_EXT((byte)(1)),
-    /** IPluginV2IOExt */
-    kV2_IOEXT((byte)(2)),
-    /** IPluginV2DynamicExt */
-    kV2_DYNAMICEXT((byte)(3)),
-    /** IPluginV2DynamicExt-based Python plugins */
-    kV2_DYNAMICEXT_PYTHON((byte)(kPLUGIN_VERSION_PYTHON_BIT | 3));
-
-    public final byte value;
-    private PluginVersion(byte v) { this.value = v; }
-    private PluginVersion(PluginVersion e) { this.value = e.value; }
-    public PluginVersion intern() { for (PluginVersion e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/**
- *  \enum PluginCreatorVersion
- * 
- *  \brief Enum to identify version of the plugin creator.
- *  */
-@Namespace("nvinfer1") public enum PluginCreatorVersion {
-    /** IPluginCreator */
-    kV1(0),
-    /** IPluginCreator-based Python plugin creators */
-    kV1_PYTHON(kPLUGIN_VERSION_PYTHON_BIT);
-
-    public final int value;
-    private PluginCreatorVersion(int v) { this.value = v; }
-    private PluginCreatorVersion(PluginCreatorVersion e) { this.value = e.value; }
-    public PluginCreatorVersion intern() { for (PluginCreatorVersion e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../nvinfer/IPluginV2.java
-
-
-// Targeting ../nvinfer/IPluginV2Ext.java
-
-
-// Targeting ../nvinfer/IPluginV2IOExt.java
-
-
-
-/**
- *  \enum PluginFieldType
- * 
- *  \brief The possible field types for custom layer.
- *  */
-@Namespace("nvinfer1") public enum PluginFieldType {
-    /** FP16 field type. */
-    kFLOAT16(0),
-    /** FP32 field type. */
-    kFLOAT32(1),
-    /** FP64 field type. */
-    kFLOAT64(2),
-    /** INT8 field type. */
-    kINT8(3),
-    /** INT16 field type. */
-    kINT16(4),
-    /** INT32 field type. */
-    kINT32(5),
-    /** char field type. */
-    kCHAR(6),
-    /** nvinfer1::Dims field type. */
-    kDIMS(7),
-    /** Unknown field type. */
-    kUNKNOWN(8),
-    /** BF16 field type. */
-    kBF16(9),
-    /** INT64 field type. */
-    kINT64(10),
-    /** FP8 field type. */
-    kFP8(11),
-    /** INT4 field type. */
-    kINT4(12);
-
-    public final int value;
-    private PluginFieldType(int v) { this.value = v; }
-    private PluginFieldType(PluginFieldType e) { this.value = e.value; }
-    public PluginFieldType intern() { for (PluginFieldType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../nvinfer/PluginField.java
-
-
-// Targeting ../nvinfer/PluginFieldCollection.java
-
-
-
-/**
- *  \enum PluginCapabilityType
- * 
- *  \brief Enumerates the different capability types a IPluginV3 object may have
- *  */
-@Namespace("nvinfer1") public enum PluginCapabilityType {
-    /** Core capability. Every IPluginV3 object must have this. */
-    kCORE(0),
-    /** Build capability. IPluginV3 objects provided to TensorRT build phase must have this. */
-    kBUILD(1),
-    /** Runtime capability. IPluginV3 objects provided to TensorRT build and execution phases must have this. */
-    kRUNTIME(2);
-
-    public final int value;
-    private PluginCapabilityType(int v) { this.value = v; }
-    private PluginCapabilityType(PluginCapabilityType e) { this.value = e.value; }
-    public PluginCapabilityType intern() { for (PluginCapabilityType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/**
- *  \enum TensorRTPhase
- * 
- *  \brief Indicates a phase of operation of TensorRT
- *  */
-@Namespace("nvinfer1") public enum TensorRTPhase {
-    /** Build phase of TensorRT */
-    kBUILD(0),
-    /** Execution phase of TensorRT */
-    kRUNTIME(1);
-
-    public final int value;
-    private TensorRTPhase(int v) { this.value = v; }
-    private TensorRTPhase(TensorRTPhase e) { this.value = e.value; }
-    public TensorRTPhase intern() { for (TensorRTPhase e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../nvinfer/IPluginCreatorInterface.java
-
-
-// Targeting ../nvinfer/IPluginCreator.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IPluginCreatorInterface
- * 
- *  \brief Base class for all plugin creator versions.
- * 
- *  @see IPluginCreator and IPluginRegistry
- *  */
-
-
-//!
-//!
-//!
-//!
-//!
-
-/**
- *  \class IPluginCreator
- * 
- *  \brief Plugin creator class for user implemented layers.
- * 
- *  @see IPlugin and IPluginFactory
- * 
- *  @deprecated Deprecated in TensorRT 10.0. Please implement IPluginCreatorV3One instead along with IPluginV3 plugins
- *  instead.
- *  */
-
- // namespace nvinfer1
-
-// #endif // NV_INFER_RUNTIME_PLUGIN_H
 
 
 // Parsed from NvInferRuntimeCommon.h
@@ -1065,8 +544,9 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  * 
  *  \warning Do not directly include this file. Instead include NvInferRuntime.h
  *  */
-// #include "NvInferRuntimeBase.h"
-// #undef NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE
+public static final int NV_INFER_INTERNAL_INCLUDE = 1;
+// #include "NvInferPluginBase.h"
+// #undef NV_INFER_INTERNAL_INCLUDE
 // #include "NvInferRuntimePlugin.h"
 // Targeting ../nvinfer/IPluginRegistry.java
 
@@ -1108,7 +588,7 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
 //!
 //!
 //!
-// #undef NV_INFER_INTERNAL_INCLUDE_RUNTIME_BASE
+// #undef NV_INFER_INTERNAL_INCLUDE
 
 /**
  *  \file NvInferLegacyDims.h
@@ -1174,6 +654,8 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  *  */
 
 // #include "NvInferImpl.h"
+// #include "NvInferPluginBase.h"
+// #undef NV_INFER_INTERNAL_INCLUDE
 // #include "NvInferRuntimeCommon.h"
 // Targeting ../nvinfer/IPluginFactory.java
 
@@ -1315,44 +797,31 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
 // Targeting ../nvinfer/IPluginV2DynamicExt.java
 
 
+// Targeting ../nvinfer/IStreamReader.java
+
+
+ // namespace v_1_0
+
+/**
+ *  \class IStreamReader
+ * 
+ *  \brief Application-implemented class for reading data in a stream-based manner.
+ * 
+ *  \note To ensure compatibility of source code with future versions of TensorRT, use IStreamReader, not
+ *        v_1_0::IStreamReader
+ *  */
+
+
+
+//!
+//!
+//!
+//!
+//!
+//!
 // Targeting ../nvinfer/IPluginResourceContext.java
 
 
-// Targeting ../nvinfer/IPluginCapability.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IPluginCapability
- * 
- *  \brief Base class for plugin capability interfaces
- * 
- *   IPluginCapability represents a split in TensorRT V3 plugins to sub-objects that expose different types of
- *   capabilites a plugin may have, as opposed to a single interface which defines all capabilities and behaviors of a
- *   plugin.
- * 
- *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
- * 
- *  @see PluginCapabilityType
- *  */
-// Targeting ../nvinfer/IPluginV3.java
-
-
-
- // namespace v_1_0
-
-/**
- *  \class IPluginV3
- * 
- *  \brief Plugin class for the V3 generation of user-implemented layers.
- * 
- *  IPluginV3 acts as a wrapper around the plugin capability interfaces that define the actual behavior of the plugin.
- * 
- *  @see IPluginCapability
- *  @see IPluginCreatorV3One
- *  @see IPluginRegistry
- *  */
 // Targeting ../nvinfer/IPluginV3OneCore.java
 
 
@@ -1422,19 +891,6 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  *  \brief A plugin capability interface that extends IPluginV3OneBuild by providing I/O aliasing functionality.
  * 
  *  @see IPluginV3OneBuild
- *  */
-// Targeting ../nvinfer/IPluginCreatorV3One.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IPluginCreatorV3One
- * 
- *  \brief A plugin creator class capable of producing IPluginV3 objects
- * 
- *  @see IPluginV3
- *  @see IPluginRegistry
  *  */
 // Targeting ../nvinfer/IProfiler.java
 
@@ -1548,6 +1004,246 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  *  @see TempfileControlFlag,
  *       IRuntime::setTempfileControlFlags(),
  *       IRuntime::getTempfileControlFlags() */
+
+
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+
+/**
+ *  \enum TensorFormat
+ * 
+ *  \brief Format of the input/output tensors.
+ * 
+ *  This enum is used by both plugins and network I/O tensors.
+ * 
+ *  @see IPluginV2::supportsFormat(), safe::ICudaEngine::getBindingFormat()
+ * 
+ *  Many of the formats are **vector-major** or **vector-minor**. These formats specify
+ *  a <em>vector dimension</em> and <em>scalars per vector</em>.
+ *  For example, suppose that the tensor has has dimensions [M,N,C,H,W],
+ *  the vector dimension is C and there are V scalars per vector.
+ * 
+ *  * A **vector-major** format splits the vectorized dimension into two axes in the
+ *    memory layout. The vectorized dimension is replaced by an axis of length ceil(C/V)
+ *    and a new dimension of length V is appended. For the example tensor, the memory layout
+ *    is equivalent to an array with dimensions [M][N][ceil(C/V)][H][W][V].
+ *    Tensor coordinate (m,n,c,h,w) maps to array location [m][n][c/V][h][w][c\%V].
+ * 
+ *  * A **vector-minor** format moves the vectorized dimension to become the last axis
+ *    in the memory layout. For the example tensor, the memory layout is equivalent to an
+ *    array with dimensions [M][N][H][W][ceil(C/V)*V]. Tensor coordinate (m,n,c,h,w) maps
+ *    array location subscript [m][n][h][w][c].
+ * 
+ *  In interfaces that refer to "components per element", that's the value of V above.
+ * 
+ *  For more information about data formats, see the topic "Data Format Description" located in the
+ *  TensorRT Developer Guide. https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#data-format-desc
+ *  */
+@Namespace("nvinfer1") public enum TensorFormat {
+    /** Memory layout is similar to an array in C or C++.
+     *  The stride of each dimension is the product of the dimensions after it.
+     *  The last dimension has unit stride.
+     * 
+     *  For DLA usage, the tensor sizes are limited to C,H,W in the range [1,8192]. */
+    
+//!
+    kLINEAR(0),
+
+    /** Vector-major format with two scalars per vector.
+     *  Vector dimension is third to last.
+     * 
+     *  This format requires FP16 and at least three dimensions. */
+    kCHW2(1),
+
+    /** Vector-minor format with eight scalars per vector.
+     *  Vector dimension is third to last.
+     *  This format requires FP16 or BF16 and at least three dimensions. */
+    
+//!
+//!
+//!
+    kHWC8(2),
+
+    /** Vector-major format with four scalars per vector.
+     *  Vector dimension is third to last.
+     * 
+     *  This format requires INT8 or FP16 and at least three dimensions.
+     *  For INT8, the length of the vector dimension must be a build-time constant.
+     * 
+     *  Deprecated usage:
+     * 
+     *  If running on the DLA, this format can be used for acceleration
+     *  with the caveat that C must be less than or equal to 4.
+     *  If used as DLA input and the build option kGPU_FALLBACK is not specified,
+     *  it needs to meet line stride requirement of DLA format. Column stride in
+     *  bytes must be a multiple of 64 on Orin. */
+    
+//!
+//!
+    kCHW4(3),
+
+    /** Vector-major format with 16 scalars per vector.
+     *  Vector dimension is third to last.
+     * 
+     *  This format requires FP16 and at least three dimensions.
+     * 
+     *  For DLA usage, this format maps to the native feature format for FP16,
+     *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
+    
+//!
+//!
+    kCHW16(4),
+
+    /** Vector-major format with 32 scalars per vector.
+     *  Vector dimension is third to last.
+     * 
+     *  This format requires at least three dimensions.
+     * 
+     *  For DLA usage, this format maps to the native feature format for INT8,
+     *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
+    
+//!
+    kCHW32(5),
+
+    /** Vector-minor format with eight scalars per vector.
+     *  Vector dimension is fourth to last.
+     * 
+     *  This format requires FP16 or BF16 and at least four dimensions. */
+    
+//!
+    kDHWC8(6),
+
+    /** Vector-major format with 32 scalars per vector.
+     *  Vector dimension is fourth to last.
+     * 
+     *  This format requires FP16 or INT8 and at least four dimensions. */
+    
+//!
+    kCDHW32(7),
+
+    /** Vector-minor format where channel dimension is third to last and unpadded.
+     * 
+     *  This format requires either FP32, FP16, UINT8, INT64 or BF16 and at least three dimensions. */
+    
+//!
+    kHWC(8),
+
+    /** DLA planar format. For a tensor with dimension {N, C, H, W}, the W axis
+     *  always has unit stride. The stride for stepping along the H axis is
+     *  rounded up to 64 bytes.
+     * 
+     *  The memory layout is equivalent to a C array with dimensions
+     *  [N][C][H][roundUp(W, 64/elementSize)] where elementSize is
+     *  2 for FP16 and 1 for Int8, with the tensor coordinates (n, c, h, w)
+     *  mapping to array subscript [n][c][h][w]. */
+    
+//!
+    kDLA_LINEAR(9),
+
+    /** DLA image format. For a tensor with dimension {N, C, H, W} the C axis
+     *  always has unit stride. The stride for stepping along the H axis is rounded up
+     *  to 64 bytes on Orin. C can only be 1, 3 or 4.
+     *  If C == 1, it will map to grayscale format.
+     *  If C == 3 or C == 4, it will map to color image format. And if C == 3,
+     *  the stride for stepping along the W axis needs to be padded to 4 in elements.
+     * 
+     *  When C is {1, 3, 4}, then C' is {1, 4, 4} respectively,
+     *  the memory layout is equivalent to a C array with dimensions
+     *  [N][H][roundUp(W, 64/C'/elementSize)][C'] on Orin
+     *  where elementSize is 2 for FP16
+     *  and 1 for Int8. The tensor coordinates (n, c, h, w) mapping to array
+     *  subscript [n][h][w][c]. */
+    
+//!
+    kDLA_HWC4(10),
+
+    /** Vector-minor format with 16 scalars per vector.
+     *  Vector dimension is third to last.
+     * 
+     *  This requires FP16 or INT8 and at least three dimensions. */
+    
+//!
+    kHWC16(11),
+
+    /** Vector-minor format with one scalar per vector.
+     *  Vector dimension is fourth to last.
+     * 
+     *  This format requires FP32 and at least four dimensions. */
+    kDHWC(12);
+
+    public final int value;
+    private TensorFormat(int v) { this.value = v; }
+    private TensorFormat(TensorFormat e) { this.value = e.value; }
+    public TensorFormat intern() { for (TensorFormat e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in TensorFormat enum. @see TensorFormat */
+ // namespace impl
+
+/**
+ *  \enum AllocatorFlag
+ * 
+ *  \brief Allowed type of memory allocation.
+ *  */
+@Namespace("nvinfer1") public enum AllocatorFlag {
+    /** TensorRT may call realloc() on this allocation. */
+    kRESIZABLE(0);
+
+    public final int value;
+    private AllocatorFlag(int v) { this.value = v; }
+    private AllocatorFlag(AllocatorFlag e) { this.value = e.value; }
+    public AllocatorFlag intern() { for (AllocatorFlag e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/** Maximum number of elements in AllocatorFlag enum. @see AllocatorFlag */
+ // namespace impl
+
+
+
+//!
+//!
+//!
+//!
+//!
+// Targeting ../nvinfer/ILogger.java
+
+
+/** Maximum number of elements in ILogger::Severity enum. @see ILogger::Severity */
+
+// Targeting ../nvinfer/IGpuAllocator.java
+
+
+
+ // namespace v_1_0
+
+/**
+ *  \class IGpuAllocator
+ * 
+ *  \brief Application-implemented class for controlling allocation on the GPU.
+ * 
+ *  \warning The lifetime of an IGpuAllocator object must exceed that of all objects that use it.
+ * 
+ *  This class is intended as a base class for allocators that implement synchronous allocation.
+ *  If you want the benefits of asynchronous allocation, you can do either of:
+ * 
+ *  * Derive your class from IGpuAllocator and override all four of its virtual methods
+ *    for allocation/deallocation, including the two deprecated methods.
+ * 
+ *  * Derive your class from IGpuAsyncAllocator and override its two pure virtual
+ *    methods for allocation/deallocation.
+ * 
+ *  The latter style is preferred because it does not tie code to deprecated methods.
+ * 
+ *  @see IGpuAsyncAllocator.
+ *  */
 
 
 //!
@@ -1904,7 +1600,6 @@ public static native @NoException(true) ILogger getLogger();
  *  including two deprecated methods.
  * 
  *  @see IGpuAllocator */
-
  // namespace nvinfer1
 
 /**
@@ -3566,7 +3261,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  control over which weights are refittable or not using INetworkDefinition::markWeightsRefittable and
      *  INetworkDefinition::unmarkWeightsRefittable. By default, all weights are non-refittable when this flag is
      *  enabled. This flag cannot be used together with kREFIT or kREFIT_IDENTICAL. */
-    kREFIT_INDIVIDUAL(23);
+    kREFIT_INDIVIDUAL(23),
+
+    /**  Disable floating-point optimizations: 0*x => 0, x-x => 0, or x/x => 1. These identities are
+     *   not true when x is a NaN or Inf, and thus might hide propagation or generation of NaNs. This flag is typically
+     *   used in combination with kSPARSE_WEIGHTS.
+     *   There are three valid sparsity configurations.
+     *   1. Disable all sparsity. Both kSPARSE_WEIGHTS and kSTRICT_NANS are unset
+     *   2. Enable sparsity only where it does not affect propagation/generation of NaNs. Both kSPARSE_WEIGHTS and
+     *   kSTRICT_NANS are set
+     *   3. Enable all sparsity. kSPARSE_WEIGHTS is set and kSTRICT_NANS is unset */
+    kSTRICT_NANS(24),
+
+    /** Enable memory monitor during build time. */
+    kMONITOR_MEMORY(25);
 
     public final int value;
     private BuilderFlag(int v) { this.value = v; }
@@ -3944,6 +3652,7 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 
 
  // namespace v_1_0
+ // namespace v_1_0
 
 /** enum class nvinfer1::ActivationType */
 ;
@@ -4253,6 +3962,369 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 // @endcond
 
 // #endif // NV_INFER_RUNTIME_IMPL_H
+
+
+// Parsed from NvInferPluginBase.h
+
+/*
+* SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+* SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+*
+* NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+* property and proprietary rights in and to this material, related
+* documentation and any modifications thereto. Any use, reproduction,
+* disclosure or distribution of this material and related documentation
+* without an express license agreement from NVIDIA CORPORATION or
+* its affiliates is strictly prohibited.
+*/
+
+// #ifndef NV_INFER_PLUGIN_BASE_H
+// #define NV_INFER_PLUGIN_BASE_H
+
+// #if !defined(NV_INFER_INTERNAL_INCLUDE)
+// #endif
+// #include "NvInferRuntimeBase.h"
+// #undef NV_INFER_INTERNAL_INCLUDE
+
+/**
+ *  \enum PluginFieldType
+ * 
+ *  \brief The possible field types for custom layer.
+ *  */
+@Namespace("nvinfer1") public enum PluginFieldType {
+    /** FP16 field type. */
+    kFLOAT16(0),
+    /** FP32 field type. */
+    kFLOAT32(1),
+    /** FP64 field type. */
+    kFLOAT64(2),
+    /** INT8 field type. */
+    kINT8(3),
+    /** INT16 field type. */
+    kINT16(4),
+    /** INT32 field type. */
+    kINT32(5),
+    /** char field type. */
+    kCHAR(6),
+    /** nvinfer1::Dims field type. */
+    kDIMS(7),
+    /** Unknown field type. */
+    kUNKNOWN(8),
+    /** BF16 field type. */
+    kBF16(9),
+    /** INT64 field type. */
+    kINT64(10),
+    /** FP8 field type. */
+    kFP8(11),
+    /** INT4 field type. */
+    kINT4(12);
+
+    public final int value;
+    private PluginFieldType(int v) { this.value = v; }
+    private PluginFieldType(PluginFieldType e) { this.value = e.value; }
+    public PluginFieldType intern() { for (PluginFieldType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../nvinfer/PluginField.java
+
+
+// Targeting ../nvinfer/PluginFieldCollection.java
+
+
+
+/**
+ *  \enum TensorRTPhase
+ * 
+ *  \brief Indicates a phase of operation of TensorRT
+ *  */
+@Namespace("nvinfer1") public enum TensorRTPhase {
+    /** Build phase of TensorRT */
+    kBUILD(0),
+    /** Execution phase of TensorRT */
+    kRUNTIME(1);
+
+    public final int value;
+    private TensorRTPhase(int v) { this.value = v; }
+    private TensorRTPhase(TensorRTPhase e) { this.value = e.value; }
+    public TensorRTPhase intern() { for (TensorRTPhase e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/**
+ *  \enum PluginCapabilityType
+ * 
+ *  \brief Enumerates the different capability types a IPluginV3 object may have
+ *  */
+@Namespace("nvinfer1") public enum PluginCapabilityType {
+    /** Core capability. Every IPluginV3 object must have this. */
+    kCORE(0),
+    /** Build capability. IPluginV3 objects provided to TensorRT build phase must have this. */
+    kBUILD(1),
+    /** Runtime capability. IPluginV3 objects provided to TensorRT build and execution phases must have this. */
+    kRUNTIME(2);
+
+    public final int value;
+    private PluginCapabilityType(int v) { this.value = v; }
+    private PluginCapabilityType(PluginCapabilityType e) { this.value = e.value; }
+    public PluginCapabilityType intern() { for (PluginCapabilityType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../nvinfer/IPluginCapability.java
+
+
+// Targeting ../nvinfer/IPluginResource.java
+
+
+// Targeting ../nvinfer/IPluginCreatorInterface.java
+
+
+// Targeting ../nvinfer/IPluginV3.java
+
+
+// Targeting ../nvinfer/IPluginCreatorV3One.java
+
+
+
+ // namespace v_1_0
+
+/**
+ *  \class IPluginCreatorV3One
+ * 
+ *  \brief A plugin creator class capable of producing IPluginV3 objects
+ * 
+ *  @see IPluginV3
+ *  @see IPluginRegistry
+ *  */
+
+
+//!
+//!
+//!
+//!
+
+/**
+ *  \class IPluginResource
+ * 
+ *  \brief Interface for plugins to define custom resources that could be shared through the plugin registry
+ * 
+ *  @see IPluginRegistry::acquirePluginResource
+ *  @see IPluginRegistry::releasePluginResource
+ *  */
+
+
+//!
+//!
+//!
+//!
+
+/**
+ *  \class IPluginCreatorInterface
+ * 
+ *  \brief Base class for all plugin creator versions.
+ * 
+ *  @see IPluginCreator and IPluginRegistry
+ *  */
+
+
+//!
+//!
+//!
+//!
+//!
+
+/**
+ *  \class IPluginV3
+ * 
+ *  \brief Plugin class for the V3 generation of user-implemented layers.
+ * 
+ *  IPluginV3 acts as a wrapper around the plugin capability interfaces that define the actual behavior of the plugin.
+ * 
+ *  @see IPluginCapability
+ *  @see IPluginCreatorV3One
+ *  @see IPluginRegistry
+ *  */
+
+
+//!
+//!
+//!
+//!
+//!
+//!
+
+/**
+ *  \class IPluginCapability
+ * 
+ *  \brief Base class for plugin capability interfaces
+ * 
+ *   IPluginCapability represents a split in TensorRT V3 plugins to sub-objects that expose different types of
+ *   capabilites a plugin may have, as opposed to a single interface which defines all capabilities and behaviors of a
+ *   plugin.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
+ * 
+ *  @see PluginCapabilityType
+ *  */
+ // namespace nvinfer1
+
+// #endif /* NV_INFER_PLUGIN_BASE_H */
+
+
+// Parsed from NvInferRuntimePlugin.h
+
+/*
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// #ifndef NV_INFER_RUNTIME_PLUGIN_H
+// #define NV_INFER_RUNTIME_PLUGIN_H
+// #include "NvInferPluginBase.h"
+
+
+//!
+//!
+//!
+//!
+
+//!
+//!
+//!
+// #undef NV_INFER_INTERNAL_INCLUDE
+
+/**
+ *  \file NvInferRuntimePlugin.h
+ * 
+ *  This file contains common definitions, data structures and interfaces that relate to plugins and are shared
+ *  between the standard and safe runtime.
+ * 
+ *  \warning Do not directly include this file. Instead include NvInferRuntime.h
+ * 
+ <p>
+ * 
+ *  \namespace nvinfer1
+ * 
+ *  \brief The TensorRT API version 1 namespace.
+ *  */
+
+/** enum class nvinfer1::TensorFormat */
+;
+
+
+
+//!
+//!
+//!
+
+/**
+ *  \brief PluginFormat is reserved for backward compatibility.
+ * 
+ *  @see IPluginV2::supportsFormat()
+ *  */
+
+
+//!
+//!
+
+/**
+ *  \brief Bit at the plugin version to identify that it is a plugin.
+ *  */
+
+
+//!
+//!
+//!
+//!
+//!
+@Namespace("nvinfer1") @MemberGetter public static native int kPLUGIN_VERSION_PYTHON_BIT();
+public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT();
+// Targeting ../nvinfer/PluginTensorDesc.java
+
+
+
+/**
+ *  \struct PluginVersion
+ * 
+ *  \brief Definition of plugin versions.
+ * 
+ *  Tag for plug-in versions.  Used in upper byte of getTensorRTVersion().
+ *  */
+@Namespace("nvinfer1") public enum PluginVersion {
+    /** IPluginV2 */
+    kV2((byte)(0)),
+    /** IPluginV2Ext */
+    kV2_EXT((byte)(1)),
+    /** IPluginV2IOExt */
+    kV2_IOEXT((byte)(2)),
+    /** IPluginV2DynamicExt */
+    kV2_DYNAMICEXT((byte)(3)),
+    /** IPluginV2DynamicExt-based Python plugins */
+    kV2_DYNAMICEXT_PYTHON((byte)(kPLUGIN_VERSION_PYTHON_BIT | 3));
+
+    public final byte value;
+    private PluginVersion(byte v) { this.value = v; }
+    private PluginVersion(PluginVersion e) { this.value = e.value; }
+    public PluginVersion intern() { for (PluginVersion e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/**
+ *  \enum PluginCreatorVersion
+ * 
+ *  \brief Enum to identify version of the plugin creator.
+ *  */
+@Namespace("nvinfer1") public enum PluginCreatorVersion {
+    /** IPluginCreator */
+    kV1(0),
+    /** IPluginCreator-based Python plugin creators */
+    kV1_PYTHON(kPLUGIN_VERSION_PYTHON_BIT);
+
+    public final int value;
+    private PluginCreatorVersion(int v) { this.value = v; }
+    private PluginCreatorVersion(PluginCreatorVersion e) { this.value = e.value; }
+    public PluginCreatorVersion intern() { for (PluginCreatorVersion e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../nvinfer/IPluginV2.java
+
+
+// Targeting ../nvinfer/IPluginV2Ext.java
+
+
+// Targeting ../nvinfer/IPluginV2IOExt.java
+
+
+// Targeting ../nvinfer/IPluginCreator.java
+
+
+ // namespace v_1_0
+
+/**
+ *  \class IPluginCreator
+ * 
+ *  \brief Plugin creator class for user implemented layers.
+ * 
+ *  @see IPlugin and IPluginFactory
+ * 
+ *  @deprecated Deprecated in TensorRT 10.0. Please implement IPluginCreatorV3One instead along with IPluginV3 plugins
+ *  instead.
+ *  */
+
+ // namespace nvinfer1
+
+// #endif // NV_INFER_RUNTIME_PLUGIN_H
 
 
 }
