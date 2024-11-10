@@ -3704,7 +3704,7 @@ public static final int DNNL_VERSION_MAJOR = 3;
 public static final int DNNL_VERSION_MINOR = 6;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 0;
+public static final int DNNL_VERSION_PATCH = 1;
 
 // clang-format on
 
