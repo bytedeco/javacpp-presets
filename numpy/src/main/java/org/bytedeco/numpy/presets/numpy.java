@@ -139,7 +139,7 @@ public class numpy implements InfoMapper {
                              "NPY_FLOAT256", "NPY_COMPLEX512", "NPY_COMPLEX512_FMT",
                              "NPY_SIGJMP_BUF", "_npy_signbit_f", "_npy_signbit_d", "_npy_signbit_ld",
                              "npy_degrees", "npy_degreesf", "npy_degreesl", "npy_radians", "npy_radiansf", "npy_radiansl",
-                             "PyStringScalarObject", /*"PyUnicodeScalarObject",*/ "__COMP_NPY_UNUSED",
+                             "PyStringScalarObject", /*"PyUnicodeScalarObject",*/ "__COMP_NPY_UNUSED", "_WARN___LOC__",
                              "PyArrayScalar_False", "PyArrayScalar_True", "PyArrayScalar_RETURN_FALSE", "PyArrayScalar_RETURN_TRUE", "NPY_NO_EXPORT",
                              "PyArray_malloc", "PyArray_free", "PyArray_realloc",
                              "NPY_BEGIN_THREADS_DEF", "NPY_BEGIN_ALLOW_THREADS", "NPY_END_ALLOW_THREADS", "NPY_BEGIN_THREADS", "NPY_END_THREADS",
