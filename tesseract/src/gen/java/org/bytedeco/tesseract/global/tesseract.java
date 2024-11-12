@@ -145,15 +145,15 @@ public static final int
 // clang-format off
 
 public static final int TESSERACT_MAJOR_VERSION = 5;
-public static final int TESSERACT_MINOR_VERSION = 4;
-public static final int TESSERACT_MICRO_VERSION = 1;
+public static final int TESSERACT_MINOR_VERSION = 5;
+public static final int TESSERACT_MICRO_VERSION = 0;
 
 public static final int TESSERACT_VERSION =          
   (TESSERACT_MAJOR_VERSION << 16 | 
    TESSERACT_MINOR_VERSION <<  8 | 
    TESSERACT_MICRO_VERSION);
 
-public static final String TESSERACT_VERSION_STR = "5.4.1";
+public static final String TESSERACT_VERSION_STR = "5.5.0";
 
 // clang-format on
 
