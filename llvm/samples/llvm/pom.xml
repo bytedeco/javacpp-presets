@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.11</version>
     <properties>
         <exec.mainClass>MCJIT</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,12 +12,12 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>19.1.3-1.5.11-SNAPSHOT</version>
+            <version>19.1.3-1.5.11</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.4.6-1.5.11-SNAPSHOT</version>
+            <version>3.4.6-1.5.11</version>
         </dependency>
     </dependencies>
     <repositories>

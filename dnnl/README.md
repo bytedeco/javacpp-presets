@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.dnnl</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.11</version>
     <properties>
         <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>3.6.1-1.5.11-SNAPSHOT</version>
+            <version>3.6.1-1.5.11</version>
         </dependency>
     </dependencies>
     <build>

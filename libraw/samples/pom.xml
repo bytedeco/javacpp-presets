@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libraw</groupId>
     <artifactId>librawdemo</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.11</version>
     <properties>
         <exec.mainClass>LibRawDemo</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libraw-platform</artifactId>
-            <version>0.21.2-1.5.11-SNAPSHOT</version>
+            <version>0.21.2-1.5.11</version>
         </dependency>
     </dependencies>
     <build>
