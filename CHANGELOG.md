@@ -1,4 +1,5 @@
 
+### November 16, 2024 version 1.5.11
  * Enable distributed package using Gloo in presets for PyTorch ([pull #1510](https://github.com/bytedeco/javacpp-presets/pull/1510))
  * Add presets for the CUPTI module of CUDA ([pull #1531](https://github.com/bytedeco/javacpp-presets/pull/1531))
  * Add new `ClangMemoryMgmtExample` in samples for LLVM ([pull #1522](https://github.com/bytedeco/javacpp-presets/pull/1522))

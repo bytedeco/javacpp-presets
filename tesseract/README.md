@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tesseract</groupId>
     <artifactId>BasicExample</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.11</version>
     <properties>
         <exec.mainClass>BasicExample</exec.mainClass>
     </properties>
@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>5.5.0-1.5.11-SNAPSHOT</version>
+            <version>5.5.0-1.5.11</version>
         </dependency>
     </dependencies>
     <build>
