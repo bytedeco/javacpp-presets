@@ -2,5 +2,4 @@ org.bytedeco.tensorrt.global
 org.bytedeco.tensorrt.nvinfer
 org.bytedeco.tensorrt.nvinfer_plugin
 org.bytedeco.tensorrt.nvonnxparser
-org.bytedeco.tensorrt.nvparsers
 org.bytedeco.tensorrt.presets

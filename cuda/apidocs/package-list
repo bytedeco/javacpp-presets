@@ -2,6 +2,7 @@ org.bytedeco.cuda.cublas
 org.bytedeco.cuda.cudart
 org.bytedeco.cuda.cudnn
 org.bytedeco.cuda.cufftw
+org.bytedeco.cuda.cupti
 org.bytedeco.cuda.curand
 org.bytedeco.cuda.cusolver
 org.bytedeco.cuda.cusparse

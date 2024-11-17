@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.bytedeco.leptonica"},{"l":"org.bytedeco.leptonica.global"},{"l":"org.bytedeco.leptonica.presets"}];updateSearchResults();
