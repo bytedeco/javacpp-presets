@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2017-2024 Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,7 +22,10 @@
 
 package org.bytedeco.systems.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -37,8 +40,8 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = javacpp.class, value = {@Platform(value = "macosx-x86", define = "__STDC_WANT_LIB_EXT1__ 1",
-    include = {"cpuid.h", "dlfcn.h", "nl_types.h", "_xlocale.h", "xlocale.h", "_locale.h", "langinfo.h", "locale.h",
+@Properties(inherit = javacpp.class, value = {@Platform(value = "macosx", define = "__STDC_WANT_LIB_EXT1__ 1",
+    include = {"dlfcn.h", "nl_types.h", "__xlocale.h", "_xlocale.h", "xlocale.h", "_locale.h", "langinfo.h", "locale.h",
                "sys/uio.h", "sys/_types/_iovec_t.h", "sys/socket.h", "sys/errno.h", "string.h", "stdlib.h", /*"sys/types.h",*/
                "sys/_types/_timespec.h", "sys/_types/_timeval.h", "sys/time.h", "time.h", "utime.h",
                "sys/_types/_s_ifmt.h", "sys/_types/_filesec_t.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",
@@ -47,11 +50,10 @@ import org.bytedeco.javacpp.tools.Logger;
                "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h",
                "sys/_types/_uid_t.h", "sys/_types/_gid_t.h", "sys/_types/_mode_t.h", "sys/_types/_key_t.h", "sys/ipc.h",
                "sys/_types/_pid_t.h", "sys/_types/_time_t.h", "sys/_types/_size_t.h", "sys/shm.h"},
-    includepath = {"/usr/include/", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/",
-                   "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"})},
+    exclude = {"__xlocale.h"})},
     target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
 @NoException
-public class macosx implements BuildEnabled, InfoMapper {
+public class macosx implements LoadEnabled, BuildEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
@@ -67,6 +69,21 @@ public class macosx implements BuildEnabled, InfoMapper {
         this.is64bits = properties.getProperty("platform").contains("64");
     }
 
+    @Override
+    public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> includePaths = properties.get("platform.includepath");
+        List<String> includes = properties.get("platform.include");
+        if (platform.startsWith("macosx-x86")) {
+            includes.add(0, "cpuid.h");
+        }
+        if (Loader.getCallerClass(4).getName().equals("org.bytedeco.javacpp.tools.Parser")) {
+            includePaths.add("/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/");
+            includePaths.add("/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/");
+            includePaths.add("/usr/include/");
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("stat.h").linePatterns("#define[ \t]st_.*").skip())
                .put(new Info("signal.h").linePatterns("#define[ \t]sa_.*").skip())
@@ -74,13 +91,14 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("__BEGIN_DECLS").cppText("#define __BEGIN_DECLS"))
                .put(new Info("__END_DECLS").cppText("#define __END_DECLS"))
+               .put(new Info("__sized_by").cppText("#define __sized_by(N)"))
 
                .put(new Info("__LP64__", "__x86_64__").define(is64bits))
 
                .put(new Info("!defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)",
                              "__APPLE__", "__DARWIN_UNIX03").define(true))
 
-               .put(new Info("__BLOCKS__", "!__DARWIN_UNIX03",
+               .put(new Info("__BLOCKS__", "!__DARWIN_UNIX03", "!__DARWIN_ONLY_64_BIT_INO_T",
                              "__DARWIN_C_LEVEL < __DARWIN_C_FULL").define(false))
 
                .put(new Info("__deprecated").annotations("@Deprecated").cppTypes())
@@ -126,7 +144,7 @@ public class macosx implements BuildEnabled, InfoMapper {
                .put(new Info("locale_t").valueTypes("_xlocale"))
                .put(new Info("filesec_t").valueTypes("_filesec"))
                .put(new Info("struct stat").pointerTypes("stat"))
-               .put(new Info("struct stat64").pointerTypes("stat64"))
+               .put(new Info("struct stat64").pointerTypes("stat64").skip())
                .put(new Info("struct timezone").pointerTypes("timezone"))
                .put(new Info("struct sigaction").pointerTypes("sigaction"))
                .put(new Info("struct sigvec").pointerTypes("sigvec"))

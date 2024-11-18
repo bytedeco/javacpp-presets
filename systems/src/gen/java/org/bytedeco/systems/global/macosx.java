@@ -3483,7 +3483,6 @@ public static final int S_IEXEC =         S_IXUSR;         /* backward compatabi
 
 
 // #else /* !__DARWIN_64_BIT_INO_T */
-// Targeting ../macosx/stat64.java
 
 
 
@@ -3703,17 +3702,6 @@ public static native int statx_np(String arg0, stat arg1, _filesec arg2);
 public static native int umaskx_np(_filesec arg0);
 
 // #if !__DARWIN_ONLY_64_BIT_INO_T
-/* The following deprecated routines are simillar to stat and friends except provide struct stat64 instead of struct stat  */
-public static native int fstatx64_np(int arg0, stat64 arg1, _filesec arg2);
-public static native int lstatx64_np(@Cast("const char*") BytePointer arg0, stat64 arg1, _filesec arg2);
-public static native int lstatx64_np(String arg0, stat64 arg1, _filesec arg2);
-public static native int statx64_np(@Cast("const char*") BytePointer arg0, stat64 arg1, _filesec arg2);
-public static native int statx64_np(String arg0, stat64 arg1, _filesec arg2);
-public static native int fstat64(int arg0, stat64 arg1);
-public static native int lstat64(@Cast("const char*") BytePointer arg0, stat64 arg1);
-public static native int lstat64(String arg0, stat64 arg1);
-public static native int stat64(@Cast("const char*") BytePointer arg0, stat64 arg1);
-public static native int stat64(String arg0, stat64 arg1);
 // #endif /* !__DARWIN_ONLY_64_BIT_INO_T */
 // #endif /* (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
 

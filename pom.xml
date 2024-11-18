@@ -1472,6 +1472,7 @@
         <module>tesseract</module>
         <module>pytorch</module>
         <module>sentencepiece</module>
+        <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

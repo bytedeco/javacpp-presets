@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2022 Samuel Audet
+ * Copyright (C) 2015-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "native_camera_r2.2.0", "native_camera_r2.3.4", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
             "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
         @Platform(value = "ios", preload = "libopencv_videoio"),
+        @Platform(value = "macosx", preload = "OrbbecSDK@.1.9"),
         @Platform(value = "windows", link = "opencv_videoio4100", preload = {"opencv_ffmpeg4100", "opencv_ffmpeg4100_64"})},
     target = "org.bytedeco.opencv.opencv_videoio",
     global = "org.bytedeco.opencv.global.opencv_videoio"
