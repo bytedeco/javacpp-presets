@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2017-2024 Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -128,8 +128,9 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                              "defined __USE_XOPEN2K && !defined __USE_GNU",
                              "defined __GNUC__ && __GNUC__ >= 2 && defined __USE_EXTERN_INLINES",
                              "defined __USE_XOPEN_EXTENDED && !defined __USE_XOPEN2K8",
+			     "DLFO_STRUCT_HAS_EH_DBASE", "DLFO_STRUCT_HAS_EH_COUNT", "_LINUX_KERNEL_H",
                              "__GNUC_PREREQ (3, 0)",  "__SI_CLOCK_T", "__TIMESIZE == 32",
-                             "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64", "_LINUX_KERNEL_H",
+                             "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64", "__USE_TIME_BITS64",
                              "__HAVE_FLOAT16", "__HAVE_FLOAT16 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
                              "__HAVE_FLOAT32", "__HAVE_FLOAT32 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
                              "__HAVE_FLOAT64", "__HAVE_FLOAT64 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
@@ -168,7 +169,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("off64_t", "rlim64_t", "__off64_t", "__rlim64_t", "__blkcnt64_t", "greg_t", "__ino64_t", "__u64", "__uint64_t")
                        .cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 
-               .put(new Info("__locale_data", "module", "sigcontext", "__spawn_action", "timex", "pt_regs",
+               .put(new Info("link_map", "__locale_data", "module", "sigcontext", "__spawn_action", "timex", "pt_regs",
                              "_fpreg", "_fpstate", "_fpxreg", "_libc_fpstate", "_libc_fpxreg", "_libc_xmmreg", "_xmmreg").cast().pointerTypes("Pointer"))
                .put(new Info("__timezone_ptr_t").cast().pointerTypes("timezone"))
                .put(new Info("gregset_t", "fpregset_t").cppTypes("void* const"))
