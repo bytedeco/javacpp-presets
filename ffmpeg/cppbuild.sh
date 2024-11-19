@@ -116,7 +116,7 @@ export PATH=$INSTALL_PATH/bin:$PATH
 export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
-patch -Np1 -d $OPENSSL < ../../openssl-android.patch
+# patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
@@ -197,7 +197,7 @@ case $PLATFORM in
         make install
         cd ../$OPENSSL
         PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-arm no-shared no-tests -D__ANDROID_API__=24
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
         patch -Np1 < ../../../srt-android.patch || true
@@ -353,7 +353,7 @@ EOF
         make install
         cd ../$OPENSSL
         PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-arm64 no-shared no-tests -D__ANDROID_API__=24
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
         patch -Np1 < ../../../srt-android.patch || true
@@ -508,7 +508,7 @@ EOF
         make install
         cd ../$OPENSSL
         PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-x86 no-shared no-tests -D__ANDROID_API__=24
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
         patch -Np1 < ../../../srt-android.patch || true
@@ -660,7 +660,7 @@ EOF
         make install
         cd ../$OPENSSL
         PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-x86_64 no-shared no-tests -D__ANDROID_API__=24
-        ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
         patch -Np1 < ../../../srt-android.patch || true

@@ -99,6 +99,7 @@ export ANDROID_BIN="$ANDROID_NDK/toolchains/llvm/prebuilt/$KERNEL-$ARCH/"
 export ANDROID_CC="$ANDROID_NDK/toolchains/llvm/prebuilt/$KERNEL-$ARCH/bin/clang"
 export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/llvm-libc++/"
 export ANDROID_PREFIX="$ANDROID_BIN/bin/llvm"
+export ANDROID_NDK_ROOT="$ANDROID_NDK"
 export ANDROID_ROOT=
 case $PLATFORM in
     android-arm)
