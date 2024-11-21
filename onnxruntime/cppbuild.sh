@@ -45,6 +45,9 @@ case $PLATFORM in
         export ARCH_FLAGS="$ARCH_FLAGS --arm64"
         export DNNL_FLAGS=
         ;;
+    macosx-arm64)
+        export DNNL_FLAGS=
+        ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
             export CUDACXX="$CUDA_PATH/bin/nvcc.exe"

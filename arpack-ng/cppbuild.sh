@@ -83,7 +83,18 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-    macosx-*)
+    macosx-arm64)
+        sed -i="" 's/install_name \\$rpath/install_name @rpath/g' configure m4/libtool.m4
+        export CC="$(ls -1 /opt/homebrew/bin/gcc-* | head -n 1)"
+        export CXX="$(ls -1 /opt/homebrew/bin/g++-* | head -n 1)"
+        export FC="$(ls -1 /opt/homebrew/bin/gfortran-* | head -n 1) -Wl,-rpath,@loader_path/ -Wl,-rpath,$(ls -1d /opt/homebrew/opt/gcc*/lib/gcc/*/ | head -n 1)"
+        export F77="$FC"
+        export FLIBS="-lgfortran"
+        ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    macosx-x86_64)
         sed -i="" 's/install_name \\$rpath/install_name @rpath/g' configure m4/libtool.m4
         export CC="$(ls -1 /usr/local/bin/gcc-* | head -n 1)"
         export CXX="$(ls -1 /usr/local/bin/g++-* | head -n 1)"
