@@ -1461,6 +1461,10 @@
         <module>ffmpeg</module>
         <module>lz4</module>
         <module>openblas</module>
+        <module>arpack-ng</module>
+        <module>cminpack</module>
+        <module>fftw</module>
+        <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
         <module>scipy</module>
@@ -1472,6 +1476,9 @@
         <module>tesseract</module>
         <module>pytorch</module>
         <module>sentencepiece</module>
+        <module>tensorflow-lite</module>
+        <module>onnx</module>
+        <module>onnxruntime</module>
         <module>systems</module>
       </modules>
       <properties>
