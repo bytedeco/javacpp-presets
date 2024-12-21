@@ -103,6 +103,10 @@ case $PLATFORM in
           ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java
           make -j $MAKEJ
           make install-strip
+        elif [[ "$MACHINE_TYPE" =~ aarch64 ]]; then
+          ./configure --prefix=$INSTALL_PATH CC="gcc" CXX="g++" --enable-cxx --enable-java
+          make -j $MAKEJ
+          make install-strip
         else
           echo "Not native arm so assume cross compiling"
           patch -Np1 < ../../../hdf5-linux-arm64.patch || true
