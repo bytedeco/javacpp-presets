@@ -205,7 +205,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.13.x  https://www.python.org/downloads/
- * NumPy 2.1.x  https://github.com/numpy/numpy
+ * NumPy 2.2.x  https://github.com/numpy/numpy
  * SciPy 1.14.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
  * LLVM 19.1.x  http://llvm.org/releases/download.html
