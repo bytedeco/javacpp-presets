@@ -35,11 +35,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_imgproc.class,
     value = {
         @Platform(include = {/*"<opencv2/photo/photo_c.h>",*/ "<opencv2/photo.hpp>", "<opencv2/photo/cuda.hpp>"},
-            link = "opencv_photo@.410",
-            preload = {"opencv_cuda@.410", "opencv_cudaarithm@.410", "opencv_cudafilters@.410", "opencv_cudaimgproc@.410"}),
+            link = "opencv_photo@.411",
+            preload = {"opencv_cuda@.411", "opencv_cudaarithm@.411", "opencv_cudafilters@.411", "opencv_cudaimgproc@.411"}),
         @Platform(value = "ios", preload = "libopencv_photo"),
-        @Platform(value = "windows", link = "opencv_photo4100",
-            preload = {"opencv_cuda4100", "opencv_cudaarithm4100", "opencv_cudafilters4100", "opencv_cudaimgproc4100"})},
+        @Platform(value = "windows", link = "opencv_photo4110",
+            preload = {"opencv_cuda4110", "opencv_cudaarithm4110", "opencv_cudafilters4110", "opencv_cudaimgproc4110"})},
     target = "org.bytedeco.opencv.opencv_photo",
     global = "org.bytedeco.opencv.global.opencv_photo"
 )

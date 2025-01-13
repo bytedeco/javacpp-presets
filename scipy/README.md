@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * SciPy 1.14.1  https://www.scipy.org/
+ * SciPy 1.15.1  https://www.scipy.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.scipy</groupId>
     <artifactId>sparselinalg</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.12-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SparseLinalg</exec.mainClass>
     </properties>
@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.14.1-1.5.11</version>
+            <version>1.15.1-1.5.12-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->

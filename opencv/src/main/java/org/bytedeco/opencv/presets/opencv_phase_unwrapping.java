@@ -37,10 +37,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/phase_unwrapping/phase_unwrapping.hpp>",
                 "<opencv2/phase_unwrapping/histogramphaseunwrapping.hpp>",
             },
-            link = "opencv_phase_unwrapping@.410"
+            link = "opencv_phase_unwrapping@.411"
         ),
         @Platform(value = "ios", preload = "libopencv_phase_unwrapping"),
-        @Platform(value = "windows", link = "opencv_phase_unwrapping4100")
+        @Platform(value = "windows", link = "opencv_phase_unwrapping4110")
     },
     target = "org.bytedeco.opencv.opencv_phase_unwrapping",
     global = "org.bytedeco.opencv.global.opencv_phase_unwrapping"
