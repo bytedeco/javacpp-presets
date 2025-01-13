@@ -37,10 +37,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             	"<opencv2/saliency/saliencyBaseClasses.hpp>",
                 "<opencv2/saliency/saliencySpecializedClasses.hpp>"
             },
-            link = "opencv_saliency@.410"
+            link = "opencv_saliency@.411"
         ),
         @Platform(value = "ios", preload = "libopencv_saliency"),
-        @Platform(value = "windows", link = "opencv_saliency4100")
+        @Platform(value = "windows", link = "opencv_saliency4110")
     },
     target = "org.bytedeco.opencv.opencv_saliency",
     global = "org.bytedeco.opencv.global.opencv_saliency"

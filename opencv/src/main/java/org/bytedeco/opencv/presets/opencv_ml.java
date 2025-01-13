@@ -34,9 +34,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_core.class,
     value = {
-        @Platform(include = "<opencv2/ml.hpp>", link = "opencv_ml@.410"),
+        @Platform(include = "<opencv2/ml.hpp>", link = "opencv_ml@.411"),
         @Platform(value = "ios", preload = "libopencv_ml"),
-        @Platform(value = "windows", link = "opencv_ml4100")},
+        @Platform(value = "windows", link = "opencv_ml4110")},
     target = "org.bytedeco.opencv.opencv_ml",
     global = "org.bytedeco.opencv.global.opencv_ml"
 )

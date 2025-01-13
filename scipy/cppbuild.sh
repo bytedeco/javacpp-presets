@@ -7,15 +7,16 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-BOOST=1_75_0
-SCIPY_VERSION=1.14.1
+BOOST=1_87_0
+SCIPY_VERSION=1.15.1
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download https://github.com/data-apis/array-api-compat/archive/fd22a73.tar.gz array-api-compat-fd22a73.tar.gz
-download https://github.com/cobyqa/cobyqa/archive/7f40b6d.tar.gz cobyqa-7f40b6d.tar.gz
-download https://github.com/scipy/HiGHS/archive/4a12295.tar.gz HiGHS-4a12295.tar.gz
+download https://github.com/data-apis/array-api-compat/archive/498f086.tar.gz array-api-compat-498f086.tar.gz
+download https://github.com/data-apis/array-api-extra/archive/8e1c8fa.tar.gz array-api-extra-8e1c8fa.tar.gz
+download https://github.com/cobyqa/cobyqa/archive/55c8e5a.tar.gz cobyqa-55c8e5a.tar.gz
+download https://github.com/scipy/HiGHS/archive/222cce7.tar.gz HiGHS-222cce7.tar.gz
 download https://github.com/scipy/unuran/archive/21810c8.tar.gz unuran-21810c8.tar.gz
 download https://github.com/scipy/pocketfft/archive/9367142.tar.gz pocketfft-9367142.tar.gz
-download https://github.com/scipy/PROPACK/archive/96f6800.tar.gz PROPACK-96f6800.tar.gz
+download https://github.com/scipy/PROPACK/archive/8a6b207.tar.gz PROPACK-8a6b207.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -55,6 +56,7 @@ NUMPY_PATH="${NUMPY_PATH//\\//}"
 echo "Decompressing archives..."
 tar --totals -xzf ../boost_$BOOST.tar.gz
 tar --totals -xzf ../array-api-compat-*.tar.gz || true
+tar --totals -xzf ../array-api-extra-*.tar.gz || true
 tar --totals -xzf ../cobyqa-*.tar.gz
 tar --totals -xzf ../HiGHS-*.tar.gz
 tar --totals -xzf ../unuran-*.tar.gz
@@ -63,8 +65,9 @@ tar --totals -xzf ../PROPACK-*.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
 cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost_math/
 cp -a array-api-compat-*/* scipy-$SCIPY_VERSION/scipy/_lib/array_api_compat/
+cp -a array-api-extra-*/* scipy-$SCIPY_VERSION/scipy/_lib/array_api_extra/
 cp -a cobyqa-*/* scipy-$SCIPY_VERSION/scipy/_lib/cobyqa/
-cp -a HiGHS-*/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
+cp -a HiGHS-*/* scipy-$SCIPY_VERSION/subprojects/highs/
 cp -a unuran-*/* scipy-$SCIPY_VERSION/scipy/_lib/unuran/
 cp -a pocketfft-*/* scipy-$SCIPY_VERSION/scipy/_lib/pocketfft/
 cp -a PROPACK-*/* scipy-$SCIPY_VERSION/scipy/sparse/linalg/_propack/PROPACK/
