@@ -28,6 +28,9 @@ import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.presets.javacpp;
+import org.bytedeco.javacpp.tools.Info;
+import org.bytedeco.javacpp.tools.InfoMap;
 
 /**
  *
