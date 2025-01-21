@@ -41,29 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
     @Platform(
         include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"})})
 @NoException
-public class openblas_full extends openblas_nolapack {
-
-    @Override public void init(ClassProperties properties) {
-        super.init(properties);
-
-        List<String> links = properties.get("platform.link");
-        List<String> preloads = properties.get("platform.preload");
-
-        // Replace all occurences of "openblas_nolapack" with "openblas_full" (with LAPACK)
-        for (List<String> l : new List[] {links, preloads}) {
-            ListIterator<String> it = l.listIterator();
-            while (it.hasNext()) {
-                String s = it.next();
-                if (s.contains("openblas_nolapack")) {
-                    it.remove();
-                    s = s.replace("openblas_nolapack", "openblas_full");
-                    if (!l.contains(s)) {
-                        it.add(s);
-                    }
-                }
-            }
-        }
-    }
+public class openblas_full extends openblas {
 
   @Override public void map(InfoMap infoMap) {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
