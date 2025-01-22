@@ -22,6 +22,9 @@
 
 package org.bytedeco.openblas.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
+import org.bytedeco.javacpp.annotation.Properties;
+
 /**
  *
  * @author Samuel Audet
