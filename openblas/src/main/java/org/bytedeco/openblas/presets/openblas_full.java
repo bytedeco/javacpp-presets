@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.annotation.Properties;
  * @author Samuel Audet
  * @author Dragan Djuric
  */
-@Properties(inherit = openblas.class, global = "org.bytedeco.openblas.global.openblas_full"))
+@Properties(inherit = openblas.class, global = "org.bytedeco.openblas.global.openblas_full")
 @NoException
 public class openblas_full extends openblas {
 
