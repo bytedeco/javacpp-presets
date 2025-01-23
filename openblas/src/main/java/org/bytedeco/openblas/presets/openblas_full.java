@@ -24,13 +24,15 @@ package org.bytedeco.openblas.presets;
 
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.annotation.Platform;
 
 /**
  *
  * @author Samuel Audet
  * @author Dragan Djuric
  */
-@Properties(inherit = openblas.class, global = "org.bytedeco.openblas.global.openblas_full")
+@Properties(inherit = openblas.class, global = "org.bytedeco.openblas.global.openblas_full",
+            value = {@Platform(include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"})})
 @NoException
 public class openblas_full extends openblas {
 
