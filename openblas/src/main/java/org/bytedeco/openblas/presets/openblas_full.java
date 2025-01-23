@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2025 Samuel Audet
+ * Copyright (C) 2025 Samuel Audet, Dragan Djuric
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 package org.bytedeco.openblas.presets;
 
 import org.bytedeco.javacpp.annotation.NoException;
+import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.Platform;
 
@@ -31,8 +32,9 @@ import org.bytedeco.javacpp.annotation.Platform;
  * @author Samuel Audet
  * @author Dragan Djuric
  */
-@Properties(inherit = openblas.class, global = "org.bytedeco.openblas.global.openblas_full",
-            value = {@Platform(include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"})})
+@Properties(inherit = openblas.class, global = "org.bytedeco.openblas.global.openblas_full", value = {
+    @Platform(
+        include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"})})
 @NoException
 public class openblas_full extends openblas {
 
