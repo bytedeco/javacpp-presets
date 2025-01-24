@@ -25,6 +25,7 @@ package org.bytedeco.openblas.presets;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.tools.InfoMap;
 
 /**
  *
@@ -37,7 +38,8 @@ import org.bytedeco.javacpp.annotation.Properties;
 @NoException
 public class openblas_full extends openblas {
 
-    @Override public String[] functionsToSkip() {
-        return new String[0];
+    @Override public void map(InfoMap infoMap) {
+        openblas_nolapack.mapCommon(infoMap);
     }
+
 }
