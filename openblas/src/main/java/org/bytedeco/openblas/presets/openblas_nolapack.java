@@ -139,6 +139,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
     public String[] functionsToSkip() {
         String[] functions = {
             // not available in Accelerate
+
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
             "cblas_caxpyc", "cblas_zaxpyc",
             "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
