@@ -1,5 +1,5 @@
 
- * Add `openblas_full` class giving access to all of OpenBLAS ([pull #1571](https://github.com/bytedeco/javacpp-presets/pull/1571))
+ * Add `openblas_full` class giving access to all of OpenBLAS ([pull #1572](https://github.com/bytedeco/javacpp-presets/pull/1572))
  * Introduce `macosx-arm64` builds for ARPACK-NG, CMINPACK, FFTW, GSL, TensorFlow Lite, ONNX, ONNX Runtime ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069))
  * Upgrade presets for OpenCV 4.11.0, DNNL 3.6.2, CPython 3.13.1, NumPy 2.2.1, SciPy 1.15.1, LLVM 19.1.6, ONNX Runtime 1.20.1
 
