@@ -130,16 +130,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
     }
 
     @Override public void map(InfoMap infoMap) {
-        mapCommon(infoMap);
-        for (String f : functionsToSkip()) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip());
-        }
-    }
 
-    public String[] functionsToSkip() {
+        mapCommon(infoMap);
+
         String[] functions = {
             // not available in Accelerate
-
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
             "cblas_caxpyc", "cblas_zaxpyc",
             "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
@@ -173,7 +168,10 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
             "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
-        return functions;
+
+        for (String f : functions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip());
+        }
     }
 
     static int maxThreads = -1;
