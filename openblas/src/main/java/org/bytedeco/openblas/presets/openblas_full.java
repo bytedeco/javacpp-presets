@@ -38,7 +38,5 @@ import org.bytedeco.javacpp.tools.InfoMap;
 @NoException
 public class openblas_full extends openblas {
 
-    @Override public void map(InfoMap infoMap) {
-        openblas_nolapack.mapCommon(infoMap);
-    }
+    @Override protected boolean skipFunctions() { return false; }
 }
