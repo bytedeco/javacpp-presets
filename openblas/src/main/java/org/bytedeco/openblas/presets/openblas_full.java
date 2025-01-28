@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.InfoMap;
+import org.bytedeco.javacpp.tools.Info;
 
 /**
  *
@@ -54,7 +55,7 @@ public class openblas_full extends openblas {
             "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
 
         for (String f : functions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base")).skip();
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base").skip());
         }
 
     }
