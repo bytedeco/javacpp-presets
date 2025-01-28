@@ -38,5 +38,25 @@ import org.bytedeco.javacpp.tools.InfoMap;
 @NoException
 public class openblas_full extends openblas {
 
-    @Override protected boolean skipFunctions() { return false; }
+    @Override public void map(InfoMap infoMap) {
+        openblas_nolapack.mapCommon(infoMap);
+
+        String[] functions = {
+            // not implemented by MKL
+            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
+            "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
+            // deprecated
+            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq",
+            "cggsvd", "dggsvd", "sggsvd", "zggsvd", "zggsvp", "cggsvp", "dggsvp", "sggsvp",
+            // extended
+            "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
+            "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
+
+        for (String f : functions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base")).skip();
+        }
+
+    }
+
 }

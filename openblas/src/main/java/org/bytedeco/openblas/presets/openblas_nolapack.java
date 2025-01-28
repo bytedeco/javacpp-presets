@@ -116,7 +116,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         }
     }
 
-    @Override public void map(InfoMap infoMap) {
+    static void mapCommon(InfoMap infoMap) {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
                              "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "FORTRAN_STRLEN", "lapack_int", "lapack_logical").cppTypes().annotations())
@@ -127,6 +127,10 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                              "defined(LAPACK_COMPLEX_CPP)", "LAPACK_COMPLEX_CUSTOM", "LAPACK_FORTRAN_STRLEN_END").define())
                .put(new Info("openblas_complex_float", "lapack_complex_float").cast().pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("openblas_complex_double", "lapack_complex_double").cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
+    }
+
+    @Override public void map(InfoMap infoMap) {
+        mapCommon(infoMap);
 
         String[] functions = {
             // not available in Accelerate
@@ -162,12 +166,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
             "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
+
         for (String f : functions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work")).skip();
         }
     }
-
-    protected boolean skipFunctions() { return true; }
 
     static int maxThreads = -1;
     static int vendor = 0;
