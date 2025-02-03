@@ -8,6 +8,8 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 export BUILD_TEST=0
+#export CUDAHOSTCC="clang"
+#export CUDAHOSTCXX="clang++"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
 export CUDA_HOME="/usr/local/cuda"
 export CUDNN_HOME="/usr/local/cuda"
@@ -38,7 +40,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.5.1
+PYTORCH_VERSION=2.6.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
