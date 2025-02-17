@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 Hervé Guillemet, Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2020-2025 Hervé Guillemet, Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -289,14 +289,14 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("TORCH_API", "C10_API", "TORCH_XPU_API", "C10_EXPORT", "C10_HIDDEN", "C10_IMPORT", "C10_API_ENUM", "C10_UNUSED",
                 "EXPORT_IF_NOT_GCC", "TORCH_CUDA_CU_API", "TORCH_CUDA_CPP_API", "TORCH_HIP_API", "TORCH_PYTHON_API", "TORCH_UNUSED_EXCEPT_CUDA",
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__", "__ubsan_ignore_signed_int_overflow__", "__ubsan_ignore_function__",
+                "__ubsan_ignore_float_cast_overflow__", "C10_ALWAYS_INLINE_ATTRIBUTE", "C10_TYPENAME_CONSTEXPR",
                 "C10_CLANG_DIAGNOSTIC_IGNORE", "C10_CLANG_DIAGNOSTIC_PUSH", "C10_CLANG_DIAGNOSTIC_POP", "C10_ATTR_VISIBILITY_HIDDEN", "C10_ERASE",
                 "C10_UID", "C10_NODISCARD", "C10_UNUSED", "C10_USED", "C10_RESTRICT", "C10_NOINLINE", "C10_ALWAYS_INLINE", "C10_FALLTHROUGH",
                 "C10_HOST_DEVICE", "C10_DEVICE", "C10_HOST", "C10_LAUNCH_BOUNDS_0", "C10_HIP_HOST_DEVICE", "C10_WARP_SIZE", "C10_IOS", "C10_MOBILE",
                 "C10_HOST_CONSTEXPR", "CONSTEXPR_EXCEPT_WIN_CUDA", "C10_HOST_CONSTEXPR_EXCEPT_WIN_CUDA", "C10_ALWAYS_INLINE_UNLESS_MOBILE",
                 "alignas", "COMPLEX_INTEGER_OP_TEMPLATE_CONDITION", "C10_DEVICE_HOST_FUNCTION", "FORCE_INLINE_APPLE",
                 "ERROR_UNSUPPORTED_CAST", "LEGACY_CONTIGUOUS_MEMORY_FORMAT", "GFLAGS_DLL_DEFINE_FLAG", "GFLAGS_DLL_DECLARE_FLAG",
-                "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__",
-                "__inline__",
+                "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__", "__inline__",
                 "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
                 "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT",
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__",
@@ -539,6 +539,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
         //// std::variant
         infoMap
+//            .put(new Info("std::variant<int,std::vector<int> >").pointerTypes("IntVectorVariant").define())
             .put(new Info("std::variant<torch::enumtype::kLinear,torch::enumtype::kConv1D,torch::enumtype::kConv2D,torch::enumtype::kConv3D,"
                           + "torch::enumtype::kConvTranspose1D,torch::enumtype::kConvTranspose2D,torch::enumtype::kConvTranspose3D,"
                           + "torch::enumtype::kSigmoid,torch::enumtype::kTanh,torch::enumtype::kReLU,torch::enumtype::kLeakyReLU>",
@@ -648,7 +649,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::array<c10::detail::infer_schema::ArgumentDef,0>").cast().pointerTypes("ArgumentDef"))
             .put(new Info("std::array<const char*,2>").pointerTypes("PointerPointer<BytePointer>"))
             .put(new Info("std::array<c10::FunctionalityOffsetAndMask,c10::num_functionality_keys>").cast().pointerTypes("FunctionalityOffsetAndMask"))
-            .put(new Info("std::array<uint32_t,at::MERSENNE_STATE_N>").pointerTypes("IntPointer").cast())
+            .put(new Info("std::array<uint32_t,at::MERSENNE_STATE_N>", "std::array<at::SDPBackend,at::num_sdp_backends>").pointerTypes("IntPointer").cast())
             .put(new Info("std::array<std::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >,at::COMPILE_TIME_MAX_DEVICE_TYPES>").pointerTypes("PointerPairOptional").cast())
             .put(new Info("std::array<uint8_t,c10::NumScalarTypes>").pointerTypes("BytePointer").cast())
         ;
@@ -659,6 +660,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<bool>").pointerTypes("BoolVector").define())
             .put(new Info("std::vector<uint8_t>", "std::vector<char>").pointerTypes("ByteVector").define().cast()) // cast to accomodate sign/unsigned
             .put(new Info("std::vector<const char*>").pointerTypes("BytePointerVector").define())
+//            .put(new Info("std::vector<int>").pointerTypes("IntVector").define())
             .put(new Info("std::vector<int64_t>", "std::tuple<std::vector<int64_t>,std::vector<int64_t> >").cast().pointerTypes("LongVector").define())
             .put(new Info("std::vector<double>").cast().pointerTypes("DoubleVector").define())
             .put(new Info("std::vector<size_t>").cast().pointerTypes("SizeTVector").define())
@@ -910,6 +912,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::unordered_map<std::string,bool>").pointerTypes("StringBoolMap").define())
             .put(new Info("std::unordered_map<std::string,size_t>").pointerTypes("StringSizeTMap").define())
             .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("ExtraFilesMap").define())
+            .put(new Info("std::unordered_map<std::string,at::Tensor>").pointerTypes("StringTensorUMap").define())
             .put(new Info("std::unordered_map<std::string,c10::TypePtr>").pointerTypes("TypeEnv").define())
             .put(new Info("std::unordered_map<std::string,c10::IValue>", "std::unordered_map<std::string,at::IValue>").pointerTypes("StringIValueMap").define())
             .put(new Info("std::unordered_map<std::string,c10::ScalarType>").pointerTypes("StringScalarTypeMap").define())
@@ -1059,6 +1062,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         infoMap
             // Parser doesn't generate iterators for vector of pairs, so function returning such iterators, like ParameterListImpl::begin()
             // must be mapped to returning item instead. Issue #673. Change when issue resolved.
+//            .put(new Info("std::pair<bool,std::variant<int,std::vector<int> > >").pointerTypes("BoolIntVectorVariantPair").define())
             .put(new Info("std::pair<std::string,torch::Tensor>", "std::pair<std::string,torch::Tensor>").cast().pointerTypes("StringTensorPair").define())
             .put(new Info("std::pair<std::string,torch::nn::AnyModule>").pointerTypes("StringAnyModulePair").define())
             .put(new Info("std::pair<std::string,std::shared_ptr<torch::nn::Module> >").pointerTypes("StringSharedModulePair").define())
@@ -1983,7 +1987,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10::DDPLoggingData::strs_map",
             "c10::DDPLoggingData::ints_map",
             "torch::dynamo::autograd::TensorArgs::inputs",
-            "torch::dynamo::autograd::AutogradCompilerCall::tensor_args",
+//            "torch::dynamo::autograd::AutogradCompilerCall::tensor_args",
             "torch::dynamo::autograd::AutogradCompilerCall::all_size_inputs",
             "torch::dynamo::autograd::AutogradCompilerCall::dyn_size_inputs",
             "torch::dynamo::autograd::AutogradCompilerCall::node_calls",
@@ -2265,7 +2269,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
         //// c10::string_view
         infoMap.put(new Info("c10::basic_string_view<char>", "c10::string_view").annotations("@StringView").valueTypes("BytePointer", "String"));
-        infoMap.put(new Info("std::string_view").valueTypes("@Cast(\"const char*\") BytePointer", "String"));
+        infoMap.put(new Info("std::string_view").annotations("@StringView").valueTypes("@Cast(\"const char*\") BytePointer", "String"));
 
         // Registries.
         // Skipped them for now. Much burden with variadic args and creator function pointers.
@@ -2571,6 +2575,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "at::operator <<(std::ostream&, at::Range&)",
             "c10::cuda::CUDACachingAllocator::format_size",
             "c10::detail::makeBaseType",
+            "c10::util::detail::extract",
             "c10::ivalue::Await::operator <<",
             "c10::ivalue::ConstantString::operator <<", // No idea why these are not exported. TODO: dig
             "c10::ivalue::EnumHolder::is", // Calls ==, which is not exported
@@ -2595,6 +2600,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "torch::jit::ClassDef::create",
             "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code
             "torch::jit::Object::Object(c10::QualifiedName, std::shared_ptr<torch::jit::CompilationUnit>, bool)", // No definition
+            "torch::profiler::impl::checkFunctionInputsForLogging",
+            "torch::profiler::impl::checkFunctionOutputsForLogging",
+            "torch::profiler::impl::findStartAddrForTensors",
+            "torch::profiler::impl::getTensorStartHint",
             "torch::profiler::impl::getNvtxStr",
             "torch::profiler::impl::shapeToStr"
         ).skip());
@@ -2648,6 +2657,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         ///// Special cases needing javaText
         infoMap
             .put(new Info("at::Tensor::toString", "at::TensorBase::toString", "torch::Tensor::toString", "torch::TensorBase::toString", "torch::jit::Graph::toString").javaText("public native @StdString String toString();"))
+            .put(new Info("torch::dynamo::autograd::AutogradCompilerCall::active_node_call_idx").javaText("@MemberGetter public native @ByRef SizeTOptional active_node_call_idx();"))
+            .put(new Info("torch::dynamo::autograd::AutogradCompilerCall::tensor_args").javaText("@MemberGetter public native @ByRef @NoOffset TensorArgs tensor_args();"))
+            .put(new Info("torch::dynamo::autograd::AutogradCompilerCall::lifted_ivalue_args").javaText("@MemberGetter public native @ByRef LiftedIValueArgs lifted_ivalue_args();"))
             .put(new Info("torch::jit::ProfileOp::getCallback()", "torch::jit::ProfileIValueOp::getCallback()").javaText(
                 "public native @ByVal @Cast(\"std::function<void(std::vector<c10::IValue>&)>*\") Pointer getCallback();"))
             .put(new Info("torch::optim::AdamOptions::betas", "torch::optim::AdamWOptions::betas").javaText(
@@ -2867,6 +2879,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 cppNames[n++] = template("torch::ArrayRef", vt);
                 infoMap.put(new Info(mainName + "(const " + vt + "&)").skip())// Causes SIGSEGV since it just make a pointer to the value
                        .put(new Info(mainName + "(" + vt + "&)").skip());// Parser removes const for non-investigated reasons for some elementTypes (eg Block*)
+                infoMap.put(new Info(mainName + "::allMatch").skip());
                 // With the following info, any operator<<
                 //infoMap.put(new Info(template("c10::operator <<", vt)).javaNames("shiftLeft"));
             }

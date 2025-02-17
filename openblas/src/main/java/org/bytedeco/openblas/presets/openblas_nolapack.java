@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2024 Samuel Audet
+ * Copyright (C) 2016-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -68,21 +68,29 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
+        List<String> links = properties.get("platform.link");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
         String className = getOpenblasClassName(); // "openblas_nolapack" or "openblas"
+
+        // Let users enable loading of arbitrary library (for Accelerate, MKL, etc) or "none"
+        String lib = System.getProperty("org.bytedeco." + className + ".load", "").toLowerCase();
+        if (lib.length() == 0) {
+            lib = System.getProperty("org.bytedeco.openblas.load", "").toLowerCase();
+        }
+
+        if (lib.equals("none")) {
+            links.clear();
+            preloads.clear();
+            properties.setProperty("platform.library", "#none#");
+            return;
+        }
 
         // Only apply this at load time for this class only, without inheriting, since MKLML,
         // for example, doesn't come with all of LAPACK, the user might want to use it with
         // openblas_nolapack.class, but have openblas.class load something else.
         if (!Loader.isLoadLibraries() || getClass() != properties.getEffectiveClasses().get(0)) {
             return;
-        }
-
-        // Let users enable loading of arbitrary library (for Accelerate, MKL, etc)
-        String lib = System.getProperty("org.bytedeco." + className + ".load", "").toLowerCase();
-        if (lib.length() == 0) {
-            lib = System.getProperty("org.bytedeco.openblas.load", "").toLowerCase();
         }
 
         int i = 0;
