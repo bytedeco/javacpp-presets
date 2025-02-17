@@ -31,11 +31,14 @@
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
+          <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+            <includePath>/usr/include/openblas/</includePath>
+        </configuration>
         <executions>
           <execution>
             <id>javacpp-postbuild</id>

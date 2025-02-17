@@ -60,4 +60,5 @@ public class openblas extends openblas_nolapack {
             }
         }
     }
+
 }

@@ -70,7 +70,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         String platform = properties.getProperty("platform");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
-        String className = getClass().getSimpleName(); // "openblas_nolapack" or "openblas"
+        String className = getOpenblasClassName(); // "openblas_nolapack" or "openblas"
 
         // Only apply this at load time for this class only, without inheriting, since MKLML,
         // for example, doesn't come with all of LAPACK, the user might want to use it with
@@ -116,7 +116,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         }
     }
 
-    static void mapCommon(InfoMap infoMap) {
+    @Override public void map(InfoMap infoMap) {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
                              "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "FORTRAN_STRLEN", "lapack_int", "lapack_logical").cppTypes().annotations())
@@ -127,10 +127,22 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                              "defined(LAPACK_COMPLEX_CPP)", "LAPACK_COMPLEX_CUSTOM", "LAPACK_FORTRAN_STRLEN_END").define())
                .put(new Info("openblas_complex_float", "lapack_complex_float").cast().pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("openblas_complex_double", "lapack_complex_double").cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
-    }
 
-    @Override public void map(InfoMap infoMap) {
-        mapCommon(infoMap);
+        String[] brokenFunctions = {
+            // not implemented by MKL
+            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
+            "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
+            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq",
+            // deprecated
+            "cggsvd", "dggsvd", "sggsvd", "zggsvd", "zggsvp", "cggsvp", "dggsvp", "sggsvp",
+            // extended
+            "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
+            "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
+
+        for (String f : brokenFunctions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
+        }
 
         String[] functions = {
             // not available in Accelerate
@@ -151,25 +163,30 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
             "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
-            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "lapack_make_complex_double", "lapack_make_complex_float",
+            "lapack_make_complex_double", "lapack_make_complex_float",
             "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
-            "clangb", "dlangb", "slangb", "zlangb", "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
             "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
-            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq", "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
+            "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
             // deprecated
             "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
             "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
             "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
             "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf",
             // extended
-            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
-            "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
-            "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
-            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
+            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch"};
 
         for (String f : functions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip());
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
         }
+
+    }
+
+    protected boolean skipFunctions() {
+        return true;
+    }
+
+    protected String getOpenblasClassName() {
+        return getClass().getSimpleName();
     }
 
     static int maxThreads = -1;
