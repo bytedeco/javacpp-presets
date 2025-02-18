@@ -154,7 +154,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         }
 
         for (String f : lapackeOnlyFunctions) {
-            infoMap.put(new Info(f, "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+            infoMap.put(new Info("LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
         }
 
         String[] functions = {
