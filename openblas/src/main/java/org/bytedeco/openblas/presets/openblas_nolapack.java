@@ -147,7 +147,10 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             // extended
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
-            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx",
+            //extended,  failing in android and Windows
+            "cblas_cgemmt", "cblas_zgemmt", "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos",
+            "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch"};
 
         for (String f : brokenFunctions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
@@ -156,7 +159,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         String[] functions = {
             // not available in Accelerate
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
-            "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_sgemmt", "cblas_dgemmt",
             "cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
             "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
             "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
@@ -180,9 +183,8 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
             "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
             "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
-            "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf",
-            // extended
-            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch"};
+            "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf"
+        };
 
         for (String f : functions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
