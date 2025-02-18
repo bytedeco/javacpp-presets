@@ -39,6 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  *
  * @author Samuel Audet
+ * @author Dragan Djuric
  */
 @Properties(inherit = javacpp.class, global = "org.bytedeco.openblas.global.openblas_nolapack", value = {
     @Platform(define = {"__OPENBLAS 1", "LAPACK_COMPLEX_CPP"},
@@ -136,7 +137,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                .put(new Info("openblas_complex_float", "lapack_complex_float").cast().pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("openblas_complex_double", "lapack_complex_double").cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
 
-        String[] brokenFunctions = {
+        String[] lapackeOnlyFunctions = {
             // not implemented by MKL
             "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
             "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
@@ -148,8 +149,12 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
             "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
 
-        for (String f : brokenFunctions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
+        for (String f : lapackeOnlyFunctions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f).skip(true));
+        }
+
+        for (String f : lapackeOnlyFunctions) {
+            infoMap.put(new Info(f, "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
         }
 
         String[] functions = {

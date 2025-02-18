@@ -36,9 +36,6 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-            <includePath>/usr/include/openblas/</includePath>
-        </configuration>
         <executions>
           <execution>
             <id>javacpp-postbuild</id>
