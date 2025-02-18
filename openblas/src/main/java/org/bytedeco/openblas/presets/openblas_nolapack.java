@@ -150,7 +150,9 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx",
             //extended,  failing in android and Windows
             "cblas_cgemmt", "cblas_zgemmt", "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos",
-            "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch"};
+            "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
+            // not exported by OpenBLAS, failing in android and Windows
+            "cblas_cgemm3m", "cblas_zgemm3m"};
 
         for (String f : brokenFunctions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
@@ -164,7 +166,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
             "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
             // not exported by OpenBLAS
-            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
+            "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
             "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
             "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
