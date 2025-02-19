@@ -204,7 +204,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         };
 
         for (String f : functionsToSkip) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true);
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
         }
 
         String[] functionsToInclude = {
@@ -253,7 +253,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         };
 
         for (String f : functionsToInclude) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions());
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
         }
 
         // String[] functions = {
