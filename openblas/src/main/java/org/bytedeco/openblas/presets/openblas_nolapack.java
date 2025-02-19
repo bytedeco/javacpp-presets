@@ -158,25 +158,40 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
         }
 
-        String[] functions = {
+        String[] functionsToSkip = {
             // not available in Accelerate
-            "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
-            "cblas_sgemmt", "cblas_dgemmt",
+            "cblas_caxpby",
+            //"cblas_daxpby", "cblas_saxpby",
+            "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
+            //"cblas_sgemmt", "cblas_dgemmt",
             "cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
-            "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
-            "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
+            //"cblas_samax", "cblas_damax",
+            "cblas_scamax", "cblas_dzamax",
+            //"cblas_samin", "cblas_damin",
+            "cblas_scamin", "cblas_dzamin",
             // not exported by OpenBLAS
-            "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
-            "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
-            "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
-            "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
-            "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
+            "cblas_xerbla", "cblas_icamin",
+            //"cblas_idamin", "cblas_isamin",
+            "cblas_izamin",
+            //"cblas_ssum", "cblas_dsum",
+            "cblas_scsum", "cblas_dzsum",
+            //"cblas_ismax", "cblas_idmax",
+            "cblas_icmax", "cblas_izmax",
+            //"cblas_ismin", "cblas_idmin",
+            "cblas_icmin", "cblas_izmin",
+            //"cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
-            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function", "cblas_cdotc", "cblas_cdotu",
-            "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
-            "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
-            "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
+            //"openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
+            //"openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function",
+            "cblas_cdotc", "cblas_cdotu",
+            "cblas_cimatcopy", "cblas_comatcopy",
+            //"cblas_dimatcopy", "cblas_domatcopy",
+            "cblas_cgeadd",
+            //"cblas_dgeadd", "cblas_sgeadd", "cblas_simatcopy", "cblas_somatcopy",
+            "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
+            "clacrm",
+            "dlacrm", "slacrm",
+            "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
             "lapack_make_complex_double", "lapack_make_complex_float",
             "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
             "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
@@ -188,9 +203,92 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf"
         };
 
-        for (String f : functions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+        for (String f : functionsToSkip) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true);
         }
+
+        String[] functionsToInclude = {
+            // not available in Accelerate
+            //"cblas_caxpby",
+            "cblas_daxpby", "cblas_saxpby",
+            //"cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
+            "cblas_sgemmt", "cblas_dgemmt",
+            //"cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
+            "cblas_samax", "cblas_damax",
+            //"cblas_scamax", "cblas_dzamax",
+            "cblas_samin", "cblas_damin",
+            //"cblas_scamin", "cblas_dzamin",
+            // not exported by OpenBLAS
+            //"cblas_xerbla", "cblas_icamin",
+            "cblas_idamin", "cblas_isamin",
+            //"cblas_izamin",
+            "cblas_ssum", "cblas_dsum",
+            //"cblas_scsum", "cblas_dzsum",
+            "cblas_ismax", "cblas_idmax",
+            //"cblas_icmax", "cblas_izmax",
+            "cblas_ismin", "cblas_idmin",
+            //"cblas_icmin", "cblas_izmin",
+            "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
+            // not implemented by MKL
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function",
+            //"cblas_cdotc", "cblas_cdotu",
+            //"cblas_cimatcopy", "cblas_comatcopy",
+            "cblas_dimatcopy", "cblas_domatcopy",
+            //"cblas_cgeadd",
+            "cblas_dgeadd", "cblas_sgeadd", "cblas_simatcopy", "cblas_somatcopy",
+            //"cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy"
+            //"clacrm",
+            //"dlacrm", "slacrm",
+            // "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
+            // "lapack_make_complex_double", "lapack_make_complex_float",
+            // "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
+            // "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
+            // "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
+            // deprecated
+            // "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
+            // "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
+            // "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
+            // "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf"
+        };
+
+        for (String f : functionsToInclude) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions());
+        }
+
+        // String[] functions = {
+        //     // not available in Accelerate
+        //     "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
+        //     "cblas_sgemmt", "cblas_dgemmt",
+        //     "cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
+        //     "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
+        //     "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
+        //     // not exported by OpenBLAS
+        //     "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
+        //     "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
+        //     "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
+        //     "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
+        //     "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
+        //     // not implemented by MKL
+        //     "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
+        //     "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function", "cblas_cdotc", "cblas_cdotu",
+        //     "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
+        //     "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
+        //     "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
+        //     "lapack_make_complex_double", "lapack_make_complex_float",
+        //     "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
+        //     "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
+        //     "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
+        //     // deprecated
+        //     "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
+        //     "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
+        //     "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
+        //     "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf"
+        // };
+
+        // for (String f : functions) {
+        //     infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+        // }
 
     }
 
