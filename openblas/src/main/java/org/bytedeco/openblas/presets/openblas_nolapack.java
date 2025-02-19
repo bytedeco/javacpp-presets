@@ -181,8 +181,8 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_icmin", "cblas_izmin",
             //"cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            //"openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
-            //"openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function",
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function",
             "cblas_cdotc", "cblas_cdotu",
             "cblas_cimatcopy", "cblas_comatcopy",
             //"cblas_dimatcopy", "cblas_domatcopy",
@@ -230,8 +230,8 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             //"cblas_icmin", "cblas_izmin",
             "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
-            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function",
+            // "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
+            // "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function",
             //"cblas_cdotc", "cblas_cdotu",
             //"cblas_cimatcopy", "cblas_comatcopy",
             "cblas_dimatcopy", "cblas_domatcopy",
@@ -253,7 +253,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         };
 
         for (String f : functionsToInclude) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+            infoMap.put(new Info("LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
+        }
+
+        for (String f : functionsToInclude) {
+            infoMap.put(new Info(f).skip(skipFunctions()));
         }
 
         // String[] functions = {
