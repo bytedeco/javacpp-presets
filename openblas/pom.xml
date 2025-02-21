@@ -31,7 +31,7 @@
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
       <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>

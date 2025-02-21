@@ -137,32 +137,6 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                .put(new Info("openblas_complex_float", "lapack_complex_float").cast().pointerTypes("FloatPointer", "FloatBuffer", "float[]"))
                .put(new Info("openblas_complex_double", "lapack_complex_double").cast().pointerTypes("DoublePointer", "DoubleBuffer", "double[]"));
 
-        String[] brokenFunctions = {
-            // not implemented by MKL
-            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
-            "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
-            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq",
-            // deprecated
-            "cggsvd", "dggsvd", "sggsvd", "zggsvd", "zggsvp", "cggsvp", "dggsvp", "sggsvp",
-            // extended
-            "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx",
-            "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx", "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx",
-            "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
-            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx",
-            "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx",
-            //extended,  failing in android and Windows
-            "cblas_cgemmt", "cblas_zgemmt", "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos",
-            "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
-            // not exported by OpenBLAS, failing in android and Windows
-            "cblas_cgemm3m", "cblas_zgemm3m",
-            // broken on Windows
-            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"
-        };
-
-        for (String f : brokenFunctions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
-        }
-
         String[] functions = {
             // not available in Accelerate
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
@@ -177,31 +151,47 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
             "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads",
-            "openblas_get_num_procs",
-            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel",
-            "cblas_cdotc", "cblas_cdotu", "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy",
-            "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd", "cblas_simatcopy",
-            "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy",
-            "cblas_zomatcopy", "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm",
-            "zlarcm", "classq", "dlassq", "slassq", "zlassq",
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu",
+            "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
+            "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
+            "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
             "lapack_make_complex_double", "lapack_make_complex_float",
-            "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt",
-            "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
-            "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans",
-            "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
+            "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
+            "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
             "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
             // deprecated
-            "cgegs", "cggsvd", "ctzrqf", "dgeqpf", "dlatzm", "sgelsx", "slahrd", "zgegv", "zggsvp",
-            "cgegv", "cggsvp", "dgegs", "dggsvd", "dtzrqf", "sgeqpf", "slatzm", "zgelsx", "zlahrd",
-            "cgelsx", "clahrd", "dgegv", "dggsvp", "sgegs", "sggsvd", "stzrqf", "zgeqpf", "zlatzm",
-            "cgeqpf", "clatzm", "dgelsx", "dlahrd", "sgegv", "sggsvp", "zgegs", "zggsvd", "ztzrqf"
+            "cgegs",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",
+            "cgegv",  "dgegs",   "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
+            "cgelsx", "clahrd",  "dgegv",   "sgegs",   "stzrqf",  "zgeqpf",  "zlatzm",
+            "cgeqpf", "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "zgegs",   "ztzrqf"
         };
-
         for (String f : functions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
         }
 
+        String[] brokenFunctions = {
+            // not implemented by MKL
+            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
+            "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
+            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq",
+            // deprecated
+            "cggsvd", "dggsvd", "sggsvd", "zggsvd", "zggsvp", "cggsvp", "dggsvp", "sggsvp",
+            // extended
+            "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
+            "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"
+            //broken on android and Windows
+            "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod",
+            "cblas_sbdot",  "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
+            "cblas_cgemm3m", "cblas_zgemm3m",
+            // broken on Windows
+            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"
+        };
+        for (String f : brokenFunctions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
+        }
     }
 
     protected boolean skipFunctions() {
