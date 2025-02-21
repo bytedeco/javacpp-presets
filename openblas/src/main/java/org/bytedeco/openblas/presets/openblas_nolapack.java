@@ -164,8 +164,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgegs",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",
             "cgegv",  "dgegs",   "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
             "cgelsx", "clahrd",  "dgegv",   "sgegs",   "stzrqf",  "zgeqpf",  "zlatzm",
-            "cgeqpf", "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "zgegs",   "ztzrqf"
-        };
+            "cgeqpf", "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "zgegs",   "ztzrqf"};
         for (String f : functions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
         }
@@ -180,15 +179,14 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             // extended
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
-            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx",
             //broken on android and Windows
             "cblas_cgemmt", "cblas_zgemmt",
             "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod",
             "cblas_sbdot",  "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
             "cblas_cgemm3m", "cblas_zgemm3m",
             // broken on Windows
-            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"
-        };
+            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"};
         for (String f : brokenFunctions) {
             infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
         }
