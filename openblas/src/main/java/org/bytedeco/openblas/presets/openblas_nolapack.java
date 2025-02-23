@@ -39,6 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  *
  * @author Samuel Audet
+ * @author Dragan Djuric
  */
 @Properties(inherit = javacpp.class, global = "org.bytedeco.openblas.global.openblas_nolapack", value = {
     @Platform(define = {"__OPENBLAS 1", "LAPACK_COMPLEX_CPP"},
@@ -71,10 +72,10 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         List<String> links = properties.get("platform.link");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
-        String className = getClass().getSimpleName(); // "openblas_nolapack" or "openblas"
+        String linkName = getLinkName(); // "openblas_nolapack" or "openblas"
 
         // Let users enable loading of arbitrary library (for Accelerate, MKL, etc) or "none"
-        String lib = System.getProperty("org.bytedeco." + className + ".load", "").toLowerCase();
+        String lib = System.getProperty("org.bytedeco." + linkName + ".load", "").toLowerCase();
         if (lib.length() == 0) {
             lib = System.getProperty("org.bytedeco.openblas.load", "").toLowerCase();
         }
@@ -115,11 +116,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
         if (lib.length() > 0) {
             if (platform.startsWith("linux")) {
-                preloads.add(i, lib + "#" + className + "@.0");
+                preloads.add(i, lib + "#" + linkName + "@.0");
             } else if (platform.startsWith("macosx")) {
-                preloads.add(i, lib + "#" + className + ".0");
+                preloads.add(i, lib + "#" + linkName + ".0");
             } else if (platform.startsWith("windows")) {
-                preloads.add(i, lib + "#lib" + className);
+                preloads.add(i, lib + "#lib" + linkName);
             }
         }
     }
@@ -139,40 +140,64 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         String[] functions = {
             // not available in Accelerate
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
-            "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_sgemmt", "cblas_dgemmt",
             "cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
             "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
             "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
             // not exported by OpenBLAS
-            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
+            "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
             "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
             "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
             "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
-            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function", "cblas_cdotc", "cblas_cdotu",
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu",
             "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
             "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
-            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "lapack_make_complex_double", "lapack_make_complex_float",
+            "lapack_make_complex_double", "lapack_make_complex_float",
             "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
-            "clangb", "dlangb", "slangb", "zlangb", "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
             "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
-            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq", "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
+            "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
             // deprecated
-            "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
-            "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
-            "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
-            "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf",
+            "cgegs",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",
+            "cgegv",  "dgegs",   "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
+            "cgelsx", "clahrd",  "dgegv",   "sgegs",   "stzrqf",  "zgeqpf",  "zlatzm",
+            "cgeqpf", "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "zgegs",   "ztzrqf"};
+        for (String f : functions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+        }
+
+        String[] brokenFunctions = {
+            // not implemented by MKL
+            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
+            "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
+            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq",
+            // deprecated
+            "cggsvd", "dggsvd", "sggsvd", "zggsvd", "zggsvp", "cggsvp", "dggsvp", "sggsvp",
             // extended
-            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
-            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
-        for (String f : functions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip());
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx",
+            //broken on android and Windows
+            "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod",
+            "cblas_sbdot",  "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
+            "cblas_cgemm3m", "cblas_zgemm3m",
+            // broken on Windows
+            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"};
+        for (String f : brokenFunctions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
         }
+    }
+
+    protected boolean skipFunctions() {
+        return true;
+    }
+
+    protected String getLinkName() {
+        return getClass().getSimpleName();
     }
 
     static int maxThreads = -1;
