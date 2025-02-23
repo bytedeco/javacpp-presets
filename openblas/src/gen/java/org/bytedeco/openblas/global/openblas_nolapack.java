@@ -15,35 +15,37 @@ public class openblas_nolapack extends org.bytedeco.openblas.presets.openblas_no
 
 // #ifndef OPENBLAS_CONFIG_H
 // #define OPENBLAS_CONFIG_H
-public static final int OPENBLAS_OS_LINUX =	1;
-public static final int OPENBLAS_ARCH_X86_64 =	1;
-public static final int OPENBLAS_C_GCC =	1;
-public static final int OPENBLAS___64BIT__ =	1;
-// #define OPENBLAS_FUNDERSCORE	
+public static final int OPENBLAS_OS_LINUX = 1;
+public static final int OPENBLAS_ARCH_X86_64 = 1;
+public static final int OPENBLAS_C_GCC = 1;
+public static final int OPENBLAS___64BIT__ = 1;
+public static final int OPENBLAS_HAVE_C11 = 1;
+// #define OPENBLAS_PTHREAD_CREATE_FUNC pthread_create
 // #define OPENBLAS_BUNDERSCORE _
 public static final int OPENBLAS_NEEDBUNDERSCORE = 1;
-public static final int OPENBLAS_NEED2UNDERSCORES = 0;
-// #define OPENBLAS_CORE2
+// #define OPENBLAS_NEHALEM 
 public static final int OPENBLAS_L1_DATA_SIZE = 32768;
 public static final int OPENBLAS_L1_DATA_LINESIZE = 64;
-public static final int OPENBLAS_L2_SIZE = 1048576;
+public static final int OPENBLAS_L2_SIZE = 262144;
 public static final int OPENBLAS_L2_LINESIZE = 64;
-public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 256;
+public static final int OPENBLAS_DTB_DEFAULT_ENTRIES = 64;
 public static final int OPENBLAS_DTB_SIZE = 4096;
-// #define OPENBLAS_HAVE_CMOV
-// #define OPENBLAS_HAVE_MMX
-// #define OPENBLAS_HAVE_SSE
-// #define OPENBLAS_HAVE_SSE2
-// #define OPENBLAS_HAVE_SSE3
-// #define OPENBLAS_HAVE_SSSE3
-// #define OPENBLAS_CORE_CORE2
-public static final String OPENBLAS_CHAR_CORENAME = "CORE2";
-public static final int OPENBLAS_SLOCAL_BUFFER_SIZE =	16384;
-public static final int OPENBLAS_DLOCAL_BUFFER_SIZE =	16384;
-public static final int OPENBLAS_CLOCAL_BUFFER_SIZE =	16384;
-public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE =	16384;
-public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD =	4;
-public static final String OPENBLAS_VERSION = "OpenBLAS 0.3.28";
+// #define OPENBLAS_HAVE_CMOV 
+// #define OPENBLAS_HAVE_MMX 
+// #define OPENBLAS_HAVE_SSE 
+// #define OPENBLAS_HAVE_SSE2 
+// #define OPENBLAS_HAVE_SSE3 
+// #define OPENBLAS_HAVE_SSSE3 
+// #define OPENBLAS_HAVE_SSE4_1 
+// #define OPENBLAS_HAVE_SSE4_2 
+// #define OPENBLAS_CORE_NEHALEM 
+public static final String OPENBLAS_CHAR_CORENAME = "NEHALEM";
+public static final int OPENBLAS_SLOCAL_BUFFER_SIZE = 65536;
+public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 32768;
+public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 65536;
+public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 32768;
+public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.28 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -118,7 +120,6 @@ public static final String OPENBLAS_VERSION = "OpenBLAS 0.3.28";
 /* Inclusion of Linux-specific header is needed for definition of cpu_set_t. */
 // #ifdef OPENBLAS_OS_LINUX
 // #endif
-
 // #endif /* OPENBLAS_CONFIG_H */
 
 

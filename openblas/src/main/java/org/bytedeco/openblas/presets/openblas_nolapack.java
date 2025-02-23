@@ -72,10 +72,10 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         List<String> links = properties.get("platform.link");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
-        String className = getOpenblasClassName(); // "openblas_nolapack" or "openblas"
+        String linkName = getLinkName(); // "openblas_nolapack" or "openblas"
 
         // Let users enable loading of arbitrary library (for Accelerate, MKL, etc) or "none"
-        String lib = System.getProperty("org.bytedeco." + className + ".load", "").toLowerCase();
+        String lib = System.getProperty("org.bytedeco." + linkName + ".load", "").toLowerCase();
         if (lib.length() == 0) {
             lib = System.getProperty("org.bytedeco.openblas.load", "").toLowerCase();
         }
@@ -116,11 +116,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
         if (lib.length() > 0) {
             if (platform.startsWith("linux")) {
-                preloads.add(i, lib + "#" + className + "@.0");
+                preloads.add(i, lib + "#" + linkName + "@.0");
             } else if (platform.startsWith("macosx")) {
-                preloads.add(i, lib + "#" + className + ".0");
+                preloads.add(i, lib + "#" + linkName + ".0");
             } else if (platform.startsWith("windows")) {
-                preloads.add(i, lib + "#lib" + className);
+                preloads.add(i, lib + "#lib" + linkName);
             }
         }
     }
@@ -196,7 +196,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         return true;
     }
 
-    protected String getOpenblasClassName() {
+    protected String getLinkName() {
         return getClass().getSimpleName();
     }
 

@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.Info;
 @NoException
 public class openblas_full extends openblas {
 
-    @Override protected String getOpenblasClassName() {
+    @Override protected String getLinkName() {
         return "openblas";
     }
 
