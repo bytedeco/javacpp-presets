@@ -1,4 +1,5 @@
 
+ * Add `openblas_full` class giving access to all of OpenBLAS ([pull #1572](https://github.com/bytedeco/javacpp-presets/pull/1572))
  * Allow setting "org.bytedeco.openblas.load" system property to "none" ([issue #1203](https://github.com/bytedeco/javacpp-presets/issues/1203))
  * Fix presets for the CUPTI module of CUDA on Windows ([pull #1576](https://github.com/bytedeco/javacpp-presets/pull/1576))
  * Introduce `macosx-arm64` builds for ARPACK-NG, CMINPACK, FFTW, GSL, TensorFlow Lite, ONNX, ONNX Runtime ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069))
