@@ -20,6 +20,9 @@ env:
 jobs:
   linux-arm64:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        ext: [ "", -gpu ]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
