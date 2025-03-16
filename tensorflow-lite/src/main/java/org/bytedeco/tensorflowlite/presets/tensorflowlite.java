@@ -53,6 +53,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/compiler/mlir/lite/core/model_builder_base.h",
                 "tensorflow/compiler/mlir/lite/utils/control_edges.h",
                 "tensorflow/compiler/mlir/lite/experimental/remat/metadata_util.h",
+                "tensorflow/compiler/mlir/lite/core/c/tflite_types.h",
                 "tensorflow/lite/builtin_ops.h",
                 "tensorflow/lite/c/c_api_types.h",
                 "tensorflow/lite/core/c/c_api_types.h",

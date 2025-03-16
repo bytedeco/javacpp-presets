@@ -31,10 +31,10 @@ public class KernelContext extends Pointer {
   private native void allocate(OrtKernelContext context);
   public native @Cast("size_t") long GetInputCount();
   public native @Cast("size_t") long GetOutputCount();
-  // If input is optional and is not present, the method returns en empty ConstValue
+  // If input is optional and is not present, the method returns an empty ConstValue
   // which can be compared to nullptr.
   public native @ByVal ConstValue GetInput(@Cast("size_t") long index);
-  // If outout is optional and is not present, the method returns en empty UnownedValue
+  // If output is optional and is not present, the method returns an empty UnownedValue
   // which can be compared to nullptr.
   public native @ByVal @Cast("Ort::UnownedValue*") ValueImpl GetOutput(@Cast("size_t") long index, @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count);
   public native @ByVal @Cast("Ort::UnownedValue*") ValueImpl GetOutput(@Cast("size_t") long index, @Cast("const int64_t*") LongBuffer dim_values, @Cast("size_t") long dim_count);

@@ -138,6 +138,10 @@ public static final int
     dnnl_u4 = 12,
     /** [MX-compliant 8-bit compliant scale data type](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf) with 8-bit exponent. */
     dnnl_e8m0 = 13,
+    /** [MX-compliant 4-bit float data type](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf) with 2-bit exponent and 1 bit mantissa. */
+    dnnl_f4_e2m1 = 14,
+    /** 4-bit float data type with 3-bit exponent and 0 bit mantissa. */
+    dnnl_f4_e3m0 = 15,
 
     /** Parameter to allow internal only data_types without undefined behavior.
      *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
@@ -269,7 +273,8 @@ public static final int
 // Parsed from oneapi/dnnl/dnnl_types.h
 
 /*******************************************************************************
-* Copyright 2016-2024 Intel Corporation
+* Copyright 2016-2025 Intel Corporation
+* Copyright 2024 FUJITSU LIMITED
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -1334,10 +1339,18 @@ public static final int
     dnnl_cabd = 836,
     dnnl_dabc = 837,
     dnnl_Ab32a = 838,
+    dnnl_aCBd8b8c = 839,
+    dnnl_aCBde8b8c = 840,
+    dnnl_BAc8a8b = 841,
+    dnnl_BAcd8a8b = 842,
+    dnnl_BAcde8a8b = 843,
+    dnnl_aCBdef8b8c = 844,
+    dnnl_abdEC16e4c = 845,
+    dnnl_abDC16d4c = 846,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 839,
+    dnnl_format_tag_last = 847,
 
     // Aliases
 
@@ -1475,10 +1488,12 @@ public static final int
     /** 5D LSTM projection tensor */
     dnnl_ldOi16o = dnnl_abDc16d,
     dnnl_ldOi32o = dnnl_abDc32d,
+    dnnl_ldOI16o4i = dnnl_abDC16d4c,
     dnnl_ldOI32o4i = dnnl_abDC32d4c,
     dnnl_ldIo32i = dnnl_abCd32c,
     /** 6D RNN weights tensor */
     dnnl_ldgOi16o = dnnl_abdEc16e,
+    dnnl_ldgOI16o4i = dnnl_abdEC16e4c,
     dnnl_ldgOi32o = dnnl_abdEc32e,
     dnnl_ldgOI32o2i = dnnl_abdEC32e2c,
     dnnl_ldgOI32o4i = dnnl_abdEC32e4c,
@@ -1560,6 +1575,7 @@ public static final int
     dnnl_OI8i8o = dnnl_AB8b8a,
 
     // weights, 3D
+    dnnl_IOw8o8i = dnnl_BAc8a8b,
     dnnl_IOw16o16i = dnnl_BAc16a16b,
     dnnl_IOw16i16o = dnnl_BAc16b16a,
     dnnl_OIw16i16o = dnnl_ABc16b16a,
@@ -1630,6 +1646,7 @@ public static final int
 
     // weights, 4D
     dnnl_IOhw16i16o = dnnl_BAcd16b16a,
+    dnnl_IOhw8o8i = dnnl_BAcd8a8b,
     dnnl_IOhw16o16i = dnnl_BAcd16a16b,
     dnnl_Ohwi16o = dnnl_Acdb16a,
     dnnl_OhwI16o2i = dnnl_AcdB16a2b,
@@ -1762,6 +1779,7 @@ public static final int
     dnnl_OIdhw8o4i = dnnl_ABcde8a4b,
     dnnl_IOdhw16i16o = dnnl_BAcde16b16a,
     dnnl_OIdhw4o8i8o4i = dnnl_ABcde4a8b8a4b,
+    dnnl_IOdhw8o8i = dnnl_BAcde8a8b,
     dnnl_IOdhw16o16i = dnnl_BAcde16a16b,
     dnnl_OIdhw16o16i2o = dnnl_ABcde16a16b2a,
     dnnl_OIdhw8i32o = dnnl_ABcde8b32a,
@@ -1775,6 +1793,7 @@ public static final int
     dnnl_Goiw16g = dnnl_Abcd16a,
     dnnl_Goiw8g = dnnl_Abcd8a,
     dnnl_Goiw4g = dnnl_Abcd4a,
+    dnnl_gIOw8o8i = dnnl_aCBd8b8c,
     dnnl_gIOw16o16i = dnnl_aCBd16b16c,
     dnnl_gIOw16i16o = dnnl_aCBd16c16b,
     dnnl_gOIw16i16o = dnnl_aBCd16c16b,
@@ -1820,6 +1839,7 @@ public static final int
 
     // weights w/ groups, 4D
     dnnl_gIOhw16i16o = dnnl_aCBde16c16b,
+    dnnl_gIOhw8o8i = dnnl_aCBde8b8c,
     dnnl_gIOhw16o16i = dnnl_aCBde16b16c,
     dnnl_gOhwi16o = dnnl_aBdec16b,
     dnnl_gOhwI16o2i = dnnl_aBdeC16b2c,
@@ -1887,6 +1907,7 @@ public static final int
 
     // weights w/ groups, 6D
     dnnl_gIOdhw16i16o = dnnl_aCBdef16c16b,
+    dnnl_gIOdhw8o8i = dnnl_aCBdef8b8c,
     dnnl_gIOdhw16o16i = dnnl_aCBdef16b16c,
     dnnl_gOdhwi16o = dnnl_aBdefc16b,
     dnnl_gOdhwI16o2i = dnnl_aBdefC16b2c,
@@ -2456,6 +2477,8 @@ public static final int
     dnnl_binary_eq = 0x1fffa,
     /** Binary not equal */
     dnnl_binary_ne = 0x1fffb,
+    /** Binary select */
+    dnnl_binary_select = 0x1fffc,
     /** Nearest Neighbor Resampling Method */
     dnnl_resampling_nearest = 0x2fff0,
     /** Linear Resampling Method */
@@ -3665,6 +3688,7 @@ public static final int BUILD_XEHP = 0;
 public static final int BUILD_XEHPG = 0;
 public static final int BUILD_XEHPC = 0;
 public static final int BUILD_XE2 = 0;
+public static final int BUILD_XE3 = 0;
 // GeMM kernels ISA controls
 public static final int BUILD_GEMM_KERNELS_ALL = 1;
 public static final int BUILD_GEMM_KERNELS_NONE = 0;
@@ -3701,10 +3725,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 6;
+public static final int DNNL_VERSION_MINOR = 7;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 2;
+public static final int DNNL_VERSION_PATCH = 1;
 
 // clang-format on
 
@@ -5494,7 +5518,7 @@ public static native @Cast("dnnl_status_t") int dnnl_sum_primitive_desc_create(
  *  Creates a primitive descriptor for a binary primitive.
  * 
  *  \note
- *      Memory descriptors \p src1_desc and \p dst_desc are alloweded to be
+ *      Memory descriptors \p src1_desc and \p dst_desc are allowed to be
  *      initialized with #dnnl_format_tag_any or with format_kind set to
  *      #dnnl_format_kind_any.
  * 
@@ -5529,6 +5553,46 @@ public static native @Cast("dnnl_status_t") int dnnl_binary_primitive_desc_creat
         @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc src0_desc,
         @Const dnnl_memory_desc src1_desc, @Const dnnl_memory_desc dst_desc,
         @Const dnnl_primitive_attr attr);
+
+/** Creates a primitive descriptor for a binary primitive with support of
+ *  ternary operators.
+ * 
+ *  \note
+ *      Memory descriptors \p src1_desc, \p src2_desc and \p dst_desc are
+ *      allowed to be initialized with #dnnl_format_tag_any or with format_kind
+ *      set to #dnnl_format_kind_any.
+ * 
+ *  \note
+ *      All memory descriptors must have the same number of dimensions.
+ *      Element broadcasting is supported for memory descriptor \p src1_desc
+ *      and is applied to \p src1_desc dimensions that have a size equal to 1.
+ *      There is no broadcasting support for \p src2_desc.
+ * 
+ *  @param primitive_desc Output primitive descriptor.
+ *  @param engine Engine to use.
+ *  @param alg_kind Algorithm kind.
+ *  @param src0_desc Source 0 memory descriptor.
+ *  @param src1_desc Source 1 memory descriptor.
+ *  @param src2_desc Source memory descriptor for ternary operations. Might
+ *      be empty.
+ *  @param dst_desc Destination memory descriptor.
+ *  @param attr Primitive attributes.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_binary_primitive_desc_create_v2(
+        @ByPtrPtr dnnl_primitive_desc primitive_desc, dnnl_engine engine,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc src0_desc,
+        @Const dnnl_memory_desc src1_desc, @Const dnnl_memory_desc src2_desc,
+        @Const dnnl_memory_desc dst_desc, @Const dnnl_primitive_attr attr);
+public static native @Cast("dnnl_status_t") int dnnl_binary_primitive_desc_create_v2(
+        @Cast("dnnl_primitive_desc_t*") PointerPointer primitive_desc, dnnl_engine engine,
+        @Cast("dnnl_alg_kind_t") int alg_kind, @Const dnnl_memory_desc src0_desc,
+        @Const dnnl_memory_desc src1_desc, @Const dnnl_memory_desc src2_desc,
+        @Const dnnl_memory_desc dst_desc, @Const dnnl_primitive_attr attr);
 
 /** \} dnnl_api_binary
  <p>
@@ -8954,7 +9018,7 @@ public static native @Cast("dnnl_status_t") int dnnl_gemm_s8s8s32(@Cast("char") 
 // Parsed from oneapi/dnnl/dnnl_common.hpp
 
 /*******************************************************************************
-* Copyright 2022-2024 Intel Corporation
+* Copyright 2022-2025 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -9209,7 +9273,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 // Parsed from oneapi/dnnl/dnnl.hpp
 
 /*******************************************************************************
-* Copyright 2016-2024 Intel Corporation
+* Copyright 2016-2025 Intel Corporation
+* Copyright 2024 FUJITSU LIMITED
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -9509,6 +9574,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     binary_eq(dnnl_binary_eq),
     /** Binary not equal */
     binary_ne(dnnl_binary_ne),
+    /** Binary select */
+    binary_select(dnnl_binary_select),
     /** Nearest Neighbor resampling method */
     resampling_nearest(dnnl_resampling_nearest),
     /** Linear (Bilinear, Trilinear) resampling method */

@@ -3,7 +3,7 @@
  * Allow setting "org.bytedeco.openblas.load" system property to "none" ([issue #1203](https://github.com/bytedeco/javacpp-presets/issues/1203))
  * Fix presets for the CUPTI module of CUDA on Windows ([pull #1576](https://github.com/bytedeco/javacpp-presets/pull/1576))
  * Introduce `macosx-arm64` builds for ARPACK-NG, CMINPACK, FFTW, GSL, TensorFlow Lite, ONNX, ONNX Runtime ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069))
- * Upgrade presets for OpenCV 4.11.0, DNNL 3.6.2, CPython 3.13.1, NumPy 2.2.1, SciPy 1.15.1, LLVM 19.1.6, PyTorch 2.6.0, ONNX Runtime 1.20.1
+ * Upgrade presets for OpenCV 4.11.0, FFmpeg 7.1.1, DNNL 3.7.1, OpenBLAS 0.3.29, CPython 3.13.2, NumPy 2.2.3, SciPy 1.15.2, LLVM 20.1.0, libffi 3.4.7, PyTorch 2.6.0, TensorFlow Lite 2.19.0, ONNX Runtime 1.21.0, and their dependencies
 
 ### November 16, 2024 version 1.5.11
  * Enable distributed package using Gloo in presets for PyTorch ([pull #1510](https://github.com/bytedeco/javacpp-presets/pull/1510))

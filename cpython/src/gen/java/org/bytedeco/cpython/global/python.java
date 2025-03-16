@@ -174,12 +174,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        13;
-public static final int PY_MICRO_VERSION =        1;
+public static final int PY_MICRO_VERSION =        2;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.13.1";
+public static final String PY_VERSION =              "3.13.2";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -1463,7 +1463,7 @@ public static final int HAVE_STRINGS_H = 1;
 public static final int HAVE_STRING_H = 1;
 
 /* Define to 1 if you have the `strlcpy' function. */
-/* #undef HAVE_STRLCPY */
+public static final int HAVE_STRLCPY = 1;
 
 /* Define to 1 if you have the <stropts.h> header file. */
 /* #undef HAVE_STROPTS_H */
@@ -1581,6 +1581,9 @@ public static final int HAVE_SYS_MMAN_H = 1;
 /* Define to 1 if you have the <sys/param.h> header file. */
 public static final int HAVE_SYS_PARAM_H = 1;
 
+/* Define to 1 if you have the <sys/pidfd.h> header file. */
+public static final int HAVE_SYS_PIDFD_H = 1;
+
 /* Define to 1 if you have the <sys/poll.h> header file. */
 public static final int HAVE_SYS_POLL_H = 1;
 
@@ -1687,8 +1690,8 @@ public static final int HAVE_TM_ZONE = 1;
 /* Define to 1 if you have the `truncate' function. */
 public static final int HAVE_TRUNCATE = 1;
 
-/* Define to 1 if you have the `ttyname' function. */
-public static final int HAVE_TTYNAME = 1;
+/* Define to 1 if you have the `ttyname_r' function. */
+public static final int HAVE_TTYNAME_R = 1;
 
 /* Define to 1 if you don't have `tm_zone' but do have the external array
    `tzname'. */
@@ -1808,7 +1811,7 @@ public static final int HAVE___UINT128_T = 1;
 public static final int MAJOR_IN_SYSMACROS = 1;
 
 /* Define if mvwdelch in curses.h is an expression. */
-public static final int MVWDELCH_IS_EXPRESSION = 1;
+/* #undef MVWDELCH_IS_EXPRESSION */
 
 /* Define to the address where bug reports for this package should be sent. */
 /* #undef PACKAGE_BUGREPORT */
@@ -2212,62 +2215,6 @@ public static final int __BSD_VISIBLE = 1;
 // #ifndef PY_MACCONFIG_H
 // #define PY_MACCONFIG_H
 // #ifdef __APPLE__
-
-// #undef ALIGNOF_MAX_ALIGN_T
-// #undef SIZEOF_LONG
-// #undef SIZEOF_LONG_DOUBLE
-// #undef SIZEOF_PTHREAD_T
-// #undef SIZEOF_SIZE_T
-// #undef SIZEOF_TIME_T
-// #undef SIZEOF_VOID_P
-// #undef SIZEOF__BOOL
-// #undef SIZEOF_UINTPTR_T
-// #undef SIZEOF_PTHREAD_T
-// #undef WORDS_BIGENDIAN
-// #undef DOUBLE_IS_ARM_MIXED_ENDIAN_IEEE754
-// #undef DOUBLE_IS_BIG_ENDIAN_IEEE754
-// #undef DOUBLE_IS_LITTLE_ENDIAN_IEEE754
-// #undef HAVE_GCC_ASM_FOR_X87
-// #undef HAVE_GCC_ASM_FOR_X64
-
-// #undef VA_LIST_IS_ARRAY
-// #if defined(__LP64__) && defined(__x86_64__)
-public static final int VA_LIST_IS_ARRAY = 1;
-// #endif
-
-// #undef HAVE_LARGEFILE_SUPPORT
-// #ifndef __LP64__
-public static final int HAVE_LARGEFILE_SUPPORT = 1;
-// #endif
-
-// #undef SIZEOF_LONG
-// #ifdef __LP64__
-// #else
-// #  ifdef __ppc__
-// #  else
-// #  endif
-// #endif
-
-// macOS 10.4 (the first release to support 64-bit code
-// at all) only supports 64-bit in the UNIX layer.
-// Therefore suppress the toolbox-glue in 64-bit mode.
-//
-// In 64-bit mode setpgrp always has no arguments, in 32-bit
-// mode that depends on the compilation environment
-// #if defined(__LP64__)
-// #   undef SETPGRP_HAVE_ARG
-// #endif
-
-// #ifdef __BIG_ENDIAN__
-// #  define DOUBLE_IS_BIG_ENDIAN_IEEE754
-// #else
-// #  define DOUBLE_IS_LITTLE_ENDIAN_IEEE754
-// #endif
-
-// #if defined(__i386__) || defined(__x86_64__)
-// #  define HAVE_GCC_ASM_FOR_X87
-// #else
-// #endif
 
 // #endif   // __APPLE__
 // #endif   // !PY_MACCONFIG_H
@@ -2909,7 +2856,7 @@ public static final int Py_CAN_START_THREADS = 1;
 // #define Py_CHARMASK(c) ((unsigned char)((c) & 0xff))
 
 // #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-//      && !defined(__cplusplus))
+//      && !defined(__cplusplus) && !defined(_MSC_VER))
 // #  define Py_BUILD_ASSERT_EXPR(cond)
 //     ((void)sizeof(struct { int dummy; _Static_assert(cond, #cond); }),
 //      0)
@@ -13249,6 +13196,8 @@ public static final long _PyHASH_IMAG = PyHASH_IMAG;
 // #ifndef Py_LIMITED_API
 // #ifndef Py_TRACEMALLOC_H
 // #define Py_TRACEMALLOC_H
+// #ifdef __cplusplus
+// #endif
 
 /* Track an allocated memory block in the tracemalloc module.
    Return 0 on success, return -1 on error (failed to allocate memory to store
@@ -13270,6 +13219,8 @@ public static final long _PyHASH_IMAG = PyHASH_IMAG;
     @Cast("unsigned int") int domain,
     @Cast("uintptr_t") long ptr);
 
+// #ifdef __cplusplus
+// #endif
 // #endif  // !Py_TRACEMALLOC_H
 // #endif  // !Py_LIMITED_API
 

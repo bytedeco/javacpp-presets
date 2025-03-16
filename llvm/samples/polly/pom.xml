@@ -13,12 +13,12 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>19.1.6-1.5.12-SNAPSHOT</version>
+            <version>20.1.0-1.5.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.4.6-1.5.12-SNAPSHOT</version>
+            <version>3.4.7-1.5.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>

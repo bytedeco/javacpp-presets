@@ -154,6 +154,10 @@ public static final int
 
 /**
  * Retrieve the character data associated with the given string.
+ *
+ * The returned data is a reference and not owned by the user. This data
+ * is only valid while the {@code CXString} is valid. This function is similar
+ * to {@code std::string::c_str()}.
  */
 public static native @Cast("const char*") BytePointer clang_getCString(@ByVal CXString string);
 
@@ -604,6 +608,16 @@ public static native @ByVal CXSourceLocation clang_getNullLocation();
  */
 public static native @Cast("unsigned") int clang_equalLocations(@ByVal CXSourceLocation loc1,
                                              @ByVal CXSourceLocation loc2);
+
+/**
+ * Determine for two source locations if the first comes
+ * strictly before the second one in the source code.
+ *
+ * @return non-zero if the first source location comes
+ * strictly before the second one, zero otherwise.
+ */
+public static native @Cast("unsigned") int clang_isBeforeInTranslationUnit(@ByVal CXSourceLocation loc1,
+                                                        @ByVal CXSourceLocation loc2);
 
 /**
  * Returns non-zero if the given source location is in a system header.
@@ -3335,6 +3349,10 @@ public static final int
    */
   CXCursor_OMPInterchangeDirective = 308,
 
+  /** OpenMP assume directive.
+   */
+  CXCursor_OMPAssumeDirective = 309,
+
   /** OpenACC Compute Construct.
    */
   CXCursor_OpenACCComputeConstruct = 320,
@@ -3343,7 +3361,47 @@ public static final int
    */
   CXCursor_OpenACCLoopConstruct = 321,
 
-  CXCursor_LastStmt = CXCursor_OpenACCLoopConstruct,
+  /** OpenACC Combined Constructs.
+   */
+  CXCursor_OpenACCCombinedConstruct = 322,
+
+  /** OpenACC data Construct.
+   */
+  CXCursor_OpenACCDataConstruct = 323,
+
+  /** OpenACC enter data Construct.
+   */
+  CXCursor_OpenACCEnterDataConstruct = 324,
+
+  /** OpenACC exit data Construct.
+   */
+  CXCursor_OpenACCExitDataConstruct = 325,
+
+  /** OpenACC host_data Construct.
+   */
+  CXCursor_OpenACCHostDataConstruct = 326,
+
+  /** OpenACC wait Construct.
+   */
+  CXCursor_OpenACCWaitConstruct = 327,
+
+  /** OpenACC init Construct.
+   */
+  CXCursor_OpenACCInitConstruct = 328,
+
+  /** OpenACC shutdown Construct.
+   */
+  CXCursor_OpenACCShutdownConstruct = 329,
+
+  /** OpenACC set Construct.
+   */
+  CXCursor_OpenACCSetConstruct = 330,
+
+  /** OpenACC update Construct.
+   */
+  CXCursor_OpenACCUpdateConstruct = 331,
+
+  CXCursor_LastStmt = CXCursor_OpenACCUpdateConstruct,
 
   /**
    * Cursor that represents the translation unit itself.
@@ -4114,7 +4172,11 @@ public static final int
 
   CXType_ExtVector = 176,
   CXType_Atomic = 177,
-  CXType_BTFTagAttributed = 178;
+  CXType_BTFTagAttributed = 178,
+
+  /* HLSL Types */
+  CXType_HLSLResource = 179,
+  CXType_HLSLAttributedResource = 180;
 
 /**
  * Describes the calling convention of a function type
@@ -4687,8 +4749,8 @@ public static native @Cast("CXTypeNullabilityKind") int clang_Type_getNullabilit
 
 /**
  * List the possible error codes for \c clang_Type_getSizeOf,
- *   \c clang_Type_getAlignOf, \c clang_Type_getOffsetOf and
- *   \c clang_Cursor_getOffsetOf.
+ *   \c clang_Type_getAlignOf, \c clang_Type_getOffsetOf,
+ *   \c clang_Cursor_getOffsetOf, and \c clang_getOffsetOfBase.
  *
  * A value of this enumeration type can be returned if the target type is not
  * a valid argument to sizeof, alignof or offsetof.
@@ -4853,6 +4915,15 @@ public static native @Cast("CXRefQualifierKind") int clang_Type_getCXXRefQualifi
  *   CX_CXXBaseSpecifier is virtual.
  */
 public static native @Cast("unsigned") int clang_isVirtualBase(@ByVal CXCursor arg0);
+
+/**
+ * Returns the offset in bits of a CX_CXXBaseSpecifier relative to the parent
+ * class.
+ *
+ * Returns a small negative number if the offset cannot be computed. See
+ * CXTypeLayoutError for error codes.
+ */
+public static native long clang_getOffsetOfBase(@ByVal CXCursor Parent, @ByVal CXCursor Base);
 
 /**
  * Represents the C++ access control level to a base class for a
@@ -5240,6 +5311,14 @@ public static native void clang_PrintingPolicy_dispose(CXPrintingPolicy Policy);
  */
 public static native @ByVal CXString clang_getCursorPrettyPrinted(@ByVal CXCursor Cursor,
                                                      CXPrintingPolicy Policy);
+
+/**
+ * Pretty-print the underlying type using a custom printing policy.
+ *
+ * If the type is invalid, an empty string is returned.
+ */
+public static native @ByVal CXString clang_getTypePrettyPrinted(@ByVal CXType CT,
+                                                   CXPrintingPolicy cxPolicy);
 
 /**
  * Retrieve the display name for the entity referenced by this cursor.
@@ -7451,6 +7530,29 @@ public static native @ByVal CXSourceLocation clang_indexLoc_getCXSourceLocation(
  */
 public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType T, CXFieldVisitor visitor,
                                                CXClientData client_data);
+
+/**
+ * Visit the base classes of a type.
+ *
+ * This function visits all the direct base classes of a the given cursor,
+ * invoking the given \p visitor function with the cursors of each
+ * visited base. The traversal may be ended prematurely, if
+ * the visitor returns \c CXFieldVisit_Break.
+ *
+ * @param T the record type whose field may be visited.
+ *
+ * @param visitor the visitor function that will be invoked for each
+ * field of \p T.
+ *
+ * @param client_data pointer data supplied by the client, which will
+ * be passed to the visitor each time it is invoked.
+ *
+ * @return a non-zero value if the traversal was terminated
+ * prematurely by the visitor returning \c CXFieldVisit_Break.
+ */
+public static native @Cast("unsigned") int clang_visitCXXBaseClasses(@ByVal CXType T,
+                                                  CXFieldVisitor visitor,
+                                                  CXClientData client_data);
 
 /**
  * Describes the kind of binary operators.

@@ -461,8 +461,7 @@ public static final int
   LLVMVectorTypeKind = 13,
   /** Metadata */
   LLVMMetadataTypeKind = 14,
-  /** X86 MMX */
-  LLVMX86_MMXTypeKind = 15,
+                             /* 15 previously used by LLVMX86_MMXTypeKind */
   /** Tokens */
   LLVMTokenTypeKind = 16,
   /** Scalable SIMD vector type */
@@ -776,7 +775,12 @@ public static final int
   LLVMAtomicRMWBinOpUIncWrap = 15,
   /** Decrements the value, wrapping back to
                                the input value when decremented below zero */
-  LLVMAtomicRMWBinOpUDecWrap = 16;
+  LLVMAtomicRMWBinOpUDecWrap = 16,
+  /**Subtracts the value only if no unsigned
+                                 overflow */
+  LLVMAtomicRMWBinOpUSubCond = 17,
+  /**Subtracts the value, clamping to zero */
+  LLVMAtomicRMWBinOpUSubSat = 18;
 
 /** enum LLVMDiagnosticSeverity */
 public static final int
@@ -1021,6 +1025,12 @@ public static native @Cast("unsigned") int LLVMGetMDKindIDInContext(LLVMContextR
                                   @Cast("unsigned") int SLen);
 public static native @Cast("unsigned") int LLVMGetMDKindID(@Cast("const char*") BytePointer Name, @Cast("unsigned") int SLen);
 public static native @Cast("unsigned") int LLVMGetMDKindID(String Name, @Cast("unsigned") int SLen);
+
+/**
+ * Maps a synchronization scope name to a ID unique within this context.
+ */
+public static native @Cast("unsigned") int LLVMGetSyncScopeID(LLVMContextRef C, @Cast("const char*") BytePointer Name, @Cast("size_t") long SLen);
+public static native @Cast("unsigned") int LLVMGetSyncScopeID(LLVMContextRef C, String Name, @Cast("size_t") long SLen);
 
 /**
  * Return an unique id given the name of a enum attribute,
@@ -1623,6 +1633,18 @@ public static native LLVMValueRef LLVMGetNamedFunction(LLVMModuleRef M, @Cast("c
 public static native LLVMValueRef LLVMGetNamedFunction(LLVMModuleRef M, String Name);
 
 /**
+ * Obtain a Function value from a Module by its name.
+ *
+ * The returned value corresponds to a llvm::Function value.
+ *
+ * @see llvm::Module::getFunction()
+ */
+public static native LLVMValueRef LLVMGetNamedFunctionWithLength(LLVMModuleRef M, @Cast("const char*") BytePointer Name,
+                                            @Cast("size_t") long Length);
+public static native LLVMValueRef LLVMGetNamedFunctionWithLength(LLVMModuleRef M, String Name,
+                                            @Cast("size_t") long Length);
+
+/**
  * Obtain an iterator to the first Function in a Module.
  *
  * @see llvm::Module::begin()
@@ -2174,11 +2196,6 @@ public static native LLVMTypeRef LLVMVoidTypeInContext(LLVMContextRef C);
 public static native LLVMTypeRef LLVMLabelTypeInContext(LLVMContextRef C);
 
 /**
- * Create a X86 MMX type in a context.
- */
-public static native LLVMTypeRef LLVMX86MMXTypeInContext(LLVMContextRef C);
-
-/**
  * Create a X86 AMX type in a context.
  */
 public static native LLVMTypeRef LLVMX86AMXTypeInContext(LLVMContextRef C);
@@ -2199,7 +2216,6 @@ public static native LLVMTypeRef LLVMMetadataTypeInContext(LLVMContextRef C);
  */
 public static native LLVMTypeRef LLVMVoidType();
 public static native LLVMTypeRef LLVMLabelType();
-public static native LLVMTypeRef LLVMX86MMXType();
 public static native LLVMTypeRef LLVMX86AMXType();
 
 /**
@@ -2451,6 +2467,13 @@ public static native void LLVMDumpValue(LLVMValueRef Val);
  * @see llvm::Value::print()
  */
 public static native @Cast("char*") BytePointer LLVMPrintValueToString(LLVMValueRef Val);
+
+/**
+ * Obtain the context to which this value is associated.
+ *
+ * @see llvm::Value::getContext()
+ */
+public static native LLVMContextRef LLVMGetValueContext(LLVMValueRef Val);
 
 /**
  * Return a string representation of the DbgRecord. Use
@@ -3260,6 +3283,10 @@ public static native LLVMValueRef LLVMAddGlobalInAddressSpace(LLVMModuleRef M, L
                                          @Cast("unsigned") int AddressSpace);
 public static native LLVMValueRef LLVMGetNamedGlobal(LLVMModuleRef M, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMGetNamedGlobal(LLVMModuleRef M, String Name);
+public static native LLVMValueRef LLVMGetNamedGlobalWithLength(LLVMModuleRef M, @Cast("const char*") BytePointer Name,
+                                          @Cast("size_t") long Length);
+public static native LLVMValueRef LLVMGetNamedGlobalWithLength(LLVMModuleRef M, String Name,
+                                          @Cast("size_t") long Length);
 public static native LLVMValueRef LLVMGetFirstGlobal(LLVMModuleRef M);
 public static native LLVMValueRef LLVMGetLastGlobal(LLVMModuleRef M);
 public static native LLVMValueRef LLVMGetNextGlobal(LLVMValueRef GlobalVar);
@@ -3400,7 +3427,7 @@ public static native void LLVMSetPersonalityFn(LLVMValueRef Fn, LLVMValueRef Per
 /**
  * Obtain the intrinsic ID number which matches the given function name.
  *
- * @see llvm::Function::lookupIntrinsicID()
+ * @see llvm::Intrinsic::lookupIntrinsicID()
  */
 public static native @Cast("unsigned") int LLVMLookupIntrinsicID(@Cast("const char*") BytePointer Name, @Cast("size_t") long NameLen);
 public static native @Cast("unsigned") int LLVMLookupIntrinsicID(String Name, @Cast("size_t") long NameLen);
@@ -3413,10 +3440,10 @@ public static native @Cast("unsigned") int LLVMLookupIntrinsicID(String Name, @C
 public static native @Cast("unsigned") int LLVMGetIntrinsicID(LLVMValueRef Fn);
 
 /**
- * Create or insert the declaration of an intrinsic.  For overloaded intrinsics,
+ * Get or insert the declaration of an intrinsic.  For overloaded intrinsics,
  * parameter types must be provided to uniquely identify an overload.
  *
- * @see llvm::Intrinsic::getDeclaration()
+ * @see llvm::Intrinsic::getOrInsertDeclaration()
  */
 public static native LLVMValueRef LLVMGetIntrinsicDeclaration(LLVMModuleRef Mod,
                                          @Cast("unsigned") int ID,
@@ -3446,14 +3473,10 @@ public static native LLVMTypeRef LLVMIntrinsicGetType(LLVMContextRef Ctx, @Cast(
 public static native @Cast("const char*") BytePointer LLVMIntrinsicGetName(@Cast("unsigned") int ID, @Cast("size_t*") SizeTPointer NameLength);
 
 /** Deprecated: Use LLVMIntrinsicCopyOverloadedName2 instead. */
-public static native @Cast("const char*") BytePointer LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") int ID,
-                                            @ByPtrPtr LLVMTypeRef ParamTypes,
-                                            @Cast("size_t") long ParamCount,
-                                            @Cast("size_t*") SizeTPointer NameLength);
-public static native String LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") int ID,
-                                            @Cast("LLVMTypeRef*") PointerPointer ParamTypes,
-                                            @Cast("size_t") long ParamCount,
-                                            @Cast("size_t*") SizeTPointer NameLength);
+public static native @Cast("char*") BytePointer LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") int ID, @ByPtrPtr LLVMTypeRef ParamTypes,
+                                      @Cast("size_t") long ParamCount, @Cast("size_t*") SizeTPointer NameLength);
+public static native @Cast("char*") ByteBuffer LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") int ID, @Cast("LLVMTypeRef*") PointerPointer ParamTypes,
+                                      @Cast("size_t") long ParamCount, @Cast("size_t*") SizeTPointer NameLength);
 
 /**
  * Copies the name of an overloaded intrinsic identified by a given list of
@@ -3466,14 +3489,12 @@ public static native String LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") in
  *
  * @see llvm::Intrinsic::getName()
  */
-public static native @Cast("const char*") BytePointer LLVMIntrinsicCopyOverloadedName2(LLVMModuleRef Mod, @Cast("unsigned") int ID,
-                                             @ByPtrPtr LLVMTypeRef ParamTypes,
-                                             @Cast("size_t") long ParamCount,
-                                             @Cast("size_t*") SizeTPointer NameLength);
-public static native String LLVMIntrinsicCopyOverloadedName2(LLVMModuleRef Mod, @Cast("unsigned") int ID,
-                                             @Cast("LLVMTypeRef*") PointerPointer ParamTypes,
-                                             @Cast("size_t") long ParamCount,
-                                             @Cast("size_t*") SizeTPointer NameLength);
+public static native @Cast("char*") BytePointer LLVMIntrinsicCopyOverloadedName2(LLVMModuleRef Mod, @Cast("unsigned") int ID,
+                                       @ByPtrPtr LLVMTypeRef ParamTypes,
+                                       @Cast("size_t") long ParamCount, @Cast("size_t*") SizeTPointer NameLength);
+public static native @Cast("char*") ByteBuffer LLVMIntrinsicCopyOverloadedName2(LLVMModuleRef Mod, @Cast("unsigned") int ID,
+                                       @Cast("LLVMTypeRef*") PointerPointer ParamTypes,
+                                       @Cast("size_t") long ParamCount, @Cast("size_t*") SizeTPointer NameLength);
 
 /**
  * Obtain if the intrinsic identified by the given ID is overloaded.
@@ -4350,6 +4371,41 @@ public static native LLVMValueRef LLVMInstructionClone(LLVMValueRef Inst);
 public static native LLVMValueRef LLVMIsATerminatorInst(LLVMValueRef Inst);
 
 /**
+ * Obtain the first debug record attached to an instruction.
+ *
+ * Use LLVMGetNextDbgRecord() and LLVMGetPreviousDbgRecord() to traverse the
+ * sequence of DbgRecords.
+ *
+ * Return the first DbgRecord attached to Inst or NULL if there are none.
+ *
+ * @see llvm::Instruction::getDbgRecordRange()
+ */
+public static native LLVMDbgRecordRef LLVMGetFirstDbgRecord(LLVMValueRef Inst);
+
+/**
+ * Obtain the last debug record attached to an instruction.
+ *
+ * Return the last DbgRecord attached to Inst or NULL if there are none.
+ *
+ * @see llvm::Instruction::getDbgRecordRange()
+ */
+public static native LLVMDbgRecordRef LLVMGetLastDbgRecord(LLVMValueRef Inst);
+
+/**
+ * Obtain the next DbgRecord in the sequence or NULL if there are no more.
+ *
+ * @see llvm::Instruction::getDbgRecordRange()
+ */
+public static native LLVMDbgRecordRef LLVMGetNextDbgRecord(LLVMDbgRecordRef DbgRecord);
+
+/**
+ * Obtain the previous DbgRecord in the sequence or NULL if there are no more.
+ *
+ * @see llvm::Instruction::getDbgRecordRange()
+ */
+public static native LLVMDbgRecordRef LLVMGetPreviousDbgRecord(LLVMDbgRecordRef DbgRecord);
+
+/**
  * \defgroup LLVMCCoreValueInstructionCall Call Sites and Invocations
  *
  * Functions in this group apply to instructions that refer to call
@@ -4851,6 +4907,13 @@ public static native void LLVMBuilderSetDefaultFPMathTag(LLVMBuilderRef Builder,
                                     LLVMMetadataRef FPMathTag);
 
 /**
+ * Obtain the context to which this builder is associated.
+ *
+ * @see llvm::IRBuilder::getContext()
+ */
+public static native LLVMContextRef LLVMGetBuilderContext(LLVMBuilderRef Builder);
+
+/**
  * Deprecated: Passing the NULL location will crash.
  * Use LLVMGetCurrentDebugLocation2 instead.
  */
@@ -5269,6 +5332,9 @@ public static native LLVMValueRef LLVMBuildGlobalString(LLVMBuilderRef B, @Cast(
                                    @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildGlobalString(LLVMBuilderRef B, String Str,
                                    String Name);
+/**
+ * Deprecated: Use LLVMBuildGlobalString instead, which has identical behavior.
+ */
 public static native LLVMValueRef LLVMBuildGlobalStringPtr(LLVMBuilderRef B, @Cast("const char*") BytePointer Str,
                                       @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildGlobalStringPtr(LLVMBuilderRef B, String Str,
@@ -5465,15 +5531,31 @@ public static native LLVMValueRef LLVMBuildFence(LLVMBuilderRef B, @Cast("LLVMAt
                             @Cast("LLVMBool") int singleThread, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildFence(LLVMBuilderRef B, @Cast("LLVMAtomicOrdering") int ordering,
                             @Cast("LLVMBool") int singleThread, String Name);
+public static native LLVMValueRef LLVMBuildFenceSyncScope(LLVMBuilderRef B,
+                                     @Cast("LLVMAtomicOrdering") int ordering, @Cast("unsigned") int SSID,
+                                     @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildFenceSyncScope(LLVMBuilderRef B,
+                                     @Cast("LLVMAtomicOrdering") int ordering, @Cast("unsigned") int SSID,
+                                     String Name);
 public static native LLVMValueRef LLVMBuildAtomicRMW(LLVMBuilderRef B, @Cast("LLVMAtomicRMWBinOp") int op,
                                 LLVMValueRef PTR, LLVMValueRef Val,
                                 @Cast("LLVMAtomicOrdering") int ordering,
                                 @Cast("LLVMBool") int singleThread);
+public static native LLVMValueRef LLVMBuildAtomicRMWSyncScope(LLVMBuilderRef B,
+                                         @Cast("LLVMAtomicRMWBinOp") int op,
+                                         LLVMValueRef PTR, LLVMValueRef Val,
+                                         @Cast("LLVMAtomicOrdering") int ordering,
+                                         @Cast("unsigned") int SSID);
 public static native LLVMValueRef LLVMBuildAtomicCmpXchg(LLVMBuilderRef B, LLVMValueRef Ptr,
                                     LLVMValueRef Cmp, LLVMValueRef New,
                                     @Cast("LLVMAtomicOrdering") int SuccessOrdering,
                                     @Cast("LLVMAtomicOrdering") int FailureOrdering,
                                     @Cast("LLVMBool") int SingleThread);
+public static native LLVMValueRef LLVMBuildAtomicCmpXchgSyncScope(LLVMBuilderRef B, LLVMValueRef Ptr,
+                                             LLVMValueRef Cmp, LLVMValueRef New,
+                                             @Cast("LLVMAtomicOrdering") int SuccessOrdering,
+                                             @Cast("LLVMAtomicOrdering") int FailureOrdering,
+                                             @Cast("unsigned") int SSID);
 
 /**
  * Get the number of elements in the mask of a ShuffleVector instruction.
@@ -5497,6 +5579,22 @@ public static native int LLVMGetMaskValue(LLVMValueRef ShuffleVectorInst, @Cast(
 
 public static native @Cast("LLVMBool") int LLVMIsAtomicSingleThread(LLVMValueRef AtomicInst);
 public static native void LLVMSetAtomicSingleThread(LLVMValueRef AtomicInst, @Cast("LLVMBool") int SingleThread);
+
+/**
+ * Returns whether an instruction is an atomic instruction, e.g., atomicrmw,
+ * cmpxchg, fence, or loads and stores with atomic ordering.
+ */
+public static native @Cast("LLVMBool") int LLVMIsAtomic(LLVMValueRef Inst);
+
+/**
+ * Returns the synchronization scope ID of an atomic instruction.
+ */
+public static native @Cast("unsigned") int LLVMGetAtomicSyncScopeID(LLVMValueRef AtomicInst);
+
+/**
+ * Sets the synchronization scope ID of an atomic instruction.
+ */
+public static native void LLVMSetAtomicSyncScopeID(LLVMValueRef AtomicInst, @Cast("unsigned") int SSID);
 
 public static native @Cast("LLVMAtomicOrdering") int LLVMGetCmpXchgSuccessOrdering(LLVMValueRef CmpXchgInst);
 public static native void LLVMSetCmpXchgSuccessOrdering(LLVMValueRef CmpXchgInst,
@@ -6158,8 +6256,10 @@ public static final int LLVMDisassembler_Option_PrintImmHex = 2;
 public static final int LLVMDisassembler_Option_AsmPrinterVariant = 4;
 /* The option to set comment on instructions */
 public static final int LLVMDisassembler_Option_SetInstrComments = 8;
-  /* The option to print latency information alongside instructions */
+/* The option to print latency information alongside instructions */
 public static final int LLVMDisassembler_Option_PrintLatency = 16;
+/* The option to print in color */
+public static final int LLVMDisassembler_Option_Color = 32;
 
 /**
  * Dispose of a disassembler context.
@@ -7737,7 +7837,7 @@ public static native LLVMTypeRef LLVMIntPtrTypeInContext(LLVMContextRef C, LLVMT
 public static native LLVMTypeRef LLVMIntPtrTypeForASInContext(LLVMContextRef C, LLVMTargetDataRef TD,
                                          @Cast("unsigned") int AS);
 
-/** Computes the size of a type in bytes for a target.
+/** Computes the size of a type in bits for a target.
     See the method llvm::DataLayout::getTypeSizeInBits. */
 public static native @Cast("unsigned long long") long LLVMSizeOfTypeInBits(LLVMTargetDataRef TD, LLVMTypeRef Ty);
 
@@ -8634,11 +8734,12 @@ public static final int
   LLVMDWARFSourceLanguageRuby = 56,
   LLVMDWARFSourceLanguageMove = 57,
   LLVMDWARFSourceLanguageHylo = 58,
+  LLVMDWARFSourceLanguageMetal = 59,
 
   // Vendor extensions:
-  LLVMDWARFSourceLanguageMips_Assembler = 59,
-  LLVMDWARFSourceLanguageGOOGLE_RenderScript = 60,
-  LLVMDWARFSourceLanguageBORLAND_Delphi = 61;
+  LLVMDWARFSourceLanguageMips_Assembler = 60,
+  LLVMDWARFSourceLanguageGOOGLE_RenderScript = 61,
+  LLVMDWARFSourceLanguageBORLAND_Delphi = 62;
 
 /**
  * The amount of debug information to emit.
@@ -9467,12 +9568,16 @@ public static native LLVMMetadataRef LLVMDIBuilderCreateObjCProperty(LLVMDIBuild
                                 LLVMMetadataRef Ty);
 
 /**
- * Create a uniqued DIType* clone with FlagObjectPointer and FlagArtificial set.
+ * Create a uniqued DIType* clone with FlagObjectPointer. If \c Implicit
+ * is true, then also set FlagArtificial.
  * @param Builder   The DIBuilder.
  * @param Type      The underlying type to which this pointer points.
+ * @param Implicit  Indicates whether this pointer was implicitly generated
+ *                  (i.e., not spelled out in source).
  */
 public static native LLVMMetadataRef LLVMDIBuilderCreateObjectPointerType(LLVMDIBuilderRef Builder,
-                                     LLVMMetadataRef Type);
+                                                     LLVMMetadataRef Type,
+                                                     @Cast("LLVMBool") int Implicit);
 
 /**
  * Create debugging information entry for a qualified
@@ -10062,6 +10167,56 @@ public static native LLVMMetadataRef LLVMInstructionGetDebugLoc(LLVMValueRef Ins
 public static native void LLVMInstructionSetDebugLoc(LLVMValueRef Inst, LLVMMetadataRef Loc);
 
 /**
+ * Create a new descriptor for a label
+ *
+ * @param Builder         The DIBuilder.
+ * @param Scope           The scope to create the label in.
+ * @param Name            Variable name.
+ * @param NameLen         Length of variable name.
+ * @param File            The file to create the label in.
+ * @param LineNo          Line Number.
+ * @param AlwaysPreserve  Preserve the label regardless of optimization.
+ *
+ * @see llvm::DIBuilder::createLabel()
+ */
+public static native LLVMMetadataRef LLVMDIBuilderCreateLabel(
+    LLVMDIBuilderRef Builder,
+    LLVMMetadataRef Context, @Cast("const char*") BytePointer Name, @Cast("size_t") long NameLen,
+    LLVMMetadataRef File, @Cast("unsigned") int LineNo, @Cast("LLVMBool") int AlwaysPreserve);
+public static native LLVMMetadataRef LLVMDIBuilderCreateLabel(
+    LLVMDIBuilderRef Builder,
+    LLVMMetadataRef Context, String Name, @Cast("size_t") long NameLen,
+    LLVMMetadataRef File, @Cast("unsigned") int LineNo, @Cast("LLVMBool") int AlwaysPreserve);
+
+/**
+ * Insert a new llvm.dbg.label intrinsic call
+ *
+ * @param Builder         The DIBuilder.
+ * @param LabelInfo       The Label's debug info descriptor
+ * @param Location        The debug info location
+ * @param InsertBefore    Location for the new intrinsic.
+ *
+ * @see llvm::DIBuilder::insertLabel()
+ */
+public static native LLVMDbgRecordRef LLVMDIBuilderInsertLabelBefore(
+    LLVMDIBuilderRef Builder, LLVMMetadataRef LabelInfo,
+    LLVMMetadataRef Location, LLVMValueRef InsertBefore);
+
+/**
+ * Insert a new llvm.dbg.label intrinsic call
+ *
+ * @param Builder         The DIBuilder.
+ * @param LabelInfo       The Label's debug info descriptor
+ * @param Location        The debug info location
+ * @param InsertAtEnd     Location for the new intrinsic.
+ *
+ * @see llvm::DIBuilder::insertLabel()
+ */
+public static native LLVMDbgRecordRef LLVMDIBuilderInsertLabelAtEnd(
+    LLVMDIBuilderRef Builder, LLVMMetadataRef LabelInfo,
+    LLVMMetadataRef Location, LLVMBasicBlockRef InsertAtEnd);
+
+/**
  * Obtain the enumerated type of a Metadata instance.
  *
  * @see llvm::Metadata::getMetadataID()
@@ -10123,6 +10278,14 @@ public static native @Const LLVMErrorTypeId LLVMGetErrorTypeId(LLVMErrorRef Err)
  * to some other consuming operation, e.g. LLVMGetErrorMessage.
  */
 public static native void LLVMConsumeError(LLVMErrorRef Err);
+
+/**
+ * Report a fatal error if Err is a failure value.
+ *
+ * This function can be used to wrap calls to fallible functions ONLY when it is
+ * known that the Error will always be a success value.
+ */
+public static native void LLVMCantFail(LLVMErrorRef Err);
 
 /**
  * Returns the given string's error message. This operation consumes the error,
@@ -11977,6 +12140,19 @@ public static native LLVMErrorRef LLVMRunPasses(LLVMModuleRef M, String Passes,
                            LLVMPassBuilderOptionsRef Options);
 
 /**
+ * Construct and run a set of passes over a function.
+ *
+ * This function behaves the same as LLVMRunPasses, but operates on a single
+ * function instead of an entire module.
+ */
+public static native LLVMErrorRef LLVMRunPassesOnFunction(LLVMValueRef F, @Cast("const char*") BytePointer Passes,
+                                     LLVMTargetMachineRef TM,
+                                     LLVMPassBuilderOptionsRef Options);
+public static native LLVMErrorRef LLVMRunPassesOnFunction(LLVMValueRef F, String Passes,
+                                     LLVMTargetMachineRef TM,
+                                     LLVMPassBuilderOptionsRef Options);
+
+/**
  * Create a new set of options for a PassBuilder
  *
  * Ownership of the returned instance is given to the client, and they are
@@ -11997,6 +12173,16 @@ public static native void LLVMPassBuilderOptionsSetVerifyEach(LLVMPassBuilderOpt
  */
 public static native void LLVMPassBuilderOptionsSetDebugLogging(LLVMPassBuilderOptionsRef Options,
                                            @Cast("LLVMBool") int DebugLogging);
+
+/**
+ * Specify a custom alias analysis pipeline for the PassBuilder to be used
+ * instead of the default one. The string argument is not copied; the caller
+ * is responsible for ensuring it outlives the PassBuilderOptions instance.
+ */
+public static native void LLVMPassBuilderOptionsSetAAPipeline(LLVMPassBuilderOptionsRef Options,
+                                         @Cast("const char*") BytePointer AAPipeline);
+public static native void LLVMPassBuilderOptionsSetAAPipeline(LLVMPassBuilderOptionsRef Options,
+                                         String AAPipeline);
 
 public static native void LLVMPassBuilderOptionsSetLoopInterleaving(
     LLVMPassBuilderOptionsRef Options, @Cast("LLVMBool") int LoopInterleaving);

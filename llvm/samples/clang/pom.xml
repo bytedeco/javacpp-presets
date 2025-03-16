@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>19.1.6-1.5.12-SNAPSHOT</version>
+            <version>20.1.0-1.5.12-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

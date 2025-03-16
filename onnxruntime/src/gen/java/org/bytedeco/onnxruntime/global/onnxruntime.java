@@ -74,14 +74,14 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 20;
+public static final int ORT_API_VERSION = 21;
 
 // #ifdef __cplusplus
 // #endif
 
 /** \} */
 // SAL2 Definitions
-// #ifndef _WIN32
+// #ifndef _MSC_VER
 // #define _In_
 // #define _In_z_
 // #define _In_opt_

@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>llvm</artifactId>
-  <version>19.1.6-${project.parent.version}</version>
+  <version>20.1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for LLVM</name>
 
   <dependencies>

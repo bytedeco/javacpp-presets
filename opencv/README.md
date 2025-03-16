@@ -77,7 +77,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>2.2.1-1.5.12-SNAPSHOT</version>
+            <version>2.2.3-1.5.12-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

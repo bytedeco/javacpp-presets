@@ -1,7 +1,7 @@
-diff -ruN libvpx-1.8.1/build/make/configure.sh libvpx-1.8.1-android/build/make/configure.sh
---- libvpx-1.8.1/build/make/configure.sh	2019-07-16 06:55:33.000000000 +0900
-+++ libvpx-1.8.1-android/build/make/configure.sh	2019-08-10 13:40:49.859895140 +0900
-@@ -1098,10 +1098,30 @@
+diff -ruN libvpx-1.15.0/build/make/configure.sh libvpx-1.15.0-android/build/make/configure.sh
+--- libvpx-1.15.0/build/make/configure.sh	2024-10-24 03:24:57.000000000 +0900
++++ libvpx-1.15.0-android/build/make/configure.sh	2025-03-15 20:57:31.240777621 +0900
+@@ -1167,18 +1167,30 @@
            ;;
  
          android*)
@@ -9,6 +9,14 @@ diff -ruN libvpx-1.8.1/build/make/configure.sh libvpx-1.8.1-android/build/make/c
 -          echo "See build/make/Android.mk for details."
 -          check_add_ldflags -static
 -          soft_enable unit_tests
+-          case "$AS" in
+-            *clang)
+-              # The GNU Assembler was removed in the r24 version of the NDK.
+-              # clang's internal assembler works, but `-c` is necessary to
+-              # avoid linking.
+-              add_asflags -c
+-              ;;
+-          esac
 +          if [ -n "${ANDROID_NDK}" ]; then
 +            TOOLCHAIN_PATH=${ANDROID_PREFIX}-
 +            CC=${ANDROID_CC}
@@ -35,8 +43,8 @@ diff -ruN libvpx-1.8.1/build/make/configure.sh libvpx-1.8.1-android/build/make/c
 +          fi
            ;;
  
-         darwin*)
-@@ -1252,8 +1272,32 @@
+         darwin)
+@@ -1363,8 +1375,32 @@
        ;;
      x86*)
        case  ${tgt_os} in

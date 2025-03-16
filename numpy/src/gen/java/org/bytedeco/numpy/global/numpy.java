@@ -76,30 +76,6 @@ public static final int __STDC_FORMAT_MACROS = 1;
  * build completely.
  */
 // #ifdef __APPLE__
-//     #undef NPY_SIZEOF_LONG
-
-//     #ifdef __LP64__
-//     #else
-//     #endif
-
-//     #undef NPY_SIZEOF_LONGDOUBLE
-//     #undef NPY_SIZEOF_COMPLEX_LONGDOUBLE
-//     #ifdef HAVE_LDOUBLE_IEEE_DOUBLE_LE
-//       #undef HAVE_LDOUBLE_IEEE_DOUBLE_LE
-//     #endif
-//     #ifdef HAVE_LDOUBLE_INTEL_EXTENDED_16_BYTES_LE
-//       #undef HAVE_LDOUBLE_INTEL_EXTENDED_16_BYTES_LE
-//     #endif
-
-//     #if defined(__arm64__)
-        public static final int HAVE_LDOUBLE_IEEE_DOUBLE_LE = 1;
-//     #elif defined(__x86_64)
-        public static final int HAVE_LDOUBLE_INTEL_EXTENDED_16_BYTES_LE = 1;
-//     #elif defined (__i386)
-//     #elif defined(__ppc__) || defined (__ppc64__)
-//     #else
-//         #error "unknown architecture"
-//     #endif
 // #endif
 
 
