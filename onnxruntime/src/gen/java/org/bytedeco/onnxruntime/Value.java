@@ -37,9 +37,6 @@ public class Value extends ValueImpl {
   /** Create an empty Value object, must be assigned a valid one to be used */
   public Value() { super((Pointer)null); allocate(); }
   private native void allocate();
-  /** Used for interop with the C API */
-  public Value(OrtValue p) { super((Pointer)null); allocate(p); }
-  private native void allocate(OrtValue p);
   public Value(@StdMove Value arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@StdMove Value arg0);
   public native @ByRef @Name("operator =") Value put(@StdMove Value arg0);

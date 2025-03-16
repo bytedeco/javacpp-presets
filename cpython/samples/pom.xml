@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.13.1-1.5.12-SNAPSHOT</version>
+            <version>3.13.2-1.5.12-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

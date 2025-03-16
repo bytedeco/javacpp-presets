@@ -16,8 +16,13 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief OpenVINO Provider Options
- *
- * @see OrtApi::SessionOptionsAppendExecutionProvider_OpenVINO
+ *  \brief This Struct is frozen since ORT 1.13.0. Its maintained part of Legacy API for compatibility.
+ *  \brief For latest OpenVINO Provider Options update to the ProviderOptions map.
+ *  \brief Latest OpenVINO Provider Options are listed in the
+ *  \htmlonly
+ *  <a href="https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html#summary-of-options">onnxruntime document.</a>
+ *  \endhtmlonly
+ * @see OrtApi::SessionOptionsAppendExecutionProvider()
  */
 @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtOpenVINOProviderOptions extends Pointer {
@@ -43,6 +48,7 @@ public class OrtOpenVINOProviderOptions extends Pointer {
    * Valid settings are one of: "CPU_FP32", "CPU_FP16", "GPU_FP32", "GPU_FP16"
    */
   public native @Cast("const char*") BytePointer device_type(); public native OrtOpenVINOProviderOptions device_type(BytePointer setter);
+  /** 0 = disabled, nonzero = enabled */
   public native @Cast("unsigned char") byte enable_npu_fast_compile(); public native OrtOpenVINOProviderOptions enable_npu_fast_compile(byte setter);
   public native @Cast("const char*") BytePointer device_id(); public native OrtOpenVINOProviderOptions device_id(BytePointer setter);
   /** 0 = Use default number of threads */

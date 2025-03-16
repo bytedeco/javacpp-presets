@@ -1,8 +1,8 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index 6eb784a406..64c6ee243d 100644
+index 2aa83e9e3e..a391acb4b5 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
-@@ -20,8 +20,8 @@ endif()
+@@ -9,8 +9,8 @@ endif()
  # Enable space optimization for gcc/clang
  # Cannot use "-ffunction-sections -fdata-sections" if we enable bitcode (iOS)
  if (NOT MSVC AND NOT onnxruntime_ENABLE_BITCODE)
@@ -13,90 +13,31 @@ index 6eb784a406..64c6ee243d 100644
  endif()
  
  if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+@@ -342,4 +342,4 @@ endif()
+ 
+ if (onnxruntime_USE_EXTENSIONS)
+     include_directories(${REPO_ROOT}/include/onnxruntime/core/session)
+-endif()
+\ No newline at end of file
++endif()
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 927b4ac84b..307d4a4fd1 100644
+index 6c1d4485eb..6b1a6440b4 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -127,9 +127,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
+@@ -144,9 +144,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
  
  if(UNIX)
    if (APPLE)
--    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker -dead_strip")
-+    set(ONNXRUNTIME_SO_LINK_FLAG " -L/usr/local/lib -lomp")
-   elseif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "AIX")
--    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker --version-script=${SYMBOL_FILE} -Xlinker --no-undefined -Xlinker --gc-sections -z noexecstack")
-+    set(ONNXRUNTIME_SO_LINK_FLAG " -Xlinker --no-undefined -Xlinker -z -Xlinker noexecstack")
+-    target_link_options(onnxruntime PRIVATE "LINKER:-dead_strip")
++    target_link_options(onnxruntime PRIVATE "LINKER:-L/usr/local/lib")
+   elseif(NOT CMAKE_SYSTEM_NAME MATCHES "AIX")
+-    target_link_options(onnxruntime PRIVATE  "LINKER:--version-script=${SYMBOL_FILE}" "LINKER:--no-undefined" "LINKER:--gc-sections")
++    target_link_options(onnxruntime PRIVATE "LINKER:--no-undefined")
    endif()
  else()
-   set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
-diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 62e9cfe24c..300a5f176f 100644
---- a/onnxruntime/core/session/provider_bridge_ort.cc
-+++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1576,13 +1576,33 @@ struct ProviderHostImpl : ProviderHost {
- #if defined(_MSC_VER) && !defined(__clang__)
- #pragma warning(pop)
- #endif
-+
-+#ifdef __APPLE__
-+#include <mach-o/dyld.h>
-+#endif
-+
- struct ProviderSharedLibrary {
-+
-+  std::string libpath;
-+
-   void Ensure() {
-     if (handle_)
-       return;
- 
-     auto full_path = Env::Default().GetRuntimePath() +
-                      PathString(LIBRARY_PREFIX ORT_TSTR("onnxruntime_providers_shared") LIBRARY_EXTENSION);
-+#ifdef __APPLE__
-+size_t len1 = strlen(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
-+for (uint32_t i = 0; i < _dyld_image_count(); i++) {
-+    const char *libname = _dyld_get_image_name(i);
-+    size_t len2 = strlen(libname);
-+    if (len2 > len1 && strcmp(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION, libname + len2 - len1) == 0) {
-+        libpath.assign(libname, len2 - len1);
-+        full_path = libname;
-+        break;
-+    }
-+}
-+#endif
-     ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
- 
-     void (*PProvider_SetHost)(void*);
-@@ -1601,7 +1621,7 @@ struct ProviderSharedLibrary {
-     }
-   }
- 
--  ProviderSharedLibrary() = default;
-+  ProviderSharedLibrary() { Ensure(); };
-   ~ProviderSharedLibrary() {
-     // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
-   }
-@@ -1634,6 +1654,18 @@ struct ProviderLibrary {
-         s_library_shared.Ensure();
- 
-         auto full_path = Env::Default().GetRuntimePath() + filename_;
-+#ifdef __APPLE__
-+full_path = s_library_shared.libpath + std::string(filename_);
-+size_t len1 = strlen(filename_);
-+for (uint32_t i = 0; i < _dyld_image_count(); i++) {
-+    const char *libname = _dyld_get_image_name(i);
-+    size_t len2 = strlen(libname);
-+    if (len2 > len1 && strcmp(filename_, libname + len2 - len1) == 0) {
-+        full_path = libname;
-+        break;
-+    }
-+}
-+#endif
-         ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
- 
-         Provider* (*PGetProvider)();
+   target_link_options(onnxruntime PRIVATE  "-DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index 7fb9fd3c8c..e0487e67f0 100644
+index 2dab9f6a40..fb1353a6c2 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 @@ -114,10 +114,11 @@ struct OnUnload {
@@ -113,7 +54,7 @@ index 7fb9fd3c8c..e0487e67f0 100644
    return g_host->CreateAllocator(info);
  }
  
-@@ -260,19 +261,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
+@@ -261,19 +262,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -137,7 +78,7 @@ index 7fb9fd3c8c..e0487e67f0 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -280,16 +284,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -281,16 +285,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -157,7 +98,7 @@ index 7fb9fd3c8c..e0487e67f0 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -300,6 +307,7 @@ int64_t TensorShape::Size() const {
+@@ -301,6 +308,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -165,7 +106,7 @@ index 7fb9fd3c8c..e0487e67f0 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -309,80 +317,93 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -310,61 +318,73 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -197,9 +138,10 @@ index 7fb9fd3c8c..e0487e67f0 100644
  }
  
  std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapability(const onnxruntime::GraphViewer& graph_viewer,
-                                                                                   const IKernelLookup& kernel_lookup) const {
+                                                                                   const IKernelLookup& kernel_lookup,
+                                                                                   IResourceAccountant* resource_accountant) const {
 +  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_lookup);
+   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_lookup, resource_accountant);
  }
  common::Status IExecutionProvider::Compile(const std::vector<FusedNodeAndGraph>& fused_nodes_and_graphs,
                                             std::vector<NodeComputeInfo>& node_compute_funcs) {
@@ -241,11 +183,12 @@ index 7fb9fd3c8c..e0487e67f0 100644
    return g_host->GetEnvironmentVar(var_name);
  }
  
- std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewer& graph,
+@@ -372,20 +392,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
                                                     const IExecutionProvider::IKernelLookup& kernel_lookup,
-                                                    gsl::span<const NodeIndex> tentative_nodes) {
+                                                    gsl::span<const NodeIndex> tentative_nodes,
+                                                    const logging::Logger& logger) {
 +  g_host = Provider_GetHost();
-   return g_host->GetCpuPreferredNodes(graph, kernel_lookup, tentative_nodes);
+   return g_host->GetCpuPreferredNodes(graph, kernel_lookup, tentative_nodes, logger);
  }
  
  namespace profiling {
@@ -266,7 +209,54 @@ index 7fb9fd3c8c..e0487e67f0 100644
  
  const char* Category::onnxruntime = "onnxruntime";
  
-@@ -465,10 +486,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -422,7 +443,7 @@ const std::string& Status::ErrorMessage() const noexcept {
+   return IsOK() ? EmptyString() : state_->msg;
+ }
+ 
+-std::string Status::ToString() const { return g_host->Status__ToString(this); }
++std::string Status::ToString() const { g_host = Provider_GetHost(); return g_host->Status__ToString(this); }
+ 
+ const std::string& Status::EmptyString() noexcept {
+   static std::string s_empty;
+@@ -432,8 +453,8 @@ const std::string& Status::EmptyString() noexcept {
+ }  // namespace common
+ 
+ namespace math {
+-uint16_t floatToHalf(float f) { return g_host->math__floatToHalf(f); }
+-float halfToFloat(uint16_t h) { return g_host->math__halfToFloat(h); }
++uint16_t floatToHalf(float f) { g_host = Provider_GetHost(); return g_host->math__floatToHalf(f); }
++float halfToFloat(uint16_t h) { g_host = Provider_GetHost(); return g_host->math__halfToFloat(h); }
+ 
+ }  // namespace math
+ 
+@@ -442,22 +463,26 @@ namespace sparse_utils {
+ #if !defined(ORT_MINIMAL_BUILD)
+ Status DenseTensorToSparseCsr(const DataTransferManager& data_manager, const Tensor& src, const AllocatorPtr& cpu_allocator,
+                               const AllocatorPtr& dst_allocator, SparseTensor& dst) {
++  g_host = Provider_GetHost();
+   return g_host->sparse_utils__DenseTensorToSparseCsr(data_manager, src, cpu_allocator, dst_allocator, dst);
+ }
+ 
+ Status SparseCsrToDenseTensor(const DataTransferManager& data_manager, const SparseTensor& src, const AllocatorPtr& cpu_allocator,
+                               const AllocatorPtr& dst_allocator, Tensor& dst) {
++  g_host = Provider_GetHost();
+   return g_host->sparse_utils__SparseCsrToDenseTensor(data_manager, src, cpu_allocator, dst_allocator, dst);
+ }
+ 
+ Status SparseCooToDenseTensor(const DataTransferManager& data_manager, const SparseTensor& src, const AllocatorPtr& cpu_allocator,
+                               const AllocatorPtr& dst_allocator, Tensor& dst) {
++  g_host = Provider_GetHost();
+   return g_host->sparse_utils__SparseCooToDenseTensor(data_manager, src, cpu_allocator, dst_allocator, dst);
+ }
+ #endif  // !ORT_MINIMAL_BUILD
+ 
+ Status DenseTensorToSparseCoo(const DataTransferManager& data_manager, const Tensor& src, const AllocatorPtr& cpu_allocator,
+                               const AllocatorPtr& dst_allocator, bool linear_indexs, SparseTensor& dst) {
++  g_host = Provider_GetHost();
+   return g_host->sparse_utils__DenseTensorToSparseCoo(data_manager, src, cpu_allocator, dst_allocator, linear_indexs, dst);
+ }
+ #endif  // !defined(DISABLE_SPARSE_TENSORS)
+@@ -468,10 +493,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -279,21 +269,87 @@ index 7fb9fd3c8c..e0487e67f0 100644
    return g_host->CopyOpKernelInfo(info);
  }
  
+diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
+index 1d25ceb9af..3b5b9f1f4d 100644
+--- a/onnxruntime/core/session/provider_bridge_ort.cc
++++ b/onnxruntime/core/session/provider_bridge_ort.cc
+@@ -1634,13 +1634,33 @@ struct ProviderHostImpl : ProviderHost {
+ #if defined(_MSC_VER) && !defined(__clang__)
+ #pragma warning(pop)
+ #endif
++
++#ifdef __APPLE__
++#include <mach-o/dyld.h>
++#endif
++
+ struct ProviderSharedLibrary {
++
++  std::string libpath;
++
+   void Ensure() {
+     if (handle_)
+       return;
+ 
+     auto full_path = Env::Default().GetRuntimePath() +
+                      PathString(LIBRARY_PREFIX ORT_TSTR("onnxruntime_providers_shared") LIBRARY_EXTENSION);
++#ifdef __APPLE__
++size_t len1 = strlen(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
++for (uint32_t i = 0; i < _dyld_image_count(); i++) {
++    const char *libname = _dyld_get_image_name(i);
++    size_t len2 = strlen(libname);
++    if (len2 > len1 && strcmp(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION, libname + len2 - len1) == 0) {
++        libpath.assign(libname, len2 - len1);
++        full_path = libname;
++        break;
++    }
++}
++#endif
+     ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
+ 
+     void (*PProvider_SetHost)(void*);
+@@ -1659,7 +1679,7 @@ struct ProviderSharedLibrary {
+     }
+   }
+ 
+-  ProviderSharedLibrary() = default;
++  ProviderSharedLibrary() { Ensure(); };
+   ~ProviderSharedLibrary() {
+     // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
+   }
+@@ -1692,6 +1712,18 @@ struct ProviderLibrary {
+         s_library_shared.Ensure();
+ 
+         auto full_path = Env::Default().GetRuntimePath() + filename_;
++#ifdef __APPLE__
++full_path = s_library_shared.libpath + std::string(filename_);
++size_t len1 = strlen(filename_);
++for (uint32_t i = 0; i < _dyld_image_count(); i++) {
++    const char *libname = _dyld_get_image_name(i);
++    size_t len2 = strlen(libname);
++    if (len2 > len1 && strcmp(filename_, libname + len2 - len1) == 0) {
++        full_path = libname;
++        break;
++    }
++}
++#endif
+         ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
+ 
+         Provider* (*PGetProvider)();
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 587d035541..812dc850a4 100644
+index ecdffbe5fd..eac7673086 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -993,6 +993,9 @@ def generate_build_tree(
+@@ -1130,6 +1130,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
 +        "-Donnxruntime_DEV_MODE=OFF",
 +        "-Donnxruntime_ENABLE_LTO=OFF",
 +        "-Donnxruntime_BUILD_UNIT_TESTS=OFF",
-         # There are two ways of locating python C API header file. "find_package(PythonLibs 3.5 REQUIRED)"
-         # and "find_package(Python 3.5 COMPONENTS Development.Module)". The first one is deprecated and it
-         # depends on the "PYTHON_EXECUTABLE" variable. The second needs "Python_EXECUTABLE". Here we set both
-@@ -2811,6 +2814,9 @@ def main():
+         "-DPython_EXECUTABLE=" + sys.executable,
+         "-Donnxruntime_USE_VCPKG=" + ("ON" if args.use_vcpkg else "OFF"),
+         "-Donnxruntime_USE_MIMALLOC=" + ("ON" if args.use_mimalloc else "OFF"),
+@@ -3157,6 +3160,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  

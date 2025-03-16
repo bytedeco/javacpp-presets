@@ -79,6 +79,8 @@ public class PyConfig extends Pointer {
     public native int use_frozen_modules(); public native PyConfig use_frozen_modules(int setter);
     public native int safe_path(); public native PyConfig safe_path(int setter);
     public native int int_max_str_digits(); public native PyConfig int_max_str_digits(int setter);
+// #ifdef __APPLE__
+// #endif
 
     public native int cpu_count(); public native PyConfig cpu_count(int setter);
 // #ifdef Py_GIL_DISABLED

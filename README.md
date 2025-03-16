@@ -198,8 +198,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2025.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 3.6.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.28  http://www.openblas.net/
+ * DNNL 3.7.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.29  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.11  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
@@ -208,7 +208,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 2.2.x  https://github.com/numpy/numpy
  * SciPy 1.15.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
- * LLVM 19.1.x  http://llvm.org/releases/download.html
+ * LLVM 20.1.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
@@ -226,14 +226,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * PyTorch 2.6.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.2.0  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.18.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.19.x  https://github.com/tensorflow/tensorflow
  * TensorRT 10.6.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.51.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.17.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.20.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.21.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

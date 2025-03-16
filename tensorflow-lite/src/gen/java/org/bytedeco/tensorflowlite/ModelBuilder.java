@@ -7,11 +7,11 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-     // Class for friend declarations.
-@Namespace("tflite") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class SignatureRunnerJNIHelper extends Pointer {
+  // namespace interpreter_wrapper
+@Namespace("tflite::model_builder") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+public class ModelBuilder extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public SignatureRunnerJNIHelper() { super((Pointer)null); }
+    public ModelBuilder() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public SignatureRunnerJNIHelper(Pointer p) { super(p); }
+    public ModelBuilder(Pointer p) { super(p); }
 }

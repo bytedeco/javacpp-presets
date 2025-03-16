@@ -21,12 +21,21 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class ModelMetadata extends BaseModelMetadata {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public ModelMetadata() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ModelMetadata(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModelMetadata(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public ModelMetadata position(long position) {
+        return (ModelMetadata)super.position(position);
+    }
+    @Override public ModelMetadata getPointer(long i) {
+        return new ModelMetadata((Pointer)this).offsetAddress(i);
+    }
 
-  /** Used for interop with the C API */
-  public ModelMetadata(OrtModelMetadata p) { super((Pointer)null); allocate(p); }
-  private native void allocate(OrtModelMetadata p);
 
   /** \brief Returns a copy of the producer name.
    *

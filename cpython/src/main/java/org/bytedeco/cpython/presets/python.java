@@ -318,6 +318,7 @@ public class python implements InfoMapper {
                              "defined _MSC_VER && _MSC_VER >= 1900",
                              "COUNT_ALLOCS",
                              "HAVE_DLOPEN",
+                             "__APPLE__",
                              "SOLARIS",
                              "MS_WINDOWS",
                              "defined(HAVE_CLOCK_GETTIME) || defined(HAVE_KQUEUE)",

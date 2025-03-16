@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.packageName>tensorflowlite</javacpp.packageName>
-    <tensorflow.version>2.18.0</tensorflow.version>
+    <tensorflow.version>2.19.0</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
