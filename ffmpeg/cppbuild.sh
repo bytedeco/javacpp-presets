@@ -50,12 +50,12 @@ SVTAV1_VERSION=2.3.0
 ZIMG_VERSION=3.0.5
 FFMPEG_VERSION=7.1.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
-download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
-download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
+download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
+download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
 download https://ftp.osuosl.org/pub/xiph/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
 download https://archive.mozilla.org/pub/opus/$OPUS.tar.gz $OPUS.tar.gz
-download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-download http://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
+download https://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
+download https://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
 download https://code.videolan.org/videolan/x264/-/archive/stable/$X264.tar.gz $X264.tar.gz
@@ -71,7 +71,7 @@ download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
-download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
+download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
 cd $PLATFORM$EXTENSION
@@ -1605,7 +1605,7 @@ EOF
           CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
         make -j $MAKEJ
-        make install 
+        make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../libaom-$AOMAV1_VERSION
@@ -2199,4 +2199,3 @@ EOF
 esac
 
 cd ../..
-
