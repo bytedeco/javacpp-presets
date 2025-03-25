@@ -21,10 +21,10 @@ jobs:
 #    runs-on: ubuntu-22.04
 #    steps:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
-#  linux-arm64:
-#    runs-on: ubuntu-22.04
-#    steps:
-#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+ linux-arm64:
+   runs-on: ubuntu-22.04-arm
+   steps:
+     - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  linux-ppc64le:
 #    runs-on: ubuntu-22.04
 #    steps:
