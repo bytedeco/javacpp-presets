@@ -85,6 +85,9 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
+# Pip isn't installed by default, so make sure it is
+$PYTHON_BIN_PATH -m ensurepip
+
 TOOLS="setuptools==67.6.1 cython==3.0.10"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
@@ -93,6 +96,8 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
 
     # crossenv 1.4 for python 3.11+ support.
     # See https://github.com/bytedeco/javacpp-presets/issues/1381
+    # NOTE: Cross-compilation to arm may not work, it is recommended
+    # to compile on real hardware using e.g. Github Action's ARM runners
     "$CPYTHON_HOST_PATH/bin/python3.13" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.13/" crossenv==1.4 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.13" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
@@ -108,8 +113,6 @@ case $PLATFORM in
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        rm -f meson.build pyproject.toml
-        mv pyproject.toml.setuppy pyproject.toml
         ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" CFLAGS="-O2" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;

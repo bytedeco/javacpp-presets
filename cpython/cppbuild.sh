@@ -68,7 +68,12 @@ case $PLATFORM in
     linux-arm64)
         CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
         cd ../$OPENSSL
-        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
+        OPENSSL_PLATFORM=$OS-$ARCH
+        if [[ "$OPENSSL_PLATFORM" == "linux-arm64" ]]; then
+            # OpenSSL doesn't recognize arm64 as a valid architecture
+            OPENSSL_PLATFORM="linux-aarch64"
+        fi;
+        ./Configure $OPENSSL_PLATFORM -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         make distclean
