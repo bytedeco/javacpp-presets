@@ -72,7 +72,7 @@ case $PLATFORM in
         if [[ "$OPENSSL_PLATFORM" == "linux-arm64" ]]; then
             # OpenSSL doesn't recognize arm64 as a valid architecture
             OPENSSL_PLATFORM="linux-aarch64"
-        fi;
+        fi
         ./Configure $OPENSSL_PLATFORM -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
         make -s -j $MAKEJ
         make install_sw
