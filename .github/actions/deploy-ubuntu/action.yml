@@ -20,12 +20,14 @@ runs:
         $SUDO rm -rf /usr/local/lib/android
         $SUDO rm -rf /usr/share/dotnet
 
-        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
-        $SUDO fallocate -l 4GB /swapfile
-        $SUDO chmod 600 /swapfile
-        $SUDO mkswap /swapfile
-        $SUDO swapon /swapfile || true
-
+        # fallocate fails on arm64 runners
+        if [[ ! "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
+          # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
+          $SUDO fallocate -l 4GB /swapfile
+          $SUDO chmod 600 /swapfile
+          $SUDO mkswap /swapfile
+          $SUDO swapon /swapfile || true
+        fi
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
