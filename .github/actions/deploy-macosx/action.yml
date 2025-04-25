@@ -25,12 +25,12 @@ runs:
         fi
 
         brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 gcc@14 little-cms2 maven openblas r
-        brew install --overwrite boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr pcre ssdeep yajl
+        brew install --overwrite boost ccache swig autoconf-archive automake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr pcre ssdeep yajl
 
         # echo Installing an older less buggy version of CMake
-        # curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
+        # curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/b4e46db74e74a8c1650b38b1da222284ce1ec5ce/Formula/c/cmake.rb
         # brew unlink cmake
-        # brew install cmake.rb
+        # brew install --build-from-source cmake.rb
 
         FORMULAE=()
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
