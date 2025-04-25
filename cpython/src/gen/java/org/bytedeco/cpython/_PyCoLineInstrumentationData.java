@@ -12,8 +12,9 @@ import static org.bytedeco.cpython.global.python.*;
 
 
 /* Ancillary data structure used for instrumentation.
-   Line instrumentation creates an array of
-   these. One entry per code unit.*/
+   Line instrumentation creates this with sufficient
+   space for one entry per code unit. The total size
+   of the data will be `bytes_per_entry * Py_SIZE(code)` */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _PyCoLineInstrumentationData extends Pointer {
     static { Loader.load(); }
@@ -32,6 +33,7 @@ public class _PyCoLineInstrumentationData extends Pointer {
         return new _PyCoLineInstrumentationData((Pointer)this).offsetAddress(i);
     }
 
-    public native @Cast("uint8_t") byte original_opcode(); public native _PyCoLineInstrumentationData original_opcode(byte setter);
-    public native byte line_delta(); public native _PyCoLineInstrumentationData line_delta(byte setter);
+    public native @Cast("uint8_t") byte bytes_per_entry(); public native _PyCoLineInstrumentationData bytes_per_entry(byte setter);
+    public native @Cast("uint8_t") byte data(int i); public native _PyCoLineInstrumentationData data(int i, byte setter);
+    @MemberGetter public native @Cast("uint8_t*") BytePointer data();
 }
