@@ -32,6 +32,9 @@ jobs:
           path: /home/runner/.ccache
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
         timeout-minutes: 350
+      - name: Sleep 60 seconds to avoid cache errors
+        run: sleep 60
+        if: always()
   macosx-arm64:
     runs-on: macos-14
     steps:

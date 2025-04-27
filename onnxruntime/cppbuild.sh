@@ -119,7 +119,8 @@ sedinplace '/omp_set_num_threads/d' onnxruntime/core/providers/dnnl/dnnl_executi
 sedinplace '/cvtfp16Avx/d' cmake/onnxruntime_mlas.cmake
 sedinplace 's/MlasCastF16ToF32KernelAvx;/MlasCastF16ToF32KernelAvx2;/g' onnxruntime/core/mlas/lib/platform.cpp
 
-# use PTX instead of compiling for all CUDA archs to reduce library size
+# compile for all CUDA archs instead of using PTX to reduce load time
+sedinplace 's/"all"/"50-real;60-real;70-real;80-real;90-real;100-real;120-real"/g' cmake/CMakeLists.txt
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_90,code=sm_90/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
 

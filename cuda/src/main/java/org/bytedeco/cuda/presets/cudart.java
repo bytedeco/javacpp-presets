@@ -41,15 +41,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "<cuda_fp16.hpp>",
                          "<cuda_bf16.h>", "<cuda_bf16.hpp>", "<library_types.h>", "<cudaGL.h>", "<cuda_gl_interop.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
-              includepath = {"/usr/local/cuda-12.6/include/", "/usr/local/cuda/include/", "/usr/include/"},
-              link = {"cudart@.12", "cuda@.1#"}, linkpath = {"/usr/local/cuda-12.6/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-12.6/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-12.6/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-12.6/lib/", "/usr/local/cuda/lib/"}),
+              includepath = {"/usr/local/cuda-12.8/include/", "/usr/local/cuda/include/", "/usr/include/"},
+              link = {"cudart@.12", "cuda@.1#"}, linkpath = {"/usr/local/cuda-12.8/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-12.8/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-12.8/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-12.8/lib/", "/usr/local/cuda/lib/"}),
     @Platform(value = "windows-x86_64",     preload = "cudart64_12",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64/") },
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
@@ -64,7 +64,7 @@ public class cudart implements InfoMapper {
                              "CUSPARSE_DEPRECATED_HINT").cppTypes().annotations().cppText(""))
 
                .put(new Info("cuda_runtime_api.h").linePatterns("#define cudaSignalExternalSemaphoresAsync.*", "#define cudaGetDeviceProperties.*").skip())
-               .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuStreamGetCaptureInfo_v2.*").skip())
+               .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuStreamGetCaptureInfo_v2.*", "#define cuMemBatchDecompressAsync.*").skip())
                .put(new Info("cudaGL.h").linePatterns("#define cuGLCtxCreate.*", "#define cuGLGetDevices.*").skip())
 
                .put(new Info("_CONCAT_OUTER").cppText("#define _CONCAT_OUTER(x, y) CUdevResource_st").cppTypes())
@@ -156,6 +156,7 @@ public class cudart implements InfoMapper {
                .put(new Info("cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@ByPtrPtr CUgraphNode_st"))
                .put(new Info("const cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@Cast(\"const cudaGraphNode_t*\") @ByPtrPtr CUgraphNode_st"))
                .put(new Info("cudaFunction_t").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
+               .put(new Info("cudaLibrary_t").valueTypes("CUlib_st").pointerTypes("@ByPtrPtr CUlib_st"))
                .put(new Info("cudaMemPool_t", "CUmemoryPool").valueTypes("CUmemPoolHandle_st").pointerTypes("@ByPtrPtr CUmemPoolHandle_st"))
                .put(new Info("cudaUserObject_t", "CUuserObject").valueTypes("CUuserObject_st").pointerTypes("@ByPtrPtr CUuserObject_st"))
                .put(new Info("cudaGraphExec_t").valueTypes("CUgraphExec_st").pointerTypes("@ByPtrPtr CUgraphExec_st"))

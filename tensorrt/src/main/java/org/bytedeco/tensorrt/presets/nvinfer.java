@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2024 Samuel Audet
+ * Copyright (C) 2018-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource@.10.6.0"
+            preload = "nvinfer_builder_resource@.10.9.0"
         ),
         @Platform(
             value = "linux-arm64",
@@ -147,7 +147,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IIfConditionalBoundaryLayer", "nvinfer1::IIfConditionalInputLayer", "nvinfer1::IIfConditionalOutputLayer", "nvinfer1::IScatterLayer",
                              "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
                              "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer",
-                             "nvinfer1::IPluginV3Layer").purify())
+                             "nvinfer1::ICumulativeLayer", "nvinfer1::IDynamicQuantizeLayer", "nvinfer1::ISqueezeLayer", "nvinfer1::IUnsqueezeLayer", "nvinfer1::IPluginV3Layer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
                              "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator", "nvinfer1::IVersionedInterface").virtualize())

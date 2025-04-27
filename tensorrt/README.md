@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorRT 10.6.0.26  https://developer.nvidia.com/tensorrt
+ * TensorRT 10.9.0.34  https://developer.nvidia.com/tensorrt
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
     <artifactId>samplegooglenet</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.12-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SampleGoogleNet</exec.mainClass>
     </properties>
@@ -54,19 +54,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.6-1.5.11</version>
+            <version>10.9-1.5.12-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.6-9.5-1.5.11</version>
+            <version>12.8-9.8-1.5.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.6-1.5.11</version>
+            <version>10.9-1.5.12-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
