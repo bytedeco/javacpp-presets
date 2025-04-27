@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NVIDIA Video Codec SDK 12.2.72  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * NVIDIA Video Codec SDK 13.0.19  https://developer.nvidia.com/nvidia-video-codec-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -47,7 +47,7 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.nvcodec</groupId>
     <artifactId>sampleencodedecode</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.12-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SampleEncodeDecode</exec.mainClass>
     </properties>
@@ -55,14 +55,14 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>12.2.72-1.5.11</version>
+            <version>12.2.72-1.5.12-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.6-9.5-1.5.11</version>
+            <version>12.8-9.8-1.5.12-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2024 Institute for Human and Machine Cognition, Samuel Audet
+ * Copyright (C) 2023-2025 Institute for Human and Machine Cognition, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,6 +48,8 @@ public class nvcomp implements InfoMapper {
                              "nvcompDecompressGetOutputSize",
                              "nvcompDecompressGetType",
                              "nvcompDecompressAsync",
+                             "nvcomp::DecompressionConfig::impl",
+                             "nvcomp::PimplManager::impl",
                              "nvcomp::set_scratch_allocators",
                              "PinnedPtrPool",
                              // TODO: Fix bitcomp symbols
