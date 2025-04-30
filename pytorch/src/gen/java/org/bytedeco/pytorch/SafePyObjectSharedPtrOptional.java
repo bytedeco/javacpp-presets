@@ -18,19 +18,19 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("std::optional<c10::SafePyObject>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class SafePyObjectOptional extends Pointer {
+@NoOffset @Name("std::optional<std::shared_ptr<c10::SafePyObject> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class SafePyObjectSharedPtrOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public SafePyObjectOptional(Pointer p) { super(p); }
-    public SafePyObjectOptional(SafePyObject value) { this(); put(value); }
-    public SafePyObjectOptional()       { allocate();  }
+    public SafePyObjectSharedPtrOptional(Pointer p) { super(p); }
+    public SafePyObjectSharedPtrOptional(SafePyObject value) { this(); put(value); }
+    public SafePyObjectSharedPtrOptional()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef SafePyObjectOptional put(@ByRef SafePyObjectOptional x);
+    public native @Name("operator =") @ByRef SafePyObjectSharedPtrOptional put(@ByRef SafePyObjectSharedPtrOptional x);
 
     public native boolean has_value();
     public native void reset();
-    public native @Name("value") @ByRef SafePyObject get();
-    @ValueSetter public native SafePyObjectOptional put(@ByRef SafePyObject value);
+    public native @Name("value") @SharedPtr("c10::SafePyObject") SafePyObject get();
+    @ValueSetter public native SafePyObjectSharedPtrOptional put(@SharedPtr("c10::SafePyObject") SafePyObject value);
 }
 

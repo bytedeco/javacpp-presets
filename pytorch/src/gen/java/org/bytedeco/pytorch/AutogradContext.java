@@ -41,6 +41,11 @@ public class AutogradContext extends Pointer {
   private native void allocate();
   
   
+  
+  
+
+  public AutogradContext(@ByRef PackedArgs packed_args) { super((Pointer)null); allocate(packed_args); }
+  private native void allocate(@ByRef PackedArgs packed_args);
 
   /** Can be used to save non-variable data for {@code backward}. */
 

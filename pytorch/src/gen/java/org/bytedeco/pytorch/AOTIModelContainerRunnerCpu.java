@@ -26,28 +26,26 @@ public class AOTIModelContainerRunnerCpu extends AOTIModelContainerRunner {
 
   public AOTIModelContainerRunnerCpu(
         @StdString BytePointer model_so_path,
-        @Cast("size_t") long num_models/*=1*/) { super((Pointer)null); allocate(model_so_path, num_models); }
+        @Cast("size_t") long num_models/*=1*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/) { super((Pointer)null); allocate(model_so_path, num_models, run_single_threaded); }
   private native void allocate(
         @StdString BytePointer model_so_path,
-        @Cast("size_t") long num_models/*=1*/);
+        @Cast("size_t") long num_models/*=1*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/);
   public AOTIModelContainerRunnerCpu(
         @StdString BytePointer model_so_path) { super((Pointer)null); allocate(model_so_path); }
   private native void allocate(
         @StdString BytePointer model_so_path);
   public AOTIModelContainerRunnerCpu(
         @StdString String model_so_path,
-        @Cast("size_t") long num_models/*=1*/) { super((Pointer)null); allocate(model_so_path, num_models); }
+        @Cast("size_t") long num_models/*=1*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/) { super((Pointer)null); allocate(model_so_path, num_models, run_single_threaded); }
   private native void allocate(
         @StdString String model_so_path,
-        @Cast("size_t") long num_models/*=1*/);
+        @Cast("size_t") long num_models/*=1*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/);
   public AOTIModelContainerRunnerCpu(
         @StdString String model_so_path) { super((Pointer)null); allocate(model_so_path); }
   private native void allocate(
         @StdString String model_so_path);
-
-  public native @ByVal TensorVector run(
-        @Const @ByRef TensorVector inputs,
-        Pointer stream_handle/*=nullptr*/);
-  public native @ByVal TensorVector run(
-        @Const @ByRef TensorVector inputs);
 }

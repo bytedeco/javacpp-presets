@@ -37,8 +37,16 @@ public class AOTIModelContainerRunner extends Pointer {
   public native @ByVal TensorVector run(
         @Const @ByRef TensorVector inputs);
 
+  // boxed_run will steal the ownership of the input tensors
+  public native @ByVal TensorVector boxed_run(
+        @ByRef(true) TensorVector inputs,
+        Pointer stream_handle/*=nullptr*/);
+  public native @ByVal TensorVector boxed_run(
+        @ByRef(true) TensorVector inputs);
+
   public native @ByVal ExtraFilesMap getConstantNamesToOriginalFQNs();
   public native @ByVal StringIntMap getConstantNamesToDtypes();
+
   public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map);
   public native void update_constant_buffer(
         @ByRef StringTensorUMap tensor_map,

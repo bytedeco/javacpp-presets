@@ -43,6 +43,15 @@ public class TensorGeometry extends Pointer {
   public TensorGeometry(@Const @ByRef TensorBase t) { super((Pointer)null); allocate(t); }
   private native void allocate(@Const @ByRef TensorBase t);
 
+  public TensorGeometry(
+        @StdVector SymInt sizes,
+        @StdVector SymInt strides,
+        @ByVal SymInt storage_offset) { super((Pointer)null); allocate(sizes, strides, storage_offset); }
+  private native void allocate(
+        @StdVector SymInt sizes,
+        @StdVector SymInt strides,
+        @ByVal SymInt storage_offset);
+
   // true if the tensor is contiguous
   public native @Cast("bool") boolean is_contiguous();
 

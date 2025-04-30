@@ -27,4 +27,5 @@ public class SavedVariableHooks extends Pointer {
 
   public native void call_pack_hook(@Const @ByRef Tensor tensor);
   public native @ByVal Tensor call_unpack_hook();
+  public native @Cast("std::pair<c10::SafePyObject,c10::SafePyObject>*") @Optional Pointer retrieve_unpack_hook_data();
 }

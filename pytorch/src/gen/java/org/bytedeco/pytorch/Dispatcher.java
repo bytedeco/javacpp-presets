@@ -31,9 +31,9 @@ public class Dispatcher extends Pointer {
     public Dispatcher(Pointer p) { super(p); }
 
 
-  // Implementation note: this class abstracts over the fact that we have per-operator
-  // dispatch tables.  This could be easily adjusted to have a single global hash
-  // table.
+  // Implementation note: this class abstracts over the fact that we have
+  // per-operator dispatch tables.  This could be easily adjusted to have a
+  // single global hash table.
   public static native @ByRef Dispatcher realSingleton();
 
   public static native @ByRef Dispatcher singleton();
@@ -79,26 +79,41 @@ public class Dispatcher extends Pointer {
   //
   // ------------------------------------------------------------------------
 
-  // Like call, but intended for use in a redispatch in kernels that have explicitly performed the DispatchKey update calculatulation.
-  // This will take the DispatchKeySet completely as is and dispatch to the kernel of the corresponding highest priority key in the set.
-  // Note that this version of redispatch treats the inputted DispatchKeySet *as is*, and does NOT mask out the highest priority key.
-  // See Note [Plumbing Keys Through The Dispatcher]
+  // Like call, but intended for use in a redispatch in kernels that have
+  // explicitly performed the DispatchKey update calculatulation. This will take
+  // the DispatchKeySet completely as is and dispatch to the kernel of the
+  // corresponding highest priority key in the set. Note that this version of
+  // redispatch treats the inputted DispatchKeySet *as is*, and does NOT mask
+  // out the highest priority key. See Note [Plumbing Keys Through The
+  // Dispatcher]
 
   // Invoke an operator via the boxed calling convention using an IValue stack
   public native void callBoxed(@Const @ByRef OperatorHandle op, @Cast("c10::Stack*") IValueVector stack);
-  public native void callBoxedForDispatchKey(@Const @ByRef OperatorHandle op, DispatchKey dk, @Cast("c10::Stack*") IValueVector stack);
-  public native void callBoxedForDispatchKey(@Const @ByRef OperatorHandle op, @Cast("c10::DispatchKey") short dk, @Cast("c10::Stack*") IValueVector stack);
+  public native void callBoxedForDispatchKey(
+        @Const @ByRef OperatorHandle op,
+        DispatchKey dk,
+        @Cast("c10::Stack*") IValueVector stack);
+  public native void callBoxedForDispatchKey(
+        @Const @ByRef OperatorHandle op,
+        @Cast("c10::DispatchKey") short dk,
+        @Cast("c10::Stack*") IValueVector stack);
 
-  // TODO: This will only be useful if we write a backend fallback that plumbs dispatch keys (currently there are none)
-  // See Note [Plumbing Keys Through The Dispatcher]
-  public native void redispatchBoxed(@Const @ByRef OperatorHandle op, @ByVal DispatchKeySet dispatchKeySet, @Cast("c10::Stack*") IValueVector stack);
+  // TODO: This will only be useful if we write a backend fallback that plumbs
+  // dispatch keys (currently there are none) See Note [Plumbing Keys Through
+  // The Dispatcher]
+  public native void redispatchBoxed(
+        @Const @ByRef OperatorHandle op,
+        @ByVal DispatchKeySet dispatchKeySet,
+        @Cast("c10::Stack*") IValueVector stack);
 
   public native @Cast("bool") boolean hasBackendFallbackForDispatchKey(DispatchKey dk);
   public native @Cast("bool") boolean hasBackendFallbackForDispatchKey(@Cast("c10::DispatchKey") short dk);
 
   // Used by torchdeploy/multipy for multiple interpreters racing.
   public native void waitForDef(@Const @ByRef FunctionSchema schema);
-  public native void waitForImpl(@Const @ByRef OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key);
+  public native void waitForImpl(
+        @Const @ByRef OperatorName op_name,
+        @ByVal DispatchKeyOptional dispatch_key);
 
   // ------------------------------------------------------------------------
   //
@@ -112,10 +127,20 @@ public class Dispatcher extends Pointer {
    * If a schema with the same operator name and overload name already exists,
    * this function will check that both schemas are exactly identical.
    */
-  public native @ByVal RegistrationHandleRAII registerDef(@ByVal FunctionSchema schema, @StdString BytePointer debug, @ByVal(nullValue = "std::vector<at::Tag>{}") TagVector tags);
-  public native @ByVal RegistrationHandleRAII registerDef(@ByVal FunctionSchema schema, @StdString BytePointer debug);
-  public native @ByVal RegistrationHandleRAII registerDef(@ByVal FunctionSchema schema, @StdString String debug, @ByVal(nullValue = "std::vector<at::Tag>{}") TagVector tags);
-  public native @ByVal RegistrationHandleRAII registerDef(@ByVal FunctionSchema schema, @StdString String debug);
+  public native @ByVal RegistrationHandleRAII registerDef(
+        @ByVal FunctionSchema schema,
+        @StdString BytePointer debug,
+        @ByVal(nullValue = "std::vector<at::Tag>{}") TagVector tags);
+  public native @ByVal RegistrationHandleRAII registerDef(
+        @ByVal FunctionSchema schema,
+        @StdString BytePointer debug);
+  public native @ByVal RegistrationHandleRAII registerDef(
+        @ByVal FunctionSchema schema,
+        @StdString String debug,
+        @ByVal(nullValue = "std::vector<at::Tag>{}") TagVector tags);
+  public native @ByVal RegistrationHandleRAII registerDef(
+        @ByVal FunctionSchema schema,
+        @StdString String debug);
 
   /**
    * Register a kernel to the dispatch table for an operator.
@@ -126,22 +151,41 @@ public class Dispatcher extends Pointer {
    */
   // NB: steals the inferred function schema, as we may need to hold on to
   // it for a bit until the real schema turns up
-  public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @ByVal FunctionSchema inferred_function_schema, @StdString BytePointer debug);
-  public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @ByVal FunctionSchema inferred_function_schema, @StdString String debug);
+  public native @ByVal RegistrationHandleRAII registerImpl(
+        @ByVal OperatorName op_name,
+        @ByVal DispatchKeyOptional dispatch_key,
+        @ByVal KernelFunction kernel,
+        @ByVal CppSignatureOptional cpp_signature,
+        @UniquePtr @ByVal FunctionSchema inferred_function_schema,
+        @StdString BytePointer debug);
+  public native @ByVal RegistrationHandleRAII registerImpl(
+        @ByVal OperatorName op_name,
+        @ByVal DispatchKeyOptional dispatch_key,
+        @ByVal KernelFunction kernel,
+        @ByVal CppSignatureOptional cpp_signature,
+        @UniquePtr @ByVal FunctionSchema inferred_function_schema,
+        @StdString String debug);
 
   /**
-   * Given an operator, tells the Dispatcher that we have implemented a fake impl
-   * for this op in the given Python module. Call this a "pystub".
+   * Given an operator, tells the Dispatcher that we have implemented a fake
+   * impl for this op in the given Python module. Call this a "pystub".
    */
-  public native @ByVal RegistrationHandleRAII registerPythonModule(@Const @ByRef OperatorName op_name, @Cast("const char*") BytePointer pymodule, @Cast("const char*") BytePointer context);
-  public native @ByVal RegistrationHandleRAII registerPythonModule(@Const @ByRef OperatorName op_name, String pymodule, String context);
+  public native @ByVal RegistrationHandleRAII registerPythonModule(
+        @Const @ByRef OperatorName op_name,
+        @Cast("const char*") BytePointer pymodule,
+        @Cast("const char*") BytePointer context);
+  public native @ByVal RegistrationHandleRAII registerPythonModule(
+        @Const @ByRef OperatorName op_name,
+        String pymodule,
+        String context);
 
   /**
    * Given an operator, throws if we have a pystub.
    */
   public native void throwIfHasPythonModule(@ByVal OperatorName op_name);
 
-  public native @ByVal BytePointerPairOptional getPyStub(@ByVal OperatorName op_name);
+  public native @ByVal BytePointerPairOptional getPyStub(
+        @ByVal OperatorName op_name);
 
   /**
    * Register a new operator by name.
@@ -154,8 +198,14 @@ public class Dispatcher extends Pointer {
    * key of the given operator arguments, it will check if there is such a
    * fallback kernel for the given dispatch key and, if yes, call that one.
    */
-  public native @ByVal RegistrationHandleRAII registerFallback(DispatchKey dispatch_key, @ByVal KernelFunction kernel, @StdString BytePointer debug);
-  public native @ByVal RegistrationHandleRAII registerFallback(@Cast("c10::DispatchKey") short dispatch_key, @ByVal KernelFunction kernel, @StdString String debug);
+  public native @ByVal RegistrationHandleRAII registerFallback(
+        DispatchKey dispatch_key,
+        @ByVal KernelFunction kernel,
+        @StdString BytePointer debug);
+  public native @ByVal RegistrationHandleRAII registerFallback(
+        @Cast("c10::DispatchKey") short dispatch_key,
+        @ByVal KernelFunction kernel,
+        @StdString String debug);
 
   /**
    * Use to register whenever we had a TORCH_LIBRARY declaration in the frontend
@@ -172,12 +222,13 @@ public class Dispatcher extends Pointer {
   // ------------------------------------------------------------------------
 
   /**
-   * Add a listener that gets called whenever a new op is registered or an existing
-   * op is deregistered. Immediately after registering, this listener gets called
-   * for all previously registered ops, so it can be used to keep track of ops
-   * registered with this dispatcher.
+   * Add a listener that gets called whenever a new op is registered or an
+   * existing op is deregistered. Immediately after registering, this listener
+   * gets called for all previously registered ops, so it can be used to keep
+   * track of ops registered with this dispatcher.
    */
-  public native @ByVal RegistrationHandleRAII addRegistrationListener(@UniquePtr OpRegistrationListener listener);
+  public native @ByVal RegistrationHandleRAII addRegistrationListener(
+        @UniquePtr OpRegistrationListener listener);
 
   public native void checkInvariants();
 
@@ -190,23 +241,26 @@ public class Dispatcher extends Pointer {
 
   /**
    * For testing purposes.
-   * Returns a list of all operators that were created through calls to registerImpl(),
-   * without any corresponding calls to registerDef(). After static initialization
-   * is done this is almost certainly a bug, as the created OperatorHandle won't have
-   * any schema associated with it and users calling the op through the dispatcher
-   * won't be able to access it
+   * Returns a list of all operators that were created through calls to
+   * registerImpl(), without any corresponding calls to registerDef(). After
+   * static initialization is done this is almost certainly a bug, as the
+   * created OperatorHandle won't have any schema associated with it and users
+   * calling the op through the dispatcher won't be able to access it
    *
-   * Note that we cannot enforce this invariant "as we go" during static initialization,
-   * due to undefined static initialization order- we have no guarantees over the order
-   * in which .def() and .impl() calls are registered in the dispatcher at static
-   * initialization time. So this function should only be called after static initialization.
+   * Note that we cannot enforce this invariant "as we go" during static
+   * initialization, due to undefined static initialization order- we have no
+   * guarantees over the order in which .def() and .impl() calls are registered
+   * in the dispatcher at static initialization time. So this function should
+   * only be called after static initialization.
    */
   public native @StdVector OperatorHandle findDanglingImpls();
 
   /**
    * Useful for inspecting global Dispatcher registration state.
-   * Returns the names of all operators with a kernel registered for the specified DispatchKey.
-   * If no DispatchKey is specified, it returns all registered operators.
+   * Returns the names of all operators with a kernel registered for the
+   * specified DispatchKey. If no DispatchKey is specified, it returns all
+   * registered operators.
    */
-  public native @StdVector OperatorName getRegistrationsForDispatchKey(@ByVal DispatchKeyOptional k);
+  public native @StdVector OperatorName getRegistrationsForDispatchKey(
+        @ByVal DispatchKeyOptional k);
 }

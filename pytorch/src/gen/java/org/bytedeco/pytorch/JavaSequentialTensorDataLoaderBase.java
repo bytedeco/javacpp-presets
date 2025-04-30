@@ -29,6 +29,10 @@ public class JavaSequentialTensorDataLoaderBase extends Pointer {
    *  to configure the DataLoader with, and a {@code sampler} that specifies the
    *  sampling strategy. */
 
+  
+  
+  
+  
   // NOLINTNEXTLINE(bugprone-exception-escape)
 
   /** Returns an iterator into the DataLoader. The lifetime of the iterator is

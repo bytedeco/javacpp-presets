@@ -193,7 +193,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("cufft") ? "@.11"
                     : lib.equals("curand") ? "@.10"
                     : lib.equals("cusolver") ? "@.11"
-                    : lib.equals("nvrtc-builtins") ? "@.12.6"
+                    : lib.equals("nvrtc-builtins") ? "@.12.8"
                     : "@.12";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_9"
@@ -204,9 +204,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("curand") ? "64_10"
                     : lib.equals("cusolver") ? "64_11"
                     : lib.equals("nvrtc") ? "64_120_0"
-                    : lib.equals("nvrtc-builtins") ? "64_126"
+                    : lib.equals("nvrtc-builtins") ? "64_128"
                     : lib.equals("nvJitLink") ? "_120_0"
-                    : lib.equals("cupti") ? "64_2024.3.0"
+                    : lib.equals("cupti") ? "64_2025.1.1"
                     : "64_12";
             } else {
                 continue; // no CUDA
@@ -287,7 +287,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// Macros
         infoMap
             .put(new Info("TORCH_API", "C10_API", "TORCH_XPU_API", "C10_EXPORT", "C10_HIDDEN", "C10_IMPORT", "C10_API_ENUM", "C10_UNUSED",
-                "EXPORT_IF_NOT_GCC", "TORCH_CUDA_CU_API", "TORCH_CUDA_CPP_API", "TORCH_HIP_API", "TORCH_PYTHON_API", "TORCH_UNUSED_EXCEPT_CUDA",
+                "EXPORT_IF_NOT_GCC", "TORCH_CUDA_CU_API", "TORCH_CUDA_CPP_API", "TORCH_HIP_CPP_API", "TORCH_HIP_API", "TORCH_PYTHON_API", "TORCH_UNUSED_EXCEPT_CUDA",
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__", "__ubsan_ignore_signed_int_overflow__", "__ubsan_ignore_function__",
                 "__ubsan_ignore_float_cast_overflow__", "C10_ALWAYS_INLINE_ATTRIBUTE", "C10_TYPENAME_CONSTEXPR",
                 "C10_CLANG_DIAGNOSTIC_IGNORE", "C10_CLANG_DIAGNOSTIC_PUSH", "C10_CLANG_DIAGNOSTIC_POP", "C10_ATTR_VISIBILITY_HIDDEN", "C10_ERASE",
@@ -325,9 +325,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("C10_DEPRECATED").cppText("#define C10_DEPRECATED deprecated").cppTypes())
             .put(new Info("deprecated").annotations("@Deprecated"))
 
-            .put(new Info("CAFFE2_LOG_THRESHOLD").translate(false))
+            .put(new Info("TORCH_ABI_VERSION", "CAFFE2_LOG_THRESHOLD").cppTypes("long").translate(false))
 
-            .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define()) // Exclude what the devs decide to not be part of public API
+            .put(new Info("!defined(USE_ROCM)", "DOXYGEN_SHOULD_SKIP_THIS").define()) // Exclude what the devs decide to not be part of public API
 
             .put(new Info("TORCH_CHECK").cppText("#define TORCH_CHECK(cond, ...)").define())
             .put(new Info("DEFINE_SYMBOL").cppText("#define DEFINE_SYMBOL(ns, s) namespace ns { constexpr Symbol s; }").define())
@@ -381,7 +381,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("at::namedinference::TensorName").pointerTypes("TensorName"))
             .put(new Info("c10::remove_symint<c10::SymInt>::type").valueTypes("long"))
             .put(new Info("std::aligned_storage_t<sizeof(IValue),alignof(IValue)>").pointerTypes("Pointer"))
-            .put(new Info("c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft").skipDefaults())
+            .put(new Info("c10::impl::custom_class_allowlist_check", "c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft").skipDefaults())
             .put(new Info("c10::prim::requires_grad").javaNames("requires_grad"))
             .put(new Info("c10::BFloat16::allocate", "c10::IValue::allocate").javaNames("_allocate"))
             .put(new Info("c10::aten::clone").javaNames("_clone"))
@@ -468,6 +468,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::optional<at::DimnameList>").pointerTypes("DimnameListOptional").define())
             .put(new Info("std::optional<at::Generator>").pointerTypes("GeneratorOptional").define())
             .put(new Info("std::optional<at::Tensor>", "std::optional<torch::Tensor>", "std::optional<at::Tensor>", "std::optional<torch::TensorBase>", "std::optional<torch::autograd::Variable>").pointerTypes("TensorOptional").define())
+            .put(new Info("const std::optional<torch::autograd::InputMetadata>",
+                "std::optional<torch::autograd::InputMetadata>").pointerTypes("InputMetadataOptional").define())
             .put(new Info("std::optional<torch::TensorList>", "std::optional<at::TensorList>").pointerTypes("TensorArrayRefOptional").define())
             .put(new Info("std::optional<caffe2::TypeMeta>", "optional<caffe2::TypeMeta>").pointerTypes("TypeMetaOptional").define())
             .put(new Info("std::optional<torch::jit::ExecutorExecutionMode>").pointerTypes("ExecutorExecutionModeOptional").define())
@@ -498,7 +500,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::optional<std::pair<void*,void*> >", "std::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >")/*.cast?*/.pointerTypes("PointerPairOptional").define())
             .put(new Info("std::optional<std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >", "std::optional<std::vector<c10::ivalue::Future::WeakStorage> >").pointerTypes("WeakStorageVectorOptional").define())
             .put(new Info("std::optional<c10::impl::CppSignature>").pointerTypes("CppSignatureOptional").define())
-            .put(new Info("std::optional<std::shared_ptr<c10::SafePyObject> >").pointerTypes("SafePyObjectOptional").define())
+            .put(new Info("std::optional<c10::SafePyObject>").pointerTypes("SafePyObjectOptional").define())
+            .put(new Info("std::optional<std::shared_ptr<c10::SafePyObject> >").pointerTypes("SafePyObjectSharedPtrOptional").define())
             .put(new Info("std::optional<std::pair<const char*,const char*> >").pointerTypes("BytePointerPairOptional").define())
             .put(new Info("std::optional<c10::intrusive_ptr<c10d::Backend> >").pointerTypes("DistributedBackendOptional").define())
             .put(new Info("std::optional<std::weak_ptr<c10d::Logger> >").pointerTypes("LoggerOptional").define())
@@ -686,6 +689,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 .pointerTypes("TensorVector").define())
             .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
             .put(new Info("std::vector<std::optional<torch::autograd::Variable> >").pointerTypes("TensorOptionalVector").define())
+            .put(new Info("const std::vector<std::optional<torch::autograd::InputMetadata> >",
+                "std::vector<std::optional<torch::autograd::InputMetadata> >").pointerTypes("InputMetadataOptionalVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >",
                 "std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreHookVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPostHook> >",
@@ -827,6 +832,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("Tensor").elementTypes("at::Tensor"),
             new ArrayInfo("Future").elementTypes("c10::intrusive_ptr<c10::ivalue::Future>").elementValueType("@IntrusivePtr(\"c10::ivalue::Future\") Future"),
             new ArrayInfo("Generic").elementTypes("c10::IValue").itPointerType("IValue").elementValueType("@ByVal IValue"),
+            new ArrayInfo("SymInt").elementTypes("c10::SymInt"),
         }) {
             ai.mapList(infoMap);
         }
@@ -1069,6 +1075,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::pair<at::RecordFunctionHandle,int>").pointerTypes("RecordFunctionHandleIntPair").define())
             .put(new Info("std::pair<void*,void*>", "std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr>").pointerTypes("PointerPair").define())
             .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
+            .put(new Info("std::pair<size_t,std::optional<size_t> >").pointerTypes("SizeTSizeTOptionalPair").define())
             .put(new Info("std::pair<const char*,const char*>").pointerTypes("BytePointerPair").define())
             .put(new Info("std::pair<std::string,c10::IValue>").pointerTypes("EnumNameValue").define())
             .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringPair").define())
@@ -2098,7 +2105,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// Deleted operator= or related errors. Any way to skip setter only ?
         infoMap.put(new Info(
             "at::native::RNNDescriptor::dropout_desc_",
-            "torch::dynamo::autograd::AutogradCompilerCall::hooks"
+            "torch::dynamo::autograd::AutogradCompilerCall::hooks",
+            "torch::dynamo::autograd::AutogradCompilerCall::sv_to_hooks",
+            "torch::dynamo::autograd::AutogradCompilerCall::pynode_objs",
+            "torch::dynamo::autograd::PyCompilerGuard",
+            "torch::dynamo::autograd::PyCompilerInterface"
         ).skip());
 
 
@@ -2505,7 +2516,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "torch::autograd::GraphTask::ExecInfo::Capture::GradCaptureHook",
             "torch::autograd::GraphTaskGuard",
             "torch::autograd::InputBuffer",
-            "torch::autograd::InputMetadata",
+//            "torch::autograd::InputMetadata",
             "torch::autograd::NodeGuard",
             "torch::autograd::ReadyQueue",
             "torch::autograd::TraceableFunction",
@@ -2589,6 +2600,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "c10d::Logger::operator <<(std::ostream&, const c10d::Logger&)", // No definition
             "c10d::ProcessGroupGloo::createProcessGroupGloo", // No definition
             "c10::TensorImpl::set_allow_tensor_metadata_change",
+            "caffe2::serialize::detail::getOffset",
             "caffe2::serialize::detail::getPadding",
             "torch::autograd::add_node_to_current_graph_task_exec_info",
             "torch::autograd::set_device(int)",

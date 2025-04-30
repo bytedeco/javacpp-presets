@@ -18,18 +18,17 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-
-@Namespace("torch::autograd") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class FunctionPreHook extends Pointer {
+@NoOffset @Name("std::optional<torch::autograd::InputMetadata>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class InputMetadataOptional extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public FunctionPreHook() { super((Pointer)null); allocate(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FunctionPreHook(Pointer p) { super(p); }
-    @UniquePtr @Name("std::make_unique<JavaCPP_torch_0003a_0003aautograd_0003a_0003aFunctionPreHook>") private native void allocate();
+    public InputMetadataOptional(Pointer p) { super(p); }
+    public InputMetadataOptional()       { allocate();  }
+    private native void allocate();
 
-  @Virtual(true) public native @ByVal @Name("operator ()") TensorVector apply(@Const @ByRef TensorVector grads);
-  // only implemented for python hooks, registers hook with compiled autograd
-  @Virtual public native @Const({false, false, true}) void compiled_args(
-        @ByRef CompiledNodeArgs args);
+
+    public native boolean has_value();
+    public native void reset();
+    public native @Name("value") @ByRef InputMetadata get();
 }
+

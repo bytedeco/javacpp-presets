@@ -40,8 +40,8 @@ public class UpsampleImpl extends UpsampleImplCloneable {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UpsampleImpl(Pointer p) { super(p); }
 
-  public UpsampleImpl(@Const @ByRef(nullValue = "torch::nn::UpsampleOptions{}") UpsampleOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr @Name("std::make_shared<torch::nn::UpsampleImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::UpsampleOptions{}") UpsampleOptions options_);
+  public UpsampleImpl(@ByVal(nullValue = "torch::nn::UpsampleOptions{}") UpsampleOptions options_) { super((Pointer)null); allocate(options_); }
+  @SharedPtr @Name("std::make_shared<torch::nn::UpsampleImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::UpsampleOptions{}") UpsampleOptions options_);
   public UpsampleImpl() { super((Pointer)null); allocate(); }
   @SharedPtr @Name("std::make_shared<torch::nn::UpsampleImpl>") private native void allocate();
 

@@ -22,16 +22,14 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::optim") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdagradParamState extends OptimizerCloneableAdagradParamState {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public AdagradParamState() { super((Pointer)null); allocate(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdagradParamState(Pointer p) { super(p); }
+    @UniquePtr @Name("std::make_unique<torch::optim::AdagradParamState>") private native void allocate();
 
   public native @ByRef @NoException(true) Tensor sum();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer step();
-  public AdagradParamState() { super((Pointer)null); allocate(); }
-  @UniquePtr @Name("std::make_unique<torch::optim::AdagradParamState>") private native void allocate();
-  public AdagradParamState(@Const @ByRef AdagradParamState arg0) { super((Pointer)null); allocate(arg0); }
-  @UniquePtr @Name("std::make_unique<torch::optim::AdagradParamState>") private native void allocate(@Const @ByRef AdagradParamState arg0);
-  public native @ByRef @Name("operator =") AdagradParamState put(@Const @ByRef AdagradParamState arg0);
   
   
   private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(

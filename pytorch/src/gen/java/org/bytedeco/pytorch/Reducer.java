@@ -33,18 +33,16 @@ public class Reducer extends Pointer {
   public Reducer(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
-        @Cast("const std::vector<size_t>*") @ByRef SizeTVector per_bucket_size_limits,
         @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
         @ByVal BoolVector expect_sparse_gradients,
         @Cast("int64_t") long bucket_bytes_cap,
         @Cast("bool") boolean find_unused_parameters,
         @Cast("bool") boolean gradient_as_bucket_view,
         @ByVal SizeTStringMap param_names,
-        @Cast("int64_t") long first_bucket_bytes_cap) { super((Pointer)null); allocate(params, bucket_indices, per_bucket_size_limits, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap); }
+        @Cast("int64_t") long first_bucket_bytes_cap) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap); }
   private native void allocate(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
-        @Cast("const std::vector<size_t>*") @ByRef SizeTVector per_bucket_size_limits,
         @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
         @ByVal BoolVector expect_sparse_gradients,
         @Cast("int64_t") long bucket_bytes_cap,

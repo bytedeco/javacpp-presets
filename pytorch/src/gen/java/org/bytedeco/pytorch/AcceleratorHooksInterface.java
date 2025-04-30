@@ -33,6 +33,19 @@ public class AcceleratorHooksInterface extends Pointer {
   // This should never actually be implemented, but it is used to
   // squelch -Werror=non-virtual-dtor
 
+  // Whether this backend was enabled at compilation time.
+  // This function should NEVER throw.
+  public native @Cast("bool") boolean isBuilt();
+
+  // Whether this backend can be used at runtime, meaning it was built,
+  // its runtime dependencies are available (driver) and at least one
+  // supported device can be used.
+  // This function should NEVER throw. This function should NOT initialize the context
+  // on any device (result of hasPrimaryContext below should not change).
+  // While it is acceptable for this function to poison fork, it is
+  // recommended to avoid doing so whenever possible.
+  public native @Cast("bool") boolean isAvailable();
+
   // Whether the device at device_index is fully initialized or not.
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
 

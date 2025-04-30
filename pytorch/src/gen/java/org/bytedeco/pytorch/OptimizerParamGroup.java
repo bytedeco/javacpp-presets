@@ -41,6 +41,7 @@ public class OptimizerParamGroup extends Pointer {
         @UniquePtr @ByVal OptimizerOptions options);
 
   
+  public native @ByRef @Name("operator =") @NoException(true) OptimizerParamGroup put(@ByRef(true) OptimizerParamGroup param_group);
   public native @Cast("bool") boolean has_options();
   public native @ByRef OptimizerOptions options();
   public native void set_options(@UniquePtr @ByVal OptimizerOptions options);

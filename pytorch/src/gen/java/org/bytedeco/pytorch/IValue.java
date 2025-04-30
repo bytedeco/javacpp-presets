@@ -281,6 +281,8 @@ public class IValue extends Pointer {
   
   public native @ByVal LongList toIntList();
   public native @ByVal @Cast("std::vector<int64_t>*") LongVector toIntVector();
+  
+  public native @ByVal SymIntList toSymIntList();
   public native @ByVal SymIntVector toSymIntVector();
   public native @ByVal DimVector toDimVector();
 

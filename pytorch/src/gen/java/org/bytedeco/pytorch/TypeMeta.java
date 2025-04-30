@@ -95,7 +95,7 @@ public class TypeMeta extends Pointer {
   /**
    * Returns a printable name for the type.
    */
-  public native @StringView @NoException(true) BytePointer name();
+  public native @StringView @NoException(true) @Cast("const char*") BytePointer name();
 
   private static native @Namespace @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByRef TypeMeta lhs, @Const @ByRef TypeMeta rhs);
   public boolean equals(TypeMeta rhs) { return equals(this, rhs); }

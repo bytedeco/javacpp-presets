@@ -41,7 +41,10 @@ public class ExperimentalConfig extends Pointer {
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
         @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
         @Cast("bool") boolean adjust_profiler_step/*=false*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, adjust_timestamps); }
+        @Cast("bool") boolean disable_external_correlation/*=false*/,
+        @Cast("bool") boolean profile_all_threads/*=false*/,
+        @Cast("bool") boolean capture_overload_names/*=false*/,
+        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, adjust_timestamps); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
@@ -49,6 +52,9 @@ public class ExperimentalConfig extends Pointer {
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
         @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
         @Cast("bool") boolean adjust_profiler_step/*=false*/,
+        @Cast("bool") boolean disable_external_correlation/*=false*/,
+        @Cast("bool") boolean profile_all_threads/*=false*/,
+        @Cast("bool") boolean capture_overload_names/*=false*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/);
   public ExperimentalConfig() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -74,6 +80,21 @@ public class ExperimentalConfig extends Pointer {
    * affects only the start of profiler step events.
    */
   public native @Cast("bool") boolean adjust_profiler_step(); public native ExperimentalConfig adjust_profiler_step(boolean setter);
+  /*
+   * Controls whether or not external correlation is disabled. This is used to
+   * lower the amount of events received by CUPTI as correlation events are
+   * paired with runtime/gpu events for each kind of correlation
+   */
+  public native @Cast("bool") boolean disable_external_correlation(); public native ExperimentalConfig disable_external_correlation(boolean setter);
+
+  /* controls whether profiler records cpu events on threads
+   * that are not spawned from the main thread on which the
+   * profiler was enabled, similar to on_demand mode */
+  public native @Cast("bool") boolean profile_all_threads(); public native ExperimentalConfig profile_all_threads(boolean setter);
+
+  /* controls whether overload names are queried from an ATen
+   * function schema and stored in the profile  */
+  public native @Cast("bool") boolean capture_overload_names(); public native ExperimentalConfig capture_overload_names(boolean setter);
 
   /*
    * Controls whether or not timestamp adjustment occurs after profiling.

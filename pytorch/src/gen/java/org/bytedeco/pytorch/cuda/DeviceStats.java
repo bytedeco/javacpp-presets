@@ -50,25 +50,25 @@ public class DeviceStats extends Pointer {
     }
 
   // COUNT: allocations requested by client code
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat allocation(); public native DeviceStats allocation(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat allocation(); public native DeviceStats allocation(Stat setter);
   // COUNT: number of allocated segments from device memory allocation.
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat segment(); public native DeviceStats segment(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat segment(); public native DeviceStats segment(Stat setter);
   // COUNT: number of active memory blocks (allocated or used by stream)
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat active(); public native DeviceStats active(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat active(); public native DeviceStats active(Stat setter);
   // COUNT: number of inactive, split memory blocks (unallocated but can't be
   // released via device memory deallocation)
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat inactive_split(); public native DeviceStats inactive_split(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat inactive_split(); public native DeviceStats inactive_split(Stat setter);
 
   // SUM: bytes allocated by this memory alocator
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat allocated_bytes(); public native DeviceStats allocated_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat allocated_bytes(); public native DeviceStats allocated_bytes(Stat setter);
   // SUM: bytes reserved by this memory allocator (both free and used)
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat reserved_bytes(); public native DeviceStats reserved_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat reserved_bytes(); public native DeviceStats reserved_bytes(Stat setter);
   // SUM: bytes within active memory blocks
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat active_bytes(); public native DeviceStats active_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat active_bytes(); public native DeviceStats active_bytes(Stat setter);
   // SUM: bytes within inactive, split memory blocks
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat inactive_split_bytes(); public native DeviceStats inactive_split_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat inactive_split_bytes(); public native DeviceStats inactive_split_bytes(Stat setter);
   // SUM: bytes requested by client code
-  public native @ByRef @Cast("c10::CachingDeviceAllocator::StatArray*") Stat requested_bytes(); public native DeviceStats requested_bytes(Stat setter);
+  public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat requested_bytes(); public native DeviceStats requested_bytes(Stat setter);
 
   // COUNT: total number of failed calls to device malloc necessitating cache
   // flushes.

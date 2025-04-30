@@ -28,6 +28,8 @@ public class Optimizer extends Pointer {
   // The copy constructor is deleted, because the user should use the
   // `state_dict` / `load_state_dict` API to copy an optimizer instead.
   
+  
+  public native @ByRef @Name("operator =") Optimizer put(@ByRef(true) Optimizer optimizer);
 
   /** Constructs the {@code Optimizer} from a vector of parameters. */
 

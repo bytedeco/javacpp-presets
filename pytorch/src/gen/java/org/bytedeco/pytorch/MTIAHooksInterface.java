@@ -78,4 +78,20 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
 
   public native void emptyCache();
 
+
+  public native void recordMemoryHistory(
+      @Const @ByRef StringOptional enabled,
+      @StdString BytePointer stacks,
+      @Cast("size_t") long max_entries);
+  public native void recordMemoryHistory(
+      @Const @ByRef StringOptional enabled,
+      @StdString String stacks,
+      @Cast("size_t") long max_entries);
+
+  public native @Cast("PyObject*") Pointer memorySnapshot();
+
+  public native @Cast("c10::DeviceIndex") byte getDeviceCount();
+
+  public native void resetPeakMemoryStats(@Cast("c10::DeviceIndex") byte device);
+
 }

@@ -42,44 +42,35 @@ public class Scalar extends Pointer {
 //   Scalar(type vv) : Scalar(vv, true) {}
 
   public Scalar(@Cast("uint8_t") byte vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@Cast("uint8_t") byte vv);
-      
+  private native void allocate(@Cast("uint8_t") byte vv); 
   public Scalar(short vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(short vv);
-      
+  private native void allocate(short vv); 
   public Scalar(int vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(int vv);
-      
+  private native void allocate(int vv); 
   public Scalar(@Cast("int64_t") long vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@Cast("int64_t") long vv);
-      
+  private native void allocate(@Cast("int64_t") long vv); 
   public Scalar(float vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(float vv);
-      
+  private native void allocate(float vv); 
   public Scalar(double vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(double vv);
-      
+  private native void allocate(double vv); 
   public Scalar(@ByVal Half vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@ByVal Half vv);
-      
+  private native void allocate(@ByVal Half vv); 
   public Scalar(@ByVal BFloat16 vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@ByVal BFloat16 vv);
-      
-  public Scalar(@ByVal Float8_e5m2 vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@ByVal Float8_e5m2 vv);
-      
-  public Scalar(@ByVal Float8_e4m3fn vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@ByVal Float8_e4m3fn vv);
-      
-  public Scalar(@ByVal Float8_e5m2fnuz vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@ByVal Float8_e5m2fnuz vv);
-      
-  public Scalar(@ByVal Float8_e4m3fnuz vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@ByVal Float8_e4m3fnuz vv);
   public Scalar(@ByVal FloatComplex vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@ByVal FloatComplex vv);
   public Scalar(@ByVal DoubleComplex vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@ByVal DoubleComplex vv);
+  public Scalar(@ByVal Float8_e5m2 vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e5m2 vv);
+  public Scalar(@ByVal Float8_e4m3fn vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e4m3fn vv);
+  public Scalar(@ByVal Float8_e5m2fnuz vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e5m2fnuz vv);
+  public Scalar(@ByVal Float8_e4m3fnuz vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e4m3fnuz vv);
+  public Scalar(@ByVal Float8_e8m0fnu vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e8m0fnu vv);
 
   // Helper constructors to allow Scalar creation from long and long long types
   // As std::is_same_v<long, long long> is false(except Android), one needs to
@@ -144,6 +135,7 @@ public class Scalar extends Pointer {
   public native @ByVal Float8_e4m3fn toFloat8_e4m3fn();
   public native @ByVal Float8_e5m2fnuz toFloat8_e5m2fnuz();
   public native @ByVal Float8_e4m3fnuz toFloat8_e4m3fnuz();
+  public native @ByVal Float8_e8m0fnu toFloat8_e8m0fnu();
   public native @Cast("uint16_t") short toUInt16();
   public native @Cast("uint32_t") int toUInt32();
   public native @Cast("uint64_t") long toUInt64();

@@ -61,6 +61,7 @@ public class Context extends Pointer {
 
   public static native @Cast("bool") boolean hasOpenMP();
   public static native @Cast("bool") boolean hasMKL();
+  public static native @Cast("bool") boolean hasKleidiAI();
   public static native @Cast("bool") boolean hasLAPACK();
   public static native @Cast("bool") boolean hasMKLDNN();
   public static native @Cast("bool") boolean hasMAGMA();
@@ -144,6 +145,10 @@ public class Context extends Pointer {
   public native BlasBackend blasPreferredBackend();
   public native void setBlasPreferredBackend(BlasBackend arg0);
   public native void setBlasPreferredBackend(@Cast("at::BlasBackend") byte arg0);
+
+  public native ROCmFABackend getROCmFAPreferredBackend();
+  public native void setROCmFAPreferredBackend(ROCmFABackend arg0);
+  public native void setROCmFAPreferredBackend(@Cast("at::ROCmFABackend") byte arg0);
 
   // Note [Enabling Deterministic Operations]
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -233,6 +238,8 @@ public class Context extends Pointer {
   public native void setFloat32MatmulPrecision(@StdString String s);
   public native @Cast("bool") boolean allowTF32CuDNN();
   public native void setAllowTF32CuDNN(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean allowTF32OneDNN();
+  public native void setAllowTF32OneDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowTF32CuBLAS();
   public native void setAllowTF32CuBLAS(@Cast("bool") boolean arg0);
   public native Float32MatmulPrecision float32MatmulPrecision();
@@ -242,6 +249,21 @@ public class Context extends Pointer {
   public native void setAllowFP16ReductionCuBLAS(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowBF16ReductionCuBLAS();
   public native void setAllowBF16ReductionCuBLAS(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean allowFP16AccumulationCuBLAS();
+  public native void setAllowFP16AccumulationCuBLAS(@Cast("bool") boolean arg0);
+
+  // Matmuls can use a so-called "persistent" kernel which launches one CUDA
+  // block for each SM on the GPU, and each block then iterates over multiple
+  // output tiles. This allows to use software pipelining to hide the begin/end
+  // latencies (e.g., epilogue), especially when only one tile fits per SM.
+  // However, if some SMs are busy (e.g., with a background NCCL kernel), the
+  // matmul's blocks will be scheduled in two waves and, in the absence of some
+  // smart load balancing, the kernel will take twice as long. This flag allows
+  // to make matmuls target only a subset of the SMs, so they can fully schedule
+  // even next to a comms kernel, and only be a few percent slower.
+  public native @ByVal IntOptional _SMCarveout_EXPERIMENTAL();
+  public native void _setSMCarveout_EXPERIMENTAL(@ByVal IntOptional arg0);
+
   public native @ByVal QEngine qEngine();
   public native void setQEngine(@ByVal QEngine e);
   public static native @Const @ByRef QEngineVector supportedQEngines();
@@ -257,6 +279,7 @@ public class Context extends Pointer {
   public native void setDisplayVmapFallbackWarnings(@Cast("bool") boolean enabled);
   public native @Cast("bool") boolean areVmapFallbackWarningsEnabled();
 
+  public native @Cast("bool") boolean isDefaultMobileCPUAllocatorSet();
   public native void setDefaultMobileCPUAllocator();
   public native void unsetDefaultMobileCPUAllocator();
   public native @Cast("bool") boolean allowFP16ReductionCPU();
