@@ -85,7 +85,7 @@ public class DeviceGuardImplInterface extends Pointer {
   /**
    * Get the current stream for a given device.
    */
-  public native @ByVal @NoException(true) Stream getStream(@ByVal Device arg0);
+  public native @ByVal Stream getStream(@ByVal Device arg0);
 
   /**
    * Get the default stream for a given device.
@@ -111,7 +111,7 @@ public class DeviceGuardImplInterface extends Pointer {
    * Return the previous stream for that device. You are NOT required
    * to set the current device to match the device of this stream.
    */
-  public native @ByVal @NoException(true) Stream exchangeStream(@ByVal Stream arg0);
+  public native @ByVal Stream exchangeStream(@ByVal Stream arg0);
 
   /**
    * Destroys the given event.

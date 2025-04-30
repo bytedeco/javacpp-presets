@@ -28,7 +28,8 @@ public class PostAccumulateGradHook extends Pointer {
   public native @Name("operator ()") void apply(@Const @ByRef Tensor tensor);
   // only implemented for python hooks on nodes, registers hook with compiled
   // autograd
-  public native void compiled_args(@ByRef CompiledNodeArgs args);
+  public native void compiled_args(
+        @ByRef CompiledNodeArgs args);
 
   public native void apply_with_saved(
         @ByRef Tensor arg0,

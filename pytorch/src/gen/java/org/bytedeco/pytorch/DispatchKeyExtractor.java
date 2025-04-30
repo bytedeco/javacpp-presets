@@ -17,7 +17,7 @@ import org.bytedeco.javacpp.chrono.*;
 import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
-
+ // namespace detail
 
 /**
  * An instance of DispatchKeyExtractor knows how to get a dispatch key given
@@ -32,8 +32,8 @@ import static org.bytedeco.pytorch.global.torch.*;
  *    varies from operator, as some operators may have overridden the
  *    fallthrough with custom behavior.
  *
- *   Note - this should maintain identical impl to the py dispatcher key extraction logic
- *   at pytorch/torch/dispatcher.py
+ *   Note - this should maintain identical impl to the py dispatcher key
+ * extraction logic at pytorch/torch/dispatcher.py
  */
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class DispatchKeyExtractor extends Pointer {

@@ -94,7 +94,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             ))
 
             .put(new Info(
-                "at::CUDAGeneratorImpl"
+                "at::CUDAGeneratorImpl",
+                "torch::inductor::AOTIModelContainerRunnerCuda::run_impl"
             ).skip())
 
             //// std::unordered_map
@@ -114,7 +115,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("const std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>", "std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>").pointerTypes("TraceEntryVector").define())
 
             //// std::array
-            .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray").cast().pointerTypes("Stat"))
+            .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray",
+                          "std::array<c10::Stat, static_cast<size_t>(StatType::NUM_TYPES)>", "c10::CachingAllocator::StatArray").cast().pointerTypes("Stat"))
             .put(new Info("std::array<void*,c10d::intra_node_comm::kMaxDevices>").cast().pointerTypes("PointerPointer<Pointer>"))
         ;
 

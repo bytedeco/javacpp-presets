@@ -33,6 +33,8 @@ public class AutogradCompilerCall extends Pointer {
 
   public native @Cast("size_t") long emplace_hook(@ByRef(true) SafePyObject fn);
 
+  public native @Cast("size_t") long emplace_packed_input(@ByRef(true) SafePyObject input);
+
   public native void set_active_node_call_idx(@Cast("size_t") long node_call_idx);
 
   @MemberGetter public native @ByRef SizeTOptional active_node_call_idx();
@@ -41,8 +43,12 @@ public class AutogradCompilerCall extends Pointer {
   @MemberGetter public native @ByRef LiftedIValueArgs lifted_ivalue_args();
   public native @ByRef @Cast("std::vector<int64_t>*") @NoOffset LongVector dyn_size_inputs(); public native AutogradCompilerCall dyn_size_inputs(LongVector setter);
   
+  public native @StdVector SafePyObject packed_inputs(); public native AutogradCompilerCall packed_inputs(SafePyObject setter);
   public native @ByRef @NoOffset NodeCalls node_calls(); public native AutogradCompilerCall node_calls(NodeCalls setter);
   public native @NoOffset SizeInput.DynType default_dyn_type(); public native AutogradCompilerCall default_dyn_type(SizeInput.DynType setter);
   // NodeCall id of each size, only when verbose logging is enabled
   public native @Cast("uint32_t*") @StdVector IntPointer size_input_origins(); public native AutogradCompilerCall size_input_origins(IntPointer setter);
+  
+  // pynode -> backward and backward state idx
+  
 }

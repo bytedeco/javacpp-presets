@@ -25,6 +25,9 @@ public class SwapSavedVariables extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwapSavedVariables(Pointer p) { super(p); }
 
+  public native @ByVal SizeTSizeTOptionalPair retrieve_pynode_objs(
+        Node pynode);
+
   public native void before(@ByRef Tensor t);
   public native void after(@ByRef Tensor t);
 
@@ -37,6 +40,8 @@ public class SwapSavedVariables extends Pointer {
 
   public native void before(@ByRef Edge t);
   public native void after(@ByRef Edge t);
+  public native void before(@ByRef InputMetadata t);
+  public native void after(@ByRef InputMetadata t);
   public native void before(@ByRef TensorGeometry t);
   public native void after(@ByRef TensorGeometry t);
   public native void before(@ByRef VariableInfo t);

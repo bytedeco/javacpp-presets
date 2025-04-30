@@ -64,6 +64,10 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
         @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
   public native @Const @ByRef Generator getDefaultGenerator();
 
+  public native @ByVal Generator getNewGenerator(
+        @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
+  public native @ByVal Generator getNewGenerator();
+
   public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
   public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);

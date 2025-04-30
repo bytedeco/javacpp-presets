@@ -50,6 +50,8 @@ public class MPSHooksInterface extends AcceleratorHooksInterface {
   public native @Const @ByRef Generator getDefaultGenerator(
         @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
   public native @Const @ByRef Generator getDefaultGenerator();
+  public native @ByVal Generator getNewGenerator(
+        @Cast("c10::DeviceIndex") byte device_index);
   public native Allocator getMPSDeviceAllocator();
   public native void deviceSynchronize();
   public native void commitStream();

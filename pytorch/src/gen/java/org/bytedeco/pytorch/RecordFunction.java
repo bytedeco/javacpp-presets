@@ -55,6 +55,7 @@ public class RecordFunction extends Pointer {
   
 
   public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer overload_name();
 
   public native @Cast("int64_t") long seqNr();
 

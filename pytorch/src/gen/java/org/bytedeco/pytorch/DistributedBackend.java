@@ -72,6 +72,8 @@ public class DistributedBackend extends CustomClassHolder {
 
   public native @Cast("bool") boolean supportsSplitting();
 
+  public native @Cast("bool") boolean supportsCoalescing();
+
   public native void startCoalescing();
 
   public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work endCoalescing();
@@ -277,4 +279,24 @@ public class DistributedBackend extends CustomClassHolder {
   public native void eagerConnectSingleDevice(@ByVal Device device);
 
   public native void setBoundDeviceId(@ByVal DeviceOptional device);
+
+  public native ErrorType getError();
+
+  public native @SharedPtr Allocator getMemAllocator();
+
+  // Allocate tensor (aten::empty) from backend's communication-optimized memory
+  // pool
+  public native @ByVal Tensor allocateTensor(long size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+  public native @ByVal Tensor allocateTensor(long size);
+
+  // Returns true if backend supports tensor allocation
+  public native @Cast("bool") boolean supportsTensorAlloc(@Cast("c10::DeviceIndex") byte deviceIdx);
+
+  // Aborts all pending operations and connections in the backend if the backend
+  // supports it.
+  public native void abort();
+
+  // Shutdown the backend if the backend supports it. This should be used for
+  // normal shutdown.
+  public native void shutdown();
 }

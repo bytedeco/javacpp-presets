@@ -37,9 +37,20 @@ public class PrivateUse1HooksInterface extends AcceleratorHooksInterface {
         return new PrivateUse1HooksInterface((Pointer)this).offsetAddress(i);
     }
 
+// #define FAIL_PRIVATEUSE1HOOKS_FUNC(func)
+//   TORCH_CHECK_NOT_IMPLEMENTED(
+//       false,
+//       "You should register `PrivateUse1HooksInterface`",
+//       "by `RegisterPrivateUse1HooksInterface` and implement `",
+//       func,
+//       "` at the same time for PrivateUse1.");
 
   public native @Const @ByRef Generator getDefaultGenerator(
         @Cast("c10::DeviceIndex") byte device_index);
+
+  public native @ByVal Generator getNewGenerator(
+        @Cast("c10::DeviceIndex") byte device_index/*=-1*/);
+  public native @ByVal Generator getNewGenerator();
 
   public native @ByVal Device getDeviceFromPtr(Pointer data);
 
@@ -53,4 +64,6 @@ public class PrivateUse1HooksInterface extends AcceleratorHooksInterface {
   public native void resizePrivateUse1Bytes(
         @Const @ByRef Storage storage,
         @Cast("size_t") long newsize);
+
+// #undef FAIL_PRIVATEUSE1HOOKS_FUNC
 }

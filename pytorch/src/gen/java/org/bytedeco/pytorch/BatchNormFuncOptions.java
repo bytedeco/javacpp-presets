@@ -48,6 +48,6 @@ public class BatchNormFuncOptions extends Pointer {
   public native @ByRef @NoException(true) Tensor weight();
   public native @ByRef @NoException(true) Tensor bias();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer training();
-  public native @ByRef @NoException(true) DoubleOptional momentum();
+  public native @ByRef @NoException(true) DoublePointer momentum();
   public native @ByRef @NoException(true) DoublePointer eps();
 }

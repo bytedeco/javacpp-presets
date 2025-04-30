@@ -117,7 +117,10 @@ public class Node extends Pointer {
 
   public native @Cast("uint32_t") @NoException(true) int num_inputs();
 
+  public native @Const @ByRef InputMetadata input_metadata(@Cast("size_t") long index);
+
   // Danger: not thread safe, caller must protect with lock
+  public native @ByRef InputMetadata mutable_input_metadata(@Cast("size_t") long index);
 
   /**
    * Note: Function Streams
@@ -330,4 +333,8 @@ public class Node extends Pointer {
   public native @ByVal TensorVector apply_with_saved(
         @Const @ByRef TensorVector inputs,
         @ByRef SwapSavedVariables saved);
+
+  // If this node is the AOTBackward node produced by torch.compile.
+  // Compiled Autograd special-cases on this information.
+  public native @Cast("bool") boolean is_aot_backward();
 }

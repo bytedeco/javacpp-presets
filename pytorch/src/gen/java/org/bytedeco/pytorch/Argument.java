@@ -124,7 +124,7 @@ public class Argument extends Pointer {
   // if type() is non-null, this is guaranteed to be non-null (if no real
   // type was provided, this takes on type()'s value)
   public native @Const @ByRef Type.TypePtr real_type();
-  public native @ByVal IntOptional N();
+  public native @Const @ByRef IntOptional N();
   public native @Const @ByRef IValueOptional default_value();
   public native @Cast("bool") boolean kwarg_only();
 

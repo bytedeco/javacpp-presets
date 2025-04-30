@@ -97,6 +97,9 @@ public class ProcessGroup extends CustomClassHolder {
 
   public native BackendType getBackendType();
 
+  public native @Cast("bool") boolean backendSupportsSequenceNumbers(BackendType backendType);
+  public native @Cast("bool") boolean backendSupportsSequenceNumbers(@Cast("c10d::ProcessGroup::BackendType") byte backendType);
+
   public native void startCoalescing(DeviceType deviceType);
   public native void startCoalescing(@Cast("c10::DeviceType") byte deviceType);
 
@@ -301,6 +304,10 @@ public class ProcessGroup extends CustomClassHolder {
         @ByRef(true) WorkInfoConsumer hook);
 
   public native void waitForPendingWorks();
+
+  public native void shutdown();
+
+  public native void abort();
 
   public native @Cast("bool") boolean hasHooks();
 

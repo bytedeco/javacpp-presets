@@ -86,9 +86,9 @@ public class TensorType extends SharedType {
 
   public native @Const @ByRef StrideVaryingShape stride_properties();
 
-  public native @ByVal DeviceOptional device();
-  public native @ByVal ScalarTypeOptional scalarType();
-  public native @ByVal BoolOptional requiresGrad();
+  public native @Const @ByRef DeviceOptional device();
+  public native @Const @ByRef ScalarTypeOptional scalarType();
+  public native @Const @ByRef BoolOptional requiresGrad();
   public native @Cast("bool") boolean requires_grad();
 
   public native @Cast("bool") boolean equals(@Const @ByRef Type rhs);

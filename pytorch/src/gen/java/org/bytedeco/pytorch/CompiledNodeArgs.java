@@ -42,6 +42,7 @@ public class CompiledNodeArgs extends Pointer {
   public native void collect(@Cast({"", "const std::shared_ptr<torch::autograd::Node>"}) @SharedPtr Node t);
   public native void collect(@Const @ByRef NodeCall t);
   public native void collect(@Const @ByRef Edge t);
+  public native void collect(@Const @ByRef InputMetadata t);
   public native void collect(@Const @ByRef VariableInfo t);
   public native @Cast("bool") boolean cond(@Cast("bool") boolean cond);
 
@@ -66,9 +67,10 @@ public class CompiledNodeArgs extends Pointer {
 
   public native @ByVal CacheKey key();
 
-  public native @Cast("size_t") long add_backward(@ByRef(true) SafePyObject obj);
-
-  public native @Cast("size_t") long add_backward_state(@ByRef(true) SafePyObject obj);
+  public native void collect_pynode_objs(
+        @Const Node pynode,
+        @ByRef(true) SafePyObject bwd,
+        @ByRef(true) SafePyObjectOptional bwd_state);
 
   public native void add_tensor_pre_hook(@ByRef(true) SafePyObject obj, int index);
 

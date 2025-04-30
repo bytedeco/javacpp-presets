@@ -109,9 +109,20 @@ public class PyTorchStreamReader extends Pointer {
 
   public native @Cast("size_t") long getRecordSize(@StdString BytePointer name);
   public native @Cast("size_t") long getRecordSize(@StdString String name);
-
+  public native @Cast("size_t") long getRecordHeaderOffset(@StdString BytePointer name);
+  public native @Cast("size_t") long getRecordHeaderOffset(@StdString String name);
   public native @Cast("size_t") long getRecordOffset(@StdString BytePointer name);
   public native @Cast("size_t") long getRecordOffset(@StdString String name);
+  public native @Cast("size_t") long getRecordOffsetNoRead(
+        @Cast("size_t") long cursor,
+        @StdString BytePointer filename,
+        @Cast("size_t") long size,
+        @Cast("uint64_t") long alignment);
+  public native @Cast("size_t") long getRecordOffsetNoRead(
+        @Cast("size_t") long cursor,
+        @StdString String filename,
+        @Cast("size_t") long size,
+        @Cast("uint64_t") long alignment);
   public native @Cast("bool") boolean hasRecord(@StdString BytePointer name);
   public native @Cast("bool") boolean hasRecord(@StdString String name);
   public native @ByVal StringVector getAllRecords();

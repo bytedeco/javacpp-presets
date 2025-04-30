@@ -32,5 +32,6 @@ public class FunctionPostHook extends Pointer {
         @Const @ByRef TensorVector outputs,
         @Const @ByRef TensorVector inputs);
   // only implemented for python hooks, registers hook with compiled autograd
-  @Virtual public native void compiled_args(@ByRef CompiledNodeArgs args);
+  @Virtual public native @Const({false, false, true}) void compiled_args(
+        @ByRef CompiledNodeArgs args);
 }

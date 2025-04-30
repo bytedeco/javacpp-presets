@@ -662,8 +662,9 @@ manage their own state. There is only a single CUDA context/state.
 // #include <cusparse.h>
 // #include <c10/macros/Export.h>
 
-// #ifdef CUDART_VERSION
+// #if !defined(USE_ROCM)
 // #include <cusolver_common.h>
+// #else
 // #endif
 
 // #if defined(USE_CUDSS)
@@ -729,14 +730,11 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #else
 // #define TORCH_CUDSS_CHECK(EXPR) EXPR
 // #endif
+// #if !defined(USE_ROCM)
 
-// cusolver related headers are only supported on cuda now
-// #ifdef CUDART_VERSION
 @Namespace("at::cuda::solver") public static native @Cast("const char*") BytePointer cusolverGetErrorMessage(@Cast("cusolverStatus_t") int status);
 
 @Namespace("at::cuda::solver") @MemberGetter public static native @Cast("const char*") BytePointer _cusolver_backend_suggestion();
-
- // namespace at::cuda::solver
 
 // When cuda < 11.5, cusolver raises CUSOLVER_STATUS_EXECUTION_FAILED when input contains nan.
 // When cuda >= 11.5, cusolver normally finishes execution and sets info array indicating convergence issue.
@@ -764,9 +762,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //     }
 //   } while (0)
 
-// #else
-// #define TORCH_CUSOLVER_CHECK(EXPR) EXPR
+// #else // defined(USE_ROCM)
 // #endif
+ // namespace at::cuda::solver
 
 // #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
 
@@ -793,14 +791,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //   } while (0)
 
 // #else
-
-// #define AT_CUDA_DRIVER_CHECK(EXPR)
-//   do {
-//     CUresult __err = EXPR;
-//     if (__err != CUDA_SUCCESS) {
-//       TORCH_CHECK(false, "CUDA driver error: ", static_cast<int>(__err));
-//     }
-//   } while (0)
 
 // #endif
 
@@ -916,25 +906,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #pragma once
 
 // #include <c10/core/Allocator.h>
-// #include <c10/util/irange.h>
-
-// #include <array>
-// Targeting ../cuda/Stat.java
-
-
-
-@Namespace("c10::CachingDeviceAllocator") public enum StatType {
-  AGGREGATE(0),
-  SMALL_POOL(1),
-  LARGE_POOL(2),
-  NUM_TYPES(3);// remember to update this whenever a new stat type is added
-
-    public final long value;
-    private StatType(long v) { this.value = v; }
-    private StatType(StatType e) { this.value = e.value; }
-    public StatType intern() { for (StatType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 // Targeting ../cuda/DeviceStats.java
 
 

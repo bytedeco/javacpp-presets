@@ -44,12 +44,14 @@ public class AOTIModelContainerRunnerCuda extends AOTIModelContainerRunner {
         @StdString BytePointer model_so_path,
         @Cast("size_t") long num_models/*=1*/,
         @StdString BytePointer device_str/*="cuda"*/,
-        @StdString BytePointer cubin_dir/*=""*/) { super((Pointer)null); allocate(model_so_path, num_models, device_str, cubin_dir); }
+        @StdString BytePointer cubin_dir/*=""*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/) { super((Pointer)null); allocate(model_so_path, num_models, device_str, cubin_dir, run_single_threaded); }
   private native void allocate(
         @StdString BytePointer model_so_path,
         @Cast("size_t") long num_models/*=1*/,
         @StdString BytePointer device_str/*="cuda"*/,
-        @StdString BytePointer cubin_dir/*=""*/);
+        @StdString BytePointer cubin_dir/*=""*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/);
   public AOTIModelContainerRunnerCuda(
         @StdString BytePointer model_so_path) { super((Pointer)null); allocate(model_so_path); }
   private native void allocate(
@@ -58,24 +60,22 @@ public class AOTIModelContainerRunnerCuda extends AOTIModelContainerRunner {
         @StdString String model_so_path,
         @Cast("size_t") long num_models/*=1*/,
         @StdString String device_str/*="cuda"*/,
-        @StdString String cubin_dir/*=""*/) { super((Pointer)null); allocate(model_so_path, num_models, device_str, cubin_dir); }
+        @StdString String cubin_dir/*=""*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/) { super((Pointer)null); allocate(model_so_path, num_models, device_str, cubin_dir, run_single_threaded); }
   private native void allocate(
         @StdString String model_so_path,
         @Cast("size_t") long num_models/*=1*/,
         @StdString String device_str/*="cuda"*/,
-        @StdString String cubin_dir/*=""*/);
+        @StdString String cubin_dir/*=""*/,
+        @Cast("const bool") boolean run_single_threaded/*=false*/);
   public AOTIModelContainerRunnerCuda(
         @StdString String model_so_path) { super((Pointer)null); allocate(model_so_path); }
   private native void allocate(
         @StdString String model_so_path);
 
-  public native @ByVal TensorVector run(
-        @Const @ByRef TensorVector inputs,
-        Pointer stream_handle/*=nullptr*/);
-  public native @ByVal TensorVector run(
-        @Const @ByRef TensorVector inputs);
+  
 
   public native @ByVal TensorVector run_with_cuda_stream(
         @Const @ByRef TensorVector inputs,
-        @ByVal CUDAStream cuda_stream);
+        @Const @ByRef CUDAStream cuda_stream);
 }

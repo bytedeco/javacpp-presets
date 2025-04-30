@@ -72,6 +72,7 @@ public class ProfilerConfig extends Pointer {
 
   public native @Cast("bool") boolean disabled();
   public native @Cast("bool") boolean global();
+  public native @Cast("bool") boolean pushGlobalCallbacks();
 
   public native ProfilerState state(); public native ProfilerConfig state(ProfilerState setter);
   public native @ByRef ExperimentalConfig experimental_config(); public native ProfilerConfig experimental_config(ExperimentalConfig setter);
