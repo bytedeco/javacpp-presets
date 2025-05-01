@@ -40,6 +40,7 @@ public class DecompressionConfig extends Pointer {
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public DecompressionConfigImpl(Pointer p) { super(p); }
   }
+  
 
   public native @Cast("size_t") long decomp_data_size(); public native DecompressionConfig decomp_data_size(long setter);
   public native @Cast("size_t") long num_chunks(); public native DecompressionConfig num_chunks(long setter);

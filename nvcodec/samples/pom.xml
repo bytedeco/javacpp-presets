@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>12.2.72-1.5.12-SNAPSHOT</version>
+            <version>13.0.19-1.5.12-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->

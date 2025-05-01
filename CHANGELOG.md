@@ -1,4 +1,5 @@
 
+ * Add presets for the CUFILE module of CUDA
  * Fix FFmpeg builds against VA-API libraries ([pull #1608](https://github.com/bytedeco/javacpp-presets/pull/1608))
  * Add `openblas_full` class giving access to all of OpenBLAS ([pull #1572](https://github.com/bytedeco/javacpp-presets/pull/1572))
  * Allow setting "org.bytedeco.openblas.load" system property to "none" ([issue #1203](https://github.com/bytedeco/javacpp-presets/issues/1203))

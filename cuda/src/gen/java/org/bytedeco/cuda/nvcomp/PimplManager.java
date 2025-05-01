@@ -17,7 +17,7 @@ import static org.bytedeco.cuda.global.nvcomp.*;
  * \brief Interface class between nvcompManagerBase and
  * algorithm specific implementation class
  */
-@Namespace("nvcomp") @NoOffset @Properties(inherit = org.bytedeco.cuda.presets.nvcomp.class)
+@Namespace("nvcomp") @Properties(inherit = org.bytedeco.cuda.presets.nvcomp.class)
 public class PimplManager extends nvcompManagerBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -32,6 +32,8 @@ public class PimplManager extends nvcompManagerBase {
         return new PimplManager((Pointer)this).offsetAddress(i);
     }
 
+
+  
 
   public PimplManager() { super((Pointer)null); allocate(); }
   private native void allocate();
