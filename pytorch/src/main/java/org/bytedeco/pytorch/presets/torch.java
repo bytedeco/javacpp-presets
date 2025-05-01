@@ -181,12 +181,14 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "cupti", "curand", "nvJitLink", "cusparse", "cusolver",
-                         "cudnn", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer",
+                         "cudnn", "cufile", "cufile_rdma", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer",
                          "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
                          "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.9"
+                    : lib.equals("cufile") ? "@.0"
+                    : lib.equals("cufile_rdma") ? "@.1"
                     : lib.equals("nccl") ? "@.2"
                     : lib.equals("myelin") ? "@.1"
                     : lib.equals("nvinfer") ? "@.10"
@@ -197,6 +199,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : "@.12";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_9"
+                    : lib.equals("cufile") ? "64_0"
+                    : lib.equals("cufile_rdma") ? "64_1"
                     : lib.equals("nccl") ? "64_2"
                     : lib.equals("myelin") ? "64_1"
                     : lib.equals("nvinfer") ? "64_10"

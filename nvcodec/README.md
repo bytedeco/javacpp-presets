@@ -31,7 +31,7 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_12.2.72.zip` available at:
+Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_13.0.19.zip` available at:
 
  * https://developer.nvidia.com/nvidia-video-codec-sdk/download
 
@@ -55,7 +55,7 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>12.2.72-1.5.12-SNAPSHOT</version>
+            <version>13.0.19-1.5.12-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->
