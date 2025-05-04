@@ -784,7 +784,7 @@ public class IExecutionContext extends INoCopy {
      * 
      *  @param event The CUDA event that is triggered after all input tensors have been consumed.
      * 
-     *  \warning The set event must be valid during the inferece.
+     *  \warning The set event must be valid during the inference.
      * 
      *  @return True on success, false if error occurred.
      * 
@@ -1131,6 +1131,18 @@ public class IExecutionContext extends INoCopy {
      * 
      *  @return true if there is a debug tensor with the given name and it has debug state turned on.
      *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean getDebugState(String name);
     public native @Cast("bool") @NoException(true) boolean getDebugState(@Cast("const char*") BytePointer name);
+
+    /**
+     *  \brief Get the runtime config object used during execution context creation.
+     * 
+     *  @return The runtime config object.
+     *  */
+    public native @NoException(true) IRuntimeConfig getRuntimeConfig();
 }

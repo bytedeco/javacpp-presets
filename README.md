@@ -216,9 +216,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Tesseract 5.5.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 12.8.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 9.8.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.26.x  https://developer.nvidia.com/nccl
+ * CUDA 12.9.x  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 9.10.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.27.x  https://developer.nvidia.com/nccl
    * nvCOMP 4.2.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
@@ -227,8 +227,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * SentencePiece 0.2.0  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.19.x  https://github.com/tensorflow/tensorflow
- * TensorRT 10.9.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.56.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * TensorRT 10.11.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.58.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.17.x  https://github.com/onnx/onnx

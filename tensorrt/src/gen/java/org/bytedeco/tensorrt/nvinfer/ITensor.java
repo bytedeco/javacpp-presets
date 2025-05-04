@@ -30,8 +30,6 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  must be less than 1GB in size to fit into a single subgraph. If the build option kGPU_FALLBACK is specified, then
  *  multiple subgraphs can be created, with each subgraph limited to less than 1GB of internal tensors data.
  * 
- *  \warning The volume of the tensor must be less than 2^31 elements. If the tensor is a shape tensor,
- *  its volume must not exceed 64.
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and
  *  ABI.
  *  */
@@ -90,7 +88,7 @@ public class ITensor extends INoCopy {
      *  in the network, the dimensions of all dependent tensors will be recomputed.
      * 
      *  This call is only legal for network input tensors, since the dimensions of layer output tensors are inferred
-     *  based on layer inputs and parameters. The volume must be less than 2^31 elements.
+     *  based on layer inputs and parameters.
      * 
      *  @param dimensions The dimensions of the tensor.
      * 
@@ -121,20 +119,45 @@ public class ITensor extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions();
 
     /**
      *  \brief Set the data type of a tensor.
      * 
-     *  @param type The data type of the tensor.
+     *  @param type The data type of the tensor when the type is not inferred.
      * 
-     *  The type is unchanged if the tensor is not a network input tensor, or marked as an output tensor or shape
-     *  output tensor.
+     *  For strongly typed networks, this method should be used only for network inputs,
+     *  since the types of all other tensors are inferred. Setting the type of a network
+     *  output is tolerated if the type equals the inferred type, otherwise an error occurs
+     *  and the type is not updated.
+     * 
+     *  For weakly typed networks, this method can be used for network outputs too, but
+     *  the type merely has to be implicitly convertible from the inferred type to the
+     *  specified type. In this case it does not matter whether the type is set first
+     *  or the tensor is marked as an output first (via {@code INetworkDefinition::markOutput}
+     *  or {@code INetworkDefinition::markOutputForShapes}).
+     * 
+     *  However, marking it first has two advantages:
+     * 
+     *      * It avoids warnings that the tensor is not yet a network I/O tensor.
+     *      * It causes method {@code getType()} to return the type that was set instead of the inferred type.
      * 
      *  @see getType()
+     * 
+     *  \note This function does more than just set the type, so {@code t.setType(t.getType())} is not necessarily a no-op,
+     *  particularly for input and output tensors!
+     * 
+     *  \note Repeated consecutive applications of {@code t.setType(t.getType())}
+     *  would be idempotent, provided the state of the {@code ITensor} isn't changed between calls.
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -146,6 +169,9 @@ public class ITensor extends INoCopy {
      *  \brief Get the data type of a tensor.
      * 
      *  @return The data type of the tensor.
+     * 
+     *  The type is the type set by {@code setType} if the tensor is a network input or output.
+     *  Otherwise the type is the inferred type.
      * 
      *  @see setType()
      *  */

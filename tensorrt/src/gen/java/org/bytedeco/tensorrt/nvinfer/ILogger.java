@@ -20,7 +20,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
 /** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
- *  The name v_1_0 may change in future versions of TensoRT.
+ *  The name v_1_0 may change in future versions of TensorRT.
  <p>
  * 
  *  \class ILogger

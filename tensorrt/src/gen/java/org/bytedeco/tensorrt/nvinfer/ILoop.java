@@ -27,7 +27,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  An ILoop defines a loop within a network. It supports the implementation of recurrences,
  *  which are crucial for iterative computations, such as RNNs for natural language processing and
  *  time-series analysis.
- *  */
+ * 
+ *  The subgraph may directly use tensors defined outside of the ILoop. */
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ILoop extends INoCopy {
     static { Loader.load(); }

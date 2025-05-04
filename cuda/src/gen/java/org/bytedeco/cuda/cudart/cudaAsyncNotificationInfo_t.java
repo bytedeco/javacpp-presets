@@ -32,6 +32,8 @@ public class cudaAsyncNotificationInfo_t extends Pointer {
         return new cudaAsyncNotificationInfo_t((Pointer)this).offsetAddress(i);
     }
 
+    /** The type of notification being sent */
     public native @Cast("cudaAsyncNotificationType") int type(); public native cudaAsyncNotificationInfo_t type(int setter);
+            /** The number of bytes that the process has allocated above its device memory budget */
             @Name("info.overBudget.bytesOverBudget") public native @Cast("unsigned long long") long info_overBudget_bytesOverBudget(); public native cudaAsyncNotificationInfo_t info_overBudget_bytesOverBudget(long setter);
 }

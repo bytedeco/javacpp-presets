@@ -36,11 +36,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 26;
-public static final int NCCL_PATCH = 2;
+public static final int NCCL_MINOR = 27;
+public static final int NCCL_PATCH = 3;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 22602;
+public static final int NCCL_VERSION_CODE = 22703;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -48,6 +48,9 @@ public static final int NCCL_VERSION_CODE = 22602;
 
 // #include <limits.h>
 // Targeting ../nccl/ncclComm.java
+
+
+// Targeting ../nccl/ncclWindow.java
 
 
 // #define NCCL_COMM_NULL NULL
@@ -73,6 +76,18 @@ public static final int ncclSuccess                 = 0,
 // #define NCCL_CONFIG_UNDEF_PTR NULL
 public static final int NCCL_SPLIT_NOCOLOR = -1;
 public static final double NCCL_UNDEF_FLOAT = -1.0f;
+
+/* Window Registration flags */
+public static final int NCCL_WIN_DEFAULT = 0x00;
+public static final int NCCL_WIN_COLL_SYMMETRIC = 0x01;
+
+/* NCCL performance policy */
+public static final int NCCL_CTA_POLICY_DEFAULT = 0x00;
+public static final int NCCL_CTA_POLICY_EFFICIENCY = 0x01;
+
+/* ncclCommShrink flags*/
+public static final int NCCL_SHRINK_DEFAULT = 0x00; /* shrink the parent communicator */
+public static final int NCCL_SHRINK_ABORT = 0x01;
 // Targeting ../nccl/ncclConfig_t.java
 
 
@@ -90,6 +105,11 @@ public static final double NCCL_UNDEF_FLOAT = -1.0f;
 //   NCCL_CONFIG_UNDEF_PTR,                    /* netName */
 //   NCCL_CONFIG_UNDEF_INT,                    /* splitShare */
 //   NCCL_CONFIG_UNDEF_INT,                    /* trafficClass */
+//   NCCL_CONFIG_UNDEF_PTR,                    /* commName */
+//   NCCL_CONFIG_UNDEF_INT,                    /* collnetEnable */
+//   NCCL_CONFIG_UNDEF_INT,                    /* CTAPolicy */
+//   NCCL_CONFIG_UNDEF_INT,                    /* shrinkShare */
+//   NCCL_CONFIG_UNDEF_INT,                    /* nvlsCTAs */
 // }
 // Targeting ../nccl/ncclSimInfo_t.java
 
@@ -198,6 +218,24 @@ public static native @Cast("ncclResult_t") int ncclCommSplit(ncclComm comm, int 
 public static native @Cast("ncclResult_t") int pncclCommSplit(ncclComm comm, int color, int key, @ByPtrPtr ncclComm newcomm, ncclConfig_t config);
 public static native @Cast("ncclResult_t") int pncclCommSplit(ncclComm comm, int color, int key, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
 
+/* Shrink existing communicator.
+ * Ranks in excludeRanksList will be removed form the existing communicator.
+ * Within the new communicator, ranks will be re-ordered to fill the gap of removed ones.
+ * If config is NULL, the new communicator will inherit the original communicator's configuration
+ * The flag enables NCCL to adapt to various states of the parent communicator, see NCCL_SHRINK flags.*/
+public static native @Cast("ncclResult_t") int ncclCommShrink(ncclComm comm, IntPointer excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int ncclCommShrink(ncclComm comm, IntBuffer excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int ncclCommShrink(ncclComm comm, int[] excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int ncclCommShrink(ncclComm comm, IntPointer excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int ncclCommShrink(ncclComm comm, IntBuffer excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int ncclCommShrink(ncclComm comm, int[] excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, IntPointer excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, IntBuffer excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, int[] excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, IntPointer excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, IntBuffer excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
+public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, int[] excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+
 /* Creates a new communicator (multi thread/process version), similar to ncclCommInitRankConfig.
  * Allows to use more than one ncclUniqueId (up to one per rank), indicated by nId, to accelerate the init operation.
  * The number of ncclUniqueIds and their order must be the same for every rank.
@@ -260,6 +298,16 @@ public static native @Cast("ncclResult_t") int pncclCommRegister(ncclComm comm, 
 /* Deregister CUDA buffer */
 public static native @Cast("ncclResult_t") int ncclCommDeregister(ncclComm comm, Pointer handle);
 public static native @Cast("ncclResult_t") int pncclCommDeregister(ncclComm comm, Pointer handle);
+
+/* Register memory window  */
+public static native @Cast("ncclResult_t") int ncclCommWindowRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @ByPtrPtr ncclWindow win, int winFlags);
+public static native @Cast("ncclResult_t") int ncclCommWindowRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @Cast("ncclWindow**") PointerPointer win, int winFlags);
+public static native @Cast("ncclResult_t") int pncclCommWindowRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @ByPtrPtr ncclWindow win, int winFlags);
+public static native @Cast("ncclResult_t") int pncclCommWindowRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @Cast("ncclWindow**") PointerPointer win, int winFlags);
+
+/* Deregister symmetric memory */
+public static native @Cast("ncclResult_t") int ncclCommWindowDeregister(ncclComm comm, ncclWindow win);
+public static native @Cast("ncclResult_t") int pncclCommWindowDeregister(ncclComm comm, ncclWindow win);
 
 /* Reduction operation selector */
 /** enum ncclRedOp_dummy_t */

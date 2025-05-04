@@ -395,6 +395,31 @@ public class IPluginRegistry extends Pointer {
      *  - Allowed context for the API call
      *    - Thread-safe: Yes; calls to this method will be synchronized by a mutex.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) int releasePluginResource(String key);
     public native @NoException(true) int releasePluginResource(@Cast("const char*") BytePointer key);
+
+    /**
+     *  \brief Return all registered plugin creators by searching starting from the current registry and following
+     *  parent registries recursively as long as isParentSearchEnabled() returns true.
+     * 
+     *  @param numCreators [out] Pointer to an integer where the number of registered plugin creators will be stored.
+     * 
+     *  @return A pointer to an array of IPluginCreatorInterface pointers. Returns nullptr if no creators are found.
+     * 
+     *  \warning If any plugin creators are registered or deregistered after calling this function, the returned pointer
+     *  is not guaranteed to remain valid.
+     * 
+     *  \u005Cusage
+     *  - Allowed context for the API call
+     *    - Thread-safe: No
+     *  */
+    public native @Cast("nvinfer1::IPluginCreatorInterface*const*") @NoException(true) PointerPointer getAllCreatorsRecursive(IntPointer numCreators);
 }

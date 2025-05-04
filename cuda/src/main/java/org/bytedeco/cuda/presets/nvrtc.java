@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvrtc.h>", link = "nvrtc@.12", preload = "nvrtc-builtins@.12.8"),
-    @Platform(value = "windows-x86_64", preload = {"nvrtc64_120_0", "nvrtc-builtins64_128"})},
+    @Platform(include = "<nvrtc.h>", link = "nvrtc@.12", preload = "nvrtc-builtins@.12.9"),
+    @Platform(value = "windows-x86_64", preload = {"nvrtc64_120_0", "nvrtc-builtins64_129"})},
         target = "org.bytedeco.cuda.nvrtc", global = "org.bytedeco.cuda.global.nvrtc")
 @NoException
 public class nvrtc implements InfoMapper {

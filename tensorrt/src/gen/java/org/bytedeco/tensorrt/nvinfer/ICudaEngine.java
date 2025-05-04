@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // class IRuntimeConfig
 
 /**
  *  \class ICudaEngine
@@ -225,6 +225,37 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     public native @Deprecated @NoException(true) IExecutionContext createExecutionContextWithoutDeviceMemory();
+
+    /**
+     *  \brief Create an execution context with TensorRT JIT runtime config.
+     * 
+     *  @param runtimeConfig The runtime config for TensorRT JIT.
+     * 
+     *  @see IRuntimeConfig
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IExecutionContext createExecutionContext(IRuntimeConfig runtimeConfig);
+
+    /**
+     *  \brief Create a runtime config for TensorRT JIT.
+     *         The caller is responsible for ownership of the returned IRuntimeConfig object.
+     * 
+     *  @return A IRuntimeConfig object.
+     * 
+     *  @see IRuntimeConfig
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IRuntimeConfig createRuntimeConfig();
 
     /**
      *  \brief Return the maximum device memory required by the context over all profiles.
@@ -604,6 +635,7 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getProfileShape(String tensorName, int profileIndex, OptProfileSelector select);
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getProfileShape(@Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
 
@@ -623,6 +655,9 @@ public class ICudaEngine extends INoCopy {
      *  nullptr.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.11. Superseded by getProfileTensorValuesV2().
+     *  \warning If input shapes are set with setShapeValuesV2, getProfileTensorValues will return nullptr
      *  */
     
     
@@ -630,8 +665,10 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    public native @Const @NoException(true) IntPointer getProfileTensorValues(String tensorName, int profileIndex, OptProfileSelector select);
-    public native @Const @NoException(true) IntBuffer getProfileTensorValues(@Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
+    public native @Const @Deprecated @NoException(true) IntPointer getProfileTensorValues(
+            String tensorName, int profileIndex, OptProfileSelector select);
+    public native @Const @Deprecated @NoException(true) IntBuffer getProfileTensorValues(
+            @Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
 
     /**
      *  \brief Determine what execution capability this engine has.
@@ -893,7 +930,7 @@ public class ICudaEngine extends INoCopy {
      * 
      *  @return true if the memory limit is valid and the call was successful, false otherwise.
      * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superceded by setWeightStreamingBudgetV2().
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by setWeightStreamingBudgetV2().
      * 
      *  @see BuilderFlag::kWEIGHT_STREAMING
      *  @see getWeightStreamingBudget()
@@ -918,7 +955,7 @@ public class ICudaEngine extends INoCopy {
      *  @return The weight streaming budget in bytes. Please see setWeightStreamingBudget() for the possible
      *           values.
      * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superceded by getWeightStreamingBudgetV2().
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by getWeightStreamingBudgetV2().
      * 
      *  @see BuilderFlag::kWEIGHT_STREAMING,
      *  @see setWeightStreamingBudget()
@@ -1131,6 +1168,40 @@ public class ICudaEngine extends INoCopy {
      * 
      *  @see INetworkDefinition::markDebug
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(String name);
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(@Cast("const char*") BytePointer name);
+
+    /**
+     *  \brief Get the minimum / optimum / maximum values (not dimensions) for an input tensor given
+     *  its name under an optimization profile. These correspond to the values set using
+     *  IOptimizationProfile::setShapeValuesV2 when the engine was built.
+     * 
+     *  @param tensorName The name of an input tensor.
+     * 
+     *  @param profileIndex The profile index, which must be between 0 and getNbOptimizationProfiles()-1.
+     * 
+     *  @param select Whether to query the minimum, optimum, or maximum values for this input tensor.
+     * 
+     *  @return The minimum / optimum / maximum values for an input tensor in this profile. If the profileIndex is
+     *  invalid or the provided name does not map to an input tensor, or the tensor is not a shape binding, return
+     *  nullptr.
+     * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  \warning If input shapes are set with setShapeValues, getProfileTensorValuesV2 will return nullptr
+     *  */
+    public native @Cast("const int64_t*") @NoException(true) LongPointer getProfileTensorValuesV2(
+            String tensorName, int profileIndex, OptProfileSelector select);
+    public native @Cast("const int64_t*") @NoException(true) LongBuffer getProfileTensorValuesV2(
+            @Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
 }

@@ -41,9 +41,9 @@ runs:
           export ARCH=arm64
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-8-local-12.8.1_570.124.06-1.aarch64.rpm
-          export CUDNN=cuda-12-9.8.0.87-1.aarch64
-          export NCCL=2.26.2-1+cuda12.8.aarch64
+          export CUDA=cuda-repo-rhel8-12-9-local-12.9.1_575.57.08-1.aarch64.rpm
+          export CUDNN=cuda-12-9.10.2.21-1.aarch64
+          export NCCL=2.27.3-1+cuda12.9.aarch64
           export NVCOMP=nvcomp-linux-sbsa-4.2.0.11_cuda12-archive
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
@@ -63,9 +63,9 @@ runs:
           export ARCH=amd64
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-8-local-12.8.1_570.124.06-1.x86_64.rpm
-          export CUDNN=cuda-12-9.8.0.87-1.x86_64
-          export NCCL=2.26.2-1+cuda12.8.x86_64
+          export CUDA=cuda-repo-rhel8-12-9-local-12.9.1_575.57.08-1.x86_64.rpm
+          export CUDNN=cuda-12-9.10.2.21-1.x86_64
+          export NCCL=2.27.3-1+cuda12.9.x86_64
           export NVCOMP=nvcomp-linux-x86_64-4.2.0.11_cuda12-archive
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
@@ -165,15 +165,16 @@ runs:
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/12.8.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.9.1/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-devel-$CUDNN.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-headers-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-$NCCL.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-devel-$NCCL.rpm
 
           $SUDO rpm -i --force --ignorearch --nodeps $CUDA libcudnn*.rpm libnccl*.rpm
           rm -f *.rpm *.tgz *.txz *.tar.*
-          pushd /var/cuda-repo-rhel8-12-8-local/; $SUDO rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; $SUDO rm *.rpm; popd
+          pushd /var/cuda-repo-rhel8-12-9-local/; $SUDO rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; $SUDO rm *.rpm; popd
           $SUDO ln -snf /usr/local/cuda/targets/*/include /usr/local/cuda/include
           $SUDO ln -snf /usr/local/cuda/targets/*/lib /usr/local/cuda/lib64
           $SUDO ln -sf /usr/local/cuda/lib64/ /usr/local/cuda/lib
@@ -215,16 +216,18 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.9.0/tars/TensorRT-10.9.0.34.Linux.aarch64-gnu.cuda-12.8.tar.gz
-          $SUDO tar -hxvf TensorRT-10.9.0.34.Linux.aarch64-gnu.cuda-12.8.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.11.0/tars/TensorRT-10.11.0.33.Linux.aarch64-gnu.cuda-12.9.tar.gz
+          $SUDO tar -hxvf TensorRT-10.11.0.33.Linux.aarch64-gnu.cuda-12.9.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+          # Remove downloaded archives and unused libraries to avoid running out of disk space
+          $SUDO rm -f *.tar.gz $(find /usr/local/tensorrt/ -name '*.a')
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.9.0/tars/TensorRT-10.9.0.34.Linux.x86_64-gnu.cuda-12.8.tar.gz
-          $SUDO tar -hxvf TensorRT-10.9.0.34.Linux.x86_64-gnu.cuda-12.8.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.11.0/tars/TensorRT-10.11.0.33.Linux.x86_64-gnu.cuda-12.9.tar.gz
+          $SUDO tar -hxvf TensorRT-10.11.0.33.Linux.x86_64-gnu.cuda-12.9.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           # Remove downloaded archives and unused libraries to avoid running out of disk space
           $SUDO rm -f *.tar.gz $(find /usr/local/tensorrt/ -name '*.a')

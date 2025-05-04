@@ -59,7 +59,6 @@ public class INetworkDefinition extends INoCopy {
      *  \brief Add an input tensor to the network.
      * 
      *  Each input and output tensor must have a unique name.
-     *  The volume must be less than 2^31 elements.
      * 
      *  For networks with wildcard dimensions, the volume
      *  is based on the maxima specified by an IOptimizationProfile.Dimensions are normally non-negative integers. The

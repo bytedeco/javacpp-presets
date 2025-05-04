@@ -32,6 +32,8 @@ public class CUasyncNotificationInfo extends Pointer {
         return new CUasyncNotificationInfo((Pointer)this).offsetAddress(i);
     }
 
+    /** The type of notification being sent */
     public native @Cast("CUasyncNotificationType") int type(); public native CUasyncNotificationInfo type(int setter);
+            /** The number of bytes that the process has allocated above its device memory budget */
             @Name("info.overBudget.bytesOverBudget") public native @Cast("unsigned long long") long info_overBudget_bytesOverBudget(); public native CUasyncNotificationInfo info_overBudget_bytesOverBudget(long setter);
 }

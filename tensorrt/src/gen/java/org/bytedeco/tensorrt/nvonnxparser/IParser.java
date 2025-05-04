@@ -81,10 +81,13 @@ public class IParser extends Pointer {
     //!
     //!
     //!
+    //!
     public native @Cast("bool") @NoException(true) boolean parseFromFile(String onnxModelFile, int verbosity);
     public native @Cast("bool") @NoException(true) boolean parseFromFile(@Cast("const char*") BytePointer onnxModelFile, int verbosity);
 
-    /** [DEPRECATED] Deprecated in TensorRT 10.1. See supportsModelV2.
+// #if !TRT_WINML
+    /**
+     *  [DEPRECATED] Deprecated in TensorRT 10.1. See supportsModelV2.
      * 
      *  \brief Check whether TensorRT supports a particular ONNX model.
      *         If the function returns True, one can proceed to engine building
@@ -98,8 +101,6 @@ public class IParser extends Pointer {
      *  @return true if the model is supported
      *  */
     
-    
-    //!
     //!
     //!
     public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
@@ -109,8 +110,8 @@ public class IParser extends Pointer {
     public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
             @ByRef SubGraphCollection_t sub_graph_collection, @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
-    /**
-     * \brief Parse a serialized ONNX model into the TensorRT network
+// #endif // !TRT_WINML
+    /**\brief Parse a serialized ONNX model into the TensorRT network
      *  with consideration of user provided weights
      * 
      *  @param serialized_onnx_model Pointer to the serialized ONNX model

@@ -40,8 +40,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  The following constraints apply to If-conditionals:
  *  - Both the trueSubgraph and falseSubgraph must be defined.
  *  - The number of output tensors in both subgraphs is the same.
- *  - Corresponding output tensors from the true/false subgraphs have the same type and shape.
- *  */
+ *  - Corresponding output tensors from the true/false subgraphs have the same type and rank.
+ * 
+ *  The subgraphs may directly use tensors defined outside of the IIfConditional. */
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IIfConditional extends INoCopy {
     static { Loader.load(); }
@@ -76,7 +77,7 @@ public class IIfConditional extends INoCopy {
      *  Each output layer of an IIfConditional represents a single output of either the true-subgraph or the
      *  false-subgraph of an IIfConditional, depending on which subgraph was executed.
      * 
-     *  The shapes of the two tensors must be equal unless the condition is a build-time constant.
+     *  The ranks of the two tensors must be equal unless the condition is a build-time constant.
      * 
      *  @see IIfConditionalOutputLayer
      *  */
@@ -91,7 +92,7 @@ public class IIfConditional extends INoCopy {
     /**
      *  \brief Add an If-conditional input.
      * 
-     *  @param input An input to the conditional that can be used by either or both of the conditional’s subgraphs.
+     *  @param input An input to the conditional that can be used by either or both of the conditional's subgraphs.
      * 
      *  @see IIfConditionalInputLayer
      *  */

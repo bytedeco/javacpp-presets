@@ -23,6 +23,15 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  \brief A layer that represents the identity function.
  * 
+ *  For a strongly typed network, the layer is an identity function, i.e. the output
+ *  tensor elements are identical to the input tensor elements, possibly with a change
+ *  in layout. For example, if a network consists of a single IIdentityLayer, the network
+ *  input and output must have the same type, but the input can have NCHW layout and
+ *  the output can have NHWC layout.
+ * 
+ *  If the network is weakly typed, the layer is additionally permitted some type conversions
+ *  as described below.
+ * 
  *  If the output type is explicitly specified via setOutputType, IIdentityLayer can be
  *  used to convert from one type to another. Other than conversions between the same
  *  type (kFLOAT -> kFLOAT for example), the only valid conversions are:
@@ -38,10 +47,18 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  Two types are compatible if they are identical, or are both in {kFLOAT, kHALF}.
  *  Implicit conversion between incompatible types, i.e. without using setOutputType,
- *  is recognized as incorrect as of TensorRT 8.4, but is retained for API compatibility
- *  within TensorRT 8.x releases. TensorRT 10.0 onwards it is an error if the network output tensor type is incompatible
- *  with the layer output type. E.g., implicit conversion from kFLOAT to kINT32 is not allowed, Use
- *  setOutputType(DataType::kINT32) to explict convert kFLOAT to kINT32.
+ *  was recognized as incorrect as of TensorRT 8.4, but was retained for API compatibility
+ *  within TensorRT 8.x releases. In TensorRT 10.0 onwards it is an error if the network
+ *  output tensor type is incompatible with the layer output type. E.g., implicit conversion
+ *  from kFLOAT to kINT32 is not allowed.
+ * 
+ *  To explicitly convert kFLOAT to kINT32:
+ * 
+ *  * Preferred: use ICastLayer.
+ * 
+ *  * Legacy alternative: use IIdentityLayer and setOutputType(DataType::kINT32).
+ * 
+ *  Similar advice applies for explicit conversion in the other direction.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */

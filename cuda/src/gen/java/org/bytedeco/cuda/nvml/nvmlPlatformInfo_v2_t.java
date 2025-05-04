@@ -13,6 +13,9 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
+/**
+ * Structure to store platform information (v2)
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlPlatformInfo_v2_t extends Pointer {
     static { Loader.load(); }

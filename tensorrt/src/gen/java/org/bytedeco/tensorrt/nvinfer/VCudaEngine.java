@@ -107,4 +107,12 @@ public class VCudaEngine extends VRoot {
     public native @Cast("int64_t") @NoException(true) long getWeightStreamingScratchMemorySize();
     public native @Cast("int64_t") @NoException(true) long getDeviceMemorySizeV2();
     public native @Cast("int64_t") @NoException(true) long getDeviceMemorySizeForProfileV2(int profileIndex);
+    // Added in TensorRT 10.11
+    public native @Cast("const int64_t*") @NoException(true) LongPointer getProfileTensorValuesV2(
+            String tensorName, int profileIndex, OptProfileSelector select);
+    public native @Cast("const int64_t*") @NoException(true) LongBuffer getProfileTensorValuesV2(
+            @Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
+    public native @NoException(true) IExecutionContext createExecutionContextWithRuntimeConfig(
+            IRuntimeConfig runtimeConfig);
+    public native @NoException(true) IRuntimeConfig createRuntimeConfig();
 }
