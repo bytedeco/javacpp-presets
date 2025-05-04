@@ -52,7 +52,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource@.10.9.0"
+            preload = "nvinfer_builder_resource@.10.11.0"
         ),
         @Platform(
             value = "linux-arm64",
@@ -118,7 +118,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI").cppTypes().annotations())
+               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI", "TRT_NODISCARD", "TRT_DEPRECATED_ENUM").cppTypes().annotations())
                .put(new Info("NV_TENSORRT_VERSION").translate(false))
 
                .put(new Info("TRT_DEPRECATED").cppText("#define TRT_DEPRECATED deprecated").cppTypes())
@@ -147,7 +147,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IIfConditionalBoundaryLayer", "nvinfer1::IIfConditionalInputLayer", "nvinfer1::IIfConditionalOutputLayer", "nvinfer1::IScatterLayer",
                              "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
                              "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer",
-                             "nvinfer1::ICumulativeLayer", "nvinfer1::IDynamicQuantizeLayer", "nvinfer1::ISqueezeLayer", "nvinfer1::IUnsqueezeLayer", "nvinfer1::IPluginV3Layer").purify())
+                             "nvinfer1::ICumulativeLayer", "nvinfer1::IDynamicQuantizeLayer", "nvinfer1::ISqueezeLayer", "nvinfer1::IUnsqueezeLayer", "nvinfer1::IPluginV3Layer",
+                             "nvinfer1::IOneHotLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
                              "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator", "nvinfer1::IVersionedInterface").virtualize())
@@ -155,6 +156,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
                .put(new Info("nvinfer1::IPluginRegistry::getAllCreators").javaText(
                              "public native @Cast(\"nvinfer1::IPluginCreatorInterface*const*\") @NoException(true) PointerPointer getAllCreators(IntPointer numCreators);"))
+               .put(new Info("nvinfer1::IPluginRegistry::getAllCreatorsRecursive").javaText(
+                             "public native @Cast(\"nvinfer1::IPluginCreatorInterface*const*\") @NoException(true) PointerPointer getAllCreatorsRecursive(IntPointer numCreators);"))
         ;
     }
 }

@@ -330,4 +330,6 @@ public class CUpti_ActivityKernel9 extends Pointer {
    * The maximum clusters that could co-exist on the target device for the kernel
    */
   public native @Cast("uint32_t") int maxActiveClusters(); public native CUpti_ActivityKernel9 maxActiveClusters(int setter);
+
+
 }

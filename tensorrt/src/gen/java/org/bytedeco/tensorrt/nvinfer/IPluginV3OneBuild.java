@@ -237,7 +237,7 @@ public class IPluginV3OneBuild extends IPluginCapability {
      *  For each format combination provided through configurePlugin(), up to a maximum of getFormatCombinationLimit(),
      *  the plugin will be timed for each tactic advertised through this method for that format combination. i.e. The
      *  plugin will be timed {@code N = \sum_{i=0}^{i<getFormatCombinationLimit()} (T(f[i]))} times. If {@code N = 1}, the
-     *  plugin may not be timed. In peudocode, the timing protocol appears as the following:
+     *  plugin may not be timed. In pseudocode, the timing protocol appears as the following:
      * 
      *  counter = 0
      *  for each supported format combination

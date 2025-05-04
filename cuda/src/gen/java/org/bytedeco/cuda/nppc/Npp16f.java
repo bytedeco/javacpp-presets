@@ -13,7 +13,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nppc.*;
 
 // #endif
-// #endif
 
 /** 
   * Workarounds for cuda_fp16.h C incompatibility 

@@ -60,6 +60,7 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 
 // #include "NvInfer.h"
 // #include <stddef.h>
+// #if !TRT_WINML
 // #include <string>
 
 
@@ -67,6 +68,7 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 //!
 //!
 // #include <vector>
+// #endif // !TRT_WINML
 
 /**
  *  \file NvOnnxParser.h
@@ -79,13 +81,13 @@ public static final int NV_ONNX_PARSER_MINOR = 1;
 public static final int NV_ONNX_PARSER_PATCH = 0;
 
 
-
 //!
 //!
 //!
 @MemberGetter public static native int NV_ONNX_PARSER_VERSION();
 public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
+// #if !TRT_WINML
 /**
  *  \typedef SubGraph_t
  * 
@@ -105,11 +107,11 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
  *  out of an ONNX graph.
  *  */
 
-
 //!
 //!
 //!
 
+// #endif // !TRT_WINML
 /**
  *  \namespace nvonnxparser
  * 
@@ -166,7 +168,11 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
      *  implementation over the plugin implementation for InstanceNormalization nodes.
      *  This flag is required when building version-compatible or hardware-compatible engines.
      *  This flag is set to be ON by default. */
-    kNATIVE_INSTANCENORM(0);
+    kNATIVE_INSTANCENORM(0),
+    /** Enable UINT8 as a quantization data type and asymmetric quantization with non-zero zero-point values
+     *  in Quantize and Dequantize nodes. This flag is set to be OFF by default.
+     *  The resulting engine must be built targeting DLA version >= 3.16. */
+    kENABLE_UINT8_AND_ASYMMETRIC_QUANTIZATION_DLA(1);
 
     public final int value;
     private OnnxParserFlag(int v) { this.value = v; }

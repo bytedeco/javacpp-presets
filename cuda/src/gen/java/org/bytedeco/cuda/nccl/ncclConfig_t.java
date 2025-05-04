@@ -11,7 +11,7 @@ import org.bytedeco.cuda.cudart.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 import static org.bytedeco.cuda.global.nccl.*;
-
+   /* First, terminate ongoing parent operations, and then shrink the parent communicator */
 
 /* Communicator configuration. Users can assign value to attributes to specify the
  * behavior of a communicator. */
@@ -45,4 +45,9 @@ public class ncclConfig_t extends Pointer {
   public native @Cast("const char*") BytePointer netName(); public native ncclConfig_t netName(BytePointer setter);
   public native int splitShare(); public native ncclConfig_t splitShare(int setter);
   public native int trafficClass(); public native ncclConfig_t trafficClass(int setter);
+  public native @Cast("const char*") BytePointer commName(); public native ncclConfig_t commName(BytePointer setter);
+  public native int collnetEnable(); public native ncclConfig_t collnetEnable(int setter);
+  public native int CTAPolicy(); public native ncclConfig_t CTAPolicy(int setter);
+  public native int shrinkShare(); public native ncclConfig_t shrinkShare(int setter);
+  public native int nvlsCTAs(); public native ncclConfig_t nvlsCTAs(int setter);
 }

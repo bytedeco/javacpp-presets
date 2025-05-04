@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2024 Samuel Audet
+ * Copyright (C) 2018-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ public class nccl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("defined(__CUDA_BF16_TYPES_EXIST__)").define(true))
                .put(new Info("NCCL_COMM_NULL", "NCCL_CONFIG_UNDEF_INT", "NCCL_CONFIG_UNDEF_PTR", "NCCL_CONFIG_INITIALIZER", "NCCL_SIM_INFO_INITIALIZER").annotations().cppTypes())
-               .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer"));
+               .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer"))
+               .put(new Info("ncclWindow_t").valueTypes("ncclWindow").pointerTypes("@ByPtrPtr ncclWindow", "@Cast(\"ncclWindow**\") PointerPointer"));
     }
 }

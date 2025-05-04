@@ -44,7 +44,7 @@ public class IOutputAllocator extends IVersionedInterface {
      *         If currentMemory is known to be big enough, one option is to return currentMemory.
      * 
      *  @param tensorName name of the output tensor.
-     *  @param currentMemory points to the address set by IExectionContext::setTensorAddress.
+     *  @param currentMemory points to the address set by IExecutionContext::setTensorAddress.
      *  @param size number of bytes required. Always positive, even for an empty tensor.
      *  @param alignment required alignment of the allocation.
      * 

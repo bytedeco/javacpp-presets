@@ -213,36 +213,38 @@ public static native @Cast("const char*") BytePointer cufileop_status_error(@Cas
 /* driver properties */
 /** enum CUfileDriverStatusFlags_t */
 public static final int
-        /** Support for DDN LUSTRE */
-        CU_FILE_LUSTRE_SUPPORTED = 0,
+    /** Support for DDN LUSTRE */
+    CU_FILE_LUSTRE_SUPPORTED = 0,
 
-        /** Support for WEKAFS */
-        CU_FILE_WEKAFS_SUPPORTED = 1,
+    /** Support for WEKAFS */
+    CU_FILE_WEKAFS_SUPPORTED = 1,
 
-        /** Support for NFS */
-        CU_FILE_NFS_SUPPORTED = 2,
+    /** Support for NFS */
+    CU_FILE_NFS_SUPPORTED = 2,
 
-        CU_FILE_GPFS_SUPPORTED = 3, /** < Support for GPFS */
+    CU_FILE_GPFS_SUPPORTED = 3, /** < Support for GPFS */
 
-        /** Support for NVMe */
-        CU_FILE_NVME_SUPPORTED = 4,
+    /** Support for NVMe */
+    CU_FILE_NVME_SUPPORTED = 4,
 
-        /** Support for NVMeOF */
-        CU_FILE_NVMEOF_SUPPORTED = 5,
+    /** Support for NVMeOF */
+    CU_FILE_NVMEOF_SUPPORTED = 5,
 
-        /** Support for SCSI */
-        CU_FILE_SCSI_SUPPORTED = 6,
+    /** Support for SCSI */
+    CU_FILE_SCSI_SUPPORTED = 6,
 
-	/** Support for Scaleflux CSD*/
-	CU_FILE_SCALEFLUX_CSD_SUPPORTED = 7,
+    /** Support for Scaleflux CSD*/
+    CU_FILE_SCALEFLUX_CSD_SUPPORTED = 7,
 
-	/** Support for NVMesh Block Dev*/
-	CU_FILE_NVMESH_SUPPORTED = 8,
-	/** Support for BeeGFS */
-	CU_FILE_BEEGFS_SUPPORTED = 9,
+    /** Support for NVMesh Block Dev*/
+    CU_FILE_NVMESH_SUPPORTED = 8,
+    /** Support for BeeGFS */
+    CU_FILE_BEEGFS_SUPPORTED = 9,
     //10 is reserved for YRCloudFile
-        /** Support for NVMe using PCI P2PDMA */
-        CU_FILE_NVME_P2P_SUPPORTED = 11;
+    /** Support for NVMe using PCI P2PDMA */
+    CU_FILE_NVME_P2P_SUPPORTED = 11,
+    /** Support for ScateFS */
+    CU_FILE_SCATEFS_SUPPORTED = 12;
 
 /** enum CUfileDriverControlFlags_t */
 public static final int
@@ -721,6 +723,86 @@ public static native @ByVal CUfileError_t cuFileStreamDeregister(CUstream_st str
 public static native @ByVal CUfileError_t cuFileGetVersion(IntPointer version);
 public static native @ByVal CUfileError_t cuFileGetVersion(IntBuffer version);
 public static native @ByVal CUfileError_t cuFileGetVersion(int[] version);
+
+/** enum CUFileSizeTConfigParameter_t */
+public static final int
+	CUFILE_PARAM_PROFILE_STATS = 0,
+	CUFILE_PARAM_EXECUTION_MAX_IO_QUEUE_DEPTH = 1,
+	CUFILE_PARAM_EXECUTION_MAX_IO_THREADS = 2,
+	CUFILE_PARAM_EXECUTION_MIN_IO_THRESHOLD_SIZE_KB = 3,
+	CUFILE_PARAM_EXECUTION_MAX_REQUEST_PARALLELISM = 4,
+	CUFILE_PARAM_PROPERTIES_MAX_DIRECT_IO_SIZE_KB = 5,
+	CUFILE_PARAM_PROPERTIES_MAX_DEVICE_CACHE_SIZE_KB = 6,
+	CUFILE_PARAM_PROPERTIES_PER_BUFFER_CACHE_SIZE_KB = 7,
+	CUFILE_PARAM_PROPERTIES_MAX_DEVICE_PINNED_MEM_SIZE_KB = 8,
+	CUFILE_PARAM_PROPERTIES_IO_BATCHSIZE = 9,
+	CUFILE_PARAM_POLLTHRESHOLD_SIZE_KB = 10,
+	CUFILE_PARAM_PROPERTIES_BATCH_IO_TIMEOUT_MS = 11;
+
+/** enum CUFileBoolConfigParameter_t */
+public static final int
+	CUFILE_PARAM_PROPERTIES_USE_POLL_MODE = 0,
+	CUFILE_PARAM_PROPERTIES_ALLOW_COMPAT_MODE = 1,
+	CUFILE_PARAM_FORCE_COMPAT_MODE = 2,
+	CUFILE_PARAM_FS_MISC_API_CHECK_AGGRESSIVE = 3,
+	CUFILE_PARAM_EXECUTION_PARALLEL_IO = 4,
+	CUFILE_PARAM_PROFILE_NVTX = 5,
+	CUFILE_PARAM_PROPERTIES_ALLOW_SYSTEM_MEMORY = 6,
+	CUFILE_PARAM_USE_PCIP2PDMA = 7,
+	CUFILE_PARAM_PREFER_IO_URING = 8,
+	CUFILE_PARAM_FORCE_ODIRECT_MODE = 9,
+	CUFILE_PARAM_SKIP_TOPOLOGY_DETECTION = 10,
+	CUFILE_PARAM_STREAM_MEMOPS_BYPASS = 11;
+
+/** enum CUFileStringConfigParameter_t */
+public static final int
+	CUFILE_PARAM_LOGGING_LEVEL = 0,
+	CUFILE_PARAM_ENV_LOGFILE_PATH = 1,
+	CUFILE_PARAM_LOG_DIR = 2;
+
+
+// GET Parameter API
+/**
+ *\brief
+ <p>
+ * @param param The parameter to get.
+ * @param value The location where the value will be stored.
+ *
+ * @return  CU_FILE_SUCCESS on success
+ * @return  CU_FILE_INVALID_VALUE if the input parameter is invalid
+ *
+ * \note If the driver is open, cuFileGetParameter*() will return the current runtime value for the given parameter. 
+ * \note If the driver is not opened yet, cuFileGetParameter*() will return the currently staged value for that parameter.
+ *       Staged parameter values are cleared when the driver is opened.
+ *
+ */
+public static native @ByVal CUfileError_t cuFileGetParameterSizeT(@Cast("CUFileSizeTConfigParameter_t") int param, @Cast("size_t*") SizeTPointer value);	
+public static native @ByVal CUfileError_t cuFileGetParameterBool(@Cast("CUFileBoolConfigParameter_t") int param, @Cast("bool*") BoolPointer value);
+public static native @ByVal CUfileError_t cuFileGetParameterBool(@Cast("CUFileBoolConfigParameter_t") int param, @Cast("bool*") boolean[] value);	
+public static native @ByVal CUfileError_t cuFileGetParameterString(@Cast("CUFileStringConfigParameter_t") int param, @Cast("char*") BytePointer desc_str, int len);
+public static native @ByVal CUfileError_t cuFileGetParameterString(@Cast("CUFileStringConfigParameter_t") int param, @Cast("char*") ByteBuffer desc_str, int len);
+public static native @ByVal CUfileError_t cuFileGetParameterString(@Cast("CUFileStringConfigParameter_t") int param, @Cast("char*") byte[] desc_str, int len);	
+
+// SET Parameter APIs
+/**
+ *\brief
+ <p>
+ * @param param The parameter to set.
+ * @param value The source of the parameter value.
+ *
+ * @return  CU_FILE_SUCCESS on success
+ * @return  CU_FILE_INVALID_VALUE if the input parameter is inalid.
+ * @return  CU_FILE_DRIVER_ALREADY_OPEN if the driver is already open.
+ *
+ * \note  Setting values is only permitted when the driver is not open - set parameter values are applied at driver load time.
+ * \note  If the same parameter is set multiple times, only the last parameter is kept and used.
+ * \note  Parameter precedence (highest to losest) is: cuFileGetParameter*() (if set), then environment variable (if exists and set), then cufile.json,
+ *
+ */
+public static native @ByVal CUfileError_t cuFileSetParameterSizeT(@Cast("CUFileSizeTConfigParameter_t") int param, @Cast("size_t") long value);
+public static native @ByVal CUfileError_t cuFileSetParameterBool(@Cast("CUFileBoolConfigParameter_t") int param, @Cast("bool") boolean value);
+public static native @ByVal CUfileError_t cuFileSetParameterString(@Cast("CUFileStringConfigParameter_t") int param, @Cast("const char*") BytePointer desc_str);
+public static native @ByVal CUfileError_t cuFileSetParameterString(@Cast("CUFileStringConfigParameter_t") int param, String desc_str);
 
 // #pragma GCC visibility pop
 

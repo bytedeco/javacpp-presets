@@ -144,6 +144,9 @@ public static final int NVML_VALUE_NOT_AVAILABLE = (-1);
 // Targeting ../nvml/nvmlDevice_st.java
 
 
+// Targeting ../nvml/nvmlGpuInstance_st.java
+
+
 
 /**
  * Buffer size guaranteed to be large enough for pci bus id
@@ -550,6 +553,37 @@ public static final int
 
 public static native @MemberGetter int nvmlCoolerInfo_v1();
 public static final int nvmlCoolerInfo_v1 = nvmlCoolerInfo_v1();
+
+/**
+ * UUID length in ASCII format
+ */
+public static final int NVML_DEVICE_UUID_ASCII_LEN =  41;
+
+/**
+ * UUID length in binary format
+ */
+public static final int NVML_DEVICE_UUID_BINARY_LEN = 16;
+
+/**
+ * Enum to represent different UUID types
+ */
+/** enum nvmlUUIDType_t */
+public static final int
+    /** Undefined type */
+    NVML_UUID_TYPE_NONE   = 0,
+    /** ASCII format type */
+    NVML_UUID_TYPE_ASCII  = 1,
+    /** Binary format type */
+    NVML_UUID_TYPE_BINARY = 2;
+// Targeting ../nvml/nvmlUUIDValue_t.java
+
+
+// Targeting ../nvml/nvmlUUID_v1_t.java
+
+
+
+public static native @MemberGetter int nvmlUUID_v1();
+public static final int nvmlUUID_v1 = nvmlUUID_v1();
 
 /** \} */
 
@@ -1326,8 +1360,12 @@ public static final int
     NVML_DEVICE_VGPU_CAP_WARM_UPDATE                      = 8,
     /** Query whether the GPU supports reporting of placements of timesliced vGPU profiles with identical framebuffer sizes */
     NVML_DEVICE_VGPU_CAP_HOMOGENEOUS_PLACEMENTS           = 9,
+    /** Query whether the GPU supports timesliced vGPU on MIG */
+    NVML_DEVICE_VGPU_CAP_MIG_TIMESLICING_SUPPORTED        = 10,
+    /** Set/Get MIG timesliced mode reporting, without impacting the underlying functionality */
+    NVML_DEVICE_VGPU_CAP_MIG_TIMESLICING_ENABLED          = 11,
     // Keep this last
-    NVML_DEVICE_VGPU_CAP_COUNT = 10;
+    NVML_DEVICE_VGPU_CAP_COUNT = 12;
 
 /** \} */
 
@@ -1448,6 +1486,11 @@ public static final int NVML_SCHEDULER_SW_MAX_LOG_ENTRIES = 200;
 public static final int NVML_VGPU_SCHEDULER_ARR_DEFAULT =   0;
 public static final int NVML_VGPU_SCHEDULER_ARR_DISABLE =   1;
 public static final int NVML_VGPU_SCHEDULER_ARR_ENABLE =    2;
+
+/**
+ * vGPU scheduler engine types
+ */
+public static final int NVML_VGPU_SCHEDULER_ENGINE_TYPE_GRAPHICS =  1;
 // Targeting ../nvml/nvmlVgpuSchedulerParams_t.java
 
 
@@ -1511,6 +1554,41 @@ public static final int
     NVML_GPU_RECOVERY_ACTION_NODE_REBOOT = 2,
     NVML_GPU_RECOVERY_ACTION_DRAIN_P2P = 3,
     NVML_GPU_RECOVERY_ACTION_DRAIN_AND_RESET = 4;
+// Targeting ../nvml/nvmlVgpuTypeIdInfo_v1_t.java
+
+
+public static native @MemberGetter int nvmlVgpuTypeIdInfo_v1();
+public static final int nvmlVgpuTypeIdInfo_v1 = nvmlVgpuTypeIdInfo_v1();
+// Targeting ../nvml/nvmlVgpuTypeMaxInstance_v1_t.java
+
+
+public static native @MemberGetter int nvmlVgpuTypeMaxInstance_v1();
+public static final int nvmlVgpuTypeMaxInstance_v1 = nvmlVgpuTypeMaxInstance_v1();
+// Targeting ../nvml/nvmlActiveVgpuInstanceInfo_v1_t.java
+
+
+public static native @MemberGetter int nvmlActiveVgpuInstanceInfo_v1();
+public static final int nvmlActiveVgpuInstanceInfo_v1 = nvmlActiveVgpuInstanceInfo_v1();
+// Targeting ../nvml/nvmlVgpuSchedulerState_v1_t.java
+
+
+public static native @MemberGetter int nvmlVgpuSchedulerState_v1();
+public static final int nvmlVgpuSchedulerState_v1 = nvmlVgpuSchedulerState_v1();
+// Targeting ../nvml/nvmlVgpuSchedulerStateInfo_v1_t.java
+
+
+public static native @MemberGetter int nvmlVgpuSchedulerStateInfo_v1();
+public static final int nvmlVgpuSchedulerStateInfo_v1 = nvmlVgpuSchedulerStateInfo_v1();
+// Targeting ../nvml/nvmlVgpuSchedulerLogInfo_v1_t.java
+
+
+public static native @MemberGetter int nvmlVgpuSchedulerLogInfo_v1();
+public static final int nvmlVgpuSchedulerLogInfo_v1 = nvmlVgpuSchedulerLogInfo_v1();
+// Targeting ../nvml/nvmlVgpuCreatablePlacementInfo_v1_t.java
+
+
+public static native @MemberGetter int nvmlVgpuCreatablePlacementInfo_v1();
+public static final int nvmlVgpuCreatablePlacementInfo_v1 = nvmlVgpuCreatablePlacementInfo_v1();
 
 /** \} */
 /** \} */
@@ -1593,7 +1671,11 @@ public static final int NVML_FI_DEV_RETIRED_DBE =           30;
 /** If any pages are pending retirement. 1=yes. 0=no. */
 public static final int NVML_FI_DEV_RETIRED_PENDING =       31;
 
-/* NvLink Flit Error Counters */
+/**
+ * NVLink Flit Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink flow control CRC  Error Counter for Lane 0 */
 public static final int NVML_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_L0 =    32;
 /** NVLink flow control CRC  Error Counter for Lane 1 */
@@ -1609,7 +1691,11 @@ public static final int NVML_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_L5 =    37;
 /** NVLink flow control CRC  Error Counter total for all Lanes */
 public static final int NVML_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_TOTAL = 38;
 
-/* NvLink CRC Data Error Counters */
+/**
+ * NVLink CRC Data Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink data CRC Error Counter for Lane 0 */
 public static final int NVML_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_L0 =    39;
 /** NVLink data CRC Error Counter for Lane 1 */
@@ -1625,7 +1711,11 @@ public static final int NVML_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_L5 =    44;
 /** NvLink data CRC Error Counter total for all Lanes */
 public static final int NVML_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_TOTAL = 45;
 
-/* NvLink Replay Error Counters */
+/**
+ * NVLink Replay Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Replay Error Counter for Lane 0 */
 public static final int NVML_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_L0 =      46;
 /** NVLink Replay Error Counter for Lane 1 */
@@ -1641,7 +1731,11 @@ public static final int NVML_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_L5 =      51;
 /** NVLink Replay Error Counter total for all Lanes */
 public static final int NVML_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_TOTAL =   52;
 
-/* NvLink Recovery Error Counters */
+/**
+ * NVLink Recovery Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Recovery Error Counter for Lane 0 */
 public static final int NVML_FI_DEV_NVLINK_RECOVERY_ERROR_COUNT_L0 =    53;
 /** NVLink Recovery Error Counter for Lane 1 */
@@ -1723,7 +1817,11 @@ public static final int NVML_FI_DEV_MEMORY_TEMP =  82;
 /** Total energy consumption for the GPU in mJ since the driver was last reloaded */
 public static final int NVML_FI_DEV_TOTAL_ENERGY_CONSUMPTION = 83;
 
-/* NVLink Speed */
+/**
+ * NVLink Speed
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Speed in MBps for Link 0 */
 public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L0 =     84;
 /** NVLink Speed in MBps for Link 1 */
@@ -1752,7 +1850,11 @@ public static final int NVML_FI_DEV_PCIE_REPLAY_COUNTER =             94;
 /** PCIe replay rollover counter */
 public static final int NVML_FI_DEV_PCIE_REPLAY_ROLLOVER_COUNTER =    95;
 
-/* NvLink Flit Error Counters */
+/**
+ * NVLink Flit Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink flow control CRC  Error Counter for Lane 6 */
 public static final int NVML_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_L6 =     96;
 /** NVLink flow control CRC  Error Counter for Lane 7 */
@@ -1766,7 +1868,11 @@ public static final int NVML_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_L10 =   100;
 /** NVLink flow control CRC  Error Counter for Lane 11 */
 public static final int NVML_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_L11 =   101;
 
-/* NvLink CRC Data Error Counters */
+/**
+ * NVLink CRC Data Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink data CRC Error Counter for Lane 6 */
 public static final int NVML_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_L6 =    102;
 /** NVLink data CRC Error Counter for Lane 7 */
@@ -1780,7 +1886,11 @@ public static final int NVML_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_L10 =   106;
 /** NVLink data CRC Error Counter for Lane 11 */
 public static final int NVML_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_L11 =   107;
 
-/* NvLink Replay Error Counters */
+/**
+ * NVLink Replay Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Replay Error Counter for Lane 6 */
 public static final int NVML_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_L6 =      108;
 /** NVLink Replay Error Counter for Lane 7 */
@@ -1794,7 +1904,11 @@ public static final int NVML_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_L10 =     112;
 /** NVLink Replay Error Counter for Lane 11 */
 public static final int NVML_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_L11 =     113;
 
-/* NvLink Recovery Error Counters */
+/**
+ * NVLink Recovery Error Counters
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Recovery Error Counter for Lane 6 */
 public static final int NVML_FI_DEV_NVLINK_RECOVERY_ERROR_COUNT_L6 =    114;
 /** NVLink Recovery Error Counter for Lane 7 */
@@ -1844,7 +1958,11 @@ public static final int NVML_FI_DEV_NVLINK_BANDWIDTH_C1_L10 =    130;
 /** NVLink Bandwidth Counter for Counter Set 1, Lane 11 */
 public static final int NVML_FI_DEV_NVLINK_BANDWIDTH_C1_L11 =    131;
 
-/* NVLink Speed */
+/**
+ * NVLink Speed
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Speed in MBps for Link 6 */
 public static final int NVML_FI_DEV_NVLINK_SPEED_MBPS_L6 =     132;
 /** NVLink Speed in MBps for Link 7 */
@@ -1930,18 +2048,40 @@ public static final int NVML_FI_DEV_NVLINK_ECC_DATA_ERROR_COUNT_L11 =   159;
 /** NVLink data ECC Error Counter total for all Links */
 public static final int NVML_FI_DEV_NVLINK_ECC_DATA_ERROR_COUNT_TOTAL = 160;
 
+/**
+ * NVLink Error Replay
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Replay Error Counter
  *  This is unsupported for Blackwell+.
  *  Please use NVML_FI_DEV_NVLINK_COUNT_LINK_RECOVERY_* */
 public static final int NVML_FI_DEV_NVLINK_ERROR_DL_REPLAY =            161;
+/**
+ * NVLink Recovery Error Counter
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Recovery Error Counter
  *  This is unsupported for Blackwell+
  *  Please use NVML_FI_DEV_NVLINK_COUNT_LINK_RECOVERY_* */
 public static final int NVML_FI_DEV_NVLINK_ERROR_DL_RECOVERY =          162;
+
+/**
+ * NVLink Recovery Error CRC Counter
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink CRC Error Counter
  *  This is unsupported for Blackwell+
  *  Please use NVML_FI_DEV_NVLINK_COUNT_LINK_RECOVERY_* */
 public static final int NVML_FI_DEV_NVLINK_ERROR_DL_CRC =               163;
+
+/**
+ * NVLink Speed, State and Version field id 164, 165, and 166
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** NVLink Speed in MBps */
 public static final int NVML_FI_DEV_NVLINK_GET_SPEED =                  164;
 /** NVLink State - Active,Inactive */
@@ -2044,6 +2184,11 @@ public static final int NVML_FI_DEV_IS_MIG_MODE_INDEPENDENT_MIG_QUERY_CAPABLE = 
 /** Max Nvlink Power Threshold. See NVML_FI_DEV_NVLINK_GET_POWER_THRESHOLD */
 public static final int NVML_FI_DEV_NVLINK_GET_POWER_THRESHOLD_MAX =              200;
 
+/**
+ * NVLink counter field id 201-225
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /**Total Tx packets on the link in NVLink5 */
 public static final int NVML_FI_DEV_NVLINK_COUNT_XMIT_PACKETS =                    201;
 /**Total Tx bytes on the link in NVLink5 */
@@ -2084,10 +2229,26 @@ public static final int NVML_FI_DEV_NVLINK_COUNT_RAW_BER_LANE1 =                
 public static final int NVML_FI_DEV_NVLINK_COUNT_RAW_BER =                         218;
 /**Sum of the number of errors in each Nvlink packet */
 public static final int NVML_FI_DEV_NVLINK_COUNT_EFFECTIVE_ERRORS =                219;
+
+/**
+ * NVLink Effective BER
+ *
+ * Bit [0:7]:  BER Exponent value
+ * Bit [8:11]: BER MANTISSA value
+ * Use macro NVML_NVLINK_ERROR_COUNTER_BER_GET to extract the two fields
+ */
 /**Effective BER for effective errors */
 public static final int NVML_FI_DEV_NVLINK_COUNT_EFFECTIVE_BER =                   220;
 /**Number of errors in rx symbols */
 public static final int NVML_FI_DEV_NVLINK_COUNT_SYMBOL_ERRORS =                   221;
+
+/**
+ * NVLink Symbol BER
+ *
+ * Bit [0:7]:  BER Exponent value
+ * Bit [8:11]: BER MANTISSA value
+ * Use macro NVML_NVLINK_ERROR_COUNTER_BER_GET to extract the two fields
+ */
 /**BER for symbol errors */
 public static final int NVML_FI_DEV_NVLINK_COUNT_SYMBOL_BER =                      222;
 
@@ -2106,6 +2267,19 @@ public static final int NVML_FI_DEV_PCIE_OUTBOUND_ATOMICS_MASK =                
 public static final int NVML_FI_DEV_PCIE_INBOUND_ATOMICS_MASK =                    229;
 /** GPU Recovery action - None/Reset/Reboot/Drain P2P/Drain and Reset */
 public static final int NVML_FI_DEV_GET_GPU_RECOVERY_ACTION =                      230;
+/** C2C Link CRC Error Counter */
+public static final int NVML_FI_DEV_C2C_LINK_ERROR_INTR =                          231;
+/** C2C Link Replay Error Counter */
+public static final int NVML_FI_DEV_C2C_LINK_ERROR_REPLAY =                        232;
+/** C2C Link Back to Back Replay Error Counter */
+public static final int NVML_FI_DEV_C2C_LINK_ERROR_REPLAY_B2B =                    233;
+/** C2C Link Power state. See NVML_C2C_POWER_STATE_* */
+public static final int NVML_FI_DEV_C2C_LINK_POWER_STATE =                         234;
+/**
+ * NVLink counter field id 235-250
+ *
+ * Link ID needs to be specified in the scopeId field in nvmlFieldValue_t.
+ */
 /** Count of symbol errors that are corrected - bin 0 */
 public static final int NVML_FI_DEV_NVLINK_COUNT_FEC_HISTORY_0 =                   235;
 /** Count of symbol errors that are corrected - bin 1 */
@@ -2138,46 +2312,63 @@ public static final int NVML_FI_DEV_NVLINK_COUNT_FEC_HISTORY_13 =               
 public static final int NVML_FI_DEV_NVLINK_COUNT_FEC_HISTORY_14 =                  249;
 /** Count of symbol errors that are corrected - bin 15 */
 public static final int NVML_FI_DEV_NVLINK_COUNT_FEC_HISTORY_15 =                  250;
+/**
+ * Field values for Clock Throttle Reason Counters
+ * All counters are in nanoseconds
+ */
+/** Throttling to not exceed currently set power limits in ns */
+public static final int NVML_FI_DEV_CLOCKS_EVENT_REASON_SW_POWER_CAP =             NVML_FI_DEV_PERF_POLICY_POWER;
+/** Throttling to match minimum possible clock across Sync Boost Group in ns */
+public static final int NVML_FI_DEV_CLOCKS_EVENT_REASON_SYNC_BOOST =               NVML_FI_DEV_PERF_POLICY_SYNC_BOOST;
+/** Throttling to ensure ((GPU temp < GPU Max Operating Temp) && (Memory Temp < Memory Max Operating Temp)) in ns */
+public static final int NVML_FI_DEV_CLOCKS_EVENT_REASON_SW_THERM_SLOWDOWN =        251;
+/** Throttling due to temperature being too high (reducing core clocks by a factor of 2 or more) in ns */
+public static final int NVML_FI_DEV_CLOCKS_EVENT_REASON_HW_THERM_SLOWDOWN =        252;
+/** Throttling due to external power brake assertion trigger (reducing core clocks by a factor of 2 or more) in ns */
+public static final int NVML_FI_DEV_CLOCKS_EVENT_REASON_HW_POWER_BRAKE_SLOWDOWN =  253;
+/** Accumulated frequency of the GPU to be used for averaging */
+public static final int NVML_FI_DEV_POWER_SYNC_BALANCING_FREQ =                    254;
+/** Accumulated activity factor of the GPU to be used for averaging */
+public static final int NVML_FI_DEV_POWER_SYNC_BALANCING_AF =                      255;
 /* Power Smoothing */
 /** Enablement (0/DISABLED or 1/ENABLED) */
-public static final int NVML_FI_PWR_SMOOTHING_ENABLED =                                   251;
+public static final int NVML_FI_PWR_SMOOTHING_ENABLED =                                   256;
 /** Current privilege level */
-public static final int NVML_FI_PWR_SMOOTHING_PRIV_LVL =                                  252;
+public static final int NVML_FI_PWR_SMOOTHING_PRIV_LVL =                                  257;
 /** Immediate ramp down enablement (0/DISABLED or 1/ENABLED) */
-public static final int NVML_FI_PWR_SMOOTHING_IMM_RAMP_DOWN_ENABLED =                     253;
+public static final int NVML_FI_PWR_SMOOTHING_IMM_RAMP_DOWN_ENABLED =                     258;
 /** Applied TMP ceiling value in Watts */
-public static final int NVML_FI_PWR_SMOOTHING_APPLIED_TMP_CEIL =                          254;
+public static final int NVML_FI_PWR_SMOOTHING_APPLIED_TMP_CEIL =                          259;
 /** Applied TMP floor value in Watts */
-public static final int NVML_FI_PWR_SMOOTHING_APPLIED_TMP_FLOOR =                         255;
+public static final int NVML_FI_PWR_SMOOTHING_APPLIED_TMP_FLOOR =                         260;
 /** Max % TMP Floor value */
-public static final int NVML_FI_PWR_SMOOTHING_MAX_PERCENT_TMP_FLOOR_SETTING =             256;
+public static final int NVML_FI_PWR_SMOOTHING_MAX_PERCENT_TMP_FLOOR_SETTING =             261;
 /** Min % TMP Floor value */
-public static final int NVML_FI_PWR_SMOOTHING_MIN_PERCENT_TMP_FLOOR_SETTING =             257;
+public static final int NVML_FI_PWR_SMOOTHING_MIN_PERCENT_TMP_FLOOR_SETTING =             262;
 /** HW Circuitry % lifetime remaining */
-public static final int NVML_FI_PWR_SMOOTHING_HW_CIRCUITRY_PERCENT_LIFETIME_REMAINING =   258;
+public static final int NVML_FI_PWR_SMOOTHING_HW_CIRCUITRY_PERCENT_LIFETIME_REMAINING =   263;
 /** Max number of preset profiles */
-public static final int NVML_FI_PWR_SMOOTHING_MAX_NUM_PRESET_PROFILES =                   259;
+public static final int NVML_FI_PWR_SMOOTHING_MAX_NUM_PRESET_PROFILES =                   264;
 /** % TMP floor for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_PROFILE_PERCENT_TMP_FLOOR =                 260;
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_PERCENT_TMP_FLOOR =                 265;
 /** Ramp up rate in mW/s for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_PROFILE_RAMP_UP_RATE =                      261;
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_RAMP_UP_RATE =                      266;
 /** Ramp down rate in mW/s for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_PROFILE_RAMP_DOWN_RATE =                    262;
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_RAMP_DOWN_RATE =                    267;
 /** Ramp down hysteresis value in ms for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_PROFILE_RAMP_DOWN_HYST_VAL =                263;
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_RAMP_DOWN_HYST_VAL =                268;
 /** Active preset profile number */
-public static final int NVML_FI_PWR_SMOOTHING_ACTIVE_PRESET_PROFILE =                     264;
+public static final int NVML_FI_PWR_SMOOTHING_ACTIVE_PRESET_PROFILE =                     269;
 /** % TMP floor for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_PERCENT_TMP_FLOOR =          265;
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_PERCENT_TMP_FLOOR =          270;
 /** Ramp up rate in mW/s for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_UP_RATE =               266;
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_UP_RATE =               271;
 /** Ramp down rate in mW/s for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_DOWN_RATE =             267;
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_DOWN_RATE =             272;
 /** Ramp down hysteresis value in ms for a given profile */
-public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_DOWN_HYST_VAL =         268;
-
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_DOWN_HYST_VAL =         273;
 /** One greater than the largest field ID defined above */
-public static final int NVML_FI_MAX =                                                     269;
+public static final int NVML_FI_MAX =                                              274;
 
 /**
  * NVML_FI_DEV_NVLINK_GET_POWER_THRESHOLD_UNITS
@@ -2208,6 +2399,12 @@ public static final int NVML_NVLINK_LOW_POWER_THRESHOLD_DEFAULT = NVML_NVLINK_LO
 // Targeting ../nvml/nvmlNvLinkPowerThres_t.java
 
 
+
+/*
+ * NVML_FI_DEV_C2C_LINK_POWER_STATE
+ */
+public static final int NVML_C2C_POWER_STATE_FULL_POWER = 0;
+public static final int NVML_C2C_POWER_STATE_LOW_POWER = 1;
 // Targeting ../nvml/nvmlFieldValue_t.java
 
 
@@ -2344,6 +2541,40 @@ public static final long nvmlEventTypeAll = (nvmlEventTypeNone
 // Targeting ../nvml/nvmlEventData_t.java
 
 
+// Targeting ../nvml/nvmlSystemEventSet_st.java
+
+
+
+/** System Event for GPU Driver Unbind */
+/** Bitmask value of Driver Unbind System Event */
+public static final long nvmlSystemEventTypeGpuDriverUnbind =  0x0000000000000001L;
+/** Bitmask value of Driver Bind System Event */
+public static final long nvmlSystemEventTypeGpuDriverBind =    0x0000000000000002L;
+
+public static final int nvmlSystemEventTypeCount = 2;
+// Targeting ../nvml/nvmlSystemEventSetCreateRequest_v1_t.java
+
+
+public static native @MemberGetter int nvmlSystemEventSetCreateRequest_v1();
+public static final int nvmlSystemEventSetCreateRequest_v1 = nvmlSystemEventSetCreateRequest_v1();
+// Targeting ../nvml/nvmlSystemEventSetFreeRequest_v1_t.java
+
+
+public static native @MemberGetter int nvmlSystemEventSetFreeRequest_v1();
+public static final int nvmlSystemEventSetFreeRequest_v1 = nvmlSystemEventSetFreeRequest_v1();
+// Targeting ../nvml/nvmlSystemRegisterEventRequest_v1_t.java
+
+
+public static native @MemberGetter int nvmlSystemRegisterEventRequest_v1();
+public static final int nvmlSystemRegisterEventRequest_v1 = nvmlSystemRegisterEventRequest_v1();
+// Targeting ../nvml/nvmlSystemEventData_v1_t.java
+
+
+// Targeting ../nvml/nvmlSystemEventSetWaitRequest_v1_t.java
+
+
+public static native @MemberGetter int nvmlSystemEventSetWaitRequest_v1();
+public static final int nvmlSystemEventSetWaitRequest_v1 = nvmlSystemEventSetWaitRequest_v1();
 
 /** \} */
 
@@ -3428,7 +3659,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleBySerial(@Cast
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleBySerial(String serial, @Cast("nvmlDevice_st**") PointerPointer device);
 
 /**
- * Acquire the handle for a particular device, based on its globally unique immutable UUID associated with each device.
+ * Acquire the handle for a particular device, based on its globally unique immutable UUID (in ASCII format) associated with each device.
  *
  * For all products.
  *
@@ -3454,6 +3685,30 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleByUUID(@Cast("
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleByUUID(String uuid, @Cast("nvmlDevice_st**") PointerPointer device);
 
 /**
+ * Acquire the handle for a particular device, based on its globally unique immutable UUID (in either ASCII or binary format) associated with each device.
+ * See \ref nvmlUUID_v1_t for more information on the UUID struct. The caller must set the appropriate version prior to calling this API.
+ *
+ * For all products.
+ *
+ * @param uuid [in]                                  The UUID of the target GPU or MIG instance
+ * @param device [out]                               Reference in which to return the device handle or MIG device handle
+ *
+ * This API causes NVML to initialize the target GPU
+ * NVML may initialize additional GPUs as it searches for the target GPU
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          if \a device has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED              if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           if \a uuid is invalid, \a device is null or \a uuid->type is invalid
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  if the provided version is invalid/unsupported
+ *         - \ref NVML_ERROR_NOT_FOUND                  if \a uuid does not match a valid device on the system
+ *         - \ref NVML_ERROR_GPU_IS_LOST                if any GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN                    on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleByUUIDV(@Cast("const nvmlUUID_t*") nvmlUUID_v1_t uuid, @ByPtrPtr nvmlDevice_st device);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleByUUIDV(@Cast("const nvmlUUID_t*") nvmlUUID_v1_t uuid, @Cast("nvmlDevice_st**") PointerPointer device);
+
+/**
  * Acquire the handle for a particular device, based on its PCI bus id.
  *
  * For all products.
@@ -3468,6 +3723,11 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetHandleByUUID(String 
  *       instead of NVML_ERROR_NO_PERMISSION.
  *
  * @param pciBusId                             The PCI bus id of the target GPU
+ *                                             Accept the following formats (all numbers in hexadecimal):
+ *                                               domain:bus:device.function in format %x:%x:%x.%x
+ *                                               domain:bus:device in format %x:%x:%x
+ *                                               bus:device.function in format %x:%x.%x
+ *
  * @param device                               Reference in which to return the device handle
  *
  * @return
@@ -7349,7 +7609,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetProcessesUtilization
  *
  * %BLACKWELL_OR_NEWER%
  *
- * See \ref nvmlPlatformInfo_v1_t for more information on the struct.
+ * See \ref nvmlPlatformInfo_v2_t for more information on the struct.
  *
  * @param device                               The identifier of the target device
  * @param platformInfo                         Pointer to the caller-provided structure of nvmlPlatformInfo_t.
@@ -8618,8 +8878,6 @@ public static native @Cast("nvmlReturn_t") int nvmlEventSetCreate(@Cast("nvmlEve
  *
  * For Linux only.
  *
- * \b IMPORTANT: Operations on \a set are not thread safe
- *
  * This call starts recording of events on specific device.
  * All events that occurred before this call are not recorded.
  * Checking if some event occurred can be done with \ref nvmlEventSetWait_v2
@@ -8725,6 +8983,98 @@ public static native @Cast("nvmlReturn_t") int nvmlEventSetWait_v2(nvmlEventSet_
  * @see nvmlDeviceRegisterEvents
  */
 public static native @Cast("nvmlReturn_t") int nvmlEventSetFree(nvmlEventSet_st set);
+
+/*
+ * Create an empty set of system events.
+ * Event set should be freed by \ref nvmlSystemEventSetFree
+ *
+ * For Fermi &tm; or newer fully supported devices.
+ * @param request                              Reference to nvmlSystemEventSetCreateRequest_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                         if the event has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED             if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT          if request is NULL
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH for unsupported version
+ *         - \ref NVML_ERROR_UNKNOWN                   on any unexpected error
+ *
+ * @see nvmlSystemEventSetFree
+ */
+public static native @Cast("nvmlReturn_t") int nvmlSystemEventSetCreate(@Cast("nvmlSystemEventSetCreateRequest_t*") nvmlSystemEventSetCreateRequest_v1_t request);
+
+/**
+ * Releases system event set
+ *
+ * For Fermi &tm; or newer fully supported devices.
+ *
+ * @param set                                  Reference to nvmlSystemEventSetFreeRequest_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                         if the event has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED             if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT          if request is NULL
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH for unsupported version
+ *         - \ref NVML_ERROR_UNKNOWN                   on any unexpected error
+ *
+ * @see nvmlDeviceRegisterEvents
+ */
+public static native @Cast("nvmlReturn_t") int nvmlSystemEventSetFree(@Cast("nvmlSystemEventSetFreeRequest_t*") nvmlSystemEventSetFreeRequest_v1_t request);
+
+/**
+ * Starts recording of events on system and add the events to specified \ref nvmlSystemEventSet_t
+ *
+ * For Linux only.
+ *
+ * This call starts recording of events on specific device.
+ * All events that occurred before this call are not recorded.
+ * Checking if some event occurred can be done with \ref nvmlSystemEventSetWait
+ *
+ * If function reports NVML_ERROR_UNKNOWN, event set is in undefined state and should be freed.
+ * If function reports NVML_ERROR_NOT_SUPPORTED, event set can still be used. None of the requested eventTypes
+ *     are registered in that case.
+ *
+ * @param request                              Reference to the struct nvmlSystemRegisterEventRequest_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                         if the event has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED             if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT          if request is NULL
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH for unsupported version
+ *         - \ref NVML_ERROR_UNKNOWN                   on any unexpected error
+ *
+ * @see nvmlSystemEventType
+ * @see nvmlSystemEventSetWait
+ * @see nvmlEventSetFree
+ */
+public static native @Cast("nvmlReturn_t") int nvmlSystemRegisterEvents(@Cast("nvmlSystemRegisterEventRequest_t*") nvmlSystemRegisterEventRequest_v1_t request);
+
+/**
+ * Waits on system events and delivers events
+ *
+ * For Fermi &tm; or newer fully supported devices.
+ *
+ * If some events are ready to be delivered at the time of the call, function returns immediately.
+ * If there are no events ready to be delivered, function sleeps till event arrives
+ * but not longer than specified timeout. This function in certain conditions can return before
+ * specified timeout passes (e.g. when interrupt arrives)
+ *
+ * if the return request->numEvent equals to request->dataSize, there might be outstanding
+ * event, it is recommended to call nvmlSystemEventSetWait again to query all the events.
+ *
+ * @param request                              Reference in which to nvmlSystemEventSetWaitRequest_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                         if the event has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED             if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT          if request is NULL
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH for unsupported version
+ *         - \ref NVML_ERROR_TIMEOUT                   if no event notification after timeoutms
+ *         - \ref NVML_ERROR_UNKNOWN                   on any unexpected error
+ *
+ * @see nvmlSystemEventType
+ * @see nvmlSystemRegisterEvents
+ */
+public static native @Cast("nvmlReturn_t") int nvmlSystemEventSetWait(@Cast("nvmlSystemEventSetWaitRequest_t*") nvmlSystemEventSetWaitRequest_v1_t request);
 
 /** \} */
 
@@ -8970,7 +9320,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceSetVirtualizationMode(n
  *         - \ref NVML_SUCCESS                          Upon success
  *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
  *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a device is invalid or \a pHeterogeneousMode is NULL
- *         - \ref NVML_ERROR_NOT_SUPPORTED              If \a device doesn't support this feature
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If MIG is enabled or \a device doesn't support this feature
  *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pHeterogeneousMode is invalid
  *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
  */
@@ -9076,7 +9426,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuTypeSupportedPla
  *         - \ref NVML_SUCCESS                          Upon success
  *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
  *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a device or \a vgpuTypeId is invalid or \a pPlacementList is NULL
- *         - \ref NVML_ERROR_NOT_SUPPORTED              If \a device or \a vgpuTypeId isn't supported
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If MIG is enabled or \a device or \a vgpuTypeId isn't supported
  *         - \ref NVML_ERROR_NO_PERMISSION              If user doesn't have permission to perform the operation
  *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pPlacementList is invalid
  *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
@@ -9971,6 +10321,237 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetCapabilities(@Cast
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetMdevUUID(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") BytePointer mdevUuid, @Cast("unsigned int") int size);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetMdevUUID(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") ByteBuffer mdevUuid, @Cast("unsigned int") int size);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetMdevUUID(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") byte[] mdevUuid, @Cast("unsigned int") int size);
+
+/**
+ * Query the currently creatable vGPU types on a specific GPU Instance.
+ *
+ * The function returns an array of vGPU types that can be created for a specified GPU instance. This array is stored
+ * in a caller-supplied buffer, with the buffer's element count passed through \a pVgpus->vgpuCount. The number of
+ * vGPU types written to the buffer is indicated by \a pVgpus->vgpuCount. If the buffer is too small to hold the vGPU
+ * type array, the function returns NVML_ERROR_INSUFFICIENT_SIZE and updates \a pVgpus->vgpuCount with the required
+ * element count.
+ *
+ * To determine the creatable vGPUs for a GPU Instance, invoke this function with \a pVgpus->vgpuCount set to 0 and
+ * \a pVgpus->vgpuTypeIds as NULL. This will result in NVML_ERROR_INSUFFICIENT_SIZE being returned, along with the
+ * count value in \a pVgpus->vgpuCount.
+ *
+ * The creatable vGPU types may differ over time, as there may be restrictions on what type of vGPUs can concurrently
+ * run on the device.
+ *
+ * @param gpuInstance                          The GPU instance handle
+ * @param pVgpus                               Pointer to the caller-provided structure of nvmlVgpuTypeIdInfo_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pVgpus is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU
+ *         - \ref NVML_ERROR_INSUFFICIENT_SIZE          If \a pVgpus->vgpuTypeIds buffer is small
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pVgpus is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetCreatableVgpus(nvmlGpuInstance_st gpuInstance, @Cast("nvmlVgpuTypeIdInfo_t*") nvmlVgpuTypeIdInfo_v1_t pVgpus);
+
+/**
+ * Retrieve the maximum number of vGPU instances per GPU instance for given vGPU type
+ *
+ * @param pMaxInstance                         Pointer to the caller-provided structure of nvmlVgpuTypeMaxInstance_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a pMaxInstance is NULL or \a pMaxInstance->vgpuTypeId is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU or non-MIG vGPU type
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pMaxInstance is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetMaxInstancesPerGpuInstance(@Cast("nvmlVgpuTypeMaxInstance_t*") nvmlVgpuTypeMaxInstance_v1_t pMaxInstance);
+
+/**
+ * Retrieve the active vGPU instances within a GPU instance.
+ *
+ * An array of active vGPU instances is returned in the caller-supplied buffer pointed
+ * at by \a pVgpuInstanceInfo->vgpuInstances. The array element count is passed in
+ * \a pVgpuInstanceInfo->vgpuCount, and \a pVgpuInstanceInfo->vgpuCount is used to return
+ * the number of vGPU instances written to the buffer.
+ *
+ * If the supplied buffer is not large enough to accommodate the vGPU instance array,
+ * the function returns NVML_ERROR_INSUFFICIENT_SIZE, with the element count of
+ * nvmlVgpuInstance_t array required in \a pVgpuInstanceInfo->vgpuCount. To query the
+ * number of active vGPU instances, call this function with pVgpuInstanceInfo->vgpuCount = 0
+ * and pVgpuInstanceInfo->vgpuTypeIds = NULL. The code will return NVML_ERROR_INSUFFICIENT_SIZE,
+ * or NVML_SUCCESS if no vGPU Types are active.
+ *
+ * @param gpuInstance          The GPU instance handle
+ * @param pVgpuInstanceInfo    Pointer to the vGPU instance information structure \a nvmlActiveVgpuInstanceInfo_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Successful completion
+ *         - \ref NVML_ERROR_UNINITIALIZED              If the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pVgpuInstanceInfo is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_INSUFFICIENT_SIZE          \a pVgpuInstanceInfo->vgpuTypeIds buffer is too small,
+ *                                                      array element count is returned in \a pVgpuInstanceInfo->vgpuCount
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pVgpuInstanceInfo is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetActiveVgpus(nvmlGpuInstance_st gpuInstance, @Cast("nvmlActiveVgpuInstanceInfo_t*") nvmlActiveVgpuInstanceInfo_v1_t pVgpuInstanceInfo);
+
+/**
+ * Set vGPU scheduler state for the given GPU instance
+ *
+ * %GB20X_OR_NEWER%
+ *
+ * Scheduler state and params will be allowed to set only when no VM is running within the GPU instance.
+ * In \a nvmlVgpuSchedulerState_t, IFF enableARRMode is enabled then provide the avgFactor and frequency
+ * as input. If enableARRMode is disabled then provide timeslice as input.
+ *
+ * The scheduler state change won't persist across module load/unload and GPU Instance creation/deletion.
+ *
+ * @param gpuInstance                          The GPU instance handle
+ * @param pScheduler                           Pointer to the caller-provided structure of nvmlVgpuSchedulerState_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Upon success
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pScheduler is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_RESET_REQUIRED             If setting the state failed with fatal error, reboot is required
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU or if any vGPU instance exists
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pScheduler is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceSetVgpuSchedulerState(nvmlGpuInstance_st gpuInstance, @Cast("nvmlVgpuSchedulerState_t*") nvmlVgpuSchedulerState_v1_t pScheduler);
+
+/**
+ * Returns the vGPU scheduler state for the given GPU instance.
+ * The information returned in \a nvmlVgpuSchedulerStateInfo_t is not relevant if the BEST EFFORT policy is set.
+ *
+ * %GB20X_OR_NEWER%
+ *
+ * @param gpuInstance                The GPU instance handle
+ * @param pSchedulerStateInfo        Reference in which \a pSchedulerStateInfo is returned
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          vGPU scheduler state is successfully obtained
+ *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pSchedulerStateInfo is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pSchedulerStateInfo is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetVgpuSchedulerState(nvmlGpuInstance_st gpuInstance, @Cast("nvmlVgpuSchedulerStateInfo_t*") nvmlVgpuSchedulerStateInfo_v1_t pSchedulerStateInfo);
+
+/**
+ * Returns the vGPU scheduler logs for the given GPU instance.
+ * \a pSchedulerLogInfo points to a caller-allocated structure to contain the logs. The number of elements returned will
+ * never exceed \a NVML_SCHEDULER_SW_MAX_LOG_ENTRIES.
+ *
+ * To get the entire logs, call the function atleast 5 times a second.
+ *
+ * %GB20X_OR_NEWER%
+ *
+ * @param gpuInstance               The GPU instance handle
+ * @param pSchedulerLogInfo         Reference in which \a pSchedulerLogInfo is written
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          vGPU scheduler logs are successfully obtained
+ *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pSchedulerLogInfo is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pSchedulerLogInfo is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetVgpuSchedulerLog(nvmlGpuInstance_st gpuInstance, @Cast("nvmlVgpuSchedulerLogInfo_t*") nvmlVgpuSchedulerLogInfo_v1_t pSchedulerLogInfo);
+
+/**
+ * Query the creatable vGPU placement ID of the vGPU type within a GPU instance.
+ *
+ * %GB20X_OR_NEWER%
+ *
+ * An array of creatable vGPU placement IDs for the vGPU type ID indicated by \a pCreatablePlacementInfo->vgpuTypeId
+ * is returned in the caller-supplied buffer of \a pCreatablePlacementInfo->placementIds. Memory needed for the
+ * placementIds array should be allocated based on maximum instances of a vGPU type per GPU instance which can be
+ * queried via \ref nvmlVgpuTypeGetMaxInstancesPerGpuInstance().
+ * If the provided count by the caller is insufficient, the function will return NVML_ERROR_INSUFFICIENT_SIZE along with
+ * the number of required entries in \a pCreatablePlacementInfo->count. The caller should then reallocate a buffer with the size
+ * of pCreatablePlacementInfo->count * sizeof(pCreatablePlacementInfo->placementIds) and invoke the function again.
+ * The creatable vGPU placement IDs may differ over time, as there may be restrictions on what type of vGPU the
+ * vGPU instance is running.
+ *
+ * @param gpuInstance                The GPU instance handle
+ * @param pCreatablePlacementInfo    Pointer to the list of vGPU creatable placement structure \a nvmlVgpuCreatablePlacementInfo_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Successful completion
+ *         - \ref NVML_ERROR_UNINITIALIZED              If the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pCreatablePlacementInfo is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_INSUFFICIENT_SIZE          If the buffer is small, element count is returned in \a pCreatablePlacementInfo->count
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pCreatablePlacementInfo is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU or vGPU heterogeneous mode is not enabled
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetVgpuTypeCreatablePlacements(nvmlGpuInstance_st gpuInstance, @Cast("nvmlVgpuCreatablePlacementInfo_t*") nvmlVgpuCreatablePlacementInfo_v1_t pCreatablePlacementInfo);
+
+/**
+ * Get the vGPU heterogeneous mode for the GPU instance.
+ *
+ * When in heterogeneous mode, a vGPU can concurrently host timesliced vGPUs with differing framebuffer sizes.
+ *
+ * On successful return, the function returns \a pHeterogeneousMode->mode with the current vGPU heterogeneous mode.
+ * \a pHeterogeneousMode->version is the version number of the structure nvmlVgpuHeterogeneousMode_t, the caller should
+ * set the correct version number to retrieve the vGPU heterogeneous mode.
+ * \a pHeterogeneousMode->mode can either be \ref NVML_FEATURE_ENABLED or \ref NVML_FEATURE_DISABLED.
+ *
+ * %GB20X_OR_NEWER%
+ *
+ * @param gpuInstance               The GPU instance handle
+ * @param pHeterogeneousMode        Pointer to the caller-provided structure of nvmlVgpuHeterogeneousMode_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance is NULL or invalid, or \a pHeterogeneousMode is NULL
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU or not in MIG mode
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pHeterogeneousMode is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetVgpuHeterogeneousMode(nvmlGpuInstance_st gpuInstance, @Cast("nvmlVgpuHeterogeneousMode_t*") nvmlVgpuHeterogeneousMode_v1_t pHeterogeneousMode);
+
+/**
+ * Enable or disable vGPU heterogeneous mode for the GPU instance.
+ *
+ * When in heterogeneous mode, a vGPU can concurrently host timesliced vGPUs with differing framebuffer sizes.
+ *
+ * API would return an appropriate error code upon unsuccessful activation. For example, the heterogeneous mode
+ * set will fail with error \ref NVML_ERROR_IN_USE if any vGPU instance is active within the GPU instance.
+ * The caller of this API is expected to shutdown the vGPU VMs and retry setting the \a mode.
+ * On successful return, the function updates the vGPU heterogeneous mode with the user provided \a pHeterogeneousMode->mode.
+ * \a pHeterogeneousMode->version is the version number of the structure nvmlVgpuHeterogeneousMode_t, the caller should
+ * set the correct version number to set the vGPU heterogeneous mode.
+ *
+ * %GB20X_OR_NEWER%
+ *
+ * @param gpuInstance               The GPU instance handle
+ * @param pHeterogeneousMode        Pointer to the caller-provided structure of nvmlVgpuHeterogeneousMode_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED              If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           If \a gpuInstance  is NULL or invalid,
+ *                                                      or \a pHeterogeneousMode is NULL or \a pHeterogeneousMode->mode is invalid
+ *                                                      or GPU Instance Id is invalid
+ *         - \ref NVML_ERROR_IN_USE                     If the \a gpuInstance is in use
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              If not on a vGPU host or an unsupported GPU
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  If the version of \a pHeterogeneousMode is invalid
+ *         - \ref NVML_ERROR_UNKNOWN                    On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceSetVgpuHeterogeneousMode(nvmlGpuInstance_st gpuInstance, @Cast("const nvmlVgpuHeterogeneousMode_t*") nvmlVgpuHeterogeneousMode_v1_t pHeterogeneousMode);
 // Targeting ../nvml/nvmlVgpuVersion_t.java
 
 
@@ -10090,8 +10671,8 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuMetadata(nvmlDev
  *
  * @return
  *         - \ref NVML_SUCCESS                   vGPU metadata structure was successfully returned
- *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a vgpuMetadata or \a pgpuMetadata or \a bufferSize are NULL
- *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    If \a vgpuMetadata or \a pgpuMetadata or \a bufferSize are NULL
+ *         - \ref NVML_ERROR_UNKNOWN             On any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlGetVgpuCompatibility(nvmlVgpuMetadata_t vgpuMetadata, nvmlVgpuPgpuMetadata_t pgpuMetadata, nvmlVgpuPgpuCompatibility_t compatibilityInfo);
 
@@ -10109,9 +10690,9 @@ public static native @Cast("nvmlReturn_t") int nvmlGetVgpuCompatibility(nvmlVgpu
  * @return
  *         - \ref NVML_SUCCESS                   GPU metadata structure was successfully returned
  *         - \ref NVML_ERROR_INSUFFICIENT_SIZE   \a pgpuMetadata buffer is too small, required size is returned in \a bufferSize
- *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a bufferSize is NULL or \a device is invalid; if \a pgpuMetadata is NULL and the value of \a bufferSize is not 0.
- *         - \ref NVML_ERROR_NOT_SUPPORTED       if vGPU is not supported by the system
- *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    If \a bufferSize is NULL or \a device is invalid; if \a pgpuMetadata is NULL and the value of \a bufferSize is not 0.
+ *         - \ref NVML_ERROR_NOT_SUPPORTED       If vGPU is not supported by the system
+ *         - \ref NVML_ERROR_UNKNOWN             On any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPgpuMetadataString(nvmlDevice_st device, @Cast("char*") BytePointer pgpuMetadata, @Cast("unsigned int*") IntPointer bufferSize);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPgpuMetadataString(nvmlDevice_st device, @Cast("char*") ByteBuffer pgpuMetadata, @Cast("unsigned int*") IntBuffer bufferSize);
@@ -10131,9 +10712,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPgpuMetadataString(n
  *
  * @return
  *         - \ref NVML_SUCCESS                   vGPU scheduler logs were successfully obtained
- *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a pSchedulerLog is NULL or \a device is invalid
- *         - \ref NVML_ERROR_NOT_SUPPORTED       The API is not supported in current state or \a device not in vGPU host mode
- *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    If \a pSchedulerLog is NULL or \a device is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED       If MIG is enabled or \a device not in vGPU host mode
+ *         - \ref NVML_ERROR_UNKNOWN             On any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuSchedulerLog(nvmlDevice_st device, nvmlVgpuSchedulerLog_t pSchedulerLog);
 
@@ -10148,9 +10729,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuSchedulerLog(nvm
  *
  * @return
  *         - \ref NVML_SUCCESS                   vGPU scheduler state is successfully obtained
- *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a pSchedulerState is NULL or \a device is invalid
- *         - \ref NVML_ERROR_NOT_SUPPORTED       The API is not supported in current state or \a device not in vGPU host mode
- *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    If \a pSchedulerState is NULL or \a device is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED       If MIG is enabled or \a device not in vGPU host mode
+ *         - \ref NVML_ERROR_UNKNOWN             On any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuSchedulerState(nvmlDevice_st device, nvmlVgpuSchedulerGetState_t pSchedulerState);
 
@@ -10171,9 +10752,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuSchedulerState(n
  *
  * @return
  *         - \ref NVML_SUCCESS                   vGPU scheduler capabilities were successfully obtained
- *         - \ref NVML_ERROR_INVALID_ARGUMENT    if \a pCapabilities is NULL or \a device is invalid
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT    If \a pCapabilities is NULL or \a device is invalid
  *         - \ref NVML_ERROR_NOT_SUPPORTED       The API is not supported in current state or \a device not in vGPU host mode
- *         - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ *         - \ref NVML_ERROR_UNKNOWN             On any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuSchedulerCapabilities(nvmlDevice_st device, nvmlVgpuSchedulerCapabilities_t pCapabilities);
 
@@ -10193,12 +10774,12 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetVgpuSchedulerCapabil
  *
  * @return
  *         - \ref NVML_SUCCESS                  vGPU scheduler state has been successfully set
- *         - \ref NVML_ERROR_INVALID_ARGUMENT   if \a pSchedulerState is NULL or \a device is invalid
- *         - \ref NVML_ERROR_RESET_REQUIRED     if setting \a pSchedulerState failed with fatal error,
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT   If \a pSchedulerState is NULL or \a device is invalid
+ *         - \ref NVML_ERROR_RESET_REQUIRED     If setting \a pSchedulerState failed with fatal error,
  *                                              reboot is required to overcome from this error.
- *         - \ref NVML_ERROR_NOT_SUPPORTED      The API is not supported in current state or \a device not in vGPU host mode
+ *         - \ref NVML_ERROR_NOT_SUPPORTED      If MIG is enabled or \a device not in vGPU host mode
  *                                              or if any vGPU instance currently exists on the \a device
- *         - \ref NVML_ERROR_UNKNOWN            on any unexpected error
+ *         - \ref NVML_ERROR_UNKNOWN            On any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetVgpuSchedulerState(nvmlDevice_st device, nvmlVgpuSchedulerSetState_t pSchedulerState);
 
@@ -10667,13 +11248,31 @@ public static final int NVML_GPU_INSTANCE_PROFILE_4_SLICE =      0x3;
 public static final int NVML_GPU_INSTANCE_PROFILE_7_SLICE =      0x4;
 public static final int NVML_GPU_INSTANCE_PROFILE_8_SLICE =      0x5;
 public static final int NVML_GPU_INSTANCE_PROFILE_6_SLICE =      0x6;
+// 1_SLICE profile with at least one (if supported at all) of Decoder, Encoder, JPEG, OFA engines.
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_REV1 = 0x7;
+// 2_SLICE profile with at least one (if supported at all) of Decoder, Encoder, JPEG, OFA engines.
 public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_REV1 = 0x8;
+// 1_SLICE profile with twice the amount of memory resources.
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_REV2 = 0x9;
-public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_GFX =  0xA;
-public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_GFX =  0xB;
-public static final int NVML_GPU_INSTANCE_PROFILE_4_SLICE_GFX =  0xC;
-public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =        0xD;
+// 1_SLICE gfx capable profile
+public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_GFX =      0x0A;
+// 2_SLICE gfx capable profile
+public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_GFX =      0x0B;
+// 4_SLICE gfx capable profile
+public static final int NVML_GPU_INSTANCE_PROFILE_4_SLICE_GFX =      0x0C;
+// 1_SLICE profile with none of Decode, Encoder, JPEG, OFA engines.
+public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_NO_ME =    0x0D;
+// 2_SLICE profile with none of Decode, Encoder, JPEG, OFA engines.
+public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_NO_ME =    0x0E;
+// 1_SLICE profile with all of GPU Decode, Encoder, JPEG, OFA engines.
+// Allocation of instance of this profile prevents allocation of
+// all but _NO_ME profiles.
+public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_ALL_ME =   0x0F;
+// 2_SLICE profile with all of GPU Decode, Encoder, JPEG, OFA engines.
+// Allocation of instance of this profile prevents allocation of
+// all but _NO_ME profiles.
+public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_ALL_ME =   0x10;
+public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =            0x11;
 
 /**
  * MIG GPU instance profile capability.
@@ -10718,9 +11317,6 @@ public static final int nvmlGpuInstanceProfileInfo_v2 = nvmlGpuInstanceProfileIn
 public static native @MemberGetter int nvmlGpuInstanceProfileInfo_v3();
 public static final int nvmlGpuInstanceProfileInfo_v3 = nvmlGpuInstanceProfileInfo_v3();
 // Targeting ../nvml/nvmlGpuInstanceInfo_t.java
-
-
-// Targeting ../nvml/nvmlGpuInstance_st.java
 
 
 
@@ -10839,6 +11435,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMigMode(nvmlDevice_s
  * Get GPU instance profile information
  *
  * Information provided by this API is immutable throughout the lifetime of a MIG mode.
+ *
+ * \note This API can be used to enumerate all MIG profiles supported by NVML in a forward compatible
+ * way by invoking it on \a profile values starting from 0, until the API returns \ref NVML_ERROR_INVALID_ARGUMENT.
  *
  * For Ampere &tm; or newer fully supported devices.
  * Supported on Linux only.
@@ -11104,6 +11703,9 @@ public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetInfo(nvmlGpuIns
  * Get compute instance profile information.
  *
  * Information provided by this API is immutable throughout the lifetime of a MIG mode.
+ *
+ * \note This API can be used to enumerate all MIG profiles supported by NVML in a forward compatible
+ * way by invoking it on \a profile values starting from 0, until the API returns \ref NVML_ERROR_INVALID_ARGUMENT.
  *
  * For Ampere &tm; or newer fully supported devices.
  * Supported on Linux only.
@@ -11678,8 +12280,119 @@ public static final int
     NVML_GPM_METRIC_NVLINK_L17_RX_PER_SEC       = 96,
     /** NvLink write bandwidth for link 17 in MiB/sec */
     NVML_GPM_METRIC_NVLINK_L17_TX_PER_SEC       = 97,
+    //Put new metrics for BLACKWELL here...
+    NVML_GPM_METRIC_C2C_TOTAL_TX_PER_SEC        = 100,
+    NVML_GPM_METRIC_C2C_TOTAL_RX_PER_SEC        = 101,
+    NVML_GPM_METRIC_C2C_DATA_TX_PER_SEC         = 102,
+    NVML_GPM_METRIC_C2C_DATA_RX_PER_SEC         = 103,
+    NVML_GPM_METRIC_C2C_LINK0_TOTAL_TX_PER_SEC  = 104,
+    NVML_GPM_METRIC_C2C_LINK0_TOTAL_RX_PER_SEC  = 105,
+    NVML_GPM_METRIC_C2C_LINK0_DATA_TX_PER_SEC   = 106,
+    NVML_GPM_METRIC_C2C_LINK0_DATA_RX_PER_SEC   = 107,
+    NVML_GPM_METRIC_C2C_LINK1_TOTAL_TX_PER_SEC  = 108,
+    NVML_GPM_METRIC_C2C_LINK1_TOTAL_RX_PER_SEC  = 109,
+    NVML_GPM_METRIC_C2C_LINK1_DATA_TX_PER_SEC   = 110,
+    NVML_GPM_METRIC_C2C_LINK1_DATA_RX_PER_SEC   = 111,
+    NVML_GPM_METRIC_C2C_LINK2_TOTAL_TX_PER_SEC  = 112,
+    NVML_GPM_METRIC_C2C_LINK2_TOTAL_RX_PER_SEC  = 113,
+    NVML_GPM_METRIC_C2C_LINK2_DATA_TX_PER_SEC   = 114,
+    NVML_GPM_METRIC_C2C_LINK2_DATA_RX_PER_SEC   = 115,
+    NVML_GPM_METRIC_C2C_LINK3_TOTAL_TX_PER_SEC  = 116,
+    NVML_GPM_METRIC_C2C_LINK3_TOTAL_RX_PER_SEC  = 117,
+    NVML_GPM_METRIC_C2C_LINK3_DATA_TX_PER_SEC   = 118,
+    NVML_GPM_METRIC_C2C_LINK3_DATA_RX_PER_SEC   = 119,
+    NVML_GPM_METRIC_C2C_LINK4_TOTAL_TX_PER_SEC  = 120,
+    NVML_GPM_METRIC_C2C_LINK4_TOTAL_RX_PER_SEC  = 121,
+    NVML_GPM_METRIC_C2C_LINK4_DATA_TX_PER_SEC   = 122,
+    NVML_GPM_METRIC_C2C_LINK4_DATA_RX_PER_SEC   = 123,
+    NVML_GPM_METRIC_C2C_LINK5_TOTAL_TX_PER_SEC  = 124,
+    NVML_GPM_METRIC_C2C_LINK5_TOTAL_RX_PER_SEC  = 125,
+    NVML_GPM_METRIC_C2C_LINK5_DATA_TX_PER_SEC   = 126,
+    NVML_GPM_METRIC_C2C_LINK5_DATA_RX_PER_SEC   = 127,
+    NVML_GPM_METRIC_C2C_LINK6_TOTAL_TX_PER_SEC  = 128,
+    NVML_GPM_METRIC_C2C_LINK6_TOTAL_RX_PER_SEC  = 129,
+    NVML_GPM_METRIC_C2C_LINK6_DATA_TX_PER_SEC   = 130,
+    NVML_GPM_METRIC_C2C_LINK6_DATA_RX_PER_SEC   = 131,
+    NVML_GPM_METRIC_C2C_LINK7_TOTAL_TX_PER_SEC  = 132,
+    NVML_GPM_METRIC_C2C_LINK7_TOTAL_RX_PER_SEC  = 133,
+    NVML_GPM_METRIC_C2C_LINK7_DATA_TX_PER_SEC   = 134,
+    NVML_GPM_METRIC_C2C_LINK7_DATA_RX_PER_SEC   = 135,
+    NVML_GPM_METRIC_C2C_LINK8_TOTAL_TX_PER_SEC  = 136,
+    NVML_GPM_METRIC_C2C_LINK8_TOTAL_RX_PER_SEC  = 137,
+    NVML_GPM_METRIC_C2C_LINK8_DATA_TX_PER_SEC   = 138,
+    NVML_GPM_METRIC_C2C_LINK8_DATA_RX_PER_SEC   = 139,
+    NVML_GPM_METRIC_C2C_LINK9_TOTAL_TX_PER_SEC  = 140,
+    NVML_GPM_METRIC_C2C_LINK9_TOTAL_RX_PER_SEC  = 141,
+    NVML_GPM_METRIC_C2C_LINK9_DATA_TX_PER_SEC   = 142,
+    NVML_GPM_METRIC_C2C_LINK9_DATA_RX_PER_SEC   = 143,
+    NVML_GPM_METRIC_C2C_LINK10_TOTAL_TX_PER_SEC = 144,
+    NVML_GPM_METRIC_C2C_LINK10_TOTAL_RX_PER_SEC = 145,
+    NVML_GPM_METRIC_C2C_LINK10_DATA_TX_PER_SEC  = 146,
+    NVML_GPM_METRIC_C2C_LINK10_DATA_RX_PER_SEC  = 147,
+    NVML_GPM_METRIC_C2C_LINK11_TOTAL_TX_PER_SEC = 148,
+    NVML_GPM_METRIC_C2C_LINK11_TOTAL_RX_PER_SEC = 149,
+    NVML_GPM_METRIC_C2C_LINK11_DATA_TX_PER_SEC  = 150,
+    NVML_GPM_METRIC_C2C_LINK11_DATA_RX_PER_SEC  = 151,
+    NVML_GPM_METRIC_C2C_LINK12_TOTAL_TX_PER_SEC = 152,
+    NVML_GPM_METRIC_C2C_LINK12_TOTAL_RX_PER_SEC = 153,
+    NVML_GPM_METRIC_C2C_LINK12_DATA_TX_PER_SEC  = 154,
+    NVML_GPM_METRIC_C2C_LINK12_DATA_RX_PER_SEC  = 155,
+    NVML_GPM_METRIC_C2C_LINK13_TOTAL_TX_PER_SEC = 156,
+    NVML_GPM_METRIC_C2C_LINK13_TOTAL_RX_PER_SEC = 157,
+    NVML_GPM_METRIC_C2C_LINK13_DATA_TX_PER_SEC  = 158,
+    NVML_GPM_METRIC_C2C_LINK13_DATA_RX_PER_SEC  = 159,
+    NVML_GPM_METRIC_HOSTMEM_CACHE_HIT           = 160,
+    NVML_GPM_METRIC_HOSTMEM_CACHE_MISS          = 161,
+    NVML_GPM_METRIC_PEERMEM_CACHE_HIT           = 162,
+    NVML_GPM_METRIC_PEERMEM_CACHE_MISS          = 163,
+    NVML_GPM_METRIC_DRAM_CACHE_HIT              = 164,
+    NVML_GPM_METRIC_DRAM_CACHE_MISS             = 165,
+    NVML_GPM_METRIC_NVENC_0_UTIL                = 166,
+    NVML_GPM_METRIC_NVENC_1_UTIL                = 167,
+    NVML_GPM_METRIC_NVENC_2_UTIL                = 168,
+    NVML_GPM_METRIC_NVENC_3_UTIL                = 169,
+    NVML_GPM_METRIC_GR0_CTXSW_CYCLES_ELAPSED    = 170,
+    NVML_GPM_METRIC_GR0_CTXSW_CYCLES_ACTIVE     = 171,
+    NVML_GPM_METRIC_GR0_CTXSW_REQUESTS          = 172,
+    NVML_GPM_METRIC_GR0_CTXSW_CYCLES_PER_REQ    = 173,
+    NVML_GPM_METRIC_GR0_CTXSW_ACTIVE_PCT        = 174,
+    NVML_GPM_METRIC_GR1_CTXSW_CYCLES_ELAPSED    = 175,
+    NVML_GPM_METRIC_GR1_CTXSW_CYCLES_ACTIVE     = 176,
+    NVML_GPM_METRIC_GR1_CTXSW_REQUESTS          = 177,
+    NVML_GPM_METRIC_GR1_CTXSW_CYCLES_PER_REQ    = 178,
+    NVML_GPM_METRIC_GR1_CTXSW_ACTIVE_PCT        = 179,
+    NVML_GPM_METRIC_GR2_CTXSW_CYCLES_ELAPSED    = 180,
+    NVML_GPM_METRIC_GR2_CTXSW_CYCLES_ACTIVE     = 181,
+    NVML_GPM_METRIC_GR2_CTXSW_REQUESTS          = 182,
+    NVML_GPM_METRIC_GR2_CTXSW_CYCLES_PER_REQ    = 183,
+    NVML_GPM_METRIC_GR2_CTXSW_ACTIVE_PCT        = 184,
+    NVML_GPM_METRIC_GR3_CTXSW_CYCLES_ELAPSED    = 185,
+    NVML_GPM_METRIC_GR3_CTXSW_CYCLES_ACTIVE     = 186,
+    NVML_GPM_METRIC_GR3_CTXSW_REQUESTS          = 187,
+    NVML_GPM_METRIC_GR3_CTXSW_CYCLES_PER_REQ    = 188,
+    NVML_GPM_METRIC_GR3_CTXSW_ACTIVE_PCT        = 189,
+    NVML_GPM_METRIC_GR4_CTXSW_CYCLES_ELAPSED    = 190,
+    NVML_GPM_METRIC_GR4_CTXSW_CYCLES_ACTIVE     = 191,
+    NVML_GPM_METRIC_GR4_CTXSW_REQUESTS          = 192,
+    NVML_GPM_METRIC_GR4_CTXSW_CYCLES_PER_REQ    = 193,
+    NVML_GPM_METRIC_GR4_CTXSW_ACTIVE_PCT        = 194,
+    NVML_GPM_METRIC_GR5_CTXSW_CYCLES_ELAPSED    = 195,
+    NVML_GPM_METRIC_GR5_CTXSW_CYCLES_ACTIVE     = 196,
+    NVML_GPM_METRIC_GR5_CTXSW_REQUESTS          = 197,
+    NVML_GPM_METRIC_GR5_CTXSW_CYCLES_PER_REQ    = 198,
+    NVML_GPM_METRIC_GR5_CTXSW_ACTIVE_PCT        = 199,
+    NVML_GPM_METRIC_GR6_CTXSW_CYCLES_ELAPSED    = 200,
+    NVML_GPM_METRIC_GR6_CTXSW_CYCLES_ACTIVE     = 201,
+    NVML_GPM_METRIC_GR6_CTXSW_REQUESTS          = 202,
+    NVML_GPM_METRIC_GR6_CTXSW_CYCLES_PER_REQ    = 203,
+    NVML_GPM_METRIC_GR6_CTXSW_ACTIVE_PCT        = 204,
+    NVML_GPM_METRIC_GR7_CTXSW_CYCLES_ELAPSED    = 205,
+    NVML_GPM_METRIC_GR7_CTXSW_CYCLES_ACTIVE     = 206,
+    NVML_GPM_METRIC_GR7_CTXSW_REQUESTS          = 207,
+    NVML_GPM_METRIC_GR7_CTXSW_CYCLES_PER_REQ    = 208,
+    NVML_GPM_METRIC_GR7_CTXSW_ACTIVE_PCT        = 209,
     /** Maximum value above +1. Note that changing this should also change NVML_GPM_METRICS_GET_VERSION due to struct size change */
-    NVML_GPM_METRIC_MAX                         = 98;
+    NVML_GPM_METRIC_MAX                         = 210;
 // Targeting ../nvml/nvmlGpmSample_st.java
 
 
@@ -11709,6 +12422,14 @@ public static final int NVML_GPM_SUPPORT_VERSION = 1;
  * Calculate GPM metrics from two samples.
  *
  * For Hopper &tm; or newer fully supported devices.
+ * 
+ * To retrieve metrics, the user must first allocate the two sample buffers at \a metricsGet->sample1
+ * and \a metricsGet->sample2 by calling \a nvmlGpmSampleAlloc(). Next, the user should fill in the ID of each metric
+ * in \a metricsGet->metrics[i].metricId and specify the total number of metrics to retrieve in \a metricsGet->numMetrics,
+ * The version should be set to NVML_GPM_METRICS_GET_VERSION in \a metricsGet->version. The user then calls the
+ * \a nvmlGpmSampleGet() API twice to obtain 2 samples of counters. \note that the interval between these
+ * two \a nvmlGpmSampleGet() calls should be greater than 100ms due to the internal sample refresh rate.
+ * Finally, the user calls \a nvmlGpmMetricsGet to retrieve the metrics, which will be stored at \a metricsGet->metrics
  *
  * @param metricsGet             IN/OUT: populated \a nvmlGpmMetricsGet_t struct
  *
@@ -11756,6 +12477,9 @@ public static native @Cast("nvmlReturn_t") int nvmlGpmSampleAlloc(@Cast("nvmlGpm
  *
  * For Hopper &tm; or newer fully supported devices.
  *
+ * \note The interval between two \a nvmlGpmSampleGet() calls should be greater than 100ms due to
+ * the internal sample refresh rate.
+ * 
  * @param device                Device to get samples for
  * @param gpmSample             Buffer to read samples into
  *
@@ -11772,6 +12496,9 @@ public static native @Cast("nvmlReturn_t") int nvmlGpmSampleGet(nvmlDevice_st de
  * samples to retrive metrics
  *
  * For Hopper &tm; or newer fully supported devices.
+ * 
+ * \note The interval between two \a nvmlGpmMigSampleGet() calls should be greater than 100ms due to
+ * the internal sample refresh rate.
  *
  * @param device                Device to get samples for
  * @param gpuInstanceId         MIG GPU Instance ID
@@ -11785,6 +12512,8 @@ public static native @Cast("nvmlReturn_t") int nvmlGpmMigSampleGet(nvmlDevice_st
 
 /**
  * Indicate whether the supplied device supports GPM
+ *
+ * For Hopper &tm; or newer fully supported devices.
  *
  * @param device                NVML device to query for
  * @param gpmSupport            Structure to indicate GPM support \a nvmlGpmSupport_t. Indicates
@@ -11991,6 +12720,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileGet
  * \a requestedProfilesMask, where each bit set corresponds to a supported bit from
  * the \a perfProfilesMask. These profiles will be added to existing list of
  * currently requested profiles.
+ * Requires root/admin permissions.
  *
  * @param device                The identifier of the target device
  * @param requestedProfiles     Reference to struct \a nvmlWorkloadPowerProfileRequestedProfiles_v1_t
@@ -12015,6 +12745,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileSet
  * \a requestedProfilesMask, where each bit set corresponds to a supported bit from
  * the \a perfProfilesMask. These profiles will be removed from the existing list of
  * currently requested profiles.
+ * Requires root/admin permissions.
  *
  * @param device                The identifier of the target device
  * @param requestedProfiles     Reference to struct \a nvmlWorkloadPowerProfileRequestedProfiles_v1_t
@@ -12050,25 +12781,24 @@ public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_RAMP_DOWN_HYSTERESIS 
 // Targeting ../nvml/nvmlPowerSmoothingProfile_v1_t.java
 
 
-/** Current version for the power smoothing profile structure */
 public static native @MemberGetter int nvmlPowerSmoothingProfile_v1();
 public static final int nvmlPowerSmoothingProfile_v1 = nvmlPowerSmoothingProfile_v1();
 // Targeting ../nvml/nvmlPowerSmoothingState_v1_t.java
 
 
-/** Current version for the power smoothing state structure */
 public static native @MemberGetter int nvmlPowerSmoothingState_v1();
 public static final int nvmlPowerSmoothingState_v1 = nvmlPowerSmoothingState_v1();
 
 /**
- * Activiate a specific preset profile for datacenter power smoothing
+ * Activiate a specific preset profile for datacenter power smoothing.
  * The API only sets the active preset profile based on the input profileId,
  * and ignores the other parameters of the structure.
+ * Requires root/admin permissions.
  *
  * %BLACKWELL_OR_NEWER%
  *
  * @param device                                The identifier of the target device
- * @param profile                               Reference to \ref nvmlPowerSmoothingProfile_t.
+ * @param profile                               Reference to \ref nvmlPowerSmoothingProfile_v1_t.
  *                                              Note that only \a profile->profileId is used and
  *                                              the rest of the structure is ignored.
  *
@@ -12083,7 +12813,8 @@ public static native @Cast("nvmlReturn_t") int nvmlDevicePowerSmoothingActivateP
                                                                    @Cast("nvmlPowerSmoothingProfile_t*") nvmlPowerSmoothingProfile_v1_t profile);
 
 /**
- * Update the value of a specific profile parameter contained within \ref nvmlPowerSmoothingProfile_t
+ * Update the value of a specific profile parameter contained within \ref nvmlPowerSmoothingProfile_v1_t.
+ * Requires root/admin permissions.
  *
  * %BLACKWELL_OR_NEWER%
  *
@@ -12093,7 +12824,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDevicePowerSmoothingActivateP
  * NVML_POWER_SMOOTHING_PROFILE_PARAM_RAMP_DOWN_HYSTERESIS expects a value in ms
  *
  * @param device                                      The identifier of the target device
- * @param profile                                     Reference to \ref nvmlPowerSmoothingProfile_t struct
+ * @param profile                                     Reference to \ref nvmlPowerSmoothingProfile_v1_t struct
  *
  * @return
  *        - \ref NVML_SUCCESS                         if the Active Profile was successfully set
@@ -12105,14 +12836,15 @@ public static native @Cast("nvmlReturn_t") int nvmlDevicePowerSmoothingActivateP
 public static native @Cast("nvmlReturn_t") int nvmlDevicePowerSmoothingUpdatePresetProfileParam(nvmlDevice_st device,
                                                                       @Cast("nvmlPowerSmoothingProfile_t*") nvmlPowerSmoothingProfile_v1_t profile);
 /**
- * Enable or disable the Power Smoothing Feature
+ * Enable or disable the Power Smoothing Feature.
+ * Requires root/admin permissions.
  *
  * %BLACKWELL_OR_NEWER%
  *
  * See \ref nvmlEnableState_t for details on allowed states
  *
  * @param device                                      The identifier of the target device
- * @param state                                       Reference to \ref nvmlPowerSmoothingState_t
+ * @param state                                       Reference to \ref nvmlPowerSmoothingState_v1_t
  *
  * @return
  *        - \ref NVML_SUCCESS                         if the feature state was successfully set

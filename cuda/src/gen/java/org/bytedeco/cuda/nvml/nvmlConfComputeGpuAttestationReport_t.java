@@ -31,13 +31,19 @@ public class nvmlConfComputeGpuAttestationReport_t extends Pointer {
         return new nvmlConfComputeGpuAttestationReport_t((Pointer)this).offsetAddress(i);
     }
 
+    /** output */
     public native @Cast("unsigned int") int isCecAttestationReportPresent(); public native nvmlConfComputeGpuAttestationReport_t isCecAttestationReportPresent(int setter);
+    /** output  */
     public native @Cast("unsigned int") int attestationReportSize(); public native nvmlConfComputeGpuAttestationReport_t attestationReportSize(int setter);
+    /** output */
     public native @Cast("unsigned int") int cecAttestationReportSize(); public native nvmlConfComputeGpuAttestationReport_t cecAttestationReportSize(int setter);
+    /** input: spdm supports 32 bytes on nonce */
     public native @Cast("unsigned char") byte nonce(int i); public native nvmlConfComputeGpuAttestationReport_t nonce(int i, byte setter);
     @MemberGetter public native @Cast("unsigned char*") BytePointer nonce();
+    /** output */
     public native @Cast("unsigned char") byte attestationReport(int i); public native nvmlConfComputeGpuAttestationReport_t attestationReport(int i, byte setter);
     @MemberGetter public native @Cast("unsigned char*") BytePointer attestationReport();
+    /** output */
     public native @Cast("unsigned char") byte cecAttestationReport(int i); public native nvmlConfComputeGpuAttestationReport_t cecAttestationReport(int i, byte setter);
     @MemberGetter public native @Cast("unsigned char*") BytePointer cecAttestationReport();
 }

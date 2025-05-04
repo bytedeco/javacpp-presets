@@ -94,4 +94,5 @@ public class VExecutionContext extends VRoot {
 
     // Added in TensorRT 10.1
     public native @NoException(true) void setDeviceMemoryV2(Pointer memory, @Cast("int64_t") long size);
+    public native @NoException(true) IRuntimeConfig getRuntimeConfig();
 }

@@ -48,14 +48,18 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #ifndef NV_INFER_VERSION_H
 // #define NV_INFER_VERSION_H
 
+public static final int TRT_MAJOR_ENTERPRISE = 10;
+public static final int TRT_MINOR_ENTERPRISE = 11;
+public static final int TRT_PATCH_ENTERPRISE = 0;
+public static final int TRT_BUILD_ENTERPRISE = 33;
 /** TensorRT major version. */
-public static final int NV_TENSORRT_MAJOR = 10;
+public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
-public static final int NV_TENSORRT_MINOR = 9;
+public static final int NV_TENSORRT_MINOR = TRT_MINOR_ENTERPRISE;
 /** TensorRT patch version. */
-public static final int NV_TENSORRT_PATCH = 0;
+public static final int NV_TENSORRT_PATCH = TRT_PATCH_ENTERPRISE;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 34;
+public static final int NV_TENSORRT_BUILD = TRT_BUILD_ENTERPRISE;
 
 /** TensorRT LWS major version. */
 public static final int NV_TENSORRT_LWS_MAJOR = 0;
@@ -107,11 +111,8 @@ public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENE
 // Items that are marked as deprecated will be removed in a future release.
 // #if __cplusplus >= 201402L
 // #define TRT_DEPRECATED [[deprecated]]
-// #if __GNUC__ < 6
-// #define TRT_DEPRECATED_ENUM
-// #else
+// #define TRT_DEPRECATED_BECAUSE(REASON) [[deprecated(REASON)]]
 // #define TRT_DEPRECATED_ENUM TRT_DEPRECATED
-// #endif
 // #ifdef _MSC_VER
 // #define TRT_DEPRECATED_API __declspec(dllexport)
 // #else
@@ -127,6 +128,19 @@ public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENE
 // #define TRT_DEPRECATED_ENUM
 // #define TRT_DEPRECATED_API __attribute__((deprecated, visibility("default")))
 // #endif
+// #define TRT_DEPRECATED_BECAUSE(REASON) TRT_DEPRECATED
+// #endif
+
+/** A stand-in for {@code [[nodiscard]]} and {@code [[nodiscard(REASON)]]} that works with older compilers. */
+// #if __cplusplus >= 201907L
+// #define TRT_NODISCARD [[nodiscard]]
+// #define TRT_NODISCARD_BECAUSE(REASON) [[nodiscard(REASON)]]
+// #elif __cplusplus >= 201603L
+// #define TRT_NODISCARD [[nodiscard]]
+// #define TRT_NODISCARD_BECAUSE(REASON) [[nodiscard]]
+// #else
+// #define TRT_NODISCARD
+// #define TRT_NODISCARD_BECAUSE(REASON)
 // #endif
 
 // Defines which symbols are exported
@@ -512,7 +526,7 @@ public static native @NoException(true) int getInferLibVersion();
 // Parsed from NvInferRuntimeCommon.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -564,7 +578,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 // Parsed from NvInferLegacyDims.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1308,7 +1322,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  *         The minimum and maximum specify the permitted range that is supported at runtime, while the optimum value
  *         is used for the kernel selection. This should be the "typical" value that is expected to occur at runtime.
  * 
- *  @see IOptimizationProfile::setDimensions(), IOptimizationProfile::setShapeValues()
+ *  @see IOptimizationProfile::setDimensions(), IOptimizationProfile::setShapeValuesV2(), IOptimizationProfile::setShapeValues()
  *  */
 @Namespace("nvinfer1") public enum OptProfileSelector {
     /** This is used to set or get the minimum permitted value for dynamic dimensions etc. */
@@ -1485,6 +1499,9 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  * 
  *  @see ExecutionContextAllocationStrategy
  *  */
+
+// Targeting ../nvinfer/IRuntimeConfig.java
+
 
 // Targeting ../nvinfer/ICudaEngine.java
 
@@ -3282,7 +3299,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  @deprecated Deprecated in TensorRT 10.7. Unneeded API. */
     kDIRECT_IO(11),
 
-    /** Fail if IAlgorithmSelector::selectAlgorithms returns an empty set of algorithms. */
+    /** Fail if IAlgorithmSelector::selectAlgorithms returns an empty set of algorithms.
+     *  @deprecated Deprecated in TensorRT 10.10. Unneeded API due to IAlgorithmSelector deprecation. */
     
 //!
     kREJECT_EMPTY_ALGORITHMS(12),
@@ -3359,7 +3377,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  for the default memory budget when this flag is enabled.
      * 
      *  Enabling this feature changes the behavior of
-     *  IRuntime::deserializeCudaEngine to allocate the entire network’s weights
+     *  IRuntime::deserializeCudaEngine to allocate the entire network's weights
      *  on the CPU DRAM instead of GPU memory. Then,
      *  ICudaEngine::createExecutionContext will determine the optimal split of
      *  weights between the CPU and GPU and place weights accordingly.
@@ -3549,7 +3567,18 @@ public static native @NoException(true) int getInferLibBuildVersion();
     /**
      *  Allows plugin I/O to be aliased when using IPluginV3OneBuildV2
      *  */
-    kALIASED_PLUGIN_IO_10_03(1);
+    
+
+//!
+//!
+    kALIASED_PLUGIN_IO_10_03(1),
+
+    /**
+     *  Allows IExecutionContext::updateDeviceMemorySizeForShapes to resize runner internal activation memory.
+     *  Using this feature can reduce runtime memory requirement when the actual input tensor shapes are smaller than
+     *  the maximum input tensor dimensions.
+     *  */
+    kRUNTIME_ACTIVATION_RESIZE_10_10(2);
 
     public final int value;
     private PreviewFeature(int v) { this.value = v; }
@@ -4168,6 +4197,10 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 // Targeting ../nvinfer/VBuilder.java
 
 
+// Targeting ../nvinfer/VRuntimeConfig.java
+
+
+
 
  // namespace apiv
  // namespace nvinfer1
@@ -4374,7 +4407,7 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 // Parsed from NvInferRuntimePlugin.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4461,6 +4494,9 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  *  \brief Definition of plugin versions.
  * 
  *  Tag for plug-in versions.  Used in upper byte of getTensorRTVersion().
+ * 
+ *  @deprecated Deprecated in TensorRT 10.10. PluginVersion is used only in relation to IPluginV2-descendent plugin
+ *  interfaces, which are all deprecated.
  *  */
 @Namespace("nvinfer1") public enum PluginVersion {
     /** IPluginV2 */
@@ -4485,6 +4521,9 @@ public static final int kPLUGIN_VERSION_PYTHON_BIT = kPLUGIN_VERSION_PYTHON_BIT(
  *  \enum PluginCreatorVersion
  * 
  *  \brief Enum to identify version of the plugin creator.
+ * 
+ *  @deprecated Deprecated in TensorRT 10.10. PluginCreatorVersion is used only in relation to plugin creators based
+ *  off IPluginCreator, which is deprecated.
  *  */
 @Namespace("nvinfer1") public enum PluginCreatorVersion {
     /** IPluginCreator */

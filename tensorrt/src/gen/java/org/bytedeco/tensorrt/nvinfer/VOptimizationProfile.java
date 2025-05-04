@@ -48,4 +48,21 @@ public class VOptimizationProfile extends VRoot {
     public native @Cast("bool") @NoException(true) boolean setExtraMemoryTarget(float target);
     public native @NoException(true) float getExtraMemoryTarget();
     public native @Cast("bool") @NoException(true) boolean isValid();
+    // Added in TensorRT 10.11
+    public native @Cast("bool") @NoException(true) boolean setShapeValuesV2(
+            String inputName, OptProfileSelector select, @Cast("const int64_t*") LongPointer values, int nbValues);
+    public native @Cast("bool") @NoException(true) boolean setShapeValuesV2(
+            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Cast("const int64_t*") LongBuffer values, int nbValues);
+    public native @Cast("bool") @NoException(true) boolean setShapeValuesV2(
+            String inputName, OptProfileSelector select, @Cast("const int64_t*") long[] values, int nbValues);
+    public native @Cast("bool") @NoException(true) boolean setShapeValuesV2(
+            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Cast("const int64_t*") LongPointer values, int nbValues);
+    public native @Cast("bool") @NoException(true) boolean setShapeValuesV2(
+            String inputName, OptProfileSelector select, @Cast("const int64_t*") LongBuffer values, int nbValues);
+    public native @Cast("bool") @NoException(true) boolean setShapeValuesV2(
+            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Cast("const int64_t*") long[] values, int nbValues);
+    public native @Cast("const int64_t*") @NoException(true) LongPointer getShapeValuesV2(
+            String inputName, OptProfileSelector select);
+    public native @Cast("const int64_t*") @NoException(true) LongBuffer getShapeValuesV2(
+            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
 }

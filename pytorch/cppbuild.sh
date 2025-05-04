@@ -224,8 +224,11 @@ sedinplace 's/#include <stdexcept>/#include <stdexcept>\
 # and see if choosing experimental works. See Issue #1503.
 # On Linux, pytorch FindOpenMP.cmake picks llvm libomp over libgomp. See Issue #1504.
 # On MacOS CMake standard version works tooL
-rm cmake/Modules/FindOpenMP.cmake
+rm -f cmake/Modules/FindOpenMP.cmake
 sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
+
+# delete broken CUDA kernels at least on Windows with CUDA 12.9
+rm -f aten/src/ATen/native/cuda/SegmentReduce.cu
 
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build
