@@ -2839,9 +2839,12 @@ public static final int
 
 
     CUPTI_CONFIDENTIAL_COMPUTE_EVENT_TYPE_FORCE_INT    = 0x7fffffff;
-// Targeting ../cupti/CUpti_ActivityConfidentialComputeRotation.java
 
-
+/**
+ * \brief Event related to confidential compute encryption rotation
+ *
+ * This structure gives timestamps for stages of encryption rotation
+ */
 // Targeting ../cupti/CUpti_ActivityInstantaneousEvent.java
 
 
