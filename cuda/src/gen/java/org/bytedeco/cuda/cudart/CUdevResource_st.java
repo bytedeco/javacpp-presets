@@ -48,7 +48,7 @@ public class CUdevResource_st extends Pointer {
     public native @Cast("CUdevResourceType") int type(); public native CUdevResource_st type(int setter);
     public native @Cast("unsigned char") byte _internal_padding(int i); public native CUdevResource_st _internal_padding(int i, byte setter);
     @MemberGetter public native @Cast("unsigned char*") BytePointer _internal_padding();
-        /** Resource corresponding to CU_DEV_RESOURCE_TYPE_SM \p. type. */
+        /** Resource corresponding to CU_DEV_RESOURCE_TYPE_SM \p type. */
         public native @ByRef CUdevSmResource_st sm(); public native CUdevResource_st sm(CUdevSmResource_st setter);
         public native @Cast("unsigned char") byte _oversize(int i); public native CUdevResource_st _oversize(int i, byte setter);
         @MemberGetter public native @Cast("unsigned char*") BytePointer _oversize();

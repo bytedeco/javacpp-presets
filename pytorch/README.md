@@ -62,7 +62,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.8-9.8-1.5.12-SNAPSHOT</version>
+            <version>12.9-9.9-1.5.12-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->

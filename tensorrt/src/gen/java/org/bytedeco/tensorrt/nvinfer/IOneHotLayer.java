@@ -48,20 +48,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IOneHotLayer extends ILayer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IOneHotLayer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IOneHotLayer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IOneHotLayer(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IOneHotLayer position(long position) {
-        return (IOneHotLayer)super.position(position);
-    }
-    @Override public IOneHotLayer getPointer(long i) {
-        return new IOneHotLayer((Pointer)this).offsetAddress(i);
-    }
 
     /**
      *  \brief Set the axis parameter.

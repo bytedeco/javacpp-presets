@@ -528,6 +528,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @Const @Deprecated @NoException(true) IOptimizationProfile getCalibrationProfile();
 
     /**
@@ -541,6 +542,8 @@ public class IBuilderConfig extends INoCopy {
      *  \note This function will override the previous set flags, rather than bitwise ORing the new flag.
      * 
      *  @see getQuantizationFlags()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
      *  */
     
     
@@ -548,7 +551,8 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void setQuantizationFlags(@Cast("nvinfer1::QuantizationFlags") int flags);
+    //!
+    public native @Deprecated @NoException(true) void setQuantizationFlags(@Cast("nvinfer1::QuantizationFlags") int flags);
 
     /**
      *  \brief Get the quantization flags.
@@ -556,6 +560,8 @@ public class IBuilderConfig extends INoCopy {
      *  @return The quantization flags as a bitmask.
      * 
      *  @see setQuantizationFlag()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
      *  */
     
     
@@ -563,7 +569,8 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("nvinfer1::QuantizationFlags") @NoException(true) int getQuantizationFlags();
+    //!
+    public native @Cast("nvinfer1::QuantizationFlags") @Deprecated @NoException(true) int getQuantizationFlags();
 
     /**
      *  \brief clear a quantization flag.
@@ -571,6 +578,8 @@ public class IBuilderConfig extends INoCopy {
      *  Clears the quantization flag from the enabled quantization flags.
      * 
      *  @see setQuantizationFlags()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
      *  */
     
     
@@ -578,8 +587,9 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void clearQuantizationFlag(QuantizationFlag flag);
-    public native @NoException(true) void clearQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
+    //!
+    public native @Deprecated @NoException(true) void clearQuantizationFlag(QuantizationFlag flag);
+    public native @Deprecated @NoException(true) void clearQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
 
     /**
      *  \brief Set a single quantization flag.
@@ -587,6 +597,8 @@ public class IBuilderConfig extends INoCopy {
      *  Add the input quantization flag to the already enabled quantization flags.
      * 
      *  @see setQuantizationFlags()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
      *  */
     
     
@@ -594,8 +606,9 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void setQuantizationFlag(QuantizationFlag flag);
-    public native @NoException(true) void setQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
+    //!
+    public native @Deprecated @NoException(true) void setQuantizationFlag(QuantizationFlag flag);
+    public native @Deprecated @NoException(true) void setQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
 
     /**
      *  \brief Returns true if the quantization flag is set.
@@ -603,6 +616,8 @@ public class IBuilderConfig extends INoCopy {
      *  @see getQuantizationFlags()
      * 
      *  @return True if quantization flag is set, false if unset.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
      *  */
     
     
@@ -613,8 +628,8 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean getQuantizationFlag(QuantizationFlag flag);
-    public native @Cast("bool") @NoException(true) boolean getQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
+    public native @Cast("bool") @Deprecated @NoException(true) boolean getQuantizationFlag(QuantizationFlag flag);
+    public native @Cast("bool") @Deprecated @NoException(true) boolean getQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
 
     /**
      *  \brief Set tactic sources.
@@ -665,9 +680,10 @@ public class IBuilderConfig extends INoCopy {
     /**
      *  \brief Create timing cache
      * 
-     *  Create ITimingCache instance from serialized raw data. The created timing cache doesn’t belong to
+     *  Create ITimingCache instance from serialized raw data. The created timing cache doesn't belong to
      *  a specific IBuilderConfig. It can be shared by multiple builder instances. Call setTimingCache()
      *  before launching a builder to attach cache to builder instance.
+     *  The lifetime of the ITimingCache must exceed the lifetime of all builders that use it.
      * 
      *  @param blob A pointer to the raw data that contains serialized timing cache
      *  @param size The size in bytes of the serialized timing cache. Size 0 means create a new cache from scratch

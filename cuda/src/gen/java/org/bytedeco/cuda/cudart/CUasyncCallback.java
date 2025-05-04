@@ -13,8 +13,8 @@ import static org.bytedeco.cuda.global.cudart.*;
 
 /**
  * CUDA async notification callback
- * @param info Information describing what actions to take as a result of this trim notification.
- * @param userData Pointer to user defined data provided at registration.
+ * @param info Information describing what actions to take as a result of this notification.
+ * @param userData Pointer to user defined data provided at callback registration.
  * @param callback The callback handle associated with this specific callback.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)

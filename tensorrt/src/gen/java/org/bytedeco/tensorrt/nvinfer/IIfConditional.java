@@ -91,7 +91,7 @@ public class IIfConditional extends INoCopy {
     /**
      *  \brief Add an If-conditional input.
      * 
-     *  @param input An input to the conditional that can be used by either or both of the conditional’s subgraphs.
+     *  @param input An input to the conditional that can be used by either or both of the conditional's subgraphs.
      * 
      *  @see IIfConditionalInputLayer
      *  */

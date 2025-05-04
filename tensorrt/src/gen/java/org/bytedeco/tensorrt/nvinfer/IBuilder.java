@@ -112,15 +112,21 @@ public class IBuilder extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) void setGpuAllocator(IGpuAllocator allocator);
 
     /**
      *  \brief Create a builder configuration object.
      * 
+     *  The caller owns the new IBuilderConfig, which must be destroyed with operator delete
+     *  before this IBuilder is destroyed. Destroying this IBuilder before destroying the
+     *  IBuilderConfig causes undefined behavior.
+     * 
      *  @see IBuilderConfig
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -143,8 +149,12 @@ public class IBuilder extends INoCopy {
      *  createNetworkV2 with NetworkDefinitionCreationFlag::kSTRONGLY_TYPED flag supports creating a strongly typed plan
      *  where tensor data types are inferred from network input types and operator type specification.
      * 
-     *  @param flags Bitset of NetworkDefinitionCreationFlags specifying network properties combined with bitwise OR.
-     *              e.g., 1U << NetworkDefinitionCreationFlag::kSTRONGLY_TYPED
+     *  The caller owns the new INetworkDefinition, which must be destroyed with operator delete
+     *  before this IBuilder is destroyed. Destroying this IBuilder before destroying the
+     *  INetworkDefinition causes undefined behavior.
+     * 
+     *  @param flags Bitset of NetworkDefinitionCreationFlags specifying network properties combined with bitwise OR,
+     *               e.g., 1U << NetworkDefinitionCreationFlag::kSTRONGLY_TYPED.
      * 
      *  @see INetworkDefinition, NetworkDefinitionCreationFlags
      *  */

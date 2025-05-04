@@ -36,7 +36,10 @@ public class nvmlWorkloadPowerProfileInfo_v1_t extends Pointer {
 
     /** the API version number */
     public native @Cast("unsigned int") int version(); public native nvmlWorkloadPowerProfileInfo_v1_t version(int setter);
-    public native @Cast("unsigned int") int profileId(); public native nvmlWorkloadPowerProfileInfo_v1_t profileId(int setter);          //<! Performance Profile Id to provide semantic name such as compute, Memory, Max-Q...
-    public native @Cast("unsigned int") int priority(); public native nvmlWorkloadPowerProfileInfo_v1_t priority(int setter);           //<! Priority of the profile
-    public native @ByRef nvmlMask255_t conflictingMask(); public native nvmlWorkloadPowerProfileInfo_v1_t conflictingMask(nvmlMask255_t setter);    //<! Mask of conflicting performance profiles
+    /** Performance Profile Id to provide semantic name such as compute, Memory, Max-Q... */
+    public native @Cast("unsigned int") int profileId(); public native nvmlWorkloadPowerProfileInfo_v1_t profileId(int setter);
+    /** Priority of the profile */
+    public native @Cast("unsigned int") int priority(); public native nvmlWorkloadPowerProfileInfo_v1_t priority(int setter);
+    /** Mask of conflicting performance profiles */
+    public native @ByRef nvmlMask255_t conflictingMask(); public native nvmlWorkloadPowerProfileInfo_v1_t conflictingMask(nvmlMask255_t setter);
 }
