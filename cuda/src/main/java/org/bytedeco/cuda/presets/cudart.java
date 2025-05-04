@@ -41,15 +41,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "<cuda_fp16.hpp>",
                          "<cuda_bf16.h>", "<cuda_bf16.hpp>", "<library_types.h>", "<cudaGL.h>", "<cuda_gl_interop.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
-              includepath = {"/usr/local/cuda-12.8/include/", "/usr/local/cuda/include/", "/usr/include/"},
-              link = {"cudart@.12", "cuda@.1#"}, linkpath = {"/usr/local/cuda-12.8/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-12.8/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-12.8/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-12.8/lib/", "/usr/local/cuda/lib/"}),
+              includepath = {"/usr/local/cuda-12.9/include/", "/usr/local/cuda/include/", "/usr/include/"},
+              link = {"cudart@.12", "cuda@.1#"}, linkpath = {"/usr/local/cuda-12.9/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-12.9/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-12.9/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-12.9/lib/", "/usr/local/cuda/lib/"}),
     @Platform(value = "windows-x86_64",     preload = "cudart64_12",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/lib/x64/") },
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
@@ -141,6 +141,7 @@ public class cudart implements InfoMapper {
                .put(new Info("CUdevResourceDesc").valueTypes("CUdevResourceDesc_st").pointerTypes("@ByPtrPtr CUdevResourceDesc_st"))
                .put(new Info("CUdevSmResource").pointerTypes("CUdevSmResource_st"))
                .put(new Info("CUdevResource").pointerTypes("CUdevResource_st"))
+               .put(new Info("CUlogsCallbackHandle").valueTypes("CUlogsCallbackEntry_st").pointerTypes("@ByPtrPtr CUlogsCallbackEntry_st"))
                .put(new Info("CU_LAUNCH_PARAM_END", "CU_LAUNCH_PARAM_BUFFER_POINTER", "CU_LAUNCH_PARAM_BUFFER_SIZE").translate(false).cppTypes("void*"))
                .put(new Info("CU_DEVICE_CPU", "CU_DEVICE_INVALID").translate(false).cppTypes("int"))
                .put(new Info("CU_STREAM_LEGACY", "CU_STREAM_PER_THREAD", "cudaStreamLegacy", "cudaStreamPerThread").translate(false).cppTypes("CUstream_st*"))
