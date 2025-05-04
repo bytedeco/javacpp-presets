@@ -13,7 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/*
+/**
  * Power Smoothing Structure for Feature Enablement
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)

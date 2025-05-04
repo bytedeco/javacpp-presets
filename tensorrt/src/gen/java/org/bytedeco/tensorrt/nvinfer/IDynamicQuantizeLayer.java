@@ -25,7 +25,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief A network layer to perform dynamic quantization.
  * 
  *  This layer accepts a floating-point input tensor and computes the block scale factors needed to
- *  quantize the input’s data. It outputs the quantized tensor as its first output and
+ *  quantize the input's data. It outputs the quantized tensor as its first output and
  *  the scale factors as its second output.
  * 
  *  Use ILayer::setInput to add an input for the double-quantization scale factor.
@@ -62,11 +62,11 @@ public class IDynamicQuantizeLayer extends ILayer {
     //!
 
     /**
-     *  \brief Set DynamicQuantizeLayer’s quantized output type.
+     *  \brief Set DynamicQuantizeLayer's quantized output type.
      * 
      *  @param toType The data type of the quantized output tensor.
      * 
-     *  Set the type of the dynamic quantization layer’s quantized output. Currently the only valid
+     *  Set the type of the dynamic quantization layer's quantized output. Currently the only valid
      *  value is DataType::kFP4. If the network is strongly typed, setToType must be used to set
      *  the output type, and use of setOutputType is an error. Otherwise, types passed to setOutputType
      *  and setToType must be the same.
@@ -83,7 +83,7 @@ public class IDynamicQuantizeLayer extends ILayer {
     public native @NoException(true) void setToType(@Cast("nvinfer1::DataType") int toType);
 
     /**
-     *  \brief Return DynamicQuantizeLayer’s quantized output type.
+     *  \brief Return DynamicQuantizeLayer's quantized output type.
      * 
      *  @return toType parameter set during layer creation or by setToType().
      * 

@@ -38,7 +38,10 @@ public class dim3 extends Pointer {
     public native @Cast("unsigned int") int y(); public native dim3 y(int setter);
     public native @Cast("unsigned int") int z(); public native dim3 z(int setter);
 // #if defined(__cplusplus)
-// #if __cplusplus >= 201103L
+// #if __cplusplus >= 201103L || ( defined(_MSC_VER) && _MSC_VER >= 1900 )
+    /* MSVC 2015 introduced support for constexpr constructors. A check in addition to the _cpluscplus macro comparison
+       that uses the _MSC_VER macro is required because by default, Visual Studio always returns the value 199711L for 
+       the __cplusplus preprocessor macro. */
     public dim3(@Cast("unsigned int") int vx/*=1*/, @Cast("unsigned int") int vy/*=1*/, @Cast("unsigned int") int vz/*=1*/) { super((Pointer)null); allocate(vx, vy, vz); }
     private native void allocate(@Cast("unsigned int") int vx/*=1*/, @Cast("unsigned int") int vy/*=1*/, @Cast("unsigned int") int vz/*=1*/);
     public dim3() { super((Pointer)null); allocate(); }

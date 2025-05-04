@@ -86,9 +86,9 @@ public static final int NVJPEG_MAX_COMPONENT = 4;
 
 // nvjpeg version information
 public static final int NVJPEG_VER_MAJOR = 12;
-public static final int NVJPEG_VER_MINOR = 3;
-public static final int NVJPEG_VER_PATCH = 5;
-public static final int NVJPEG_VER_BUILD = 92;
+public static final int NVJPEG_VER_MINOR = 4;
+public static final int NVJPEG_VER_PATCH = 0;
+public static final int NVJPEG_VER_BUILD = 16;
 
 /* nvJPEG status enums, returned by nvJPEG API */
 /** enum nvjpegStatus_t */
@@ -138,33 +138,39 @@ public static final int
 /** enum nvjpegOutputFormat_t */
 public static final int
     // return decompressed image as it is - write planar output
-    NVJPEG_OUTPUT_UNCHANGED   = 0,
+    NVJPEG_OUTPUT_UNCHANGED      = 0,
     // return planar luma and chroma, assuming YCbCr colorspace
-    NVJPEG_OUTPUT_YUV         = 1, 
+    NVJPEG_OUTPUT_YUV            = 1, 
     // return luma component only, if YCbCr colorspace, 
     // or try to convert to grayscale,
     // writes to 1-st channel of nvjpegImage_t
-    NVJPEG_OUTPUT_Y           = 2,
+    NVJPEG_OUTPUT_Y              = 2,
     // convert to planar RGB 
-    NVJPEG_OUTPUT_RGB         = 3,
+    NVJPEG_OUTPUT_RGB            = 3,
     // convert to planar BGR
-    NVJPEG_OUTPUT_BGR         = 4, 
+    NVJPEG_OUTPUT_BGR            = 4, 
     // convert to interleaved RGB and write to 1-st channel of nvjpegImage_t
-    NVJPEG_OUTPUT_RGBI        = 5, 
+    NVJPEG_OUTPUT_RGBI           = 5, 
     // convert to interleaved BGR and write to 1-st channel of nvjpegImage_t
-    NVJPEG_OUTPUT_BGRI        = 6,
+    NVJPEG_OUTPUT_BGRI           = 6,
     // 16 bit unsigned output in interleaved format
     NVJPEG_OUTPUT_UNCHANGEDI_U16 = 7,
+    // 2 channels: Y and UV (at half horizontal + vertical resolution - 420)
+    NVJPEG_OUTPUT_NV12           = 8,
+    // One channel: YUYV YUYV ... (U and V are at half horizontal resolution - 422)
+    NVJPEG_OUTPUT_YUY2           = 9,
     // maximum allowed value
-    NVJPEG_OUTPUT_FORMAT_MAX  = 7;
+    NVJPEG_OUTPUT_FORMAT_MAX     = 9;
 
 // Parameter of this type specifies what type of input user provides for encoding
 /** enum nvjpegInputFormat_t */
 public static final int
+    NVJPEG_INPUT_YUV         = 1, // Input is YUV (or YCbCr)
     NVJPEG_INPUT_RGB         = 3, // Input is RGB - will be converted to YCbCr before encoding
     NVJPEG_INPUT_BGR         = 4, // Input is RGB - will be converted to YCbCr before encoding
     NVJPEG_INPUT_RGBI        = 5, // Input is interleaved RGB - will be converted to YCbCr before encoding
-    NVJPEG_INPUT_BGRI        = 6;  // Input is interleaved RGB - will be converted to YCbCr before encoding
+    NVJPEG_INPUT_BGRI        = 6, // Input is interleaved RGB - will be converted to YCbCr before encoding
+    NVJPEG_INPUT_NV12        = 8; // Input is 2 channels: Y and UV (at half horizontal + vertical resolution - 420)
 
 // Implementation
 // NVJPEG_BACKEND_DEFAULT    : default value
@@ -183,6 +189,12 @@ public static final int
     NVJPEG_BACKEND_GPU_HYBRID_DEVICE = 4,
     NVJPEG_BACKEND_HARDWARE_DEVICE = 5,
     NVJPEG_BACKEND_LOSSLESS_JPEG = 6;
+
+/** enum nvjpegEncBackend_t */
+public static final int
+    NVJPEG_ENC_BACKEND_DEFAULT = 0,
+    NVJPEG_ENC_BACKEND_GPU = 1,
+    NVJPEG_ENC_BACKEND_HARDWARE = 2;
 
 // Currently parseable JPEG encodings (SOF markers)
 /** enum nvjpegJpegEncoding_t */
@@ -329,6 +341,12 @@ public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareDecoderInfo(nv
         @Cast("unsigned int*") int[] num_engines,
         @Cast("unsigned int*") int[] num_cores_per_engine);
 
+public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareEncoderInfo(nvjpegHandle handle,
+        @Cast("unsigned int*") IntPointer num_engines);
+public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareEncoderInfo(nvjpegHandle handle,
+        @Cast("unsigned int*") IntBuffer num_engines);
+public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareEncoderInfo(nvjpegHandle handle,
+        @Cast("unsigned int*") int[] num_engines);
 
 // Initalization of decoding state
 // IN         handle        : Library handle
@@ -527,6 +545,12 @@ public static native @Cast("nvjpegStatus_t") int nvjpegEncoderStateCreate(
         @ByPtrPtr nvjpegEncoderState encoder_state,
         CUstream_st stream);
 
+public static native @Cast("nvjpegStatus_t") int nvjpegEncoderStateCreateWithBackend(
+    nvjpegHandle handle,
+    @ByPtrPtr nvjpegEncoderState encoder_state,
+    @Cast("nvjpegEncBackend_t") int backend,
+    CUstream_st stream);
+
 public static native @Cast("nvjpegStatus_t") int nvjpegEncoderStateDestroy(nvjpegEncoderState encoder_state);
 // Targeting ../nvjpeg/nvjpegEncoderParams.java
 
@@ -559,6 +583,11 @@ public static native @Cast("nvjpegStatus_t") int nvjpegEncoderParamsSetSamplingF
         @Cast("const nvjpegChromaSubsampling_t") int chroma_subsampling,
         CUstream_st stream);
 
+public static native @Cast("nvjpegStatus_t") int nvjpegEncoderParamsSetRestartInterval(
+        nvjpegEncoderParams encoder_params,
+        @Cast("unsigned int") int restart_interval,
+        CUstream_st stream);
+
 public static native @Cast("nvjpegStatus_t") int nvjpegEncodeGetBufferSize(
         nvjpegHandle handle,
         nvjpegEncoderParams encoder_params,
@@ -582,6 +611,17 @@ public static native @Cast("nvjpegStatus_t") int nvjpegEncodeImage(
         nvjpegEncoderParams encoder_params,
         @Const nvjpegImage_t source,
         @Cast("nvjpegInputFormat_t") int input_format, 
+        int image_width,
+        int image_height,
+        CUstream_st stream);
+
+public static native @Cast("nvjpegStatus_t") int nvjpegEncode(
+        nvjpegHandle handle,
+        nvjpegEncoderState encoder_state,
+        nvjpegEncoderParams encoder_params,
+        @Const nvjpegImage_t source,
+        @Cast("nvjpegChromaSubsampling_t") int input_subsampling,
+        @Cast("nvjpegInputFormat_t") int input_format,
         int image_width,
         int image_height,
         CUstream_st stream);

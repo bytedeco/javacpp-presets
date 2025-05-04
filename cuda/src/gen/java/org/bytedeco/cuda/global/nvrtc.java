@@ -758,6 +758,13 @@ public static native @Cast("nvrtcResult") int nvrtcSetFlowCallback(_nvrtcProgram
  *       limited debug information generation for optimized device code (currently,
  *       only line number information).  When \c -G is not specified, \c -dopt=on is implicit.
  * 
+ *     - \c --Ofast-compile={0|min|mid|max} (\c -Ofc)
+ *       
+ *       Specify level to prefer device code compilation speed, where 'max'
+ *       focuses only on the fastest compilation speed, 'mid' balances compile
+ *       time and runtime, 'min' has a more minimal impact on both, and 0
+ *       (default) is normal compilation
+ * 
  *     - \c --ptxas-options \<options\> (\c -Xptxas)
  * 
  *     - \c --ptxas-options=\<options\>
@@ -854,6 +861,18 @@ public static native @Cast("nvrtcResult") int nvrtcSetFlowCallback(_nvrtcProgram
  *       Enable (disable) the generation of stack canaries in device code.
  * 
  *       - Default: \c false
+ * 
+ *     - \c --no-cache (\c -no-cache)
+ *      
+ *       Disable the use of cache for both ptx and cubin code generation.
+ * 
+ *     - \c --frandom-seed (\c -frandom-seed)
+ *      
+ *      The user specified random seed will be used to replace random numbers used 
+ *      in generating symbol names and variable names. The option can be used to 
+ *      generate deterministicly identical ptx and object files. If the input value
+ *      is a valid number (decimal, octal, or hex), it will be used directly as the
+ *      random seed. Otherwise, the CRC value of the passed string will be used instead.
  * 
  *   - Preprocessing
  *     - \c --define-macro=\<def\> (\c -D)

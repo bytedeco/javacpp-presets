@@ -102,9 +102,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 12;
-public static final int CUBLAS_VER_MINOR = 8;
-public static final int CUBLAS_VER_PATCH = 4;
-public static final int CUBLAS_VER_BUILD = 1;
+public static final int CUBLAS_VER_MINOR = 9;
+public static final int CUBLAS_VER_PATCH = 0;
+public static final int CUBLAS_VER_BUILD = 13;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 10000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -144,7 +144,7 @@ public static final int CUBLAS_POINTER_MODE_HOST = 0, CUBLAS_POINTER_MODE_DEVICE
 /** enum cublasAtomicsMode_t */
 public static final int CUBLAS_ATOMICS_NOT_ALLOWED = 0, CUBLAS_ATOMICS_ALLOWED = 1;
 
-/*For different GEMM algorithm */
+/* For specifying different GEMM algorithms */
 /** enum cublasGemmAlgo_t */
 public static final int
   CUBLAS_GEMM_DFALT = -1,
@@ -192,7 +192,7 @@ public static final int
   CUBLAS_GEMM_ALGO14_TENSOR_OP = 114,
   CUBLAS_GEMM_ALGO15_TENSOR_OP = 115;
 
-/*Enum for default math mode/tensor operation*/
+/* Enum for default math mode/tensor operation */
 /** enum cublasMath_t */
 public static final int
   CUBLAS_DEFAULT_MATH = 0,
@@ -206,6 +206,9 @@ public static final int
 
   /* allow accelerating single precision routines using TF32 tensor cores */
   CUBLAS_TF32_TENSOR_OP_MATH = 3,
+
+  /* allow accelerating single precision routines using the BF16x9 algorithm */
+  CUBLAS_FP32_EMULATED_BF16X9_MATH = 4,
 
   /* flag to force any reductons to use the accumulator type and not output type in case of mixed precision routines
      with lower size output type */
@@ -222,17 +225,32 @@ public static final int
  */
 /** enum cublasComputeType_t */
 public static final int
-  CUBLAS_COMPUTE_16F = 64,           /* half - default */
-  CUBLAS_COMPUTE_16F_PEDANTIC = 65,  /* half - pedantic */
-  CUBLAS_COMPUTE_32F = 68,           /* float - default */
-  CUBLAS_COMPUTE_32F_PEDANTIC = 69,  /* float - pedantic */
-  CUBLAS_COMPUTE_32F_FAST_16F = 74,  /* float - fast, allows down-converting inputs to half or TF32 */
-  CUBLAS_COMPUTE_32F_FAST_16BF = 75, /* float - fast, allows down-converting inputs to bfloat16 or TF32 */
-  CUBLAS_COMPUTE_32F_FAST_TF32 = 77, /* float - fast, allows down-converting inputs to TF32 */
-  CUBLAS_COMPUTE_64F = 70,           /* double - default */
-  CUBLAS_COMPUTE_64F_PEDANTIC = 71,  /* double - pedantic */
-  CUBLAS_COMPUTE_32I = 72,           /* signed 32-bit int - default */
-  CUBLAS_COMPUTE_32I_PEDANTIC = 73;  /* signed 32-bit int - pedantic */
+  CUBLAS_COMPUTE_16F = 64,                 /* half - default */
+  CUBLAS_COMPUTE_16F_PEDANTIC = 65,        /* half - pedantic */
+  CUBLAS_COMPUTE_32F = 68,                 /* float - default */
+  CUBLAS_COMPUTE_32F_PEDANTIC = 69,        /* float - pedantic */
+  CUBLAS_COMPUTE_32F_FAST_16F = 74,        /* float - fast, allows down-converting inputs to half or TF32 */
+  CUBLAS_COMPUTE_32F_FAST_16BF = 75,       /* float - fast, allows down-converting inputs to bfloat16 or TF32 */
+  CUBLAS_COMPUTE_32F_FAST_TF32 = 77,       /* float - fast, allows down-converting inputs to TF32 */
+  CUBLAS_COMPUTE_32F_EMULATED_16BFX9 = 78, /* float - emulated, converts inputs into 3xBF16 values */
+  CUBLAS_COMPUTE_64F = 70,                 /* double - default */
+  CUBLAS_COMPUTE_64F_PEDANTIC = 71,        /* double - pedantic */
+  CUBLAS_COMPUTE_32I = 72,                 /* signed 32-bit int - default */
+  CUBLAS_COMPUTE_32I_PEDANTIC = 73;        /* signed 32-bit int - pedantic */
+
+/* Enum for specifying how to leverage emulated algorithms */
+/** enum cublasEmulationStrategy_t */
+public static final int
+  /* The default emulation strategy.  For emulated computations, this is equivalent to
+   * CUBLAS_EMULATION_STRATEGY_PERFORMANT unless the CUBLAS_EMULATION_STRATEGY environment variable is set.
+   */
+  CUBLAS_EMULATION_STRATEGY_DEFAULT = 0,
+
+  /* An emulation strategy which tells cuBLAS to use emulation when it provides a performance benefit */
+  CUBLAS_EMULATION_STRATEGY_PERFORMANT = 1,
+
+  /* An emulation strategy which tells cuBLAS to use emulation whenever possible */
+  CUBLAS_EMULATION_STRATEGY_EAGER = 2;
 // Targeting ../cublas/cublasContext.java
 
 
@@ -289,6 +307,16 @@ public static native @Cast("cublasStatus_t") int cublasGetSmCountTarget(cublasCo
 public static native @Cast("cublasStatus_t") int cublasGetSmCountTarget(cublasContext handle, int[] smCountTarget);
 
 public static native @Cast("cublasStatus_t") int cublasSetSmCountTarget(cublasContext handle, int smCountTarget);
+
+public static native @Cast("cublasStatus_t") int cublasGetEmulationStrategy(cublasContext handle,
+                                                                 @Cast("cublasEmulationStrategy_t*") IntPointer emulationStrategy);
+public static native @Cast("cublasStatus_t") int cublasGetEmulationStrategy(cublasContext handle,
+                                                                 @Cast("cublasEmulationStrategy_t*") IntBuffer emulationStrategy);
+public static native @Cast("cublasStatus_t") int cublasGetEmulationStrategy(cublasContext handle,
+                                                                 @Cast("cublasEmulationStrategy_t*") int[] emulationStrategy);
+
+public static native @Cast("cublasStatus_t") int cublasSetEmulationStrategy(cublasContext handle,
+                                                                 @Cast("cublasEmulationStrategy_t") int emulationStrategy);
 
 public static native @Cast("const char*") BytePointer cublasGetStatusName(@Cast("cublasStatus_t") int status);
 
@@ -13433,7 +13461,7 @@ public static final int
   CUBLASLT_MATMUL_INNER_SHAPE_MMA16816 = 4,
   CUBLASLT_MATMUL_INNER_SHAPE_END = 5;
 
-/** Scaling mode for per-matrix scaling */
+/** Scaling mode for per-matrix scaling. See documentation for layout information. */
 /** enum cublasLtMatmulMatrixScale_t */
 public static final int
   /** Scaling factors are single precision scalars applied to the whole tensor */
@@ -13444,7 +13472,17 @@ public static final int
   /** Same as above, except that scaling factor tensor elements have type CUDA_R_8F_UE8M0 and the block size is 32
      elements*/
   CUBLASLT_MATMUL_MATRIX_SCALE_VEC32_UE8M0 = 2,
-  CUBLASLT_MATMUL_MATRIX_SCALE_END = 3;
+  /** Scaling factors are single-precision vectors. This mode is only applicable to matrices A and B, in which case the
+   * vectors are expected to have M and N elements respectively, and each (i, j)-th element of product of A and B is
+   * multiplied by i-th element of A scale and j-th element of B scale. */
+  CUBLASLT_MATMUL_MATRIX_SCALE_OUTER_VEC_32F = 3,
+  /** Scaling factors are tensors that contain a dedicated FP32 scaling factor for each 128-element block in the
+   * innermost dimension of the corresponding data tensor */
+  CUBLASLT_MATMUL_MATRIX_SCALE_VEC128_32F = 4,
+  /** Scaling factors are tensors that contain a dedicated FP32 scaling factor for each 128x128-element block in the
+   * the corresponding data tensor */
+  CUBLASLT_MATMUL_MATRIX_SCALE_BLK128x128_32F = 5,
+  CUBLASLT_MATMUL_MATRIX_SCALE_END = 6;
 
 /** Pointer mode to use for alpha/beta */
 /** enum cublasLtPointerMode_t */
@@ -13593,6 +13631,21 @@ public static final int
    */
   CUBLASLT_ORDER_COL32_2R_4R4 = 4;
 
+/** Enum for batch mode */
+/** enum cublasLtBatchMode_t */
+public static final int
+  /** Strided
+   *
+   * The matrices of each instance of the batch are located at fixed offsets in number of elements from their locations
+   * in the previous instance.
+   */
+  CUBLASLT_BATCH_MODE_STRIDED = 0,
+  /** Pointer array
+   *
+   * The address of the matrix of each instance of the batch are read from arrays of pointers.
+   */
+  CUBLASLT_BATCH_MODE_POINTER_ARRAY = 1;
+
 /** Attributes of memory layout */
 /** enum cublasLtMatrixLayoutAttribute_t */
 public static final int
@@ -13638,7 +13691,7 @@ public static final int
 
   /** Number of matmul operations to perform in the batch.
    *
-   * See also CUBLASLT_ALGO_CAP_STRIDED_BATCH_SUPPORT
+   * See also CUBLASLT_ALGO_CAP_STRIDED_BATCH_SUPPORT and CUBLASLT_ALGO_CAP_POINTER_ARRAY_BATCH_SUPPORT
    *
    * int32_t, default: 1
    */
@@ -13665,7 +13718,13 @@ public static final int
    * int64_t, default: 0 - 0 means that layout is regular (real and imaginary parts of complex numbers are interleaved
    * in memory in each element)
    */
-  CUBLASLT_MATRIX_LAYOUT_PLANE_OFFSET = 7;
+  CUBLASLT_MATRIX_LAYOUT_PLANE_OFFSET = 7,
+
+  /** Batch mode.
+   *
+   * uint32_t, default: 0 - 0 means that batch mode is CUBLASLT_BATCH_MODE_STRIDED.
+   */
+  CUBLASLT_MATRIX_LAYOUT_BATCH_MODE = 8;
 
 /** Internal. Do not use directly.
  */
@@ -14775,7 +14834,7 @@ public static final int
    */
   CUBLASLT_ALGO_CAP_CUSTOM_OPTION_MAX = 7,
 
-  /** whether algorithm supports custom (not COL or ROW memory order), see cublasLtOrder_t
+  /** describes if the algorithm supports custom (not COL or ROW memory order), see cublasLtOrder_t
    *
    * int32_t 0 means only COL and ROW memory order is allowed, non-zero means that algo might have different
    * requirements;
@@ -14847,7 +14906,19 @@ public static final int
    *
    * int32_t
    */
-  CUBLASLT_ALGO_CAP_ATOMIC_SYNC = 20;
+  CUBLASLT_ALGO_CAP_ATOMIC_SYNC = 20,
+
+  /** support pointer array batch
+   *
+   * int32_t, 0 means no support, supported otherwise
+   */
+  CUBLASLT_ALGO_CAP_POINTER_ARRAY_BATCH_SUPPORT = 21,
+
+  /** describes if the algorithm supports floating point emulation
+   *
+   * int32_t
+   */
+  CUBLASLT_ALGO_CAP_FLOATING_POINT_EMULATION_SUPPORT = 22;
 
 /** Get algo capability attribute.
  *

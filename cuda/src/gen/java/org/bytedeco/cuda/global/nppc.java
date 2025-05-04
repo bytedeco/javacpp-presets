@@ -80,15 +80,15 @@ public static final int NPP_VER_MAJOR = 12;
 /**
  * Minor version
  */
-public static final int NPP_VER_MINOR = 3;
+public static final int NPP_VER_MINOR = 4;
 /**
  * Patch version
  */
-public static final int NPP_VER_PATCH = 3;
+public static final int NPP_VER_PATCH = 0;
 /**
  * Build version
  */
-public static final int NPP_VER_BUILD = 100;
+public static final int NPP_VER_BUILD = 27;
 
 /**
  * Full version
@@ -189,7 +189,7 @@ public static final int NPP_VERSION_BUILD =  NPP_VER_BUILD;
  
 // #ifdef __cplusplus
 // #ifdef NPP_PLUS
-// #else
+// #endif
 // Targeting ../nppc/Npp16f.java
 
 
@@ -356,6 +356,9 @@ public static final int
     NPP_ALIGNMENT_ERROR                     = -1002,
     /** Cuda kernel execution error, most commonly Cuda kernel launch error. */
     NPP_CUDA_KERNEL_EXECUTION_ERROR         = -1000,
+
+    /** Non CTX function support has been deprecated. */
+    NPP_STREAM_CTX_ERROR                    = -215,
 
     /** Unsupported round mode. */
     NPP_ROUND_MODE_NOT_SUPPORTED_ERROR      = -213,
@@ -967,9 +970,7 @@ public static final int
 
 
 
-// #ifdef __cplusplus
-// #ifndef NPP_PLUS /* extern "C" */
-// #endif
+// #ifdef __cplusplus /* extern "C" */
 // #endif
 
 /*@}*/
@@ -1050,7 +1051,6 @@ public static final int
 
 // #ifdef __cplusplus
 // #ifdef NPP_PLUS
-// #else
 // #endif
 // #endif
 
@@ -1075,125 +1075,13 @@ public static final int
 // #endif
 public static native @Const NppLibraryVersion nppGetLibVersion();
 
-// NOTE:The remainder of these functions are no longer supported for external use.
-
-/**
- * Get the number of Streaming Multiprocessors (SM) on the active CUDA device.
- *
- * @return Number of SMs of the default CUDA device.
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native int nppGetGpuNumSMs();
-
-/**
- * Get the maximum number of threads per block on the active CUDA device.
- *
- * @return Maximum number of threads per block on the active CUDA device.
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native int nppGetMaxThreadsPerBlock();
-
-/**
- * Get the maximum number of threads per SM for the active GPU
- *
- * @return Maximum number of threads per SM for the active GPU
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native int nppGetMaxThreadsPerSM();
-
-/**
- * Get the maximum number of threads per SM, maximum threads per block, and number of SMs for the active GPU
- *
- * @return cudaSuccess for success, -1 for failure
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native int nppGetGpuDeviceProperties(IntPointer pMaxThreadsPerSM, IntPointer pMaxThreadsPerBlock, IntPointer pNumberOfSMs);
-public static native int nppGetGpuDeviceProperties(IntBuffer pMaxThreadsPerSM, IntBuffer pMaxThreadsPerBlock, IntBuffer pNumberOfSMs);
-public static native int nppGetGpuDeviceProperties(int[] pMaxThreadsPerSM, int[] pMaxThreadsPerBlock, int[] pNumberOfSMs);
-
-/** 
- * Get the name of the active CUDA device.
- *
- * @return Name string of the active graphics-card/compute device in a system.
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native @Cast("const char*") BytePointer nppGetGpuName();
-
-/**
- * Get the NPP CUDA stream.
- * NPP enables concurrent device tasks via a global stream state varible.
- * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
- * A user can set the NPP stream to any valid CUDA stream. All CUDA commands
- * issued by NPP (e.g. kernels launched by the NPP library) are then
- * issed to that NPP stream.
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native CUstream_st nppGetStream();
-
-/**
- * Get the current NPP managed CUDA stream context as set by calls to nppSetStream().
- * NPP enables concurrent device tasks via an NPP maintained global stream state context.
- * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
- * A user can set the NPP stream to any valid CUDA stream which will update the current NPP managed stream state context 
- * or supply application initialized stream contexts to NPP calls. All CUDA commands
- * issued by NPP (e.g. kernels launched by the NPP library) are then
- * issed to the current NPP managed stream or to application supplied stream contexts depending on whether 
- * the stream context is passed to the NPP function or not.  NPP managed stream context calls (those without stream context parameters) 
- * can be intermixed with application managed stream context calls but any NPP managed stream context calls will always use the most recent 
- * stream set by nppSetStream() or the NULL stream if nppSetStream() has never been called. 
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native @Cast("NppStatus") int nppGetStreamContext(NppStreamContext pNppStreamContext);
-
-/**
- * Get the number of SMs on the device associated with the current NPP CUDA stream.
- * NPP enables concurrent device tasks via a global stream state varible.
- * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
- * A user can set the NPP stream to any valid CUDA stream. All CUDA commands
- * issued by NPP (e.g. kernels launched by the NPP library) are then
- * issed to that NPP stream.  This call avoids a cudaGetDeviceProperties() call.
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native @Cast("unsigned int") int nppGetStreamNumSMs();
-
-/**
- * Get the maximum number of threads per SM on the device associated with the current NPP CUDA stream.
- * NPP enables concurrent device tasks via a global stream state varible.
- * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
- * A user can set the NPP stream to any valid CUDA stream. All CUDA commands
- * issued by NPP (e.g. kernels launched by the NPP library) are then
- * issed to that NPP stream.  This call avoids a cudaGetDeviceProperties() call.
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native @Cast("unsigned int") int nppGetStreamMaxThreadsPerSM();
-
-/**
- * Set the NPP CUDA stream.  This function now returns an error if a problem occurs with Cuda stream management. 
- *   This function should only be called if a call to nppGetStream() returns a stream number which is different from
- *   the desired stream since unnecessarily flushing the current stream can significantly affect performance.
- * @see nppGetStream()
- */
-// #ifdef NPP_LNX_EXTERN_C
-// #endif
-public static native @Cast("NppStatus") int nppSetStream(CUstream_st hStream);
 
 // #ifdef NPP_PLUS
 // #endif
 
 /** \} core_npp */ 
 
-// #ifdef __cplusplus
-// #ifndef NPP_PLUS /* extern "C" */
-// #endif
+// #ifdef __cplusplus /* extern "C" */
 // #endif
 
 // #endif /* NV_NPPCORE_H */

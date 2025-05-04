@@ -386,7 +386,7 @@ public static native @Cast("CUptiResult") int cuptiGetErrorMessage(@Cast("CUptiR
 // Parsed from cupti_version.h
 
 /*
- * Copyright 2010-2024 NVIDIA Corporation.  All rights reserved.
+ * Copyright 2010-2025 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -494,8 +494,9 @@ public static native @Cast("CUptiResult") int cuptiGetErrorMessage(@Cast("CUptiR
  * v23 : CUDA Toolkit 12.5
  * v24 : CUDA Toolkit 12.6
  * v26 : CUDA Toolkit 12.8
+ * v27 : CUDA Toolkit 12.9
  */
-public static final int CUPTI_API_VERSION = 26;
+public static final int CUPTI_API_VERSION = 27;
 
 /**
  * \brief Get the CUPTI API version.
@@ -751,7 +752,7 @@ public static final int
   CUPTI_ACTIVITY_KIND_RUNTIME  = 5,
 
   /**
-   * A performance counter (aka event) value. The corresponding activity record 
+   * A performance counter (aka event) value. The corresponding activity record
    * structure is \ref CUpti_ActivityEvent. This activity cannot be directly
    * enabled or disabled. Information collected using the Event API.
    * can be stored in the corresponding activity record.
@@ -983,9 +984,7 @@ public static final int
   CUPTI_ACTIVITY_KIND_OPENACC_OTHER = 35,
 
   /**
-   * Information about a CUDA event (cudaEvent). This activity cannot be
-   * directly enabled or disabled. It is enabled and disabled through
-   * the activity CUPTI_ACTIVITY_KIND_SYNCHRONIZATION.
+   * Information about a CUDA event (cudaEvent).
    * The corresponding activity record structure is \ref
    * CUpti_ActivityCudaEvent2.
    */
@@ -1137,12 +1136,19 @@ public static final int
    */
   CUPTI_ACTIVITY_KIND_MEM_DECOMPRESS = 54,
 
+  /**
+   * Tracing new overheads introduced on some hardware due when
+   * confidential computing is enabled.
+   * The corresponding activity record structure is \ref
+   * CUpti_ActivityConfidentialComputeRotation.
+   */
+  CUPTI_ACTIVITY_KIND_CONFIDENTIAL_COMPUTE_ROTATION = 55,
 
 
   /**
    * Count of supported activity kinds.
    */
-  CUPTI_ACTIVITY_KIND_COUNT = 55,
+  CUPTI_ACTIVITY_KIND_COUNT = 56,
 
   CUPTI_ACTIVITY_KIND_FORCE_INT     = 0x7fffffff;
 
@@ -2807,6 +2813,38 @@ public static final int
   CUPTI_PCIE_GEN_GEN6       = 6,
 
   CUPTI_PCIE_GEN_FORCE_INT  = 0x7fffffff;
+
+
+/*
+ * \brief Confidential Computing Rotation Events
+ *
+ * Define event type for confidential compute tracing
+ */
+/** enum CUpti_ConfidentialComputeRotationEventType */
+public static final int
+    CUPTI_CONFIDENTIAL_COMPUTE_INVALID_ROTATION_EVENT   = 0,
+    /**
+     * This channel has been blocked from accepting new CUDA work so a key rotation can be done.
+     */
+    CUPTI_CONFIDENTIAL_COMPUTE_KEY_ROTATION_CHANNEL_BLOCKED   = 1,
+    /**
+     * This channel remains blocked and all queued CUDA work has completed.
+     * Other clients or channels may cause delays in starting the key rotation.
+     */
+    CUPTI_CONFIDENTIAL_COMPUTE_KEY_ROTATION_CHANNEL_DRAINED = 2,
+    /**
+     * Key rotations have completed and this channel is unblocked.
+     */
+    CUPTI_CONFIDENTIAL_COMPUTE_KEY_ROTATION_CHANNEL_UNBLOCKED     = 3,
+
+
+    CUPTI_CONFIDENTIAL_COMPUTE_EVENT_TYPE_FORCE_INT    = 0x7fffffff;
+
+/**
+ * \brief Event related to confidential compute encryption rotation
+ *
+ * This structure gives timestamps for stages of encryption rotation
+ */
 // Targeting ../cupti/CUpti_ActivityInstantaneousEvent.java
 
 
@@ -3108,6 +3146,25 @@ public static final int
      */
     CUPTI_ACTIVITY_ATTR_PER_THREAD_ACTIVITY_BUFFER = 9,
 
+
+    /**
+     * The device memory size (in bytes) reserved for storing profiling
+     * data for device graph operations for each buffer on a context. The
+     * value is a size_t.
+     *
+     * Having larger buffer size means less flush operations but
+     * consumes more device memory. This value only applies to new
+     * allocations.
+     *
+     * Set this value before initializing CUDA or before creating a
+     * context to ensure it is considered for the following allocations.
+     *
+     * The default value is 16777216 (16MB).
+     *
+     * Note: The actual amount of device memory per context reserved by
+     * CUPTI might be larger.
+     */
+    CUPTI_ACTIVITY_ATTR_DEVICE_BUFFER_SIZE_DEVICE_GRAPHS = 10,
 
 
     CUPTI_ACTIVITY_ATTR_DEVICE_BUFFER_FORCE_INT                 = 0x7fffffff;
@@ -3898,8 +3955,8 @@ public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelatio
  * Default value is 0, i.e. these timestamps are not collected. This API needs
  * to be called before initialization of CUDA and this setting should not be
  * changed during the profiling session.
- * 
- * This API is not supported if the HW trace is enabled through the API \ref cuptiActivityEnableHWTrace. 
+ *
+ * This API is not supported if the HW trace is enabled through the API \ref cuptiActivityEnableHWTrace.
  * @param enable is a boolean, denoting whether these timestamps should be
  * collected
  *
@@ -4054,7 +4111,7 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableDriverApi(@Cast
 public static native @Cast("CUptiResult") int cuptiActivityEnableRuntimeApi(@Cast("CUpti_CallbackId") int cbid, @Cast("uint8_t") byte enable);
 
 /**
- * \brief Enables the collection of CUDA kernel timestamps through HW events.
+ * \brief Enables the collection of CUDA kernel timestamps through Hardware Event System(HES).
  *
  * This API enables the collection of CUDA kernel timestamps through HW events instead
  * of the traditional SW instrumentation and semaphore based approach.
@@ -4097,13 +4154,12 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableAllocationSourc
 /**
  * \brief Enables collecting records for all synchronization operations.
  *
- * CUPTI provides CUDA event query and stream query records via CUPTI_ACTIVTIY_KIND_SYNCHRONIZATION.
- * Using this API, CUPTI client can enable to record all CUDA event query and stream query records
- * even if the event has not yet been completed and all operations on stream have not yet been completed
- * respectively.
+ * CUPTI provides CUDA event query and stream query records via CUPTI_ACTIVITY_KIND_SYNCHRONIZATION.
+ * Using this API, CUPTI client can disable to record CUDA event query and stream query records
+ * for queries for which the operations have not yet been completed on the CUDA event/stream.
  *
- * By default, the record is only generated if all captured work has been completed for the CUDA event.
- * By default, the record is only generated if all operations have been completed on the stream.
+ * By default, the record is generated for all CUDA events and stream irrespective of whether the
+ * operations have been completed on the CUDA event/stream.
  *
  * @param enable is a boolean, denoting whether to enable or disable the collection of all CUDA event query
  * and stream query records
@@ -7796,7 +7852,9 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuMemcpy3DBatchAsync_ptsz                                      = 779,
     CUPTI_DRIVER_TRACE_CBID_cuEventElapsedTime_v2                                          = 780,
     CUPTI_DRIVER_TRACE_CBID_cuTensorMapEncodeIm2colWide                                    = 781,
-    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 782,
+    CUPTI_DRIVER_TRACE_CBID_cuGreenCtxGetId                                                = 782,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamCreateForCaptureToCig                                  = 783,
+    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 784,
     CUPTI_DRIVER_TRACE_CBID_FORCE_INT                                                      = 0x7fffffff;
 
 // #endif
@@ -8287,16 +8345,16 @@ public static final int
     CUPTI_RUNTIME_TRACE_CBID_cudaFuncGetParamInfo_v12040                                   = 467,
     CUPTI_RUNTIME_TRACE_CBID_cudaGetDriverEntryPointByVersion_v12050                       = 468,
     CUPTI_RUNTIME_TRACE_CBID_cudaGetDriverEntryPointByVersion_ptsz_v12050                  = 469,
-    CUPTI_RUNTIME_TRACE_CBID_cuda470_v12060                                                = 470,
-    CUPTI_RUNTIME_TRACE_CBID_cuda471_v12060                                                = 471,
-    CUPTI_RUNTIME_TRACE_CBID_cuda472_v12060                                                = 472,
-    CUPTI_RUNTIME_TRACE_CBID_cuda473_v12060                                                = 473,
-    CUPTI_RUNTIME_TRACE_CBID_cuda474_v12060                                                = 474,
-    CUPTI_RUNTIME_TRACE_CBID_cuda475_v12060                                                = 475,
-    CUPTI_RUNTIME_TRACE_CBID_cuda476_v12060                                                = 476,
-    CUPTI_RUNTIME_TRACE_CBID_cuda477_v12060                                                = 477,
-    CUPTI_RUNTIME_TRACE_CBID_cuda478_v12060                                                = 478,
-    CUPTI_RUNTIME_TRACE_CBID_cuda479_v12060                                                = 479,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryLoadData_v12060                                    = 470,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryLoadFromFile_v12060                                = 471,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryUnload_v12060                                      = 472,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryGetKernel_v12060                                   = 473,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryGetGlobal_v12060                                   = 474,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryGetManaged_v12060                                  = 475,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryGetUnifiedFunction_v12060                          = 476,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryGetKernelCount_v12060                              = 477,
+    CUPTI_RUNTIME_TRACE_CBID_cudaLibraryEnumerateKernels_v12060                            = 478,
+    CUPTI_RUNTIME_TRACE_CBID_cudaKernelSetAttributeForDevice_v12060                        = 479,
     CUPTI_RUNTIME_TRACE_CBID_cudaStreamGetDevice_v12080                                    = 480,
     CUPTI_RUNTIME_TRACE_CBID_cudaStreamGetDevice_ptsz_v12080                               = 481,
     CUPTI_RUNTIME_TRACE_CBID_cudaMemcpyBatchAsync_v12080                                   = 482,
