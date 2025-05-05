@@ -72,6 +72,7 @@ tar --totals -xzf ../opencv_contrib-$OPENCV_VERSION.tar.gz
 
 cd opencv_contrib-$OPENCV_VERSION
 patch -Np1 < ../../../opencv_contrib.patch
+sedinplace 's/#if CUDA_VERSION >= 11000 || CUDART_VERSION >= 11000/#if 0/g' modules/cudafilters/src/cuda/wavelet_matrix_feature_support_checks.h
 
 cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
@@ -106,6 +107,7 @@ fi
 
 # fixes for CUDA
 sedinplace '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
+sedinplace '/nppGetStreamContext/d' modules/core/include/opencv2/core/private.cuda.hpp
 sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/color_detail.hpp
 sedinplace 's/(weight != 1.0)/((double)weight != 1.0)/g' modules/dnn/src/cuda4dnn/primitives/normalize_bbox.hpp
 sedinplace 's/(nms_iou_threshold > 0)/((double)nms_iou_threshold > 0.0)/g' modules/dnn/src/cuda4dnn/primitives/region.hpp
@@ -429,6 +431,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
+        export CL="-std:c++17"
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
