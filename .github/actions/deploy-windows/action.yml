@@ -111,15 +111,7 @@ runs:
           move nvcomp-windows-x86_64-4.2.0.11_cuda12-archive\bin\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.9\bin"
           move nvcomp-windows-x86_64-4.2.0.11_cuda12-archive\lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.9\lib\x64"
 
-          rem echo Applying hotfix to Visual Studio 2019 for CUDA
-          rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
-          rem bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
           bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cusolverSp.h'"
-          bash -c "sed -i 's/#if !defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/driver_types.h'"
-          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cub/cub.cuh'"
-          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cub/cub.cuh'"
-          bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cub/cub.cuh'"
-          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/cub/cub.cuh'"
           bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/'"
         )
 
@@ -243,7 +235,7 @@ runs:
         df -h
         wmic pagefile list /format:list
 
-        set MAKEJ=%NUMBER_OF_PROCESSORS%
+        set MAKEJ=2
         echo Fetching %GITHUB_REPOSITORY%@%GITHUB_SHA%
         git init
         git fetch --depth 1 https://github.com/%GITHUB_REPOSITORY% %GITHUB_SHA%

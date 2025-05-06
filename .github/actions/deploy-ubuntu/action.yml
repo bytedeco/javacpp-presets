@@ -196,10 +196,6 @@ runs:
           $SUDO cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
           $SUDO cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
           $SUDO sed -i s/cublas_v2.h/cublas_api.h/g /usr/local/cuda/include/cublasXt.h /usr/local/cuda/include/cusolverDn.h /usr/local/cuda/include/cusolverSp.h
-          $SUDO sed -i /block_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
-          $SUDO sed -i /device_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
-          $SUDO sed -i /device_segmented_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
-          $SUDO sed -i /warp_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
 
           # Remove downloaded archives and unused libraries to avoid running out of disk space
           $SUDO rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a -and -not -name libnvcomp_device.a)
