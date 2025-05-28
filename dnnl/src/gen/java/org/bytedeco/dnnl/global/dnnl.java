@@ -274,7 +274,7 @@ public static final int
 
 /*******************************************************************************
 * Copyright 2016-2025 Intel Corporation
-* Copyright 2024 FUJITSU LIMITED
+* Copyright 2024-2025 FUJITSU LIMITED
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -1347,10 +1347,13 @@ public static final int
     dnnl_aCBdef8b8c = 844,
     dnnl_abdEC16e4c = 845,
     dnnl_abDC16d4c = 846,
+    dnnl_BA24b8a = 847,
+    dnnl_aCB24c8b = 848,
+    dnnl_abDC24d8c = 849,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 847,
+    dnnl_format_tag_last = 850,
 
     // Aliases
 
@@ -2824,7 +2827,13 @@ public static final int DNNL_ARG_WEIGHTS_PROJECTION = DNNL_ARG_WEIGHTS_3;
 /** Bias tensor argument. */
 public static final int DNNL_ARG_BIAS = 41;
 
-/** Mean values tensor argument. */
+/** Reduce tensor argument. */
+public static final int DNNL_ARG_REDUCE = 42;
+
+/** Note: when adding a new macro after {@code DNNL_ARG_REDUCE} please reserve a
+ *  space for potential indices for {@code DNNL_ARG_REDUCE}.
+ <p>
+ *  Mean values tensor argument. */
 public static final int DNNL_ARG_MEAN = 49;
 /** Variance values tensor argument. */
 public static final int DNNL_ARG_VARIANCE = 50;
@@ -2936,7 +2945,8 @@ public static final int DNNL_ARG_ATTR_DROPOUT_PROBABILITY = 510;
 /** Dropout RNG seed value passed via a buffer. */
 public static final int DNNL_ARG_ATTR_DROPOUT_SEED = 511;
 
-/** Output scaling factors provided at execution time. */
+/** Output scaling factors provided at execution time.
+ *  Deprecated value. */
 public static final int DNNL_ARG_ATTR_OUTPUT_SCALES = 513;
 
 /** Starting index for source arguments for primitives that take a variable
@@ -3725,10 +3735,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 7;
+public static final int DNNL_VERSION_MINOR = 8;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 3;
+public static final int DNNL_VERSION_PATCH = 1;
 
 // clang-format on
 
@@ -9038,6 +9048,7 @@ public static native @Cast("dnnl_status_t") int dnnl_gemm_s8s8s32(@Cast("char") 
 
 // #ifndef ONEAPI_DNNL_DNNL_COMMON_HPP
 // #define ONEAPI_DNNL_DNNL_COMMON_HPP
+// NOLINTBEGIN(readability-identifier-naming)
 
 /** \cond DO_NOT_DOCUMENT_THIS */
 // #include <algorithm>
@@ -9155,6 +9166,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 
 
+//NOLINTBEGIN(bugprone-macro-parentheses)
 // #define DNNL_DEFINE_BITMASK_OPS(enum_name)
 //     inline enum_name operator|(enum_name lhs, enum_name rhs) {
 //         return static_cast<enum_name>(
@@ -9192,6 +9204,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 //     inline enum_name operator~(enum_name rhs) {
 //         return static_cast<enum_name>(~static_cast<unsigned>(rhs));
 //     }
+//NOLINTEND(bugprone-macro-parentheses)
 
 /** \} dnnl_api_stream
  <p>
@@ -9267,14 +9280,15 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** \} dnnl_api */
 
-// #endif
+// NOLINTEND(readability-identifier-naming)
+// #endif /* ONEAPI_DNNL_DNNL_COMMON_HPP */
 
 
 // Parsed from oneapi/dnnl/dnnl.hpp
 
 /*******************************************************************************
 * Copyright 2016-2025 Intel Corporation
-* Copyright 2024 FUJITSU LIMITED
+* Copyright 2024-2025 FUJITSU LIMITED
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -9294,6 +9308,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 // #ifndef ONEAPI_DNNL_DNNL_HPP
 // #define ONEAPI_DNNL_DNNL_HPP
+// NOLINTBEGIN(readability-identifier-naming)
 
 // #include "oneapi/dnnl/dnnl_config.h"
 
@@ -10325,6 +10340,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** \} dnnl_api */
 
+// NOLINTEND(readability-identifier-naming)
 // #endif /* ONEAPI_DNNL_DNNL_HPP */
 
 
