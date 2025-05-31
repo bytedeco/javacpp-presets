@@ -248,7 +248,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
     
     ///
     ///
-    public native @Const @ByVal post_ops get_post_ops();
+    public native @ByVal post_ops get_post_ops();
 
     /** Sets post-ops.
      * 
@@ -267,7 +267,7 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
     ///
     ///
     ///
-    public native void set_post_ops(@Const @ByVal post_ops ops);
+    public native void set_post_ops(@Const @ByRef post_ops ops);
 
     /** Sets quantization scale and shift parameters for RNN data tensors.
      * 
