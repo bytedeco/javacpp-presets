@@ -58,7 +58,9 @@ if [[ $PLATFORM == windows* ]]; then
         tar xfz libuv.tgz
         mkdir build
         cd build
-        cmake ../libuv-v1.39.0 -DBUILD_TESTING=OFF
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../libuv-v1.39.0 -DBUILD_TESTING=OFF
         cmake --build . --config Release
         cmake --install . --config Release --prefix ../dist
         cd ../..

@@ -419,12 +419,12 @@ case $PLATFORM in
         fi
         ninja -j $MAKEJ
         ninja install
-        cp -r ../x86/vc16/lib ..
-        cp -r ../x86/vc16/bin ..
+        cp -r ../x86/vc??/lib ..
+        cp -r ../x86/vc??/bin ..
         cp lib/opencv_java.lib ../lib
         cp lib/opencv_java.dll ../bin
-        sedinplace "s:/x86/vc16/lib/:/lib/:g" ../x86/vc16/lib/OpenCVModules-release.cmake
-        sedinplace "s:/x86/vc16/bin/:/:g" ../x86/vc16/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x86/vc../lib/:/lib/:g" ../x86/vc??/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x86/vc../bin/:/:g" ../x86/vc??/lib/OpenCVModules-release.cmake
         ;;
     windows-x86_64)
         export CC="cl.exe"
@@ -439,12 +439,12 @@ case $PLATFORM in
         [[ ! -f modules/cudev/opencv_cudev_main.cpp ]] || sedinplace '/__termination/d' modules/cudev/opencv_cudev_main.cpp
         ninja -j $MAKEJ
         ninja install
-        cp -r ../x64/vc16/lib ..
-        cp -r ../x64/vc16/bin ..
+        cp -r ../x64/vc??/lib ..
+        cp -r ../x64/vc??/bin ..
         cp lib/opencv_java.lib ../lib
         cp lib/opencv_java.dll ../bin
-        sedinplace "s:/x64/vc16/lib/:/lib/:g" ../x64/vc16/lib/OpenCVModules-release.cmake
-        sedinplace "s:/x64/vc16/bin/:/:g" ../x64/vc16/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x64/vc../lib/:/lib/:g" ../x64/vc??/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x64/vc../bin/:/:g" ../x64/vc??/lib/OpenCVModules-release.cmake
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

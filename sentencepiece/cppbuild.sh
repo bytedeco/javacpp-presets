@@ -32,6 +32,11 @@ case $PLATFORM in
     macosx-arm64)
         $CMAKE $CMAKE_CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64" ..
         ;;
+    windows-*)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        $CMAKE $CMAKE_CONFIG -G "Ninja" ..
+        ;;
     *)
         $CMAKE $CMAKE_CONFIG ..
         ;;
