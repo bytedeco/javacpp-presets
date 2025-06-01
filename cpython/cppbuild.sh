@@ -173,6 +173,7 @@ case $PLATFORM in
     windows-x86)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
+        unset PLATFORM
         cmd.exe //c 'build.bat -p x86 -vv'
         cp win32/python*.exe win32/python*.dll ../../bin/
         cp win32/python*.lib ../../libs/
@@ -186,6 +187,7 @@ case $PLATFORM in
     windows-x86_64)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
+        unset PLATFORM
         cmd.exe //c 'build.bat -p x64 -vv'
         cp amd64/python*.exe amd64/python*.dll ../../bin/
         cp amd64/python*.lib ../../libs/

@@ -46,13 +46,13 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
 #  windows-x86:
-#    runs-on: windows-2019
+#    runs-on: windows-2022
 #    env:
 #      BUILD_DIR: C:\build
 #    steps:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   windows-x86_64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       BUILD_DIR: C:\build
     steps:
@@ -67,7 +67,7 @@ jobs:
     needs: redeploy
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-13, windows-2019]
+        os: [ubuntu-22.04, macos-13, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
