@@ -43,6 +43,10 @@ public class ConstSession extends BaseConstSession {
   /** Returns the number of inputs that have defaults that can be overridden */
   public native @Cast("size_t") long GetOverridableInitializerCount();
 
+  public native @ByVal StringVector GetInputNames();
+  public native @ByVal StringVector GetOutputNames();
+  public native @ByVal StringVector GetOverridableInitializerNames();
+
   /** \brief Returns a copy of input name at the specified index.
    *
    * @param index must less than the value returned by GetInputCount()
@@ -82,4 +86,12 @@ public class ConstSession extends BaseConstSession {
   public native @ByVal TypeInfo GetOutputTypeInfo(@Cast("size_t") long index);
   /** Wraps OrtApi::SessionGetOverridableInitializerTypeInfo */
   public native @ByVal TypeInfo GetOverridableInitializerTypeInfo(@Cast("size_t") long index);
+
+  /** Wraps OrtApi::SessionGetOpsetForDomain */
+  public native int GetOpset(@StdString BytePointer domain);
+  public native int GetOpset(@StdString String domain);
+
+  // Will move before checkin if that's the case.
+  public native @ByVal ValueInfoVector GetInputs();
+  public native @ByVal ValueInfoVector GetOutputs();
 }

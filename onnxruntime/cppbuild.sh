@@ -22,7 +22,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.21.1
+ONNXRUNTIME=1.22.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -46,7 +46,11 @@ case $PLATFORM in
         export DNNL_FLAGS=
         ;;
     macosx-arm64)
+        export ARCH_FLAGS=
         export DNNL_FLAGS=
+        ;;
+    macosx-x86_64)
+        export ARCH_FLAGS=
         ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then

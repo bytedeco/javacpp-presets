@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Samuel Audet
+ * Copyright (C) 2019-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.bytedeco.openblas.presets.*;
     inherit = {openblas.class, python.class},
     value = {
         @Platform(
-            define = "NPY_TARGET_VERSION NPY_2_1_API_VERSION",
+            define = "NPY_TARGET_VERSION NPY_2_3_API_VERSION",
             cinclude = {
                 "_numpyconfig.h",
                 "numpyconfig.h",

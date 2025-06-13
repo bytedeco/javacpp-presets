@@ -24,8 +24,25 @@ public class TensorTypeAndShapeInfo extends TensorTypeAndShapeInfoImpl {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorTypeAndShapeInfo(Pointer p) { super(p); }
 
+
+  /** Create an empty TensorTypeAndShapeInfo object, must be assigned a valid one to be used */
   /** Used for interop with the C API */
   public TensorTypeAndShapeInfo(OrtTensorTypeAndShapeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTensorTypeAndShapeInfo p);
+
+  // Create a TensorTypeAndShapeInfo object with the specified element type and dimensions
+  // symbolic_dims are optional, but should be 1:1 with dims.
+  // The value in symbolic_dims will be used for all entries in dims that are -1.
+  public TensorTypeAndShapeInfo(@Cast("ONNXTensorElementDataType") int element_type,
+                                    @Const @ByRef LongVector dims,
+                                    @Const StringVector symbolic_dims/*=nullptr*/) { super((Pointer)null); allocate(element_type, dims, symbolic_dims); }
+  private native void allocate(@Cast("ONNXTensorElementDataType") int element_type,
+                                    @Const @ByRef LongVector dims,
+                                    @Const StringVector symbolic_dims/*=nullptr*/);
+  public TensorTypeAndShapeInfo(@Cast("ONNXTensorElementDataType") int element_type,
+                                    @Const @ByRef LongVector dims) { super((Pointer)null); allocate(element_type, dims); }
+  private native void allocate(@Cast("ONNXTensorElementDataType") int element_type,
+                                    @Const @ByRef LongVector dims);
+
   public native @ByVal ConstTensorTypeAndShapeInfo GetConst();
 }

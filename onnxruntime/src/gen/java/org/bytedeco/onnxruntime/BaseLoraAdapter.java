@@ -15,32 +15,32 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::detail::Base<OrtLoraAdapter>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BaseOrtLoraAdapter extends Pointer {
+public class BaseLoraAdapter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BaseOrtLoraAdapter(Pointer p) { super(p); }
+    public BaseLoraAdapter(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseOrtLoraAdapter(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseLoraAdapter(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BaseOrtLoraAdapter position(long position) {
-        return (BaseOrtLoraAdapter)super.position(position);
+    @Override public BaseLoraAdapter position(long position) {
+        return (BaseLoraAdapter)super.position(position);
     }
-    @Override public BaseOrtLoraAdapter getPointer(long i) {
-        return new BaseOrtLoraAdapter((Pointer)this).offsetAddress(i);
+    @Override public BaseLoraAdapter getPointer(long i) {
+        return new BaseLoraAdapter((Pointer)this).offsetAddress(i);
     }
 
 
-  public BaseOrtLoraAdapter() { super((Pointer)null); allocate(); }
+  public BaseLoraAdapter() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BaseOrtLoraAdapter(@Cast("Ort::detail::Base<OrtLoraAdapter>::contained_type*") OrtLoraAdapter p) { super((Pointer)null); allocate(p); }
+  public BaseLoraAdapter(@Cast("Ort::detail::Base<OrtLoraAdapter>::contained_type*") OrtLoraAdapter p) { super((Pointer)null); allocate(p); }
   @NoException(true) private native void allocate(@Cast("Ort::detail::Base<OrtLoraAdapter>::contained_type*") OrtLoraAdapter p);
 
   
   
 
-  public BaseOrtLoraAdapter(@ByRef(true) BaseOrtLoraAdapter v) { super((Pointer)null); allocate(v); }
-  @NoException(true) private native void allocate(@ByRef(true) BaseOrtLoraAdapter v);
-  public native @ByRef @Name("operator =") @NoException(true) BaseOrtLoraAdapter put(@ByRef(true) BaseOrtLoraAdapter v);
+  public BaseLoraAdapter(@ByRef(true) BaseLoraAdapter v) { super((Pointer)null); allocate(v); }
+  @NoException(true) private native void allocate(@ByRef(true) BaseLoraAdapter v);
+  public native @ByRef @Name("operator =") @NoException(true) BaseLoraAdapter put(@ByRef(true) BaseLoraAdapter v);
 
   public native @Cast("Ort::detail::Base<OrtLoraAdapter>::contained_type*") @Name("operator Ort::detail::Base<OrtLoraAdapter>::contained_type*") @NoException(true) OrtLoraAdapter asOrtLoraAdapter();
 

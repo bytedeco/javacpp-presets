@@ -24,22 +24,42 @@ public class Session extends SessionImpl {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Session(Pointer p) { super(p); }
 
-  /** Wraps OrtApi::CreateSession */
+  /** Create an empty Session object, must be assigned a valid one to be used. Wraps OrtApi::CreateSession */
+  /** C API Interop */
+  public Session(OrtSession p) { super((Pointer)null); allocate(p); }
+  private native void allocate(OrtSession p);
+
   public Session(@Const @ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_path, options); }
   private native void allocate(@Const @ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options);
+
   /** Wraps OrtApi::CreateSessionWithPrepackedWeightsContainer */
   public Session(@Const @ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options,
             OrtPrepackedWeightsContainer prepacked_weights_container) { super((Pointer)null); allocate(env, model_path, options, prepacked_weights_container); }
   private native void allocate(@Const @ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options,
             OrtPrepackedWeightsContainer prepacked_weights_container);
+
   /** Wraps OrtApi::CreateSessionFromArray */
   public Session(@Const @ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model_data, model_data_length, options); }
   private native void allocate(@Const @ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options);
+
   /** Wraps OrtApi::CreateSessionFromArrayWithPrepackedWeightsContainer */
   public Session(@Const @ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options,
             OrtPrepackedWeightsContainer prepacked_weights_container) { super((Pointer)null); allocate(env, model_data, model_data_length, options, prepacked_weights_container); }
   private native void allocate(@Const @ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length, @Const @ByRef SessionOptions options,
             OrtPrepackedWeightsContainer prepacked_weights_container);
+
+// #if !defined(ORT_MINIMAL_BUILD)
+  /** Wraps OrtModelEditorApi::CreateSessionFromModel */
+  public Session(@Const @ByRef Env env, @Const @ByRef Model model, @Const @ByRef SessionOptions options) { super((Pointer)null); allocate(env, model, options); }
+  private native void allocate(@Const @ByRef Env env, @Const @ByRef Model model, @Const @ByRef SessionOptions options);
+
+  /** Wraps OrtModelEditorApi::CreateModelEditorSession */
+  public static native @ByVal Session CreateModelEditorSession(@Const @ByRef Env env, @Cast("const ORTCHAR_T*") Pointer model_path, @Const @ByRef SessionOptions options);
+
+  /** Wraps OrtModelEditorApi::CreateModelEditorSession */
+  public static native @ByVal Session CreateModelEditorSession(@Const @ByRef Env env, @Const Pointer model_data, @Cast("size_t") long model_data_length,
+                                            @Const @ByRef SessionOptions options);
+// #endif  // !defined(ORT_MINIMAL_BUILD)
 
   public native @ByVal ConstSession GetConst();
   public native @ByVal @Cast("Ort::UnownedSession*") SessionImpl GetUnowned();

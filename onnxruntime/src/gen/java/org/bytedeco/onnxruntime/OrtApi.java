@@ -167,9 +167,11 @@ public class OrtApi extends Pointer {
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
-  public native OrtStatus CreateSessionFromArray( @Const OrtEnv env, @Const Pointer model_data, @Cast("size_t") long model_data_length,
+  public native OrtStatus CreateSessionFromArray( @Const OrtEnv env,
+                    @Const Pointer model_data, @Cast("size_t") long model_data_length,
                     @Const OrtSessionOptions options, @Cast("OrtSession**") PointerPointer out);
-  public native OrtStatus CreateSessionFromArray( @Const OrtEnv env, @Const Pointer model_data, @Cast("size_t") long model_data_length,
+  public native OrtStatus CreateSessionFromArray( @Const OrtEnv env,
+                    @Const Pointer model_data, @Cast("size_t") long model_data_length,
                     @Const OrtSessionOptions options, @ByPtrPtr OrtSession out);
 
   /** \brief Run the model in an ::OrtSession
@@ -716,6 +718,8 @@ public class OrtApi extends Pointer {
    *
    * Create a tensor with user's buffer. You can fill the buffer either before calling this function or after.
    * p_data is owned by caller. ReleaseValue won't release p_data.
+   *
+   * If you wish to transfer ownership of p_data to ORT use CreateTensorWithDataAndDeleterAsOrtValue.
    *
    * @param info [in] Memory description of where the p_data buffer resides (CPU vs GPU etc).
    * @param p_data [in] Pointer to the data buffer.
@@ -1496,7 +1500,8 @@ public class OrtApi extends Pointer {
   /** \brief Get the value type from an ::OrtMapTypeInfo
    *
    * @param map_type_info [in]
-   * @param type_info [out]
+   * @param type_info [out] A copy of the OrtTypeInfo for the map value type.
+   *                       The user must free this value with ReleaseTypeInfo.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -1512,7 +1517,8 @@ public class OrtApi extends Pointer {
    * This is used by WinML to support model reflection APIs.
    *
    * @param sequence_type_info [in]
-   * @param type_info [out]
+   * @param type_info [out] A copy of the OrtTypeInfo for the sequence element type.
+   *                       The user must free this value with ReleaseTypeInfo.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -2535,10 +2541,12 @@ public class OrtApi extends Pointer {
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
   public native OrtStatus CreateSessionWithPrepackedWeightsContainer( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
-                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @Const OrtSessionOptions options,
+                    OrtPrepackedWeightsContainer prepacked_weights_container,
                     @Cast("OrtSession**") PointerPointer out);
   public native OrtStatus CreateSessionWithPrepackedWeightsContainer( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
-                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @Const OrtSessionOptions options,
+                    OrtPrepackedWeightsContainer prepacked_weights_container,
                     @ByPtrPtr OrtSession out);
 
   /** \brief Create session from memory with prepacked weights container
@@ -2561,11 +2569,13 @@ public class OrtApi extends Pointer {
    */
   public native OrtStatus CreateSessionFromArrayWithPrepackedWeightsContainer( @Const OrtEnv env,
                     @Const Pointer model_data, @Cast("size_t") long model_data_length,
-                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @Const OrtSessionOptions options,
+                    OrtPrepackedWeightsContainer prepacked_weights_container,
                     @Cast("OrtSession**") PointerPointer out);
   public native OrtStatus CreateSessionFromArrayWithPrepackedWeightsContainer( @Const OrtEnv env,
                     @Const Pointer model_data, @Cast("size_t") long model_data_length,
-                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @Const OrtSessionOptions options,
+                    OrtPrepackedWeightsContainer prepacked_weights_container,
                     @ByPtrPtr OrtSession out);
 
   /** \}
@@ -3496,76 +3506,96 @@ public class OrtApi extends Pointer {
    * @param provider_options_values [in] - values to configure the provider options
    * @param num_keys [in] - number of keys passed in
    *
-   * Currently supported providers:
-   *   QNN
-   *   SNPE
-   *   XNNPACK
+   * Currently supported provider names:
+   *   QNNExecutionProvider (or QNN)
+   *   OpenVINOExecutionProvider (or OpenVINO)
+   *   XnnpackExecutionProvider (or XNNPACK)
+   *   WebNNExecutionProvider (or WEBNN)
+   *   WebGpuExecutionProvider (or WebGPU)
+   *   AzureExecutionProvider (or AZURE)
+   *   JsExecutionProvider (or JS)
+   *   VitisAIExecutionProvider (or VitisAI)
+   *   CoreMLExecutionProvider (or CoreML)
    *
    * Note: If an execution provider has a dedicated SessionOptionsAppendExecutionProvider_<provider name> function
    *       that should be used to add it.
    *
    * QNN supported keys:
-   *   "backend_path": file path to QNN backend library.
-   *   "profiling_level": QNN profiling level, options: "off", "basic", "detailed". Default to off.
+   *   "backend_type": Type of QNN backend. Specifies a backend path that is the associated QNN backend library file
+   *      name. E.g., given backend type "htp", on Windows, the backend path would be "QnnHtp.dll", and on other
+   *      platforms, it would be "libQnnHtp.so". Mutually exclusive with "backend_path".
+   *      Available options:
+   *      -# "cpu"
+   *      -# "gpu"
+   *      -# "htp": Default.
+   *      -# "saver"
+   *   "backend_path": File path to QNN backend library. Mutually exclusive with "backend_type".
+   *   "profiling_level": QNN profiling level.
+   *      Available options:
+   *      -# "off": Default.
+   *      -# "basic"
+   *      -# "detailed"
    *   "profiling_file_path": QNN profiling file path if ETW not enabled.
    *   "rpc_control_latency": QNN RPC control latency.
    *   "vtcm_mb": QNN VTCM size in MB. default to 0(not set).
-   *   "htp_performance_mode": QNN performance mode, options: "burst", "balanced", "default", "high_performance",
-   *   "high_power_saver", "low_balanced", "extreme_power_saver", "low_power_saver", "power_saver", "sustained_high_performance". Default to "default".
+   *   "htp_performance_mode": QNN performance mode.
+   *      Available options:
+   *      -# "burst"
+   *      -# "balanced"
+   *      -# "default": Default.
+   *      -# "high_performance"
+   *      -# "high_power_saver"
+   *      -# "low_balanced"
+   *      -# "extreme_power_saver"
+   *      -# "low_power_saver"
+   *      -# "power_saver"
+   *      -# "sustained_high_performance"
    *   "qnn_saver_path": File path to the QNN Saver backend library. If specified, QNN Saver will be enabled and will
-   *   dump QNN API calls to disk for replay/debugging. QNN Saver produces incorrect model inference results and
-   *   may alter model/EP partitioning. Use only for debugging.
-   *   "qnn_context_priority": QNN context priority, options: "low", "normal", "normal_high", "high". Default to "normal".
-   *   "htp_graph_finalization_optimization_mode": Set the optimization mode for graph finalization on the HTP backend. Available options:
-   *     - "0": Default.
-   *     - "1": Faster preparation time, less optimal graph.
-   *     - "2": Longer preparation time, more optimal graph.
-   *     - "3": Longest preparation time, most likely even more optimal graph. See QNN SDK documentation for specific details.
-   *   "soc_model": The SoC model number. Refer to the QNN SDK documentation for valid values. Defaults to "0" (unknown).
-   *   "htp_arch": The minimum HTP architecture the driver will use to select compatible QNN operators. Available options:
-   *     - "0": Default (none).
-   *     - "68"
-   *     - "69"
-   *     - "73"
-   *     - "75"
+   *      dump QNN API calls to disk for replay/debugging. QNN Saver produces incorrect model inference results and
+   *      may alter model/EP partitioning. Use only for debugging.
+   *   "qnn_context_priority": QNN context priority.
+   *      Available options:
+   *      -# "low"
+   *      -# "normal": Default.
+   *      -# "normal_high"
+   *      -# "high"
+   *   "htp_graph_finalization_optimization_mode": Set the optimization mode for graph finalization on the HTP backend.
+   *      Available options:
+   *      -# "0": Default.
+   *      -# "1": Faster preparation time, less optimal graph.
+   *      -# "2": Longer preparation time, more optimal graph.
+   *      -# "3": Longest preparation time, most likely even more optimal graph. See QNN SDK documentation for specific
+   *        details.
+   *   "soc_model": The SoC model number. Refer to the QNN SDK documentation for valid values.
+   *      Defaults to "0" (unknown).
+   *   "htp_arch": The minimum HTP architecture the driver will use to select compatible QNN operators.
+   *      Available options:
+   *      -# "0": Default (none).
+   *      -# "68"
+   *      -# "69"
+   *      -# "73"
+   *      -# "75"
    *   "device_id": The ID of the device to use when setting 'htp_arch'. Defaults to "0" (for single device).
    *   "enable_htp_fp16_precision": Used for float32 model for HTP backend.
-   *   Enable the float32 model to be inferenced with fp16 precision. Otherwise, it will be fp32 precision.
-   *     - "0": With fp32 precision.
-   *     - "1": Default. With fp16 precision.
-   *   "enable_htp_weight_sharing": Enable QNN weight sharing feature while compiling multiple graphs into one QNN context.
-   *     - "0": Default. Disabled.
-   *     - "1": Enabled.
+   *      Enable the float32 model to be inferenced with fp16 precision. Otherwise, it will be fp32 precision.
+   *      -# "0": With fp32 precision.
+   *      -# "1": Default. With fp16 precision.
    *   "offload_graph_io_quantization": Offload graph input quantization and graph output dequantization to another
-   *   execution provider (typically CPU EP).
-   *     - "0": Disabled. QNN EP will handle quantization and dequantization of graph I/O.
-   *     - "1": Enabled. This is the default value.
-   *   "enable_htp_spill_fill_buffer": Enable HTP spill fill buffer setting. The flag is used while generating context binary.
-   *     - "0": Default. Disabled.
-   *     - "1": Enabled.
+   *      execution provider (typically CPU EP).
+   *      -# "0": Disabled. QNN EP will handle quantization and dequantization of graph I/O.
+   *      -# "1": Enabled. This is the default value.
+   *   "enable_htp_spill_fill_buffer": Enable HTP spill fill buffer setting. The flag is used while generating context
+   *      binary.
+   *      -# "0": Default. Disabled.
+   *      -# "1": Enabled.
    *   "enable_htp_shared_memory_allocator": Enable the QNN HTP shared memory allocator. Requires libcdsprpc.so/dll to
-   *   be available.
-   *     - "0": Default. Disabled.
-   *     - "1": Enabled.
+   *      be available.
+   *      -# "0": Default. Disabled.
+   *      -# "1": Enabled.
    *   "dump_json_qnn_graph": Set to "1" to dump QNN graphs generated by QNN EP as JSON files. Each graph partition
    *      assigned to QNN EP is dumped to a separate file.
    *   "json_qnn_graph_dir": Directory in which to dump QNN JSON graphs. If not specified, QNN graphs are dumped in the
    *      program's current working directory. Ignored if "dump_json_qnn_graph" is not set.
-   *
-   * SNPE supported keys:
-   *   "runtime": SNPE runtime engine, options: "CPU", "CPU_FLOAT32", "GPU", "GPU_FLOAT32_16_HYBRID", "GPU_FLOAT16",
-   *   "DSP", "DSP_FIXED8_TF", "AIP_FIXED_TF", "AIP_FIXED8_TF".
-   *   Mapping to SNPE Runtime_t definition: CPU, CPU_FLOAT32 => zdl::DlSystem::Runtime_t::CPU;
-   *   GPU, GPU_FLOAT32_16_HYBRID => zdl::DlSystem::Runtime_t::GPU;
-   *   GPU_FLOAT16 => zdl::DlSystem::Runtime_t::GPU_FLOAT16;
-   *   DSP, DSP_FIXED8_TF => zdl::DlSystem::Runtime_t::DSP.
-   *   AIP_FIXED_TF, AIP_FIXED8_TF => zdl::DlSystem::Runtime_t::AIP_FIXED_TF.
-   *   "priority": execution priority, options: "low", "normal".
-   *   "buffer_type": ITensor or user buffers, options: "ITENSOR", user buffer with different types - "TF8", "TF16", "UINT8", "FLOAT".
-   *   "ITENSOR" -- default, ITensor which is float only.
-   *   "TF8" -- quantized model required, "FLOAT" -- for both quantized or non-quantized model
-   *   "enable_init_cache": enable SNPE init caching feature, set to 1 to enabled it. Disabled by default.
-   *   If SNPE is not available (due to a non Snpe enabled build or its dependencies not being installed), this function will fail.
    *
    * XNNPACK supported keys:
    *   "intra_op_num_threads": number of thread-pool size to use for XNNPACK execution provider.
@@ -4319,8 +4349,8 @@ public class OrtApi extends Pointer {
    * specific type that is described by the returned ::OrtTypeInfo.
    *
    * @param optional_type_info [in]
-   * @param out [out] A pointer to the ::OrtTypeInfo for what the optional value could be.
-   * it is owned by OrtOptionalTypeInfo instance.
+   * @param out [out] A copy of ::OrtTypeInfo for what the optional value could be.
+   *                 The user must free this value with ReleaseTypeInfo.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    *
@@ -4959,4 +4989,560 @@ public class OrtApi extends Pointer {
                     @Cast("const char*const*") @ByPtrPtr ByteBuffer values, @Cast("size_t") long kv_len);
   public native OrtStatus SetEpDynamicOptions( OrtSession sess, @Cast("const char*const*") @ByPtrPtr byte[] keys,
                     @Cast("const char*const*") @ByPtrPtr byte[] values, @Cast("size_t") long kv_len);
+
+  /** \brief Release an OrtValueInfo instance if it was not added to an OrtGraph.
+   * @since Version 1.22.
+   */
+  public native void ReleaseValueInfo(OrtValueInfo input);
+
+  /** \brief Release an OrtNode if it was not added to an OrtGraph.
+   * @since Version 1.22.
+   */
+  public native void ReleaseNode(OrtNode input);
+
+  /** \brief Release an OrtGraph.
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.22.
+   */
+  public native void ReleaseGraph(OrtGraph input);
+
+  /** \brief Release an OrtModel.
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.22.
+   */
+  public native void ReleaseModel(OrtModel input);
+
+  /** \brief Get the value name from an OrtValueInfo instance.
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param name [out] The name of the OrtValueInfo
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.22.
+   */
+  public native OrtStatus GetValueInfoName( @Const OrtValueInfo value_info, @Cast("const char**") PointerPointer name);
+  public native OrtStatus GetValueInfoName( @Const OrtValueInfo value_info, @Cast("const char**") @ByPtrPtr BytePointer name);
+  public native OrtStatus GetValueInfoName( @Const OrtValueInfo value_info, @Cast("const char**") @ByPtrPtr ByteBuffer name);
+  public native OrtStatus GetValueInfoName( @Const OrtValueInfo value_info, @Cast("const char**") @ByPtrPtr byte[] name);
+
+  /** \brief Get the type information from an OrtValueInfo instance.
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param type_info [out] The type info of the OrtValueInfo
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.22.
+   */
+  public native OrtStatus GetValueInfoTypeInfo( @Const OrtValueInfo value_info, @Cast("const OrtTypeInfo**") PointerPointer type_info);
+  public native OrtStatus GetValueInfoTypeInfo( @Const OrtValueInfo value_info, @Const @ByPtrPtr OrtTypeInfo type_info);
+
+  /** \brief Get the Model Editor API instance
+   *
+   * Get the Model Editor API instance to create a new model or augment an existing model.
+   *
+   * @return Model Editor API struct
+   *
+   * @since Version 1.22.
+   */
+  public static class OrtModelEditorApi_GetModelEditorApi extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    OrtModelEditorApi_GetModelEditorApi(Pointer p) { super(p); }
+      protected OrtModelEditorApi_GetModelEditorApi() { allocate(); }
+      private native void allocate();
+      public native @Const OrtModelEditorApi call();
+  }
+  public native OrtModelEditorApi_GetModelEditorApi GetModelEditorApi(); public native OrtApi GetModelEditorApi(OrtModelEditorApi_GetModelEditorApi setter);
+
+  /** \brief Create an OrtValue for a Tensor that uses pre-existing memory.
+   *
+   * ORT will take ownership of the memory and free it using the provided deleter when no longer in use.
+   *
+   * @param deleter [in] OrtAllocator instance that will be used to free the memory.
+   *                    Only the OrtAllocator:Info and OrtAllocator::Release functions are required.
+   *                    The OrtMemoryInfo returned by OrtAllocator::Info must match the location of p_data.
+   * @param p_data [in] Pointer to the memory that will be used by the Tensor. ORT will take ownership of the memory.
+   * @param p_data_len [in] Length of the memory in bytes.
+   * @param shape [in] Dimensions of the Tensor. All values should be > 0.
+   * @param shape_len [in] Number of dimensions in the shape array.
+   * @param type [in] Data type of the Tensor.
+   * @param out [out] Newly created ::OrtValue. Must be freed with OrtApi::ReleaseValue
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.22.
+   */
+  public native OrtStatus CreateTensorWithDataAndDeleterAsOrtValue( OrtAllocator deleter,
+                    Pointer p_data, @Cast("size_t") long p_data_len,
+                    @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type,
+                    @Cast("OrtValue**") PointerPointer out);
+  public native OrtStatus CreateTensorWithDataAndDeleterAsOrtValue( OrtAllocator deleter,
+                    Pointer p_data, @Cast("size_t") long p_data_len,
+                    @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type,
+                    @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateTensorWithDataAndDeleterAsOrtValue( OrtAllocator deleter,
+                    Pointer p_data, @Cast("size_t") long p_data_len,
+                    @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type,
+                    @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateTensorWithDataAndDeleterAsOrtValue( OrtAllocator deleter,
+                    Pointer p_data, @Cast("size_t") long p_data_len,
+                    @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type,
+                    @ByPtrPtr OrtValue out);
+
+  /** \brief sets load cancellation flag to abort session loading process.
+   *
+   * @param options [in] instance that was passed to the session at creation time.
+   * @param cancel [in] setting this to true after model loading process was initiated will
+   *            attempt to cancel the loading process. If cancellation is successful, CreateSession()
+   *            CreateSessionFromArray() or any other session creation API that take session options as an
+   *            argument will return an OrtStatus indicating that session loading was canceled at user request,
+   *            error code ORT_MODEL_LOAD_CANCELED.
+   *            The APIs above would not return any valid Session instance. This is the best case effort and the result
+   *            is not guaranteed. The session may have already been created and initialized
+   *            before the cancellation request was issued.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.22.
+   */
+  public native OrtStatus SessionOptionsSetLoadCancellationFlag( OrtSessionOptions options,
+                    @Cast("bool") boolean cancel);
+
+  /** \brief Get the Compile API instance.
+   *
+   * Get the Compile API instance to compile ONNX models. Execution providers that support compilation fuse a subgraph
+   * into an EPContext node that wraps a provider-specific binary representation of the subgraph.
+   * For more details about the EPContext design, refer to:
+   *  \htmlonly
+   *  <a href="https://onnxruntime.ai/docs/execution-providers/EP-Context-Design.html">EPContext design document.</a>
+   *  \endhtmlonly
+   *
+   * @return Compile API struct instance.
+   *
+   * @since Version 1.22.
+   */
+  public static class OrtCompileApi_GetCompileApi extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    OrtCompileApi_GetCompileApi(Pointer p) { super(p); }
+      protected OrtCompileApi_GetCompileApi() { allocate(); }
+      private native void allocate();
+      public native @Const OrtCompileApi call();
+  }
+  public native OrtCompileApi_GetCompileApi GetCompileApi(); public native OrtApi GetCompileApi(OrtCompileApi_GetCompileApi setter);
+
+  //
+  // OrtKeyValuePairs
+  //
+
+  /** \brief Create an OrtKeyValuePairs instance.
+   *
+   * @param out [out] A pointer to a newly created OrtKeyValuePairs instance.
+   *
+   * \note Must be released by calling ReleaseKeyValuePairs.
+   *
+   * @since Version 1.22.
+   */
+  public static class CreateKeyValuePairs_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    CreateKeyValuePairs_PointerPointer(Pointer p) { super(p); }
+      protected CreateKeyValuePairs_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native void call(@Cast("OrtKeyValuePairs**") PointerPointer out);
+  }
+  public native CreateKeyValuePairs_PointerPointer CreateKeyValuePairs(); public native OrtApi CreateKeyValuePairs(CreateKeyValuePairs_PointerPointer setter);
+
+  /** \brief Add a key-value pair to the OrtKeyValuePairs instance.
+   *
+   * @param kvps [in] OrtKeyValuePairs instance.
+   * @param key [in] Key to be added.
+   * @param value [in] Value to be added.
+   *
+   * \note The {@code key} and {@code value} are copied internally.
+   *
+   * @since Version 1.22.
+   */
+
+  public static class AddKeyValuePair_OrtKeyValuePairs_BytePointer_BytePointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    AddKeyValuePair_OrtKeyValuePairs_BytePointer_BytePointer(Pointer p) { super(p); }
+      protected AddKeyValuePair_OrtKeyValuePairs_BytePointer_BytePointer() { allocate(); }
+      private native void allocate();
+      public native void call(OrtKeyValuePairs kvps, @Cast("const char*") BytePointer key, @Cast("const char*") BytePointer value);
+  }
+  public native AddKeyValuePair_OrtKeyValuePairs_BytePointer_BytePointer AddKeyValuePair(); public native OrtApi AddKeyValuePair(AddKeyValuePair_OrtKeyValuePairs_BytePointer_BytePointer setter);
+
+  /** \brief Get the value associated with a key in the OrtKeyValuePairs instance.
+   *
+   * @param kvps [in] OrtKeyValuePairs instance.
+   * @param key [in] Key to be searched.
+   *
+   * @return The value associated with the key, or nullptr if the key does not exist.
+   *
+   * @since Version 1.22.
+   */
+  public static class GetKeyValue_OrtKeyValuePairs_BytePointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetKeyValue_OrtKeyValuePairs_BytePointer(Pointer p) { super(p); }
+      protected GetKeyValue_OrtKeyValuePairs_BytePointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call(@Const OrtKeyValuePairs kvps, @Cast("const char*") BytePointer key);
+  }
+  public native GetKeyValue_OrtKeyValuePairs_BytePointer GetKeyValue(); public native OrtApi GetKeyValue(GetKeyValue_OrtKeyValuePairs_BytePointer setter);
+
+  /** \brief Get all the key-value pairs from the OrtKeyValuePairs instance.
+   *
+   * @param kvps [in] OrtKeyValuePairs instance.
+   * @param keys [out] Array of keys from {@code kvps}.
+   * @param values [out] Array of values from {@code kvps}.
+   * @param num_entries [out] Number of entries in {@code keys} and {@code values}.
+   *
+   * @since Version 1.22.
+   */
+  public static class GetKeyValuePairs_OrtKeyValuePairs_PointerPointer_PointerPointer_SizeTPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetKeyValuePairs_OrtKeyValuePairs_PointerPointer_PointerPointer_SizeTPointer(Pointer p) { super(p); }
+      protected GetKeyValuePairs_OrtKeyValuePairs_PointerPointer_PointerPointer_SizeTPointer() { allocate(); }
+      private native void allocate();
+      public native void call(@Const OrtKeyValuePairs kvps,
+                                         @Cast("const char*const**") @ByPtrPtr PointerPointer keys, @Cast("const char*const**") @ByPtrPtr PointerPointer values,
+                                         @Cast("size_t*") SizeTPointer num_entries);
+  }
+  public native GetKeyValuePairs_OrtKeyValuePairs_PointerPointer_PointerPointer_SizeTPointer GetKeyValuePairs(); public native OrtApi GetKeyValuePairs(GetKeyValuePairs_OrtKeyValuePairs_PointerPointer_PointerPointer_SizeTPointer setter);
+
+  /** \brief Remove a key-value pair from the OrtKeyValuePairs instance.
+   *
+   * @param kvps [in] OrtKeyValuePairs instance.
+   * @param key [in] Key to be removed. No error if not found.
+   *
+   * @since Version 1.22.
+   */
+  public static class RemoveKeyValuePair_OrtKeyValuePairs_BytePointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    RemoveKeyValuePair_OrtKeyValuePairs_BytePointer(Pointer p) { super(p); }
+      protected RemoveKeyValuePair_OrtKeyValuePairs_BytePointer() { allocate(); }
+      private native void allocate();
+      public native void call(OrtKeyValuePairs kvps, @Cast("const char*") BytePointer key);
+  }
+  public native RemoveKeyValuePair_OrtKeyValuePairs_BytePointer RemoveKeyValuePair(); public native OrtApi RemoveKeyValuePair(RemoveKeyValuePair_OrtKeyValuePairs_BytePointer setter);
+
+  /** \brief Release an OrtKeyValuePairs instance.
+   *
+   * @param input [in] OrtKeyValuePairs instance to be released.
+   *
+   * @since Version 1.22.
+   */
+  public native void ReleaseKeyValuePairs(OrtKeyValuePairs input);
+
+  /** \brief Register an execution provider library with ORT.
+   *
+   * The library must export 'CreateEpFactories' and 'ReleaseEpFactory' functions.
+   * See OrtEpApi for more details.
+   *
+   * @param env [in] The OrtEnv instance to register the library in.
+   * @param registration_name [in] The name to register the execution provider library under.
+   * @param path [in] The path to the execution provider library.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.22.
+   */
+  public native OrtStatus RegisterExecutionProviderLibrary( OrtEnv env, @Cast("const char*") BytePointer registration_name,
+                    @Cast("const ORTCHAR_T*") Pointer path);
+  public native OrtStatus RegisterExecutionProviderLibrary( OrtEnv env, String registration_name,
+                    @Cast("const ORTCHAR_T*") Pointer path);
+
+  /** \brief Unregister an execution provider library with ORT.
+   *
+   * ORT will call ReleaseEpFactory for all factories created by the library, and unload the library.
+   *
+   * You <b>MUST</b> ensure there are no Session instances using execution providers created by the library
+   * before calling this function.
+   *
+   * @param env [in] The OrtEnv instance to unregister the library from.
+   * @param registration_name [in] The name the execution provider library was registered under.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.22.
+   */
+  public native OrtStatus UnregisterExecutionProviderLibrary( OrtEnv env, @Cast("const char*") BytePointer registration_name);
+  public native OrtStatus UnregisterExecutionProviderLibrary( OrtEnv env, String registration_name);
+
+  /** \brief Get the list of available OrtEpDevice instances.
+   *
+   * Each OrtEpDevice instance contains details of the execution provider and the device it will use.
+   *
+   * @param env [in] The OrtEnv instance to query.
+   * @param ep_devices [out] The OrtEpDevice instances that the execution provider will use.
+   * @param num_ep_devices [out] The number of OrtEpDevice instances returned.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.22.
+   */
+  public native OrtStatus GetEpDevices( @Const OrtEnv env,
+                    @Cast("const OrtEpDevice*const**") @ByPtrPtr PointerPointer ep_devices, @Cast("size_t*") SizeTPointer num_ep_devices);
+
+  /** \brief Append the execution provider that is responsible for the selected OrtEpDevice instances
+   *         to the session options.
+   *
+   * @param session_options [in] Session options to add execution provider to.
+   * @param env [in] Environment that execution providers were registered with.
+   * @param ep_devices [in] One or more OrtEpDevice instances to create an execution provider for.
+   *                       Obtain from GetEpDevices. All OrtEpDevice instances must be from the same execution
+   *                       provider. It is only necessary to provide multiple OrtEpDevices if you want to use the
+   *                       same execution provider for multiple devices.
+   *                       e.g. the EP is capable of running on GPU and NPU.
+   * @param num_ep_devices [in] Number of OrtEpDevice instances.
+   * @param ep_option_keys [in] Optional keys to configure the execution provider.
+   * @param ep_option_vals [in] Optional values to configure the execution provider.
+   * @param num_ep_options [in] Number of execution provide options to add.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.22.
+   */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_V2( OrtSessionOptions session_options,
+                    OrtEnv env,
+                    @Cast("const OrtEpDevice*const*") PointerPointer ep_devices, @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*const*") PointerPointer ep_option_keys,
+                    @Cast("const char*const*") PointerPointer ep_option_vals,
+                    @Cast("size_t") long num_ep_options);
+  public native OrtStatus SessionOptionsAppendExecutionProvider_V2( OrtSessionOptions session_options,
+                    OrtEnv env,
+                    @Const @ByPtrPtr OrtEpDevice ep_devices, @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer ep_option_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer ep_option_vals,
+                    @Cast("size_t") long num_ep_options);
+  public native OrtStatus SessionOptionsAppendExecutionProvider_V2( OrtSessionOptions session_options,
+                    OrtEnv env,
+                    @Const @ByPtrPtr OrtEpDevice ep_devices, @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer ep_option_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer ep_option_vals,
+                    @Cast("size_t") long num_ep_options);
+  public native OrtStatus SessionOptionsAppendExecutionProvider_V2( OrtSessionOptions session_options,
+                    OrtEnv env,
+                    @Const @ByPtrPtr OrtEpDevice ep_devices, @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*const*") @ByPtrPtr byte[] ep_option_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] ep_option_vals,
+                    @Cast("size_t") long num_ep_options);
+
+  /** \brief Set the execution provider selection policy for the session.
+   *
+   * Allows users to specify a device selection policy for automatic execution provider (EP) selection.
+   * If custom selection is required please use SessionOptionsSetEpSelectionPolicyDelegate instead.
+   *
+   * @param session_options [in] The OrtSessionOptions instance.
+   * @param policy [in] The device selection policy to use (see OrtExecutionProviderDevicePolicy).
+   *
+   * @since Version 1.22
+   */
+  public native OrtStatus SessionOptionsSetEpSelectionPolicy( OrtSessionOptions session_options,
+                    @Cast("OrtExecutionProviderDevicePolicy") int policy);
+
+  /** \brief Set the execution provider selection policy delegate for the session.
+   *
+   * Allows users to provide a custom device selection policy for automatic execution provider (EP) selection.
+   *
+   * @param session_options [in] The OrtSessionOptions instance.
+   * @param delegate [in] Delegate callback for custom selection.
+   * @param delegate_state [in] Optional state that will be passed to the delegate callback. nullptr if not required.
+   *
+   * @since Version 1.22
+   */
+  public native OrtStatus SessionOptionsSetEpSelectionPolicyDelegate( OrtSessionOptions session_options,
+                    EpSelectionDelegate delegate,
+                    Pointer delegate_state);
+
+  /** \brief Get the hardware device type.
+   *
+   * @param device [in] The OrtHardwareDevice instance to query.
+   * @return The hardware device type.
+   *
+   * @since Version 1.22.
+   */
+  public static class HardwareDevice_Type_OrtHardwareDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    HardwareDevice_Type_OrtHardwareDevice(Pointer p) { super(p); }
+      protected HardwareDevice_Type_OrtHardwareDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtHardwareDeviceType") int call(@Const OrtHardwareDevice device);
+  }
+  public native HardwareDevice_Type_OrtHardwareDevice HardwareDevice_Type(); public native OrtApi HardwareDevice_Type(HardwareDevice_Type_OrtHardwareDevice setter);
+
+  /** \brief Get the hardware device's vendor identifier.
+   *
+   * @param device [in] The OrtHardwareDevice instance to query.
+   * @return The hardware device vendor identifier.
+   *
+   * @since Version 1.22.
+   */
+  public static class HardwareDevice_VendorId_OrtHardwareDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    HardwareDevice_VendorId_OrtHardwareDevice(Pointer p) { super(p); }
+      protected HardwareDevice_VendorId_OrtHardwareDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint32_t") int call(@Const OrtHardwareDevice device);
+  }
+  public native HardwareDevice_VendorId_OrtHardwareDevice HardwareDevice_VendorId(); public native OrtApi HardwareDevice_VendorId(HardwareDevice_VendorId_OrtHardwareDevice setter);
+
+  /** \brief Get the hardware device's vendor name.
+   *
+   * @param device [in] The OrtHardwareDevice instance to query.
+   * @return The hardware device's vendor name.
+   *
+   * @since Version 1.22.
+   */
+  public static class HardwareDevice_Vendor_OrtHardwareDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    HardwareDevice_Vendor_OrtHardwareDevice(Pointer p) { super(p); }
+      protected HardwareDevice_Vendor_OrtHardwareDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call(@Const OrtHardwareDevice device);
+  }
+  public native HardwareDevice_Vendor_OrtHardwareDevice HardwareDevice_Vendor(); public native OrtApi HardwareDevice_Vendor(HardwareDevice_Vendor_OrtHardwareDevice setter);
+
+  /** \brief Get the hardware device's unique identifier.
+   *
+   * @param device [in] The OrtHardwareDevice instance to query.
+   * @return The device id.
+   *
+   * \note This is not a unique identifier. It identifies the hardware type when combined with vendor id.
+   * @since Version 1.22.
+   */
+  public static class HardwareDevice_DeviceId_OrtHardwareDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    HardwareDevice_DeviceId_OrtHardwareDevice(Pointer p) { super(p); }
+      protected HardwareDevice_DeviceId_OrtHardwareDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint32_t") int call(@Const OrtHardwareDevice device);
+  }
+  public native HardwareDevice_DeviceId_OrtHardwareDevice HardwareDevice_DeviceId(); public native OrtApi HardwareDevice_DeviceId(HardwareDevice_DeviceId_OrtHardwareDevice setter);
+
+  /** \brief Get hardware device metadata.
+   *
+   * @param device [in] The OrtHardwareDevice instance to query.
+   * @return An OrtKeyValuePairs instance containing the metadata for the device.
+   *         Note: ORT owns the instance so the user must not call ReleaseKeyValuePairs with it.
+   *
+   * @since Version 1.22.
+   */
+  public static class HardwareDevice_Metadata_OrtHardwareDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    HardwareDevice_Metadata_OrtHardwareDevice(Pointer p) { super(p); }
+      protected HardwareDevice_Metadata_OrtHardwareDevice() { allocate(); }
+      private native void allocate();
+      public native @Const OrtKeyValuePairs call(@Const OrtHardwareDevice device);
+  }
+  public native HardwareDevice_Metadata_OrtHardwareDevice HardwareDevice_Metadata(); public native OrtApi HardwareDevice_Metadata(HardwareDevice_Metadata_OrtHardwareDevice setter);
+
+  /** \brief Get the execution provider name.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to query.
+   * @return The execution provider name.
+   *
+   * @since Version 1.22.
+   */
+  public static class EpDevice_EpName_OrtEpDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EpDevice_EpName_OrtEpDevice(Pointer p) { super(p); }
+      protected EpDevice_EpName_OrtEpDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call(@Const OrtEpDevice ep_device);
+  }
+  public native EpDevice_EpName_OrtEpDevice EpDevice_EpName(); public native OrtApi EpDevice_EpName(EpDevice_EpName_OrtEpDevice setter);
+
+  /** \brief Get the execution provider's vendor name.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to query.
+   * @return The execution provider's vendor name.
+   *
+   * @since Version 1.22.
+   */
+  public static class EpDevice_EpVendor_OrtEpDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EpDevice_EpVendor_OrtEpDevice(Pointer p) { super(p); }
+      protected EpDevice_EpVendor_OrtEpDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call(@Const OrtEpDevice ep_device);
+  }
+  public native EpDevice_EpVendor_OrtEpDevice EpDevice_EpVendor(); public native OrtApi EpDevice_EpVendor(EpDevice_EpVendor_OrtEpDevice setter);
+
+  /** \brief Get the metadata for the OrtEpDevice.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to query.
+   * @return An OrtKeyValuePairs instance containing the metadata for the device.
+   *
+   * @since Version 1.22.
+   */
+  public static class EpDevice_EpMetadata_OrtEpDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EpDevice_EpMetadata_OrtEpDevice(Pointer p) { super(p); }
+      protected EpDevice_EpMetadata_OrtEpDevice() { allocate(); }
+      private native void allocate();
+      public native @Const OrtKeyValuePairs call(@Const OrtEpDevice ep_device);
+  }
+  public native EpDevice_EpMetadata_OrtEpDevice EpDevice_EpMetadata(); public native OrtApi EpDevice_EpMetadata(EpDevice_EpMetadata_OrtEpDevice setter);
+
+  /** \brief Get the execution provider options for the OrtEpDevice.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to query.
+   * @return An OrtKeyValuePairs instance containing the execution provider options for the device.
+   *
+   * @since Version 1.22.
+   */
+  public static class EpDevice_EpOptions_OrtEpDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EpDevice_EpOptions_OrtEpDevice(Pointer p) { super(p); }
+      protected EpDevice_EpOptions_OrtEpDevice() { allocate(); }
+      private native void allocate();
+      public native @Const OrtKeyValuePairs call(@Const OrtEpDevice ep_device);
+  }
+  public native EpDevice_EpOptions_OrtEpDevice EpDevice_EpOptions(); public native OrtApi EpDevice_EpOptions(EpDevice_EpOptions_OrtEpDevice setter);
+
+  /** \brief Get the OrtHardwareDevice instance for the OrtEpDevice.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to query.
+   * @return The OrtHardwareDevice instance for the device.
+   *
+   * @since Version 1.22.
+   */
+  public static class EpDevice_Device_OrtEpDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EpDevice_Device_OrtEpDevice(Pointer p) { super(p); }
+      protected EpDevice_Device_OrtEpDevice() { allocate(); }
+      private native void allocate();
+      public native @Const OrtHardwareDevice call(@Const OrtEpDevice ep_device);
+  }
+  public native EpDevice_Device_OrtEpDevice EpDevice_Device(); public native OrtApi EpDevice_Device(EpDevice_Device_OrtEpDevice setter);
+
+  /** \brief Get the OrtEpApi instance for implementing an execution provider.
+   *
+   * @since Version 1.22.
+   */
+  public static class OrtEpApi_GetEpApi extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    OrtEpApi_GetEpApi(Pointer p) { super(p); }
+      protected OrtEpApi_GetEpApi() { allocate(); }
+      private native void allocate();
+      public native @Const OrtEpApi call();
+  }
+  public native OrtEpApi_GetEpApi GetEpApi(); public native OrtApi GetEpApi(OrtEpApi_GetEpApi setter);
 }

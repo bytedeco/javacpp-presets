@@ -12,7 +12,7 @@ export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export MAX_JOBS=$MAKEJ
 
-export ONNX=1.17.0
+export ONNX=1.18.0
 export PROTO=3.20.3
 export PYBIND=2.11.0
 
@@ -60,7 +60,7 @@ if [[ -f "$CPYTHON_PATH/include/python3.13/Python.h" ]]; then
     export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.13/"
     export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.13/site-packages/"
     export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.13/site-packages/pip/_vendor/certifi/cacert.pem"
-    chmod +x "$PYTHON_BIN_PATH"
+    chmod +x $CPYTHON_PATH/bin/*
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
     export PATH="$CPYTHON_PATH:$PATH"

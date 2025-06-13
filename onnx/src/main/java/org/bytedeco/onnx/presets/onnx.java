@@ -118,11 +118,11 @@ public class onnx implements InfoMapper {
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2ddata_2eproto").skip())
                .put(new Info("onnx::shape_inference::InferenceContextImpl").skip())
-               .put(new Info("std::set<int>").pointerTypes("IntSet").define())
+               .put(new Info("std::unordered_set<int>").pointerTypes("IntSet").define())
                .put(new Info("onnx::optimization::Pass").purify(true))
                .put(new Info("std::shared_ptr<onnx::optimization::Pass>").annotations("@SharedPtr").pointerTypes("Pass"))
 //               .put(new Info("std::map<std::string,std::shared_ptr<onnx::optimization::Pass> >").pointerTypes("StringPassMap").define())
-               .put(new Info("std::unordered_set<std::string>").pointerTypes("UnorderedStringSet").define())
+               .put(new Info("std::unordered_set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::multimap<std::string,const onnx::FunctionProto*>").skip())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
                .put(new Info("onnx::version_conversion::BaseVersionConverter::registerAdapter").skip())
@@ -156,7 +156,9 @@ public class onnx implements InfoMapper {
                              "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_", "onnx::RegisterOneFunctionBuilder", "BuildFunction",
                              "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
                              "onnx::_AttributeProto_default_instance_", "onnx::_TensorAnnotation_default_instance_", "onnx::_MapProto_default_instance_",
-                             "onnx::_SequenceProto_default_instance_", "onnx::_OptionalProto_default_instance_", "onnx::_TypeProto_Optional_default_instance_").skip())
+                             "onnx::_SequenceProto_default_instance_", "onnx::_OptionalProto_default_instance_", "onnx::_TypeProto_Optional_default_instance_",
+                             "onnx::_DeviceConfigurationProto_default_instance_", "onnx::_IntIntListEntryProto_default_instance_", "onnx::_NodeDeviceConfigurationProto_default_instance_",
+                             "onnx::_ShardedDimProto_default_instance_", "onnx::_ShardingSpecProto_default_instance_", "onnx::_SimpleShardedDimProto_default_instance_").skip())
 
                .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
@@ -164,7 +166,7 @@ public class onnx implements InfoMapper {
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))
 
                .put(new Info("std::pair<int,int>", "std::pair<onnx::OpSchema::UseType,int>").pointerTypes("UseTypeIntPair").define())
-               .put(new Info("const std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
+               .put(new Info("const std::unordered_map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
                .put(new Info("std::unordered_map<size_t,std::string>").pointerTypes("SizeTStringMap").define())
                .put(new Info("std::unordered_map<std::string,int>").pointerTypes("StringIntMap").define())
                .put(new Info("std::unordered_map<std::string,onnx::TypeProto*>").pointerTypes("StringTypeProtoMap").define())
@@ -175,7 +177,6 @@ public class onnx implements InfoMapper {
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())
                .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
                .put(new Info("std::unordered_set<onnx::DataType>").pointerTypes("DataTypeSet").define())
-               .put(new Info("std::set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
                .put(new Info("std::vector<onnx::TypeProto*>").pointerTypes("TypeProtoVector").define())

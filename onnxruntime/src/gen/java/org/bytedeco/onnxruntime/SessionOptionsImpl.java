@@ -67,6 +67,9 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
   /** Wraps OrtApi::SetSessionExecutionMode */
   public native @ByRef SessionOptionsImpl SetExecutionMode(@Cast("ExecutionMode") int execution_mode);
 
+  /** Wraps OrtApi::SessionOptionsSetLoadCancellationFlag */
+  public native @ByRef SessionOptionsImpl SetLoadCancellationFlag(@Cast("bool") boolean value);
+
   /** Wraps OrtApi::SetSessionLogId */
   public native @ByRef SessionOptionsImpl SetLogId(@Cast("const char*") BytePointer logid);
   public native @ByRef SessionOptionsImpl SetLogId(String logid);
@@ -117,12 +120,11 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_TensorRT(@Const @ByRef OrtTensorRTProviderOptions provider_options);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_TensorRT */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_TensorRT_V2(@Const @ByRef OrtTensorRTProviderOptionsV2 provider_options);
-  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_MIGraphX
-   *  Wraps OrtApi::SessionOptionsAppendExecutionProvider_CANN */
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_MIGraphX */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_MIGraphX(@Const @ByRef OrtMIGraphXProviderOptions provider_options);
-  
-  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_Dnnl */
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CANN */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_CANN(@Const @ByRef OrtCANNProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_Dnnl */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_Dnnl(@Const @ByRef OrtDnnlProviderOptions provider_options);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider. Currently supports QNN, SNPE and XNNPACK. */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider(@StdString BytePointer provider_name,
@@ -131,6 +133,22 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
   public native @ByRef SessionOptionsImpl AppendExecutionProvider(@StdString String provider_name,
                                                 @Const @ByRef(nullValue = "std::unordered_map<std::string,std::string>{}") StringStringMap provider_options);
   public native @ByRef SessionOptionsImpl AppendExecutionProvider(@StdString String provider_name);
+
+  /** Append EPs that have been registered previously with the OrtEnv.
+   *  Wraps OrtApi::SessionOptionsAppendExecutionProvider_V2 */
+  public native @ByRef SessionOptionsImpl AppendExecutionProvider_V2(@ByRef Env env, @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl ep_devices,
+                                                   @Const @ByRef KeyValuePairs ep_options);
+  /** Append EPs that have been registered previously with the OrtEnv.
+   *  Wraps OrtApi::SessionOptionsAppendExecutionProvider_V2 */
+  public native @ByRef SessionOptionsImpl AppendExecutionProvider_V2(@ByRef Env env, @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl ep_devices,
+                                                   @Const @ByRef StringStringMap ep_options);
+
+  /** Wraps OrtApi::SessionOptionsSetEpSelectionPolicy */
+  public native @ByRef SessionOptionsImpl SetEpSelectionPolicy(@Cast("OrtExecutionProviderDevicePolicy") int policy);
+
+  /** Wraps OrtApi::SessionOptionsSetEpSelectionPolicyDelegate */
+  public native @ByRef SessionOptionsImpl SetEpSelectionPolicy(EpSelectionDelegate delegate, Pointer state/*=nullptr*/);
+  public native @ByRef SessionOptionsImpl SetEpSelectionPolicy(EpSelectionDelegate delegate);
 
   /** Wraps OrtApi::SessionOptionsSetCustomCreateThreadFn */
   public native @ByRef SessionOptionsImpl SetCustomCreateThreadFn(OrtCustomCreateThreadFn ort_custom_create_thread_fn);

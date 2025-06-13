@@ -55,6 +55,7 @@ public class TensorTypeAndShapeInfoImpl extends BaseTensorTypeAndShapeInfo {
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr BytePointer values, @Cast("size_t") long values_count);
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr ByteBuffer values, @Cast("size_t") long values_count);
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr byte[] values, @Cast("size_t") long values_count);
+  public native @Cast("const char**") @StdVector PointerPointer GetSymbolicDimensions();
 
   /** Uses GetDimensionsCount & GetDimensions to return a std::vector of the shape */
   public native @ByVal LongVector GetShape();

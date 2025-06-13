@@ -127,8 +127,8 @@ public static final int FFI_TRAMPOLINE_SIZE = FFI_TRAMPOLINE_SIZE();
 // Parsed from ffi.h
 
 /* -----------------------------------------------------------------*-C-*-
-   libffi 3.4.8
-     - Copyright (c) 2011, 2014, 2019, 2021, 2022, 2024 Anthony Green
+   libffi 3.5.1
+     - Copyright (c) 2011, 2014, 2019, 2021, 2022, 2024, 2025 Anthony Green
      - Copyright (c) 1996-2003, 2007, 2008 Red Hat, Inc.
 
    Permission is hereby granted, free of charge, to any person
@@ -378,6 +378,24 @@ public static native @Deprecated void ffi_java_ptrarray_to_raw(ffi_cif cif, @Cas
 public static native @Deprecated void ffi_java_raw_to_ptrarray(ffi_cif cif, ffi_java_raw raw, @Cast("void**") PointerPointer args);
 public static native @Deprecated void ffi_java_raw_to_ptrarray(ffi_cif cif, ffi_java_raw raw, @Cast("void**") @ByPtrPtr Pointer args);
 public static native @Cast("size_t") @Deprecated long ffi_java_raw_size(ffi_cif cif);
+
+/* ---- Version API ------------------------------------------------------ */
+
+public static final String FFI_VERSION_STRING = "3.5.1";
+public static final int FFI_VERSION_NUMBER = 30501;
+
+// #ifndef LIBFFI_ASM
+/* Return a version string. */
+public static native @Cast("const char*") BytePointer ffi_get_version();
+
+/* Return the version as an unsigned long value: (x * 10000 + y * 100 + z) */
+public static native @Cast("unsigned long") long ffi_get_version_number();
+// #endif
+
+/* ---- Internals API ---------------------------------------------------- */
+
+public static native @Cast("unsigned int") int ffi_get_default_abi();
+public static native @Cast("size_t") long ffi_get_closure_size();
 
 /* ---- Definitions for closures ----------------------------------------- */
 
