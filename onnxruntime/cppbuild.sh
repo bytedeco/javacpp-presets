@@ -46,7 +46,11 @@ case $PLATFORM in
         export DNNL_FLAGS=
         ;;
     macosx-arm64)
+        export ARCH_FLAGS=
         export DNNL_FLAGS=
+        ;;
+    macosx-x86_64)
+        export ARCH_FLAGS=
         ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
