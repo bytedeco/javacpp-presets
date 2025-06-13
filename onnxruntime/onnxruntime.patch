@@ -1,5 +1,5 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index 2aa83e9e3e..a391acb4b5 100644
+index 8f5ef15c53..348f70ef27 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
 @@ -9,8 +9,8 @@ endif()
@@ -13,15 +13,8 @@ index 2aa83e9e3e..a391acb4b5 100644
  endif()
  
  if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
-@@ -342,4 +342,4 @@ endif()
- 
- if (onnxruntime_USE_EXTENSIONS)
-     include_directories(${REPO_ROOT}/include/onnxruntime/core/session)
--endif()
-\ No newline at end of file
-+endif()
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 6c1d4485eb..6b1a6440b4 100644
+index 6c1d4485eb..14d72dacef 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
 @@ -144,9 +144,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
@@ -37,10 +30,10 @@ index 6c1d4485eb..6b1a6440b4 100644
  else()
    target_link_options(onnxruntime PRIVATE  "-DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index 2dab9f6a40..fb1353a6c2 100644
+index eee6a05f12..3e3d295dce 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-@@ -114,10 +114,11 @@ struct OnUnload {
+@@ -115,10 +115,11 @@ struct OnUnload {
  
  } g_on_unload;
  
@@ -54,7 +47,7 @@ index 2dab9f6a40..fb1353a6c2 100644
    return g_host->CreateAllocator(info);
  }
  
-@@ -261,19 +262,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
+@@ -262,19 +263,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -78,7 +71,7 @@ index 2dab9f6a40..fb1353a6c2 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -281,16 +285,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -282,16 +286,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -98,7 +91,7 @@ index 2dab9f6a40..fb1353a6c2 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -301,6 +308,7 @@ int64_t TensorShape::Size() const {
+@@ -302,6 +309,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -106,7 +99,7 @@ index 2dab9f6a40..fb1353a6c2 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -310,61 +318,73 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -311,28 +319,33 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -137,11 +130,18 @@ index 2dab9f6a40..fb1353a6c2 100644
    return g_host->IAllocator__CalcMemSizeForArrayWithAlignment(nmemb, size, alignment, out);
  }
  
- std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapability(const onnxruntime::GraphViewer& graph_viewer,
+ std::unique_ptr<IExecutionProvider> IExecutionProviderFactory::CreateProvider(
+     const OrtSessionOptions& session_options, const OrtLogger& session_logger) {
++  g_host = Provider_GetHost();
+   return g_host->IExecutionProviderFactory__CreateProvider(this, session_options, session_logger);
+ }
+ 
+@@ -340,38 +353,46 @@ std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapabilit
                                                                                    const IKernelLookup& kernel_lookup,
+                                                                                   const GraphOptimizerRegistry& graph_optimizer_registry,
                                                                                    IResourceAccountant* resource_accountant) const {
 +  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_lookup, resource_accountant);
+   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_lookup, graph_optimizer_registry, resource_accountant);
  }
  common::Status IExecutionProvider::Compile(const std::vector<FusedNodeAndGraph>& fused_nodes_and_graphs,
                                             std::vector<NodeComputeInfo>& node_compute_funcs) {
@@ -149,7 +149,7 @@ index 2dab9f6a40..fb1353a6c2 100644
    return g_host->IExecutionProvider__Compile(this, fused_nodes_and_graphs, node_compute_funcs);
  }
  
- #ifdef USE_TENSORRT
+ #if defined(USE_TENSORRT) || defined(USE_NV)
  std::unique_ptr<IAllocator> CreateCUDAAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
    return g_host->CreateCUDAAllocator(device_id, name);
@@ -183,7 +183,7 @@ index 2dab9f6a40..fb1353a6c2 100644
    return g_host->GetEnvironmentVar(var_name);
  }
  
-@@ -372,20 +392,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
+@@ -379,20 +400,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
                                                     const IExecutionProvider::IKernelLookup& kernel_lookup,
                                                     gsl::span<const NodeIndex> tentative_nodes,
                                                     const logging::Logger& logger) {
@@ -209,7 +209,7 @@ index 2dab9f6a40..fb1353a6c2 100644
  
  const char* Category::onnxruntime = "onnxruntime";
  
-@@ -422,7 +443,7 @@ const std::string& Status::ErrorMessage() const noexcept {
+@@ -429,7 +451,7 @@ const std::string& Status::ErrorMessage() const noexcept {
    return IsOK() ? EmptyString() : state_->msg;
  }
  
@@ -218,7 +218,7 @@ index 2dab9f6a40..fb1353a6c2 100644
  
  const std::string& Status::EmptyString() noexcept {
    static std::string s_empty;
-@@ -432,8 +453,8 @@ const std::string& Status::EmptyString() noexcept {
+@@ -439,8 +461,8 @@ const std::string& Status::EmptyString() noexcept {
  }  // namespace common
  
  namespace math {
@@ -229,7 +229,7 @@ index 2dab9f6a40..fb1353a6c2 100644
  
  }  // namespace math
  
-@@ -442,22 +463,26 @@ namespace sparse_utils {
+@@ -449,22 +471,26 @@ namespace sparse_utils {
  #if !defined(ORT_MINIMAL_BUILD)
  Status DenseTensorToSparseCsr(const DataTransferManager& data_manager, const Tensor& src, const AllocatorPtr& cpu_allocator,
                                const AllocatorPtr& dst_allocator, SparseTensor& dst) {
@@ -256,7 +256,7 @@ index 2dab9f6a40..fb1353a6c2 100644
    return g_host->sparse_utils__DenseTensorToSparseCoo(data_manager, src, cpu_allocator, dst_allocator, linear_indexs, dst);
  }
  #endif  // !defined(DISABLE_SPARSE_TENSORS)
-@@ -468,10 +493,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -475,10 +501,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -270,10 +270,10 @@ index 2dab9f6a40..fb1353a6c2 100644
  }
  
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 1d25ceb9af..3b5b9f1f4d 100644
+index 7fcaee4858..310214c0b4 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1634,13 +1634,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1686,13 +1686,33 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -307,7 +307,7 @@ index 1d25ceb9af..3b5b9f1f4d 100644
      ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1659,7 +1679,7 @@ struct ProviderSharedLibrary {
+@@ -1711,7 +1731,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -316,10 +316,10 @@ index 1d25ceb9af..3b5b9f1f4d 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1692,6 +1712,18 @@ struct ProviderLibrary {
-         s_library_shared.Ensure();
- 
-         auto full_path = Env::Default().GetRuntimePath() + filename_;
+@@ -1756,6 +1776,18 @@ Status ProviderLibrary::Load() {
+       ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(filename_, false, &handle_));
+     } else {
+       auto full_path = Env::Default().GetRuntimePath() + filename_;
 +#ifdef __APPLE__
 +full_path = s_library_shared.libpath + std::string(filename_);
 +size_t len1 = strlen(filename_);
@@ -332,14 +332,14 @@ index 1d25ceb9af..3b5b9f1f4d 100644
 +    }
 +}
 +#endif
-         ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
+       ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
+     }
  
-         Provider* (*PGetProvider)();
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index ecdffbe5fd..eac7673086 100644
+index 1835c0b41f..a7a7b4a9bf 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -1130,6 +1130,9 @@ def generate_build_tree(
+@@ -417,6 +417,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -349,7 +349,7 @@ index ecdffbe5fd..eac7673086 100644
          "-DPython_EXECUTABLE=" + sys.executable,
          "-Donnxruntime_USE_VCPKG=" + ("ON" if args.use_vcpkg else "OFF"),
          "-Donnxruntime_USE_MIMALLOC=" + ("ON" if args.use_mimalloc else "OFF"),
-@@ -3157,6 +3160,9 @@ def main():
+@@ -2406,6 +2409,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
@@ -359,3 +359,31 @@ index ecdffbe5fd..eac7673086 100644
          if args.enable_pybind and is_windows():
              run_subprocess(
                  [sys.executable, "-m", "pip", "install", "-r", "requirements/pybind/requirements.txt"],
+diff --git a/tools/ci_build/build_args.py b/tools/ci_build/build_args.py
+index 215ad77335..0584b0533c 100644
+--- a/tools/ci_build/build_args.py
++++ b/tools/ci_build/build_args.py
+@@ -241,6 +241,11 @@ def add_documentation_args(parser: argparse.ArgumentParser) -> None:
+ 
+ def add_cross_compile_args(parser: argparse.ArgumentParser) -> None:
+     """Adds arguments for cross-compiling to non-Windows target CPU architectures."""
++    parser.add_argument(
++        "--arm64",
++        action="store_true",
++        help="[Windows cross-compiling] Target Windows ARM64.",
++    )
+     parser.add_argument(
+         "--rv64",
+         action="store_true",
+@@ -409,11 +414,6 @@ def add_windows_specific_args(parser: argparse.ArgumentParser) -> None:
+         action="store_true",
+         help="[Windows cross-compiling] Target Windows ARM.",
+     )
+-    parser.add_argument(
+-        "--arm64",
+-        action="store_true",
+-        help="[Windows cross-compiling] Target Windows ARM64.",
+-    )
+     parser.add_argument(
+         "--arm64ec",
+         action="store_true",

@@ -86,6 +86,19 @@ public class Env extends BaseEnv {
   public native @ByRef Env CreateAndRegisterAllocator(@Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg);
 
   /** Wraps OrtApi::CreateAndRegisterAllocatorV2 */
-  public native @ByRef Env CreateAndRegisterAllocatorV2(@StdString BytePointer provider_type, @Const OrtMemoryInfo mem_info, @Const @ByRef StringStringMap options, @Const OrtArenaCfg arena_cfg);
-  public native @ByRef Env CreateAndRegisterAllocatorV2(@StdString String provider_type, @Const OrtMemoryInfo mem_info, @Const @ByRef StringStringMap options, @Const OrtArenaCfg arena_cfg);
+  public native @ByRef Env CreateAndRegisterAllocatorV2(@StdString BytePointer provider_type, @Const OrtMemoryInfo mem_info,
+                                      @Const @ByRef StringStringMap options,
+                                      @Const OrtArenaCfg arena_cfg);
+  public native @ByRef Env CreateAndRegisterAllocatorV2(@StdString String provider_type, @Const OrtMemoryInfo mem_info,
+                                      @Const @ByRef StringStringMap options,
+                                      @Const OrtArenaCfg arena_cfg);
+
+  /** Wraps OrtApi::RegisterExecutionProviderLibrary */
+  public native @ByRef Env RegisterExecutionProviderLibrary(@Cast("const char*") BytePointer registration_name, @Cast("const std::basic_string<ORTCHAR_T>*") @ByRef Pointer path);
+  public native @ByRef Env RegisterExecutionProviderLibrary(String registration_name, @Cast("const std::basic_string<ORTCHAR_T>*") @ByRef Pointer path);
+  /** Wraps OrtApi::UnregisterExecutionProviderLibrary */
+  public native @ByRef Env UnregisterExecutionProviderLibrary(@Cast("const char*") BytePointer registration_name);
+  public native @ByRef Env UnregisterExecutionProviderLibrary(String registration_name);
+
+  public native @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl GetEpDevices();
 }

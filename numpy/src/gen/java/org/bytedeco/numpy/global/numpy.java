@@ -50,7 +50,7 @@ public static final int NPY_NO_SMP = 0;
 
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x02000000;
-public static final int NPY_API_VERSION = 0x00000013;
+public static final int NPY_API_VERSION = 0x00000014;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -109,6 +109,8 @@ public static final int NPY_1_24_API_VERSION = 0x00000010;
 public static final int NPY_1_25_API_VERSION = 0x00000011;
 public static final int NPY_2_0_API_VERSION = 0x00000012;
 public static final int NPY_2_1_API_VERSION = 0x00000013;
+public static final int NPY_2_2_API_VERSION = 0x00000013;
+public static final int NPY_2_3_API_VERSION = 0x00000014;
 
 
 /*
@@ -146,8 +148,8 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
     /* user provided a target version, use it */
 //     #define NPY_FEATURE_VERSION NPY_TARGET_VERSION
 // #else
-    /* Use the default (increase when dropping Python 3.10 support) */
-//     #define NPY_FEATURE_VERSION NPY_1_21_API_VERSION
+    /* Use the default (increase when dropping Python 3.11 support) */
+//     #define NPY_FEATURE_VERSION NPY_1_23_API_VERSION
 // #endif
 
 /* Sanity check the (requested) feature version */
@@ -183,6 +185,7 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 // #elif NPY_FEATURE_VERSION == NPY_1_25_API_VERSION
 // #elif NPY_FEATURE_VERSION == NPY_2_0_API_VERSION
 // #elif NPY_FEATURE_VERSION == NPY_2_1_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_2_3_API_VERSION
 // #else
 //     #error "Missing version string define for new NumPy version."
 // #endif
@@ -523,9 +526,6 @@ public static final long NPY_MAX_UINT64 = NPY_MAX_UINT64();
 // #define NPY_MAX_INT128 NPY_LONGLONG_SUFFIX(85070591730234615865843651857942052864L)
 // #define NPY_MIN_INT128 (-NPY_MAX_INT128 - NPY_LONGLONG_SUFFIX(1))
 // #define NPY_MAX_UINT128 NPY_ULONGLONG_SUFFIX(170141183460469231731687303715884105728L)
-// #define NPY_MAX_INT256 NPY_LONGLONG_SUFFIX(57896044618658097711785492504343953926634992332820282019728792003956564819967L)
-// #define NPY_MIN_INT256 (-NPY_MAX_INT256 - NPY_LONGLONG_SUFFIX(1))
-// #define NPY_MAX_UINT256 NPY_ULONGLONG_SUFFIX(115792089237316195423570985008687907853269984665640564039457584007913129639935L)
 public static native @MemberGetter long NPY_MIN_DATETIME();
 public static final long NPY_MIN_DATETIME = NPY_MIN_DATETIME();
 public static native @MemberGetter long NPY_MAX_DATETIME();
@@ -631,7 +631,6 @@ public static final String NPY_INT64_FMT = NPY_LONG_FMT;
 public static final String NPY_UINT64_FMT = NPY_ULONG_FMT;
 // #define MyPyLong_FromInt64 PyLong_FromLong
 // #define MyPyLong_AsInt64 PyLong_AsLong
-// #elif NPY_BITSOF_LONG == 128
 // #endif
 
 // #if NPY_BITSOF_LONGLONG == 8
@@ -652,8 +651,6 @@ public static native @MemberGetter long NPY_MIN_LONGLONG();
 public static final long NPY_MIN_LONGLONG = NPY_MIN_LONGLONG();
 public static native @MemberGetter long NPY_MAX_ULONGLONG();
 public static final long NPY_MAX_ULONGLONG = NPY_MAX_ULONGLONG();
-// #elif NPY_BITSOF_LONGLONG == 128
-// #elif NPY_BITSOF_LONGLONG == 256
 // #endif
 
 // #if NPY_BITSOF_INT == 8
@@ -672,7 +669,6 @@ public static final String NPY_INT32_FMT = NPY_INT_FMT;
 public static final String NPY_UINT32_FMT = NPY_UINT_FMT;
 // #endif
 // #elif NPY_BITSOF_INT == 64
-// #elif NPY_BITSOF_INT == 128
 // #endif
 
 // #if NPY_BITSOF_SHORT == 8
@@ -691,7 +687,6 @@ public static final String NPY_UINT16_FMT = NPY_USHORT_FMT;
 // #endif
 // #elif NPY_BITSOF_SHORT == 32
 // #elif NPY_BITSOF_SHORT == 64
-// #elif NPY_BITSOF_SHORT == 128
 // #endif
 
 
@@ -901,15 +896,6 @@ public static final int NPY_FLOAT16 = NPY_FLOAT16();
 // #    define PyComplex256ArrType_Type PyCLongDoubleArrType_Type
 // #define NPY_COMPLEX256_FMT NPY_CLONGDOUBLE_FMT
 // #endif
-// #elif NPY_BITSOF_LONGDOUBLE == 256
-// #define NPY_FLOAT256 NPY_LONGDOUBLE
-// #define NPY_COMPLEX512 NPY_CLONGDOUBLE
-// #    define PyFloat256ScalarObject PyLongDoubleScalarObject
-// #    define PyComplex512ScalarObject PyCLongDoubleScalarObject
-// #    define PyFloat256ArrType_Type PyLongDoubleArrType_Type
-// #    define PyComplex512ArrType_Type PyCLongDoubleArrType_Type
-public static final String NPY_FLOAT256_FMT = NPY_LONGDOUBLE_FMT;
-// #define NPY_COMPLEX512_FMT NPY_CLONGDOUBLE_FMT
 // #endif
 
 /* datetime typedefs */
@@ -1080,8 +1066,8 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #elif __riscv_xlen == 32
 // 	#define NPY_CPU_RISCV32
 //     #endif
-// #elif defined(__loongarch__)
-//     #define NPY_CPU_LOONGARCH
+// #elif defined(__loongarch_lp64)
+//     #define NPY_CPU_LOONGARCH64
 // #elif defined(__EMSCRIPTEN__)
     /* __EMSCRIPTEN__ is defined by emscripten: an LLVM-to-Web compiler */
 //     #define NPY_CPU_WASM
@@ -1090,16 +1076,7 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     information about your platform (OS, CPU and compiler)
 // #endif
 
-/*
- * Except for the following architectures, memory access is limited to the natural
- * alignment of data types otherwise it may lead to bus error or performance regression.
- * For more details about unaligned access, see https://www.kernel.org/doc/Documentation/unaligned-memory-access.txt.
-*/
-// #if defined(NPY_CPU_X86) || defined(NPY_CPU_AMD64) || defined(__aarch64__) || defined(__powerpc64__)
-    public static final int NPY_ALIGNMENT_REQUIRED = 0;
-// #endif
-// #ifndef NPY_ALIGNMENT_REQUIRED
-// #endif
+public static final int NPY_ALIGNMENT_REQUIRED = 1;
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_CPU_H_ */
 
@@ -3002,7 +2979,7 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 /*
  * PyDataType_* FLAGS, FLACHK, REFCHK, HASFIELDS, HASSUBARRAY, UNSIZED,
  * SUBARRAY, NAMES, FIELDS, C_METADATA, and METADATA require version specific
- * lookup and are defined in npy_2_compat.h.
+ * lookup and are defined in npy_2_compat.h.
  */
 
 
@@ -3098,10 +3075,6 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 // #error "Do not use the reserved keyword NPY_DEPRECATED_INCLUDES."
 // #endif
 // #define NPY_DEPRECATED_INCLUDES
-// #if !defined(NPY_NO_DEPRECATED_API) ||
-//     (NPY_NO_DEPRECATED_API < NPY_1_7_API_VERSION)
-// #include "npy_1_7_deprecated_api.h"
-// #endif
 /*
  * There is no file npy_1_8_deprecated_api.h since there are no additional
  * deprecated API features in NumPy 1.8.
@@ -3113,6 +3086,27 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
  *     (NPY_NO_DEPRECATED_API < NPY_1_9_API_VERSION)
  * #include "npy_1_9_deprecated_api.h"
  * #endif
+ * Then in the npy_1_9_deprecated_api.h header add something like this
+ * --------------------
+ * #ifndef NPY_DEPRECATED_INCLUDES
+ * #error "Should never include npy_*_*_deprecated_api directly."
+ * #endif
+ * #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_1_7_DEPRECATED_API_H_
+ * #define NUMPY_CORE_INCLUDE_NUMPY_NPY_1_7_DEPRECATED_API_H_
+ * 
+ * #ifndef NPY_NO_DEPRECATED_API
+ * #if defined(_WIN32)
+ * #define _WARN___STR2__(x) #x
+ * #define _WARN___STR1__(x) _WARN___STR2__(x)
+ * #define _WARN___LOC__ __FILE__ "(" _WARN___STR1__(__LINE__) ") : Warning Msg: "
+ * #pragma message(_WARN___LOC__"Using deprecated NumPy API, disable it with " \
+ *                          "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION")
+ * #else
+ * #warning "Using deprecated NumPy API, disable it with " \
+ *          "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION"
+ * #endif
+ * #endif
+ * --------------------
  */
 // #undef NPY_DEPRECATED_INCLUDES
 
@@ -4104,6 +4098,7 @@ public static native @ByRef PyTypeObject PyHalfArrType_Type(); public static nat
 
 public static native @ByRef PyTypeObject NpyIter_Type(); public static native void NpyIter_Type(PyTypeObject setter);
 
+@NoException public static native @Cast("NPY_ARRAYMETHOD_FLAGS") int NpyIter_GetTransferFlags(NpyIter arg0);
 @NoException public static native NpyIter NpyIter_New(PyArrayObject arg0, @Cast("npy_uint32") int arg1, @Cast("NPY_ORDER") int arg2, @Cast("NPY_CASTING") int arg3, PyArray_Descr arg4);
 @NoException public static native NpyIter NpyIter_MultiNew(int arg0, @Cast("PyArrayObject**") PointerPointer arg1, @Cast("npy_uint32") int arg2, @Cast("NPY_ORDER") int arg3, @Cast("NPY_CASTING") int arg4, @Cast("npy_uint32*") IntPointer arg5, @Cast("PyArray_Descr**") PointerPointer arg6);
 @NoException public static native NpyIter NpyIter_MultiNew(int arg0, @ByPtrPtr PyArrayObject arg1, @Cast("npy_uint32") int arg2, @Cast("NPY_ORDER") int arg3, @Cast("NPY_CASTING") int arg4, @Cast("npy_uint32*") IntPointer arg5, @ByPtrPtr PyArray_Descr arg6);
@@ -4630,8 +4625,7 @@ public static final int UFUNC_OUTER = 3;
 
 public static final String UFUNC_PYVALS_NAME = "UFUNC_PYVALS";
 
-/*
- * THESE MACROS ARE DEPRECATED.
+/* THESE MACROS ARE DEPRECATED.
  * Use npy_set_floatstatus_* in the npymath library.
  */
 public static final int UFUNC_FPE_DIVIDEBYZERO =  NPY_FPE_DIVIDEBYZERO;
@@ -4639,10 +4633,7 @@ public static final int UFUNC_FPE_OVERFLOW =      NPY_FPE_OVERFLOW;
 public static final int UFUNC_FPE_UNDERFLOW =     NPY_FPE_UNDERFLOW;
 public static final int UFUNC_FPE_INVALID =       NPY_FPE_INVALID;
 
-// #define generate_divbyzero_error() npy_set_floatstatus_divbyzero()
-// #define generate_overflow_error() npy_set_floatstatus_overflow()
-
-  /* Make sure it gets defined if it isn't already */
+/* Make sure it gets defined if it isn't already */
 // #ifndef UFUNC_NOFPE
 /* Clear the floating point exception default of Borland C++ */
 // #if defined(__BORLANDC__)

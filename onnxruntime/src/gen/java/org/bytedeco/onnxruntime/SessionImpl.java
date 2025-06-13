@@ -127,4 +127,8 @@ public class SessionImpl extends ConstSessionImpl {
   public native void SetEpDynamicOptions(@Cast("const char*const*") @ByPtrPtr BytePointer keys, @Cast("const char*const*") @ByPtrPtr BytePointer values, @Cast("size_t") long kv_len);
   public native void SetEpDynamicOptions(@Cast("const char*const*") @ByPtrPtr ByteBuffer keys, @Cast("const char*const*") @ByPtrPtr ByteBuffer values, @Cast("size_t") long kv_len);
   public native void SetEpDynamicOptions(@Cast("const char*const*") @ByPtrPtr byte[] keys, @Cast("const char*const*") @ByPtrPtr byte[] values, @Cast("size_t") long kv_len);
+
+  public native void FinalizeModelEditorSession(@Const @ByRef Model model, @Const @ByRef SessionOptions options,
+                                    OrtPrepackedWeightsContainer prepacked_weights_container/*=nullptr*/);
+  public native void FinalizeModelEditorSession(@Const @ByRef Model model, @Const @ByRef SessionOptions options);
 }

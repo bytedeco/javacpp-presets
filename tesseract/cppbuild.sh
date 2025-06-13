@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=5.5.0
+TESSERACT_VERSION=5.5.1
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -48,7 +48,7 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$LEPTONICA_PATH -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=$INSTALL_PATH/lib -DDISABLE_ARCHIVE=ON -DDISABLE_CURL=ON -DMARCH_NATIVE_OPT=OFF -DOPENMP_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DBUILD_TRAINING_TOOLS=OFF -DLEPT_TIFF_RESULT=1"
 
-patch -RNp1 < ../../../tesseract.patch
+patch -Np1 < ../../../tesseract.patch
 
 case $PLATFORM in
     android-arm)

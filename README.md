@@ -205,11 +205,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.13.x  https://www.python.org/downloads/
- * NumPy 2.2.x  https://github.com/numpy/numpy
+ * NumPy 2.3.x  https://github.com/numpy/numpy
  * SciPy 1.15.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
  * LLVM 20.1.x  http://llvm.org/releases/download.html
- * libffi 3.4.x  https://github.com/libffi/libffi
+ * libffi 3.5.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
  * Leptonica 1.85.x  http://www.leptonica.org/download.html
@@ -231,9 +231,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Triton Inference Server 2.58.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
- * ONNX 1.17.x  https://github.com/onnx/onnx
+ * ONNX 1.18.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.21.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.22.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

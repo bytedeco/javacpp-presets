@@ -17,7 +17,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 /** \brief LoraAdapter holds a set of Lora Parameters loaded from a single file */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class LoraAdapter extends BaseOrtLoraAdapter {
+public class LoraAdapter extends BaseLoraAdapter {
     static { Loader.load(); }
     /** Default native constructor. */
     public LoraAdapter() { super((Pointer)null); allocate(); }

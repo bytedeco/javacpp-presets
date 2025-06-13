@@ -25,7 +25,7 @@ public class MemoryInfo extends MemoryInfoImpl {
     public MemoryInfo(Pointer p) { super(p); }
 
   public static native @ByVal MemoryInfo CreateCpu(@Cast("OrtAllocatorType") int type, @Cast("OrtMemType") int mem_type1);
-  /** Take ownership of a pointer created by C Api */
+  /** Take ownership of a pointer created by C API */
   public MemoryInfo(OrtMemoryInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtMemoryInfo p);
   public MemoryInfo(@Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type) { super((Pointer)null); allocate(name, type, id, mem_type); }

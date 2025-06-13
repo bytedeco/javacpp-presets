@@ -17,6 +17,15 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
     static { Loader.load(); }
 
+// Targeting ../ValueInfoVector.java
+
+
+// Targeting ../OpAttrVector.java
+
+
+// Targeting ../StringIntPairVector.java
+
+
 // Targeting ../FloatVector.java
 
 
@@ -27,6 +36,9 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 
 
 // Targeting ../ValueVector.java
+
+
+// Targeting ../StringIntPair.java
 
 
 // Targeting ../StringStringMap.java
@@ -74,7 +86,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 21;
+public static final int ORT_API_VERSION = 22;
 
 // #ifdef __cplusplus
 // #endif
@@ -301,7 +313,9 @@ public static final int
   ORT_MODEL_LOADED = 8,
   ORT_NOT_IMPLEMENTED = 9,
   ORT_INVALID_GRAPH = 10,
-  ORT_EP_FAIL = 11;
+  ORT_EP_FAIL = 11,
+  ORT_MODEL_LOAD_CANCELED = 12,
+  ORT_MODEL_REQUIRES_COMPILATION = 13;
 
 /** enum OrtOpAttrType */
 public static final int
@@ -377,6 +391,9 @@ public static final int
 // Targeting ../OrtTensorRTProviderOptionsV2.java
 
 
+// Targeting ../OrtNvTensorRtRtxProviderOptions.java
+
+
 // Targeting ../OrtCUDAProviderOptionsV2.java
 
 
@@ -398,8 +415,32 @@ public static final int
 // Targeting ../OrtLoraAdapter.java
 
 
+// Targeting ../OrtValueInfo.java
 
-// #ifdef _WIN32
+
+// Targeting ../OrtNode.java
+
+
+// Targeting ../OrtGraph.java
+
+
+// Targeting ../OrtModel.java
+
+
+// Targeting ../OrtModelCompilationOptions.java
+
+
+// Targeting ../OrtHardwareDevice.java
+
+
+// Targeting ../OrtEpDevice.java
+
+
+// Targeting ../OrtKeyValuePairs.java
+
+
+
+// #ifdef _MSC_VER
 // #else
 // Targeting ../OrtAllocator.java
 
@@ -471,6 +512,27 @@ public static final int
   OrtMemoryInfoDeviceType_CPU = 0,
   OrtMemoryInfoDeviceType_GPU = 1,
   OrtMemoryInfoDeviceType_FPGA = 2;
+
+/** enum OrtHardwareDeviceType */
+public static final int
+  OrtHardwareDeviceType_CPU = 0,
+  OrtHardwareDeviceType_GPU = 1,
+  OrtHardwareDeviceType_NPU = 2;
+
+/** \brief These are the default EP selection policies used by ORT when doing automatic EP selection.
+ */
+/** enum OrtExecutionProviderDevicePolicy */
+public static final int
+  OrtExecutionProviderDevicePolicy_DEFAULT = 0,
+  OrtExecutionProviderDevicePolicy_PREFER_CPU = 1,
+  OrtExecutionProviderDevicePolicy_PREFER_NPU = 2,
+  OrtExecutionProviderDevicePolicy_PREFER_GPU = 3,
+  OrtExecutionProviderDevicePolicy_MAX_PERFORMANCE = 4,
+  OrtExecutionProviderDevicePolicy_MAX_EFFICIENCY = 5,
+  OrtExecutionProviderDevicePolicy_MIN_OVERALL_POWER = 6;
+// Targeting ../EpSelectionDelegate.java
+
+
 
 /** \brief Algorithm to use for cuDNN Convolution Op
  */
@@ -549,6 +611,27 @@ public static final int
   INPUT_OUTPUT_OPTIONAL = 1,
   INPUT_OUTPUT_VARIADIC = 2;
 // Targeting ../OrtCustomOp.java
+
+
+// Targeting ../OrtModelEditorApi.java
+
+
+// Targeting ../OrtCompileApi.java
+
+
+// Targeting ../OrtEpApi.java
+
+
+// Targeting ../OrtEp.java
+
+
+// Targeting ../CreateEpApiFactoriesFn.java
+
+
+// Targeting ../ReleaseEpApiFactoryFn.java
+
+
+// Targeting ../OrtEpFactory.java
 
 
 
@@ -633,16 +716,17 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // #include "onnxruntime_c_api.h"
 // #include "onnxruntime_float16.h"
 
+// #include <array>
 // #include <cstddef>
 // #include <cstdio>
-// #include <array>
 // #include <memory>
 // #include <stdexcept>
 // #include <string>
-// #include <vector>
+// #include <type_traits>
 // #include <unordered_map>
 // #include <utility>
-// #include <type_traits>
+// #include <variant>
+// #include <vector>
 
 // #ifdef ORT_NO_EXCEPTIONS
 // #include <iostream>
@@ -688,7 +772,7 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // #endif
 // #endif
 
-/** This returns a reference to the OrtApi interface in use */
+/** This returns a reference to the ORT C API. */
 @Namespace("Ort") public static native @Const @ByRef @NoException(true) OrtApi GetApi();
 
 /** <summary>
@@ -710,6 +794,24 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
  *  </summary>
  *  <returns>vector of strings</returns> */
 @Namespace("Ort") public static native @ByVal StringVector GetAvailableProviders();
+
+/** <summary>
+ *  This returns a reference to the ORT C Model Editor API. Used if building or augmenting a model at runtime.
+ *  </summary>
+ *  <returns>ORT C Model Editor API reference</returns> */
+@Namespace("Ort") public static native @Const @ByRef OrtModelEditorApi GetModelEditorApi();
+
+/** <summary>
+ *  This returns a reference to the ORT C Compile API. Used if compiling a model at runtime.
+ *  </summary>
+ *  <returns>ORT C Compile API reference</returns> */
+@Namespace("Ort") public static native @Const @ByRef OrtCompileApi GetCompileApi();
+
+/** <summary>
+ *  This returns a reference to the ORT C EP API. Used if authoring a plugin execution provider.
+ *  </summary>
+ *  <returns>ORT C EP API reference</returns> */
+@Namespace("Ort") public static native @Const @ByRef OrtEpApi GetEpApi();
 // Targeting ../Float16_t.java
 
 
@@ -733,6 +835,9 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // #define ORT_DEFINE_RELEASE(NAME)
 //   inline void OrtRelease(Ort##NAME* ptr) { GetApi().Release##NAME(ptr); }
 
+// #define ORT_DEFINE_RELEASE_FROM_API_STRUCT(NAME, API_GETTER)
+//   inline void OrtRelease(Ort##NAME* ptr) { API_GETTER().Release##NAME(ptr); }
+
 @Namespace("Ort::detail") public static native void OrtRelease(OrtAllocator ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtMemoryInfo ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtCustomOpDomain ptr);
@@ -754,8 +859,16 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 @Namespace("Ort::detail") public static native void OrtRelease(OrtOpAttr ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtOp ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtKernelInfo ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtValueInfo ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtNode ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtGraph ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtModel ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtKeyValuePairs ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtModelCompilationOptions ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtEpDevice ptr);
 
 // #undef ORT_DEFINE_RELEASE
+// #undef ORT_DEFINE_RELEASE_FROM_API_STRUCT
 // Targeting ../UnownedAllocator.java
 
 
@@ -852,7 +965,28 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // Targeting ../BaseThreadingOptions.java
 
 
-// Targeting ../BaseOrtLoraAdapter.java
+// Targeting ../BaseLoraAdapter.java
+
+
+// Targeting ../BaseModelCompilationOptions.java
+
+
+// Targeting ../BaseGraph.java
+
+
+// Targeting ../BaseKeyValuePairs.java
+
+
+// Targeting ../BaseNode.java
+
+
+// Targeting ../BaseModel.java
+
+
+// Targeting ../BaseValueInfo.java
+
+
+// Targeting ../BaseEpDevice.java
 
 
 
@@ -879,6 +1013,31 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 
 
 // Targeting ../ThreadingOptions.java
+
+
+// Targeting ../KeyValuePairsImpl.java
+
+
+  // namespace detail
+
+// Const object holder that does not own the underlying object
+// Targeting ../KeyValuePairs.java
+
+
+  // namespace detail
+
+/** \brief Wrapper around ::OrtHardwareDevice
+ * \remarks HardwareDevice is always read-only for API users.
+ */
+// Targeting ../EpDeviceImpl.java
+
+
+  // namespace detail
+
+/** \brief Wrapper around ::OrtEpDevice
+ * \remarks EpDevice is always read-only for ORT API users.
+ */
+// Targeting ../EpDevice.java
 
 
 // Targeting ../Env.java
@@ -919,6 +1078,17 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // Targeting ../SessionOptions.java
 
 
+// Targeting ../ModelCompilationOptions.java
+
+
+
+/** \brief Compiles an input model to generate a model with EPContext nodes that execute EP-specific kernels. Wraps OrtApi::CompileModels.
+ *
+ * @param env: ORT environment object.
+ * @param model_compilation_options: Compilation options for a model.
+ * @return A Status indicating success or failure.
+ */
+@Namespace("Ort") public static native @ByVal Status CompileModel(@Const @ByRef Env env, @Const @ByRef ModelCompilationOptions model_compilation_options);
 // Targeting ../ModelMetadata.java
 
 
@@ -1169,9 +1339,39 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 
 
 public static final long MAX_CUSTOM_OP_END_VER = (1L << 31) - 1;
+// Targeting ../ValueInfoImpl.java
+
+
+  // namespace detail
+
+// Const object holder that does not own the underlying object
+// Targeting ../ValueInfo.java
+
+
+// Targeting ../NodeImpl.java
+
+
+
+// Targeting ../Node.java
+
+
+// Targeting ../GraphImpl.java
+
+
+
+// Targeting ../Graph.java
+
+
+// Targeting ../ModelImpl.java
+
+
+  // namespace detail
+
+// Const object holder that does not own the underlying object
+// Targeting ../Model.java
+
 
   // namespace Ort
-
 // #include "onnxruntime_cxx_inline.h"
 
 
