@@ -1,276 +1,264 @@
-diff --git a/src/api/baseapi.cpp b/src/api/baseapi.cpp
-index 72503636c0..bae30ab8bb 100644
---- a/src/api/baseapi.cpp
-+++ b/src/api/baseapi.cpp
-@@ -64,6 +64,7 @@
+diff -ruN tesseract-5.5.1/src/api/baseapi.cpp tesseract-5.5.1-patch/src/api/baseapi.cpp
+--- tesseract-5.5.1/src/api/baseapi.cpp	2025-05-25 18:48:40.000000000 +0900
++++ tesseract-5.5.1-patch/src/api/baseapi.cpp	2025-06-13 18:46:41.712533982 +0900
+@@ -64,7 +64,6 @@
  #include <cmath>    // for round, M_PI
  #include <cstdint>  // for int32_t
  #include <cstring>  // for strcmp, strcpy
-+#include <filesystem> // for std::filesystem
+-#include <filesystem> // for std::filesystem
  #include <fstream>  // for size_t
  #include <iostream> // for std::cin
  #include <locale>   // for std::locale::classic
-@@ -82,15 +83,9 @@
+@@ -83,9 +82,15 @@
  #endif
  
  #if defined(_WIN32)
--#  include <fcntl.h>
--#  include <io.h>
--#else
--#  include <dirent.h> // for closedir, opendir, readdir, DIR, dirent
--#  include <libgen.h>
--#  include <sys/stat.h> // for stat, S_IFDIR
--#  include <sys/types.h>
--#  include <unistd.h>
--#endif // _WIN32
-+#  include <fcntl.h> // for _O_BINARY
-+#  include <io.h>    // for _setmode
-+#endif
+-#  include <fcntl.h> // for _O_BINARY
+-#  include <io.h>    // for _setmode
+-#endif
++#  include <fcntl.h>
++#  include <io.h>
++#else
++#  include <dirent.h> // for closedir, opendir, readdir, DIR, dirent
++#  include <libgen.h>
++#  include <sys/stat.h> // for stat, S_IFDIR
++#  include <sys/types.h>
++#  include <unistd.h>
++#endif // _WIN32
  
  namespace tesseract {
  
-@@ -149,61 +144,18 @@ static void ExtractFontName(const char* filename, std::string* fontname) {
+@@ -144,17 +149,61 @@
  
  /* Add all available languages recursively.
   */
--static void addAvailableLanguages(const std::string &datadir, const std::string &base,
-+static void addAvailableLanguages(const std::string &datadir,
+-static void addAvailableLanguages(const std::string &datadir,
++static void addAvailableLanguages(const std::string &datadir, const std::string &base,
                                    std::vector<std::string> *langs) {
--  auto base2 = base;
--  if (!base2.empty()) {
--    base2 += "/";
--  }
--  const size_t extlen = sizeof(kTrainedDataSuffix);
--#ifdef _WIN32
--  WIN32_FIND_DATA data;
--  HANDLE handle = FindFirstFile((datadir + base2 + "*").c_str(), &data);
--  if (handle != INVALID_HANDLE_VALUE) {
--    BOOL result = TRUE;
--    for (; result;) {
--      char *name = data.cFileName;
--      // Skip '.', '..', and hidden files
--      if (name[0] != '.') {
--        if ((data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
--          addAvailableLanguages(datadir, base2 + name, langs);
--        } else {
--          size_t len = strlen(name);
--          if (len > extlen && name[len - extlen] == '.' &&
--              strcmp(&name[len - extlen + 1], kTrainedDataSuffix) == 0) {
--            name[len - extlen] = '\0';
--            langs->push_back(base2 + name);
--          }
--        }
--      }
--      result = FindNextFile(handle, &data);
--    }
--    FindClose(handle);
--  }
--#else // _WIN32
--  DIR *dir = opendir((datadir + base).c_str());
--  if (dir != nullptr) {
--    dirent *de;
--    while ((de = readdir(dir))) {
--      char *name = de->d_name;
--      // Skip '.', '..', and hidden files
--      if (name[0] != '.') {
--        struct stat st;
--        if (stat((datadir + base2 + name).c_str(), &st) == 0 && (st.st_mode & S_IFDIR) == S_IFDIR) {
--          addAvailableLanguages(datadir, base2 + name, langs);
--        } else {
--          size_t len = strlen(name);
--          if (len > extlen && name[len - extlen] == '.' &&
--              strcmp(&name[len - extlen + 1], kTrainedDataSuffix) == 0) {
--            name[len - extlen] = '\0';
--            langs->push_back(base2 + name);
--          }
--        }
--      }
-+  for (const auto& entry :
-+       std::filesystem::recursive_directory_iterator(datadir,
-+         std::filesystem::directory_options::follow_directory_symlink |
-+         std::filesystem::directory_options::skip_permission_denied)) {
-+    auto path = entry.path().lexically_relative(datadir).string();
-+    auto extPos = path.rfind(".traineddata");
-+    if (extPos != std::string::npos) {
-+      langs->push_back(path.substr(0, extPos));
+-  for (const auto& entry :
+-       std::filesystem::recursive_directory_iterator(datadir,
+-         std::filesystem::directory_options::follow_directory_symlink |
+-         std::filesystem::directory_options::skip_permission_denied)) {
+-    auto path = entry.path().lexically_relative(datadir);
+-    if (path.extension() == ".traineddata") {
+-      langs->push_back(path.replace_extension("").string());
++  auto base2 = base;
++  if (!base2.empty()) {
++    base2 += "/";
++  }
++  const size_t extlen = sizeof(kTrainedDataSuffix);
++#ifdef _WIN32
++  WIN32_FIND_DATA data;
++  HANDLE handle = FindFirstFile((datadir + base2 + "*").c_str(), &data);
++  if (handle != INVALID_HANDLE_VALUE) {
++    BOOL result = TRUE;
++    for (; result;) {
++      char *name = data.cFileName;
++      // Skip '.', '..', and hidden files
++      if (name[0] != '.') {
++        if ((data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
++          addAvailableLanguages(datadir, base2 + name, langs);
++        } else {
++          size_t len = strlen(name);
++          if (len > extlen && name[len - extlen] == '.' &&
++              strcmp(&name[len - extlen + 1], kTrainedDataSuffix) == 0) {
++            name[len - extlen] = '\0';
++            langs->push_back(base2 + name);
++          }
++        }
++      }
++      result = FindNextFile(handle, &data);
++    }
++    FindClose(handle);
++  }
++#else // _WIN32
++  DIR *dir = opendir((datadir + base).c_str());
++  if (dir != nullptr) {
++    dirent *de;
++    while ((de = readdir(dir))) {
++      char *name = de->d_name;
++      // Skip '.', '..', and hidden files
++      if (name[0] != '.') {
++        struct stat st;
++        if (stat((datadir + base2 + name).c_str(), &st) == 0 && (st.st_mode & S_IFDIR) == S_IFDIR) {
++          addAvailableLanguages(datadir, base2 + name, langs);
++        } else {
++          size_t len = strlen(name);
++          if (len > extlen && name[len - extlen] == '.' &&
++              strcmp(&name[len - extlen + 1], kTrainedDataSuffix) == 0) {
++            name[len - extlen] = '\0';
++            langs->push_back(base2 + name);
++          }
++        }
++      }
      }
--    closedir(dir);
++    closedir(dir);
    }
--#endif
++#endif
  }
  
  TessBaseAPI::TessBaseAPI()
-@@ -444,7 +396,7 @@ void TessBaseAPI::GetLoadedLanguagesAsVector(std::vector<std::string> *langs) co
+@@ -395,7 +444,7 @@
  void TessBaseAPI::GetAvailableLanguagesAsVector(std::vector<std::string> *langs) const {
    langs->clear();
    if (tesseract_ != nullptr) {
--    addAvailableLanguages(tesseract_->datadir, "", langs);
-+    addAvailableLanguages(tesseract_->datadir, langs);
+-    addAvailableLanguages(tesseract_->datadir, langs);
++    addAvailableLanguages(tesseract_->datadir, "", langs);
      std::sort(langs->begin(), langs->end());
    }
  }
-diff --git a/src/ccutil/ccutil.cpp b/src/ccutil/ccutil.cpp
-index 5e93e70866..930aa2636e 100644
---- a/src/ccutil/ccutil.cpp
-+++ b/src/ccutil/ccutil.cpp
-@@ -10,10 +10,6 @@
+diff -ruN tesseract-5.5.1/src/ccutil/ccutil.cpp tesseract-5.5.1-patch/src/ccutil/ccutil.cpp
+--- tesseract-5.5.1/src/ccutil/ccutil.cpp	2025-05-25 18:48:40.000000000 +0900
++++ tesseract-5.5.1-patch/src/ccutil/ccutil.cpp	2025-06-13 18:46:22.788651795 +0900
+@@ -10,12 +10,15 @@
  // See the License for the specific language governing permissions and
  // limitations under the License.
  
--#if defined(_WIN32)
--#  include <io.h> // for _access
--#endif
--
++#if defined(_WIN32)
++#  include <io.h> // for _access
++#endif
++
  #include "ccutil.h"
  #include "tprintf.h"  // for tprintf
  
-@@ -63,7 +59,7 @@ void CCUtil::main_setup(const std::string &argv0, const std::string &basename) {
-     /* Use tessdata prefix from the environment. */
-     datadir = tessdata_prefix;
- #if defined(_WIN32)
--  } else if (datadir.empty() || _access(datadir.c_str(), 0) != 0) {
-+  } else if (datadir.empty() || !std::filesystem::exists(datadir)) {
-     /* Look for tessdata in directory of executable. */
-     char path[_MAX_PATH];
-     DWORD length = GetModuleFileName(nullptr, path, sizeof(path));
-@@ -73,7 +69,7 @@ void CCUtil::main_setup(const std::string &argv0, const std::string &basename) {
-         *separator = '\0';
-         std::string subdir = path;
-         subdir += "/tessdata";
--        if (_access(subdir.c_str(), 0) == 0) {
-+        if (std::filesystem::exists(subdir)) {
-           datadir = subdir;
-         }
-       }
-diff --git a/unittest/pagesegmode_test.cc b/unittest/pagesegmode_test.cc
-index 9689e407e1..781e67d3f9 100644
---- a/unittest/pagesegmode_test.cc
-+++ b/unittest/pagesegmode_test.cc
-@@ -9,13 +9,9 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
--#if defined(_WIN32)
--#  include <io.h> // for _access
--#else
--#  include <unistd.h> // for access
--#endif
- #include <allheaders.h>
- #include <tesseract/baseapi.h>
-+#include <filesystem>
- #include <string>
- #include "helpers.h"
- #include "include_gunit.h"
-@@ -24,15 +20,6 @@
- 
- namespace tesseract {
- 
--// Replacement for std::filesystem::exists (C++-17)
--static bool file_exists(const char *filename) {
--#if defined(_WIN32)
--  return _access(filename, 0) == 0;
--#else
--  return access(filename, 0) == 0;
--#endif
--}
--
- // The fixture for testing Tesseract.
- class PageSegModeTest : public testing::Test {
- protected:
-@@ -86,7 +73,7 @@ class PageSegModeTest : public testing::Test {
- // and differently to line and block mode.
- TEST_F(PageSegModeTest, WordTest) {
-   std::string filename = file::JoinPath(TESTING_DIR, "segmodeimg.tif");
--  if (!file_exists(filename.c_str())) {
-+  if (!std::filesystem::exists(filename)) {
-     LOG(INFO) << "Skip test because of missing " << filename << '\n';
-     GTEST_SKIP();
-   } else {
-diff --git a/unittest/tatweel_test.cc b/unittest/tatweel_test.cc
-index d0d8f2ae6f..10e673b217 100644
---- a/unittest/tatweel_test.cc
-+++ b/unittest/tatweel_test.cc
-@@ -9,12 +9,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
--#if defined(_WIN32)
--#  include <io.h> // for _access
--#else
--#  include <unistd.h> // for access
--#endif
--
-+#include <filesystem>
- #include "dawg.h"
- #include "include_gunit.h"
- #include "trie.h"
-@@ -23,15 +18,6 @@
- 
- namespace tesseract {
- 
--// Replacement for std::filesystem::exists (C++-17)
--static bool file_exists(const char *filename) {
--#if defined(_WIN32)
--  return _access(filename, 0) == 0;
--#else
--  return access(filename, 0) == 0;
--#endif
--}
--
- class TatweelTest : public ::testing::Test {
- protected:
-   void SetUp() override {
-@@ -41,7 +27,7 @@ class TatweelTest : public ::testing::Test {
- 
-   TatweelTest() {
-     std::string filename = TestDataNameToPath("ara.wordlist");
--    if (file_exists(filename.c_str())) {
-+    if (std::filesystem::exists(filename)) {
-       std::string wordlist("\u0640");
-       CHECK_OK(file::GetContents(filename, &wordlist, file::Defaults()));
-       // Put all the unicodes in the unicharset_.
-@@ -77,7 +63,7 @@ TEST_F(TatweelTest, DictIgnoresTatweel) {
-   // This test verifies that the dictionary ignores the Tatweel character.
-   tesseract::Trie trie(tesseract::DAWG_TYPE_WORD, "ara", SYSTEM_DAWG_PERM, unicharset_.size(), 0);
-   std::string filename = TestDataNameToPath("ara.wordlist");
--  if (!file_exists(filename.c_str())) {
-+  if (!std::filesystem::exists(filename)) {
-     LOG(INFO) << "Skip test because of missing " << filename;
-     GTEST_SKIP();
-   } else {
-@@ -91,7 +77,7 @@ TEST_F(TatweelTest, UnicharsetLoadKeepsTatweel) {
-   // This test verifies that a load of an existing unicharset keeps any
-   // existing tatweel for backwards compatibility.
-   std::string filename = TestDataNameToPath("ara.unicharset");
--  if (!file_exists(filename.c_str())) {
-+  if (!std::filesystem::exists(filename)) {
-     LOG(INFO) << "Skip test because of missing " << filename;
-     GTEST_SKIP();
-   } else {
-diff --git a/src/ccutil/ccutil.cpp b/src/ccutil/ccutil.cpp
-index 7cf57f2ee9..483d5bc1ee 100644
---- a/src/ccutil/ccutil.cpp
-+++ b/src/ccutil/ccutil.cpp
-@@ -17,7 +17,8 @@
- #include "ccutil.h"
- 
  #include <cstdlib>
--#include <cstring> // for std::strrchr
-+#include <cstring>    // for std::strrchrA
-+#include <filesystem> // for std::filesystem
+-#include <cstring>    // for std::strrchrA
+-#include <filesystem> // for std::filesystem
++#include <cstring> // for std::strrchr
  
  namespace tesseract {
  
-@@ -48,6 +49,12 @@ void CCUtil::main_setup(const std::string &argv0, const std::string &basename) {
+@@ -46,12 +49,6 @@
  
    const char *tessdata_prefix = getenv("TESSDATA_PREFIX");
  
-+  // Ignore TESSDATA_PREFIX if there is no matching filesystem entry.
-+  if (tessdata_prefix != nullptr && !std::filesystem::exists(tessdata_prefix)) {
-+    tprintf("Warning: TESSDATA_PREFIX %s does not exist, ignore it\n", tessdata_prefix);
-+    tessdata_prefix = nullptr;
-+  }
-+
+-  // Ignore TESSDATA_PREFIX if there is no matching filesystem entry.
+-  if (tessdata_prefix != nullptr && !std::filesystem::exists(tessdata_prefix)) {
+-    tprintf("Warning: TESSDATA_PREFIX %s does not exist, ignore it\n", tessdata_prefix);
+-    tessdata_prefix = nullptr;
+-  }
+-
    if (!argv0.empty()) {
      /* Use tessdata prefix from the command line. */
      datadir = argv0;
+@@ -59,7 +56,7 @@
+     /* Use tessdata prefix from the environment. */
+     datadir = tessdata_prefix;
+ #if defined(_WIN32)
+-  } else if (datadir.empty() || !std::filesystem::exists(datadir)) {
++  } else if (datadir.empty() || _access(datadir.c_str(), 0) != 0) {
+     /* Look for tessdata in directory of executable. */
+     char path[_MAX_PATH];
+     DWORD length = GetModuleFileName(nullptr, path, sizeof(path));
+@@ -69,7 +66,7 @@
+         *separator = '\0';
+         std::string subdir = path;
+         subdir += "/tessdata";
+-        if (std::filesystem::exists(subdir)) {
++        if (_access(subdir.c_str(), 0) == 0) {
+           datadir = subdir;
+         }
+       }
+diff -ruN tesseract-5.5.1/unittest/pagesegmode_test.cc tesseract-5.5.1-patch/unittest/pagesegmode_test.cc
+--- tesseract-5.5.1/unittest/pagesegmode_test.cc	2025-05-25 18:48:40.000000000 +0900
++++ tesseract-5.5.1-patch/unittest/pagesegmode_test.cc	2025-06-13 18:46:22.789253868 +0900
+@@ -9,9 +9,13 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
++#if defined(_WIN32)
++#  include <io.h> // for _access
++#else
++#  include <unistd.h> // for access
++#endif
+ #include <allheaders.h>
+ #include <tesseract/baseapi.h>
+-#include <filesystem>
+ #include <string>
+ #include "helpers.h"
+ #include "include_gunit.h"
+@@ -20,6 +24,15 @@
+ 
+ namespace tesseract {
+ 
++// Replacement for std::filesystem::exists (C++-17)
++static bool file_exists(const char *filename) {
++#if defined(_WIN32)
++  return _access(filename, 0) == 0;
++#else
++  return access(filename, 0) == 0;
++#endif
++}
++
+ // The fixture for testing Tesseract.
+ class PageSegModeTest : public testing::Test {
+ protected:
+@@ -73,7 +86,7 @@
+ // and differently to line and block mode.
+ TEST_F(PageSegModeTest, WordTest) {
+   std::string filename = file::JoinPath(TESTING_DIR, "segmodeimg.tif");
+-  if (!std::filesystem::exists(filename)) {
++  if (!file_exists(filename.c_str())) {
+     LOG(INFO) << "Skip test because of missing " << filename << '\n';
+     GTEST_SKIP();
+   } else {
+diff -ruN tesseract-5.5.1/unittest/tatweel_test.cc tesseract-5.5.1-patch/unittest/tatweel_test.cc
+--- tesseract-5.5.1/unittest/tatweel_test.cc	2025-05-25 18:48:40.000000000 +0900
++++ tesseract-5.5.1-patch/unittest/tatweel_test.cc	2025-06-13 18:46:22.789846301 +0900
+@@ -9,7 +9,12 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-#include <filesystem>
++#if defined(_WIN32)
++#  include <io.h> // for _access
++#else
++#  include <unistd.h> // for access
++#endif
++
+ #include "dawg.h"
+ #include "include_gunit.h"
+ #include "trie.h"
+@@ -18,6 +23,15 @@
+ 
+ namespace tesseract {
+ 
++// Replacement for std::filesystem::exists (C++-17)
++static bool file_exists(const char *filename) {
++#if defined(_WIN32)
++  return _access(filename, 0) == 0;
++#else
++  return access(filename, 0) == 0;
++#endif
++}
++
+ class TatweelTest : public ::testing::Test {
+ protected:
+   void SetUp() override {
+@@ -27,7 +41,7 @@
+ 
+   TatweelTest() {
+     std::string filename = TestDataNameToPath("ara.wordlist");
+-    if (std::filesystem::exists(filename)) {
++    if (file_exists(filename.c_str())) {
+       std::string wordlist("\u0640");
+       CHECK_OK(file::GetContents(filename, &wordlist, file::Defaults()));
+       // Put all the unicodes in the unicharset_.
+@@ -63,7 +77,7 @@
+   // This test verifies that the dictionary ignores the Tatweel character.
+   tesseract::Trie trie(tesseract::DAWG_TYPE_WORD, "ara", SYSTEM_DAWG_PERM, unicharset_.size(), 0);
+   std::string filename = TestDataNameToPath("ara.wordlist");
+-  if (!std::filesystem::exists(filename)) {
++  if (!file_exists(filename.c_str())) {
+     LOG(INFO) << "Skip test because of missing " << filename;
+     GTEST_SKIP();
+   } else {
+@@ -77,7 +91,7 @@
+   // This test verifies that a load of an existing unicharset keeps any
+   // existing tatweel for backwards compatibility.
+   std::string filename = TestDataNameToPath("ara.unicharset");
+-  if (!std::filesystem::exists(filename)) {
++  if (!file_exists(filename.c_str())) {
+     LOG(INFO) << "Skip test because of missing " << filename;
+     GTEST_SKIP();
+   } else {

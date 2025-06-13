@@ -291,7 +291,7 @@ public class python implements InfoMapper {
                              "Py_False", "Py_True", "Py_RETURN_TRUE", "Py_RETURN_FALSE", "Py_RETURN_NAN",
                              "PyObject_HEAD", "PyObject_VAR_HEAD", "Py_RETURN_NONE", "Py_RETURN_NOTIMPLEMENTED",
                              "PyModuleDef_HEAD_INIT", "_Py_atomic_address", "__declspec",
-                             "PyException_HEAD", "_Py_NO_RETURN", "Py_Ellipsis",
+                             "PyException_HEAD", "_Py_NONSTRING", "_Py_NO_RETURN", "Py_Ellipsis",
                              "PyObject_Length", "PySequence_Length", "PySequence_In", "PyMapping_Length",
                              "PY_TIMEOUT_T", "_PyCoreConfig_INIT", "_PyMainInterpreterConfig_INIT", "_PyThreadState_Current",
                              "Py_ALLOW_RECURSION", "Py_END_ALLOW_RECURSION", "NATIVE_TSS_KEY_T",

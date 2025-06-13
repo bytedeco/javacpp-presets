@@ -78436,14 +78436,14 @@ public static final int TORCH_VERSION_MAJOR = 2;
 public static final int TORCH_VERSION_MINOR = 7;
 
 /** Indicates the patch version of LibTorch. */
-public static final int TORCH_VERSION_PATCH = 0;
+public static final int TORCH_VERSION_PATCH = 1;
 
 /** Indicates the ABI version tag of LibTorch. */
 public static final int TORCH_VERSION_ABI_TAG = 0;
 
 /** Indicates the version of LibTorch as a string literal. */
 public static final String TORCH_VERSION = 
-  "2.7.0";
+  "2.7.1";
 
 /** Indicates the ABI version of LibTorch as a single uint64.
  *  [ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ]

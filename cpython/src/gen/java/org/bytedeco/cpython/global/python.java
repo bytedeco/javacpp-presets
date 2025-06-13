@@ -174,12 +174,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        13;
-public static final int PY_MICRO_VERSION =        3;
+public static final int PY_MICRO_VERSION =        5;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.13.3";
+public static final String PY_VERSION =              "3.13.5";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -454,6 +454,10 @@ public static final int HAVE_DECL_RTLD_NOW = 1;
    */
 /* #undef HAVE_DECL_TZNAME */
 
+/* Define to 1 if you have the declaration of `UT_NAMESIZE', and to 0 if you
+   don't. */
+public static final int HAVE_DECL_UT_NAMESIZE = 1;
+
 /* Define to 1 if you have the device macros. */
 public static final int HAVE_DEVICE_MACROS = 1;
 
@@ -716,6 +720,9 @@ public static final int HAVE_GETLOADAVG = 1;
 
 /* Define to 1 if you have the `getlogin' function. */
 public static final int HAVE_GETLOGIN = 1;
+
+/* Define to 1 if you have the `getlogin_r' function. */
+public static final int HAVE_GETLOGIN_R = 1;
 
 /* Define to 1 if you have the `getnameinfo' function. */
 public static final int HAVE_GETNAMEINFO = 1;
@@ -981,6 +988,9 @@ public static final int HAVE_MADVISE = 1;
 
 /* Define this if you have the makedev macro. */
 public static final int HAVE_MAKEDEV = 1;
+
+/* Define if you have the 'MAXLOGNAME' constant. */
+/* #undef HAVE_MAXLOGNAME */
 
 /* Define to 1 if you have the `mbrtowc' function. */
 public static final int HAVE_MBRTOWC = 1;
@@ -1734,6 +1744,9 @@ public static final int HAVE_UTIME_H = 1;
 
 /* Define to 1 if you have the <utmp.h> header file. */
 public static final int HAVE_UTMP_H = 1;
+
+/* Define if you have the 'HAVE_UT_NAMESIZE' constant. */
+public static final int HAVE_UT_NAMESIZE = 1;
 
 /* Define to 1 if you have the `uuid_create' function. */
 /* #undef HAVE_UUID_CREATE */
@@ -2738,6 +2751,14 @@ public static final int Py_CAN_START_THREADS = 1;
 // #  define _Py__has_builtin(x) 0
 // #endif
 
+// Preprocessor check for a compiler __attribute__. Always return 0
+// if __has_attribute() macro is not defined.
+// #ifdef __has_attribute
+// #  define _Py__has_attribute(x) __has_attribute(x)
+// #else
+// #  define _Py__has_attribute(x) 0
+// #endif
+
 // _Py_TYPEOF(expr) gets the type of an expression.
 //
 // Example: _Py_TYPEOF(x) x_copy = (x);
@@ -2801,6 +2822,22 @@ public static final int Py_CAN_START_THREADS = 1;
 // #if defined(__sgi) && !defined(_SGI_MP_SOURCE)
 // #  define _SGI_MP_SOURCE
 // #endif
+
+
+// _Py_NONSTRING: The nonstring variable attribute specifies that an object or
+// member declaration with type array of char, signed char, or unsigned char,
+// or pointer to such a type is intended to store character arrays that do not
+// necessarily contain a terminating NUL.
+//
+// Usage:
+//
+//   char name [8] _Py_NONSTRING;
+// #if _Py__has_attribute(nonstring)
+// #  define _Py_NONSTRING __attribute__((nonstring))
+// #else
+// #  define _Py_NONSTRING
+// #endif
+
 
 // #endif /* Py_PYPORT_H */
 
@@ -4266,8 +4303,13 @@ public static native @ByRef PyObject _Py_NoneStruct(); public static native void
 @NoException public static native int Py_IsNone(PyObject x);
 // #define Py_IsNone(x) Py_Is((x), Py_None)
 
-/* Macro for returning Py_None from a function */
-// #define Py_RETURN_NONE return Py_None
+/* Macro for returning Py_None from a function.
+ * Only treat Py_None as immortal in the limited C API 3.12 and newer. */
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 < 0x030c0000
+// #  define Py_RETURN_NONE return Py_NewRef(Py_None)
+// #else
+// #  define Py_RETURN_NONE return Py_None
+// #endif
 
 /*
 Py_NotImplemented is a singleton used to signal that an operation is
@@ -7394,9 +7436,16 @@ public static native @ByRef PyLongObject _Py_TrueStruct(); public static native 
 @NoException public static native int Py_IsFalse(PyObject x);
 // #define Py_IsFalse(x) Py_Is((x), Py_False)
 
-/* Macros for returning Py_True or Py_False, respectively */
-// #define Py_RETURN_TRUE return Py_True
-// #define Py_RETURN_FALSE return Py_False
+/* Macros for returning Py_True or Py_False, respectively.
+ * Only treat Py_True and Py_False as immortal in the limited C API 3.12
+ * and newer. */
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 < 0x030c0000
+// #  define Py_RETURN_TRUE return Py_NewRef(Py_True)
+// #  define Py_RETURN_FALSE return Py_NewRef(Py_False)
+// #else
+// #  define Py_RETURN_TRUE return Py_True
+// #  define Py_RETURN_FALSE return Py_False
+// #endif
 
 /* Function to return a bool from a C long */
 @NoException public static native PyObject PyBool_FromLong(long arg0);
@@ -11260,7 +11309,12 @@ public static native @Const _frozen PyImport_FrozenModules(); public static nati
    Delete attribute named attr_name, for object o. Returns
    -1 on failure.
 
-   This is the equivalent of the Python statement: del o.attr_name. */
+   This is the equivalent of the Python statement: del o.attr_name.
+
+   Implemented as a macro in the limited C API 3.12 and older. */
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 < 0x030d0000
+// #  define PyObject_DelAttrString(O, A) PyObject_SetAttrString((O), (A), NULL)
+// #endif
 
 
 /* Implemented elsewhere:
@@ -11269,7 +11323,12 @@ public static native @Const _frozen PyImport_FrozenModules(); public static nati
 
    Delete attribute named attr_name, for object o. Returns -1
    on failure.  This is the equivalent of the Python
-   statement: del o.attr_name. */
+   statement: del o.attr_name.
+
+   Implemented as a macro in the limited C API 3.12 and older. */
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 < 0x030d0000
+// #  define PyObject_DelAttr(O, A) PyObject_SetAttr((O), (A), NULL)
+// #endif
 
 
 /* Implemented elsewhere:

@@ -25,9 +25,19 @@ public class TypeInfo extends TypeInfoImpl {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TypeInfo(Pointer p) { super(p); }
 
+
+  /** Create an empty TypeInfo object, must be assigned a valid one to be used */
   /** C API Interop */
   public TypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTypeInfo p);
+
+// #if !defined(ORT_MINIMAL_BUILD)
+  public static native @ByVal TypeInfo CreateTensorInfo(@ByVal ConstTensorTypeAndShapeInfo tensor_info);
+  public static native @ByVal TypeInfo CreateSparseTensorInfo(@ByVal ConstTensorTypeAndShapeInfo sparse_tensor_info);
+  public static native @ByVal TypeInfo CreateSequenceTypeInfo(@ByVal @Cast("Ort::ConstTypeInfo*") TypeInfoImpl sequence_type);
+  public static native @ByVal TypeInfo CreateMapTypeInfo(@Cast("ONNXTensorElementDataType") int key_type, @ByVal @Cast("Ort::ConstTypeInfo*") TypeInfoImpl value_type);
+  public static native @ByVal TypeInfo CreateOptionalTypeInfo(@ByVal @Cast("Ort::ConstTypeInfo*") TypeInfoImpl contained_type);
+// #endif  // !defined(ORT_MINIMAL_BUILD)
 
   public native @ByVal @Cast("Ort::ConstTypeInfo*") TypeInfoImpl GetConst();
 }
