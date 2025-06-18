@@ -5,7 +5,7 @@
  * Allow setting "org.bytedeco.openblas.load" system property to "none" ([issue #1203](https://github.com/bytedeco/javacpp-presets/issues/1203))
  * Fix presets for the CUPTI module of CUDA on Windows ([pull #1576](https://github.com/bytedeco/javacpp-presets/pull/1576))
  * Introduce `macosx-arm64` builds for ARPACK-NG, CMINPACK, FFTW, GSL, TensorFlow Lite, ONNX, ONNX Runtime ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069))
- * Upgrade presets for OpenCV 4.11.0, FFmpeg 7.1.1, DNNL 3.8.1 ([pull #1633](https://github.com/bytedeco/javacpp-presets/pull/1633)), OpenBLAS 0.3.29, CPython 3.13.5, NumPy 2.3.0, SciPy 1.15.3, LLVM 20.1.6, libffi 3.5.1, Tesseract 5.5.1, CUDA 12.9.1, cuDNN 9.10.2, NCCL 2.27.3, nvCOMP 4.2.0.11, NVIDIA Video Codec SDK 13.0.19, PyTorch 2.7.1, TensorFlow Lite 2.19.0, TensorRT 10.11.0.33, Triton Inference Server 2.58.0, ONNX 1.18.0, ONNX Runtime 1.22.0, and their dependencies
+ * Upgrade presets for OpenCV 4.11.0, FFmpeg 7.1.1, DNNL 3.8.1 ([pull #1633](https://github.com/bytedeco/javacpp-presets/pull/1633)), OpenBLAS 0.3.29, CPython 3.13.5, NumPy 2.3.0, SciPy 1.15.3, LLVM 20.1.7, libffi 3.5.1, Tesseract 5.5.1, CUDA 12.9.1, cuDNN 9.10.2, NCCL 2.27.3, nvCOMP 4.2.0.11, NVIDIA Video Codec SDK 13.0.19, PyTorch 2.7.1, TensorFlow Lite 2.19.0, TensorRT 10.12.0.36, Triton Inference Server 2.58.0, ONNX 1.18.0, ONNX Runtime 1.22.0, and their dependencies
 
 ### November 16, 2024 version 1.5.11
  * Enable distributed package using Gloo in presets for PyTorch ([pull #1510](https://github.com/bytedeco/javacpp-presets/pull/1510))

@@ -28,9 +28,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  dequantize the input according to:
  *  \p output = (\p input - \p zeroPt) * \p scale
  * 
- *  The first input (index 0) is the tensor to be quantized.
+ *  The first input (index 0) is the tensor to be dequantized.
  *  The second (index 1) and third (index 2) are the scale and zero point respectively.
- *  \p scale and \p zeroPt should have identical dimensions, and rank lower or equal to 2.
+ *  \p scale and \p zeroPt should have identical dimensions, and a rank that is lower or equal to 2.
  * 
  *  The \p zeroPt tensor is optional, and if not set, will be assumed to be zero. Its data type must be identical to
  *  the input's data type. \p zeroPt must only contain zero-valued coefficients, because only symmetric quantization is
@@ -52,8 +52,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  DataType::kINT8 precision during instantiation. For strongly typed networks, \p input data type must be same as
  *  \p zeroPt data type.
  * 
- *  IDequantizeLayer supports DataType::kFLOAT, DataType::kHALF, or DataType::kBF16 output. For strongly typed
- *  networks, \p output data type is inferred from \p scale data type.
+ *  IDequantizeLayer supports DataType::kFLOAT, DataType::kHALF, or DataType::kBF16 output. The output data type must
+ *  be configured explicitly using \p setToType.
  * 
  *  As an example of the operation of this layer, imagine a 4D NCHW activation input which can be quantized using a
  *  single scale coefficient (referred to as per-tensor quantization):
@@ -130,7 +130,7 @@ public class IDequantizeLayer extends ILayer {
      * 
      *  @param toType The DataType of the output tensor.
      * 
-     *  Set the output type of the dequantize layer. Valid values are DataType::kFLOAT and DataType::kHALF.
+     *  Set the output type of the dequantize layer. Valid values are DataType::kFLOAT, DataType::kHALF and DataType::kBF16.
      *  If the network is strongly typed, setToType must be used to set the output type, and use of setOutputType
      *  is an error. Otherwise, types passed to setOutputType and setToType must be the same.
      * 

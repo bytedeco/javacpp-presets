@@ -156,7 +156,7 @@ public class IExecutionContext extends INoCopy {
      *  Releasing or otherwise using the memory for other purposes, including using it in another execution context
      *  running in parallel, during this time will result in undefined behavior.
      * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superceded by setDeviceMemoryV2().
+     *  @deprecated Deprecated in TensorRT 10.1. Superseded by setDeviceMemoryV2().
      * 
      *  \warning Weight streaming related scratch memory will be allocated by TensorRT if the memory is set by this API.
      *           Please use setDeviceMemoryV2() instead.
@@ -1112,22 +1112,9 @@ public class IExecutionContext extends INoCopy {
     public native @Cast("bool") @NoException(true) boolean setTensorDebugState(@Cast("const char*") BytePointer name, @Cast("bool") boolean flag);
 
     /**
-     *  Turn the debug state of all debug tensors on or off.
+     *  \brief Get the debug state.
      * 
-     *  @param flag true if turning on debug state, false if turning off debug state.
-     * 
-     *  @return true if successful, false otherwise.
-     * 
-     *  The default is off. */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @NoException(true) boolean setAllTensorsDebugState(@Cast("bool") boolean flag);
-
-    /**
-     *  Get the debug state.
+     *  @param name Name of target tensor.
      * 
      *  @return true if there is a debug tensor with the given name and it has debug state turned on.
      *  */
@@ -1144,5 +1131,53 @@ public class IExecutionContext extends INoCopy {
      * 
      *  @return The runtime config object.
      *  */
+    
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) IRuntimeConfig getRuntimeConfig();
+
+    /** \brief Turn the debug state of all debug tensors on or off.
+     * 
+     *  @param flag true if turning on debug state, false if turning off debug state.
+     * 
+     *  @return true if successful, false otherwise.
+     * 
+     *  The default is off.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setAllTensorsDebugState(@Cast("bool") boolean flag);
+
+    /**
+     *  \brief Turn the debug state of unfused tensors on or off.
+     * 
+     *  The default is off.
+     * 
+     *  @param flag true if turning on debug state, false if turning off debug state.
+     * 
+     *  @return true if successful, false otherwise.
+     * 
+     *  @see INetworkDefinition::markUnfusedTensorsAsDebugTensors()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setUnfusedTensorsDebugState(@Cast("bool") boolean flag);
+
+    /**
+     *  \brief Get the debug state of unfused tensors.
+     * 
+     *  @return true if unfused tensors debug state is on. False if unfused tensors debug state is off.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean getUnfusedTensorsDebugState();
 }

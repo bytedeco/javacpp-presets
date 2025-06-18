@@ -124,6 +124,7 @@ public class ITensor extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions();
 
     /**
@@ -154,6 +155,8 @@ public class ITensor extends INoCopy {
      * 
      *  \note Repeated consecutive applications of {@code t.setType(t.getType())}
      *  would be idempotent, provided the state of the {@code ITensor} isn't changed between calls.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
@@ -162,8 +165,8 @@ public class ITensor extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void setType(DataType type);
-    public native @NoException(true) void setType(@Cast("nvinfer1::DataType") int type);
+    public native @Deprecated @NoException(true) void setType(DataType type);
+    public native @Deprecated @NoException(true) void setType(@Cast("nvinfer1::DataType") int type);
 
     /**
      *  \brief Get the data type of a tensor.

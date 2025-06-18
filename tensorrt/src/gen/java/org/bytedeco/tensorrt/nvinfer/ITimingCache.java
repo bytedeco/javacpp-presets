@@ -121,7 +121,7 @@ public class ITimingCache extends INoCopy {
      *  @param capacity The capacity of the buffer.
      * 
      *  @return The count of entries in the cache and fill keys if keyBuffer is non-null.
-     *          If an error occurrs, -1 will be returned.
+     *          If an error occurs, -1 will be returned.
      * 
      *  Query the count of entries in the cache and write out cache keys if keyBuffer is provided.
      *  Any key entries exceeding the capacity of the keyBuffer will not be copied.

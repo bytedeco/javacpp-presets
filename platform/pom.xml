@@ -232,7 +232,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>20.1.6-${project.version}</version>
+      <version>20.1.7-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -312,7 +312,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>10.11-${project.version}</version>
+      <version>10.12-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

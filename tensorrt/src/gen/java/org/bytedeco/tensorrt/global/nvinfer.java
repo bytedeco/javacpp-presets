@@ -49,9 +49,9 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #define NV_INFER_VERSION_H
 
 public static final int TRT_MAJOR_ENTERPRISE = 10;
-public static final int TRT_MINOR_ENTERPRISE = 11;
+public static final int TRT_MINOR_ENTERPRISE = 12;
 public static final int TRT_PATCH_ENTERPRISE = 0;
-public static final int TRT_BUILD_ENTERPRISE = 33;
+public static final int TRT_BUILD_ENTERPRISE = 36;
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
@@ -260,7 +260,10 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 
     /** 4-bit floating point type
      *  1 bit sign, 2 bit exponent, 1 bit mantissa */
-    kFP4(10);
+    kFP4(10),
+
+    /** Unsigned representation of exponent-only 8-bit floating point type for quantization scales */
+    kE8M0(11);
 
     public final int value;
     private DataType(int v) { this.value = v; }
@@ -1101,7 +1104,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  *  In interfaces that refer to "components per element", that's the value of V above.
  * 
  *  For more information about data formats, see the topic "Data Format Description" located in the
- *  TensorRT Developer Guide. https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#data-format-desc
+ *  TensorRT Developer Guide.
+ *  https://docs.nvidia.com/deeplearning/tensorrt/latest/inference-library/advanced.html#i-o-formats
  *  */
 @Namespace("nvinfer1") public enum TensorFormat {
     /** Memory layout is similar to an array in C or C++.
@@ -1132,7 +1136,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     /** Vector-major format with four scalars per vector.
      *  Vector dimension is third to last.
      * 
-     *  This format requires INT8, FP16, or BF16 and at least three dimensions.
+     *  This format requires INT8 and at least three dimensions.
      *  For INT8, the length of the vector dimension must be a build-time constant.
      * 
      *  Deprecated usage:
@@ -1144,15 +1148,13 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
      *  bytes must be a multiple of 64 on Orin. */
     
 //!
-//!
     kCHW4(3),
 
     /** Vector-major format with 16 scalars per vector.
      *  Vector dimension is third to last.
      * 
-     *  This format requires FP16 and at least three dimensions.
-     * 
-     *  For DLA usage, this format maps to the native feature format for FP16,
+     *  This format is only supported by DLA and requires FP16 and at least three dimensions.
+     *  This format maps to the native feature format for FP16,
      *  and the tensor sizes are limited to C,H,W in the range [1,8192]. */
     
 //!
@@ -2230,8 +2232,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  Operations kAND, kOR, and kXOR must have inputs of DataType::kBOOL.
  * 
- *  Operation kPOW must have inputs of floating-point type or DataType::kINT8.
- * 
  *  All other operations must have inputs of floating-point type, DataType::kINT8, DataType::kINT32, or
  *  DataType::kINT64.
  * 
@@ -3134,7 +3134,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  \brief Interface implemented by application for selecting and reporting algorithms of a layer provided by the
  *         builder.
- *  \note A layer in context of algorithm selection may be different from ILayer in INetworkDefiniton.
+ *  \note A layer in context of algorithm selection may be different from ILayer in INetworkDefinition.
  *        For example, an algorithm might be implementing a conglomeration of multiple ILayers in INetworkDefinition.
  *  \note To ensure compatibility of source code with future versions of TensorRT, use IAlgorithmSelector, not
  *        v_1_0::IAlgorithmSelector
@@ -3250,10 +3250,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see IBuilderConfig::setFlags(), IBuilderConfig::getFlags()
  *  */
 @Namespace("nvinfer1") public enum BuilderFlag {
-    /** Enable FP16 layer selection, with FP32 fallback. */
+    /** Enable FP16 layer selection, with FP32 fallback.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kFP16(0),
 
-    /** Enable Int8 layer selection, with FP32 fallback with FP16 fallback if kFP16 also specified. */
+    /** Enable Int8 layer selection, with FP32 fallback with FP16 fallback if kFP16 also specified.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kINT8(1),
 
     /** Enable debugging of layers via synchronizing after every layer. */
@@ -3286,11 +3288,13 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  This flag is only supported in NVIDIA Drive(R) products. */
     kSAFETY_SCOPE(8),
 
-    /** Require that layers execute in specified precisions. Build fails otherwise. */
+    /** Require that layers execute in specified precisions. Build fails otherwise.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kOBEY_PRECISION_CONSTRAINTS(9),
 
     /** Prefer that layers execute in specified precisions.
-     *  Fall back (with warning) to another precision if build would otherwise fail. */
+     *  Fall back (with warning) to another precision if build would otherwise fail.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kPREFER_PRECISION_CONSTRAINTS(10),
 
     /** Require that no reformats be inserted between a layer and a network I/O tensor
@@ -3327,7 +3331,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
      * 
      *  This flag is not supported when HardwareCompatibilityLevel::kAMPERE_PLUS is enabled.
      * 
-     *  @see HardwareCompatibilityLevel */
+     *  @see HardwareCompatibilityLevel
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kFP8(15),
 
     /** Emit error when a tactic being timed is not present in the timing cache.
@@ -3335,7 +3340,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
     kERROR_ON_TIMING_CACHE_MISS(16),
 
     /** Enable DataType::kBF16 layer selection, with FP32 fallback.
-     *  This flag is only supported by NVIDIA Ampere and later GPUs. */
+     *  This flag is only supported by NVIDIA Ampere and later GPUs.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kBF16(17),
 
     /** Disable caching of JIT-compilation results during engine build.
@@ -3395,7 +3401,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  */
     kWEIGHT_STREAMING(21),
 
-    /** Enable plugins with INT4 input/output. */
+    /** Enable plugins with INT4 input/output.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kINT4(22),
 
     /** Enable building a refittable engine and provide fine-grained control. This allows
@@ -3417,11 +3424,24 @@ public static native @NoException(true) int getInferLibBuildVersion();
     /** Enable memory monitor during build time. */
     kMONITOR_MEMORY(25),
 
-    /** Enable plugins with FP4 input/output. */
+    /** Enable plugins with FP4 input/output.
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
     kFP4(26),
 
     /** Enable editable timing cache. */
-    kEDITABLE_TIMING_CACHE(27);
+    kEDITABLE_TIMING_CACHE(27),
+
+    /** Enable distributive independence.
+     *  When BuilderFlag::kDISTRIBUTIVE_INDEPENDENCE is set and a layer documents axis i of an output as a distributive
+     *  axis, then the layer behaves exactly as if each evaluation across axis i was done using identical operations.
+     *  The definition of distributive axis is as follows:
+     *  For IMatrixMultiplyLayer:
+     *  All axes that are not one of the vector or matrix dimensions are distributive axes.
+     *  For layers that perform reduction:
+     *  All non-reduction axes are distributive axes.
+     *  For layers that perform einsum:
+     *  Let n be the leftmost reduction axis. The axes to the left of n are distributive axes. */
+    kDISTRIBUTIVE_INDEPENDENCE(28);
 
     public final int value;
     private BuilderFlag(int v) { this.value = v; }
@@ -3649,6 +3669,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see HardwareCompatibilityLevel
  *  */
  // namespace impl
+
 
 /**
  *  \enum TilingOptimizationLevel

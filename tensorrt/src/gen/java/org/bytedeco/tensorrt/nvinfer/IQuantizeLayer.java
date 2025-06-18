@@ -56,7 +56,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  IQuantizeLayer supports DataType::kFLOAT, DataType::kHALF, or DataType::kBF16 precision and will default to
  *  DataType::kFLOAT precision during instantiation. For strongly typed networks, \p input data type must match the
- *  \p scale data type.
+ *  \p scale data type, with the exception of MXFP8 quantization, where the scale data type must be DataType::kE8M0.
  * 
  *  IQuantizeLayer supports DataType::kINT8, DataType::kFP8, or DataType::kINT4 output.
  * 

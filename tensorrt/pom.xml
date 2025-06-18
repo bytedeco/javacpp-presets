@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorrt</artifactId>
-  <version>10.11-${project.parent.version}</version>
+  <version>10.12-${project.parent.version}</version>
   <name>JavaCPP Presets for TensorRT</name>
 
   <dependencies>

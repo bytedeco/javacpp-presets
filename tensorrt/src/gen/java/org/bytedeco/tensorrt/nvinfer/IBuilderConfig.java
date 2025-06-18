@@ -933,7 +933,7 @@ public class IBuilderConfig extends INoCopy {
      *  @return hardwareCompatibilityLevel The level of hardware
      *         compatibility.
      * 
-     *  @see setHardwareCompatiblityLevel()
+     *  @see setHardwareCompatibilityLevel()
      *  */
     
     
