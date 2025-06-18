@@ -20,7 +20,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
 /** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
- *  The name v_1_0 may change in future versions of TensoRT. */
+ *  The name v_1_0 may change in future versions of TensorRT. */
 
 @Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IGpuAsyncAllocator extends IGpuAllocator {
@@ -121,7 +121,8 @@ public class IGpuAsyncAllocator extends IGpuAllocator {
      *          If an allocation request cannot be satisfied, nullptr must be returned.
      *          If a non-null address is returned, it is guaranteed to have the specified alignment.
      * 
-     *  \note The implementation must guarantee thread safety for concurrent allocateAsync/deallocateAsync/reallocate requests.
+     *  \note The implementation must guarantee thread safety for concurrent allocateAsync/deallocateAsync/reallocate
+     *  requests.
      * 
      *  \u005Cusage
      *  - Allowed context for the API call

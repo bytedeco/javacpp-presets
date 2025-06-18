@@ -51,8 +51,6 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  Batch Matrix Multiplication:  ijk,ikl->ijl
  *  Batch Diagonal:               ...ii->...i
  * 
- *  \note TensorRT does not support ellipsis, diagonal operations or more than two inputs for Einsum.
- * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)

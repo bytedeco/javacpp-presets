@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.11-1.5.12-SNAPSHOT</version>
+            <version>10.12-1.5.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>

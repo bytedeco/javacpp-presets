@@ -172,8 +172,53 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(@Const @ByRef ITensor tensor);
+
+    /**
+     *  \brief Mark unfused tensors as debug tensors.
+     * 
+     *  Debug tensors can be optionally emitted at runtime.
+     *  Tensors that are fused by the optimizer will not be emitted.
+     *  Tensors marked this way will not prevent fusion like markDebug() does, thus preserving performance.
+     * 
+     *  \warning Tensors marked this way cannot be detected by isDebugTensor().
+     *  \warning DebugListener can only get internal tensor names instead of the original tensor
+     *           names in the NetworkDefinition for tensors marked this way. But the names correspond to the
+     *           names obtained by IEngineInspector.
+     *  \warning There is no guarantee that all unfused tensors are marked.
+     * 
+     *  @return True if tensors were successfully marked (or were already marked), false otherwise.
+     * 
+     *  @see unmarkUnfusedTensorsAsDebugTensors(), markDebug(), IExecutionContext::setDebugListener()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean markUnfusedTensorsAsDebugTensors();
+
+    /**
+     *  \brief Undo the marking of unfused tensors as debug tensors.
+     * 
+     *  This has no effect on tensors marked by markDebug().
+     * 
+     *  @return True if tensor successfully unmarked (or was already unmarked), false otherwise.
+     * 
+     *  @see markUnfusedTensorsAsDebugTensors(), IExecutionContext::setDebugListener()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean unmarkUnfusedTensorsAsDebugTensors();
 
     /**
      *  \brief Add an activation layer to the network.
@@ -1616,10 +1661,12 @@ public class INetworkDefinition extends INoCopy {
      *  DataType::kHALF, or DataType::kBF16. Currently only 2D and 3D inputs are supported.
      *  @param axis The axis that is sliced into blocks. The axis must be the last or second to last dimension.
      *  @param blockSize The number of elements that are quantized using a shared scale factor.
-     *  Currently only blocks of 16 elements are supported.
-     *  @param outputType The data type of the quantized output tensor, must be DataType::kFP4. Future calls to set output
-     *  type using setToType or setOutputType must be consistent.
-     *  @param scaleType The data type of the scale factor used for quantizing the input data, must be DataType::kFP8.
+     *  Valid values are 16 (NVFP4 quantization) and 32 (MXFP8 quantization).
+     *  @param outputType The data type of the quantized output tensor, must be DataType::kFP4 (NVFP4 quantization) or
+     *  DataType::kFP8 (MXFP8 quantization). Future calls to set output type using setToType or setOutputType must be
+     *  consistent.
+     *  @param scaleType The data type of the scale factor used for quantizing the input data, must be DataType::kFP8
+     *  (NVFP4 quantization) or DataType::kE8M0 (MXFP8 quantization).
      * 
      *  @return The new dynamic quantization layer, or nullptr if it could not be created.
      * 
@@ -1881,7 +1928,7 @@ public class INetworkDefinition extends INoCopy {
      *  @param input The input tensor to the layer.
      *  @param axes The axes to add unit dimensions.
      * 
-     *  @see IUnsqueezeLauyer
+     *  @see IUnsqueezeLayer
      * 
      *  Axes must be resolvable to a constant Int32 or Int64 shape tensor.
      *  Values in axes must be unique and in the range of [-r_final, r_final-1], where r_final

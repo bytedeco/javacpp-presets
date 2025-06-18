@@ -25,7 +25,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief Select elements from two data tensors based on a condition tensor.
  * 
  *  The select layer makes elementwise selections from two data tensors based on a condition tensor,
- *  behaving similarly to the numpy.where function with three parameters.
+ *  behaving similarly to the {@code numpy.where} function with three parameters.
  *  The three input tensors must share the same rank. Multidirectional broadcasting is supported.
  *  The output tensor has the dimensions of the inputs AFTER applying the broadcast rule.
  * 

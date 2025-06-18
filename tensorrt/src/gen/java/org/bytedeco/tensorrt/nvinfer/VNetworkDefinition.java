@@ -151,4 +151,6 @@ public class VNetworkDefinition extends VRoot {
             @ByRef ITensor input, @ByRef ITensor axis, CumulativeOperation operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
     public native @NoException(true) ICumulativeLayer addCumulative(
             @ByRef ITensor input, @ByRef ITensor axis, @Cast("nvinfer1::CumulativeOperation") int operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
+    public native @Cast("bool") @NoException(true) boolean markUnfusedTensorsAsDebugTensors();
+    public native @Cast("bool") @NoException(true) boolean unmarkUnfusedTensorsAsDebugTensors();
 }

@@ -147,6 +147,7 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) void setInput(int index, @ByRef ITensor tensor);
 
     /**
@@ -174,6 +175,8 @@ public class ILayer extends INoCopy {
      *  @param dataType the computational precision.
      * 
      *  @see getPrecision() precisionIsSet() resetPrecision()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
@@ -181,8 +184,8 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void setPrecision(DataType dataType);
-    public native @NoException(true) void setPrecision(@Cast("nvinfer1::DataType") int dataType);
+    public native @Deprecated @NoException(true) void setPrecision(DataType dataType);
+    public native @Deprecated @NoException(true) void setPrecision(@Cast("nvinfer1::DataType") int dataType);
 
     /**
      *  \brief get the computational precision of this layer
@@ -197,6 +200,7 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) DataType getPrecision();
 
     /**
@@ -205,18 +209,23 @@ public class ILayer extends INoCopy {
      *  @return whether the computational precision has been explicitly set
      * 
      *  @see setPrecision() getPrecision() resetPrecision()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean precisionIsSet();
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean precisionIsSet();
 
     /**
      *  \brief reset the computational precision for this layer
      * 
      *  @see setPrecision() getPrecision() precisionIsSet()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
@@ -232,7 +241,8 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void resetPrecision();
+    //!
+    public native @Deprecated @NoException(true) void resetPrecision();
 
     /**
      *  \brief Set the output type of this layer in a weakly-typed network.
@@ -268,6 +278,7 @@ public class ILayer extends INoCopy {
      * 
      *  * ICastLayer
      *  * IDequantizeLayer
+     *  * IDynamicQuantizeLayer
      *  * IFillLayer
      *  * IQuantizeLayer
      * 
@@ -275,6 +286,8 @@ public class ILayer extends INoCopy {
      *  @param dataType the type of the output
      * 
      *  @see getOutputType() outputTypeIsSet() resetOutputType()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
@@ -283,8 +296,8 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void setOutputType(int index, DataType dataType);
-    public native @NoException(true) void setOutputType(int index, @Cast("nvinfer1::DataType") int dataType);
+    public native @Deprecated @NoException(true) void setOutputType(int index, DataType dataType);
+    public native @Deprecated @NoException(true) void setOutputType(int index, @Cast("nvinfer1::DataType") int dataType);
 
     /**
      *  \brief get the output type of this layer
@@ -303,6 +316,7 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) DataType getOutputType(int index);
 
     /**
@@ -313,6 +327,8 @@ public class ILayer extends INoCopy {
      *  @return whether the output type has been explicitly set
      * 
      *  @see setOutputType() getOutputType() resetOutputType()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
@@ -320,7 +336,8 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean outputTypeIsSet(int index);
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean outputTypeIsSet(int index);
 
     /**
      *  \brief reset the output type for this layer
@@ -328,6 +345,8 @@ public class ILayer extends INoCopy {
      *  @param index the index of the output
      * 
      *  @see setOutputType() getOutputType() outputTypeIsSet()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
      *  */
     
     
@@ -337,7 +356,7 @@ public class ILayer extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void resetOutputType(int index);
+    public native @Deprecated @NoException(true) void resetOutputType(int index);
 
     /**
      *  \brief Set the metadata for this layer.

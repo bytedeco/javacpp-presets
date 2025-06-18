@@ -60,7 +60,6 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 
 // #include "NvInfer.h"
 // #include <stddef.h>
-// #if !TRT_WINML
 // #include <string>
 
 
@@ -68,7 +67,6 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 //!
 //!
 // #include <vector>
-// #endif // !TRT_WINML
 
 /**
  *  \file NvOnnxParser.h
@@ -81,13 +79,13 @@ public static final int NV_ONNX_PARSER_MINOR = 1;
 public static final int NV_ONNX_PARSER_PATCH = 0;
 
 
+
 //!
 //!
 //!
 @MemberGetter public static native int NV_ONNX_PARSER_VERSION();
 public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
-// #if !TRT_WINML
 /**
  *  \typedef SubGraph_t
  * 
@@ -107,11 +105,11 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
  *  out of an ONNX graph.
  *  */
 
+
 //!
 //!
 //!
 
-// #endif // !TRT_WINML
 /**
  *  \namespace nvonnxparser
  * 

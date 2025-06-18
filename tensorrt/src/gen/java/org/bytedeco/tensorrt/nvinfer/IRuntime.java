@@ -146,12 +146,16 @@ public class IRuntime extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) IErrorRecorder getErrorRecorder();
 
     /**
      *  \brief Deserialize an engine from host memory.
      * 
      *  If an error recorder has been set for the runtime, it will also be passed to the engine.
+     * 
+     *  \warning Destroying the IRuntime before destroying all associated ICudaEngine instances results in undefined
+     *  behavior.
      * 
      *  @param blob The memory that holds the serialized engine.
      *  @param size The size of the memory.
@@ -160,6 +164,7 @@ public class IRuntime extends INoCopy {
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -177,6 +182,9 @@ public class IRuntime extends INoCopy {
      * 
      *  This deserialization path will reduce host memory usage when weight streaming is enabled.
      * 
+     *  \warning Destroying the IRuntime before destroying all associated ICudaEngine instances results in undefined
+     *  behavior.
+     * 
      *  @param streamReader a read-only stream from which TensorRT will deserialize a
      *         previously serialized engine.
      * 
@@ -187,6 +195,7 @@ public class IRuntime extends INoCopy {
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -204,6 +213,9 @@ public class IRuntime extends INoCopy {
      * 
      *  This deserialization path will reduce engine load time when applied with GDS (GPU Direct storage), or when
      *  weight streaming is enabled.
+     * 
+     *  \warning Destroying the IRuntime before destroying all associated ICudaEngine instances results in undefined
+     *  behavior.
      * 
      *  @param streamReader a read-only stream from which TensorRT will deserialize a previously serialized engine.
      * 

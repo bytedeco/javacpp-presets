@@ -66,10 +66,10 @@ public class IDynamicQuantizeLayer extends ILayer {
      * 
      *  @param toType The data type of the quantized output tensor.
      * 
-     *  Set the type of the dynamic quantization layer's quantized output. Currently the only valid
-     *  value is DataType::kFP4. If the network is strongly typed, setToType must be used to set
-     *  the output type, and use of setOutputType is an error. Otherwise, types passed to setOutputType
-     *  and setToType must be the same.
+     *  Set the type of the dynamic quantization layer's quantized output.If the network is strongly typed, setToType
+     *  must be used to set the output type, and use of setOutputType is an error. Otherwise, types passed to
+     *  setOutputType and setToType must be the same.
+     *  Valid values for \p toType are DataType::kFP4 (NVFP4 quantization) and DataType::kFP8 (MXFP8 quantization).
      * 
      *  @see NetworkDefinitionCreationFlag::kSTRONGLY_TYPED
      *  */
@@ -103,7 +103,8 @@ public class IDynamicQuantizeLayer extends ILayer {
      * 
      *  @param scaleType The scale factors data type.
      * 
-     *  Set the scale-factors type. Currently the only valid value is DataType::kFP8.
+     *  Set the scale-factors type.
+     *  Valid values are DataType::kFP8 (NVFP4 quantization) and DataType::kE8M0 (MXFP8 quantization).
      *  */
     
     
@@ -162,7 +163,7 @@ public class IDynamicQuantizeLayer extends ILayer {
      *  \brief Set the size of the quantization block.
      * 
      *  Note: The block size must divide the input in the blocked axis without remainder.
-     *  Currently only 16-element blocks are supported.
+     *  Valid values are 16 (NVFP4 quantization) and 32 (MXFP8 quantization).
      * 
      *  @see getBlockSize()
      *  */
