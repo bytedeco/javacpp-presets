@@ -24,7 +24,9 @@ runs:
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
         $SUDO mkswap /swapfile
-        $SUDO swapon /swapfile || true
+        if ! $SUDO swapon /swapfile; then
+          $SUDO rm /swapfile
+        fi
 
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
@@ -72,6 +74,7 @@ runs:
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
         $SUDO dpkg --list
+        $SUDO du -cd2 /* || true
 
         $SUDO apt-get update
         $SUDO apt-get -y install gnupg
