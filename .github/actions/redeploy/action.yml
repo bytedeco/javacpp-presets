@@ -41,10 +41,16 @@ runs:
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
-        if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]] || [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
-            # We are not deploying snapshots
+        if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            # We are not deploying
             exit 0
         fi
+
+        curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+        sudo ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
+
+        sudo python3 -m pip install gdown || sudo python3 -m pip install --break-system-packages gdown
 
         git --version
         mvn -version
@@ -56,39 +62,57 @@ runs:
         git checkout $GITHUB_SHA
 
         mkdir -p $HOME/.m2
-        echo "<settings>" > $HOME/.m2/settings.xml
-        echo "<servers><server><id>central</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server></servers>" >> $HOME/.m2/settings.xml
-        echo "</settings>" >> $HOME/.m2/settings.xml
+        echo "<settings><servers>" > $HOME/.m2/settings.xml
+        echo "<server><id>central</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server>" >> $HOME/.m2/settings.xml
+        echo "<server><id>central-portal-staging</id><configuration><httpHeaders><property><name>Authorization</name>" >> $HOME/.m2/settings.xml
+        echo "<value>Bearer $(echo $CI_DEPLOY_USERNAME:$CI_DEPLOY_PASSWORD | base64)</value></property></httpHeaders></configuration></server>" >> $HOME/.m2/settings.xml
+        echo "</servers></settings>" >> $HOME/.m2/settings.xml
 
         GROUP="org.bytedeco"
         REPOSITORY_ID="central"
         REPOSITORY_URL="https://central.sonatype.com/repository/maven-snapshots/"
+        DEPLOY_OPTIONS="-DaltDeploymentRepository=$REPOSITORY_ID::default::$REPOSITORY_URL"
+        DEPLOY_FILE_OPTIONS="deploy:deploy-file -DrepositoryId=$REPOSITORY_ID -Durl=$REPOSITORY_URL"
         MAVEN_OPTIONS="-N -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3"
+        UPLOAD_URL=
+        if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
+            python3 -m gdown -q -O settings.tar.gz $CI_DEPLOY_SETTINGS
+            tar -xzf settings.tar.gz
+            export GPG_PASSPHRASE=***
+            DEPLOY_OPTIONS="-DaltDeploymentRepository=local::default::file://$(pwd)/redeploy"
+            DEPLOY_FILE_OPTIONS="gpg:sign-and-deploy-file -DrepositoryId=local -Durl=file://$(pwd)/redeploy"
+            MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -Dgpg.passphrase=$GPG_PASSPHRASE -Dgpg.useagent=false -DperformRelease"
+            UPLOAD_URL="https://central.sonatype.com/api/v1/publisher/upload"
+        fi
 
         rm -f dependencies.txt
         for POM in $(find $CI_DEPLOY_MODULE/platform/ -iname pom.xml); do
             if [[ $POM =~ tensorflow/platform/python ]]; then
                 continue # Skip over builds taking more than 6 hours on GitHub Actions
             fi
+            if [[ $POM =~ platform/redist ]]; then
+                continue # Skip over redist artifacts too big for the Central Portal
+            fi
             for i in {1..5}; do
                 STATUS=0
                 mvn dependency:list $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
                     && mvn dependency:resolve -Dclassifier=javadoc  $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
                     && mvn dependency:resolve -Dclassifier=sources  $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
+                    && mvn clean deploy $DEPLOY_OPTIONS $MAVEN_OPTIONS -f $POM \
                     && break || STATUS=$? && sleep 60
             done
             (exit $STATUS)
         done
 
-        for LINE in $(sort -u dependencies.txt); do
-            if [[ $LINE =~ $GROUP:([^:]*):jar:([^:]*-SNAPSHOT):compile ]]; then
-                ARTIFACT=${BASH_REMATCH[1]}
-                VERSION=${BASH_REMATCH[2]}
+        for LINE in $(sed s/:compile//g dependencies.txt | sort -u); do
+            [[ "$CI_DEPLOY_MODULE" == "." ]] && ARTIFACT=javacpp || ARTIFACT=$CI_DEPLOY_MODULE
+            if [[ $LINE =~ $GROUP:$ARTIFACT:jar:([^[:space:]]*) ]]; then
+                VERSION=${BASH_REMATCH[1]}
                 FILES=
                 TYPES=
                 CLASSIFIERS=
                 for LINE2 in $(sort -u dependencies.txt); do
-                    if [[ $LINE2 =~ $GROUP:$ARTIFACT:jar:([^:]*):$VERSION:compile ]]; then
+                    if [[ $LINE2 =~ $GROUP:$ARTIFACT:jar:([^:]*):$VERSION ]]; then
                         CLASSIFIER=${BASH_REMATCH[1]}
                         FILE=$ARTIFACT-$VERSION-$CLASSIFIER.jar
                         mv -v $HOME/.m2/repository/${GROUP//.//}/$ARTIFACT/$VERSION/$FILE .
@@ -103,13 +127,18 @@ runs:
                     unzip -o $FILE META-INF/maven/$GROUP/$ARTIFACT/pom.xml
                     for i in {1..5}; do
                         STATUS=0
-                        mvn deploy:deploy-file $MAVEN_OPTIONS -DrepositoryId=$REPOSITORY_ID -Durl=$REPOSITORY_URL -DpomFile=META-INF/maven/$GROUP/$ARTIFACT/pom.xml \
+                        mvn $DEPLOY_FILE_OPTIONS $MAVEN_OPTIONS -DpomFile=META-INF/maven/$GROUP/$ARTIFACT/pom.xml \
                             -Dfile=$FILE -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION -Dfiles=$FILES -Dtypes=$TYPES -Dclassifiers=$CLASSIFIERS && break || STATUS=$? && sleep 60
                     done
                     (exit $STATUS)
                 fi
             fi
         done
+        if [[ -n $UPLOAD_URL ]]; then
+            rm -f $(find redeploy -name *.asc.*)
+            pushd redeploy; zip -r ../redeploy.zip *; popd
+            curl --request POST --header "Authorization: Bearer $(echo $CI_DEPLOY_USERNAME:$CI_DEPLOY_PASSWORD | base64)" --form bundle=@redeploy.zip $UPLOAD_URL
+        fi
         df -h
 
 #    - name: Save cache
