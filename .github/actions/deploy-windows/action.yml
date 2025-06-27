@@ -267,13 +267,15 @@ runs:
         echo Publishing only now to help avoid race conditions with Gradle
         gradle %GRADLE_TASK% %GRADLE_OPTIONS% -b %CI_DEPLOY_MODULE%/build.gradle --refresh-dependencies
         if ERRORLEVEL 1 exit /b
-        goto :done3
+        goto :done
 
         :maven
         mkdir %USERPROFILE%\.m2
-        echo ^<settings^> > %USERPROFILE%\.m2\settings.xml
-        echo ^<servers^>^<server^>^<id^>central^</id^>^<username^>%CI_DEPLOY_USERNAME%^</username^>^<password^>%CI_DEPLOY_PASSWORD%^</password^>^</server^>^</servers^> >> %USERPROFILE%\.m2\settings.xml
-        echo ^</settings^> >> %USERPROFILE%\.m2\settings.xml
+        bash -c "echo ""<settings><servers>""" > %USERPROFILE%\.m2\settings.xml
+        bash -c "echo ""<server><id>central</id><username>$CI_DEPLOY_USERNAME</username><password>$CI_DEPLOY_PASSWORD</password></server>""" >> %USERPROFILE%\.m2\settings.xml
+        bash -c "echo ""<server><id>central-portal-staging</id><configuration><httpHeaders><property><name>Authorization</name>""" >> %USERPROFILE%\.m2\settings.xml
+        bash -c "echo ""<value>Bearer $(echo $CI_DEPLOY_USERNAME:$CI_DEPLOY_PASSWORD | base64)</value></property></httpHeaders></configuration></server>""" >> %USERPROFILE%\.m2\settings.xml
+        bash -c "echo ""</servers></settings>""" >> %USERPROFILE%\.m2\settings.xml
 
         set /a "SECONDS=%RANDOM% %% 300"
         if "%CI_DEPLOY_NEED_CUDA%"=="" (
@@ -283,7 +285,6 @@ runs:
 
         echo Executing Maven %MAVEN_PHASE% %CI_DEPLOY_OPTIONS% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}
-        if "%EXT%" == "" (set EXT2=) else (set EXT2=%EXT:~1%)
         set "MAVEN_OPTS=-Xss2m -Xmx4g"
         set "MAVEN_OPTIONS=clean %MAVEN_PHASE% clean -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS% %CI_DEPLOY_OPTIONS%"
 
@@ -291,14 +292,6 @@ runs:
         for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -pl .,%CI_DEPLOY_MODULE% && goto :done || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
         exit /b !STATUS!
         :done
-        for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE%/platform/%EXT2%/pom.xml && goto :done2 || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
-        exit /b !STATUS!
-        :done2
-        if exist %CI_DEPLOY_MODULE%/platform/redist/pom.xml (
-          for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -f %CI_DEPLOY_MODULE%/platform/redist/pom.xml && goto :done3 || set STATUS=!ERRORLEVEL! && timeout 60 > nul)
-          exit /b !STATUS!
-        )
-        :done3
         ccache --version -sv
         df -h
         wmic pagefile list /format:list
