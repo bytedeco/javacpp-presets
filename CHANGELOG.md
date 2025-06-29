@@ -1,4 +1,5 @@
 
+### June 30, 2025 version 1.5.12
  * Add presets for the CUFILE module of CUDA
  * Fix FFmpeg builds against VA-API libraries ([pull #1608](https://github.com/bytedeco/javacpp-presets/pull/1608))
  * Add `openblas_full` class giving access to all of OpenBLAS ([pull #1572](https://github.com/bytedeco/javacpp-presets/pull/1572))

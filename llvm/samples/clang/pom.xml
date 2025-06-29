@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>ClangASTVisitorExample</artifactId>
-    <version>1.5.12-SNAPSHOT</version>
+    <version>1.5.12</version>
     <properties>
         <exec.mainClass>ClangASTVisitorExample</exec.mainClass>
         <maven.compiler.source>8</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>20.1.7-1.5.12-SNAPSHOT</version>
+            <version>20.1.7-1.5.12</version>
         </dependency>
     </dependencies>
     <build>
