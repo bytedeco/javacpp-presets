@@ -41,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.opencv</groupId>
     <artifactId>stitching</artifactId>
-    <version>1.5.12-SNAPSHOT</version>
+    <version>1.5.12</version>
     <properties>
         <exec.mainClass>Stitching</exec.mainClass>
     </properties>
@@ -49,21 +49,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.11.0-1.5.12-SNAPSHOT</version>
+            <version>4.11.0-1.5.12</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform-gpu</artifactId>
-            <version>4.11.0-1.5.12-SNAPSHOT</version>
+            <version>4.11.0-1.5.12</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.9-9.10-1.5.12-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
@@ -77,7 +77,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>2.3.1-1.5.12-SNAPSHOT</version>
+            <version>2.3.1-1.5.12</version>
         </dependency>
 
     </dependencies>

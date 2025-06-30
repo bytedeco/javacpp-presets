@@ -53,7 +53,7 @@ jobs:
         ext: ["", -gpu]
     env:
         BUILD_DIR: C:\build
-        CI_DEPLOY_OPTIONS: -Djavacpp.parser.skip -Dmaven.javadoc.skip
+        CI_DEPLOY_OPTIONS: -Djavacpp.parser.skip
     steps:
       - uses: al-cheb/configure-pagefile-action@v1.3
         with:
