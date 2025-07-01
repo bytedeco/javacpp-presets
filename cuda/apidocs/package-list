@@ -2,6 +2,7 @@ org.bytedeco.cuda.cublas
 org.bytedeco.cuda.cudart
 org.bytedeco.cuda.cudnn
 org.bytedeco.cuda.cufftw
+org.bytedeco.cuda.cufile
 org.bytedeco.cuda.cupti
 org.bytedeco.cuda.curand
 org.bytedeco.cuda.cusolver
@@ -9,7 +10,6 @@ org.bytedeco.cuda.cusparse
 org.bytedeco.cuda.global
 org.bytedeco.cuda.nccl
 org.bytedeco.cuda.nppc
-org.bytedeco.cuda.nvToolsExt
 org.bytedeco.cuda.nvcomp
 org.bytedeco.cuda.nvjpeg
 org.bytedeco.cuda.nvml
