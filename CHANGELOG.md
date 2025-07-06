@@ -1,4 +1,6 @@
 
+ * Bundle libraries for VA-API 2.x with FFmpeg to avoid loading issues ([issue bytedeco/javacv#2340](https://github.com/bytedeco/javacv/issues/2340))
+
 ### June 30, 2025 version 1.5.12
  * Add presets for the CUFILE module of CUDA
  * Fix FFmpeg builds against VA-API libraries ([pull #1608](https://github.com/bytedeco/javacpp-presets/pull/1608))
