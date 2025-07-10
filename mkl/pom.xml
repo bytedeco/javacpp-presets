@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.12</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl</artifactId>
-  <version>2025.0-${project.parent.version}</version>
+  <version>2025.2-${project.parent.version}</version>
   <name>JavaCPP Presets for MKL</name>
 
   <dependencies>
