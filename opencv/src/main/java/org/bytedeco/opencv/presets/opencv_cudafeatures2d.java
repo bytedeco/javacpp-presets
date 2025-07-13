@@ -37,12 +37,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudafeatures2d.hpp>",
-            link = "opencv_cudafeatures2d@.411",
+            link = "opencv_cudafeatures2d@.412",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudafeatures2d4110",
+            link = "opencv_cudafeatures2d4120",
             extension = "-gpu"
         )
     },

@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 4.11.0  http://opencv.org/
+ * OpenCV 4.12.0  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -41,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.opencv</groupId>
     <artifactId>stitching</artifactId>
-    <version>1.5.12</version>
+    <version>1.5.13-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Stitching</exec.mainClass>
     </properties>
@@ -49,35 +49,35 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.11.0-1.5.12</version>
+            <version>4.12.0-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform-gpu</artifactId>
-            <version>4.11.0-1.5.12</version>
+            <version>4.12.0-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.9-9.10-1.5.12</version>
+            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2025.2-1.5.12</version>
+            <version>2025.2-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load the Python module -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>2.3.1-1.5.12</version>
+            <version>2.3.1-1.5.13-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
