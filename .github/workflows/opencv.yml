@@ -52,7 +52,7 @@ jobs:
       matrix:
         ext: [ "", -gpu ]
     steps:
-      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@opencv_arm_gpu
 #  linux-ppc64le:
 #    runs-on: ubuntu-22.04
 #    steps:
