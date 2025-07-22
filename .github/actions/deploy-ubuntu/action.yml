@@ -21,10 +21,19 @@ runs:
         $SUDO rm -rf /usr/share/dotnet
 
         # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
+        # Make sure no busy /swapfile is hanging around
+        # First disable any existing swapfile with swapoff
+        if $SUDO swapon --summary | grep -q '^/swapfile'; then
+          $SUDO swapoff /swapfile        
+        fi
+        $SUDO rm /swapfile
+  
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
         $SUDO mkswap /swapfile
-        $SUDO swapon /swapfile || true
+        if ! $SUDO swapon /swapfile; then
+          $SUDO rm /swapfile
+        fi
 
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
@@ -80,7 +89,7 @@ runs:
         export CODENAME=$UBUNTU_CODENAME
         # arm64 runners don't work with apt-spy2,
         # the selected mirrors don't have arm64 binaries
-        if [[ "$ARCH" != "arm64" ]]; then
+        if [[ "$ARCH" != "$HOST_ARCH" ]]; then
           # https://github.com/actions/runner-images/issues/675
           $SUDO gem install apt-spy2
           $SUDO apt-spy2 check
