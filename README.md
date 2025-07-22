@@ -283,6 +283,7 @@ where possible platform names are:
 * `linux-x86_64`
 * `macosx-arm64`
 * `macosx-x86_64`
+* `windows-arm64`
 * `windows-x86`
 * `windows-x86_64`
 
