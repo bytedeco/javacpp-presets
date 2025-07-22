@@ -68,7 +68,7 @@ case $PLATFORM in
     linux-arm64)
         CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
         cd ../$OPENSSL
-        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
+        ./Configure linux-aarch64 -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         make distclean
