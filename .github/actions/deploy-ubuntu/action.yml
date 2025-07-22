@@ -20,14 +20,11 @@ runs:
         $SUDO rm -rf /usr/local/lib/android
         $SUDO rm -rf /usr/share/dotnet
 
-        # fallocate fails on arm64 runners
-        if [[ ! "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
-          # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
-          $SUDO fallocate -l 4GB /swapfile
-          $SUDO chmod 600 /swapfile
-          $SUDO mkswap /swapfile
-          $SUDO swapon /swapfile || true
-        fi
+        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
+        $SUDO fallocate -l 4GB /swapfile
+        $SUDO chmod 600 /swapfile
+        $SUDO mkswap /swapfile
+        $SUDO swapon /swapfile || true
 
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
@@ -83,7 +80,7 @@ runs:
         export CODENAME=$UBUNTU_CODENAME
         # arm64 runners don't work with apt-spy2,
         # the selected mirrors don't have arm64 binaries
-        if [[ ! "$ARCH" == "amd64" && ! "$ARCH" == "arm64" ]]; then
+        if [[ "$ARCH" != "arm64" ]]; then
           # https://github.com/actions/runner-images/issues/675
           $SUDO gem install apt-spy2
           $SUDO apt-spy2 check
@@ -104,7 +101,7 @@ runs:
           $SUDO dpkg --add-architecture $ARCH
           if [[ "$ARCH" == "i386" ]]; then
             TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
-          elif [[ ! "$ARCH" == "amd64" ]]; then
+          elif [[ "$ARCH" == "amd64" ]]; then
             $SUDO sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
