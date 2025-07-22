@@ -87,8 +87,7 @@ runs:
         $SUDO apt-get -y install gnupg
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
-        # arm64 runners don't work with apt-spy2,
-        # the selected mirrors don't have arm64 binaries
+        
         if [[ "$ARCH" != "$HOST_ARCH" ]]; then
           # https://github.com/actions/runner-images/issues/675
           $SUDO gem install apt-spy2
