@@ -69,14 +69,14 @@ fi
 # Fallback: use system-installed Python (apt install python3-dev python3-numpy)
 # -------------------------------------------------------------------------
 if [[ -z "$PYTHON3_EXECUTABLE" ]]; then
-    PYTHON3_EXECUTABLE=$(command -v python3)                     # /usr/bin/python3
-    PYVER=$(python3 - <<'PY' ;import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}") ;PY)
+    PYTHON3_EXECUTABLE=$(command -v python3)          # /usr/bin/python3
+    PYVER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
 
     # headers and lib from python3-dev
-    PYTHON3_INCLUDE_DIR=/usr/include/python$PYVER                # /usr/include/python3.10
-    PYTHON3_LIBRARY=$(ldconfig -p | grep -m1 "libpython$PYVER" | awk '{print $4}')
+    PYTHON3_INCLUDE_DIR=/usr/include/python${PYVER}   # /usr/include/python3.10
+    PYTHON3_LIBRARY=$(ldconfig -p | grep -m1 "libpython${PYVER}" | awk '{print $4}')
     # site-packages path
-    PYTHON3_PACKAGES_PATH=$(python3 - <<'PY' ;import sysconfig, sys;print(sysconfig.get_paths()["platlib"]) ;PY)
+    PYTHON3_PACKAGES_PATH=$(python3 -c 'import sysconfig; print(sysconfig.get_paths()["platlib"])')
 
     export PYTHON3_EXECUTABLE PYTHON3_INCLUDE_DIR PYTHON3_LIBRARY PYTHON3_PACKAGES_PATH
 fi
