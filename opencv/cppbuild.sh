@@ -64,6 +64,23 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
     export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
+
+# -------------------------------------------------------------------------
+# Fallback: use system-installed Python (apt install python3-dev python3-numpy)
+# -------------------------------------------------------------------------
+if [[ -z "$PYTHON3_EXECUTABLE" ]]; then
+    PYTHON3_EXECUTABLE=$(command -v python3)                     # /usr/bin/python3
+    PYVER=$(python3 - <<'PY' ;import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}") ;PY)
+
+    # headers and lib from python3-dev
+    PYTHON3_INCLUDE_DIR=/usr/include/python$PYVER                # /usr/include/python3.10
+    PYTHON3_LIBRARY=$(ldconfig -p | grep -m1 "libpython$PYVER" | awk '{print $4}')
+    # site-packages path
+    PYTHON3_PACKAGES_PATH=$(python3 - <<'PY' ;import sysconfig, sys;print(sysconfig.get_paths()["platlib"]) ;PY)
+
+    export PYTHON3_EXECUTABLE PYTHON3_INCLUDE_DIR PYTHON3_LIBRARY PYTHON3_PACKAGES_PATH
+fi
+
 export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
 
 echo "Decompressing archives..."
