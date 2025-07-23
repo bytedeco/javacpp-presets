@@ -218,7 +218,7 @@ runs:
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
           call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" arm64
           call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" arm64
-          set MSYSTEM=MINGW32
+          set MSYSTEM=CLANGARM64
         )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
           call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
