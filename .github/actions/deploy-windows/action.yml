@@ -8,27 +8,46 @@ runs:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
         cd /d %USERPROFILE%
-
+        
         echo Installing MSYS2
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel mingw-w64-x86_64-vulkan-headers mingw-w64-i686-vulkan-headers mingw-w64-x86_64-vulkan-loader mingw-w64-i686-vulkan-loader"
-        set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
-
+        
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          curl -Lo msys2.exe https://github.com/msys2/msys2-installer/releases/download/2025-06-22/msys2-base-x86_64-20250622.sfx.exe
+          msys2.exe -oC:\ -y
+        
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-clang-aarch64-nasm mingw-w64-clang-aarch64-clang mingw-w64-clang-aarch64-libtool mingw-w64-clang-aarch64-gcc-compat mingw-w64-clang-aarch64-libwinpthread mingw-w64-clang-aarch64-SDL2 mingw-w64-clang-aarch64-ragel mingw-w64-clang-aarch64-vulkan-headers mingw-w64-clang-aarch64-vulkan-loader"
+          set "PATH=C:\msys64\usr\bin;%PATH%"
+        ) else (
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
+          C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel mingw-w64-x86_64-vulkan-headers mingw-w64-i686-vulkan-headers mingw-w64-x86_64-vulkan-loader mingw-w64-i686-vulkan-loader"
+          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
+        )
+        
         C:\msys64\usr\bin\bash -lc "pacman -Q"
-
-        echo Installing Windows SDK 8.1
-        curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
-        sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
-
-        echo Removing broken stuff from WSL, MSYS2, etc
-        rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
-        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
-        rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
-        rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
-        rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
-        rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a" "C:/Strawberry/c/bin/cmake.exe"
-
+        
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          echo Installing Windows SDK 10
+          curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
+          start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
+        ) else (
+          echo Installing Windows SDK 8.1
+          curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
+          sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
+        )
+        
+        if not "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          echo Removing broken stuff from WSL, MSYS2, etc
+          rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
+          rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+          rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
+          rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
+          rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
+          rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a" "C:/Strawberry/c/bin/cmake.exe"
+        )
+        
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
 
@@ -53,47 +72,51 @@ runs:
           echo sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros >> ccache\ccache.conf
         )
 
-        if not "%CI_DEPLOY_NEED_GCC%"=="" (
-          echo Installing an older less buggy version of GCC
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.42-2-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-headers-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-loader-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-SDL2-2.30.12-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-python-3.11.9-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-13.2.0-6-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.42-2-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-headers-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-loader-1.3.280.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-SDL2-2.30.12-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-python-3.11.9-1-any.pkg.tar.zst
-          bash -c "pacman -U --noconfirm *.pkg.tar.zst"
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          bash -c "pacman -Rc --noconfirm mingw-w64-clang-aarch64-headers-git mingw-w64-clang-aarch64-zlib"
         ) else (
-          bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git mingw-w64-i686-zlib mingw-w64-x86_64-zlib"
+          if not "%CI_DEPLOY_NEED_GCC%"=="" (
+            echo Installing an older less buggy version of GCC
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.42-2-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-headers-1.3.280.0-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-loader-1.3.280.0-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-SDL2-2.30.12-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-python-3.11.9-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-13.2.0-6-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.42-2-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-headers-1.3.280.0-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-loader-1.3.280.0-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-SDL2-2.30.12-1-any.pkg.tar.zst
+            curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-python-3.11.9-1-any.pkg.tar.zst
+            bash -c "pacman -U --noconfirm *.pkg.tar.zst"
+          ) else (
+            bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git mingw-w64-i686-zlib mingw-w64-x86_64-zlib"
+          )
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
@@ -193,6 +216,11 @@ runs:
     - name: Build project
       shell: cmd
       run: |
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" arm64
+          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" arm64
+          set MSYSTEM=MINGW32
+        )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
           call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
           call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
