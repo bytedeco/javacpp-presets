@@ -85,6 +85,11 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
+# Install pip for the cross-compiled interpreter
+if ! "$PYTHON_BIN_PATH" -m pip --version >/dev/null 2>&1; then
+    "$PYTHON_BIN_PATH" -m ensurepip --upgrade
+fi
+
 TOOLS="setuptools==67.6.1 cython==3.0.10"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
