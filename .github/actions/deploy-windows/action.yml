@@ -8,13 +8,12 @@ runs:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
         cd /d %USERPROFILE%
-        
+
         echo Installing MSYS2
-        
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
           curl -Lo msys2.exe https://github.com/msys2/msys2-installer/releases/download/2025-06-22/msys2-base-x86_64-20250622.sfx.exe
           msys2.exe -oC:\ -y
-        
+
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-clang-aarch64-nasm mingw-w64-clang-aarch64-clang mingw-w64-clang-aarch64-libtool mingw-w64-clang-aarch64-gcc-compat mingw-w64-clang-aarch64-libwinpthread mingw-w64-clang-aarch64-SDL2 mingw-w64-clang-aarch64-ragel mingw-w64-clang-aarch64-vulkan-headers mingw-w64-clang-aarch64-vulkan-loader"
@@ -25,11 +24,11 @@ runs:
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel mingw-w64-x86_64-vulkan-headers mingw-w64-i686-vulkan-headers mingw-w64-x86_64-vulkan-loader mingw-w64-i686-vulkan-loader"
           set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
         )
-        
+
         C:\msys64\usr\bin\bash -lc "pacman -Q"
-        
+
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
-          echo Installing Windows SDK 10
+          echo Installing Windows SDK 10.0.26100.4654
           curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
           start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
         ) else (
@@ -37,7 +36,7 @@ runs:
           curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
           sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
         )
-        
+
         if not "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
           echo Removing broken stuff from WSL, MSYS2, etc
           rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
@@ -47,7 +46,7 @@ runs:
           rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
           rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a" "C:/Strawberry/c/bin/cmake.exe"
         )
-        
+
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
 
