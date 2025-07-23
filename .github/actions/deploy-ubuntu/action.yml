@@ -107,15 +107,14 @@ runs:
         if [[ "$ARCH" != "$HOST_ARCH" ]]; then
           # we are cross-compiling
           $SUDO dpkg --add-architecture $ARCH
-          if [[ "$ARCH" == "i386" ]]; then
-            TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
-          elif [[ "$ARCH" == "amd64" ]]; then
+          TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
+          if [[ "$ARCH" == "amd64" ]]; then
             $SUDO sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
-            TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
+            TOOLCHAIN="$TOOLCHAIN linux-libc-dev-$ARCH-cross binutils-multiarch"
           fi 
         fi
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
@@ -123,9 +122,6 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
-        if [[ "$HOST_ARCH" == "amd64" ]]; then
-          $SUDO apt-get -y install gcc-multilib g++-multilib gfortran-multilib
-        fi
         $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
         $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
