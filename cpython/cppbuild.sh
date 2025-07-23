@@ -67,7 +67,7 @@ case $PLATFORM in
         ;;
     linux-arm64)
         HOST_ARCH="$(uname -m)"
-        if [[ $HOST_ARCH == *"arm"* ]]; then
+        if [[ $HOST_ARCH == "aarch64" ]]; then
           echo "Detected arm arch so not cross compiling";
           cd ../$OPENSSL
           ./Configure linux-aarch64 -fPIC no-shared  --prefix=$INSTALL_PATH --libdir=lib  "$CFLAGS"

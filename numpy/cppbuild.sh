@@ -114,17 +114,17 @@ case $PLATFORM in
         ;;
     linux-arm64)
         HOST_ARCH="$(uname -m)"
-        if [[ $HOST_ARCH == *"arm"* ]]; then
+        if [[ $HOST_ARCH == "aarch64" ]]; then
           echo "Detected arm arch so not cross compiling";
           ATLAS=None CC="gcc -std=c99" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
           strip $(find ../ -iname *.so)
         else
+          echo "Detected non arm arch so cross compiling";
           rm -f meson.build pyproject.toml
           ls -l
           mv pyproject.toml.setuppy pyproject.toml
           ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" CFLAGS="-O2" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
           aarch64-linux-gnu-strip $(find ../ -iname *.so)
-          echo "Detected non arm arch so cross compiling";
         fi
         ;;
     linux-ppc64le)
