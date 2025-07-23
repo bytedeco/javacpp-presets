@@ -114,6 +114,7 @@ case $PLATFORM in
         ;;
     linux-arm64)
         rm -f meson.build pyproject.toml
+        ls -l
         mv pyproject.toml.setuppy pyproject.toml
         ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" CFLAGS="-O2" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
