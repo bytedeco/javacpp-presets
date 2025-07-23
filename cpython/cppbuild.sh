@@ -70,7 +70,7 @@ case $PLATFORM in
         if [[ $HOST_ARCH == "aarch64" ]]; then
           echo "Detected arm arch so not cross compiling";
           cd ../$OPENSSL
-          ./Configure linux-aarch64 -fPIC no-shared  --prefix=$INSTALL_PATH --libdir=lib  "$CFLAGS"
+          ./Configure linux-aarch64 -fPIC no-shared  --prefix=$INSTALL_PATH --libdir=lib
           make  -s -j $MAKEJ
           make install_sw
           cd ../Python-$CPYTHON_VERSION
