@@ -66,35 +66,50 @@ case $PLATFORM in
         make install
         ;;
     linux-arm64)
-        CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
-        cd ../$OPENSSL
-        ./Configure linux-aarch64 -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
-        make -s -j $MAKEJ
-        make install_sw
-        make distclean
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
-        make -s -j $MAKEJ
-        make install_sw
-        make distclean
-        cd ../Python-$CPYTHON_VERSION
-        # ac_cv_buggy_getaddrinfo=no disables the runtime ./configure checks for ipv6 support
-        # Without it, the build fails because it can't detect ipv6 on the host. Needed on both host and cross-compiled builds
-        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host ac_cv_buggy_getaddrinfo=no
-        make -j $MAKEJ
-        make install
-        make distclean
-        export PATH=$INSTALL_PATH/host/bin/:$PATH
-        # ac_cv_file__dev_ptmx=yes and ac_cv_file__dev_ptc=no are required for cross-compilation as stated by the configure script,
-        # but little information is known about them.
-        # /dev/ptmx is the pseudoterminal master file, reading from it generates a new file descriptor
-        # to use with a corresponding /dev/pts/ pseudoterminal
-        # See man 4 ptmx
-        # No information on /dev/ptc could be found.
-        # The above configure options specify whether the corresponding device files
-        # are expected to be found on the target machine.
-        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no
-        make -j $MAKEJ
-        make install
+        HOST_ARCH="$(uname -m)"
+        if [[ $HOST_ARCH == *"arm"* ]]; then
+          echo "Detected arm arch so not cross compiling";
+          cd ../$OPENSSL
+          ./Configure linux-aarch64 -fPIC no-shared  --prefix=$INSTALL_PATH --libdir=lib  "$CFLAGS"
+          make  -s -j $MAKEJ
+          make install_sw
+          cd ../Python-$CPYTHON_VERSION
+          ./configure --prefix=$INSTALL_PATH --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+          make -j $MAKEJ
+          make install
+
+        else
+          CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
+          echo "Detected non arm arch so cross compiling";
+          cd ../$OPENSSL
+          ./Configure linux-aarch64 -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
+          make  -s -j $MAKEJ
+          make install_sw
+          make distclean
+          ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
+          make -s -j $MAKEJ
+          make install_sw
+          make distclean
+          cd ../Python-$CPYTHON_VERSION
+          # ac_cv_buggy_getaddrinfo=no disables the runtime ./configure checks for ipv6 support
+          # Without it, the build fails because it can't detect ipv6 on the host. Needed on both host and cross-compiled builds
+          ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host ac_cv_buggy_getaddrinfo=no
+          make -j $MAKEJ
+          make install
+          make distclean
+          export PATH=$INSTALL_PATH/host/bin/:$PATH
+          # ac_cv_file__dev_ptmx=yes and ac_cv_file__dev_ptc=no are required for cross-compilation as stated by the configure script,
+          # but little information is known about them.
+          # /dev/ptmx is the pseudoterminal master file, reading from it generates a new file descriptor
+          # to use with a corresponding /dev/pts/ pseudoterminal
+          # See man 4 ptmx
+          # No information on /dev/ptc could be found.
+          # The above configure options specify whether the corresponding device files
+          # are expected to be found on the target machine.
+          CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no
+          make -j $MAKEJ
+          make install
+        fi
         ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
