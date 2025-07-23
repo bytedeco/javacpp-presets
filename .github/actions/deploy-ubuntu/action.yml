@@ -26,7 +26,7 @@ runs:
         if $SUDO swapon --summary | grep -q '^/swapfile'; then
           $SUDO swapoff /swapfile        
         fi
-        $SUDO rm /swapfile
+        $SUDO rm -f /swapfile
   
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
