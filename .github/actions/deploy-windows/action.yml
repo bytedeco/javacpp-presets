@@ -8,9 +8,24 @@ runs:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
         cd /d %USERPROFILE%
-
-        echo Installing MSYS2
+        
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          echo Installing OpenJDK 11 for Windows on ARM
+          curl -Lo microsoft-jdk-11-arm64.msi https://aka.ms/download-jdk/microsoft-jdk-11.0.28-windows-aarch64.msi
+          start /wait msiexec /i microsoft-jdk-11-arm64.msi /quiet /norestart ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome
+          set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
+          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;%PATH%"
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          echo Installing Python 3.11.4 for Windows on ARM
+          curl -Lo python-3.11.4-arm64.exe https://www.python.org/ftp/python/3.11.4/python-3.11.4-arm64.exe
+          start /wait python-3.11.4-arm64.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+          set "PATH=C:\Program Files\Python311-arm64;C:\Program Files\Python311-arm64\Scripts;%PATH%"
+        )
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          echo Installing MSYS2 20250622 for Windows on ARM
           curl -Lo msys2.exe https://github.com/msys2/msys2-installer/releases/download/2025-06-22/msys2-base-x86_64-20250622.sfx.exe
           msys2.exe -oC:\ -y
 
@@ -19,6 +34,7 @@ runs:
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-clang-aarch64-nasm mingw-w64-clang-aarch64-clang mingw-w64-clang-aarch64-libtool mingw-w64-clang-aarch64-gcc-compat mingw-w64-clang-aarch64-libwinpthread mingw-w64-clang-aarch64-SDL2 mingw-w64-clang-aarch64-ragel mingw-w64-clang-aarch64-vulkan-headers mingw-w64-clang-aarch64-vulkan-loader"
           set "PATH=C:\msys64\usr\bin;%PATH%"
         ) else (
+          echo Installing MSYS2
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel mingw-w64-x86_64-vulkan-headers mingw-w64-i686-vulkan-headers mingw-w64-x86_64-vulkan-loader mingw-w64-i686-vulkan-loader"
@@ -28,7 +44,7 @@ runs:
         C:\msys64\usr\bin\bash -lc "pacman -Q"
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
-          echo Installing Windows SDK 10.0.26100.4654
+          echo Installing Windows SDK 10.0.26100.4654 for Windows on ARM
           curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
           start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
         ) else (
@@ -216,6 +232,7 @@ runs:
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
           call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" arm64
           call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" arm64
+          set MSYSTEM=CLANGARM64
         )
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" (
           call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
@@ -242,9 +259,16 @@ runs:
           set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.9\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.9\libnvvp;%PATH%"
           echo CUDA Version 12.9.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.9\version.txt"
         )
+        
         set "CCACHE_DIR=%USERPROFILE%\ccache"
-        set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
-
+        
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
+          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
+        ) else (
+          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
+        )
+        
         where bash
         where curl
         where git
@@ -324,5 +348,12 @@ runs:
       shell: cmd
       run: |
         cd /d %USERPROFILE%
-        set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
+        
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
+          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\msys64\usr\bin;%PATH%"
+        ) else (
+          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
+        )
+        
         bash -c "rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')"
