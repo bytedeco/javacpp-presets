@@ -24,7 +24,7 @@ jobs:
   linux-arm64:
     runs-on: ubuntu-22.04-arm
     steps:
-      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@cpython-arm
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  linux-ppc64le:
 #    runs-on: ubuntu-22.04
 #    steps:
@@ -36,7 +36,7 @@ jobs:
   linux-x86_64:
     runs-on: ubuntu-22.04
     steps:
-      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@cpython-arm
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-arm64:
     runs-on: macos-14
     steps:

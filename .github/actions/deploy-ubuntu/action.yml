@@ -20,14 +20,14 @@ runs:
         $SUDO rm -rf /usr/local/lib/android
         $SUDO rm -rf /usr/share/dotnet
 
-        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
         # Make sure no busy /swapfile is hanging around
         # First disable any existing swapfile with swapoff
         if $SUDO swapon --summary | grep -q '^/swapfile'; then
-          $SUDO swapoff /swapfile        
+          $SUDO swapoff /swapfile
         fi
         $SUDO rm -f /swapfile
-  
+
+        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
         $SUDO mkswap /swapfile
@@ -87,7 +87,7 @@ runs:
         $SUDO apt-get -y install gnupg
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
-        
+
         HOST_ARCH=$(dpkg --print-architecture)   # amd64 or arm64
         if [[ "$ARCH" != "$HOST_ARCH" ]]; then
           # https://github.com/actions/runner-images/issues/675
@@ -102,20 +102,19 @@ runs:
           $SUDO apt-add-repository -y ppa:ondrej/php
           $SUDO apt-get -y install ppa-purge
           $SUDO ppa-purge -y ppa:ondrej/php
-        fi
-        
-        if [[ "$ARCH" != "$HOST_ARCH" ]]; then
+
           # we are cross-compiling
           $SUDO dpkg --add-architecture $ARCH
           TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
-          if [[ "$ARCH" == "amd64" ]]; then
+
+          if [[ "$ARCH" != "i386" ]]; then
             $SUDO sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
             TOOLCHAIN="$TOOLCHAIN linux-libc-dev-$ARCH-cross binutils-multiarch"
-          fi 
+          fi
         fi
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
