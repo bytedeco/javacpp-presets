@@ -20,6 +20,13 @@ runs:
         $SUDO rm -rf /usr/local/lib/android
         $SUDO rm -rf /usr/share/dotnet
 
+        # Make sure no busy /swapfile is hanging around
+        # First disable any existing swapfile with swapoff
+        if $SUDO swapon --summary | grep -q '^/swapfile'; then
+          $SUDO swapoff /swapfile
+        fi
+        $SUDO rm -f /swapfile
+
         # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
         $SUDO fallocate -l 4GB /swapfile
         $SUDO chmod 600 /swapfile
@@ -81,7 +88,8 @@ runs:
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
 
-        if [[ ! "$ARCH" == "amd64" ]]; then
+        HOST_ARCH=$(dpkg --print-architecture)   # amd64 or arm64
+        if [[ "$ARCH" != "$HOST_ARCH" ]]; then
           # https://github.com/actions/runner-images/issues/675
           $SUDO gem install apt-spy2
           $SUDO apt-spy2 check
@@ -94,29 +102,29 @@ runs:
           $SUDO apt-add-repository -y ppa:ondrej/php
           $SUDO apt-get -y install ppa-purge
           $SUDO ppa-purge -y ppa:ondrej/php
-        fi
 
-        if [[ "$ARCH" == "i386" ]]; then
+          # we are cross-compiling
           $SUDO dpkg --add-architecture $ARCH
           TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
-        elif [[ ! "$ARCH" == "amd64" ]]; then
-          $SUDO dpkg --add-architecture $ARCH
-          $SUDO sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
-          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
-          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
-          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
-          TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
+
+          if [[ "$ARCH" != "i386" ]]; then
+            $SUDO sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+            $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+            $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+            $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+            $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+            TOOLCHAIN="$TOOLCHAIN linux-libc-dev-$ARCH-cross binutils-multiarch"
+          fi
         fi
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
-        $SUDO apt-get -y install gcc-multilib g++-multilib gfortran-multilib python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
+        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
         $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
-        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
         ln -sf $JAVA_HOME /usr/lib/jvm/default-java
         find /usr/lib/jvm/default-java/
