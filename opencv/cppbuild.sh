@@ -64,23 +64,6 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
     export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
-
-# -------------------------------------------------------------------------
-# Fallback: use system-installed Python (apt install python3-dev python3-numpy)
-# -------------------------------------------------------------------------
-if [[ -z "$PYTHON3_EXECUTABLE" ]]; then
-    PYTHON3_EXECUTABLE=$(command -v python3)          # /usr/bin/python3
-    PYVER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-
-    # headers and lib from python3-dev
-    PYTHON3_INCLUDE_DIR=/usr/include/python${PYVER}   # /usr/include/python3.10
-    PYTHON3_LIBRARY=$(ldconfig -p | grep -m1 "libpython${PYVER}" | awk '{print $4}')
-    # site-packages path
-    PYTHON3_PACKAGES_PATH=$(python3 -c 'import sysconfig; print(sysconfig.get_paths()["platlib"])')
-
-    export PYTHON3_EXECUTABLE PYTHON3_INCLUDE_DIR PYTHON3_LIBRARY PYTHON3_PACKAGES_PATH
-fi
-
 export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
 
 echo "Decompressing archives..."
@@ -400,7 +383,7 @@ case $PLATFORM in
     macosx-arm64)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
-        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
