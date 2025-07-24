@@ -142,7 +142,7 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf;
-//                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
