@@ -1,4 +1,5 @@
 
+ * Reenable again `linux-arm64` builds for CPython and NumPy ([pull #1652](https://github.com/bytedeco/javacpp-presets/pull/1652))
  * Bundle libraries for VA-API 2.x with FFmpeg to avoid loading issues ([issue bytedeco/javacv#2340](https://github.com/bytedeco/javacv/issues/2340))
  * Upgrade presets for OpenCV 4.12.0
 
