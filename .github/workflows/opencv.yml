@@ -47,7 +47,10 @@ jobs:
 #    steps:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-arm64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
+    strategy:
+      matrix:
+        ext: [ "", -gpu ]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  linux-ppc64le:
