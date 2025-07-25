@@ -87,7 +87,7 @@ echo
 
 if [[ -z ${OPERATION:-} ]]; then
     echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]"
-    echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86, windows-x86_64, etc."
+    echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-arm64, windows-x86, windows-x86_64, etc."
     exit 1
 fi
 
