@@ -1614,7 +1614,9 @@
           <value>windows-arm64</value>
         </property>
       </activation>
-      <modules></modules>
+      <modules>
+        <module>llvm</module>
+      </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
