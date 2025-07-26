@@ -105,6 +105,19 @@ case $PLATFORM in
         make -C $LLVM_BUILD install > /dev/null
         cp $INSTALL_PATH/lib/LLVMPolly.so $INSTALL_PATH/lib/libLLVMPolly.so
         ;;
+    windows-arm64)
+        export INSTALL_PATH=$(cygpath -w $INSTALL_PATH)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        $CMAKE -G "Ninja" -S ../llvm -B $LLVM_BUILD -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" -DLLVM_POLLY_LINK_INTO_TOOLS=ON -DLLVM_ENABLE_ZSTD=OFF -DLLVM_ENABLE_PROJECTS="$PROJECTS"
+        ninja -C $LLVM_BUILD -j $MAKEJ
+        ninja -C $LLVM_BUILD install
+        pushd $INSTALL_PATH/lib
+        [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib Polly*.lib
+        [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
+        [ -f LTO.lib ] || cp ../llvm-$LLVM_VERSION.src/build/lib/LTO.lib .
+        popd
+        ;;
     windows-x86)
         export INSTALL_PATH=$(cygpath -w $INSTALL_PATH)
         export CC="cl.exe"

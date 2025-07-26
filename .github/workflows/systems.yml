@@ -45,6 +45,10 @@ jobs:
     runs-on: macos-13
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+  windows-arm64:
+    runs-on: windows-11-arm
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
 #  windows-x86:
 #    runs-on: windows-2022
 #    steps:
