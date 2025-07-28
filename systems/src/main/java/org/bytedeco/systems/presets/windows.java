@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = javacpp.class, value = {@Platform(value = "windows-x86", define = {"WINVER 0x0601", "_WIN32_WINNT 0x0601"},
+@Properties(inherit = javacpp.class, value = {@Platform(value = "windows", define = {"WINVER 0x0601", "_WIN32_WINNT 0x0601"},
     include = {"minwindef.h", "guiddef.h", "winnt.h", "minwinbase.h", "processenv.h", "fileapi.h", "debugapi.h", "utilapiset.h",
                "handleapi.h", "errhandlingapi.h", "fibersapi.h", "namedpipeapi.h", "profileapi.h", "heapapi.h", "ioapiset.h",
                "synchapi.h", "interlockedapi.h", "processthreadsapi.h", "sysinfoapi.h", "memoryapi.h", "threadpoollegacyapiset.h",
@@ -51,16 +51,6 @@ import org.bytedeco.javacpp.tools.Logger;
 @Platform(value = "windows-x86_64",
     linkpath = "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/um/x64/"),
 @Platform(value = "windows-arm64",
-    define = {"WINVER 0x0601", "_WIN32_WINNT 0x0601"},
-    include = {"minwindef.h", "guiddef.h", "winnt.h", "minwinbase.h", "processenv.h", "fileapi.h", "debugapi.h", "utilapiset.h",
-               "handleapi.h", "errhandlingapi.h", "fibersapi.h", "namedpipeapi.h", "profileapi.h", "heapapi.h", "ioapiset.h",
-               "synchapi.h", "interlockedapi.h", "processthreadsapi.h", "sysinfoapi.h", "memoryapi.h", "threadpoollegacyapiset.h",
-               "threadpoolapiset.h", /*"bemapiset.h",*/ "jobapi.h", "wow64apiset.h", "libloaderapi.h", "securitybaseapi.h",
-               "namespaceapi.h", "systemtopologyapi.h", "processtopologyapi.h", "securityappcontainer.h", "realtimeapiset.h",
-               "WinBase.h", "timezoneapi.h", "Psapi.h", "TlHelp32.h", "mmsyscom.h", "timeapi.h"},
-    includepath = {"C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/shared/",
-                   "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/um/"},
-    link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi", "winmm"},
     linkpath = "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/um/arm64/")},
         target = "org.bytedeco.systems.windows", global = "org.bytedeco.systems.global.windows")
 @NoException
