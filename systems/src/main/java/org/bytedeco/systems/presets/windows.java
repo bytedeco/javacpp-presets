@@ -89,7 +89,6 @@ public class windows implements BuildEnabled, InfoMapper {
                .put(new Info("_ARM64_", "defined(_ARM64_)", "_M_ARM64", "defined(_M_ARM64)",
                              "__ARM64_COMPILER_BITTEST64_WORKAROUND", "!defined(__ARM64_COMPILER_BITTEST64_WORKAROUND)",
                              "defined(_ARM64_) || defined(_CHPE_X86_ARM64_) || defined(_ARM64EC_)").define(isArm && is64bits))
-
                .put(new Info("_WIN64", "defined(_WIN64)", "(_WIN32_WINNT >= 0x0601) && !defined(MIDL_PASS)").define(is64bits))
 
                .put(new Info("__cplusplus", "defined(_MSC_EXTENSIONS)", "(_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)", "UNICODE",
@@ -274,7 +273,8 @@ public class windows implements BuildEnabled, InfoMapper {
                        .cppTypes("std::vector<BYTE>").translate(false))
                .put(new Info("SYSTEM_LUID", "ANONYMOUS_LOGON_LUID", "LOCALSERVICE_LUID", "NETWORKSERVICE_LUID", "IUSER_LUID", "PROTECTED_TO_SYSTEM_LUID")
                        .cppTypes("LUID").translate(false))
-               .put(new Info("INVALID_HANDLE_VALUE").cppTypes("HANDLE").pointerTypes("Pointer").translate(false))
+               .put(new Info("MEMORY_CURRENT_PARTITION_HANDLE", "MEMORY_SYSTEM_PARTITION_HANDLE", "MEMORY_EXISTING_VAD_PARTITION_HANDLE",
+                             "INVALID_HANDLE_VALUE").cppTypes("HANDLE").pointerTypes("Pointer").translate(false))
 
                .put(new Info("Int32x32To64", "UInt32x32To64").cppTypes("long", "int", "int"))
                .put(new Info("Int64ShllMod32", "Int64ShraMod32", "Int64ShrlMod32").cppTypes("long", "long", "int"))
@@ -293,7 +293,6 @@ public class windows implements BuildEnabled, InfoMapper {
 
                .put(new Info("MMRESULT").cppTypes("UINT").translate(false))
                .put(new Info("WINMMAPI").cppTypes().annotations())
-               .put(new Info("HDRVR").cast().valueTypes("Pointer"))
-               .put(new Info("MEMORY_CURRENT_PARTITION_HANDLE", "MEMORY_SYSTEM_PARTITION_HANDLE", "MEMORY_EXISTING_VAD_PARTITION_HANDLE").cppTypes("HANDLE"));
+               .put(new Info("HDRVR").cast().valueTypes("Pointer"));
     }
 }
