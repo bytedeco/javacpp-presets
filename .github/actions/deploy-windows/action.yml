@@ -38,15 +38,9 @@ runs:
 
         C:\msys64\usr\bin\bash -lc "pacman -Q"
 
-        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
-          echo Installing Windows SDK 10.0.26100.4654 for Windows on ARM
-          curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
-          start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
-        ) else (
-          echo Installing Windows SDK 8.1
-          curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
-          sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
-        )
+        echo Installing Windows SDK 10.0.26100.4654
+        curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
+        start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
 
         echo Removing broken stuff from WSL, MSYS2, etc
         rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
