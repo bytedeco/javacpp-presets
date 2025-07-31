@@ -10,6 +10,9 @@ runs:
         cd /d %USERPROFILE%
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          echo Installing WMIC for Windows on ARM
+          DISM /Online /Add-Capability /CapabilityName:WMIC
+
           echo Installing OpenJDK 11 for Windows on ARM
           curl -Lo microsoft-jdk-11-arm64.msi https://aka.ms/download-jdk/microsoft-jdk-11.0.28-windows-aarch64.msi
           start /wait msiexec /i microsoft-jdk-11-arm64.msi /quiet /norestart ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome
