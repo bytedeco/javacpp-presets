@@ -284,7 +284,7 @@ runs:
         clang-cl --version
         ccache --version -sv
         df -h
-        wmic pagefile list /format:list
+        powershell "Get-CimInstance Win32_PageFileUsage | Select-Object * | Format-List"
 
         set MAKEJ=%NUMBER_OF_PROCESSORS%
         echo Fetching %GITHUB_REPOSITORY%@%GITHUB_SHA%
@@ -331,7 +331,7 @@ runs:
         :done
         ccache --version -sv
         df -h
-        wmic pagefile list /format:list
+        powershell "Get-CimInstance Win32_PageFileUsage | Select-Object * | Format-List"
 
     - name: Clean up
       shell: cmd
