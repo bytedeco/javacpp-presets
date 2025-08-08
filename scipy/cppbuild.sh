@@ -7,16 +7,16 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-BOOST=1_87_0
-SCIPY_VERSION=1.15.3
-download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download https://github.com/data-apis/array-api-compat/archive/498f086.tar.gz array-api-compat-498f086.tar.gz
-download https://github.com/data-apis/array-api-extra/archive/8e1c8fa.tar.gz array-api-extra-8e1c8fa.tar.gz
+SCIPY_VERSION=1.16.1
+download https://github.com/boostorg/math/archive/529f3a7.tar.gz math-529f3a7.tar.gz
+download https://github.com/data-apis/array-api-compat/archive/8005d6d.tar.gz array-api-compat-8005d6d.tar.gz
+download https://github.com/data-apis/array-api-extra/archive/28a364d.tar.gz array-api-extra-28a364d.tar.gz
 download https://github.com/cobyqa/cobyqa/archive/55c8e5a.tar.gz cobyqa-55c8e5a.tar.gz
 download https://github.com/scipy/HiGHS/archive/222cce7.tar.gz HiGHS-222cce7.tar.gz
 download https://github.com/scipy/unuran/archive/21810c8.tar.gz unuran-21810c8.tar.gz
 download https://github.com/scipy/pocketfft/archive/9367142.tar.gz pocketfft-9367142.tar.gz
 download https://github.com/scipy/PROPACK/archive/8a6b207.tar.gz PROPACK-8a6b207.tar.gz
+download https://github.com/scipy/xsf/archive/4fff9b2.tar.gz xsf-4fff9b2.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -54,7 +54,7 @@ OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives..."
-tar --totals -xzf ../boost_$BOOST.tar.gz
+tar --totals -xzf ../math-*.tar.gz
 tar --totals -xzf ../array-api-compat-*.tar.gz || true
 tar --totals -xzf ../array-api-extra-*.tar.gz || true
 tar --totals -xzf ../cobyqa-*.tar.gz
@@ -62,8 +62,9 @@ tar --totals -xzf ../HiGHS-*.tar.gz
 tar --totals -xzf ../unuran-*.tar.gz
 tar --totals -xzf ../pocketfft-*.tar.gz
 tar --totals -xzf ../PROPACK-*.tar.gz
+tar --totals -xzf ../xsf-*.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
-cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost_math/
+cp -a math-*/* scipy-$SCIPY_VERSION/subprojects/boost_math/math/
 cp -a array-api-compat-*/* scipy-$SCIPY_VERSION/scipy/_lib/array_api_compat/
 cp -a array-api-extra-*/* scipy-$SCIPY_VERSION/scipy/_lib/array_api_extra/
 cp -a cobyqa-*/* scipy-$SCIPY_VERSION/scipy/_lib/cobyqa/
@@ -71,6 +72,7 @@ cp -a HiGHS-*/* scipy-$SCIPY_VERSION/subprojects/highs/
 cp -a unuran-*/* scipy-$SCIPY_VERSION/scipy/_lib/unuran/
 cp -a pocketfft-*/* scipy-$SCIPY_VERSION/scipy/_lib/pocketfft/
 cp -a PROPACK-*/* scipy-$SCIPY_VERSION/scipy/sparse/linalg/_propack/PROPACK/
+cp -a xsf-*/* scipy-$SCIPY_VERSION/subprojects/xsf/
 cd scipy-$SCIPY_VERSION
 
 sedinplace "/blas = dependency(\['openblas', 'OpenBLAS'\])/c\\
@@ -82,8 +84,6 @@ sedinplace "/lapack = dependency(\['openblas', 'OpenBLAS'\])/c\\
 lapack = blas\\
 " scipy/meson.build
 
-mkdir -p scipy/_lib/boost_math/include
-cp -a scipy/_lib/boost_math/boost scipy/_lib/boost_math/include
 # mv _setup.py setup.py
 
 # prevent setuptools from trying to build NumPy
@@ -127,7 +127,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.13"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.13" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.13/" crossenv==1.4 numpy==2.3.1 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.13" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.13/" crossenv==1.4 numpy==2.3.2 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.13" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.13/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.13/include" "$PYTHON_LIB_PATH"

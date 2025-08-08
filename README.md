@@ -206,7 +206,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.13.x  https://www.python.org/downloads/
  * NumPy 2.3.x  https://github.com/numpy/numpy
- * SciPy 1.15.x  https://github.com/scipy/scipy
+ * SciPy 1.16.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
  * LLVM 20.1.x  http://llvm.org/releases/download.html
  * libffi 3.5.x  https://github.com/libffi/libffi
