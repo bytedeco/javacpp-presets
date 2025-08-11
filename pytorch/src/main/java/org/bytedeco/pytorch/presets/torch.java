@@ -62,7 +62,7 @@ import org.bytedeco.openblas.presets.openblas;
             compiler = "cpp17",
 	        // __WINSOCKAPI_ fixes compilation error on windows due to
 	        // inclusion of both V1 and V2 of winsock API.
-            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO", "_WINSOCKAPI_"},
+            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "USE_C10D_GLOO", "_WINSOCKAPI_", "WIN32_LEAN_AND_MEAN"},
             include = {
                 "torch/torch.h",
                 "torch/script.h",
@@ -90,15 +90,15 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
-            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/include/"},
+            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/"},
             preloadpath = {
-                "/usr/local/cuda-12.6/lib64/",
-                "/usr/local/cuda-12.6/extras/CUPTI/lib64/",
+                "/usr/local/cuda-12.9/lib64/",
+                "/usr/local/cuda-12.9/extras/CUPTI/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/local/cuda/extras/CUPTI/lib64/",
                 "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
             extension = "-gpu"
@@ -310,6 +310,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("defined(__CUDACC__) || defined(__HIPCC__)",
                 "defined(__HIPCC__) && defined(USE_ROCM)",
                 "defined(__CUDACC__) && !defined(USE_ROCM)",
+                "defined(USE_ROCM) && defined(__HIPCC__)",
+                "defined(TORCH_LIBRARY_THREAD_UNSAFE_LAZY_INIT) && defined(C10_MOBILE)",
                 "defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)",
                 "defined(_MSC_VER) && _MSC_VER <= 1900",
                 "defined(NDEBUG)",
@@ -343,7 +345,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         sharedMap(infoMap);
 
         infoMap
-            .put(new Info("model_container_runner.h").linePatterns("using CreateAOTIModelRunnerFunc.*", "};").skip())
+            .put(new Info("ArrayRef.h").linePatterns("using IntList.*", ".*ArrayRef<int64_t>;").skip())
+            .put(new Info("model_container_runner.h").linePatterns("using CreateAOTIModelRunnerFunc.*", "}*;").skip())
             .put(new Info("ordered_dict.h").linePatterns(".*class Item;.*").skip())
             .put(new Info("util.h").linePatterns(".*using approx_time_t = decltype.*").skip())
 
@@ -385,7 +388,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("at::namedinference::TensorName").pointerTypes("TensorName"))
             .put(new Info("c10::remove_symint<c10::SymInt>::type").valueTypes("long"))
             .put(new Info("std::aligned_storage_t<sizeof(IValue),alignof(IValue)>").pointerTypes("Pointer"))
-            .put(new Info("c10::impl::custom_class_allowlist_check", "c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft").skipDefaults())
+            .put(new Info("c10::impl::custom_class_allowlist_check", "c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft",
+                          "c10::guard_size_oblivious", "c10::guard_or_false", "c10::statically_known_true", "c10::guard_or_true").skipDefaults())
             .put(new Info("c10::prim::requires_grad").javaNames("requires_grad"))
             .put(new Info("c10::BFloat16::allocate", "c10::IValue::allocate").javaNames("_allocate"))
             .put(new Info("c10::aten::clone").javaNames("_clone"))
@@ -450,6 +454,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::optional<c10::MemoryFormat>", "std::optional<at::MemoryFormat>").pointerTypes("MemoryFormatOptional").define())
             .put(new Info("std::optional<c10::Scalar>", "std::optional<at::Scalar>").pointerTypes("ScalarOptional").define())
             .put(new Info("std::optional<c10::ScalarType>", "std::optional<at::ScalarType>", "std::optional<torch::Dtype>", "optional<at::ScalarType>", "optional<c10::ScalarType>").pointerTypes("ScalarTypeOptional").define())
+            .put(new Info("std::optional<c10::Allocator*>", "std::optional<at::Allocator*>").pointerTypes("AllocatorOptional").define())
             .put(new Info("std::optional<c10::AliasInfo>").pointerTypes("AliasInfoOptional").define())
             .put(new Info("std::optional<c10::IValue>").pointerTypes("IValueOptional").define())
             .put(new Info("std::optional<c10::impl::CppSignature>").pointerTypes("CppSignatureOptional").define())
@@ -606,7 +611,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::variant<torch::enumtype::kNone,torch::enumtype::kBatchMean,torch::enumtype::kSum,torch::enumtype::kMean>",
                 "torch::nn::KLDivLossOptions::reduction_t", "torch::nn::functional::KLDivFuncOptions::reduction_t").pointerTypes("KLDivLossReduction").define())
 
-            .put(new Info("std::variant<torch::enumtype::kBilinear,torch::enumtype::kNearest>",
+            .put(new Info("std::variant<torch::enumtype::kBilinear,torch::enumtype::kNearest,torch::enumtype::kBicubic>",
                 "torch::nn::functional::GridSampleFuncOptions::mode_t").pointerTypes("GridSampleMode").define())
             .put(new Info("std::variant<torch::enumtype::kZeros,torch::enumtype::kBorder,torch::enumtype::kReflection>",
                 "torch::nn::functional::GridSampleFuncOptions::padding_mode_t").pointerTypes("GridSamplePaddingMode").define())
@@ -673,6 +678,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<size_t>").cast().pointerTypes("SizeTVector").define())
             .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
             .put(new Info("std::vector<c10::string_view>", "std::vector<std::string_view>").pointerTypes("StringViewVector").define())
+            .put(new Info("std::vector<std::pair<int,int> >").pointerTypes("IntPairVector").define())
             .put(new Info("std::vector<std::pair<std::string,int64_t> >").pointerTypes("StringLongVector").define())
             .put(new Info("std::vector<c10::IValue>", "torch::jit::Stack").pointerTypes("IValueVector").define())
             .put(new Info("std::vector<c10::IValue>::const_iterator", "torch::jit::Stack::const_iterator").pointerTypes("IValueVector.Iterator"))
@@ -897,11 +903,14 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
             .put(new Info("std::map<std::string,int64_t>").pointerTypes("StringLongMap").define())
             .put(new Info("std::map<std::string,at::Tensor>").pointerTypes("StringTensorMap").define()) // Used by distributed only
+            .put(new Info("const std::map<std::tuple<void*,void*>,at::DataPtr>",
+                                "std::map<std::tuple<void*,void*>,at::DataPtr>").pointerTypes("T_PointerPointer_TDataPtrMap").define())
         ;
 
 
         //// std::unordered_set
         infoMap
+            .put(new Info("std::set<std::string>").pointerTypes("OrderedStringSet").define())
             .put(new Info("std::unordered_set<std::string>").pointerTypes("StringSet").define())
             .put(new Info("std::unordered_set<c10::IValue,c10::IValue::HashAliasedIValue,c10::IValue::CompAliasedIValues>").pointerTypes("HashAliasedIValues").define())
             .put(new Info("std::unordered_set<c10::Symbol>").pointerTypes("SymbolSet").define())
@@ -952,6 +961,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         infoMap
             .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T").define()) // Needed for CUDAStream
             .put(new Info("std::tuple<int64_t,int64_t>").pointerTypes("T_LongLong_T").define())
+            .put(new Info("std::tuple<void*,void*>").pointerTypes("T_PointerPointer_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor>", "std::tuple<torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensorTensor_T").define())
@@ -1176,6 +1186,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "torch::jit::PrintDepsTable::add", "torch::jit::printerHasSpecialCaseFor", "ONNX_NAMESPACE::ModelProto", "torch::jit::export_onnx",
                 "torch::jit::Function::call", "torch::jit::GraphFunction::call", "torch::jit::GraphFunction::function_creator", "torch::jit::getOptionsFromGlobal",
                 "torch::jit::pickle_load_obj", "torch::jit::serialize_model_proto_to_string", "torch::onnx::IR_VERSION", "torch::onnx::PRODUCER_VERSION",
+                "torch::jit::StringCordView::IteratorImpl::operator +=",
+                "torch::jit::StringCordView::IteratorImpl::operator +",
+                "torch::jit::StringCordView::Iterator::operator +=",
+                "torch::jit::StringCordView::Iterator::operator +",
                 "TORCH_DISALLOW_TEMPORARIES", "TORCH_DISALLOW_TEMPORARIES_IMPL", // Issue #674
                 "DEFINE_CASTING(TAG, ...)", "TORCH_ILISTREF_FORALL_TAGS",
                 "torch::autograd::GraphTask::ExecInfo::Capture::DO_NOT_USE_DEPRECATED_get_capture_hooks",
@@ -2110,6 +2124,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         infoMap.put(new Info(
             "at::native::RNNDescriptor::dropout_desc_",
             "torch::dynamo::autograd::AutogradCompilerCall::hooks",
+            "torch::dynamo::autograd::AutogradCompilerCall::cpp_tensor_pre_hooks",
             "torch::dynamo::autograd::AutogradCompilerCall::sv_to_hooks",
             "torch::dynamo::autograd::AutogradCompilerCall::pynode_objs",
             "torch::dynamo::autograd::PyCompilerGuard",
