@@ -69,7 +69,7 @@ runs:
           curl -LO https://github.com/ccache/ccache/releases/download/v4.6/ccache-4.6-windows-64.zip
           unzip -j ccache-4.6-windows-64.zip -d C:/msys64/usr/bin/
           mkdir ccache
-          echo max_size = 3.0G                                                                        > ccache\ccache.conf
+          echo max_size = 8.0G                                                                        > ccache\ccache.conf
           echo hash_dir = false                                                                      >> ccache\ccache.conf
           echo sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros >> ccache\ccache.conf
         )
