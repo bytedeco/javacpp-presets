@@ -33,22 +33,22 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.4.1
+OPENSSL=openssl-3.5.2
 OPENH264_VERSION=2.6.0
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.15.1
+VPX_VERSION=1.15.2
 ALSA_VERSION=1.2.14
 FREETYPE_VERSION=2.13.3
 MFX_VERSION=1.35.1
 NVCODEC_VERSION=13.0.19.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.4
-WEBP_VERSION=1.5.0
+WEBP_VERSION=1.6.0
 AOMAV1_VERSION=3.9.1
-SVTAV1_VERSION=2.3.0
-ZIMG_VERSION=3.0.5
-FFMPEG_VERSION=7.1.1
+SVTAV1_VERSION=3.1.1
+ZIMG_VERSION=3.0.6
+FFMPEG_VERSION=8.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz

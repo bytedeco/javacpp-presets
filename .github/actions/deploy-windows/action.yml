@@ -69,14 +69,13 @@ runs:
           curl -LO https://github.com/ccache/ccache/releases/download/v4.6/ccache-4.6-windows-64.zip
           unzip -j ccache-4.6-windows-64.zip -d C:/msys64/usr/bin/
           mkdir ccache
-          echo max_size = 3.0G                                                                        > ccache\ccache.conf
+          echo max_size = 8.0G                                                                        > ccache\ccache.conf
           echo hash_dir = false                                                                      >> ccache\ccache.conf
           echo sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros >> ccache\ccache.conf
         )
 
         if not "%CI_DEPLOY_NEED_GCC%"=="" (
           echo Installing an older less buggy version of GCC
-          bash -c "pacman -Rsc --noconfirm mingw-w64-i686-gettext-runtime mingw-w64-x86_64-gettext-runtime"
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-13.2.0-6-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-13.2.0-6-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-13.2.0-6-any.pkg.tar.zst
@@ -84,6 +83,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-13.2.0-6-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-13.2.0-6-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.42-2-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gettext-runtime-0.22.5-2-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-readline-8.2.013-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
@@ -102,6 +103,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-13.2.0-6-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-13.2.0-6-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.42-2-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gettext-runtime-0.22.5-2-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-readline-8.2.013-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
