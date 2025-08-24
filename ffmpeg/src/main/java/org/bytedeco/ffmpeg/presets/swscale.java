@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 Samuel Audet
+ * Copyright (C) 2013-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.swscale",
     global = "org.bytedeco.ffmpeg.global.swscale",
     value = {
-        @Platform(cinclude = {"<libswscale/swscale.h>", "<libswscale/version_major.h>", "<libswscale/version.h>"}, link = "swscale@.8"),
-        @Platform(value = "windows", preload = "swscale-8")
+        @Platform(cinclude = {"<libswscale/swscale.h>", "<libswscale/version_major.h>", "<libswscale/version.h>"}, link = "swscale@.9"),
+        @Platform(value = "windows", preload = "swscale-9")
     }
 )
 public class swscale implements InfoMapper {

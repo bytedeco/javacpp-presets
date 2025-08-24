@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 Samuel Audet
+ * Copyright (C) 2013-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,10 +38,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.avcodec",
     value = {
         @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/defs.h>", "<libavcodec/codec_par.h>", "<libavcodec/packet.h>",
-                              "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", "<libavcodec/avfft.h>", "<libavcodec/version_major.h>", "<libavcodec/version.h>"},
-                  link = "avcodec@.61"),
+                              "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", /*"<libavcodec/avfft.h>",*/
+                              "<libavcodec/version_major.h>", "<libavcodec/version.h>"},
+                  link = "avcodec@.62"),
         @Platform(value = "linux-arm", preload = {"asound@.2", "vchiq_arm", "vcos", "vcsm", "bcm_host", "mmal_core", "mmal_util", "mmal_vc_client"}),
-        @Platform(value = "windows", preload = "avcodec-61")
+        @Platform(value = "windows", preload = "avcodec-62")
     }
 )
 public class avcodec implements InfoMapper {
@@ -56,7 +57,8 @@ public class avcodec implements InfoMapper {
                              "FF_API_AYUV_CODECID", "FF_API_VT_OUTPUT_CALLBACK", "FF_API_AVCODEC_CHROMA_POS", "FF_API_VT_HWACCEL_CONTEXT",
                              "FF_API_AVCTX_FRAME_NUMBER", "FF_CODEC_CRYSTAL_HD", "FF_API_SLICE_OFFSET", "FF_API_SUBFRAMES", "FF_API_TICKS_PER_FRAME",
                              "FF_API_DROPCHANGED", "FF_API_AVFFT", "FF_API_FF_PROFILE_LEVEL", "FF_API_AVCODEC_CLOSE", "FF_API_BUFFER_MIN_SIZE",
-                             "FF_API_VDPAU_ALLOC_GET_SET", "FF_API_QUALITY_FACTOR").define().translate().cppTypes("bool"))
+                             "FF_API_VDPAU_ALLOC_GET_SET", "FF_API_QUALITY_FACTOR", "FF_API_V408_CODECID", "FF_API_CODEC_PROPS", "FF_API_EXR_GAMMA",
+                             "FF_API_NVDEC_OLD_PIX_FMTS", "FF_CODEC_OMX", "FF_CODEC_SONIC_ENC", "FF_CODEC_SONIC_DEC").define().translate().cppTypes("bool"))
                .put(new Info("AVCodecInternal", "AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
                .put(new Info("av_jni_get_android_app_ctx").annotations("@Platform(\"android\")").javaNames("av_jni_get_android_app_ctx"))
                .put(new Info("av_jni_set_android_app_ctx").annotations("@Platform(\"android\")").javaNames("av_jni_set_android_app_ctx"))

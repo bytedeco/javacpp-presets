@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 Samuel Audet
+ * Copyright (C) 2013-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -60,15 +60,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/hdr_dynamic_metadata.h>", "<libavutil/intfloat.h>", "<libavutil/intreadwrite.h>", "<libavutil/mastering_display_metadata.h>",
             "<libavutil/murmur3.h>", "<libavutil/parseutils.h>", "<libavutil/pixelutils.h>", "<libavutil/random_seed.h>", "<libavutil/replaygain.h>",
             "<libavutil/spherical.h>", "<libavutil/threadmessage.h>", "<libavutil/timecode.h>", "<libavutil/timestamp.h>", "<libavutil/tree.h>",
-            "<libavutil/tx.h>", "<libavutil/version.h>", "<libavutil/macros.h>", "log_callback.h"},
+            "<libavutil/container_fifo.h>", "<libavutil/tx.h>", "<libavutil/version.h>", "<libavutil/macros.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
-            link = "avutil@.59", compiler = {"default", "nodeprecated"}),
+            link = "avutil@.60", compiler = {"default", "nodeprecated"}),
         @Platform(value = "linux-x86", preload = {"va@.2", "drm@.2", "va-drm@.2"}, preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "macosx", preload = {"atomic@.1"},
                                     preloadpath = {"/usr/local/lib/gcc/13/", "/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
                                                    "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
-        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-59"),
+        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-60"),
         @Platform(extension = "-gpl")
     }
 )
@@ -88,7 +88,8 @@ public class avutil implements InfoMapper {
                              "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8", "FF_API_PKT_DURATION",
                              "FF_API_REORDERED_OPAQUE", "FF_API_FRAME_PICTURE_NUMBER", "FF_API_HDR_VIVID_THREE_SPLINE", "FF_API_FRAME_PKT",
                              "FF_API_INTERLACED_FRAME", "FF_API_FRAME_KEY", "FF_API_PALETTE_HAS_CHANGED", "FF_API_VULKAN_CONTIGUOUS_MEMORY",
-                             "FF_API_H274_FILM_GRAIN_VCS", "FF_API_MOD_UINTP2", "FF_API_RISCV_FD_ZBA", "FF_API_VULKAN_FIXED_QUEUES").define().translate().cppTypes("bool"))
+                             "FF_API_H274_FILM_GRAIN_VCS", "FF_API_MOD_UINTP2", "FF_API_RISCV_FD_ZBA", "FF_API_VULKAN_FIXED_QUEUES",
+                             "FF_API_OPT_INT_LIST", "FF_API_OPT_PTR").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
@@ -201,6 +202,7 @@ public class avutil implements InfoMapper {
                              "AV_CHANNEL_LAYOUT_7POINT1_WIDE",
                              "AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK",
                              "AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK",
+                             "AV_CHANNEL_LAYOUT_5POINT1POINT2",
                              "AV_CHANNEL_LAYOUT_5POINT1POINT2_BACK",
                              "AV_CHANNEL_LAYOUT_OCTAGONAL",
                              "AV_CHANNEL_LAYOUT_CUBE",
@@ -209,7 +211,9 @@ public class avutil implements InfoMapper {
                              "AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK",
                              "AV_CHANNEL_LAYOUT_7POINT2POINT3",
                              "AV_CHANNEL_LAYOUT_9POINT1POINT4_BACK",
+                             "AV_CHANNEL_LAYOUT_9POINT1POINT6",
                              "AV_CHANNEL_LAYOUT_HEXADECAGONAL",
+                             "AV_CHANNEL_LAYOUT_BINAURAL",
                              "AV_CHANNEL_LAYOUT_STEREO_DOWNMIX",
                              "AV_CHANNEL_LAYOUT_22POINT2",
                              "AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER").translate(false).cppTypes("AVChannelLayout"))
