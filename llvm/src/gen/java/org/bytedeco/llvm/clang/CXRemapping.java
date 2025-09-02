@@ -12,18 +12,15 @@ import static org.bytedeco.llvm.global.LLVM.*;
 
 import static org.bytedeco.llvm.global.clang.*;
 
+
 /**
  * \}
  */
 
-/** \defgroup CINDEX_REMAPPING Remapping functions
- *
- * \{
+/**
+ * \}
  */
 
-/**
- * A remapping of original source files and their translated files.
- */
 @Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.llvm.presets.clang.class)
 public class CXRemapping extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

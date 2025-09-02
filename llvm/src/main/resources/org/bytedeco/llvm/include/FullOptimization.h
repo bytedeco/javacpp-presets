@@ -64,7 +64,7 @@ LLVMErrorRef optimizeModule(
         return wrap(make_error<StringError>(error, inconvertibleErrorCode()));
     }
 
-    module->setTargetTriple(machine->getTargetTriple().str());
+    module->setTargetTriple(machine->getTargetTriple());
     module->setDataLayout(machine->createDataLayout());
 
     legacy::PassManager passes;
