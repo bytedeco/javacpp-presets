@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=20.1.7
+LLVM_VERSION=21.1.0
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
@@ -109,6 +109,7 @@ case $PLATFORM in
         export INSTALL_PATH=$(cygpath -w $INSTALL_PATH)
         export CC="cl.exe"
         export CXX="cl.exe"
+        sedinplace '/.inc"/d' ../clang/lib/CodeGen/TargetBuiltins/RISCV.cpp # "function too large"
         $CMAKE -G "Ninja" -S ../llvm -B $LLVM_BUILD -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DLLVM_BUILD_LLVM_C_DYLIB=OFF -DCMAKE_EXE_LINKER_FLAGS="/FORCE:MULTIPLE" -DCMAKE_SHARED_LINKER_FLAGS="/FORCE:MULTIPLE" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_DIA_SDK=OFF -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="$(where python.exe | head -1)" -DLLVM_POLLY_LINK_INTO_TOOLS=ON -DLLVM_ENABLE_ZSTD=OFF -DLLVM_ENABLE_PROJECTS="$PROJECTS"
         ninja -C $LLVM_BUILD -j $MAKEJ
         ninja -C $LLVM_BUILD install
