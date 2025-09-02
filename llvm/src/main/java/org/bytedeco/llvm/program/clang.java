@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 Samuel Audet
+ * Copyright (C) 2020-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.annotation.Properties;
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            preload = {"LLVM@.20.1", "clang-cpp@.20.1"},
+            preload = {"LLVM@.21.1", "clang-cpp@.21.1"},
             executable = {
                 "clang",
                 "clang-check",

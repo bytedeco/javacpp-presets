@@ -39,7 +39,7 @@ public class clang extends org.bytedeco.llvm.presets.clang {
 // #ifndef CINDEX_NO_EXPORTS
 //   #define CINDEX_EXPORTS
 // #endif
-// #ifdef _WIN32
+// #if defined(_WIN32) || defined(__CYGWIN__)
 //   #ifdef CINDEX_EXPORTS
 //   #endif
 // #elif defined(CINDEX_EXPORTS) && defined(__GNUC__)
@@ -145,10 +145,10 @@ public static final int
 
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
-// Targeting ..\clang\CXString.java
+// Targeting ../clang/CXString.java
 
 
-// Targeting ..\clang\CXStringSet.java
+// Targeting ../clang/CXStringSet.java
 
 
 
@@ -201,13 +201,13 @@ public static native void clang_disposeStringSet(CXStringSet set);
 // #include "clang-c/CXString.h"
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
-// Targeting ..\clang\CXCompilationDatabase.java
+// Targeting ../clang/CXCompilationDatabase.java
 
 
-// Targeting ..\clang\CXCompileCommands.java
+// Targeting ../clang/CXCompileCommands.java
 
 
-// Targeting ..\clang\CXCompileCommand.java
+// Targeting ../clang/CXCompileCommand.java
 
 
 
@@ -362,7 +362,7 @@ public static native @ByVal CXString clang_CompileCommand_getMappedSourceContent
  * \c -fbuild-session-timestamp= option.
  */
 public static native @Cast("unsigned long long") long clang_getBuildSessionTimestamp();
-// Targeting ..\clang\CXVirtualFileOverlay.java
+// Targeting ../clang/CXVirtualFileOverlay.java
 
 
 
@@ -429,7 +429,7 @@ public static native void clang_free(Pointer buffer);
  * Dispose a \c CXVirtualFileOverlay object.
  */
 public static native void clang_VirtualFileOverlay_dispose(CXVirtualFileOverlay arg0);
-// Targeting ..\clang\CXModuleMapDescriptor.java
+// Targeting ../clang/CXModuleMapDescriptor.java
 
 
 
@@ -517,7 +517,7 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
 // #include "clang-c/CXString.h"
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
-// Targeting ..\clang\CXFile.java
+// Targeting ../clang/CXFile.java
 
 
 
@@ -530,7 +530,7 @@ public static native @ByVal CXString clang_getFileName(CXFile SFile);
  * Retrieve the last modification time of the given file.
  */
 public static native @ByVal @Cast("time_t*") Pointer clang_getFileTime(CXFile SFile);
-// Targeting ..\clang\CXFileUniqueID.java
+// Targeting ../clang/CXFileUniqueID.java
 
 
 
@@ -586,10 +586,10 @@ public static native @ByVal CXString clang_File_tryGetRealPathName(CXFile file);
 // #include "clang-c/CXString.h"
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
-// Targeting ..\clang\CXSourceLocation.java
+// Targeting ../clang/CXSourceLocation.java
 
 
-// Targeting ..\clang\CXSourceRange.java
+// Targeting ../clang/CXSourceRange.java
 
 
 
@@ -840,7 +840,7 @@ public static native @ByVal CXSourceLocation clang_getRangeStart(@ByVal CXSource
  * source range.
  */
 public static native @ByVal CXSourceLocation clang_getRangeEnd(@ByVal CXSourceRange range);
-// Targeting ..\clang\CXSourceRangeList.java
+// Targeting ../clang/CXSourceRangeList.java
 
 
 
@@ -919,10 +919,10 @@ public static final int
    * results.
    */
   CXDiagnostic_Fatal = 4;
-// Targeting ..\clang\CXDiagnostic.java
+// Targeting ../clang/CXDiagnostic.java
 
 
-// Targeting ..\clang\CXDiagnosticSet.java
+// Targeting ../clang/CXDiagnosticSet.java
 
 
 
@@ -1278,7 +1278,7 @@ public static native @ByVal CXString clang_getDiagnosticFixIt(
 public static final int CINDEX_VERSION_MAJOR = 0;
 public static final int CINDEX_VERSION_MINOR = 64;
 
-// #define CINDEX_VERSION_ENCODE(major, minor) (((major)*10000) + ((minor)*1))
+// #define CINDEX_VERSION_ENCODE(major, minor) (((major) * 10000) + ((minor) * 1))
 
 public static native @MemberGetter int CINDEX_VERSION();
 public static final int CINDEX_VERSION = CINDEX_VERSION();
@@ -1292,19 +1292,19 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
 
 // #ifndef __has_feature
 // #define __has_feature(feature) 0
-// Targeting ..\clang\CXIndex.java
+// Targeting ../clang/CXIndex.java
 
 
-// Targeting ..\clang\CXTargetInfo.java
+// Targeting ../clang/CXTargetInfo.java
 
 
-// Targeting ..\clang\CXTranslationUnit.java
+// Targeting ../clang/CXTranslationUnit.java
 
 
-// Targeting ..\clang\CXClientData.java
+// Targeting ../clang/CXClientData.java
 
 
-// Targeting ..\clang\CXUnsavedFile.java
+// Targeting ../clang/CXUnsavedFile.java
 
 
 
@@ -1333,7 +1333,7 @@ public static final int
    * an error.
    */
   CXAvailability_NotAccessible = 3;
-// Targeting ..\clang\CXVersion.java
+// Targeting ../clang/CXVersion.java
 
 
 
@@ -1493,7 +1493,7 @@ public static final int
   CXGlobalOpt_ThreadBackgroundPriorityForAll = 
       CXGlobalOpt_ThreadBackgroundPriorityForIndexing |
       CXGlobalOpt_ThreadBackgroundPriorityForEditing;
-// Targeting ..\clang\CXIndexOptions.java
+// Targeting ../clang/CXIndexOptions.java
 
 
 
@@ -2329,10 +2329,10 @@ public static native @Cast("const char*") BytePointer clang_getTUResourceUsageNa
 public static class CXTUResourceUsageKind {
     public static String getString(int kind) { return clang_getTUResourceUsageName(kind).getString(); }
 }
-// Targeting ..\clang\CXTUResourceUsageEntry.java
+// Targeting ../clang/CXTUResourceUsageEntry.java
 
 
-// Targeting ..\clang\CXTUResourceUsage.java
+// Targeting ../clang/CXTUResourceUsage.java
 
 
 
@@ -3353,6 +3353,10 @@ public static final int
    */
   CXCursor_OMPAssumeDirective = 309,
 
+  /** OpenMP assume directive.
+   */
+  CXCursor_OMPStripeDirective = 310,
+
   /** OpenACC Compute Construct.
    */
   CXCursor_OpenACCComputeConstruct = 320,
@@ -3401,7 +3405,15 @@ public static final int
    */
   CXCursor_OpenACCUpdateConstruct = 331,
 
-  CXCursor_LastStmt = CXCursor_OpenACCUpdateConstruct,
+  /** OpenACC atomic Construct.
+   */
+  CXCursor_OpenACCAtomicConstruct = 332,
+
+  /** OpenACC cache Construct.
+   */
+  CXCursor_OpenACCCacheConstruct = 333,
+
+  CXCursor_LastStmt = CXCursor_OpenACCCacheConstruct,
 
   /**
    * Cursor that represents the translation unit itself.
@@ -3497,7 +3509,7 @@ public static final int
    * A code completion overload candidate.
    */
   CXCursor_OverloadCandidate = 700;
-// Targeting ..\clang\CXCursor.java
+// Targeting ../clang/CXCursor.java
 
 
 
@@ -3670,7 +3682,7 @@ public static native @Cast("CXVisibilityKind") int clang_getCursorVisibility(@By
  * @return The availability of the cursor.
  */
 public static native @Cast("CXAvailabilityKind") int clang_getCursorAvailability(@ByVal CXCursor cursor);
-// Targeting ..\clang\CXPlatformAvailability.java
+// Targeting ../clang/CXPlatformAvailability.java
 
 
 
@@ -3780,7 +3792,7 @@ public static native @Cast("CXTLSKind") int clang_getCursorTLSKind(@ByVal CXCurs
  * Returns the translation unit that a cursor originated from.
  */
 public static native CXTranslationUnit clang_Cursor_getTranslationUnit(@ByVal CXCursor arg0);
-// Targeting ..\clang\CXCursorSet.java
+// Targeting ../clang/CXCursorSet.java
 
 
 
@@ -4176,7 +4188,8 @@ public static final int
 
   /* HLSL Types */
   CXType_HLSLResource = 179,
-  CXType_HLSLAttributedResource = 180;
+  CXType_HLSLAttributedResource = 180,
+  CXType_HLSLInlineSpirv = 181;
 
 /**
  * Describes the calling convention of a function type
@@ -4207,10 +4220,22 @@ public static final int
   CXCallingConv_M68kRTD = 19,
   CXCallingConv_PreserveNone = 20,
   CXCallingConv_RISCVVectorCall = 21,
+  CXCallingConv_RISCVVLSCall_32 = 22,
+  CXCallingConv_RISCVVLSCall_64 = 23,
+  CXCallingConv_RISCVVLSCall_128 = 24,
+  CXCallingConv_RISCVVLSCall_256 = 25,
+  CXCallingConv_RISCVVLSCall_512 = 26,
+  CXCallingConv_RISCVVLSCall_1024 = 27,
+  CXCallingConv_RISCVVLSCall_2048 = 28,
+  CXCallingConv_RISCVVLSCall_4096 = 29,
+  CXCallingConv_RISCVVLSCall_8192 = 30,
+  CXCallingConv_RISCVVLSCall_16384 = 31,
+  CXCallingConv_RISCVVLSCall_32768 = 32,
+  CXCallingConv_RISCVVLSCall_65536 = 33,
 
   CXCallingConv_Invalid = 100,
   CXCallingConv_Unexposed = 200;
-// Targeting ..\clang\CXType.java
+// Targeting ../clang/CXType.java
 
 
 
@@ -5003,11 +5028,15 @@ public static final int
 
 /**
  * \brief Returns the operator code for the binary operator.
+ *
+ * @deprecated : use clang_getCursorBinaryOperatorKind instead.
  */
 public static native @Cast("CX_BinaryOperatorKind") int clang_Cursor_getBinaryOpcode(@ByVal CXCursor C);
 
 /**
  * \brief Returns a string containing the spelling of the binary operator.
+ *
+ * @deprecated : use clang_getBinaryOperatorKindSpelling instead
  */
 public static native @ByVal CXString clang_Cursor_getBinaryOpcodeStr(@Cast("CX_BinaryOperatorKind") int Op);
 
@@ -5100,7 +5129,7 @@ public static final int
    * the same visitor and client data.
    */
   CXChildVisit_Recurse = 2;
-// Targeting ..\clang\CXCursorVisitor.java
+// Targeting ../clang/CXCursorVisitor.java
 
 
 
@@ -5129,7 +5158,7 @@ public static final int
 public static native @Cast("unsigned") int clang_visitChildren(@ByVal CXCursor parent,
                                             CXCursorVisitor visitor,
                                             CXClientData client_data);
-// Targeting ..\clang\_CXChildVisitResult.java
+// Targeting ../clang/_CXChildVisitResult.java
 
 
 // #endif
@@ -5232,7 +5261,7 @@ public static native @ByVal CXString clang_getCursorSpelling(@ByVal CXCursor arg
  */
 public static native @ByVal CXSourceRange clang_Cursor_getSpellingNameRange(
     @ByVal CXCursor arg0, @Cast("unsigned") int pieceIndex, @Cast("unsigned") int options);
-// Targeting ..\clang\CXPrintingPolicy.java
+// Targeting ../clang/CXPrintingPolicy.java
 
 
 
@@ -5319,6 +5348,18 @@ public static native @ByVal CXString clang_getCursorPrettyPrinted(@ByVal CXCurso
  */
 public static native @ByVal CXString clang_getTypePrettyPrinted(@ByVal CXType CT,
                                                    CXPrintingPolicy cxPolicy);
+
+/**
+ * Get the fully qualified name for a type.
+ *
+ * This includes full qualification of all template parameters.
+ *
+ * Policy - Further refine the type formatting
+ * WithGlobalNsPrefix - If non-zero, function will prepend a '::' to qualified
+ * names
+ */
+public static native @ByVal CXString clang_getFullyQualifiedName(
+    @ByVal CXType CT, CXPrintingPolicy Policy, @Cast("unsigned") int WithGlobalNsPrefix);
 
 /**
  * Retrieve the display name for the entity referenced by this cursor.
@@ -5581,7 +5622,130 @@ public static native CXStringSet clang_Cursor_getCXXManglings(@ByVal CXCursor ar
  * class interface or implementation at the cursor.
  */
 public static native CXStringSet clang_Cursor_getObjCManglings(@ByVal CXCursor arg0);
-// Targeting ..\clang\CXModule.java
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup CINDEX_MODULE Inline Assembly introspection
+ *
+ * The functions in this group provide access to information about GCC-style
+ * inline assembly statements.
+ *
+ * \{
+ */
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, return the assembly template string.
+ * As per LLVM IR Assembly Template language, template placeholders for
+ * inputs and outputs are either of the form $N where N is a decimal number
+ * as an index into the input-output specification,
+ * or ${N:M} where N is a decimal number also as an index into the
+ * input-output specification and M is the template argument modifier.
+ * The index N in both cases points into the the total inputs and outputs,
+ * or more specifically, into the list of outputs followed by the inputs,
+ * starting from index 0 as the first available template argument.
+ *
+ * This function also returns a valid empty string if the cursor does not point
+ * at a GCC inline assembly block.
+ *
+ * Users are responsible for releasing the allocation of returned string via
+ * \c clang_disposeString.
+ */
+
+public static native @ByVal CXString clang_Cursor_getGCCAssemblyTemplate(@ByVal CXCursor arg0);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, check if the assembly block has goto
+ * labels.
+ * This function also returns 0 if the cursor does not point at a GCC inline
+ * assembly block.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_isGCCAssemblyHasGoto(@ByVal CXCursor arg0);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, count the number of outputs.
+ * This function also returns 0 if the cursor does not point at a GCC inline
+ * assembly block.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_getGCCAssemblyNumOutputs(@ByVal CXCursor arg0);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, count the number of inputs.
+ * This function also returns 0 if the cursor does not point at a GCC inline
+ * assembly block.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_getGCCAssemblyNumInputs(@ByVal CXCursor arg0);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, get the constraint and expression cursor
+ * to the Index-th input.
+ * This function returns 1 when the cursor points at a GCC inline assembly
+ * statement, {@code Index} is within bounds and both the {@code Constraint} and {@code Expr} are
+ * not NULL.
+ * Otherwise, this function returns 0 but leaves {@code Constraint} and {@code Expr}
+ * intact.
+ *
+ * Users are responsible for releasing the allocation of {@code Constraint} via
+ * \c clang_disposeString.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_getGCCAssemblyInput(@ByVal CXCursor Cursor,
+                                                         @Cast("unsigned") int Index,
+                                                         CXString Constraint,
+                                                         CXCursor Expr);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, get the constraint and expression cursor
+ * to the Index-th output.
+ * This function returns 1 when the cursor points at a GCC inline assembly
+ * statement, {@code Index} is within bounds and both the {@code Constraint} and {@code Expr} are
+ * not NULL.
+ * Otherwise, this function returns 0 but leaves {@code Constraint} and {@code Expr}
+ * intact.
+ *
+ * Users are responsible for releasing the allocation of {@code Constraint} via
+ * \c clang_disposeString.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_getGCCAssemblyOutput(@ByVal CXCursor Cursor,
+                                                          @Cast("unsigned") int Index,
+                                                          CXString Constraint,
+                                                          CXCursor Expr);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, count the clobbers in it.
+ * This function also returns 0 if the cursor does not point at a GCC inline
+ * assembly block.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_getGCCAssemblyNumClobbers(@ByVal CXCursor Cursor);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, get the Index-th clobber of it.
+ * This function returns a valid empty string if the cursor does not point
+ * at a GCC inline assembly block or {@code Index} is out of bounds.
+ *
+ * Users are responsible for releasing the allocation of returned string via
+ * \c clang_disposeString.
+ */
+
+public static native @ByVal CXString clang_Cursor_getGCCAssemblyClobber(@ByVal CXCursor Cursor,
+                                                           @Cast("unsigned") int Index);
+
+/**
+ * Given a CXCursor_GCCAsmStmt cursor, check if the inline assembly is
+ * {@code volatile}.
+ * This function returns 0 if the cursor does not point at a GCC inline
+ * assembly block.
+ */
+
+public static native @Cast("unsigned") int clang_Cursor_isGCCAssemblyVolatile(@ByVal CXCursor Cursor);
+// Targeting ../clang/CXModule.java
 
 
 
@@ -5969,7 +6133,7 @@ public static final int
    * A comment.
    */
   CXToken_Comment = 4;
-// Targeting ..\clang\CXToken.java
+// Targeting ../clang/CXToken.java
 
 
 
@@ -6104,15 +6268,15 @@ public static native void clang_getDefinitionSpellingAndExtent(
     @ByVal CXCursor arg0, @Cast("const char**") @ByPtrPtr byte[] startBuf, @Cast("const char**") @ByPtrPtr byte[] endBuf, @Cast("unsigned*") int[] startLine,
     @Cast("unsigned*") int[] startColumn, @Cast("unsigned*") int[] endLine, @Cast("unsigned*") int[] endColumn);
 public static native void clang_enableStackTraces();
-// Targeting ..\clang\Fn_Pointer.java
+// Targeting ../clang/Fn_Pointer.java
 
 
 public static native void clang_executeOnThread(Fn_Pointer fn, Pointer user_data,
                                           @Cast("unsigned") int stack_size);
-// Targeting ..\clang\CXCompletionString.java
+// Targeting ../clang/CXCompletionString.java
 
 
-// Targeting ..\clang\CXCompletionResult.java
+// Targeting ../clang/CXCompletionResult.java
 
 
 
@@ -6419,7 +6583,7 @@ public static native @ByVal CXString clang_getCompletionBriefComment(CXCompletio
  * definition cursors, or NULL for other kinds of cursors.
  */
 public static native CXCompletionString clang_getCursorCompletionString(@ByVal CXCursor cursor);
-// Targeting ..\clang\CXCodeCompleteResults.java
+// Targeting ../clang/CXCodeCompleteResults.java
 
 
 
@@ -6859,7 +7023,7 @@ public static native @ByVal CXString clang_getClangVersion();
  *        value enables crash recovery, while 0 disables it.
  */
 public static native void clang_toggleCrashRecovery(@Cast("unsigned") int isEnabled);
-// Targeting ..\clang\CXInclusionVisitor.java
+// Targeting ../clang/CXInclusionVisitor.java
 
 
 
@@ -6883,7 +7047,7 @@ public static final int
   CXEval_Other = 6,
 
   CXEval_UnExposed = 0;
-// Targeting ..\clang\CXEvalResult.java
+// Targeting ../clang/CXEvalResult.java
 
 
 
@@ -6943,62 +7107,6 @@ public static native @Cast("const char*") BytePointer clang_EvalResult_getAsStr(
  * Disposes the created Eval memory.
  */
 public static native void clang_EvalResult_dispose(CXEvalResult E);
-// Targeting ..\clang\CXRemapping.java
-
-
-
-/**
- * Retrieve a remapping.
- *
- * @param path the path that contains metadata about remappings.
- *
- * @return the requested remapping. This remapping must be freed
- * via a call to \c clang_remap_dispose(). Can return NULL if an error occurred.
- */
-public static native CXRemapping clang_getRemappings(@Cast("const char*") BytePointer path);
-public static native CXRemapping clang_getRemappings(String path);
-
-/**
- * Retrieve a remapping.
- *
- * @param filePaths pointer to an array of file paths containing remapping info.
- *
- * @param numFiles number of file paths.
- *
- * @return the requested remapping. This remapping must be freed
- * via a call to \c clang_remap_dispose(). Can return NULL if an error occurred.
- */
-public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") PointerPointer filePaths,
-                                            @Cast("unsigned") int numFiles);
-public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") @ByPtrPtr BytePointer filePaths,
-                                            @Cast("unsigned") int numFiles);
-public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") @ByPtrPtr ByteBuffer filePaths,
-                                            @Cast("unsigned") int numFiles);
-public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") @ByPtrPtr byte[] filePaths,
-                                            @Cast("unsigned") int numFiles);
-
-/**
- * Determine the number of remappings.
- */
-public static native @Cast("unsigned") int clang_remap_getNumFiles(CXRemapping arg0);
-
-/**
- * Get the original and the associated filename from the remapping.
- *
- * @param original If non-NULL, will be set to the original filename.
- *
- * @param transformed If non-NULL, will be set to the filename that the original
- * is associated with.
- */
-public static native void clang_remap_getFilenames(CXRemapping arg0, @Cast("unsigned") int index,
-                                             CXString original,
-                                             CXString transformed);
-
-/**
- * Dispose the remapping.
- */
-public static native void clang_remap_dispose(CXRemapping arg0);
-
 /**
  * \}
  */
@@ -7010,7 +7118,7 @@ public static native void clang_remap_dispose(CXRemapping arg0);
 
 /** enum CXVisitorResult */
 public static final int CXVisit_Break = 0, CXVisit_Continue = 1;
-// Targeting ..\clang\CXCursorAndRangeVisitor.java
+// Targeting ../clang/CXCursorAndRangeVisitor.java
 
 
 
@@ -7061,29 +7169,29 @@ public static native @Cast("CXResult") int clang_findReferencesInFile(
  */
 public static native @Cast("CXResult") int clang_findIncludesInFile(
     CXTranslationUnit TU, CXFile file, @ByVal CXCursorAndRangeVisitor visitor);
-// Targeting ..\clang\_CXCursorAndRangeVisitorBlock.java
+// Targeting ../clang/_CXCursorAndRangeVisitorBlock.java
 
 
 // #endif
-// Targeting ..\clang\CXIdxClientFile.java
+// Targeting ../clang/CXIdxClientFile.java
 
 
-// Targeting ..\clang\CXIdxClientEntity.java
+// Targeting ../clang/CXIdxClientEntity.java
 
 
-// Targeting ..\clang\CXIdxClientContainer.java
+// Targeting ../clang/CXIdxClientContainer.java
 
 
-// Targeting ..\clang\CXIdxClientASTFile.java
+// Targeting ../clang/CXIdxClientASTFile.java
 
 
-// Targeting ..\clang\CXIdxLoc.java
+// Targeting ../clang/CXIdxLoc.java
 
 
-// Targeting ..\clang\CXIdxIncludedFileInfo.java
+// Targeting ../clang/CXIdxIncludedFileInfo.java
 
 
-// Targeting ..\clang\CXIdxImportedASTFileInfo.java
+// Targeting ../clang/CXIdxImportedASTFileInfo.java
 
 
 
@@ -7153,22 +7261,22 @@ public static final int
   CXIdxAttr_IBAction = 1,
   CXIdxAttr_IBOutlet = 2,
   CXIdxAttr_IBOutletCollection = 3;
-// Targeting ..\clang\CXIdxAttrInfo.java
+// Targeting ../clang/CXIdxAttrInfo.java
 
 
-// Targeting ..\clang\CXIdxEntityInfo.java
+// Targeting ../clang/CXIdxEntityInfo.java
 
 
-// Targeting ..\clang\CXIdxContainerInfo.java
+// Targeting ../clang/CXIdxContainerInfo.java
 
 
-// Targeting ..\clang\CXIdxIBOutletCollectionAttrInfo.java
+// Targeting ../clang/CXIdxIBOutletCollectionAttrInfo.java
 
 
 
 /** enum CXIdxDeclInfoFlags */
 public static final int CXIdxDeclFlag_Skipped = 0x1;
-// Targeting ..\clang\CXIdxDeclInfo.java
+// Targeting ../clang/CXIdxDeclInfo.java
 
 
 
@@ -7177,28 +7285,28 @@ public static final int
   CXIdxObjCContainer_ForwardRef = 0,
   CXIdxObjCContainer_Interface = 1,
   CXIdxObjCContainer_Implementation = 2;
-// Targeting ..\clang\CXIdxObjCContainerDeclInfo.java
+// Targeting ../clang/CXIdxObjCContainerDeclInfo.java
 
 
-// Targeting ..\clang\CXIdxBaseClassInfo.java
+// Targeting ../clang/CXIdxBaseClassInfo.java
 
 
-// Targeting ..\clang\CXIdxObjCProtocolRefInfo.java
+// Targeting ../clang/CXIdxObjCProtocolRefInfo.java
 
 
-// Targeting ..\clang\CXIdxObjCProtocolRefListInfo.java
+// Targeting ../clang/CXIdxObjCProtocolRefListInfo.java
 
 
-// Targeting ..\clang\CXIdxObjCInterfaceDeclInfo.java
+// Targeting ../clang/CXIdxObjCInterfaceDeclInfo.java
 
 
-// Targeting ..\clang\CXIdxObjCCategoryDeclInfo.java
+// Targeting ../clang/CXIdxObjCCategoryDeclInfo.java
 
 
-// Targeting ..\clang\CXIdxObjCPropertyDeclInfo.java
+// Targeting ../clang/CXIdxObjCPropertyDeclInfo.java
 
 
-// Targeting ..\clang\CXIdxCXXClassDeclInfo.java
+// Targeting ../clang/CXIdxCXXClassDeclInfo.java
 
 
 
@@ -7238,10 +7346,10 @@ public static final int
   CXSymbolRole_Dynamic = 1 << 6,
   CXSymbolRole_AddressOf = 1 << 7,
   CXSymbolRole_Implicit = 1 << 8;
-// Targeting ..\clang\CXIdxEntityRefInfo.java
+// Targeting ../clang/CXIdxEntityRefInfo.java
 
 
-// Targeting ..\clang\IndexerCallbacks.java
+// Targeting ../clang/IndexerCallbacks.java
 
 
 
@@ -7283,7 +7391,7 @@ public static native CXIdxClientEntity clang_index_getClientEntity(@Const CXIdxE
  */
 public static native void clang_index_setClientEntity(@Const CXIdxEntityInfo arg0,
                                                 CXIdxClientEntity arg1);
-// Targeting ..\clang\CXIndexAction.java
+// Targeting ../clang/CXIndexAction.java
 
 
 
@@ -7505,7 +7613,7 @@ public static native void clang_indexLoc_getFileLocation(@ByVal CXIdxLoc loc,
  * Retrieve the CXSourceLocation represented by the given CXIdxLoc.
  */
 public static native @ByVal CXSourceLocation clang_indexLoc_getCXSourceLocation(@ByVal CXIdxLoc loc);
-// Targeting ..\clang\CXFieldVisitor.java
+// Targeting ../clang/CXFieldVisitor.java
 
 
 
@@ -7553,6 +7661,28 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
 public static native @Cast("unsigned") int clang_visitCXXBaseClasses(@ByVal CXType T,
                                                   CXFieldVisitor visitor,
                                                   CXClientData client_data);
+
+/**
+ * Visit the class methods of a type.
+ *
+ * This function visits all the methods of the given cursor,
+ * invoking the given \p visitor function with the cursors of each
+ * visited method. The traversal may be ended prematurely, if
+ * the visitor returns \c CXFieldVisit_Break.
+ *
+ * @param T The record type whose field may be visited.
+ *
+ * @param visitor The visitor function that will be invoked for each
+ * field of \p T.
+ *
+ * @param client_data Pointer data supplied by the client, which will
+ * be passed to the visitor each time it is invoked.
+ *
+ * @return A non-zero value if the traversal was terminated
+ * prematurely by the visitor returning \c CXFieldVisit_Break.
+ */
+public static native @Cast("unsigned") int clang_visitCXXMethods(@ByVal CXType T, CXFieldVisitor visitor,
+                                              CXClientData client_data);
 
 /**
  * Describes the kind of binary operators.
@@ -7626,7 +7756,8 @@ public static final int
   /** Bitwise OR assignment operator. */
   CXBinaryOperator_OrAssign = 32,
   /** Comma operator. */
-  CXBinaryOperator_Comma = 33;
+  CXBinaryOperator_Comma = 33,
+  CXBinaryOperator_Last = CXBinaryOperator_Comma;
 
 /**
  * Retrieve the spelling of a given CXBinaryOperatorKind.
@@ -7687,14 +7818,23 @@ public static native @ByVal CXString clang_getUnaryOperatorKindSpelling(@Cast("C
  * If this cursor is not a unary operator then returns Invalid.
  */
 public static native @Cast("CXUnaryOperatorKind") int clang_getCursorUnaryOperatorKind(@ByVal CXCursor cursor);
+// Targeting ../clang/CXRemapping.java
 
-/**
- * \}
- */
 
-/**
- * \}
- */
+
+public static native CXRemapping clang_getRemappings(@Cast("const char*") BytePointer arg0);
+public static native CXRemapping clang_getRemappings(String arg0);
+
+public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") PointerPointer arg0, @Cast("unsigned") int arg1);
+public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") @ByPtrPtr BytePointer arg0, @Cast("unsigned") int arg1);
+public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") @ByPtrPtr ByteBuffer arg0, @Cast("unsigned") int arg1);
+public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") @ByPtrPtr byte[] arg0, @Cast("unsigned") int arg1);
+
+public static native @Cast("unsigned") int clang_remap_getNumFiles(CXRemapping arg0);
+
+public static native void clang_remap_getFilenames(CXRemapping arg0, @Cast("unsigned") int arg1, CXString arg2, CXString arg3);
+
+public static native void clang_remap_dispose(CXRemapping arg0);
 
 // #endif
 
@@ -7721,7 +7861,7 @@ public static native @Cast("CXUnaryOperatorKind") int clang_getCursorUnaryOperat
 // #include "clang-c/CXErrorCode.h"
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Index.h"
-// Targeting ..\clang\CXComment.java
+// Targeting ../clang/CXComment.java
 
 
 
@@ -8208,7 +8348,7 @@ public static native @ByVal CXString clang_FullComment_getAsHTML(@ByVal CXCommen
  * @return string containing an XML document.
  */
 public static native @ByVal CXString clang_FullComment_getAsXML(@ByVal CXComment Comment);
-// Targeting ..\clang\CXAPISet.java
+// Targeting ../clang/CXAPISet.java
 
 
 
