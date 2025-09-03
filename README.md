@@ -198,7 +198,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2025.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 3.8.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 3.9.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.30  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.11  https://github.com/devernay/cminpack
@@ -231,7 +231,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Triton Inference Server 2.59.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
- * ONNX 1.18.x  https://github.com/onnx/onnx
+ * ONNX 1.19.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.22.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm

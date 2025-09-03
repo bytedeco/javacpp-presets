@@ -165,6 +165,7 @@ public class onnx implements InfoMapper {
                .put(new Info("onnx::OpSchema::FormalParameter").pointerTypes("OpSchema.FormalParameter"))
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))
 
+               .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringStringPair").define())
                .put(new Info("std::pair<int,int>", "std::pair<onnx::OpSchema::UseType,int>").pointerTypes("UseTypeIntPair").define())
                .put(new Info("const std::unordered_map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
                .put(new Info("std::unordered_map<size_t,std::string>").pointerTypes("SizeTStringMap").define())
@@ -183,6 +184,7 @@ public class onnx implements InfoMapper {
                .put(new Info("const std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define())
                .put(new Info("onnx::TensorShapeProto").pointerTypes("TensorShapeProto"))
                .put(new Info("std::vector<const onnx::TensorShapeProto*>").pointerTypes("TensorShapeProtoVector").define())
+               .put(new Info("std::vector<std::pair<std::string,std::string> >").pointerTypes("StringStringPairVector").define())
 
                .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::OpSchema::SetContextDependentFunctionBodyBuilder",
                              "onnx::OpSchema::GetDataPropagationFunction", "onnx::RegisterSchema", "onnx::ReplaceAll", "onnx::DbgOperatorSetTracker::Instance",
