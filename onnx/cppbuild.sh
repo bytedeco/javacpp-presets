@@ -12,7 +12,7 @@ export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export MAX_JOBS=$MAKEJ
 
-export ONNX=1.18.0
+export ONNX=1.19.0
 export PROTO=3.20.3
 export PYBIND=2.11.0
 
@@ -100,8 +100,8 @@ cd protobuf-$PROTO
 "$CMAKE" --install . --config Release
 
 cd ../onnx-$ONNX
-rm -Rf third_party/pybind11
-ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
+rm -Rf third_party/pybind11 || true
+ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11  || true
 # work around issue in Xcode's version of Clang, options unsupported by Ninja, and test requirements
 sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h
 sedinplace 's/if WINDOWS:/if False:/g' setup.py
