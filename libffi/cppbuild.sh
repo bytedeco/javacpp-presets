@@ -97,6 +97,13 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
+    windows-arm64)
+        CC="../msvcc.sh -marm64" LD="link" CPP="cl -nologo -EP" CPPFLAGS="-DFFI_BUILDING_DLL" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory
+        cp msvc_build/aarch64/aarch64_include/* x86_64-pc-mingw64/include/
+        make -j $MAKEJ
+        make install || true
+        cp */.libs/* ../lib
+        ;;
     windows-x86)
         CC="../msvcc.sh -m32" LD="link" CPP="cl -nologo -EP" CPPFLAGS="-DFFI_BUILDING_DLL" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory
         make -j $MAKEJ

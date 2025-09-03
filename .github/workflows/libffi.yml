@@ -61,6 +61,10 @@ jobs:
     runs-on: macos-13
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+  windows-arm64:
+    runs-on: windows-11-arm
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
 #  windows-x86:
 #    runs-on: windows-2022
 #    steps:
@@ -71,7 +75,7 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
 #    needs: [android-arm, android-arm64, android-x86, android-x86_64, linux-armhf, linux-arm64, linux-ppc64le, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86, windows-x86_64]
-    needs: [android-arm64, android-x86_64, linux-arm64, linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86_64]
+    needs: [android-arm64, android-x86_64, linux-arm64, linux-x86_64, macosx-arm64, macosx-x86_64, windows-arm64, windows-x86_64]
     runs-on: ubuntu-22.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

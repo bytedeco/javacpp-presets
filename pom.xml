@@ -1616,6 +1616,7 @@
       </activation>
       <modules>
         <module>llvm</module>
+        <module>libffi</module>
         <module>systems</module>
       </modules>
       <properties>
