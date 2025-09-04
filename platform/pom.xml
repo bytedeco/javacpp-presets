@@ -297,7 +297,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>sentencepiece-platform</artifactId>
-      <version>0.2.0-${project.version}</version>
+      <version>0.2.1-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -307,7 +307,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-lite-platform</artifactId>
-      <version>2.19.0-${project.version}</version>
+      <version>2.20.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SENTENCEPIECE_VERSION=0.2.0
+SENTENCEPIECE_VERSION=0.2.1
 download https://github.com/google/sentencepiece/archive/refs/tags/v$SENTENCEPIECE_VERSION.zip sentencepiece-$SENTENCEPIECE_VERSION.zip
 
 mkdir -p $PLATFORM

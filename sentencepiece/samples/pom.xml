@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>sentencepiece-platform</artifactId>
-            <version>0.2.0-1.5.13-SNAPSHOT</version>
+            <version>0.2.1-1.5.13-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
