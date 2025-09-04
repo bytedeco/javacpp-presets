@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * SentencePiece 0.2.0  https://github.com/google/sentencepiece
+ * SentencePiece 0.2.1  https://github.com/google/sentencepiece
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of SentencePiece ported to Java from this C++ example:
 
- * https://github.com/google/sentencepiece/blob/v0.2.0/doc/api.md
+ * https://github.com/google/sentencepiece/blob/v0.2.1/doc/api.md
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SentencePieceExample.java` source files below, simply execute on the command line:
 ```bash
@@ -39,7 +39,7 @@ $ mvn compile exec:java exec.args="en.wiki.bpe.vs10000.model"
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.sentencepiece</groupId>
     <artifactId>sentencepiece-example</artifactId>
-    <version>1.5.12</version>
+    <version>1.5.13-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SentencePieceExample</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -49,7 +49,7 @@ $ mvn compile exec:java exec.args="en.wiki.bpe.vs10000.model"
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>sentencepiece-platform</artifactId>
-            <version>0.2.0-1.5.12</version>
+            <version>0.2.1-1.5.13-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

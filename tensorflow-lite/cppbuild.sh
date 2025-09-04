@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON $CMAKE_FLAGS"
 fi
 
-TENSORFLOW_VERSION=2.19.0
+TENSORFLOW_VERSION=2.20.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -32,6 +32,9 @@ ${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/c\/telemetry_setting_internal.cc\
 sedinplace '/#include <math.h>/a\
 #include <stdint.h>\
 ' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/spectrogram.cc
+sedinplace "s/TFLITE_VERSION_STRING/\"$TENSORFLOW_VERSION\"/g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/c/c_api.cc
+sedinplace "s/TFLITE_EXTENSION_APIS_VERSION_STRING/\"$TENSORFLOW_VERSION\"/g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/c/c_api.cc
+sedinplace '/private:/d' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/model_building.h
 
 if [[ ! "$PLATFORM" == windows* ]]; then
     mkdir -p build_flatc
@@ -103,7 +106,9 @@ case $PLATFORM in
         ;;
 esac
 
-"$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib -DTFLITE_C_BUILD_SHARED_LIBS=OFF ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
+V=(${TENSORFLOW_VERSION//./ })
+FLAGS="-DTF_MAJOR_VERSION=${V[0]} -DTF_MINOR_VERSION=${V[1]} -DTF_PATCH_VERSION=${V[2]} -DTF_VERSION_SUFFIX=''"
+"$CMAKE" $CMAKE_FLAGS -DCMAKE_C_FLAGS="$FLAGS" -DCMAKE_CXX_FLAGS="$FLAGS" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib -DTFLITE_C_BUILD_SHARED_LIBS=OFF ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
 "$CMAKE" --build . --parallel $MAKEJ --target absl_log_internal_message
 "$CMAKE" --build . --parallel $MAKEJ
 #"$CMAKE" --install .

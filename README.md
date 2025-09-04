@@ -224,9 +224,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
  * PyTorch 2.8.x  https://github.com/pytorch/pytorch
- * SentencePiece 0.2.0  https://github.com/google/sentencepiece
+ * SentencePiece 0.2.x  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.19.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.20.x  https://github.com/tensorflow/tensorflow
  * TensorRT 10.12.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.59.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment

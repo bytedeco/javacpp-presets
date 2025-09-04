@@ -117,7 +117,7 @@ public class tensorflowlite implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK", "TFL_CAPI_EXPORT", "TFLITE_NOINLINE").cppTypes().annotations())
-               .put(new Info("DOYXGEN_SKIP").define(true))
+               .put(new Info("DOYXGEN_SKIP", "__cplusplus").define(true))
                .put(new Info("FLATBUFFERS_LITTLEENDIAN == 0").define(false))
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
                .put(new Info("tflite::ops::builtin::BuiltinOpResolver").pointerTypes("BuiltinOpResolver"))
