@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCL_VERSION=2024.10.24
-CLHPP_VERSION=2024.10.24
+OPENCL_VERSION=2025.07.22
+CLHPP_VERSION=2025.07.22
 download https://github.com/KhronosGroup/OpenCL-Headers/archive/v$OPENCL_VERSION.tar.gz OpenCL-Headers-$OPENCL_VERSION.tar.gz
 download https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/v$OPENCL_VERSION.tar.gz OpenCL-ICD-Loader-$OPENCL_VERSION.tar.gz
 download https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v$CLHPP_VERSION.tar.gz OpenCL-CLHPP-$CLHPP_VERSION.tar.gz
@@ -40,6 +40,20 @@ case $PLATFORM in
         make install/strip
         ;;
     linux-x86_64)
+        cd OpenCL-Headers-$OPENCL_VERSION
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
+        make -j $MAKEJ
+        make install/strip
+        cd ../OpenCL-ICD-Loader-$OPENCL_VERSION
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOPENCL_ICD_LOADER_HEADERS_DIR=$INSTALL_PATH/include .
+        make -j $MAKEJ
+        make install/strip
+        cd ../OpenCL-CLHPP-$CLHPP_VERSION
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    macosx-arm64)
         cd OpenCL-Headers-$OPENCL_VERSION
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH .
         make -j $MAKEJ

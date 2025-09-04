@@ -1491,6 +1491,7 @@
         <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>opencl</module>
         <module>pytorch</module>
         <module>sentencepiece</module>
         <module>tensorflow-lite</module>
