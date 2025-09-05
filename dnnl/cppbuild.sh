@@ -45,6 +45,9 @@ sedinplace 's/-fvisibility=internal//g' cmake/platform.cmake
 sedinplace 's/-fvisibility-inlines-hidden//g' cmake/platform.cmake
 sedinplace 's:Headers/cl.h:CL/cl.h:g' cmake/FindOpenCL.cmake
 sedinplace 's/= default_attr/= dnnl::primitive_attr/g' include/oneapi/dnnl/dnnl.hpp
+sedinplace '/#include <atomic>/i\
+#include <algorithm>\
+' src/common/utils.hpp
 
 if [[ -d "$OPENCL_PATH" ]]; then
     export OPENCLROOT="$OPENCL_PATH"
@@ -88,6 +91,14 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
+    macosx-arm64)
+        mkdir -p ../lib
+        cp /opt/homebrew/opt/libomp/lib/libomp.dylib ../lib/
+        sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOpenMP_C_FLAG="-Xclang -fopenmp -I/opt/homebrew/opt/libomp/include -I$OPENCL_PATH/include -L$INSTALL_PATH/lib -lomp" -DOpenMP_CXX_FLAG="-Xclang -fopenmp -I/opt/homebrew/opt/libomp/include -I$OPENCL_PATH/include -L$INSTALL_PATH/lib -lomp" -DARCH_OPT_FLAGS='' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DONEDNN_BUILD_GRAPH=OFF .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     macosx-x86_64)
         if [[ "$DNNL_CPU_RUNTIME" == "TBB" ]]; then
             cd ../oneTBB-$TBB_VERSION
@@ -105,7 +116,7 @@ case $PLATFORM in
             install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
         fi
         sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOpenMP_C_FLAG="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DOpenMP_CXX_FLAG="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DARCH_OPT_FLAGS='' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DONEDNN_BUILD_GRAPH=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOpenMP_C_FLAG="-Xclang -fopenmp -I/usr/local/include -I$OPENCL_PATH/include -L$INSTALL_PATH/lib -liomp5" -DOpenMP_CXX_FLAG="-Xclang -fopenmp -I/usr/local/include -I$OPENCL_PATH/include -L$INSTALL_PATH/lib -liomp5" -DARCH_OPT_FLAGS='' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DONEDNN_BUILD_GRAPH=OFF .
         make -j $MAKEJ
         make install/strip
         install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libdnnl.dylib

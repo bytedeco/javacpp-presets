@@ -1477,6 +1477,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>lz4</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
