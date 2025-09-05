@@ -41,7 +41,7 @@ import org.bytedeco.opencl.presets.*;
     inherit = OpenCL.class,
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            value = {"linux", "macosx", "windows"},
             compiler = "cpp11",
 //            define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"oneapi/dnnl/dnnl_common_types.h", "oneapi/dnnl/dnnl_types.h", "oneapi/dnnl/dnnl_common.h",

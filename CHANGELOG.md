@@ -1,5 +1,5 @@
 
- * Introduce `macosx-arm64` builds for OpenCL ([issue #1681](https://github.com/bytedeco/javacpp-presets/issues/1681))
+ * Introduce `macosx-arm64` builds for DNNL, OpenCL ([issue #1681](https://github.com/bytedeco/javacpp-presets/issues/1681))
  * Add `windows-arm64` builds for LLVM ([pull #1656](https://github.com/bytedeco/javacpp-presets/pull/1656)), and system APIs with upgrade to Windows SDK 10.0 ([pull #1659](https://github.com/bytedeco/javacpp-presets/pull/1659))
  * Introduce CUDA-enabled `linux-arm64-gpu` builds to presets for OpenCV ([pull #1651](https://github.com/bytedeco/javacpp-presets/pull/1651))
  * Reenable again `linux-arm64` builds for CPython and NumPy ([pull #1652](https://github.com/bytedeco/javacpp-presets/pull/1652))
