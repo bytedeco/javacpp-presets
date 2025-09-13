@@ -86,11 +86,19 @@ runs:
         fi
 
         rm -f dependencies.txt
-        for POM in $(find $CI_DEPLOY_MODULE/platform/ -iname pom.xml); do
+        readarray POMS <<< "$(find $CI_DEPLOY_MODULE/platform/ -name pom.xml)";
+        while [[ ${#POMS[@]} > 0 ]]; do
+            POM=${POMS[0]}
+            unset POMS[0]
+            POMS=(${POMS[@]})
+            if ! mvn compile -f $POM; then
+                POMS+=($POM)
+                continue # Missing dependencies, try again later
+            fi
             if [[ $POM =~ tensorflow/platform/python ]]; then
                 continue # Skip over builds taking more than 6 hours on GitHub Actions
             fi
-            if [[ $POM =~ platform/redist ]] && [[ "$CI_DEPLOY_MODULE" != "mkl" ]]; then
+            if [[ $POM =~ platform/redist ]] && [[ "$CI_DEPLOY_MODULE" != "cuda" ]] && [[ "$CI_DEPLOY_MODULE" != "mkl" ]]; then
                 continue # Skip over redist artifacts too big for the Central Portal
             fi
             for i in {1..5}; do

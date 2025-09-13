@@ -57,6 +57,7 @@ import org.bytedeco.opencv.presets.*;
         opencv_stitching.class,
         opencv_saliency.class,
         opencv_quality.class,
+        opencv_signal.class,
         opencv_dnn_superres.class,
         opencv_intensity_transform.class,
         opencv_mcc.class,
