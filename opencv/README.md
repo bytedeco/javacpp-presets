@@ -62,7 +62,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda-platform-redist</artifactId>
+            <artifactId>cuda-platform-redist-cudnn</artifactId>
+            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist-npp</artifactId>
             <version>12.9-9.10-1.5.13-SNAPSHOT</version>
         </dependency>
 
