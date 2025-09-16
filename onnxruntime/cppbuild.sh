@@ -47,7 +47,6 @@ case $PLATFORM in
         ;;
     macosx-arm64)
         export ARCH_FLAGS=
-        export DNNL_FLAGS=
         ;;
     macosx-x86_64)
         export ARCH_FLAGS=
