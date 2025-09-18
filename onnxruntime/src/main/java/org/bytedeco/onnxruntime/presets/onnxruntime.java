@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2019-2025 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -68,11 +68,11 @@ import org.bytedeco.dnnl.presets.*;
             link = {"onnxruntime_providers_shared", "onnxruntime@.1"}
         ),
         @Platform(
-            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            value = {"linux", "macosx", "windows"},
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
-            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            value = {"linux", "macosx", "windows"},
             extension = "-gpu",
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
