@@ -44,7 +44,6 @@ case $PLATFORM in
         export CC="aarch64-linux-gnu-gcc"
         export CXX="aarch64-linux-gnu-g++"
         export ARCH_FLAGS="$ARCH_FLAGS --arm64"
-        export DNNL_FLAGS=
         ;;
     macosx-arm64)
         export ARCH_FLAGS=
