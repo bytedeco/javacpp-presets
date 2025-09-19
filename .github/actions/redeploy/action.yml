@@ -91,7 +91,7 @@ runs:
             POM=${POMS[0]}
             unset POMS[0]
             POMS=(${POMS[@]})
-            if ! mvn compile -f $POM; then
+            if ! mvn compile $MAVEN_OPTIONS -f $POM; then
                 POMS+=($POM)
                 continue # Missing dependencies, try again later
             fi

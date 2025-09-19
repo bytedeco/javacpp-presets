@@ -9,6 +9,8 @@ fi
 
 export ARCH_FLAGS="--allow_running_as_root"
 export DNNL_FLAGS="--use_dnnl"
+export CMAKE_ARGS=
+export COREML_FLAGS=
 export OPENMP_FLAGS= # "--use_openmp"
 export CUDAFLAGS="-v"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
@@ -43,14 +45,15 @@ case $PLATFORM in
         export CC="aarch64-linux-gnu-gcc"
         export CXX="aarch64-linux-gnu-g++"
         export ARCH_FLAGS="$ARCH_FLAGS --arm64"
-        export DNNL_FLAGS=
+        export CMAKE_ARGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=AARCH64"
         ;;
     macosx-arm64)
         export ARCH_FLAGS=
-        export DNNL_FLAGS=
+        export COREML_FLAGS="--use_coreml"
         ;;
     macosx-x86_64)
         export ARCH_FLAGS=
+        export COREML_FLAGS="--use_coreml"
         ;;
     windows-*)
         if [[ -n "${CUDA_PATH:-}" ]]; then
@@ -105,7 +108,7 @@ sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxrun
 sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.9.1)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
-sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=SEQ/g' cmake/external/dnnl.cmake
+sedinplace "s/ CMAKE_ARGS/ CMAKE_ARGS $CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=SEQ/g" cmake/external/dnnl.cmake
 sedinplace 's#GIT_REPOSITORY ${DNNL_URL}#URL https://github.com/oneapi-src/oneDNN/archive/refs/tags/${DNNL_TAG}.tar.gz#g' cmake/external/dnnl.cmake
 sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/core/providers/cuda/rnn/cudnn_rnn_base.h
 sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/providers/cuda/cuda_call.cc
@@ -179,7 +182,7 @@ sedinplace 's/initializers = allocarray/initializers = (const OrtValue**)allocar
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 for i in {1..2}; do
-  "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $OPENMP_FLAGS $GPU_FLAGS || sedinplace 's/5ea4d05e62d7f954a46b3213f9b2535bdd866803/51982be81bbe52572b54180454df11a3ece9a934/g' cmake/deps.txt
+  "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $GPU_FLAGS || sedinplace 's/5ea4d05e62d7f954a46b3213f9b2535bdd866803/51982be81bbe52572b54180454df11a3ece9a934/g' cmake/deps.txt
 done
 
 # install headers and libraries in standard directories
