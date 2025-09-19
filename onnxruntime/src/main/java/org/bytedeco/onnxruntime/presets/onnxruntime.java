@@ -65,10 +65,6 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
             },
             exclude = {"CL/opencl.h", "CL/cl_version.h", "CL/cl_platform.h", "CL/cl.h"/*, "CL/cl_gl.h", "CL/cl_gl_ext.h", "CL/cl_ext.h"*/},
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1"}
-        ),
-        @Platform(
-            value = {"linux", "macosx", "windows"},
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
