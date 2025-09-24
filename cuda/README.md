@@ -79,37 +79,37 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cublas</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cudnn</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cusolver</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cusparse</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-npp</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-nccl</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-nvcomp</artifactId>
-            <version>12.9-9.10-1.5.13-SNAPSHOT</version>
+            <version>12.9-9.10-1.5.12</version>
         </dependency>
 
     </dependencies>

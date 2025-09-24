@@ -22,35 +22,35 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        file: [pom.xml, redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
+        file: [redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  linux-ppc64le:
 #    runs-on: ubuntu-22.04
 #    strategy:
 #      matrix:
-#        file: [pom.xml, redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
+#        file: [redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
 #    steps:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        file: [pom.xml, redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
+        file: [redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  macosx-x86_64:
 #    runs-on: macos-13
 #    strategy:
 #      matrix:
-#        file: [pom.xml, redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
+#        file: [redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
 #    steps:
 #      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86_64:
     runs-on: windows-2022
     strategy:
       matrix:
-        file: [pom.xml, redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
+        file: [redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   platform:
@@ -59,6 +59,6 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        file: [pom.xml, redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
+        file: [redist, redist-cublas, redist-cudnn, redist-cusolver, redist-cusparse, redist-npp, redist-nccl, redist-nvcomp]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions
