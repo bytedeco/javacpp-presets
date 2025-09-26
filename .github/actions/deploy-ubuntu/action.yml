@@ -344,8 +344,9 @@ runs:
 
           echo Executing Maven $MAVEN_PHASE $CI_DEPLOY_OPTIONS on $MAKEJ processors
           export EXT=${{ matrix.ext }}
+          export PROFILE=${{ matrix.profile }}
           export MAVEN_OPTS="-Xss2m -Xmx4g"
-          export MAVEN_OPTIONS="clean $MAVEN_PHASE clean -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT $MAVEN_OPTIONS $CI_DEPLOY_OPTIONS"
+          export MAVEN_OPTIONS="clean $MAVEN_PHASE clean -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=$CI_DEPLOY_PLATFORM -Djavacpp.platform.extension=$EXT -P=$PROFILE $MAVEN_OPTIONS $CI_DEPLOY_OPTIONS"
           for i in {1..5}; do STATUS=0; mvn $MAVEN_OPTIONS -pl .,$CI_DEPLOY_MODULE && break || STATUS=$? && sleep 60; done; (exit $STATUS)
         fi
         df -h

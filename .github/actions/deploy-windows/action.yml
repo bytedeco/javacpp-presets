@@ -326,8 +326,9 @@ runs:
 
         echo Executing Maven %MAVEN_PHASE% %CI_DEPLOY_OPTIONS% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}
+        set PROFILE=${{ matrix.profile }}
         set "MAVEN_OPTS=-Xss2m -Xmx4g"
-        set "MAVEN_OPTIONS=clean %MAVEN_PHASE% clean -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS% %CI_DEPLOY_OPTIONS%"
+        set "MAVEN_OPTIONS=clean %MAVEN_PHASE% clean -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% -P=%PROFILE% %MAVEN_OPTIONS% %CI_DEPLOY_OPTIONS%"
 
         setlocal enabledelayedexpansion
         for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -pl .,%CI_DEPLOY_MODULE% && goto :done || set STATUS=!ERRORLEVEL! && timeout 60 > nul)

@@ -32,7 +32,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDNN=1
     export USE_FAST_NVCC=0
     export CUDA_SEPARABLE_COMPILATION=OFF
-    export TORCH_CUDA_ARCH_LIST="5.0;6.0;7.0;8.0;9.0"
+    export TORCH_CUDA_ARCH_LIST="5.0;6.0;7.0;8.0;9.0;10.0"
 fi
 
 export PYTHON_BIN_PATH=$(which python3)
