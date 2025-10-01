@@ -96,6 +96,7 @@ ${CMAKE:-cmake} \
   -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
   -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
   -DCMAKE_INSTALL_LIBDIR="lib" \
+  -DCMAKE_INSTALL_CMAKEDIR="cmake" \
   -Dprotobuf_MSVC_STATIC_RUNTIME=OFF \
   -Dprotobuf_BUILD_SHARED_LIBS=OFF \
   -Dprotobuf_BUILD_TESTS=OFF \
@@ -132,14 +133,14 @@ ${CMAKE:-cmake} \
   -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PATH" \
   -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
+  -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
   -DCMAKE_INSTALL_LIBDIR="lib" \
   -DONNX_ML=ON \
-  -DBUILD_SHARED_LIBS=ON \
   -DONNX_BUILD_TESTS=OFF \
   -DONNX_WERROR=OFF \
   -DONNX_USE_LITE_PROTO=ON \
   -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF \
-  -DProtobuf_DIR="$INSTALL_PATH/lib/cmake/protobuf" \
+  -DProtobuf_DIR="$INSTALL_PATH/cmake" \
   -DProtobuf_USE_STATIC_LIBS=ON \
   -DProtobuf_PROTOC_EXECUTABLE="$PROTOC" \
   -DProtobuf_INCLUDE_DIR="$PROTOBUF_TARGET_INCLUDE" \
@@ -151,8 +152,6 @@ ${CMAKE:-cmake} \
 ${CMAKE:-cmake} --build . --parallel "$MAX_JOBS" --config Release
 ${CMAKE:-cmake} --install . --config Release
 cd ../
-cd ../
-
 
 mkdir -p "$INSTALL_PATH/include/onnx" \
          "$INSTALL_PATH/include/onnx/common" \
@@ -162,19 +161,21 @@ mkdir -p "$INSTALL_PATH/include/onnx" \
          "$INSTALL_PATH/include/onnx/shape_inference" \
          "$INSTALL_PATH/lib"
 
-cp -a onnx-$ONNX/onnx/*.h "$INSTALL_PATH/include/onnx/" || true
-cp -a onnx-$ONNX/onnx/common/*.h "$INSTALL_PATH/include/onnx/common/" || true
-cp -a onnx-$ONNX/onnx/defs/*.h "$INSTALL_PATH/include/onnx/defs/" || true
-cp -a onnx-$ONNX/onnx/version_converter/*.h "$INSTALL_PATH/include/onnx/version_converter/" || true
-cp -a onnx-$ONNX/onnx/version_converter/adapters/*.h "$INSTALL_PATH/include/onnx/version_converter/adapters/" || true
-cp -a onnx-$ONNX/onnx/shape_inference/*.h "$INSTALL_PATH/include/onnx/shape_inference/" || true
+cp -a onnx/*.h "$INSTALL_PATH/include/onnx/" || true
+cp -a onnx/common/*.h "$INSTALL_PATH/include/onnx/common/" || true
+cp -a onnx/defs/*.h "$INSTALL_PATH/include/onnx/defs/" || true
+cp -a onnx/version_converter/*.h "$INSTALL_PATH/include/onnx/version_converter/" || true
+cp -a onnx/version_converter/adapters/*.h "$INSTALL_PATH/include/onnx/version_converter/adapters/" || true
+cp -a onnx/shape_inference/*.h "$INSTALL_PATH/include/onnx/shape_inference/" || true
 
 cp -a $ONNX_BUILD_PATH/*.h "$INSTALL_PATH/include/onnx/" || true
 cp -a $ONNX_BUILD_PATH/libonnx* "$INSTALL_PATH/lib/" || true
-cp -a $ONNX_BUILD_PATH/*.so* "$INSTALL_PATH/lib/" || true
+
 cp -a $ONNX_BUILD_PATH/*.dylib "$INSTALL_PATH/lib/" || true
-cp -a $ONNX_BUILD_PATH/*.dll "$INSTALL_PATH/lib/" || true
-cp -a $ONNX_BUILD_PATH/*.lib "$INSTALL_PATH/lib/" || true
+cp -a $ONNX_BUILD_PATH/*.so* "$INSTALL_PATH/lib/" || true
 cp -a $ONNX_BUILD_PATH/*.a "$INSTALL_PATH/lib/" || true
 
-cd ../
+cp -a $ONNX_BUILD_PATH/*.dll "$INSTALL_PATH/lib/" || true
+cp -a $ONNX_BUILD_PATH/*.lib "$INSTALL_PATH/lib/" || true
+
+cd ../..
