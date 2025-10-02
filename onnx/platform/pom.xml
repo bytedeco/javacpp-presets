@@ -26,12 +26,6 @@
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>cpython-platform</artifactId>
-      <version>3.13.6-${project.parent.version}</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
