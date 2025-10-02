@@ -40,6 +40,12 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
     <dependency>
@@ -72,7 +78,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-arm64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-arm64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -117,6 +123,7 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.arm64;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
