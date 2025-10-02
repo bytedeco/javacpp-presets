@@ -30,34 +30,34 @@ export CXXFLAGS="-I$INSTALL_PATH/include"
 export TARGET_CMAKE_ARGS=""
 
 case "$PLATFORM" in
-  linux-arm64)
-    export CC="aarch64-linux-gnu-gcc"
-    export CXX="aarch64-linux-gnu-g++"
-    export AR="aarch64-linux-gnu-ar"
-    export RANLIB="aarch64-linux-gnu-ranlib"
-    export STRIP="aarch64-linux-gnu-strip"
-    export CFLAGS="$CFLAGS -fPIC"
-    export CXXFLAGS="$CXXFLAGS -fPIC"
-    export TARGET_CMAKE_ARGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64"
-    ;;
-  linux-*)
-    export CC="gcc"
-    export CXX="g++"
-    export CFLAGS="$CFLAGS -fPIC"
-    export CXXFLAGS="$CXXFLAGS -fPIC"
-    ;;
-  macosx-*)
-    export CC="clang"
-    export CXX="clang++"
-    export CFLAGS="$CFLAGS -fPIC"
-    export CXXFLAGS="$CXXFLAGS -fPIC"
-    ;;
-  windows-*)
-    export CC="cl.exe"
-    export CXX="cl.exe"
-    export CMAKE_GENERATOR="Ninja"
-    export USE_MSVC_STATIC_RUNTIME=0
-    ;;
+    linux-arm64)
+        export CC="aarch64-linux-gnu-gcc"
+        export CXX="aarch64-linux-gnu-g++"
+        export AR="aarch64-linux-gnu-ar"
+        export RANLIB="aarch64-linux-gnu-ranlib"
+        export STRIP="aarch64-linux-gnu-strip"
+        export CFLAGS="$CFLAGS -fPIC"
+        export CXXFLAGS="$CXXFLAGS -fPIC"
+        export TARGET_CMAKE_ARGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64"
+        ;;
+    linux-*)
+        export CC="gcc"
+        export CXX="g++"
+        export CFLAGS="$CFLAGS -fPIC"
+        export CXXFLAGS="$CXXFLAGS -fPIC"
+        ;;
+    macosx-*)
+        export CC="clang"
+        export CXX="clang++"
+        export CFLAGS="$CFLAGS -fPIC"
+        export CXXFLAGS="$CXXFLAGS -fPIC"
+        ;;
+    windows-*)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        export CMAKE_GENERATOR="Ninja"
+        export USE_MSVC_STATIC_RUNTIME=0
+        ;;
 esac
 
 ####################
@@ -71,13 +71,13 @@ mkdir -p _build-host
 cd _build-host
 
 CC= CXX= ${CMAKE:-cmake} \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH/host" \
-  -DCMAKE_INSTALL_LIBDIR="lib" \
-  -Dprotobuf_BUILD_TESTS=OFF \
-  -Dprotobuf_BUILD_SHARED_LIBS=OFF \
-  -Dprotobuf_MSVC_STATIC_RUNTIME=OFF \
-  ../cmake
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH/host" \
+    -DCMAKE_INSTALL_LIBDIR="lib" \
+    -Dprotobuf_BUILD_TESTS=OFF \
+    -Dprotobuf_BUILD_SHARED_LIBS=OFF \
+    -Dprotobuf_MSVC_STATIC_RUNTIME=OFF \
+    ../cmake
 
 ${CMAKE:-cmake} --build . --parallel "$MAX_JOBS" --config Release
 ${CMAKE:-cmake} --install . --config Release
@@ -91,19 +91,19 @@ mkdir -p _build-target
 cd _build-target
 
 ${CMAKE:-cmake} \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_C_FLAGS="$CFLAGS" \
-  -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
-  -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
-  -DCMAKE_INSTALL_LIBDIR="lib" \
-  -DCMAKE_INSTALL_CMAKEDIR="cmake" \
-  -Dprotobuf_MSVC_STATIC_RUNTIME=OFF \
-  -Dprotobuf_BUILD_SHARED_LIBS=OFF \
-  -Dprotobuf_BUILD_TESTS=OFF \
-  -Dprotobuf_BUILD_PROTOC_BINARIES=OFF \
-  -DProtobuf_PROTOC_EXECUTABLE="$PROTOC" \
-  $TARGET_CMAKE_ARGS \
-  ../cmake
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_FLAGS="$CFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+    -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
+    -DCMAKE_INSTALL_LIBDIR="lib" \
+    -DCMAKE_INSTALL_CMAKEDIR="cmake" \
+    -Dprotobuf_MSVC_STATIC_RUNTIME=OFF \
+    -Dprotobuf_BUILD_SHARED_LIBS=OFF \
+    -Dprotobuf_BUILD_TESTS=OFF \
+    -Dprotobuf_BUILD_PROTOC_BINARIES=OFF \
+    -DProtobuf_PROTOC_EXECUTABLE="$PROTOC" \
+    $TARGET_CMAKE_ARGS \
+    ../cmake
 
 ${CMAKE:-cmake} --build . --parallel "$MAX_JOBS" --config Release
 ${CMAKE:-cmake} --install . --config Release
@@ -128,38 +128,38 @@ cd _build
 ONNX_BUILD_PATH="$(pwd)"
 
 ${CMAKE:-cmake} \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_C_FLAGS="$CFLAGS" \
-  -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_PATH" \
-  -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
-  -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
-  -DCMAKE_INSTALL_LIBDIR="lib" \
-  -DONNX_ML=ON \
-  -DONNX_BUILD_TESTS=OFF \
-  -DONNX_WERROR=OFF \
-  -DONNX_USE_LITE_PROTO=ON \
-  -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF \
-  -DProtobuf_DIR="$INSTALL_PATH/cmake" \
-  -DProtobuf_USE_STATIC_LIBS=ON \
-  -DProtobuf_PROTOC_EXECUTABLE="$PROTOC" \
-  -DProtobuf_INCLUDE_DIR="$PROTOBUF_TARGET_INCLUDE" \
-  -DProtobuf_LIBRARY="$PROTOBUF_TARGET_STATIC_LIB" \
-  -DProtobuf_LITE_LIBRARY="$PROTOBUF_TARGET_LITE_STATIC_LIB" \
-  $TARGET_CMAKE_ARGS \
-  ../
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_FLAGS="$CFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+    -DCMAKE_PREFIX_PATH="$INSTALL_PATH" \
+    -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" \
+    -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
+    -DCMAKE_INSTALL_LIBDIR="lib" \
+    -DONNX_ML=ON \
+    -DONNX_BUILD_TESTS=OFF \
+    -DONNX_WERROR=OFF \
+    -DONNX_USE_LITE_PROTO=ON \
+    -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF \
+    -DProtobuf_DIR="$INSTALL_PATH/cmake" \
+    -DProtobuf_USE_STATIC_LIBS=ON \
+    -DProtobuf_PROTOC_EXECUTABLE="$PROTOC" \
+    -DProtobuf_INCLUDE_DIR="$PROTOBUF_TARGET_INCLUDE" \
+    -DProtobuf_LIBRARY="$PROTOBUF_TARGET_STATIC_LIB" \
+    -DProtobuf_LITE_LIBRARY="$PROTOBUF_TARGET_LITE_STATIC_LIB" \
+    $TARGET_CMAKE_ARGS \
+    ../
 
 ${CMAKE:-cmake} --build . --parallel "$MAX_JOBS" --config Release
 ${CMAKE:-cmake} --install . --config Release
 cd ../
 
 mkdir -p "$INSTALL_PATH/include/onnx" \
-         "$INSTALL_PATH/include/onnx/common" \
-         "$INSTALL_PATH/include/onnx/defs" \
-         "$INSTALL_PATH/include/onnx/version_converter" \
-         "$INSTALL_PATH/include/onnx/version_converter/adapters" \
-         "$INSTALL_PATH/include/onnx/shape_inference" \
-         "$INSTALL_PATH/lib"
+        "$INSTALL_PATH/include/onnx/common" \
+        "$INSTALL_PATH/include/onnx/defs" \
+        "$INSTALL_PATH/include/onnx/version_converter" \
+        "$INSTALL_PATH/include/onnx/version_converter/adapters" \
+        "$INSTALL_PATH/include/onnx/shape_inference" \
+        "$INSTALL_PATH/lib"
 
 cp -a onnx/*.h "$INSTALL_PATH/include/onnx/" || true
 cp -a onnx/common/*.h "$INSTALL_PATH/include/onnx/common/" || true
