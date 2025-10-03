@@ -1,4 +1,5 @@
 
+ * Introduce `linux-arm64` builds for ONNX ([pull #1697](https://github.com/bytedeco/javacpp-presets/pull/1697))
  * Enable DNNL and CoreML in `linux-arm64` and `macosx-arm64` builds for ONNX Runtime ([pull #1689](https://github.com/bytedeco/javacpp-presets/pull/1689))
  * Split the `redist` artifacts for CUDA into multiple less-than-1-GB smaller ones ([issue #1638](https://github.com/bytedeco/javacpp-presets/issues/1638))
  * Introduce `macosx-arm64` builds for DNNL, OpenCL ([issue #1681](https://github.com/bytedeco/javacpp-presets/issues/1681))

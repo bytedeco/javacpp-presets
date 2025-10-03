@@ -1219,6 +1219,7 @@
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>depthai</module>
+        <module>onnx</module>
         <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
