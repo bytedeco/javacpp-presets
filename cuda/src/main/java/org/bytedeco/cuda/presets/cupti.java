@@ -48,7 +48,7 @@ public class cupti implements InfoMapper {
         infoMap
             .put(new Info("CUPTIAPI").cppTypes().annotations().cppText(""))
             .put(new Info("CUPTILP64").define())
-            .put(new Info("CUpti_ActivityConfidentialComputeRotation").skip())
+            .put(new Info("CUpti_ActivityConfidentialComputeRotation", "cuptiActivityEnableAllocationSource").skip())
             .put(new Info("CUpti_EventID", "CUpti_EventDomainID", "CUpti_MetricID", "CUpti_CallbackId", "CUpti_DeviceAttribute", "CUpti_MetricValueKind").valueTypes("int").cast().pointerTypes("IntPointer", "int[]")) // enum or uint32
             .put(new Info("CUpti_SubscriberHandle").valueTypes("@ByPtr CUpti_Subscriber_st").pointerTypes("@ByPtrPtr CUpti_Subscriber_st"))
         ;

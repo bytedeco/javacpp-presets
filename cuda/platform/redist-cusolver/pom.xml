@@ -17,7 +17,6 @@
 
   <properties>
     <javacpp.moduleId>cuda</javacpp.moduleId>
-    <javacpp.platform.extension>-redist-cusolver</javacpp.platform.extension>
   </properties>
 
   <dependencies>
@@ -33,31 +32,36 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
+      <artifactId>${javacpp.moduleId}-redist-cusolver</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}-redist-cusolver</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-arm64}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
+      <artifactId>${javacpp.moduleId}-redist-cusolver</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>${project.groupId}</groupId>-->
-<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <artifactId>${javacpp.moduleId}-redist-cusolver</artifactId>-->
 <!--      <version>${project.version}</version>-->
 <!--      <classifier>${javacpp.platform.linux-ppc64le}</classifier>-->
 <!--    </dependency>-->
 <!--    <dependency>-->
 <!--      <groupId>${project.groupId}</groupId>-->
-<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <artifactId>${javacpp.moduleId}-redist-cusolver</artifactId>-->
 <!--      <version>${project.version}</version>-->
 <!--      <classifier>${javacpp.platform.macosx-x86_64}</classifier>-->
 <!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
+      <artifactId>${javacpp.moduleId}-redist-cusolver</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.windows-x86_64}</classifier>
     </dependency>
@@ -73,7 +77,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64-redist-cusolver.jar ${javacpp.moduleId}-linux-x86_64-redist-cusolver.jar ${javacpp.moduleId}-linux-ppc64le-redist-cusolver.jar ${javacpp.moduleId}-macosx-x86_64-redist-cusolver.jar ${javacpp.moduleId}-windows-x86_64-redist-cusolver.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-redist-cusolver-linux-arm64.jar ${javacpp.moduleId}-redist-cusolver-linux-x86_64.jar ${javacpp.moduleId}-redist-cusolver-linux-ppc64le.jar ${javacpp.moduleId}-redist-cusolver-macosx-x86_64.jar ${javacpp.moduleId}-redist-cusolver-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -118,11 +122,11 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform.redist.cusolver {
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.redist.cusolver;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.redist.cusolver;
-//                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le.redist.cusolver;
-//                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.redist.cusolver;
-                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.redist.cusolver;
+                      requires static org.bytedeco.${javacpp.moduleId}.redist.cusolver.linux.arm64;
+                      requires static org.bytedeco.${javacpp.moduleId}.redist.cusolver.linux.x86_64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.redist.cusolver.linux.ppc64le;
+//                      requires static org.bytedeco.${javacpp.moduleId}.redist.cusolver.macosx.x86_64;
+                      requires static org.bytedeco.${javacpp.moduleId}.redist.cusolver.windows.x86_64;
                     }
                   </moduleInfoSource>
                 </module>
