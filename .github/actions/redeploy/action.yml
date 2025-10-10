@@ -40,15 +40,16 @@ runs:
       shell: bash
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        FILE: ${{ matrix.file }}
       run: |
         if [[ -z ${CI_DEPLOY_USERNAME:-} ]] || [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
             # We are not deploying
             exit 0
         fi
 
-        curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-        sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
-        sudo ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
+        curl -LO https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+        sudo tar -xzf apache-maven-3.9.6-bin.tar.gz -C /opt/
+        sudo ln -sf /opt/apache-maven-3.9.6/bin/mvn /usr/bin/mvn
 
         sudo python3 -m pip install gdown || sudo python3 -m pip install --break-system-packages gdown
 
@@ -68,12 +69,11 @@ runs:
         echo "<value>Bearer $(echo $CI_DEPLOY_USERNAME:$CI_DEPLOY_PASSWORD | base64)</value></property></httpHeaders></configuration></server>" >> $HOME/.m2/settings.xml
         echo "</servers></settings>" >> $HOME/.m2/settings.xml
 
-        GROUP="org.bytedeco"
         REPOSITORY_ID="central"
         REPOSITORY_URL="https://central.sonatype.com/repository/maven-snapshots/"
         DEPLOY_OPTIONS="-DaltDeploymentRepository=$REPOSITORY_ID::default::$REPOSITORY_URL"
         DEPLOY_FILE_OPTIONS="deploy:deploy-file -DrepositoryId=$REPOSITORY_ID -Durl=$REPOSITORY_URL"
-        MAVEN_OPTIONS="-N -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3"
+        MAVEN_OPTIONS="-N -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Dmaven.test.skip"
         UPLOAD_URL=
         if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
             python3 -m gdown -q -O settings.tar.gz $CI_DEPLOY_SETTINGS
@@ -86,7 +86,7 @@ runs:
         fi
 
         rm -f dependencies.txt
-        readarray POMS <<< "$(find $CI_DEPLOY_MODULE/platform/ -name pom.xml)";
+        readarray POMS <<< "$(find $CI_DEPLOY_MODULE/platform/$FILE -name pom.xml)";
         while [[ ${#POMS[@]} > 0 ]]; do
             POM=${POMS[0]}
             unset POMS[0]
@@ -104,16 +104,24 @@ runs:
             for i in {1..5}; do
                 STATUS=0
                 mvn dependency:list $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
-                    && mvn dependency:resolve -Dclassifier=javadoc  $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
-                    && mvn dependency:resolve -Dclassifier=sources  $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
+                    && mvn dependency:resolve -Dclassifier=javadoc $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
+                    && mvn dependency:resolve -Dclassifier=sources $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
                     && mvn clean deploy $DEPLOY_OPTIONS $MAVEN_OPTIONS -f $POM \
                     && break || STATUS=$? && sleep 60
             done
             (exit $STATUS)
         done
+        cat dependencies.txt
 
+        GROUP="org.bytedeco"
+        ARTIFACT=$CI_DEPLOY_MODULE
+        if [[ "$ARTIFACT" == "." ]]; then
+            ARTIFACT=javacpp
+        fi
+        if [[ -n $FILE && -d $ARTIFACT/$FILE ]]; then
+            ARTIFACT=$ARTIFACT-$FILE
+        fi
         for LINE in $(sed s/:compile//g dependencies.txt | sort -u); do
-            [[ "$CI_DEPLOY_MODULE" == "." ]] && ARTIFACT=javacpp || ARTIFACT=$CI_DEPLOY_MODULE
             if [[ $LINE =~ $GROUP:$ARTIFACT:jar:([^[:space:]]*) ]]; then
                 VERSION=${BASH_REMATCH[1]}
                 FILES=

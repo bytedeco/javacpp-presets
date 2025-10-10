@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.5.13-SNAPSHOT</version>
+    <relativePath>../../</relativePath>
+  </parent>
+
+  <groupId>org.bytedeco</groupId>
+  <artifactId>cuda-redist-nvcomp</artifactId>
+  <version>12.9-9.10-${project.parent.version}</version>
+  <name>JavaCPP Presets Redist for CUDA</name>
+
+  <properties>
+    <javacpp.packageName>cuda</javacpp.packageName>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <directory>${project.basedir}/../target</directory>
+    <sourceDirectory>${project.basedir}/../src/main/java</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <executions>
+          <execution>
+            <id>javacpp-parser</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <excludes><exclude>**/*</exclude></excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <excludes><exclude>**/*</exclude></excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp-${javacpp.platform}</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>${javacpp.platform}</classifier>
+              <classesDirectory>${project.build.directory}/native</classesDirectory>
+              <includes>
+                <include>org/bytedeco/cuda/${javacpp.platform}/*nvcomp*</include>
+              </includes>
+              <excludes>
+                <exclude>org/bytedeco/cuda/${javacpp.platform}/*jni*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>empty-javadoc-jar</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>javadoc</classifier>
+            </configuration>
+          </execution>
+          <execution>
+            <id>empty-sources-jar</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>sources</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-module-infos</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>add-redist-module-info</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <modules>
+                <module>
+                  <file>${project.build.directory}/${project.artifactId}.jar</file>
+                  <moduleInfoSource>
+                    open module org.bytedeco.${javacpp.packageName}.redist.nvcomp {
+                      requires transitive org.bytedeco.${javacpp.packageName};
+                    }
+                  </moduleInfoSource>
+                </module>
+                <module>
+                  <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}.jar</file>
+                  <moduleInfoSource>
+                    open module org.bytedeco.${javacpp.packageName}.redist.nvcomp.${javacpp.platform.module} {
+                      requires transitive org.bytedeco.${javacpp.packageName};
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-source</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

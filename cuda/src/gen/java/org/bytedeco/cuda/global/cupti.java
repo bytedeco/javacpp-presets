@@ -4149,7 +4149,7 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableHWTrace(@Cast("
  * \retval CUPTI_SUCCESS
  * \retval CUPTI_ERROR_NOT_INITIALIZED
 */
-public static native @Cast("CUptiResult") int cuptiActivityEnableAllocationSource(@Cast("uint8_t") byte enable);
+
 
 /**
  * \brief Enables collecting records for all synchronization operations.

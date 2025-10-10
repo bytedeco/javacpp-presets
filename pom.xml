@@ -218,7 +218,7 @@
             </goals>
             <configuration>
               <targetDirectories>
-                <targetDirectory>${project.basedir}/src/gen/java</targetDirectory>
+                <targetDirectory>${project.build.sourceDirectory}/../../gen/java</targetDirectory>
                 <targetDirectory>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
               </targetDirectories>
             </configuration>
@@ -270,7 +270,7 @@
             </goals>
             <configuration>
               <skip>${javacpp.parser.skip}</skip>
-              <outputDirectory>${project.basedir}/src/gen/java</outputDirectory>
+              <outputDirectory>${project.build.sourceDirectory}/../../gen/java</outputDirectory>
               <classOrPackageName>org.bytedeco.${javacpp.packageName}.presets.*</classOrPackageName>
             </configuration>
           </execution>
@@ -377,7 +377,7 @@
               <modules>
                 <module>
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
-                  <moduleInfoFile>${project.basedir}/src/main/java9/module-info.java</moduleInfoFile>
+                  <moduleInfoFile>${project.build.sourceDirectory}/../java9/module-info.java</moduleInfoFile>
                 </module>
                 <module>
                   <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}${javacpp.platform.extension}.jar</file>
@@ -451,7 +451,7 @@
             </goals>
             <configuration>
               <sources>
-                <source>${project.basedir}/src/gen/java</source>
+                <source>${project.build.sourceDirectory}/../../gen/java</source>
                 <source>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</source>
               </sources>
             </configuration>
