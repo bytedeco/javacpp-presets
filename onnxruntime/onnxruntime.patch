@@ -387,3 +387,14 @@ index 215ad77335..0584b0533c 100644
      parser.add_argument(
          "--arm64ec",
          action="store_true",
+diff --git a/onnxruntime/core/optimizer/transpose_optimization/optimizer_api.h b/onnxruntime/core/optimizer/transpose_optimization/optimizer_api.h
+--- a/onnxruntime/core/optimizer/transpose_optimization/optimizer_api.h
++++ b/onnxruntime/core/optimizer/transpose_optimization/optimizer_api.h
+@@ -11,6 +11,7 @@
+ #include <unordered_map>
+ #include <unordered_set>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace onnx_transpose_optimization {
+ namespace api {
