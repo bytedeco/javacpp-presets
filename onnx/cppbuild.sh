@@ -9,7 +9,7 @@ fi
 
 export MAX_JOBS=${MAKEJ:-4}
 
-export ONNX=1.19.0
+export ONNX=1.19.1
 export PROTO=3.20.3
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz

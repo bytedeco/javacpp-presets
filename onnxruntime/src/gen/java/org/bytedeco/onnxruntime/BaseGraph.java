@@ -43,6 +43,7 @@ public class BaseGraph extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseGraph put(@ByRef(true) BaseGraph v);
 
   public native @Cast("Ort::detail::Base<OrtGraph>::contained_type*") @Name("operator Ort::detail::Base<OrtGraph>::contained_type*") @NoException(true) OrtGraph asOrtGraph();
+  public native @Cast("const Ort::detail::Base<OrtGraph>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtGraph multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

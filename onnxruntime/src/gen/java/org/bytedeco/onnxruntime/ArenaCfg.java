@@ -35,4 +35,11 @@ public class ArenaCfg extends BaseArenaCfg {
    */
   public ArenaCfg(@Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes, int max_dead_bytes_per_chunk) { super((Pointer)null); allocate(max_mem, arena_extend_strategy, initial_chunk_size_bytes, max_dead_bytes_per_chunk); }
   private native void allocate(@Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes, int max_dead_bytes_per_chunk);
+
+  /**
+   * Wraps Ort::CreateArenaCfgV2
+   * See C API for details on what the following parameters mean and how to choose these values
+   */
+  public ArenaCfg(@Const @ByRef StringSizeTMap arena_config) { super((Pointer)null); allocate(arena_config); }
+  private native void allocate(@Const @ByRef StringSizeTMap arena_config);
 }

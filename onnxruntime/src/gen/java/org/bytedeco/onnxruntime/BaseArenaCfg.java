@@ -43,6 +43,7 @@ public class BaseArenaCfg extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseArenaCfg put(@ByRef(true) BaseArenaCfg v);
 
   public native @Cast("Ort::detail::Base<OrtArenaCfg>::contained_type*") @Name("operator Ort::detail::Base<OrtArenaCfg>::contained_type*") @NoException(true) OrtArenaCfg asOrtArenaCfg();
+  public native @Cast("const Ort::detail::Base<OrtArenaCfg>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtArenaCfg multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

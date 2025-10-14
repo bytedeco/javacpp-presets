@@ -15,7 +15,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-/** \brief Wrapper around ::OrtKeyValuePair */
+/** \brief Wrapper around ::OrtKeyValuePairs */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class KeyValuePairs extends KeyValuePairsImpl {
     static { Loader.load(); }

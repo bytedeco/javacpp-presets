@@ -43,6 +43,7 @@ public class BaseThreadingOptions extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseThreadingOptions put(@ByRef(true) BaseThreadingOptions v);
 
   public native @Cast("Ort::detail::Base<OrtThreadingOptions>::contained_type*") @Name("operator Ort::detail::Base<OrtThreadingOptions>::contained_type*") @NoException(true) OrtThreadingOptions asOrtThreadingOptions();
+  public native @Cast("const Ort::detail::Base<OrtThreadingOptions>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtThreadingOptions multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

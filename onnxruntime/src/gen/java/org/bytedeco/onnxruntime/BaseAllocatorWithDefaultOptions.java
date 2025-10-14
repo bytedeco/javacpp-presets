@@ -43,6 +43,7 @@ public class BaseAllocatorWithDefaultOptions extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseAllocatorWithDefaultOptions put(@ByRef(true) BaseAllocatorWithDefaultOptions v);
 
   public native @Cast("Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >::contained_type*") @Name("operator Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >::contained_type*") @NoException(true) UnownedAllocator asUnownedAllocator();
+  public native @Cast("const Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >::contained_type*") @ByRef @Name("operator *") @NoException(true) UnownedAllocator multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

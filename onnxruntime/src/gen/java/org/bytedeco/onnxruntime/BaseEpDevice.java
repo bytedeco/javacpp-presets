@@ -43,6 +43,7 @@ public class BaseEpDevice extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseEpDevice put(@ByRef(true) BaseEpDevice v);
 
   public native @Cast("Ort::detail::Base<OrtEpDevice>::contained_type*") @Name("operator Ort::detail::Base<OrtEpDevice>::contained_type*") @NoException(true) OrtEpDevice asOrtEpDevice();
+  public native @Cast("const Ort::detail::Base<OrtEpDevice>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtEpDevice multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

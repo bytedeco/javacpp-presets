@@ -44,7 +44,7 @@ public class OrtROCMProviderOptions extends Pointer {
    */
   public native int device_id(); public native OrtROCMProviderOptions device_id(int setter);
 
-  /** \brief ROCM MIOpen Convolution algorithm exaustive search option.
+  /** \brief ROCM MIOpen Convolution algorithm exhaustive search option.
    *   Defaults to 0 (false).
    */
   public native int miopen_conv_exhaustive_search(); public native OrtROCMProviderOptions miopen_conv_exhaustive_search(int setter);

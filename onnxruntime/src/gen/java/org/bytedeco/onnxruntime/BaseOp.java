@@ -15,34 +15,35 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 @Name("Ort::detail::Base<OrtOp>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class BaseOrtOp extends Pointer {
+public class BaseOp extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BaseOrtOp(Pointer p) { super(p); }
+    public BaseOp(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BaseOrtOp(long size) { super((Pointer)null); allocateArray(size); }
+    public BaseOp(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public BaseOrtOp position(long position) {
-        return (BaseOrtOp)super.position(position);
+    @Override public BaseOp position(long position) {
+        return (BaseOp)super.position(position);
     }
-    @Override public BaseOrtOp getPointer(long i) {
-        return new BaseOrtOp((Pointer)this).offsetAddress(i);
+    @Override public BaseOp getPointer(long i) {
+        return new BaseOp((Pointer)this).offsetAddress(i);
     }
 
 
-  public BaseOrtOp() { super((Pointer)null); allocate(); }
+  public BaseOp() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public BaseOrtOp(@Cast("Ort::detail::Base<OrtOp>::contained_type*") OrtOp p) { super((Pointer)null); allocate(p); }
+  public BaseOp(@Cast("Ort::detail::Base<OrtOp>::contained_type*") OrtOp p) { super((Pointer)null); allocate(p); }
   @NoException(true) private native void allocate(@Cast("Ort::detail::Base<OrtOp>::contained_type*") OrtOp p);
 
   
   
 
-  public BaseOrtOp(@ByRef(true) BaseOrtOp v) { super((Pointer)null); allocate(v); }
-  @NoException(true) private native void allocate(@ByRef(true) BaseOrtOp v);
-  public native @ByRef @Name("operator =") @NoException(true) BaseOrtOp put(@ByRef(true) BaseOrtOp v);
+  public BaseOp(@ByRef(true) BaseOp v) { super((Pointer)null); allocate(v); }
+  @NoException(true) private native void allocate(@ByRef(true) BaseOp v);
+  public native @ByRef @Name("operator =") @NoException(true) BaseOp put(@ByRef(true) BaseOp v);
 
   public native @Cast("Ort::detail::Base<OrtOp>::contained_type*") @Name("operator Ort::detail::Base<OrtOp>::contained_type*") @NoException(true) OrtOp asOrtOp();
+  public native @Cast("const Ort::detail::Base<OrtOp>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtOp multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

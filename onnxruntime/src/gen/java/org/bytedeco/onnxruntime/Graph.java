@@ -13,7 +13,7 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
-  // namespace detail
+
 
 /** \brief Wrapper around ::OrtGraph
  *
@@ -37,6 +37,7 @@ public class Graph extends GraphImpl {
   public Graph(OrtGraph p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtGraph p);
 // #if !defined(ORT_MINIMAL_BUILD)
+  // <Wraps GetModelEditorApi().CreateGraph()
   public Graph() { super((Pointer)null); allocate(); }
   private native void allocate();
 // #endif

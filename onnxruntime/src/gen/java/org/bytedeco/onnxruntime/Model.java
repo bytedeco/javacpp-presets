@@ -29,9 +29,8 @@ public class Model extends ModelImpl {
   private native void allocate(OrtModel p);
 
 // #if !defined(ORT_MINIMAL_BUILD)
+  //< Wraps GetModelEditorApi().CreateModel()
   public Model(@Cast("Ort::Model::DomainOpsetPair*") @StdVector StringIntPair opsets) { super((Pointer)null); allocate(opsets); }
   private native void allocate(@Cast("Ort::Model::DomainOpsetPair*") @StdVector StringIntPair opsets);
 // #endif
-
-  public native @ByVal @Cast("Ort::ConstModel*") ModelImpl GetConst();
 }

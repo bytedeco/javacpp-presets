@@ -43,6 +43,7 @@ public class BaseIoBinding extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseIoBinding put(@ByRef(true) BaseIoBinding v);
 
   public native @Cast("Ort::detail::Base<OrtIoBinding>::contained_type*") @Name("operator Ort::detail::Base<OrtIoBinding>::contained_type*") @NoException(true) OrtIoBinding asOrtIoBinding();
+  public native @Cast("const Ort::detail::Base<OrtIoBinding>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtIoBinding multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

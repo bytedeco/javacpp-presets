@@ -46,7 +46,9 @@ public class OrtEpFactory extends Pointer {
    */
   public native @Cast("uint32_t") int ort_version_supported(); public native OrtEpFactory ort_version_supported(int setter);
 
-  /** \brief Get the name the of the execution provider that the factory creates.
+  /** \brief Get the name of the execution provider that the factory creates.
+   *
+   * The returned string should be a null-terminated, UTF-8 encoded string. ORT will copy it.
    *
    * @param this_ptr [in] The OrtEpFactory instance.
    * @return The name of the execution provider the factory creates.
@@ -59,11 +61,13 @@ public class OrtEpFactory extends Pointer {
       public    GetName_OrtEpFactory(Pointer p) { super(p); }
       protected GetName_OrtEpFactory() { allocate(); }
       private native void allocate();
-      public native @Cast("const char*") BytePointer call(@Const OrtEpFactory this_ptr);
+      public native @Cast("const char*") BytePointer call( @Const OrtEpFactory this_ptr);
   }
   public native GetName_OrtEpFactory GetName(); public native OrtEpFactory GetName(GetName_OrtEpFactory setter);
 
   /** \brief Get the name of vendor who owns the execution provider that the factory creates.
+   *
+   * The returned string should be a null-terminated, UTF-8 encoded string. ORT will copy it.
    *
    * @param this_ptr [in] The OrtEpFactory instance.
    * @return vendor The vendor name of the execution provider the factory creates.
@@ -76,11 +80,11 @@ public class OrtEpFactory extends Pointer {
       public    GetVendor_OrtEpFactory(Pointer p) { super(p); }
       protected GetVendor_OrtEpFactory() { allocate(); }
       private native void allocate();
-      public native @Cast("const char*") BytePointer call(@Const OrtEpFactory this_ptr);
+      public native @Cast("const char*") BytePointer call( @Const OrtEpFactory this_ptr);
   }
   public native GetVendor_OrtEpFactory GetVendor(); public native OrtEpFactory GetVendor(GetVendor_OrtEpFactory setter);  // return EP vendor
 
-  /** \brief Get information from the execution provider if it supports the OrtHardwareDevice.
+  /** \brief Get information from the execution provider about OrtHardwareDevice support.
    *
    * @param this_ptr [in] The OrtEpFactory instance.
    *                     Non-const as the factory is passed through to the CreateEp call via the OrtEpDevice.
@@ -95,24 +99,20 @@ public class OrtEpFactory extends Pointer {
    * @param num_ep_devices [out] The number of EP devices added to ep_devices.
    * @return true if the factory can create an execution provider that uses {@code device}.
    *
-   * \note ORT will take ownership or ep_metadata and/or ep_options if they are not null.
-   *
    * @since Version 1.22.
    */
-  public static class GetSupportedDevices_OrtEpFactory_PointerPointer_long_PointerPointer_long_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSupportedDevices_OrtEpFactory_PointerPointer_long_PointerPointer_long_SizeTPointer(Pointer p) { super(p); }
-      protected GetSupportedDevices_OrtEpFactory_PointerPointer_long_PointerPointer_long_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native OrtStatus call(OrtEpFactory this_ptr,
-                                                  @Cast("const OrtHardwareDevice*const*") PointerPointer devices,
-                                                  @Cast("size_t") long num_devices,
-                                                  @Cast("OrtEpDevice**") PointerPointer ep_devices,
-                                                  @Cast("size_t") long max_ep_devices,
-                                                  @Cast("size_t*") SizeTPointer num_ep_devices);
-  }
-  public native GetSupportedDevices_OrtEpFactory_PointerPointer_long_PointerPointer_long_SizeTPointer GetSupportedDevices(); public native OrtEpFactory GetSupportedDevices(GetSupportedDevices_OrtEpFactory_PointerPointer_long_PointerPointer_long_SizeTPointer setter);
+  public native OrtStatus GetSupportedDevices( OrtEpFactory this_ptr,
+                    @Cast("const OrtHardwareDevice*const*") PointerPointer devices,
+                    @Cast("size_t") long num_devices,
+                    @Cast("OrtEpDevice**") PointerPointer ep_devices,
+                    @Cast("size_t") long max_ep_devices,
+                    @Cast("size_t*") SizeTPointer num_ep_devices);
+  public native OrtStatus GetSupportedDevices( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long max_ep_devices,
+                    @Cast("size_t*") SizeTPointer num_ep_devices);
 
   /** \brief Function to create an OrtEp instance for use in a Session.
    *
@@ -120,13 +120,15 @@ public class OrtEpFactory extends Pointer {
    *
    * @param this_ptr [in] The OrtEpFactory instance.
    * @param devices [in] The OrtHardwareDevice instances that the execution provider was selected to use.
+   *                    May be a subset of the OrtHardwareDevice instances that the execution provider's factory
+   *                    set as supported in the call to OrtEpFactory::GetSupportedDevices.
    * @param ep_metadata_pairs [in] Execution provider metadata that was provided to OrtEpApi::CreateEpDevice, for each
    *                              device.
    * @param num_devices [in] The number of devices the execution provider was selected for.
    * @param session_options [in] The OrtSessionOptions instance that contains the configuration options for the
    *                            session. This will include ep_options from GetSupportedDevices as well as any
    *                            user provided overrides.
-   *                            Execution provider options will have been added with a prefix of 'ep.<ep name>.'.
+   *                            Execution provider options will have been added with a prefix of 'ep.[ep name].'.
    *                            The OrtSessionOptions instance will NOT be valid after this call and should not be
    *                            stored for later use.
    * @param logger [in] The OrtLogger instance for the session that the execution provider should use for logging.
@@ -134,29 +136,27 @@ public class OrtEpFactory extends Pointer {
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    *
-   * @since Version <coming soon>. This is a placeholder.
+   * @since Version 1.22.
    */
-  public static class CreateEp_OrtEpFactory_PointerPointer_PointerPointer_long_OrtSessionOptions_OrtLogger_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateEp_OrtEpFactory_PointerPointer_PointerPointer_long_OrtSessionOptions_OrtLogger_PointerPointer(Pointer p) { super(p); }
-      protected CreateEp_OrtEpFactory_PointerPointer_PointerPointer_long_OrtSessionOptions_OrtLogger_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native OrtStatus call(OrtEpFactory this_ptr,
-                                       @Cast("const OrtHardwareDevice*const*") PointerPointer devices,
-                                       @Cast("const OrtKeyValuePairs*const*") PointerPointer ep_metadata_pairs,
-                                       @Cast("size_t") long num_devices,
-                                       @Const OrtSessionOptions session_options,
-                                       @Const OrtLogger logger, @Cast("OrtEp**") PointerPointer ep);
-  }
-  public native CreateEp_OrtEpFactory_PointerPointer_PointerPointer_long_OrtSessionOptions_OrtLogger_PointerPointer CreateEp(); public native OrtEpFactory CreateEp(CreateEp_OrtEpFactory_PointerPointer_PointerPointer_long_OrtSessionOptions_OrtLogger_PointerPointer setter);
+  public native OrtStatus CreateEp( OrtEpFactory this_ptr,
+                    @Cast("const OrtHardwareDevice*const*") PointerPointer devices,
+                    @Cast("const OrtKeyValuePairs*const*") PointerPointer ep_metadata_pairs,
+                    @Cast("size_t") long num_devices,
+                    @Const OrtSessionOptions session_options,
+                    @Const OrtLogger logger, @Cast("OrtEp**") PointerPointer ep);
+  public native OrtStatus CreateEp( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Const @ByPtrPtr OrtKeyValuePairs ep_metadata_pairs,
+                    @Cast("size_t") long num_devices,
+                    @Const OrtSessionOptions session_options,
+                    @Const OrtLogger logger, @ByPtrPtr OrtEp ep);
 
   /** \brief Release the OrtEp instance.
    *
    * @param this_ptr [in] The OrtEpFactory instance.
    * @param ep [in] The OrtEp instance to release.
    *
-   * @since Version <coming soon>. This is a placeholder.
+   * @since Version 1.22.
    */
   public static class ReleaseEp_OrtEpFactory_OrtEp extends FunctionPointer {
       static { Loader.load(); }
@@ -164,7 +164,197 @@ public class OrtEpFactory extends Pointer {
       public    ReleaseEp_OrtEpFactory_OrtEp(Pointer p) { super(p); }
       protected ReleaseEp_OrtEpFactory_OrtEp() { allocate(); }
       private native void allocate();
-      public native void call(OrtEpFactory this_ptr, OrtEp ep);
+      public native void call( OrtEpFactory this_ptr, OrtEp ep);
   }
   public native ReleaseEp_OrtEpFactory_OrtEp ReleaseEp(); public native OrtEpFactory ReleaseEp(ReleaseEp_OrtEpFactory_OrtEp setter);
+
+  /** \brief Get the vendor id who owns the execution provider that the factory creates.
+   *
+   * This is typically the PCI vendor ID. See https://pcisig.com/membership/member-companies
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @return vendor_id The vendor ID of the execution provider the factory creates.
+   *
+   * @since Version 1.23.
+   */
+  public static class GetVendorId_OrtEpFactory extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetVendorId_OrtEpFactory(Pointer p) { super(p); }
+      protected GetVendorId_OrtEpFactory() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint32_t") int call( @Const OrtEpFactory this_ptr);
+  }
+  public native GetVendorId_OrtEpFactory GetVendorId(); public native OrtEpFactory GetVendorId(GetVendorId_OrtEpFactory setter);
+
+  /** \brief Get the version of the execution provider that the factory creates.
+   *
+   * The version string should adhere to the Semantic Versioning 2.0 specification
+   * (https://github.com/semver/semver/blob/v2.0.0/semver.md).
+   *
+   * The returned string should be a null-terminated, UTF-8 encoded string. ORT will copy it.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @return The execution provider version string.
+   *
+   * @since Version 1.23.
+   */
+  public static class GetVersion_OrtEpFactory extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetVersion_OrtEpFactory(Pointer p) { super(p); }
+      protected GetVersion_OrtEpFactory() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( @Const OrtEpFactory this_ptr);
+  }
+  public native GetVersion_OrtEpFactory GetVersion(); public native OrtEpFactory GetVersion(GetVersion_OrtEpFactory setter);
+
+  /** \brief Validate the compatibility of a compiled model with the execution provider factory for one or more devices.
+   *
+   * Given a compatibility info string produced during model compilation, the EP factory should determine whether the
+   * compiled model is compatible with the EP factory when targeting the provided hardware devices. All devices provided
+   * must belong to the same execution provider instance that this factory creates.
+   *
+   * The EP factory implementation should consider the set of devices (e.g., multi-adapter or multi-GPU scenarios) when
+   * evaluating compatibility and set {@code model_compatibility} accordingly.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param devices [in] Array of OrtHardwareDevice pointers that the EP would run on. All must map to this EP.
+   * @param num_devices [in] Number of entries in {@code devices}.
+   * @param compatibility_info [in] The compatibility information string produced when the model was compiled.
+   * @param model_compatibility [out] OrtCompiledModelCompatibility value describing the compatibility of the model with the EP.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Cast("const OrtHardwareDevice*const*") PointerPointer devices,
+                    @Cast("size_t") long num_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntPointer model_compatibility);
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntPointer model_compatibility);
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    String compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntBuffer model_compatibility);
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") int[] model_compatibility);
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    String compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntPointer model_compatibility);
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntBuffer model_compatibility);
+  public native OrtStatus ValidateCompiledModelCompatibilityInfo( OrtEpFactory this_ptr,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices,
+                    String compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") int[] model_compatibility);
+
+  /** \brief Create an OrtAllocator that can be shared across sessions for the given OrtMemoryInfo.
+   *
+   * The factory that creates the EP is responsible for providing the allocators required by the EP.
+   * The OrtMemoryInfo instance will match one of the values set in the OrtEpDevice using EpDevice_AddAllocatorInfo.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param memory_info [in] The OrtMemoryInfo to create the allocator for. May be nullptr.
+   * @param allocator_options [in] Optional key-value pairs for allocator options, can be nullptr.
+   * @param allocator [out] The created OrtAllocator instance. Set to nullptr if the default CPU allocator is used.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus CreateAllocator( OrtEpFactory this_ptr,
+                    @Const OrtMemoryInfo memory_info,
+                    @Const OrtKeyValuePairs allocator_options,
+                    @Cast("OrtAllocator**") PointerPointer allocator);
+  public native OrtStatus CreateAllocator( OrtEpFactory this_ptr,
+                    @Const OrtMemoryInfo memory_info,
+                    @Const OrtKeyValuePairs allocator_options,
+                    @ByPtrPtr OrtAllocator allocator);
+
+  /** \brief Release an OrtAllocator created by the factory.
+   *
+   * @since Version 1.23.
+   */
+  public static class ReleaseAllocator_OrtEpFactory_OrtAllocator extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseAllocator_OrtEpFactory_OrtAllocator(Pointer p) { super(p); }
+      protected ReleaseAllocator_OrtEpFactory_OrtAllocator() { allocate(); }
+      private native void allocate();
+      public native void call( OrtEpFactory this_ptr, OrtAllocator allocator);
+  }
+  public native ReleaseAllocator_OrtEpFactory_OrtAllocator ReleaseAllocator(); public native OrtEpFactory ReleaseAllocator(ReleaseAllocator_OrtEpFactory_OrtAllocator setter);
+
+  /** \brief Create an OrtDataTransferImpl instance for the factory.
+   *
+   * This is used to create an IDataTransfer implementation that can be used to copy data between devices
+   * that the execution provider supports.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param data_transfer [out] The created OrtDataTransferImpl instance. Set to nullptr if not required.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus CreateDataTransfer( OrtEpFactory this_ptr,
+                    @Cast("OrtDataTransferImpl**") PointerPointer data_transfer);
+  public native OrtStatus CreateDataTransfer( OrtEpFactory this_ptr,
+                    @ByPtrPtr OrtDataTransferImpl data_transfer);
+
+  /** \brief Check if execution providers created by the factory are stream aware.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @return True if the factory creates execution providers that are stream aware and it implements CreateSyncStreamForDevice.
+   *
+   * @since Version 1.23.
+   */
+  public static class IsStreamAware_OrtEpFactory extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    IsStreamAware_OrtEpFactory(Pointer p) { super(p); }
+      protected IsStreamAware_OrtEpFactory() { allocate(); }
+      private native void allocate();
+      public native @Cast("bool") boolean call( @Const OrtEpFactory this_ptr);
+  }
+  public native IsStreamAware_OrtEpFactory IsStreamAware(); public native OrtEpFactory IsStreamAware(IsStreamAware_OrtEpFactory setter);
+
+  /** \brief Create a synchronization stream for the given memory device.
+   *
+   * This is used to create a synchronization stream for the memory device that can be used for operations outside of
+   * a session.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param memory_device [in] The OrtMemoryDevice to create the synchronization stream for.
+   * @param stream_options [in] Options for stream creation. May be nullptr.
+   * @param stream [out] The created OrtSyncStreamImpl instance. nullptr if the execution provider is not stream aware.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus CreateSyncStreamForDevice( OrtEpFactory this_ptr,
+                    @Const OrtMemoryDevice memory_device,
+                    @Const OrtKeyValuePairs stream_options,
+                    @Cast("OrtSyncStreamImpl**") PointerPointer stream);
+  public native OrtStatus CreateSyncStreamForDevice( OrtEpFactory this_ptr,
+                    @Const OrtMemoryDevice memory_device,
+                    @Const OrtKeyValuePairs stream_options,
+                    @ByPtrPtr OrtSyncStreamImpl stream);
 }

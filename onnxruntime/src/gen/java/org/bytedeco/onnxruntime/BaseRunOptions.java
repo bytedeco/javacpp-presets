@@ -43,6 +43,7 @@ public class BaseRunOptions extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseRunOptions put(@ByRef(true) BaseRunOptions v);
 
   public native @Cast("Ort::detail::Base<OrtRunOptions>::contained_type*") @Name("operator Ort::detail::Base<OrtRunOptions>::contained_type*") @NoException(true) OrtRunOptions asOrtRunOptions();
+  public native @Cast("const Ort::detail::Base<OrtRunOptions>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtRunOptions multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

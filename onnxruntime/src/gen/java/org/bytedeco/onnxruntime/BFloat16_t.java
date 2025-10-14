@@ -24,7 +24,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
  * uint16_t buffers to/from Ort::BFloat16_t to feed and retrieve data.
  *
  * <pre>{@code {.unparsed}
- * // This example demonstrates converion from float to float16
+ * // This example demonstrates conversion from float to float16
  * constexpr float values[] = {1.f, 2.f, 3.f, 4.f, 5.f};
  * std::vector<Ort::BFloat16_t> bfp16_values;
  * bfp16_values.reserve(std::size(values));

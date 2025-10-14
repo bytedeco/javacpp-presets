@@ -159,7 +159,7 @@ public class OrtCustomOp extends Pointer {
   // Returns the memory type of the input tensors. This API allows the custom op
   // to place the inputs on specific devices. By default, it returns
   // OrtMemTypeDefault, which means the input is placed on the default device for
-  // the execution provider. If the inputs need to be with different memory tyeps,
+  // the execution provider. If the inputs need to be with different memory types,
   // this function can be overridden to return the specific memory types.
   public static class GetInputMemoryType_OrtCustomOp_long extends FunctionPointer {
       static { Loader.load(); }

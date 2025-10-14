@@ -62,7 +62,7 @@ public class ValueImpl extends ConstValueImpl {
   /** by the vector of dims.
   /** </summary>
   /** <typeparam name="R"></typeparam>
-  /** <param name="location">[in] expressed by a vecotr of dimensions offsets</param>
+  /** <param name="location">[in] expressed by a vector of dimensions offsets</param>
   /** <returns></returns> */
 
   /** <summary>

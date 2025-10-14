@@ -18,6 +18,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 /** \brief Wrapper around ::OrtAllocator
  *
  */
+
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class Allocator extends AllocatorImpl {
     static { Loader.load(); }

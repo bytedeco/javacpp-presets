@@ -18,13 +18,14 @@ export CUDA_HOME="/usr/local/cuda"
 export CUDNN_HOME="/usr/local/cuda"
 export MAKEFLAGS="-j $MAKEJ"
 export PYTHON_BIN_PATH=$(which python3)
+export ORT_BUILD_WITH_CACHE=1
 
 export GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.22.2
+ONNXRUNTIME=1.23.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -63,7 +64,7 @@ case $PLATFORM in
         fi
         export CC="cl.exe"
         export CXX="cl.exe"
-        export ARCH_FLAGS=
+        export ARCH_FLAGS="--cmake_generator Ninja"
         export PYTHON_BIN_PATH=$(which python.exe)
         ;;
 esac
@@ -121,12 +122,14 @@ sedinplace 's/round(/roundf(/g' onnxruntime/core/providers/cuda/tensor/resize_im
 sedinplace 's/, dims_span);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_reduce.cc
 sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_squeeze.cc
 sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
+sedinplace '/omp.h/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
 sedinplace '/omp_get_max_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
 sedinplace '/omp_set_num_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
 sedinplace '/cvtfp16Avx/d' cmake/onnxruntime_mlas.cmake
 sedinplace 's/MlasCastF16ToF32KernelAvx;/MlasCastF16ToF32KernelAvx2;/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # compile for all CUDA archs instead of using PTX to reduce load time
+sedinplace 's/"60;70;75;80;86;89;90;100;120"/"50;60;70;80;90;100;120"/g' cmake/external/cuda_configuration.cmake
 sedinplace 's/"all"/"50-real;60-real;70-real;80-real;90-real;100-real;120-real"/g' cmake/CMakeLists.txt
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_90,code=sm_90/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt

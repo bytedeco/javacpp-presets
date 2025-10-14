@@ -58,4 +58,275 @@ public class OrtEpApi extends Pointer {
                     @ByPtrPtr OrtEpDevice ep_device);
 
   public native void ReleaseEpDevice(OrtEpDevice input);
+
+  /** \brief Specify nodes that are supported by an OrtEp and should be fused into one node.
+   *
+   * Because the nodes will be fused into one "fused node", there must not exist an unsupported node in
+   * a path between two of the provided nodes. Otherwise, the graph will become invalid.
+   *
+   * This function can be called multiple times. A subsequent call to this function will force the next set of
+   * nodes to be fused into a different node.
+   *
+   * @param graph_support_info [in] OrtEpGraphSupportInfo instance to which to add the supported nodes.
+   * @param nodes [in] Array of nodes supported by the EP that should be fused/compiled.
+   * @param num_nodes [in] The number of supported nodes.
+   * @param node_fusion_options [in] Optional node fusion options. Ignored if set to NULL.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus EpGraphSupportInfo_AddNodesToFuse( OrtEpGraphSupportInfo graph_support_info,
+                    @Cast("const OrtNode*const*") PointerPointer nodes, @Cast("size_t") long num_nodes,
+                    @Const OrtNodeFusionOptions node_fusion_options);
+  public native OrtStatus EpGraphSupportInfo_AddNodesToFuse( OrtEpGraphSupportInfo graph_support_info,
+                    @Const @ByPtrPtr OrtNode nodes, @Cast("size_t") long num_nodes,
+                    @Const OrtNodeFusionOptions node_fusion_options);
+
+  /** \brief Specify a node that is supported by an OrtEp and should be run with a registered EP kernel.
+   *
+   * @param graph_support_info [in] OrtEpGraphSupportInfo instance to which to add the supported node.
+   * @param node [in] The supported OrtNode instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus EpGraphSupportInfo_AddSingleNode( OrtEpGraphSupportInfo graph_support_info,
+                    @Const OrtNode node);
+
+  /** \brief Query a OrtNodeComputeContext for the name of the node that encapsulates the compiled/fused node.
+   *
+   * Used in OrtNodeComputeInfo::CreateComputeState().
+   *
+   * @param context [in] The OrtNodeComputeContext instance to query.
+   * @return The node's name.
+   *
+   * \note Returned string is owned by ORT and valid only while OrtNodeComputeInfo::CreateComputeState() is called.
+   *
+   * @since Version 1.23.
+   */
+  public static class NodeComputeContext_NodeName_OrtNodeComputeContext extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    NodeComputeContext_NodeName_OrtNodeComputeContext(Pointer p) { super(p); }
+      protected NodeComputeContext_NodeName_OrtNodeComputeContext() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( @Const OrtNodeComputeContext context);
+  }
+  public native NodeComputeContext_NodeName_OrtNodeComputeContext NodeComputeContext_NodeName(); public native OrtEpApi NodeComputeContext_NodeName(NodeComputeContext_NodeName_OrtNodeComputeContext setter);
+
+  /** \brief Register an allocator with the OrtEpDevice.
+   *
+   * This allows an EP to provide OrtMemoryInfo for DEFAULT and HOST_ACCESSIBLE memory type as needed.
+   * The registered values will be used in calls to OrtEpFactory::CreateAllocator to ensure the required allocator/s
+   * are available for EP usage.
+   *
+   * Multiple calls for the same entry type will replace a previous entry.
+   *
+   * Available entries:
+   *   - OrtDeviceAllocator with type of OrtDeviceMemoryType_DEFAULT
+   *   - OrtDeviceAllocator with type of OrtDeviceMemoryType_HOST_ACCESSIBLE
+   *   - OrtReadOnlyAllocator with type of OrtDeviceMemoryType_DEFAULT
+   *     - if provided this allocator will only be used to copy initializers to the device the EP uses.
+   *       ORT will use the OrtDeviceAllocator if not provided.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to register the OrtMemoryInfo with.
+   * @param allocator_memory_info [in] The OrtMemoryInfo information for the allocator.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus EpDevice_AddAllocatorInfo( OrtEpDevice ep_device,
+                    @Const OrtMemoryInfo allocator_memory_info);
+
+  /** \brief Get the OrtMemoryDevice from an OrtMemoryInfo instance.
+   *
+   * This is required for OrtDataTransferImpl (which implements onnxruntime::IDataTransfer) where the OrtMemoryDevice
+   * is used in the CanCopy and CopyTensors functions.
+   *
+   * @param memory_info [in] The OrtMemoryInfo instance to get the memory device from.
+   * @return The OrtMemoryDevice associated with the OrtMemoryInfo instance.
+   *
+   * @since Version 1.23.
+   */
+  public static class MemoryInfo_GetMemoryDevice_OrtMemoryInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryInfo_GetMemoryDevice_OrtMemoryInfo(Pointer p) { super(p); }
+      protected MemoryInfo_GetMemoryDevice_OrtMemoryInfo() { allocate(); }
+      private native void allocate();
+      public native @Const OrtMemoryDevice call( @Const OrtMemoryInfo memory_info);
+  }
+  public native MemoryInfo_GetMemoryDevice_OrtMemoryInfo MemoryInfo_GetMemoryDevice(); public native OrtEpApi MemoryInfo_GetMemoryDevice(MemoryInfo_GetMemoryDevice_OrtMemoryInfo setter);
+
+  /** \brief Get the OrtMemoryDevice from an OrtValue instance if it contains a Tensor.
+   *
+   * @param value [in] The OrtValue instance to get the memory device from.
+   * @return Memory device if OrtValue contains a Tensor, nullptr otherwise.
+   *
+   * @since Version 1.23.
+   */
+  public static class Value_GetMemoryDevice_OrtValue extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Value_GetMemoryDevice_OrtValue(Pointer p) { super(p); }
+      protected Value_GetMemoryDevice_OrtValue() { allocate(); }
+      private native void allocate();
+      public native @Const OrtMemoryDevice call( @Const OrtValue value);
+  }
+  public native Value_GetMemoryDevice_OrtValue Value_GetMemoryDevice(); public native OrtEpApi Value_GetMemoryDevice(Value_GetMemoryDevice_OrtValue setter);
+
+  /** \brief Compare two OrtMemoryDevice instances for equality.
+   *
+   * This is used to check if two memory devices are the same.
+   * Used to implement DataTransferImpl::CanCopy.
+   *
+   * @param a [in] The first OrtMemoryDevice instance to compare.
+   * @param b [in] The second OrtMemoryDevice instance to compare.
+   * @return True if the two OrtMemoryDevice instances are equal, false otherwise.
+   *
+   * @since Version 1.23.
+   */
+  public static class MemoryDevice_AreEqual_OrtMemoryDevice_OrtMemoryDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryDevice_AreEqual_OrtMemoryDevice_OrtMemoryDevice(Pointer p) { super(p); }
+      protected MemoryDevice_AreEqual_OrtMemoryDevice_OrtMemoryDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("bool") boolean call( @Const OrtMemoryDevice a, @Const OrtMemoryDevice b);
+  }
+  public native MemoryDevice_AreEqual_OrtMemoryDevice_OrtMemoryDevice MemoryDevice_AreEqual(); public native OrtEpApi MemoryDevice_AreEqual(MemoryDevice_AreEqual_OrtMemoryDevice_OrtMemoryDevice setter);
+
+  /** \brief Get the OrtMemoryInfoDeviceType value from an OrtMemoryDevice instance.
+   *
+   * @param memory_device [in] OrtMemoryDevice instance.
+   * @return The OrtMemoryInfoDeviceType value.
+   *
+   * @since Version 1.23.
+   */
+  public static class MemoryDevice_GetDeviceType_OrtMemoryDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryDevice_GetDeviceType_OrtMemoryDevice(Pointer p) { super(p); }
+      protected MemoryDevice_GetDeviceType_OrtMemoryDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtMemoryInfoDeviceType") int call( @Const OrtMemoryDevice memory_device);
+  }
+  public native MemoryDevice_GetDeviceType_OrtMemoryDevice MemoryDevice_GetDeviceType(); public native OrtEpApi MemoryDevice_GetDeviceType(MemoryDevice_GetDeviceType_OrtMemoryDevice setter);
+
+  /** \brief Get the OrtDeviceMemoryType value from an OrtMemoryDevice instance.
+   *
+   * @param memory_device [in] OrtMemoryDevice instance.
+   * @return The OrtDeviceMemoryType value.
+   *
+   * @since Version 1.23.
+   */
+  public static class MemoryDevice_GetMemoryType_OrtMemoryDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryDevice_GetMemoryType_OrtMemoryDevice(Pointer p) { super(p); }
+      protected MemoryDevice_GetMemoryType_OrtMemoryDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtDeviceMemoryType") int call( @Const OrtMemoryDevice memory_device);
+  }
+  public native MemoryDevice_GetMemoryType_OrtMemoryDevice MemoryDevice_GetMemoryType(); public native OrtEpApi MemoryDevice_GetMemoryType(MemoryDevice_GetMemoryType_OrtMemoryDevice setter);
+
+  /** \brief Get the vendor ID from an OrtMemoryDevice instance.
+   *
+   * The vendor ID is used to identify the vendor of the device, and is typically set to the PCI vendor ID.
+   *
+   * If the device is not vendor specific (e.g. CPU memory) the vendor ID is set to 0.
+   *
+   * @param memory_device [in] OrtMemoryDevice instance.
+   * @return The vendor ID value.
+   *
+   * @since Version 1.23.
+   */
+  public static class MemoryDevice_GetVendorId_OrtMemoryDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryDevice_GetVendorId_OrtMemoryDevice(Pointer p) { super(p); }
+      protected MemoryDevice_GetVendorId_OrtMemoryDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint32_t") int call( @Const OrtMemoryDevice memory_device);
+  }
+  public native MemoryDevice_GetVendorId_OrtMemoryDevice MemoryDevice_GetVendorId(); public native OrtEpApi MemoryDevice_GetVendorId(MemoryDevice_GetVendorId_OrtMemoryDevice setter);
+
+  /** \brief Get the device ID from an OrtMemoryDevice instance.
+   *
+   * @param memory_device [in] OrtMemoryDevice instance.
+   * @return The device ID.
+   *
+   * @since Version 1.23.
+   */
+  public static class MemoryDevice_GetDeviceId_OrtMemoryDevice extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryDevice_GetDeviceId_OrtMemoryDevice(Pointer p) { super(p); }
+      protected MemoryDevice_GetDeviceId_OrtMemoryDevice() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint32_t") int call( @Const OrtMemoryDevice memory_device);
+  }
+  public native MemoryDevice_GetDeviceId_OrtMemoryDevice MemoryDevice_GetDeviceId(); public native OrtEpApi MemoryDevice_GetDeviceId(MemoryDevice_GetDeviceId_OrtMemoryDevice setter);
+
+  /** \brief Get the OrtSyncStreamImpl associated with an OrtSyncStream instance.
+   *
+   * This allows an the plugin library to connect its OrtSyncStreamImpl instance with an OrtSyncStream if needed.
+   *
+   * @param stream [in] The OrtSyncStream instance to find an OrtSyncStreamImpl for.
+   * @return The associated OrtSyncStreamImpl if found. nullptr otherwise.
+   *
+   * @since Version 1.23.
+   *
+   * \remarks There should always be an OrtSyncStreamImpl associated with an OrtSyncStream instance that the EP gets.
+   */
+  public static class SyncStream_GetImpl_OrtSyncStream extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SyncStream_GetImpl_OrtSyncStream(Pointer p) { super(p); }
+      protected SyncStream_GetImpl_OrtSyncStream() { allocate(); }
+      private native void allocate();
+      public native @Const OrtSyncStreamImpl call( @Const OrtSyncStream stream);
+  }
+  public native SyncStream_GetImpl_OrtSyncStream SyncStream_GetImpl(); public native OrtEpApi SyncStream_GetImpl(SyncStream_GetImpl_OrtSyncStream setter);
+
+  /** \brief Get the current sync ID for a stream.
+   *
+   * @param stream [in] The OrtSyncStream to get the sync ID for.
+   * @return Current sync ID.
+   *
+   * @since Version 1.23.
+   */
+  public static class SyncStream_GetSyncId_OrtSyncStream extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SyncStream_GetSyncId_OrtSyncStream(Pointer p) { super(p); }
+      protected SyncStream_GetSyncId_OrtSyncStream() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint64_t") long call( @Const OrtSyncStream stream);
+  }
+  public native SyncStream_GetSyncId_OrtSyncStream SyncStream_GetSyncId(); public native OrtEpApi SyncStream_GetSyncId(SyncStream_GetSyncId_OrtSyncStream setter);
+
+  /** \brief Get the sync ID for the last time the consumer_stream waited on the producer_stream.
+   *
+   * When two streams are synchronized, the sync id represents the event used in that synchronization.
+   *
+   * @param producer_stream [in] The OrtSyncStream that produced the data.
+   * @param consumer_stream [in] The OrtSyncStream that waited on the producer_stream.
+   * @return ID for last sync. 0 if no sync has occurred between the two streams.
+   *
+   * @since Version 1.23.
+   */
+  public static class GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream(Pointer p) { super(p); }
+      protected GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint64_t") long call(
+              @Const OrtSyncStream producer_stream, @Const OrtSyncStream consumer_stream);
+  }
+  public native GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream GetSyncIdForLastWaitOnSyncStream(); public native OrtEpApi GetSyncIdForLastWaitOnSyncStream(GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream setter);
 }

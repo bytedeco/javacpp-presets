@@ -38,4 +38,8 @@ public class EpDeviceImpl extends BaseEpDevice {
   public native @ByVal @Cast("Ort::ConstKeyValuePairs*") KeyValuePairsImpl EpMetadata();
   public native @ByVal @Cast("Ort::ConstKeyValuePairs*") KeyValuePairsImpl EpOptions();
   public native @ByVal @Cast("Ort::ConstHardwareDevice*") Pointer Device();
+  /** Wraps EpDevice_MemoryInfo */
+  public native @ByVal @Cast("Ort::ConstMemoryInfo*") MemoryInfoImpl GetMemoryInfo(@Cast("OrtDeviceMemoryType") int memory_type);
+  public native @ByVal SyncStream CreateSyncStream(@ByVal(nullValue = "Ort::ConstKeyValuePairs{}") @Cast("Ort::ConstKeyValuePairs*") KeyValuePairsImpl stream_options);
+  public native @ByVal SyncStream CreateSyncStream();  /** Wraps EpDevice_CreateSyncStream */
 }

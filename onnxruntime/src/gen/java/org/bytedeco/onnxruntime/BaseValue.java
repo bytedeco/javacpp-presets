@@ -43,6 +43,7 @@ public class BaseValue extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseValue put(@ByRef(true) BaseValue v);
 
   public native @Cast("Ort::detail::Base<OrtValue>::contained_type*") @Name("operator Ort::detail::Base<OrtValue>::contained_type*") @NoException(true) OrtValue asOrtValue();
+  public native @Cast("const Ort::detail::Base<OrtValue>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtValue multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

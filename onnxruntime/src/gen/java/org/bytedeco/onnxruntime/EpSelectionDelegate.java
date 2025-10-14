@@ -25,9 +25,9 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
  * @param model_metadata The model metadata.
  * @param runtime_metadata The runtime metadata. May be nullptr.
  * @param selected Pre-allocated array to populate with selected OrtEpDevice pointers from ep_devices.
- * @param max_ep_devices The maximum number of devices that can be selected in the pre-allocated array.
-                         Currently the maximum is 8.
- * @param num_ep_devices The number of selected devices.
+ * @param max_selected The maximum number of devices that can be selected in the pre-allocated array.
+                       Currently the maximum is 8.
+ * @param num_selected The number of selected devices.
  * @param state Opaque pointer. Required to use the delegate from other languages like C# and python.
  *
  * @return OrtStatus* Selection status. Return nullptr on success.
@@ -42,11 +42,11 @@ public class EpSelectionDelegate extends FunctionPointer {
     protected EpSelectionDelegate() { allocate(); }
     private native void allocate();
     public native OrtStatus call(@Cast("const OrtEpDevice**") PointerPointer ep_devices,
-                                          @Cast("size_t") long num_devices,
-                                          @Const OrtKeyValuePairs model_metadata,
-                                          @Const OrtKeyValuePairs runtime_metadata,
-                                          @Cast("const OrtEpDevice**") PointerPointer selected,
-                                          @Cast("size_t") long max_selected,
-                                          @Cast("size_t*") SizeTPointer num_selected,
-                                          Pointer state);
+                                                      @Cast("size_t") long num_devices,
+                                                      @Const OrtKeyValuePairs model_metadata,
+                                                      @Const OrtKeyValuePairs runtime_metadata,
+                                                      @Cast("const OrtEpDevice**") PointerPointer selected,
+                                                      @Cast("size_t") long max_selected,
+                                                      @Cast("size_t*") SizeTPointer num_selected,
+                                                      Pointer state);
 }
