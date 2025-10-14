@@ -19,20 +19,32 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
  *
  */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class ValueInfo extends ValueInfoImpl {
+public class ValueInfo extends ConstValueInfoImpl {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ValueInfo(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ValueInfo(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ValueInfo position(long position) {
+        return (ValueInfo)super.position(position);
+    }
+    @Override public ValueInfo getPointer(long i) {
+        return new ValueInfo((Pointer)this).offsetAddress(i);
+    }
 
+  public ValueInfo() { super((Pointer)null); allocate(); }
+  private native void allocate();                 // Same thing as with nullptr
   /** Take ownership of a pointer created by C API */
   public ValueInfo(OrtValueInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtValueInfo p);
 
+// #if !defined(ORT_MINIMAL_BUILD)
   // Create ValueInfo for a tensor
   public ValueInfo(@StdString BytePointer name, @Cast("const Ort::ConstTypeInfo*") @ByRef TypeInfoImpl type_info) { super((Pointer)null); allocate(name, type_info); }
   private native void allocate(@StdString BytePointer name, @Cast("const Ort::ConstTypeInfo*") @ByRef TypeInfoImpl type_info);
   public ValueInfo(@StdString String name, @Cast("const Ort::ConstTypeInfo*") @ByRef TypeInfoImpl type_info) { super((Pointer)null); allocate(name, type_info); }
   private native void allocate(@StdString String name, @Cast("const Ort::ConstTypeInfo*") @ByRef TypeInfoImpl type_info);
-
-  public native @ByVal @Cast("Ort::ConstValueInfo*") ValueInfoImpl GetConst();
+// #endif
+  public native @ByVal @Cast("Ort::ConstValueInfo*") ConstValueInfoImpl GetConst();
 }

@@ -43,6 +43,7 @@ public class BaseTensorTypeAndShapeInfo extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseTensorTypeAndShapeInfo put(@ByRef(true) BaseTensorTypeAndShapeInfo v);
 
   public native @Cast("Ort::detail::Base<OrtTensorTypeAndShapeInfo>::contained_type*") @Name("operator Ort::detail::Base<OrtTensorTypeAndShapeInfo>::contained_type*") @NoException(true) OrtTensorTypeAndShapeInfo asOrtTensorTypeAndShapeInfo();
+  public native @Cast("const Ort::detail::Base<OrtTensorTypeAndShapeInfo>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtTensorTypeAndShapeInfo multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

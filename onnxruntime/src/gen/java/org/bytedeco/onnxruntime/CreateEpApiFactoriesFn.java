@@ -22,6 +22,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
  * @param registered_name [in] The name the execution library is registered with by RegisterExecutionProviderLibrary
  * @param ort_api_base [in] The OrtApiBase instance that is used by the factory to get the OrtApi instance for the
  *                         version of ORT that the library was compiled against.
+ * @param default_logger [in] The default ORT logger that can be used for logging outside of an inference session.
  * @param factories [in,out] The implementation should create and add OrtEpFactory instances to this
  *                          pre-allocated array.
  *                          i.e. usage is {@code factories[0] = new MyEpFactory();}
@@ -41,6 +42,7 @@ public class CreateEpApiFactoriesFn extends FunctionPointer {
     protected CreateEpApiFactoriesFn() { allocate(); }
     private native void allocate();
     public native OrtStatus call(@Cast("const char*") BytePointer registered_name, @Const OrtApiBase ort_api_base,
+                                             @Const OrtLogger default_logger,
                                              @Cast("OrtEpFactory**") PointerPointer factories, @Cast("size_t") long max_factories,
                                              @Cast("size_t*") SizeTPointer num_factories);
 }

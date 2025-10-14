@@ -42,6 +42,8 @@ public class OrtAllocator extends Pointer {
 
   /** Must be initialized to ORT_API_VERSION */
   public native @Cast("uint32_t") int version(); public native OrtAllocator version(int setter);
+
+  /** Returns a pointer to an allocated block of {@code size} bytes */
   public static class Alloc_OrtAllocator_long extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -50,8 +52,9 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native Pointer call(OrtAllocator this_, @Cast("size_t") long size);
   }
-  /** Returns a pointer to an allocated block of {@code size} bytes */
   public native Alloc_OrtAllocator_long Alloc(); public native OrtAllocator Alloc(Alloc_OrtAllocator_long setter);
+
+  /** Free a block of memory previously allocated with OrtAllocator::Alloc */
   public static class Free_OrtAllocator_Pointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -60,8 +63,9 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native void call(OrtAllocator this_, Pointer p);
   }
-  /** Free a block of memory previously allocated with OrtAllocator::Alloc */
   public native Free_OrtAllocator_Pointer Free(); public native OrtAllocator Free(Free_OrtAllocator_Pointer setter);
+
+  /** Return a pointer to an ::OrtMemoryInfo that describes this allocator */
   public static class Info_OrtAllocator extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -70,12 +74,16 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native @Const OrtMemoryInfo call(@Const OrtAllocator this_);
   }
-  /** Return a pointer to an ::OrtMemoryInfo that describes this allocator */
   public native Info_OrtAllocator Info(); public native OrtAllocator Info(Info_OrtAllocator setter);
   /**
    * \brief Optional allocation function to use for memory allocations made during session initialization.
    * Use this function if you want to separate allocations made by ORT during Run() calls from
-   * those made during session initialization. This allows for separate memory management strategies for these allocations.
+   * those made during session initialization. This allows for separate memory management strategies for these
+   * allocations.
+   *
+   * @return pointer to an allocated block of {@code size} bytes. nullptr if size was 0 or allocation failed.
+   *
+   * @since 1.18
    */
   public static class Reserve_OrtAllocator_long extends FunctionPointer {
       static { Loader.load(); }
@@ -85,6 +93,58 @@ public class OrtAllocator extends Pointer {
       private native void allocate();
       public native Pointer call(OrtAllocator this_, @Cast("size_t") long size);
   }
-  /** Returns a pointer to an allocated block of {@code size} bytes */
   public native Reserve_OrtAllocator_long Reserve(); public native OrtAllocator Reserve(Reserve_OrtAllocator_long setter);
+
+  /**
+   * \brief Function used to get the statistics of the allocator.
+   *
+   * Return a pointer to the OrtKeyValuePairs structure that contains the statistics of the allocator.
+   * The user should call OrtApi::ReleaseKeyValuePairs when done.
+   *
+   * Current known keys are:
+   * - Limit: Bytes limit of the allocator. -1 if no limit is set.
+   * - InUse: Number of bytes in use.
+   * - TotalAllocated: The total number of allocated bytes by the allocator.
+   * - MaxInUse: The maximum bytes in use.
+   * - NumAllocs: Number of allocations.
+   * - NumReserves: Number of reserves. (Number of calls to Reserve() in arena-based allocators)
+   * - NumArenaExtensions: Number of arena extensions (Relevant only for arena based allocators)
+   * - NumArenaShrinkages: Number of arena shrinkages (Relevant only for arena based allocators)
+   * - MaxAllocSize: The max single allocation seen.
+   *
+   * The allocator is free to add other entries as appropriate.
+   *
+   * \note Implementation of this function is optional and GetStats may be set to a nullptr.
+   *       If the OrtAllocator is wrapping an internal ORT allocator that does not implement GetStats
+   *       the returned OrtKeyValuePairs instance will be empty.
+   *
+   * @since 1.23
+   */
+  public native OrtStatus GetStats( @Const OrtAllocator this_, @Cast("OrtKeyValuePairs**") PointerPointer out);
+  public native OrtStatus GetStats( @Const OrtAllocator this_, @ByPtrPtr OrtKeyValuePairs out);
+
+  /** \brief Allocate using a stream.
+   *
+   * If the allocator is stream aware this performs allocation using a stream.
+   *
+   * Alloc will be used if this is nullptr.
+   *
+   * @param this_ [in] OrtAllocator instance
+   * @param size [in] Size of the allocation in bytes. nullptr if size was 0 or allocation failed.
+   * @param stream [in] The stream to allocate on.
+   *
+   * @return pointer to an allocated block of {@code size} bytes
+   *
+   * \note Implementation of this function is optional and AllocOnStream may be set to a nullptr.
+   * @since 1.23
+   */
+  public static class AllocOnStream_OrtAllocator_long_OrtSyncStream extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    AllocOnStream_OrtAllocator_long_OrtSyncStream(Pointer p) { super(p); }
+      protected AllocOnStream_OrtAllocator_long_OrtSyncStream() { allocate(); }
+      private native void allocate();
+      public native Pointer call(OrtAllocator this_, @Cast("size_t") long size, OrtSyncStream stream);
+  }
+  public native AllocOnStream_OrtAllocator_long_OrtSyncStream AllocOnStream(); public native OrtAllocator AllocOnStream(AllocOnStream_OrtAllocator_long_OrtSyncStream setter);
 }

@@ -55,6 +55,9 @@ public class RunOptions extends BaseRunOptions {
   /** Wraps OrtApi::AddRunConfigEntry */
   public native @ByRef RunOptions AddConfigEntry(@Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
   public native @ByRef RunOptions AddConfigEntry(String config_key, String config_value);
+  /** Wraps OrtApi::GetRunConfigEntry */
+  public native @Cast("const char*") BytePointer GetConfigEntry(@Cast("const char*") BytePointer config_key);
+  public native String GetConfigEntry(String config_key);
 
   /** \brief Terminates all currently executing Session::Run calls that were made using this RunOptions instance
    *

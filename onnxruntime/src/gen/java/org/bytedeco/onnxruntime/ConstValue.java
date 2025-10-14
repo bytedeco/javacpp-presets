@@ -132,6 +132,15 @@ public class ConstValue extends BaseConstValue {
    *  <returns>byte length for the specified string element</returns> */
   public native @Cast("size_t") long GetStringTensorElementLength(@Cast("size_t") long element_index);
 
+  /** <summary>
+   *  Returns the total size of the tensor data in bytes. Throws an exception if the OrtValue
+   *  does not contain a tensor or if it contains a tensor that contains strings.
+   *  For numeric tensors, this is sizeof(element_type) * total_element_count.
+   *  </summary>
+   *  <returns>The total size of the tensor data in bytes</returns> */
+  /** Wraps OrtApi::GetTensorSizeInBytes */
+  public native @Cast("size_t") long GetTensorSizeInBytes();
+
 // #if !defined(DISABLE_SPARSE_TENSORS)
   /** <summary>
    *  The API returns the sparse data format this OrtValue holds in a sparse tensor.

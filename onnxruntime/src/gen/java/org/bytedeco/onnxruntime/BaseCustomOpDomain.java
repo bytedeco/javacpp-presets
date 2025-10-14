@@ -43,6 +43,7 @@ public class BaseCustomOpDomain extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseCustomOpDomain put(@ByRef(true) BaseCustomOpDomain v);
 
   public native @Cast("Ort::detail::Base<OrtCustomOpDomain>::contained_type*") @Name("operator Ort::detail::Base<OrtCustomOpDomain>::contained_type*") @NoException(true) OrtCustomOpDomain asOrtCustomOpDomain();
+  public native @Cast("const Ort::detail::Base<OrtCustomOpDomain>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtCustomOpDomain multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

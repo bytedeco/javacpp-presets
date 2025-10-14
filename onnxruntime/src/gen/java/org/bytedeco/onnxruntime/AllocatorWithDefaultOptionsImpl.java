@@ -37,4 +37,10 @@ public class AllocatorWithDefaultOptionsImpl extends BaseAllocatorWithDefaultOpt
   public native @ByVal MemoryAllocation GetAllocation(@Cast("size_t") long size);
   public native void Free(Pointer p);
   public native @ByVal @Cast("Ort::ConstMemoryInfo*") MemoryInfoImpl GetInfo();
+
+  /** \brief Function that returns the statistics of the allocator.
+   *
+   * @return A pointer to a KeyValuePairs object that will be filled with the allocator statistics.
+   */
+  public native @ByVal KeyValuePairs GetStats();
 }

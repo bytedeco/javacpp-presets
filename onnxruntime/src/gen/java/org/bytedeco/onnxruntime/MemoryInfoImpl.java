@@ -33,9 +33,18 @@ public class MemoryInfoImpl extends BaseMemoryInfo {
     }
 
 
+  /** Wrapper MemoryInfoGetName */
   public native @StdString BytePointer GetAllocatorName();
+  /** Wrapper MemoryInfoGetType */
   public native @Cast("OrtAllocatorType") int GetAllocatorType();
+  /** Wrapper MemoryInfoGetId */
   public native int GetDeviceId();
+  /** Wrapper MemoryInfoGetDeviceType */
   public native @Cast("OrtMemoryInfoDeviceType") int GetDeviceType();
+  /** Wrapper MemoryInfoGetMemType */
   public native @Cast("OrtMemType") int GetMemoryType();
+  /** Wrapper MemoryInfoGetDeviceMemType */
+  public native @Cast("OrtDeviceMemoryType") int GetDeviceMemoryType();
+  /** Wrapper MemoryInfoGetVendorId */
+  public native @Cast("uint32_t") int GetVendorId();
 }

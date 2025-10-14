@@ -14,26 +14,6 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
-
-/** \brief Used internally by the C++ API. C++ wrapper types inherit from this.
- *   This is a zero cost abstraction to wrap the C API objects and delete them on destruction.
- *
- * All of the C++ classes
- *  a) serve as containers for pointers to objects that are created by the underlying C API.
- *     Their size is just a pointer size, no need to dynamically allocate them. Use them by value.
- *  b) Each of struct XXXX, XXX instances function as smart pointers to the underlying C API objects.
- *     they would release objects owned automatically when going out of scope, they are move-only.
- *  c) ConstXXXX and UnownedXXX structs function as non-owning, copyable containers for the above pointers.
- *     ConstXXXX allow calling const interfaces only. They give access to objects that are owned by somebody else
- *     such as Onnxruntime or instances of XXXX classes.
- *  d) serve convenient interfaces that return C++ objects and further enhance exception and type safety so they can be used
- *     in C++ code.
- *
- */
-
-/** <summary>
-/** This is a non-const pointer holder that is move-only. Disposes of the pointer on destruction.
-/** </summary> */
 @Name("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class BaseConstValue extends Pointer {
     static { Loader.load(); }
@@ -63,6 +43,7 @@ public class BaseConstValue extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseConstValue put(@ByRef(true) BaseConstValue v);
 
   public native @Cast("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::contained_type*") @Name("operator Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::contained_type*") @NoException(true) UnownedAllocator asUnownedAllocator();
+  public native @Cast("const Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::contained_type*") @ByRef @Name("operator *") @NoException(true) UnownedAllocator multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

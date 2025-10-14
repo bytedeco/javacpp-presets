@@ -93,6 +93,25 @@ public class Env extends BaseEnv {
                                       @Const @ByRef StringStringMap options,
                                       @Const OrtArenaCfg arena_cfg);
 
+  /** Wraps OrtApi::RegisterAllocator */
+  public native @ByRef Env RegisterAllocator(OrtAllocator allocator);
+
+  /** Wraps OrtApi::UnregisterAllocator */
+  public native @ByRef Env UnregisterAllocator(@Const OrtMemoryInfo mem_info);
+
+  /** Wraps OrtApi::CreateSharedAllocator */
+  public native @ByVal @Cast("Ort::UnownedAllocator*") AllocatorWithDefaultOptionsImpl CreateSharedAllocator(@Const OrtEpDevice ep_device, @Cast("OrtDeviceMemoryType") int mem_type,
+                                           @Cast("OrtAllocatorType") int allocator_type,
+                                           @Const OrtKeyValuePairs allocator_options);
+
+  // Result may be nullptr
+  /** Wraps OrtApi::GetSharedAllocator */
+  public native @ByVal @Cast("Ort::UnownedAllocator*") AllocatorWithDefaultOptionsImpl GetSharedAllocator(@Const OrtMemoryInfo mem_info);
+
+  /** Wraps OrtApi::ReleaseSharedAllocator */
+  public native void ReleaseSharedAllocator(@Const OrtEpDevice ep_device,
+                                @Cast("OrtDeviceMemoryType") int mem_type);
+
   /** Wraps OrtApi::RegisterExecutionProviderLibrary */
   public native @ByRef Env RegisterExecutionProviderLibrary(@Cast("const char*") BytePointer registration_name, @Cast("const std::basic_string<ORTCHAR_T>*") @ByRef Pointer path);
   public native @ByRef Env RegisterExecutionProviderLibrary(String registration_name, @Cast("const std::basic_string<ORTCHAR_T>*") @ByRef Pointer path);
@@ -101,4 +120,9 @@ public class Env extends BaseEnv {
   public native @ByRef Env UnregisterExecutionProviderLibrary(String registration_name);
 
   public native @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl GetEpDevices();
+
+  /** Wraps OrtApi::CopyTensors */
+  public native @ByVal Status CopyTensors(@StdMove ValueVector src_tensors,
+                       @StdMove ValueVector dst_tensors,
+                       OrtSyncStream stream);
 }

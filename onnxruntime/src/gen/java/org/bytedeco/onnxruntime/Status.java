@@ -22,21 +22,32 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class Status extends BaseStatus {
     static { Loader.load(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Status(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Status position(long position) {
+        return (Status)super.position(position);
+    }
+    @Override public Status getPointer(long i) {
+        return new Status((Pointer)this).offsetAddress(i);
+    }
 
+  public Status() { super((Pointer)null); allocate(); }
+  private native void allocate();                              // Same as with std::nullptr_t. But can be used in re-sizable containers and represent success.
   /** Takes ownership of OrtStatus instance returned from the C API. */
   public Status(OrtStatus status) { super((Pointer)null); allocate(status); }
   @NoException(true) private native void allocate(OrtStatus status);
   /** Creates status instance out of exception */
   public Status(@Const @ByRef OrtException arg0) { super((Pointer)null); allocate(arg0); }
-  @NoException(true) private native void allocate(@Const @ByRef OrtException arg0);
+  private native void allocate(@Const @ByRef OrtException arg0);
   /** Creates status instance out of exception */
   public Status(@Cast("const std::exception*") @ByRef Pointer arg0) { super((Pointer)null); allocate(arg0); }
-  @NoException(true) private native void allocate(@Cast("const std::exception*") @ByRef Pointer arg0);
+  private native void allocate(@Cast("const std::exception*") @ByRef Pointer arg0);
   /** Creates status instance out of null-terminated string message. */
   public Status(@Cast("const char*") BytePointer message, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(message, code); }
-  @NoException(true) private native void allocate(@Cast("const char*") BytePointer message, @Cast("OrtErrorCode") int code);
+  private native void allocate(@Cast("const char*") BytePointer message, @Cast("OrtErrorCode") int code);
   public Status(String message, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(message, code); }
-  @NoException(true) private native void allocate(String message, @Cast("OrtErrorCode") int code);
+  private native void allocate(String message, @Cast("OrtErrorCode") int code);
   public native @StdString BytePointer GetErrorMessage();
   public native @Cast("OrtErrorCode") int GetErrorCode();
   /** Returns true if instance represents an OK (non-error) status. */

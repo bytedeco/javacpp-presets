@@ -48,10 +48,10 @@ public class OrtEp extends Pointer {
 
   /** \brief Get the execution provider name.
    *
+   * The returned string should be a null-terminated, UTF-8 encoded string. ORT will copy it.
+   *
    * @param this_ptr [in] The OrtEp instance.
    * @return The execution provider name.
-   *
-   * \note Returned string is owned by ORT and valid until UnregisterExecutionProviderLibrary is called.
    *
    * @since Version 1.22.
    */
@@ -61,16 +61,287 @@ public class OrtEp extends Pointer {
       public    GetName_OrtEp(Pointer p) { super(p); }
       protected GetName_OrtEp() { allocate(); }
       private native void allocate();
-      public native @Cast("const char*") BytePointer call(@Const OrtEp this_ptr);
+      public native @Cast("const char*") BytePointer call( @Const OrtEp this_ptr);
   }
   public native GetName_OrtEp GetName(); public native OrtEp GetName(GetName_OrtEp setter);
 
-  // OrtStatus* GetCapability(OrtEp* ep, const OrtGraph* graph,
-  //                          size_t* num_supported_subgraphs,
-  //                          OrtIndexedSubgraph** supported_subgraphs, OrtAllocator* allocator);
+  /** \brief Get information about the nodes supported by the OrtEp instance.
+   *
+   * IMPORTANT: This is not the final version of this API function. This is currently experimental but will
+   * be stabilized by the ONNX Runtime 1.23 release.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param graph [in] The OrtGraph instance for which to populate node support. The OrtGraph could be a nested subgraph
+   *                  contained by a node (e.g., an If or Loop node). ONNX Runtime calls this function separately
+   *                  for each nested subgraph.
+   * @param graph_support_info [inout] OrtEpGraphSupportInfo instance that the implementer must fill out in order to
+   *                                  specify the supported nodes.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus GetCapability( OrtEp this_ptr, @Const OrtGraph graph,
+                    OrtEpGraphSupportInfo graph_support_info);
 
-  // OrtStatus* Compile(OrtEp* ep, const OrtGraph** graphs, OrtNode** fused_graph_nodes,
-  //                    size_t count, OrtNodeComputeInfo* node_compute_infos);
+  /** \brief Compile OrtGraph instances assigned to the OrtEp. Implementer must set a OrtNodeComputeInfo instance
+   * for each OrtGraph in order to define its computation function.
+   *
+   * If the session is configured to generate a pre-compiled model, the execution provider must return EPContext nodes,
+   * as OrtNode instances, that ONNX Runtime uses to create a pre-compiled model, known as an "EPContext model".
+   * An EPContext model contains EPContext nodes. Each EPContext node encapsulates the pre-compiled binary data for a
+   * OrtGraph compiled for a specific execution provider. For more details about the EPContext design, refer to:
+   *  \htmlonly
+   *  <a href="https://onnxruntime.ai/docs/execution-providers/EP-Context-Design.html">EPContext design document.</a>
+   *  \endhtmlonly
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param graphs [in] Array of {@code count} OrtGraph instances to compile. Each graph contains only the nodes for
+   *                   which the execution provider indicated support. Nested subgraphs contained by a
+   *                   node, such as an If or Loop, have separate OrtGraph instances.
+   * @param fused_nodes [in] Array of {@code count} fused nodes that will replace the compiled graphs.
+   *                        Each fused node is an OrtNode initialized with the intended fused node name and
+   *                        input/output information.
+   * @param count [in] The number of OrtGraph instances to compile.
+   * @param node_compute_infos [out] Array of {@code count} OrtNodeComputeInfo instances that define each OrtGraph instance's
+   *                                computation function. The implementer allocates the OrtNodeComputeInfo instances.
+   *                                ORT calls ReleaseNodeComputeInfos() to release multiple instances in a batch.
+   * @param ep_context_nodes [out] Output array of {@code count} OrtNode instances, each representing an EPContext
+   *                              node for a compiled OrtGraph. The execution provider must use
+   *                              OrtModelEditorApi::CreateNode to create the OrtNode instances. ONNX Runtime takes
+   *                              ownership of the OrtNode instances, so the execution provider must NOT call
+   *                              OrtApi::ReleaseNode. Should be ignored if the session is not configured to generate an
+   *                              EPContext model.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Do NOT cache the provided OrtGraph instances in any of the OrtNodeComputeInfo functions because the
+   *       graphs are only valid for the duration of the call to Compile. Any graph/node/input/output
+   *       names that are needed by the OrtNodeComputeInfo functions must be copied and stored by the OrtEp.
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Compile( OrtEp this_ptr, @Cast("const OrtGraph**") PointerPointer graphs,
+                    @Cast("const OrtNode**") PointerPointer fused_nodes, @Cast("size_t") long count,
+                    @Cast("OrtNodeComputeInfo**") PointerPointer node_compute_infos,
+                    @Cast("OrtNode**") PointerPointer ep_context_nodes);
+  public native OrtStatus Compile( OrtEp this_ptr, @Const @ByPtrPtr OrtGraph graphs,
+                    @Const @ByPtrPtr OrtNode fused_nodes, @Cast("size_t") long count,
+                    @ByPtrPtr OrtNodeComputeInfo node_compute_infos,
+                    @ByPtrPtr OrtNode ep_context_nodes);
 
-  // TODO: Implement OrtEpApi and the complete OrtEp interface as the next step.
+  /** \brief Release OrtNodeComputeInfo instances.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param node_compute_infos [inout] The OrtNodeComputeInfo instances to release.
+   * @param num_node_compute_infos [in] The number of OrtNodeComputeInfo instances.
+   *
+   * @since Version 1.23.
+   */
+  public static class ReleaseNodeComputeInfos_OrtEp_PointerPointer_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseNodeComputeInfos_OrtEp_PointerPointer_long(Pointer p) { super(p); }
+      protected ReleaseNodeComputeInfos_OrtEp_PointerPointer_long() { allocate(); }
+      private native void allocate();
+      public native void call( OrtEp this_ptr,
+              @Cast("OrtNodeComputeInfo**") PointerPointer node_compute_infos,
+              @Cast("size_t") long num_node_compute_infos);
+  }
+  public native ReleaseNodeComputeInfos_OrtEp_PointerPointer_long ReleaseNodeComputeInfos(); public native OrtEp ReleaseNodeComputeInfos(ReleaseNodeComputeInfos_OrtEp_PointerPointer_long setter);
+
+  /** \brief Get the EP's preferred data layout.
+   *
+   * \note Implementation of this function is optional.
+   *       If not implemented, ORT will assume that this EP prefers the data layout {@code OrtEpDataLayout::NCHW}.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param preferred_data_layout [out] The EP's preferred data layout.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus GetPreferredDataLayout( OrtEp this_ptr, @Cast("OrtEpDataLayout*") IntPointer preferred_data_layout);
+  public native OrtStatus GetPreferredDataLayout( OrtEp this_ptr, @Cast("OrtEpDataLayout*") IntBuffer preferred_data_layout);
+  public native OrtStatus GetPreferredDataLayout( OrtEp this_ptr, @Cast("OrtEpDataLayout*") int[] preferred_data_layout);
+
+  /** \brief Given an op with domain {@code domain} and type {@code op_type}, determine whether an associated node's data layout
+   *         should be converted to {@code target_data_layout}.
+   *         If the EP prefers a non-default data layout (see {@code GetPreferredDataLayout()}), this function will be called
+   *         during layout transformation with {@code target_data_layout} set to the EP's preferred data layout.
+   *
+   * \note Implementation of this function is optional.
+   *       If an EP prefers a non-default data layout, it may implement this to customize the specific op data layout
+   *       preferences at a finer granularity.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param domain [in] The op domain. An empty string means the ONNX domain.
+   * @param op_type [in] The op type.
+   * @param target_data_layout [in] The target data layout.
+   * @param should_convert [out] Whether the associated node's data layout should be converted to {@code target_data_layout}.
+   *                            If greater than 0, convert.
+   *                            If 0, don't convert.
+   *                            Otherwise, if less than 0, leave the decision to ORT.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ShouldConvertDataLayoutForOp( OrtEp this_ptr,
+                    @Cast("const char*") BytePointer domain, @Cast("const char*") BytePointer op_type,
+                    @Cast("OrtEpDataLayout") int target_data_layout,
+                    IntPointer should_convert);
+  public native OrtStatus ShouldConvertDataLayoutForOp( OrtEp this_ptr,
+                    String domain, String op_type,
+                    @Cast("OrtEpDataLayout") int target_data_layout,
+                    IntBuffer should_convert);
+  public native OrtStatus ShouldConvertDataLayoutForOp( OrtEp this_ptr,
+                    @Cast("const char*") BytePointer domain, @Cast("const char*") BytePointer op_type,
+                    @Cast("OrtEpDataLayout") int target_data_layout,
+                    int[] should_convert);
+  public native OrtStatus ShouldConvertDataLayoutForOp( OrtEp this_ptr,
+                    String domain, String op_type,
+                    @Cast("OrtEpDataLayout") int target_data_layout,
+                    IntPointer should_convert);
+  public native OrtStatus ShouldConvertDataLayoutForOp( OrtEp this_ptr,
+                    @Cast("const char*") BytePointer domain, @Cast("const char*") BytePointer op_type,
+                    @Cast("OrtEpDataLayout") int target_data_layout,
+                    IntBuffer should_convert);
+  public native OrtStatus ShouldConvertDataLayoutForOp( OrtEp this_ptr,
+                    String domain, String op_type,
+                    @Cast("OrtEpDataLayout") int target_data_layout,
+                    int[] should_convert);
+
+  /** \brief Set dynamic options on this EP.
+   *
+   * Dynamic options can be set by the user at any time after session creation with {@code OrtApi::SetEpDynamicOptions()}.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param option_keys [in] The dynamic option keys.
+   * @param option_values [in] The dynamic option values.
+   * @param num_options [in] The number of dynamic options.
+   *
+   * \note Implementation of this function is optional.
+   *       An EP should only implement this if it needs to handle any dynamic options.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus SetDynamicOptions( OrtEp this_ptr,
+                    @Cast("const char*const*") PointerPointer option_keys,
+                    @Cast("const char*const*") PointerPointer option_values,
+                    @Cast("size_t") long num_options);
+  public native OrtStatus SetDynamicOptions( OrtEp this_ptr,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer option_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer option_values,
+                    @Cast("size_t") long num_options);
+  public native OrtStatus SetDynamicOptions( OrtEp this_ptr,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer option_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer option_values,
+                    @Cast("size_t") long num_options);
+  public native OrtStatus SetDynamicOptions( OrtEp this_ptr,
+                    @Cast("const char*const*") @ByPtrPtr byte[] option_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] option_values,
+                    @Cast("size_t") long num_options);
+
+  /** \brief Called by ORT to notify the EP of the start of a run.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param run_options [in] The run options for this run.
+   *
+   * \note Implementation of this function is optional.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus OnRunStart( OrtEp this_ptr, @Const OrtRunOptions run_options);
+
+  /** \brief Called by ORT to notify the EP of the end of a run.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param run_options [in] The run options for this run.
+   * @param sync_stream [in] Whether any associated stream should be synchronized during this call.
+   *                        Only applicable if there is such a stream.
+   *
+   * \note Implementation of this function is optional.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus OnRunEnd( OrtEp this_ptr, @Const OrtRunOptions run_options, @Cast("bool") boolean sync_stream);
+
+  /** \brief Create an OrtAllocator for the given OrtMemoryInfo for an OrtSession.
+   *
+   * The OrtMemoryInfo instance will match one of the values set in the OrtEpDevice using EpDevice_AddAllocatorInfo.
+   * Any allocator specific options should be read from the session options.
+   *
+   * If nullptr OrtEpFactory::CreateAllocator will be used.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param memory_info [in] The OrtMemoryInfo to create the allocator for. May be nullptr.
+   * @param allocator [out] The created OrtAllocator instance. Set to nullptr if the default CPU allocator is used.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus CreateAllocator( OrtEp this_ptr,
+                    @Const OrtMemoryInfo memory_info,
+                    @Cast("OrtAllocator**") PointerPointer allocator);
+  public native OrtStatus CreateAllocator( OrtEp this_ptr,
+                    @Const OrtMemoryInfo memory_info,
+                    @ByPtrPtr OrtAllocator allocator);
+
+  /** \brief Create a synchronization stream for the given memory device for an OrtSession.
+   *
+   * This is used to create a synchronization stream for the execution provider and is used to synchronize
+   * operations on the device during model execution.
+   * Any stream specific options should be read from the session options.
+   *
+   * If nullptr OrtEpFactory::CreateSyncStreamForDevice will be used.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param memory_device [in] The OrtMemoryDevice to create the synchronization stream for.
+   * @param stream [out] The created OrtSyncStreamImpl instance. nullptr if the execution provider is not stream aware.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus CreateSyncStreamForDevice( OrtEp this_ptr,
+                    @Const OrtMemoryDevice memory_device,
+                    @Cast("OrtSyncStreamImpl**") PointerPointer stream);
+  public native OrtStatus CreateSyncStreamForDevice( OrtEp this_ptr,
+                    @Const OrtMemoryDevice memory_device,
+                    @ByPtrPtr OrtSyncStreamImpl stream);
+
+  /** \brief Get a string with details about the EP stack used to produce a compiled model.
+   *
+   * This function gets a compatibility information string that contains details about the execution provider
+   * used to compile a given model. This string can later be used with ValidateCompiledModelCompatibilityInfo
+   * to determine if a compiled model is compatible with the EP.
+   *
+   * The returned string should be a null-terminated, UTF-8 encoded string. ORT will copy it.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param graph [in] The OrtGraph instance for which to generate compatibility information.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public static class GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph(Pointer p) { super(p); }
+      protected GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( OrtEp this_ptr,
+              @Const OrtGraph graph);
+  }
+  public native GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph GetCompiledModelCompatibilityInfo(); public native OrtEp GetCompiledModelCompatibilityInfo(GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph setter);
 }

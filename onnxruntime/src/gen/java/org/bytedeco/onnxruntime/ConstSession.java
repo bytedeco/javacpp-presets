@@ -47,6 +47,13 @@ public class ConstSession extends BaseConstSession {
   public native @ByVal StringVector GetOutputNames();
   public native @ByVal StringVector GetOverridableInitializerNames();
 
+  /** Wrapper for OrtApi::SessionGetMemoryInfoForInputs */
+  public native @Cast("Ort::ConstMemoryInfo*") @StdVector MemoryInfoImpl GetMemoryInfoForInputs();
+  /** Wrapper for OrtApi::SessionGetMemoryInfoForOutputs */
+  public native @Cast("Ort::ConstMemoryInfo*") @StdVector MemoryInfoImpl GetMemoryInfoForOutputs();
+  /** Wrapper for OrtApi::SessionGetEpDeviceForInputs */
+  public native @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl GetEpDeviceForInputs();
+
   /** \brief Returns a copy of input name at the specified index.
    *
    * @param index must less than the value returned by GetInputCount()

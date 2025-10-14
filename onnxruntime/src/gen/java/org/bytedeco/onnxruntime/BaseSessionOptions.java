@@ -43,6 +43,7 @@ public class BaseSessionOptions extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseSessionOptions put(@ByRef(true) BaseSessionOptions v);
 
   public native @Cast("Ort::detail::Base<OrtSessionOptions>::contained_type*") @Name("operator Ort::detail::Base<OrtSessionOptions>::contained_type*") @NoException(true) OrtSessionOptions asOrtSessionOptions();
+  public native @Cast("const Ort::detail::Base<OrtSessionOptions>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtSessionOptions multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

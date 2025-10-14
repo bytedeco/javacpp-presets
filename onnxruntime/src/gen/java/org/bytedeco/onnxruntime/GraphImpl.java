@@ -14,8 +14,9 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
+
 @Name("Ort::detail::GraphImpl<OrtGraph>") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class GraphImpl extends BaseGraph {
+public class GraphImpl extends ConstGraphImpl {
     static { Loader.load(); }
     /** Default native constructor. */
     public GraphImpl() { super((Pointer)null); allocate(); }
@@ -34,10 +35,14 @@ public class GraphImpl extends BaseGraph {
 
 
 // #if !defined(ORT_MINIMAL_BUILD)
+  // <Wraps GetModelEditorApi().SetGraphInputs()
   public native void SetInputs(@ByRef ValueInfoVector inputs);
+  // <Wraps GetModelEditorApi().SetGraphOutputs()
   public native void SetOutputs(@ByRef ValueInfoVector outputs);
+  // <Wraps GetModelEditorApi().AddInitializerToGraph()
   public native void AddInitializer(@StdString BytePointer name, @ByRef Value initializer, @Cast("bool") boolean data_is_external);
   public native void AddInitializer(@StdString String name, @ByRef Value initializer, @Cast("bool") boolean data_is_external);  // Graph takes ownership of Value
-  public native void AddNode(@ByRef Node node);                                                                 // Graph takes ownership of Node
-// #endif                                                                                      // !defined(ORT_MINIMAL_BUILD)
+  // <Wraps GetModelEditorApi().AddNodeToGraph()
+  public native void AddNode(@ByRef Node node);  // Graph takes ownership of Node
+// #endif                       // !defined(ORT_MINIMAL_BUILD)
 }

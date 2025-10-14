@@ -34,6 +34,7 @@ public class ModelImpl extends BaseModel {
 
 
 // #if !defined(ORT_MINIMAL_BUILD)
+  // <Wraps GetModelEditorApi().AddGraphToModel()
   public native void AddGraph(@ByRef Graph graph);
 // #endif
 }

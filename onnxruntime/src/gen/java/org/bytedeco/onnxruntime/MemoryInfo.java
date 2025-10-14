@@ -32,5 +32,14 @@ public class MemoryInfo extends MemoryInfoImpl {
   private native void allocate(@Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type);
   public MemoryInfo(String name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type) { super((Pointer)null); allocate(name, type, id, mem_type); }
   private native void allocate(String name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type);
+  /** Wrapper around CreateMemoryInfo_V2 */
+  public MemoryInfo(@Cast("const char*") BytePointer name, @Cast("OrtMemoryInfoDeviceType") int device_type, @Cast("uint32_t") int vendor_id, @Cast("uint32_t") int device_id,
+               @Cast("OrtDeviceMemoryType") int mem_type, @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type) { super((Pointer)null); allocate(name, device_type, vendor_id, device_id, mem_type, alignment, allocator_type); }
+  private native void allocate(@Cast("const char*") BytePointer name, @Cast("OrtMemoryInfoDeviceType") int device_type, @Cast("uint32_t") int vendor_id, @Cast("uint32_t") int device_id,
+               @Cast("OrtDeviceMemoryType") int mem_type, @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type);
+  public MemoryInfo(String name, @Cast("OrtMemoryInfoDeviceType") int device_type, @Cast("uint32_t") int vendor_id, @Cast("uint32_t") int device_id,
+               @Cast("OrtDeviceMemoryType") int mem_type, @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type) { super((Pointer)null); allocate(name, device_type, vendor_id, device_id, mem_type, alignment, allocator_type); }
+  private native void allocate(String name, @Cast("OrtMemoryInfoDeviceType") int device_type, @Cast("uint32_t") int vendor_id, @Cast("uint32_t") int device_id,
+               @Cast("OrtDeviceMemoryType") int mem_type, @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type);
   public native @ByVal @Cast("Ort::ConstMemoryInfo*") MemoryInfoImpl GetConst();
 }

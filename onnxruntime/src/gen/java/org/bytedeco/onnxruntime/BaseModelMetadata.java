@@ -43,6 +43,7 @@ public class BaseModelMetadata extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseModelMetadata put(@ByRef(true) BaseModelMetadata v);
 
   public native @Cast("Ort::detail::Base<OrtModelMetadata>::contained_type*") @Name("operator Ort::detail::Base<OrtModelMetadata>::contained_type*") @NoException(true) OrtModelMetadata asOrtModelMetadata();
+  public native @Cast("const Ort::detail::Base<OrtModelMetadata>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtModelMetadata multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

@@ -19,7 +19,7 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
  *  Create and own custom defined operation.
  *  </summary> */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class Op extends BaseOrtOp {
+public class Op extends BaseOp {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Op(Pointer p) { super(p); }

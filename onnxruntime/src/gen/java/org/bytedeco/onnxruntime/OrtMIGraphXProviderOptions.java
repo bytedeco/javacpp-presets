@@ -39,12 +39,29 @@ public class OrtMIGraphXProviderOptions extends Pointer {
 
   public native int device_id(); public native OrtMIGraphXProviderOptions device_id(int setter);                                     // hip device id.
   public native int migraphx_fp16_enable(); public native OrtMIGraphXProviderOptions migraphx_fp16_enable(int setter);                          // MIGraphX FP16 precision. Default 0 = false, nonzero = true
+  public native int migraphx_fp8_enable(); public native OrtMIGraphXProviderOptions migraphx_fp8_enable(int setter);                           // MIGraphX FP8 precision. Default 0 = false, nonzero = true
   public native int migraphx_int8_enable(); public native OrtMIGraphXProviderOptions migraphx_int8_enable(int setter);                          // MIGraphX INT8 precision. Default 0 = false, nonzero = true
-  public native int migraphx_use_native_calibration_table(); public native OrtMIGraphXProviderOptions migraphx_use_native_calibration_table(int setter);         // MIGraphx INT8 cal table. Default 0 = false, noznero = true
+  public native int migraphx_use_native_calibration_table(); public native OrtMIGraphXProviderOptions migraphx_use_native_calibration_table(int setter);         // MIGraphx INT8 cal table. Default 0 = false, nonzero = true
   public native @Cast("const char*") BytePointer migraphx_int8_calibration_table_name(); public native OrtMIGraphXProviderOptions migraphx_int8_calibration_table_name(BytePointer setter);  // MIGraphx INT8 calibration table name
-  public native int migraphx_save_compiled_model(); public native OrtMIGraphXProviderOptions migraphx_save_compiled_model(int setter);                  // migraphx save compiled model. Default 0 = false, noznero = true
+  public native int migraphx_save_compiled_model(); public native OrtMIGraphXProviderOptions migraphx_save_compiled_model(int setter);                  // migraphx save compiled model. Default 0 = false, nonzero = true
   public native @Cast("const char*") BytePointer migraphx_save_model_path(); public native OrtMIGraphXProviderOptions migraphx_save_model_path(BytePointer setter);              // migraphx model path name
-  public native int migraphx_load_compiled_model(); public native OrtMIGraphXProviderOptions migraphx_load_compiled_model(int setter);                  // migraphx int8 cal table. Default 0 = false, noznero = true
+  public native int migraphx_load_compiled_model(); public native OrtMIGraphXProviderOptions migraphx_load_compiled_model(int setter);                  // migraphx int8 cal table. Default 0 = false, nonzero = true
   public native @Cast("const char*") BytePointer migraphx_load_model_path(); public native OrtMIGraphXProviderOptions migraphx_load_model_path(BytePointer setter);              // migraphx model path name
-  public native @Cast("bool") boolean migraphx_exhaustive_tune(); public native OrtMIGraphXProviderOptions migraphx_exhaustive_tune(boolean setter);                     // migraphx tuned compile  Default = false
+  public native @Cast("bool") boolean migraphx_exhaustive_tune(); public native OrtMIGraphXProviderOptions migraphx_exhaustive_tune(boolean setter);                     // MIGraphX tuned compile. Default = false, nonzero = true
+
+  /** \brief MIGraphX memory limit (To use all possible memory pass in maximum size_t)
+   *   Defaults to SIZE_MAX.
+   *   \note If a ::OrtArenaCfg has been applied, it will override this field
+   */
+  public native @Cast("size_t") long migraphx_mem_limit(); public native OrtMIGraphXProviderOptions migraphx_mem_limit(long setter);
+
+  /** \brief Strategy used to grow the memory arena
+   *   0 = kNextPowerOfTwo<br>
+   *   1 = kSameAsRequested<br>
+   *   Defaults to 0.
+   *   \note If a ::OrtArenaCfg has been applied, it will override this field
+   */
+  public native int migraphx_arena_extend_strategy(); public native OrtMIGraphXProviderOptions migraphx_arena_extend_strategy(int setter);
+
+  // This is the legacy struct and don't add new fields here.
 }

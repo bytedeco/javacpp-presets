@@ -15,13 +15,6 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-/** \brief The C API
- *
- * All C API functions are defined inside this structure as pointers to functions.
- * Call OrtApiBase::GetApi to get a pointer to it
- *
- * \nosubgrouping
- */
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtApi extends Pointer {
     static { Loader.load(); }
@@ -1050,7 +1043,7 @@ public class OrtApi extends Pointer {
   public native OrtStatus MemoryInfoGetName( @Const OrtMemoryInfo ptr, @Cast("const char**") @ByPtrPtr ByteBuffer out);
   public native OrtStatus MemoryInfoGetName( @Const OrtMemoryInfo ptr, @Cast("const char**") @ByPtrPtr byte[] out);
 
-  /** \brief Get the id from ::OrtMemoryInfo
+  /** \brief Get the device id from ::OrtMemoryInfo
    */
   public native OrtStatus MemoryInfoGetId( @Const OrtMemoryInfo ptr, IntPointer out);
   public native OrtStatus MemoryInfoGetId( @Const OrtMemoryInfo ptr, IntBuffer out);
@@ -1867,6 +1860,8 @@ public class OrtApi extends Pointer {
   <p>
   /** \brief Create an allocator for an ::OrtSession following an ::OrtMemoryInfo
    *
+   * The allocator wraps the internal allocator from the OrtSession and becomes invalid when the session does.
+   *
    * @param session [in]
    * @param mem_info [in] valid ::OrtMemoryInfo instance
    * @param out [out] Newly created ::OrtAllocator. Must be freed with OrtApi::ReleaseAllocator
@@ -2446,7 +2441,7 @@ public class OrtApi extends Pointer {
    *  crossing which the current chunk is chunked into 2.
    * "initial_growth_chunk_size_bytes": (Possible) Size of the second allocation in the arena.
    *  Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
-   * "max_power_of_two_extend_bytes": The maximum enxtend size if arena strategy is {@code kNextPowerOfTwo}.
+   * "max_power_of_two_extend_bytes": The maximum extend size if arena strategy is {@code kNextPowerOfTwo}.
    *  It is not an allocation limit, it is only a limit for extension when requested byte is less than the limit.
    *  When requested bytes is more than the limit, allocator will still return as requested.
    *  Use -1 to allow ORT to choose the default 1GB for max_power_of_two_extend_bytes.
@@ -3322,7 +3317,8 @@ public class OrtApi extends Pointer {
    *
    * @param name [in] Name of the attribute
    * @param data [in] Data content of the attribute
-   * @param len [in] Number of bytes stored in data
+   * @param len [in] Number of bytes stored in data for ORT_OP_ATTR_STRING.
+                    Number of elements if data represents an array (e.g., ORT_OP_ATTR_INTS). Otherwise, set to 1.
    * @param type [in] Data type
    * @param op_attr [out] Attribute that has been created, which must be released by OrtApi::ReleaseOpAttr
    *
@@ -3361,9 +3357,9 @@ public class OrtApi extends Pointer {
    * @param op_name [in] Operator name
    * @param domain [in] Operator domain
    * @param version [in] Operator opset version
-   * @param type_constraint_names [in] Name of the type contraints, such as "T" or "T1"
-   * @param type_constraint_values [in] Type of each contraints
-   * @param type_constraint_count [in] Number of contraints
+   * @param type_constraint_names [in] Name of the type constraints, such as "T" or "T1"
+   * @param type_constraint_values [in] Type of each constraints
+   * @param type_constraint_count [in] Number of constraints
    * @param attr_values [in] Attributes used to initialize the operator
    * @param attr_count [in] Number of the attributes
    * @param input_count [in] Number of inputs
@@ -3529,6 +3525,7 @@ public class OrtApi extends Pointer {
    *      -# "gpu"
    *      -# "htp": Default.
    *      -# "saver"
+   *      -# "ir"
    *   "backend_path": File path to QNN backend library. Mutually exclusive with "backend_type".
    *   "profiling_level": QNN profiling level.
    *      Available options:
@@ -3550,6 +3547,14 @@ public class OrtApi extends Pointer {
    *      -# "low_power_saver"
    *      -# "power_saver"
    *      -# "sustained_high_performance"
+   *   "dump_qnn_ir_dlc": Use the QnnIr backend library to write .dlc files for each subgraph dispatched to QNN. When
+   *       enabled, inference results will be incorrect. Use only for debugging.
+   *      -# "0": Default: disabled
+   *      -# "1": enabled
+   *   "dump_qnn_ir_dlc_dir": Set the directory into which QnnIr will be configured to write QNN graphs as .dlc files.
+   *      Default is current working directory.
+   *   "qnn_ir_backend_path": File path to the QnnIr backend library. If "dump_qnn_ir_dlc" is enabled, use this path
+   *      instead of looking for the Ir backend in the standard location.
    *   "qnn_saver_path": File path to the QNN Saver backend library. If specified, QNN Saver will be enabled and will
    *      dump QNN API calls to disk for replay/debugging. QNN Saver produces incorrect model inference results and
    *      may alter model/EP partitioning. Use only for debugging.
@@ -3596,6 +3601,11 @@ public class OrtApi extends Pointer {
    *      assigned to QNN EP is dumped to a separate file.
    *   "json_qnn_graph_dir": Directory in which to dump QNN JSON graphs. If not specified, QNN graphs are dumped in the
    *      program's current working directory. Ignored if "dump_json_qnn_graph" is not set.
+   *   "op_packages": QNN UDO op_package for QNN EP, allowed format:
+   *     "<op_type>:<op_package_path>:<interface>[:<target>],<op_type2>:<op_package_path2>:<interface2>[:<target>]",
+   *     where op_type is the name of the operation, op_package_path is the path to the op package shared library,
+   *     interface is the symbol name to register the op life cycle functions, and target is the backend type. For more
+   *     details, refer to: https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-50/op_packages.html
    *
    * XNNPACK supported keys:
    *   "intra_op_num_threads": number of thread-pool size to use for XNNPACK execution provider.
@@ -4282,7 +4292,7 @@ public class OrtApi extends Pointer {
 
   /** \brief Get the logging severity level of the ::OrtLogger.
    *
-   * Can be used in a custom operator to get the logging serverity level of the ::OrtLogger associated with
+   * Can be used in a custom operator to get the logging severity level of the ::OrtLogger associated with
    * the ::OrtKernelInfo.
    *
    * @param logger [in] The ::OrtLogger instance.
@@ -4501,19 +4511,26 @@ public class OrtApi extends Pointer {
    *  @param provider_options_values [in] value of the provider options map
    *  @param num_keys [in] Length of the provider options map
    */
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") PointerPointer provider_options_keys, @Cast("const char*const*") PointerPointer provider_options_values, @Cast("size_t") long num_keys);
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys, @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values, @Cast("size_t") long num_keys);
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, String provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, String provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys, @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values, @Cast("size_t") long num_keys);
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys, @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values, @Cast("size_t") long num_keys);
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, String provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, String provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys, @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values, @Cast("size_t") long num_keys);
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, @Cast("const char*") BytePointer provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys, @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values, @Cast("size_t") long num_keys);
-  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, String provider_type, @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
+  public native OrtStatus CreateAndRegisterAllocatorV2( OrtEnv env, String provider_type,
+                    @Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg,
                     @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys, @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values, @Cast("size_t") long num_keys);
 
   /** \brief Run the model asynchronously in a thread owned by intra op thread pool
@@ -4722,6 +4739,8 @@ public class OrtApi extends Pointer {
    * @param len [in] Number of bytes allowed to store in data
    * @param out [out] Number of bytes required to save the data when the call failed, or the real number of bytes saved to data on success
    *
+   * \note Does not support reading graph attributes. Refer to Node_GetSubgraphs.
+   *
    * @since Version 1.17.
    */
   public native OrtStatus ReadOpAttr( @Const OrtOpAttr op_attr, @Cast("OrtOpAttrType") int type, Pointer data, @Cast("size_t") long len, @Cast("size_t*") SizeTPointer out);
@@ -4827,12 +4846,12 @@ public class OrtApi extends Pointer {
                     @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
                     @Cast("size_t") long num_keys);
 
-  /** \brief Get scratch buffer from the corresponding allocator under the sepcific OrtMemoryInfo object.
+  /** \brief Get scratch buffer from the corresponding allocator under the specific OrtMemoryInfo object.
    *         NOTE: callers are responsible to release this scratch buffer from the corresponding allocator
    *  @param context [in] OrtKernelContext instance
    *  @param mem_info [in] OrtMemoryInfo instance
    *  @param count_or_bytes [in] How many bytes is this scratch buffer
-   *  @param out [out] A pointer to the scrach buffer
+   *  @param out [out] A pointer to the scratch buffer
    *
    *  \snippet{doc} snippets.dox OrtStatus Return Value
    *
@@ -4990,6 +5009,8 @@ public class OrtApi extends Pointer {
   public native OrtStatus SetEpDynamicOptions( OrtSession sess, @Cast("const char*const*") @ByPtrPtr byte[] keys,
                     @Cast("const char*const*") @ByPtrPtr byte[] values, @Cast("size_t") long kv_len);
 
+  /** \}
+  <p>
   /** \brief Release an OrtValueInfo instance if it was not added to an OrtGraph.
    * @since Version 1.22.
    */
@@ -5154,6 +5175,8 @@ public class OrtApi extends Pointer {
   public native CreateKeyValuePairs_PointerPointer CreateKeyValuePairs(); public native OrtApi CreateKeyValuePairs(CreateKeyValuePairs_PointerPointer setter);
 
   /** \brief Add a key-value pair to the OrtKeyValuePairs instance.
+   *
+   * If a pair with the same key already exists, it is overwritten.
    *
    * @param kvps [in] OrtKeyValuePairs instance.
    * @param key [in] Key to be added.
@@ -5545,4 +5568,1378 @@ public class OrtApi extends Pointer {
       public native @Const OrtEpApi call();
   }
   public native OrtEpApi_GetEpApi GetEpApi(); public native OrtApi GetEpApi(OrtEpApi_GetEpApi setter);
+
+  /** \brief Compute total size in bytes of the tensor data contained in an OrtValue.
+   *
+   * Returns the total number of bytes used to store the tensor data. For numeric tensors,
+   * this is sizeof(element_type) * total_element_count. OrtValues that are not tensors or
+   * that are tensors that contain strings will cause an error to be returned.
+   *
+   * @param ort_value [in] OrtValue instance containing a tensor
+   * @param size [out] The total size of the tensor data in bytes
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus GetTensorSizeInBytes( @Const OrtValue ort_value, @Cast("size_t*") SizeTPointer size);
+
+  /** \brief Calls OrtAllocator::GetStats function
+   *
+   * Return a pointer to the OrtKeyValuePairs structure that contains the statistics of the allocator
+   * and the user should call OrtApi::ReleaseKeyValuePairs.
+   *
+   * NOTE: If the allocator does not implement this function, the OrtKeyValuePairs instance will be empty.
+   *
+   * @param ort_allocator [in] The allocator to get stats from
+   * @param out [out] A pointer to the OrtKeyValuePairs instance that contains the stats
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus AllocatorGetStats( @Const OrtAllocator ort_allocator, @Cast("OrtKeyValuePairs**") PointerPointer out);
+  public native OrtStatus AllocatorGetStats( @Const OrtAllocator ort_allocator, @ByPtrPtr OrtKeyValuePairs out);
+
+  /** \brief Create an ::OrtMemoryInfo
+   *
+   * @param name [in] Arbitrary name.
+   * @param device_type [in] Device type.
+   * @param vendor_id [in] PCI Vendor ID. Use 0 for a generic allocator (e.g. WebGPU).
+   * @param device_id [in] Device ID if there are multiple devices of the same type. e.g. 2 GPU devices.
+   * @param mem_type [in] Memory type. Use OrtDeviceMemoryType_DEFAULT for device memory, and
+   *                     OrtDeviceMemoryType_HOST_ACCESSIBLE (if applicable) for memory used to transfer between the
+   *                     device and the CPU. Use the device_type and device_id of the GPU/NPU that the memory is also
+   *                     accessible to.
+   * @param alignment [in] Alignment of the memory if required. Pass 0 for default alignment.
+   * @param allocator_type [in] Allocator type. If OrtAllocatorType::OrtArenaAllocator, the ORT arena will be used.
+   *                           Caveat: Support for OrtArenaAllocator is currently limited to usage of internal ORT
+   *                           allocators via CreateAllocator/CreateAndRegisterAllocator/CreateAndRegisterAllocatorV2.
+   * @param out [out] Newly created ::OrtMemoryInfo. Must be freed with OrtApi::ReleaseMemoryInfo
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus CreateMemoryInfo_V2( @Cast("const char*") BytePointer name, @Cast("OrtMemoryInfoDeviceType") int device_type,
+                    @Cast("uint32_t") int vendor_id, int device_id, @Cast("OrtDeviceMemoryType") int mem_type,
+                    @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type,
+                    @Cast("OrtMemoryInfo**") PointerPointer out);
+  public native OrtStatus CreateMemoryInfo_V2( @Cast("const char*") BytePointer name, @Cast("OrtMemoryInfoDeviceType") int device_type,
+                    @Cast("uint32_t") int vendor_id, int device_id, @Cast("OrtDeviceMemoryType") int mem_type,
+                    @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type,
+                    @ByPtrPtr OrtMemoryInfo out);
+  public native OrtStatus CreateMemoryInfo_V2( String name, @Cast("OrtMemoryInfoDeviceType") int device_type,
+                    @Cast("uint32_t") int vendor_id, int device_id, @Cast("OrtDeviceMemoryType") int mem_type,
+                    @Cast("size_t") long alignment, @Cast("OrtAllocatorType") int allocator_type,
+                    @ByPtrPtr OrtMemoryInfo out);
+
+  /** \brief Get the device memory type from ::OrtMemoryInfo
+   *
+   * @param ptr [in] The OrtMemoryInfo instance to query.
+   * @return The device memory type.
+   *
+   * @since Version 1.23
+   */
+  public static class MemoryInfoGetDeviceMemType_OrtMemoryInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryInfoGetDeviceMemType_OrtMemoryInfo(Pointer p) { super(p); }
+      protected MemoryInfoGetDeviceMemType_OrtMemoryInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtDeviceMemoryType") int call( @Const OrtMemoryInfo ptr);
+  }
+  public native MemoryInfoGetDeviceMemType_OrtMemoryInfo MemoryInfoGetDeviceMemType(); public native OrtApi MemoryInfoGetDeviceMemType(MemoryInfoGetDeviceMemType_OrtMemoryInfo setter);
+
+  /** \brief Get the vendor id from ::OrtMemoryInfo
+   *
+   * @param ptr [in] The OrtMemoryInfo instance to query.
+   * @return The vendor id.
+   *
+   * @since Version 1.23
+   */
+  public static class MemoryInfoGetVendorId_OrtMemoryInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    MemoryInfoGetVendorId_OrtMemoryInfo(Pointer p) { super(p); }
+      protected MemoryInfoGetVendorId_OrtMemoryInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("uint32_t") int call( @Const OrtMemoryInfo ptr);
+  }
+  public native MemoryInfoGetVendorId_OrtMemoryInfo MemoryInfoGetVendorId(); public native OrtApi MemoryInfoGetVendorId(MemoryInfoGetVendorId_OrtMemoryInfo setter);
+
+  /** \name OrtValueInfo
+   *  \{
+  <p>
+  /** \brief Get the OrtNode that produces the value represented by the given OrtValueInfo.
+   * Optionally returns the associated output index.
+   *
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param producer_node [out] Output parameter set to the OrtNode that produces the OrtValueInfo.
+   * @param producer_output_index [out] Optional output parameter set to the OrtNode instance's output index
+   *                                   that produces the value. Ignored if set to NULL.
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_GetValueProducer( @Const OrtValueInfo value_info,
+                    @Cast("const OrtNode**") PointerPointer producer_node, @Cast("size_t*") SizeTPointer producer_output_index);
+  public native OrtStatus ValueInfo_GetValueProducer( @Const OrtValueInfo value_info,
+                    @Const @ByPtrPtr OrtNode producer_node, @Cast("size_t*") SizeTPointer producer_output_index);
+
+  /** \brief Get the number of consumers of a value as a node input.
+   *
+   * Only nodes are considered "consumers" by this function. To check if an OrtValueInfo is a graph output,
+   * call ValueInfo_IsGraphOutput().
+   *
+   * A single OrtNode may use a single value for more than one input (e.g., Mul(x, x)), so the returned
+   * {@code num_consumers} may be larger than the number of unique OrtNode instances that consume the value.
+   *
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param num_consumers [out] Output parameter set to the number of consumers of the value.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_GetValueNumConsumers( @Const OrtValueInfo value_info, @Cast("size_t*") SizeTPointer num_consumers);
+
+  /** \brief Returns information (OrtNode and input index) for all consumer nodes that use the value as an input.
+   *
+   * Only nodes are considered "consumers" by this function.
+   *
+   * Caller provides 2 pre-allocated arrays that will be filled with the OrtNode and input index values.
+   * Use ValueInfo_GetValueNumConsumers() to get the number of consumers of the value.
+   *
+   * An OrtNode instance may appear multiple times if it uses the given value more than once.
+   * Example: For a node MulNode(x, x) that consumes the value 'x' twice, the following is returned:
+   *   - nodes: [MulNode, MulNode]
+   *   - input_indices: [0, 1]
+   *
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param nodes [out] Pre-allocated array of size {@code num_consumers} that is filled with OrtNode instances.
+   * @param input_indices [out] Pre-allocated array of {@code num_consumers} elements that is filled
+   *                           with input indices. Index is set to -1 for an "implicit" input to a consumer node
+   *                           that contains a subgraph (e.g., If, Loop) with nodes that use the value internally.
+   * @param num_consumers [in] The size of the {@code consumer_nodes} and {@code consumer_input_indices} arrays.
+   *                          Typical usage sets this to the value of ValueInfo_GetValueNumConsumers().
+   *                          An error status is returned if {@code num_consumers} is less than the number of actual
+   *                          consumers.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_GetValueConsumers( @Const OrtValueInfo value_info,
+                    @Cast("const OrtNode**") PointerPointer nodes,
+                    @Cast("int64_t*") LongPointer input_indices,
+                    @Cast("size_t") long num_consumers);
+  public native OrtStatus ValueInfo_GetValueConsumers( @Const OrtValueInfo value_info,
+                    @Const @ByPtrPtr OrtNode nodes,
+                    @Cast("int64_t*") LongPointer input_indices,
+                    @Cast("size_t") long num_consumers);
+  public native OrtStatus ValueInfo_GetValueConsumers( @Const OrtValueInfo value_info,
+                    @Const @ByPtrPtr OrtNode nodes,
+                    @Cast("int64_t*") LongBuffer input_indices,
+                    @Cast("size_t") long num_consumers);
+  public native OrtStatus ValueInfo_GetValueConsumers( @Const OrtValueInfo value_info,
+                    @Const @ByPtrPtr OrtNode nodes,
+                    @Cast("int64_t*") long[] input_indices,
+                    @Cast("size_t") long num_consumers);
+
+  /** \brief Get the underlying initializer value, as an OrtValue, from the given OrtValueInfo.
+   *
+   * Sets the output parameter to NULL if the given OrtValueInfo does not represent an initializer.
+   * Does not return an error status in this case.
+   *
+   * Supports initializers defined in an outer scope (i.e., a parent graph).
+   *
+   * Supports initializers stored in an external file. For external initializers, ORT memory maps
+   * the initializer data on the first call to this function. If caller needs custom memory mapping,
+   * use ValueInfo_GetExternalInitializerInfo to get the location of the initializer data.
+   *
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param initializer_value [out] Output parameter set to the initializer value or NULL. Do not cache the OrtValue
+   *                               as it is released when the owning OrtGraph is released.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_GetInitializerValue( @Const OrtValueInfo value_info,
+                    @Cast("const OrtValue**") PointerPointer initializer_value);
+  public native OrtStatus ValueInfo_GetInitializerValue( @Const OrtValueInfo value_info,
+                    @Const @ByPtrPtr OrtValue initializer_value);
+
+  /** \brief Get information about an external initializer (e.g., filepath, file offset, byte size).
+   *
+   * Sets the output parameter {@code info} to NULL if the given OrtValueInfo does not represent an initializer
+   * with external data. In this case, a NULL status (non-error) is returned.
+   *
+   * @param value_info [in] The OrtValueInfo instance.
+   * @param info [out] Output parameter set to an OrtExternalInitializerInfo instance that can be used to query
+   *                  file path, file offset, etc. ORT sets this to NULL if the OrtValueInfo does not represent
+   *                  an external initializer.
+   *                  Must release with ReleaseExternalInitializerInfo.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_GetExternalInitializerInfo( @Const OrtValueInfo value_info,
+                    @Cast("OrtExternalInitializerInfo**") PointerPointer info);
+  public native OrtStatus ValueInfo_GetExternalInitializerInfo( @Const OrtValueInfo value_info,
+                    @ByPtrPtr OrtExternalInitializerInfo info);
+
+  /** \brief Returns a boolean indicating if the given value is a required graph input.
+   *
+   * For ONNX IR version < 4, all graph inputs without a matching initializer are required.
+   *
+   * For ONNX IR version >=4, a graph input with a matching initializer is an optional graph input
+   * with the initializer serving as the default value.
+   *
+   * @param value_info [in] The OrtValueInfo instance representing the graph value.
+   * @param is_required_graph_input [out] Output parameter set to true if the graph value is a required graph input.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_IsRequiredGraphInput( @Const OrtValueInfo value_info,
+                    @Cast("bool*") BoolPointer is_required_graph_input);
+  public native OrtStatus ValueInfo_IsRequiredGraphInput( @Const OrtValueInfo value_info,
+                    @Cast("bool*") boolean[] is_required_graph_input);
+
+  /** \brief Returns a boolean indicating if the given value is an optional graph input.
+   *
+   * Optional graph inputs were introduced in ONNX IR version 4. For ONNX IR version >=4, a graph input with a
+   * matching initializer is an optional graph input with the initializer serving as the default value.
+   * The matching initializer is also known as a non-constant initializer.
+   *
+   * @param value_info [in] The OrtValueInfo instance representing the graph value.
+   * @param is_optional_graph_input [out] Output parameter set to true if the graph value is an optional graph input.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_IsOptionalGraphInput( @Const OrtValueInfo value_info,
+                    @Cast("bool*") BoolPointer is_optional_graph_input);
+  public native OrtStatus ValueInfo_IsOptionalGraphInput( @Const OrtValueInfo value_info,
+                    @Cast("bool*") boolean[] is_optional_graph_input);
+
+  /** \brief Returns a boolean indicating if the given value is a graph output.
+   *
+   * @param value_info [in] The OrtValueInfo instance representing the graph value.
+   * @param is_graph_output [out] Output parameter set to true if the graph value is a graph output.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_IsGraphOutput( @Const OrtValueInfo value_info, @Cast("bool*") BoolPointer is_graph_output);
+  public native OrtStatus ValueInfo_IsGraphOutput( @Const OrtValueInfo value_info, @Cast("bool*") boolean[] is_graph_output);
+
+  /** \brief Returns a boolean indicating if the given value is a constant initializer.
+   *
+   * For ONNX IR version < 4, all initializers are constant.
+   *
+   * For ONNX IR version >=4, an initializer that serves as the default value for a matching graph input is not a
+   * constant initializer.
+   *
+   * @param value_info [in] The OrtValueInfo instance representing the graph value.
+   * @param is_constant_initializer [out] Output parameter set to true if the graph value is a constant initializer.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_IsConstantInitializer( @Const OrtValueInfo value_info,
+                    @Cast("bool*") BoolPointer is_constant_initializer);
+  public native OrtStatus ValueInfo_IsConstantInitializer( @Const OrtValueInfo value_info,
+                    @Cast("bool*") boolean[] is_constant_initializer);
+
+  /** \brief Returns a boolean indicating if the given value is defined in an outer scope.
+   *
+   * Certain operator types (e.g., If and Loop) contain nested subgraphs. This function enables
+   * determining whether a value is defined in a parent node's graph.
+   *
+   * @param value_info [in] The OrtValueInfo instance representing the graph value.
+   * @param is_from_outer_scope [out] Output parameter set to true if the value is defined in an outer
+   *                                 scope (i.e., a parent graph).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ValueInfo_IsFromOuterScope( @Const OrtValueInfo value_info,
+                    @Cast("bool*") BoolPointer is_from_outer_scope);
+  public native OrtStatus ValueInfo_IsFromOuterScope( @Const OrtValueInfo value_info,
+                    @Cast("bool*") boolean[] is_from_outer_scope);
+
+  /** \}
+   <p>
+   *  \name OrtGraph
+   *  \{
+  <p>
+  /** \brief Returns a graph's name.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param graph_name [out] Output parameter set to the graph's name.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetName( @Const OrtGraph graph, @Cast("const char**") PointerPointer graph_name);
+  public native OrtStatus Graph_GetName( @Const OrtGraph graph, @Cast("const char**") @ByPtrPtr BytePointer graph_name);
+  public native OrtStatus Graph_GetName( @Const OrtGraph graph, @Cast("const char**") @ByPtrPtr ByteBuffer graph_name);
+  public native OrtStatus Graph_GetName( @Const OrtGraph graph, @Cast("const char**") @ByPtrPtr byte[] graph_name);
+
+  /** \brief Get the filepath to the model from which an OrtGraph is constructed.
+   *
+   * \note The model's filepath is empty if the filepath is unknown, such as when the model is loaded from bytes
+   * via CreateSessionFromArray.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param model_path [out] Output parameter set to the model's null-terminated filepath.
+   *                        Set to an empty path string if unknown.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetModelPath( @Const OrtGraph graph, @Cast("const ORTCHAR_T**") PointerPointer model_path);
+  public native OrtStatus Graph_GetModelPath( @Const OrtGraph graph, @Cast("const ORTCHAR_T**") @ByPtrPtr Pointer model_path);
+
+  /** \brief Returns the ONNX IR version.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param onnx_ir_version [out] Output parameter set to the ONNX IR version.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetOnnxIRVersion( @Const OrtGraph graph, @Cast("int64_t*") LongPointer onnx_ir_version);
+  public native OrtStatus Graph_GetOnnxIRVersion( @Const OrtGraph graph, @Cast("int64_t*") LongBuffer onnx_ir_version);
+  public native OrtStatus Graph_GetOnnxIRVersion( @Const OrtGraph graph, @Cast("int64_t*") long[] onnx_ir_version);
+
+  /** \brief Returns the number of operator sets that the graph's model uses.
+   *
+   * \note An operator set is uniquely identified by the (domain, opset_version) pair. All models must have at
+   * least one entry that specifies which entry of the ONNX operator set is used. The ONNX domain is represented by
+   * an empty string.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param num_operator_sets [out] Output parameter set to the number of operator sets that the graph's model uses.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetNumOperatorSets( @Const OrtGraph graph, @Cast("size_t*") SizeTPointer num_operator_sets);
+
+  /** \brief Returns the operator sets that the graph's model uses.
+   *
+   * \note An operator set is uniquely identified by the (domain, opset_version) pair. All models must have at
+   * least one entry that specifies which entry of the ONNX operator set is used. The ONNX domain is represented by
+   * an empty string.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param domains [out] Pre-allocated array of {@code num_operator_sets} elements that is filled with
+   *                     null-terminated domain names.
+   * @param opset_versions [out] Pre-allocated array of {@code num_operator_sets} elements that is filled with
+   *                            the opset version of the corresponding domain in the {@code domains} array.
+   * @param num_operator_sets [in] The size of the {@code domains} and {@code opset_versions} arrays.
+   *                              Typical usage sets this to the result of Graph_GetNumOperatorSets().
+   *                              An error status is returned if {@code num_operator_sets} is less than the actual number
+   *                              of operator sets.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetOperatorSets( @Const OrtGraph graph,
+                    @Cast("const char**") PointerPointer domains,
+                    @Cast("int64_t*") LongPointer opset_versions, @Cast("size_t") long num_operator_sets);
+  public native OrtStatus Graph_GetOperatorSets( @Const OrtGraph graph,
+                    @Cast("const char**") @ByPtrPtr BytePointer domains,
+                    @Cast("int64_t*") LongPointer opset_versions, @Cast("size_t") long num_operator_sets);
+  public native OrtStatus Graph_GetOperatorSets( @Const OrtGraph graph,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer domains,
+                    @Cast("int64_t*") LongBuffer opset_versions, @Cast("size_t") long num_operator_sets);
+  public native OrtStatus Graph_GetOperatorSets( @Const OrtGraph graph,
+                    @Cast("const char**") @ByPtrPtr byte[] domains,
+                    @Cast("int64_t*") long[] opset_versions, @Cast("size_t") long num_operator_sets);
+
+  /** \brief Returns the number of graph inputs.
+   *
+   * \note The count includes initializers that are included in the list of graph inputs.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param num_inputs [out] Output parameter set to the number of graph inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetNumInputs( @Const OrtGraph graph, @Cast("size_t*") SizeTPointer num_inputs);
+
+  /** \brief Returns the graph's inputs as OrtValueInfo instances.
+   *
+   * \note The result includes initializers that are included in the list of graph inputs.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param inputs [out] Pre-allocated array of {@code num_inputs} elements that is filled with the graph's inputs.
+   * @param num_inputs [in] The size of the {@code inputs} array.
+   *                       Typical usage sets this to the result of Graph_GetNumInputs(). An error status is
+   *                       returned if {@code num_inputs} is less than the number of graph inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetInputs( @Const OrtGraph graph,
+                    @Cast("const OrtValueInfo**") PointerPointer inputs, @Cast("size_t") long num_inputs);
+  public native OrtStatus Graph_GetInputs( @Const OrtGraph graph,
+                    @Const @ByPtrPtr OrtValueInfo inputs, @Cast("size_t") long num_inputs);
+
+  /** \brief Returns the number of graph outputs.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param num_outputs [out] Output parameter set to the number of graph outputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetNumOutputs( @Const OrtGraph graph, @Cast("size_t*") SizeTPointer num_outputs);
+
+  /** \brief Returns the graph's outputs as OrtValueInfo instances.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param outputs [out] Pre-allocated array of {@code num_outputs} elements that is filled with the graph's outputs.
+   * @param num_outputs [in] The size of the {@code outputs} array.
+   *                        Typical usage sets this to the result of Graph_GetNumOutputs(). An error status is
+   *                        returned if {@code num_outputs} is less than the number of graph outputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetOutputs( @Const OrtGraph graph,
+                    @Cast("const OrtValueInfo**") PointerPointer outputs, @Cast("size_t") long num_outputs);
+  public native OrtStatus Graph_GetOutputs( @Const OrtGraph graph,
+                    @Const @ByPtrPtr OrtValueInfo outputs, @Cast("size_t") long num_outputs);
+
+  /** \brief Returns the number of graph initializers.
+   *
+   * Counts constant and non-constant initializers.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param num_initializers [out] Output parameter set to the number of graph initializers.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetNumInitializers( @Const OrtGraph graph, @Cast("size_t*") SizeTPointer num_initializers);
+
+  /** \brief Returns the graph's initializers as OrtValueInfo instances.
+   *
+   * Includes constant and non-constant initializers.
+   *
+   * For ONNX IR version < 4, all initializers are constant.
+   *
+   * For ONNX IR version >= 4, an initializer with a name that matches a graph input is considered a
+   * non-constant initializer.
+   *
+   * Call ValueInfo_GetInitializerValue to get the initializer's data.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param initializers [out] Pre-allocated array of {@code num_outputs} elements that is filled with the initializers.
+   * @param num_initializers [in] The size of the {@code initializers} array. Typical usage sets this to the
+   *                             result of Graph_GetNumInitializers(). An error status is returned if
+   *                            {@code num_initializers} is less than the number of graph initializers.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetInitializers( @Const OrtGraph graph,
+                    @Cast("const OrtValueInfo**") PointerPointer initializers,
+                    @Cast("size_t") long num_initializers);
+  public native OrtStatus Graph_GetInitializers( @Const OrtGraph graph,
+                    @Const @ByPtrPtr OrtValueInfo initializers,
+                    @Cast("size_t") long num_initializers);
+
+  /** \brief Returns the number of graph nodes.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param num_nodes [out] Output parameter set to the number of graph nodes.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetNumNodes( @Const OrtGraph graph, @Cast("size_t*") SizeTPointer num_nodes);
+
+  /** \brief Returns the graph's nodes as OrtNode instances.
+   *
+   * The nodes are sorted using a stable topological ordering. Callers are responsible for maintaining their
+   * own node ordering if a different order is required.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param nodes [out] Pre-allocated array of {@code num_nodes} elements that is filled with the graph's nodes.
+   * @param num_nodes [in] The size of the {@code nodes} array. Typical usage sets this to the
+   *                      result of Graph_GetNumNodes(). An error status is returned if
+   *                      {@code num_nodes} is less than the number of graph nodes.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetNodes( @Const OrtGraph graph,
+                    @Cast("const OrtNode**") PointerPointer nodes, @Cast("size_t") long num_nodes);
+  public native OrtStatus Graph_GetNodes( @Const OrtGraph graph,
+                    @Const @ByPtrPtr OrtNode nodes, @Cast("size_t") long num_nodes);
+
+  /** \brief Get the parent node for the given graph, if any exists.
+   *
+   * Certain operator types (e.g., If and Loop) contain nested subgraphs. This function enables
+   * access to the parent node (e.g., the If and Loop node) from a nested subgraph.
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param node [out] Output parameter that is set to the graph's parent node.
+   *                  Set to NULL if a parent node does not exist (e.g., for a top-level graph).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetParentNode( @Const OrtGraph graph, @Cast("const OrtNode**") PointerPointer node);
+  public native OrtStatus Graph_GetParentNode( @Const OrtGraph graph, @Const @ByPtrPtr OrtNode node);
+
+  /** \brief Returns an OrtGraph that contains a subset of nodes in the source OrtGraph.
+   *
+   * \note The lifetime of "dst_graph" is tied to that of "src_graph", as they both internally reference
+   * the same underlying graph.
+   *
+   * @param src_graph [in] The source OrtGraph instance.
+   * @param nodes [in] A subset of the nodes/OrtNodes in 'graph'.
+   * @param num_nodes [in] Number of nodes.
+   * @param dst_graph [out] An OrtGraph created from a given set of nodes. Must be released by calling ReleaseGraph.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetGraphView( @Const OrtGraph src_graph, @Cast("const OrtNode**") PointerPointer nodes,
+                    @Cast("size_t") long num_nodes, @Cast("OrtGraph**") PointerPointer dst_graph);
+  public native OrtStatus Graph_GetGraphView( @Const OrtGraph src_graph, @Const @ByPtrPtr OrtNode nodes,
+                    @Cast("size_t") long num_nodes, @ByPtrPtr OrtGraph dst_graph);
+
+  /** \}
+   <p>
+   *  \name OrtNode
+   *  \{
+  <p>
+  /** \brief Returns a node's identifier.
+   *
+   * The node's identifier is only unique in the node's parent graph. Different nested subgraphs
+   * (e.g., subgraphs contained by If and Loop nodes) may reuse identifiers.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param node_id [out] Output parameter set to the node's identifier.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetId( @Const OrtNode node, @Cast("size_t*") SizeTPointer node_id);
+
+  /** \brief Returns a node's name. Can be an empty string.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param node_name [out] Output parameter set to the node's name.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetName( @Const OrtNode node, @Cast("const char**") PointerPointer node_name);
+  public native OrtStatus Node_GetName( @Const OrtNode node, @Cast("const char**") @ByPtrPtr BytePointer node_name);
+  public native OrtStatus Node_GetName( @Const OrtNode node, @Cast("const char**") @ByPtrPtr ByteBuffer node_name);
+  public native OrtStatus Node_GetName( @Const OrtNode node, @Cast("const char**") @ByPtrPtr byte[] node_name);
+
+  /** \brief Returns a node's operator type (e.g., "Conv").
+   *
+   * @param node [in] The OrtNode instance.
+   * @param operator_type [out] Output parameter set to the name of the node's operator type.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetOperatorType( @Const OrtNode node, @Cast("const char**") PointerPointer operator_type);
+  public native OrtStatus Node_GetOperatorType( @Const OrtNode node, @Cast("const char**") @ByPtrPtr BytePointer operator_type);
+  public native OrtStatus Node_GetOperatorType( @Const OrtNode node, @Cast("const char**") @ByPtrPtr ByteBuffer operator_type);
+  public native OrtStatus Node_GetOperatorType( @Const OrtNode node, @Cast("const char**") @ByPtrPtr byte[] operator_type);
+
+  /** \brief Returns a node's domain name.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param domain_name [out] Output parameter set to the node's domain name.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetDomain( @Const OrtNode node, @Cast("const char**") PointerPointer domain_name);
+  public native OrtStatus Node_GetDomain( @Const OrtNode node, @Cast("const char**") @ByPtrPtr BytePointer domain_name);
+  public native OrtStatus Node_GetDomain( @Const OrtNode node, @Cast("const char**") @ByPtrPtr ByteBuffer domain_name);
+  public native OrtStatus Node_GetDomain( @Const OrtNode node, @Cast("const char**") @ByPtrPtr byte[] domain_name);
+
+  /** \brief Get the opset version in which the given node's operator type was first defined.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param since_version [out] The opset version in which the node's operator type was first defined.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetSinceVersion( @Const OrtNode node, IntPointer since_version);
+  public native OrtStatus Node_GetSinceVersion( @Const OrtNode node, IntBuffer since_version);
+  public native OrtStatus Node_GetSinceVersion( @Const OrtNode node, int[] since_version);
+
+  /** \brief Returns the number of node inputs.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param num_inputs [out] Output parameter set to the number of node inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetNumInputs( @Const OrtNode node, @Cast("size_t*") SizeTPointer num_inputs);
+
+  /** \brief Returns the node's inputs as OrtValueInfo instances.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param inputs [out] Pre-allocated array of {@code num_inputs} elements that is filled with the node's inputs.
+   * @param num_inputs [in] The size of the {@code inputs} array.
+   *                       Typical usage sets this to the result of Node_GetNumInputs(). An error status is
+   *                       returned if {@code num_inputs} is less than the number of node inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetInputs( @Const OrtNode node,
+                    @Cast("const OrtValueInfo**") PointerPointer inputs, @Cast("size_t") long num_inputs);
+  public native OrtStatus Node_GetInputs( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtValueInfo inputs, @Cast("size_t") long num_inputs);
+
+  /** \brief Returns the number of node outputs.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param num_outputs [out] Output parameter set to the number of node outputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetNumOutputs( @Const OrtNode node, @Cast("size_t*") SizeTPointer num_outputs);
+
+  /** \brief Returns the node's outputs as OrtValueInfo instances.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param outputs [out] Pre-allocated array of {@code num_outputs} elements that is filled with the node's outputs.
+   * @param num_outputs [in] The size of the {@code outputs} array.
+   *                        Typical usage sets this to the result of Node_GetNumOutputs(). An error status is
+   *                        returned if {@code num_outputs} is less than the number of node outputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetOutputs( @Const OrtNode node,
+                    @Cast("const OrtValueInfo**") PointerPointer outputs, @Cast("size_t") long num_outputs);
+  public native OrtStatus Node_GetOutputs( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtValueInfo outputs, @Cast("size_t") long num_outputs);
+
+  /** \brief Returns the number of node implicit inputs.
+   *
+   * Certain operator types (e.g., If and Loop) contain nested subgraphs. The internal nodes within the nested subgraphs
+   * may use values from the outer scope. Those "outer scope" values are considered implicit inputs to the node that
+   * contains the subgraphs (e.g., the If or Loop node).
+   *
+   * @param node [in] The OrtNode instance.
+   * @param num_implicit_inputs [out] Output parameter set to the number of node implicit inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetNumImplicitInputs( @Const OrtNode node, @Cast("size_t*") SizeTPointer num_implicit_inputs);
+
+  /** \brief Get the implicit inputs, as OrtValueInfo instances, that are used within the given node's subgraphs.
+   *
+   * \note Only certain operator types (e.g., If and Loop) contain nested subgraphs.
+   * The internal nodes within the nested subgraphs may use values from the outer scope. Those "outer scope" values
+   * are considered implicit inputs to the node that contains the subgraphs (e.g., the If or Loop node).
+   *
+   * @param node [in] The OrtNode instance.
+   * @param implicit_inputs [out] Pre-allocated array of {@code num_implicit_inputs} elements that is filled the node's
+   *                             implicit inputs.
+   * @param num_implicit_inputs [in] The size of the {@code implicit_inputs} array. Typical usage sets this to the result
+   *                                of Node_GetNumImplicitInputs(). An error status is returned if
+   *                                {@code num_implicit_inputs} is less than the number of node implicit inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetImplicitInputs( @Const OrtNode node,
+                    @Cast("const OrtValueInfo**") PointerPointer implicit_inputs,
+                    @Cast("size_t") long num_implicit_inputs);
+  public native OrtStatus Node_GetImplicitInputs( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtValueInfo implicit_inputs,
+                    @Cast("size_t") long num_implicit_inputs);
+
+  /** \brief Returns the number of node attributes.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param num_attributes [out] Output parameter set to the number of node attributes.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetNumAttributes( @Const OrtNode node, @Cast("size_t*") SizeTPointer num_attributes);
+
+  /** \brief Returns a node's attributes as OrtOpAttr instances.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param attributes [out] Pre-allocated array of {@code num_attributes} elements that is filled with the node's attributes.
+   * @param num_attributes [in] The size of the {@code num_attributes} array.
+   *                           Typical usage sets this to the result of Node_GetNumAttributes(). An error status is
+   *                           returned if {@code num_attributes} is less than the number of node attributes.
+   *
+   * \note ONNX Runtime automatically sets optional (unset) attributes to their default values if the default value
+   * is a constant expression that does not depend on other tensor/model characteristics. Conv's 'kernel_shape'
+   * attribute is an example of an optional attribute that does not have a constant default value. This function
+   * does not provide any unset optional attributes without a constant default value.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetAttributes( @Const OrtNode node,
+                    @Cast("const OrtOpAttr**") PointerPointer attributes, @Cast("size_t") long num_attributes);
+  public native OrtStatus Node_GetAttributes( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtOpAttr attributes, @Cast("size_t") long num_attributes);
+
+  /** \brief Gets the OrtNode's attribute as OrtOpAttr by name.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param attribute_name [in] The name of the attribute
+   * @param attribute [out] Output parameter set to the OrtOpAttr instance if an attribute by the given name exists.
+   *                       For an unset optional attribute, {@code attribute} is set to NULL and a non-error status is
+   *                       returned. For an invalid attribute name, {@code attribute} is set to NULL and an error status with
+   *                       code ORT_NOT_FOUND is returned.
+   *
+   * \note ONNX Runtime automatically sets optional (unset) attributes to their default values if the default value
+   * is a constant expression that does not depend on other tensor/model characteristics. Conv's 'kernel_shape'
+   * attribute is an example of an optional attribute that does not have a constant default value. This function
+   * does not provide any unset optional attributes without a constant default value.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetAttributeByName( @Const OrtNode node, @Cast("const char*") BytePointer attribute_name,
+                    @Cast("const OrtOpAttr**") PointerPointer attribute);
+  public native OrtStatus Node_GetAttributeByName( @Const OrtNode node, @Cast("const char*") BytePointer attribute_name,
+                    @Const @ByPtrPtr OrtOpAttr attribute);
+  public native OrtStatus Node_GetAttributeByName( @Const OrtNode node, String attribute_name,
+                    @Const @ByPtrPtr OrtOpAttr attribute);
+
+  /** \brief Get the OrtNode's 'TENSOR' attribute as an OrtValue.
+   *
+   * @param attribute [in] The OrtOpAttr instance.
+   * @param attr_tensor [out] If successful, contains the 'TENSOR' attribute as a newly created OrtValue.
+                             Must be freed with OrtApi::ReleaseValue.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus OpAttr_GetTensorAttributeAsOrtValue( @Const OrtOpAttr attribute,
+                    @Cast("OrtValue**") PointerPointer attr_tensor);
+  public native OrtStatus OpAttr_GetTensorAttributeAsOrtValue( @Const OrtOpAttr attribute,
+                    @ByPtrPtr OrtValue attr_tensor);
+
+  /** \brief Get the attribute type as OrtOpAttrType from an OrtOpAttr.
+   *
+   * @param attribute [in] The OrtOpAttr instance.
+   * @param type [out] Output the attribute type as OrtOpAttrType.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus OpAttr_GetType( @Const OrtOpAttr attribute, @Cast("OrtOpAttrType*") IntPointer type);
+  public native OrtStatus OpAttr_GetType( @Const OrtOpAttr attribute, @Cast("OrtOpAttrType*") IntBuffer type);
+  public native OrtStatus OpAttr_GetType( @Const OrtOpAttr attribute, @Cast("OrtOpAttrType*") int[] type);
+
+  /** \brief Get the attribute name from an OrtOpAttr.
+   *
+   * @param attribute [in] The OrtOpAttr instance.
+   * @param name [out] Output parameter set to the attribute's name. The name is a null-terminated string.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus OpAttr_GetName( @Const OrtOpAttr attribute, @Cast("const char**") PointerPointer name);
+  public native OrtStatus OpAttr_GetName( @Const OrtOpAttr attribute, @Cast("const char**") @ByPtrPtr BytePointer name);
+  public native OrtStatus OpAttr_GetName( @Const OrtOpAttr attribute, @Cast("const char**") @ByPtrPtr ByteBuffer name);
+  public native OrtStatus OpAttr_GetName( @Const OrtOpAttr attribute, @Cast("const char**") @ByPtrPtr byte[] name);
+
+  /** \brief Returns the number of subgraphs contained by the given node.
+   *
+   * \note Only certain operator types (e.g., If and Loop) contain nested subgraphs.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param num_subgraphs [out] Output parameter set to the number of node subgraphs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetNumSubgraphs( @Const OrtNode node, @Cast("size_t*") SizeTPointer num_subgraphs);
+
+  /** \brief Get the subgraphs, as OrtGraph instances, contained by the given node.
+   *
+   * \note Only certain operator types (e.g., If and Loop) contain nested subgraphs. ONNX nodes store subgraphs in
+   * their attributes, however, this function must be used to obtain subgraphs from an OrtNode.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param subgraphs [out] Pre-allocated array of {@code num_subgraphs} elements that is filled with the node's subgraphs.
+   * @param num_subgraphs [in] The size of the {@code num_subgraphs} array.
+   *                          Typical usage sets this to the result of Node_GetNumSubgraphs(). An error status is
+   *                          returned if {@code num_subgraphs} is less than the number of node subgraphs.
+   * @param attribute_names [out] Optional pre-allocated array of {@code num_subgraphs} elements that is filled with the
+   *                             attribute names that correspond to the subgraphs. Ignored if set to NULL.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetSubgraphs( @Const OrtNode node,
+                    @Cast("const OrtGraph**") PointerPointer subgraphs, @Cast("size_t") long num_subgraphs,
+                    @Cast("const char**") PointerPointer attribute_names);
+  public native OrtStatus Node_GetSubgraphs( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtGraph subgraphs, @Cast("size_t") long num_subgraphs,
+                    @Cast("const char**") @ByPtrPtr BytePointer attribute_names);
+  public native OrtStatus Node_GetSubgraphs( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtGraph subgraphs, @Cast("size_t") long num_subgraphs,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer attribute_names);
+  public native OrtStatus Node_GetSubgraphs( @Const OrtNode node,
+                    @Const @ByPtrPtr OrtGraph subgraphs, @Cast("size_t") long num_subgraphs,
+                    @Cast("const char**") @ByPtrPtr byte[] attribute_names);
+
+  /** \brief Get the node's parent OrtGraph instance.
+   *
+   * Can return NULL if the OrtNode was created without an owning graph.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param graph [out] Output parameter set to the node's OrtGraph. Can be set to NULL
+   *                   if the node is not currently contained by a graph.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetGraph( @Const OrtNode node, @Cast("const OrtGraph**") PointerPointer graph);
+  public native OrtStatus Node_GetGraph( @Const OrtNode node, @Const @ByPtrPtr OrtGraph graph);
+
+  /** \brief Returns the execution provider name that this node is assigned to run on.
+   *         Returns NULL if the node has not been assigned to any execution provider yet.
+   *         For plugin execution providers, the name is the one returned by OrtEp::GetName.
+   *
+   * @param node [in] The OrtNode instance.
+   * @param out [out] Output execution provider type and can be NULL if node has not been assigned.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Node_GetEpName( @Const OrtNode node, @Cast("const char**") PointerPointer out);
+  public native OrtStatus Node_GetEpName( @Const OrtNode node, @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus Node_GetEpName( @Const OrtNode node, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus Node_GetEpName( @Const OrtNode node, @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \}
+   <p>
+   *  \name OrtExternalInitializerInfo
+   *  \{
+  <p>
+  /** \brief Release an OrtExternalInitializerInfo instance.
+   *
+   * @param input [in] OrtExternalInitializerInfo instance to be released.
+   *
+   * @since Version 1.23.
+   */
+  public native void ReleaseExternalInitializerInfo(OrtExternalInitializerInfo input);
+
+  /** \brief Get the relative path to the file that stores the initializer's data.
+   *
+   * \note The path is relative to the filesystem directory where the ONNX model was stored.
+   * Caller can use Graph_GetModelPath to get the model's full path and construct the absolute path to the
+   * external initializer file if necessary.
+   *
+   * @param info [in] The OrtExternalInitializerInfo instance.
+   * @return The relative path to the file that stores the initializer's data. Do NOT free this pointer.
+   *
+   * @since Version 1.23.
+   */
+  public static class ExternalInitializerInfo_GetFilePath_OrtExternalInitializerInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ExternalInitializerInfo_GetFilePath_OrtExternalInitializerInfo(Pointer p) { super(p); }
+      protected ExternalInitializerInfo_GetFilePath_OrtExternalInitializerInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("const ORTCHAR_T*") Pointer call( @Const OrtExternalInitializerInfo info);
+  }
+  public native ExternalInitializerInfo_GetFilePath_OrtExternalInitializerInfo ExternalInitializerInfo_GetFilePath(); public native OrtApi ExternalInitializerInfo_GetFilePath(ExternalInitializerInfo_GetFilePath_OrtExternalInitializerInfo setter);
+
+  /** \brief Get the byte offset within the file where the initializer's data is stored.
+   *
+   * @param info [in] The OrtExternalInitializerInfo instance.
+   * @return The byte offset where the initializer's data is stored within the file.
+   *
+   * @since Version 1.23.
+   */
+  public static class ExternalInitializerInfo_GetFileOffset_OrtExternalInitializerInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ExternalInitializerInfo_GetFileOffset_OrtExternalInitializerInfo(Pointer p) { super(p); }
+      protected ExternalInitializerInfo_GetFileOffset_OrtExternalInitializerInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("int64_t") long call( @Const OrtExternalInitializerInfo info);
+  }
+  public native ExternalInitializerInfo_GetFileOffset_OrtExternalInitializerInfo ExternalInitializerInfo_GetFileOffset(); public native OrtApi ExternalInitializerInfo_GetFileOffset(ExternalInitializerInfo_GetFileOffset_OrtExternalInitializerInfo setter);
+
+  /** \brief Get the size in bytes of the initializer's data within the file.
+   *
+   * @param info [in] The OrtExternalInitializerInfo instance.
+   * @return The size in bytes of the initializer's data within the file.
+   *
+   * @since Version 1.23.
+   */
+  public static class ExternalInitializerInfo_GetByteSize_OrtExternalInitializerInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ExternalInitializerInfo_GetByteSize_OrtExternalInitializerInfo(Pointer p) { super(p); }
+      protected ExternalInitializerInfo_GetByteSize_OrtExternalInitializerInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("size_t") long call( @Const OrtExternalInitializerInfo info);
+  }
+  public native ExternalInitializerInfo_GetByteSize_OrtExternalInitializerInfo ExternalInitializerInfo_GetByteSize(); public native OrtApi ExternalInitializerInfo_GetByteSize(ExternalInitializerInfo_GetByteSize_OrtExternalInitializerInfo setter);
+
+  /** \}
+   <p>
+   *  \name OrtRunOptions
+   *  \{
+  <p>
+  /** \brief Get a run configuration entry.
+   *
+   * If a run configuration entry with key {@code config_key} doesn't exist, {@code config_value} will be set to NULL.
+   *
+   * {@code config_key}s are defined in onnxruntime_run_options_config_keys.h.
+   *
+   * @param options [in] The OrtRunOptions instance.
+   * @param config_key [in] The configuration entry key. A null-terminated string.
+   * @return The configuration entry value. Either a null-terminated string if the entry was found. nullptr otherwise.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public static class GetRunConfigEntry_OrtRunOptions_BytePointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetRunConfigEntry_OrtRunOptions_BytePointer(Pointer p) { super(p); }
+      protected GetRunConfigEntry_OrtRunOptions_BytePointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( @Const OrtRunOptions options,
+              @Cast("const char*") BytePointer config_key);
+  }
+  public native GetRunConfigEntry_OrtRunOptions_BytePointer GetRunConfigEntry(); public native OrtApi GetRunConfigEntry(GetRunConfigEntry_OrtRunOptions_BytePointer setter);
+
+  /** \}
+  <p>
+  /** \brief Get the OrtMemoryInfo for the device.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to query.
+   * @param memory_type [in] The memory type to return.
+   * @return A pointer to the OrtMemoryInfo for the device. This may be nullptr if not set.
+   *         If memory_type is OrtDeviceMemoryType_DEFAULT and nullptr is returned the EP uses CPU memory.
+   *
+   * @since Version 1.23
+   */
+  public static class EpDevice_MemoryInfo_OrtEpDevice_int extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    EpDevice_MemoryInfo_OrtEpDevice_int(Pointer p) { super(p); }
+      protected EpDevice_MemoryInfo_OrtEpDevice_int() { allocate(); }
+      private native void allocate();
+      public native @Const OrtMemoryInfo call( @Const OrtEpDevice ep_device,
+              @Cast("OrtDeviceMemoryType") int memory_type);
+  }
+  public native EpDevice_MemoryInfo_OrtEpDevice_int EpDevice_MemoryInfo(); public native OrtApi EpDevice_MemoryInfo(EpDevice_MemoryInfo_OrtEpDevice_int setter);
+
+  /** \brief Create/replace a shared allocator for the OrtEpDevice in the OrtEnv.
+   *
+   * OrtEpDevice maps to the EP factory, and the factory provides the allocator implementation.
+   *
+   * Both OrtDeviceMemoryType_DEFAULT and OrtDeviceMemoryType_HOST_ACCESSIBLE are optional for an EP to provide.
+   * It is EP implementation dependent as to what is available.
+   *
+   * If a shared allocator already exists for the OrtEpDevice and OrtDeviceMemoryType, it is replaced. This allows
+   * changing the shared allocator configuration from the default. e.g. adding an arena.
+   *
+   * @param env [in] The OrtEnv instance to create the shared allocator in.
+   * @param ep_device [in] The OrtEpDevice instance to create the shared allocator for.
+   * @param mem_type [in] The memory type to use for the shared allocator.
+   * @param allocator_type [in] The type of allocator to create. Only OrtDeviceAllocator is valid currently.
+   * @param allocator_options [in] Optional key-value pairs to configure the allocator. If arena based, see
+   *                              include/onnxruntime/core/framework/allocator.h for the keys and values that can be
+   *                              used.
+   * @param allocator [out] A pointer to the created shared allocator. Owned by the OrtEnv instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus CreateSharedAllocator( OrtEnv env, @Const OrtEpDevice ep_device,
+                    @Cast("OrtDeviceMemoryType") int mem_type, @Cast("OrtAllocatorType") int allocator_type,
+                    @Const OrtKeyValuePairs allocator_options,
+                    @Cast("OrtAllocator**") PointerPointer allocator);
+  public native OrtStatus CreateSharedAllocator( OrtEnv env, @Const OrtEpDevice ep_device,
+                    @Cast("OrtDeviceMemoryType") int mem_type, @Cast("OrtAllocatorType") int allocator_type,
+                    @Const OrtKeyValuePairs allocator_options,
+                    @ByPtrPtr OrtAllocator allocator);
+
+  /** \brief Get a shared allocator from the OrtEnv.
+   *
+   * By default there is a shared allocator created for all OrtEpDevice instances, so if you get the OrtMemoryInfo
+   * from the OrtEpDevice using EpDevice_MemoryInfo a shared allocator is guaranteed to exist.
+   *
+   * This will also match and return custom allocators added with RegisterAllocator.
+   *
+   * It is not an error to not find a matching allocator.
+   *
+   * @param env [in] The OrtEnv instance to get the shared allocator from.
+   * @param mem_info [in] The OrtMemoryInfo instance to get the shared allocator for.
+   * @param allocator [out] A pointer to the shared allocator, or nullptr if no shared allocator exists for
+   *                       the given memory info.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus GetSharedAllocator( OrtEnv env, @Const OrtMemoryInfo mem_info,
+                    @Cast("OrtAllocator**") PointerPointer allocator);
+  public native OrtStatus GetSharedAllocator( OrtEnv env, @Const OrtMemoryInfo mem_info,
+                    @ByPtrPtr OrtAllocator allocator);
+
+  /** \brief Release a shared allocator from the OrtEnv for the OrtEpDevice and memory type.
+   *
+   * This will release the shared allocator for the given OrtEpDevice and memory type.
+   * If no shared allocator exists, this is a no-op.
+   *
+   * @param env [in] The OrtEnv instance to release the shared allocator from.
+   * @param ep_device [in] The OrtEpDevice instance to release the shared allocator for.
+   * @param mem_type [in] The memory type of the shared allocator to release.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus ReleaseSharedAllocator( OrtEnv env, @Const OrtEpDevice ep_device,
+                    @Cast("OrtDeviceMemoryType") int mem_type);
+
+  /** \brief Get a const pointer to the raw data inside a tensor
+   *
+   * Used to read the internal tensor data directly.
+   * \note The returned pointer is valid until the OrtValue is destroyed.
+   *
+   * @param value [in] A tensor type (string tensors are not supported)
+   * @param out [out] Filled in with a pointer to the internal storage
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus GetTensorData( @Const OrtValue value, @Cast("const void**") PointerPointer out);
+  public native OrtStatus GetTensorData( @Const OrtValue value, @Cast("const void**") @ByPtrPtr Pointer out);
+
+  /** \brief Get Session configuration entries.
+   *
+   * @param options [in] The session options.
+   * @param out [out] A pointer to a newly created OrtKeyValuePairs instance.
+   *
+   *  An OrtKeyValuePairs instance containing all session configuration entries.
+   *  Note: the user should call OrtApi::ReleaseKeyValuePairs.
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus GetSessionOptionsConfigEntries( @Const OrtSessionOptions options, @Cast("OrtKeyValuePairs**") PointerPointer out);
+  public native OrtStatus GetSessionOptionsConfigEntries( @Const OrtSessionOptions options, @ByPtrPtr OrtKeyValuePairs out);
+
+  /** \brief Get the OrtMemoryInfo for each input of the session.
+   *
+   * The memory info can be used to determine where the input tensors are required.
+   *
+   * The session must be fully initialized before calling this function as the input locations are not known until
+   * this has occurred.
+   *
+   * @param session [in] The OrtSession instance.
+   * @param inputs_memory_info [out] Pre-allocated array of size {@code num_inputs} that will be filled with the
+   *                                OrtMemoryInfo* value for each input.
+   *                                The order is the same as returned by SessionGetInputName.
+   * @param num_inputs [in] The number of inputs in the session. Must match SessionGetInputCount.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus SessionGetMemoryInfoForInputs( @Const OrtSession session,
+                    @Cast("const OrtMemoryInfo**") PointerPointer inputs_memory_info,
+                    @Cast("size_t") long num_inputs);
+  public native OrtStatus SessionGetMemoryInfoForInputs( @Const OrtSession session,
+                    @Const @ByPtrPtr OrtMemoryInfo inputs_memory_info,
+                    @Cast("size_t") long num_inputs);
+
+  /** \brief Get the OrtMemoryInfo for each output of the session.
+   *
+   * The memory info can be used to determine the device the output tensors are produced on.
+   * The user can pre-allocate an OrtValue using this information or use IOBinding to keep the data on the device.
+   * ORT will copy the output to CPU otherwise.
+   *
+   * The session must be fully initialized before calling this function as the output locations are not known until
+   * this has occurred.
+   *
+   * @param session [in] The OrtSession instance.
+   * @param outputs_memory_info [out] Pre-allocated array of size {@code num_outputs} that will be filled with
+   *                                 OrtMemoryInfo* values for each output.
+   *                                 The order is the same as returned by SessionGetOutputName.
+   * @param num_outputs [in] The number of outputs in the session. Must match SessionGetOutputCount.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus SessionGetMemoryInfoForOutputs( @Const OrtSession session,
+                    @Cast("const OrtMemoryInfo**") PointerPointer outputs_memory_info,
+                    @Cast("size_t") long num_outputs);
+  public native OrtStatus SessionGetMemoryInfoForOutputs( @Const OrtSession session,
+                    @Const @ByPtrPtr OrtMemoryInfo outputs_memory_info,
+                    @Cast("size_t") long num_outputs);
+
+  /** \brief Get the OrtEpDevice (if available) for each input of the session.
+   *
+   * An OrtEpDevice will be available if auto EP selection is enabled by calling
+   * SessionOptionsSetEpSelectionPolicy or SessionOptionsSetEpSelectionPolicyDelegate,
+   * or if the OrtEpDevice was manually added to the session using SessionOptionsAppendExecutionProvider_V2.
+   *
+   * If an OrtEpDevice is not available for the input a nullptr is returned.
+   *
+   * The returned OrtEpDevice can be used to create an OrtSyncStream via CreateSyncStreamForEpDevice to asynchronously
+   * provide input to the inference session Run.
+   *
+   * The session must be fully initialized before calling this function as the assigned EPs are not known until
+   * this has occurred.
+   *
+   * @param session [in] The OrtSession instance.
+   * @param inputs_ep_devices [out] Pre-allocated array of size {@code num_inputs} that will be filled with
+   *                               OrtEpDevice* values for each input.
+   *                               The order is the same as returned by SessionGetInputName.
+   * @param num_inputs [in] The number of inputs in the session. Must match SessionGetInputCount.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus SessionGetEpDeviceForInputs( @Const OrtSession session,
+                    @Cast("const OrtEpDevice**") PointerPointer inputs_ep_devices,
+                    @Cast("size_t") long num_inputs);
+  public native OrtStatus SessionGetEpDeviceForInputs( @Const OrtSession session,
+                    @Const @ByPtrPtr OrtEpDevice inputs_ep_devices,
+                    @Cast("size_t") long num_inputs);
+
+  /** \brief Create an OrtSyncStream for the given OrtEpDevice.
+   *
+   * The OrtSyncStream can be used to enable asynchronous operations.
+   * e.g. async usage of CopyTensors to provide input to an OrtSession Run call.
+   *
+   * An error code of ORT_NOT_IMPLEMENTED will be returned if the EP does not support OrtSyncStream.
+   *
+   * @param ep_device [in] The OrtEpDevice instance to create the sync stream for.
+   * @param stream_options [in] Options for OrtSyncStream creation. May be nullptr.
+   * @param stream [out] Output parameter set to the created OrtSyncStream instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus CreateSyncStreamForEpDevice( @Const OrtEpDevice ep_device,
+                    @Const OrtKeyValuePairs stream_options,
+                    @Cast("OrtSyncStream**") PointerPointer stream);
+  public native OrtStatus CreateSyncStreamForEpDevice( @Const OrtEpDevice ep_device,
+                    @Const OrtKeyValuePairs stream_options,
+                    @ByPtrPtr OrtSyncStream stream);
+
+  /** \brief Get the native handle of the sync stream.
+   *
+   * This returns the native handle for the stream. e.g. cudaStream_t for CUDA streams.
+   *
+   * @param stream [in] The OrtSyncStream instance to get the handle from.
+   *
+   * @return The native handle of the stream.
+   *
+   * @since Version 1.23
+   */
+  public static class SyncStream_GetHandle_OrtSyncStream extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    SyncStream_GetHandle_OrtSyncStream(Pointer p) { super(p); }
+      protected SyncStream_GetHandle_OrtSyncStream() { allocate(); }
+      private native void allocate();
+      public native Pointer call( OrtSyncStream stream);
+  }
+  public native SyncStream_GetHandle_OrtSyncStream SyncStream_GetHandle(); public native OrtApi SyncStream_GetHandle(SyncStream_GetHandle_OrtSyncStream setter);
+
+  public native void ReleaseSyncStream(OrtSyncStream input);
+
+  /** \brief Copy OrtValue instances containing Tensors between devices.
+   *
+   * The overall copy must be between a single source device and a single destination device. i.e.
+   *   - all src_tensors must have matching OrtMemoryInfo,
+   *   - all dst_tensors must have matching OrtMemoryInfo.
+   *
+   * OrtValue instances can be created by:
+   *   - Use GetSharedAllocator to get the shared allocator for the OrtMemoryInfo if you need to allocate memory
+   *     on the device.
+   *   - Use CreateTensorAsOrtValue, CreateTensorWithDataAsOrtValue or CreateTensorWithDataAndDeleterAsOrtValue
+   *     to create an OrtValue containing a tensor depending on whether you have existing data or not, and whether
+   *     you want ORT to free the existing data once it is done with the OrtValue.
+   *
+   * @param env [in] The OrtEnv instance to use. The data transfer implementation is provided by an execution provider
+   *                that is registered in this OrtEnv.
+   * @param src_tensors [in] Array of OrtValue instances containing the source tensors to copy.
+   * @param dst_tensors [in] Array of OrtValue instances to copy the source tensors to.
+   * @param stream [in] Optional OrtSyncStream that can be used to perform the copy asynchronously. May be nullptr.
+   * @param num_tensors [in] The number of tensors to copy. The size of {@code src_tensors} and {@code dst_tensors} must match.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23
+   */
+  public native OrtStatus CopyTensors( @Const OrtEnv env,
+                    @Cast("const OrtValue*const*") PointerPointer src_tensors,
+                    @Cast("OrtValue*const*") PointerPointer dst_tensors,
+                    OrtSyncStream stream,
+                    @Cast("size_t") long num_tensors);
+  public native OrtStatus CopyTensors( @Const OrtEnv env,
+                    @Const @ByPtrPtr OrtValue src_tensors,
+                    @ByPtrPtr OrtValue dst_tensors,
+                    OrtSyncStream stream,
+                    @Cast("size_t") long num_tensors);
+
+  /** \brief Get ::OrtModelMetadata from an ::OrtGraph
+   *
+   * @param graph [in] The OrtGraph instance.
+   * @param out [out] Newly created ::OrtModelMetadata. Must be freed using OrtApi::ReleaseModelMetadata.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus Graph_GetModelMetadata( @Const OrtGraph graph, @Cast("OrtModelMetadata**") PointerPointer out);
+  public native OrtStatus Graph_GetModelMetadata( @Const OrtGraph graph, @ByPtrPtr OrtModelMetadata out);
+
+  /** \brief Validate a compiled model's compatibility information for one or more EP devices.
+   *
+   * @param ep_devices [in] The EP devices to validate against (e.g., from GetEpDevices).
+   *                        All devices must belong to the same execution provider.
+   * @param num_ep_devices [in] The number of EP devices provided.
+   * @param compatibility_info [in] The compatibility info string produced when the model was compiled.
+   * @param out_status [out] The resulting compatibility status for the EP devices.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Cast("const OrtEpDevice*const*") PointerPointer ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntPointer out_status);
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Const @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntPointer out_status);
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Const @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    String compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntBuffer out_status);
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Const @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") int[] out_status);
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Const @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    String compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntPointer out_status);
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Const @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    @Cast("const char*") BytePointer compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") IntBuffer out_status);
+  public native OrtStatus GetModelCompatibilityForEpDevices(
+                    @Const @ByPtrPtr OrtEpDevice ep_devices,
+                    @Cast("size_t") long num_ep_devices,
+                    String compatibility_info,
+                    @Cast("OrtCompiledModelCompatibility*") int[] out_status);
+
+  /** \name OrtExternalInitializerInfo
+   *  \{
+  <p>
+  /** \brief Creates an OrtExternalInitializerInfo instance.
+   *
+   * @param filepath [in] The relative path to the file that stores the initializer's data. ORT copies this path string.
+   * @param file_offset [in] The byte offset where the initializer's data is stored within the file.
+   * @param byte_size [in] The size in bytes of the initializer's data within the file.
+   * @param out [out] Output parameter set to the new OrtExternalInitializerInfo instance.
+   *                 Must be released by calling ReleaseExternalInitializerInfo().
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus CreateExternalInitializerInfo( @Cast("const ORTCHAR_T*") Pointer filepath, @Cast("int64_t") long file_offset,
+                    @Cast("size_t") long byte_size, @Cast("OrtExternalInitializerInfo**") PointerPointer out);
+  public native OrtStatus CreateExternalInitializerInfo( @Cast("const ORTCHAR_T*") Pointer filepath, @Cast("int64_t") long file_offset,
+                    @Cast("size_t") long byte_size, @ByPtrPtr OrtExternalInitializerInfo out);
+
+  /** \} */
 }

@@ -16,10 +16,6 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /**
- * ORT Compile API
- */
-
-/**
  * \brief The OrtCompileApi struct provides functions to compile ONNX models.
  *
  * Execution providers that support compilation fuse a subgraph into an EPContext node that wraps a provider-specific
@@ -60,8 +56,7 @@ public class OrtCompileApi extends Pointer {
         return new OrtCompileApi((Pointer)this).offsetAddress(i);
     }
 
-  /** \}
-   *  \name OrtModelCompilationOptions
+  /** \name OrtModelCompilationOptions
    *  \{ */
   public native void ReleaseModelCompilationOptions(OrtModelCompilationOptions input);
 
@@ -72,6 +67,9 @@ public class OrtCompileApi extends Pointer {
    *
    * ReleaseOrtModelCompilationsOptions must be called to free the OrtModelCompilationOptions after calling
    * CompileModel.
+   *
+   * \note By default, the GraphOptimizationLevel is set to ORT_DISABLE_ALL. Use
+   * ModelCompilationOptions_SetGraphOptimizationLevel to enable graph optimizations.
    *
    * @param env [in] OrtEnv object.
    * @param session_options [in] The OrtSessionOptions instance from which to create the OrtModelCompilationOptions.
@@ -225,4 +223,84 @@ public class OrtCompileApi extends Pointer {
    * @since Version 1.22.
    */
   public native OrtStatus CompileModel( @Const OrtEnv env, @Const OrtModelCompilationOptions model_options);
+
+  /** \brief Sets flags from OrtCompileApiFlags that represent one or more boolean options to enable.
+   *
+   * @param model_compile_options [in] The OrtModelCompilationOptions instance.
+   * @param flags [in] bitwise OR of flags in OrtCompileApiFlags to enable.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ModelCompilationOptions_SetFlags( OrtModelCompilationOptions model_compile_options,
+                    @Cast("uint32_t") int flags);
+
+  /** Sets information related to EP context binary file.
+   *
+   * EP uses this information to decide the location and context binary file name.
+   * Used while compiling model with input and output in memory buffer
+   *
+   * @param model_compile_options [in] The OrtModelCompilationOptions instance.
+   * @param output_directory [in] Null terminated string of the path (wchar on Windows, char otherwise).
+   * @param model_name [in] Null terminated string of the model name (wchar on Windows, char otherwise).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ModelCompilationOptions_SetEpContextBinaryInformation(
+                    OrtModelCompilationOptions model_compile_options,
+                    @Cast("const ORTCHAR_T*") Pointer output_directory,
+                    @Cast("const ORTCHAR_T*") Pointer model_name);
+
+  /** Set the graph optimization level.
+   *
+   * @param model_compile_options [in] The OrtModelCompilationOptions instance.
+   * @param graph_optimization_level [in] The graph optimization level.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ModelCompilationOptions_SetGraphOptimizationLevel(
+                    OrtModelCompilationOptions model_compile_options,
+                    @Cast("GraphOptimizationLevel") int graph_optimization_level);
+
+  /** \brief Sets a OrtWriteBufferFunc function that is called by ORT to write out the output model's serialized
+   * ONNX bytes.
+   *
+   * The provided write function may be called repeatedly until then entire output model has been written out. Each call
+   * to the write function is expected to consume the entire input buffer.
+   *
+   * The output model's destination (e.g., file path, memory buffer, or stream) can be set with any of the functions
+   * that begin with ModelCompilationOptions_SetOutputModel____.
+   *
+   * @param model_compile_options [in] The OrtModelCompilationOptions instance.
+   * @param write_func [in] The OrtWriteBufferFunc function called by ORT when writing out the model.
+   * @param state [in] Opaque state passed as the first argument to OrtWriteBufferFunc. Can be NULL.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ModelCompilationOptions_SetOutputModelWriteFunc(
+                    OrtModelCompilationOptions model_compile_options,
+                    OrtWriteBufferFunc write_func, Pointer state);
+
+  /** \brief Sets a OrtGetInitializerLocationFunc function that is called by ORT for every initializer in the generated
+   * model. Allows implementer to specify whether initializers should be stored within the model or externally.
+   *
+   * @param model_compile_options [in] The OrtModelCompilationOptions instance.
+   * @param get_initializer_location_func [in] The OrtGetInitializerLocationFunc function called by ORT when
+   *                                          to determine the location of the initializer.
+   * @param state [in] Opaque state passed as the first argument to OrtGetInitializerLocationFunc. Can be NULL.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.23.
+   */
+  public native OrtStatus ModelCompilationOptions_SetOutputModelGetInitializerLocationFunc(
+                    OrtModelCompilationOptions model_compile_options,
+                    OrtGetInitializerLocationFunc get_initializer_location_func, Pointer state);
 }

@@ -13,17 +13,28 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
-  // namespace detail
+
 
 /** \brief Wrapper around ::OrtNode
  *
  */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class Node extends NodeImpl {
+public class Node extends ConstNodeImpl {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Node(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Node(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Node position(long position) {
+        return (Node)super.position(position);
+    }
+    @Override public Node getPointer(long i) {
+        return new Node((Pointer)this).offsetAddress(i);
+    }
 
+  public Node() { super((Pointer)null); allocate(); }
+  private native void allocate();                                         // Same thing as with nullptr
   /** Take ownership of a pointer created by C API */
   public Node(OrtNode p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtNode p);

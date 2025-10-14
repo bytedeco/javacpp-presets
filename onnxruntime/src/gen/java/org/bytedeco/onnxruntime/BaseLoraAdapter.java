@@ -43,6 +43,7 @@ public class BaseLoraAdapter extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseLoraAdapter put(@ByRef(true) BaseLoraAdapter v);
 
   public native @Cast("Ort::detail::Base<OrtLoraAdapter>::contained_type*") @Name("operator Ort::detail::Base<OrtLoraAdapter>::contained_type*") @NoException(true) OrtLoraAdapter asOrtLoraAdapter();
+  public native @Cast("const Ort::detail::Base<OrtLoraAdapter>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtLoraAdapter multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

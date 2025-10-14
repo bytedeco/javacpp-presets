@@ -105,6 +105,8 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
                                                                  @Cast("char**") @StdVector @ByPtrPtr byte[] external_initializer_file_buffer_array,
                                                                  @Cast("size_t*") @StdVector SizeTPointer external_initializer_file_lengths);
 
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CPU */
+  public native @ByRef SessionOptionsImpl AppendExecutionProvider_CPU(int use_arena);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CUDA */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_CUDA(@Const @ByRef OrtCUDAProviderOptions provider_options);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CUDA_V2 */

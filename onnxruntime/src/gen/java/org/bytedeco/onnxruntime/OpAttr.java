@@ -15,21 +15,31 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-//
-// Custom OPs (only needed to implement custom OPs)
-//
-
 /** <summary>
  *  This struct provides life time management for custom op attribute
  *  </summary> */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class OpAttr extends BaseOpAttr {
+public class OpAttr extends ConstOpAttrImpl {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpAttr(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpAttr(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpAttr position(long position) {
+        return (OpAttr)super.position(position);
+    }
+    @Override public OpAttr getPointer(long i) {
+        return new OpAttr((Pointer)this).offsetAddress(i);
+    }
 
+
+  public OpAttr() { super((Pointer)null); allocate(); }
+  private native void allocate();  // Enable storing it in the container for resize()
   public OpAttr(@Cast("const char*") BytePointer name, @Const Pointer data, int len, @Cast("OrtOpAttrType") int type) { super((Pointer)null); allocate(name, data, len, type); }
   private native void allocate(@Cast("const char*") BytePointer name, @Const Pointer data, int len, @Cast("OrtOpAttrType") int type);
   public OpAttr(String name, @Const Pointer data, int len, @Cast("OrtOpAttrType") int type) { super((Pointer)null); allocate(name, data, len, type); }
   private native void allocate(String name, @Const Pointer data, int len, @Cast("OrtOpAttrType") int type);
+
+  public native @ByVal @Cast("Ort::ConstOpAttr*") ConstOpAttrImpl GetConst();
 }

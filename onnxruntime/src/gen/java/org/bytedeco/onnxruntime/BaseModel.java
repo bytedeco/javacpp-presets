@@ -43,6 +43,7 @@ public class BaseModel extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseModel put(@ByRef(true) BaseModel v);
 
   public native @Cast("Ort::detail::Base<OrtModel>::contained_type*") @Name("operator Ort::detail::Base<OrtModel>::contained_type*") @NoException(true) OrtModel asOrtModel();
+  public native @Cast("const Ort::detail::Base<OrtModel>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtModel multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */

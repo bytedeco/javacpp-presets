@@ -1,8 +1,8 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index 8f5ef15c53..348f70ef27 100644
+index 6d517003fa..fdc4b73e0f 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
-@@ -9,8 +9,8 @@ endif()
+@@ -11,8 +11,8 @@ endif()
  # Enable space optimization for gcc/clang
  # Cannot use "-ffunction-sections -fdata-sections" if we enable bitcode (iOS)
  if (NOT MSVC AND NOT onnxruntime_ENABLE_BITCODE)
@@ -14,23 +14,23 @@ index 8f5ef15c53..348f70ef27 100644
  
  if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 6c1d4485eb..14d72dacef 100644
+index 010696a610..6c8ccd37cd 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -144,9 +144,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
+@@ -147,9 +147,9 @@ if(onnxruntime_BUILD_SHARED_LIB)
  
- if(UNIX)
-   if (APPLE)
--    target_link_options(onnxruntime PRIVATE "LINKER:-dead_strip")
-+    target_link_options(onnxruntime PRIVATE "LINKER:-L/usr/local/lib")
-   elseif(NOT CMAKE_SYSTEM_NAME MATCHES "AIX")
--    target_link_options(onnxruntime PRIVATE  "LINKER:--version-script=${SYMBOL_FILE}" "LINKER:--no-undefined" "LINKER:--gc-sections")
-+    target_link_options(onnxruntime PRIVATE "LINKER:--no-undefined")
-   endif()
- else()
-   target_link_options(onnxruntime PRIVATE  "-DEF:${SYMBOL_FILE}")
+   if(UNIX)
+     if (APPLE)
+-      target_link_options(onnxruntime PRIVATE "LINKER:-dead_strip")
++      target_link_options(onnxruntime PRIVATE "LINKER:-L/usr/local/lib")
+     elseif(NOT CMAKE_SYSTEM_NAME MATCHES "AIX")
+-      target_link_options(onnxruntime PRIVATE  "LINKER:--version-script=${SYMBOL_FILE}" "LINKER:--no-undefined" "LINKER:--gc-sections" "LINKER:-z,noexecstack")
++      target_link_options(onnxruntime PRIVATE "LINKER:--no-undefined")
+     endif()
+   else()
+     target_link_options(onnxruntime PRIVATE  "-DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index eee6a05f12..3e3d295dce 100644
+index d690cf3107..d1db98ceb6 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 @@ -115,10 +115,11 @@ struct OnUnload {
@@ -136,12 +136,7 @@ index eee6a05f12..3e3d295dce 100644
    return g_host->IExecutionProviderFactory__CreateProvider(this, session_options, session_logger);
  }
  
-@@ -340,38 +353,46 @@ std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapabilit
-                                                                                   const IKernelLookup& kernel_lookup,
-                                                                                   const GraphOptimizerRegistry& graph_optimizer_registry,
-                                                                                   IResourceAccountant* resource_accountant) const {
-+  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_lookup, graph_optimizer_registry, resource_accountant);
+@@ -344,32 +357,39 @@ std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapabilit
  }
  common::Status IExecutionProvider::Compile(const std::vector<FusedNodeAndGraph>& fused_nodes_and_graphs,
                                             std::vector<NodeComputeInfo>& node_compute_funcs) {
@@ -149,15 +144,15 @@ index eee6a05f12..3e3d295dce 100644
    return g_host->IExecutionProvider__Compile(this, fused_nodes_and_graphs, node_compute_funcs);
  }
  
- #if defined(USE_TENSORRT) || defined(USE_NV)
+ #if defined(USE_TENSORRT)
  std::unique_ptr<IAllocator> CreateCUDAAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
    return g_host->CreateCUDAAllocator(device_id, name);
  }
  
- std::unique_ptr<IAllocator> CreateCUDAPinnedAllocator(const char* name) {
+ std::unique_ptr<IAllocator> CreateCUDAPinnedAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
-   return g_host->CreateCUDAPinnedAllocator(name);
+   return g_host->CreateCUDAPinnedAllocator(device_id, name);
  }
  
  std::unique_ptr<IDataTransfer> CreateGPUDataTransfer() {
@@ -166,7 +161,6 @@ index eee6a05f12..3e3d295dce 100644
  }
  #endif
  
- #ifdef USE_MIGRAPHX
  std::unique_ptr<IAllocator> CreateMIGraphXAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
    return g_host->CreateMIGraphXAllocator(device_id, name);
@@ -176,14 +170,13 @@ index eee6a05f12..3e3d295dce 100644
 +  g_host = Provider_GetHost();
    return g_host->CreateMIGraphXPinnedAllocator(device_id, name);
  }
- #endif
  
  std::string GetEnvironmentVar(const std::string& var_name) {
 +  g_host = Provider_GetHost();
    return g_host->GetEnvironmentVar(var_name);
  }
  
-@@ -379,20 +400,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
+@@ -377,20 +397,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
                                                     const IExecutionProvider::IKernelLookup& kernel_lookup,
                                                     gsl::span<const NodeIndex> tentative_nodes,
                                                     const logging::Logger& logger) {
@@ -209,7 +202,7 @@ index eee6a05f12..3e3d295dce 100644
  
  const char* Category::onnxruntime = "onnxruntime";
  
-@@ -429,7 +451,7 @@ const std::string& Status::ErrorMessage() const noexcept {
+@@ -427,7 +448,7 @@ const std::string& Status::ErrorMessage() const noexcept {
    return IsOK() ? EmptyString() : state_->msg;
  }
  
@@ -218,7 +211,7 @@ index eee6a05f12..3e3d295dce 100644
  
  const std::string& Status::EmptyString() noexcept {
    static std::string s_empty;
-@@ -439,8 +461,8 @@ const std::string& Status::EmptyString() noexcept {
+@@ -437,8 +458,8 @@ const std::string& Status::EmptyString() noexcept {
  }  // namespace common
  
  namespace math {
@@ -229,7 +222,7 @@ index eee6a05f12..3e3d295dce 100644
  
  }  // namespace math
  
-@@ -449,22 +471,26 @@ namespace sparse_utils {
+@@ -447,22 +468,26 @@ namespace sparse_utils {
  #if !defined(ORT_MINIMAL_BUILD)
  Status DenseTensorToSparseCsr(const DataTransferManager& data_manager, const Tensor& src, const AllocatorPtr& cpu_allocator,
                                const AllocatorPtr& dst_allocator, SparseTensor& dst) {
@@ -256,7 +249,7 @@ index eee6a05f12..3e3d295dce 100644
    return g_host->sparse_utils__DenseTensorToSparseCoo(data_manager, src, cpu_allocator, dst_allocator, linear_indexs, dst);
  }
  #endif  // !defined(DISABLE_SPARSE_TENSORS)
-@@ -475,10 +501,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -473,10 +498,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -270,10 +263,10 @@ index eee6a05f12..3e3d295dce 100644
  }
  
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 7fcaee4858..310214c0b4 100644
+index 41cf8be1d1..684961c2ed 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1686,13 +1686,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1750,13 +1750,33 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -307,7 +300,7 @@ index 7fcaee4858..310214c0b4 100644
      ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1711,7 +1731,7 @@ struct ProviderSharedLibrary {
+@@ -1775,7 +1795,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -316,10 +309,10 @@ index 7fcaee4858..310214c0b4 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1756,6 +1776,18 @@ Status ProviderLibrary::Load() {
-       ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(filename_, false, &handle_));
-     } else {
-       auto full_path = Env::Default().GetRuntimePath() + filename_;
+@@ -1821,6 +1841,18 @@ Status ProviderLibrary::Load() {
+         ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(filename_, false, &handle_));
+       } else {
+         auto full_path = Env::Default().GetRuntimePath() + filename_;
 +#ifdef __APPLE__
 +full_path = s_library_shared.libpath + std::string(filename_);
 +size_t len1 = strlen(filename_);
@@ -332,14 +325,14 @@ index 7fcaee4858..310214c0b4 100644
 +    }
 +}
 +#endif
-       ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
-     }
+         ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
+       }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 1835c0b41f..a7a7b4a9bf 100644
+index 1d2f889ff1..6552ba39f5 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -417,6 +417,9 @@ def generate_build_tree(
+@@ -429,6 +429,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -349,7 +342,7 @@ index 1835c0b41f..a7a7b4a9bf 100644
          "-DPython_EXECUTABLE=" + sys.executable,
          "-Donnxruntime_USE_VCPKG=" + ("ON" if args.use_vcpkg else "OFF"),
          "-Donnxruntime_USE_MIMALLOC=" + ("ON" if args.use_mimalloc else "OFF"),
-@@ -2406,6 +2409,9 @@ def main():
+@@ -2523,6 +2526,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
@@ -360,7 +353,7 @@ index 1835c0b41f..a7a7b4a9bf 100644
              run_subprocess(
                  [sys.executable, "-m", "pip", "install", "-r", "requirements/pybind/requirements.txt"],
 diff --git a/tools/ci_build/build_args.py b/tools/ci_build/build_args.py
-index 215ad77335..0584b0533c 100644
+index c42f8e3219..e4a34d381b 100644
 --- a/tools/ci_build/build_args.py
 +++ b/tools/ci_build/build_args.py
 @@ -241,6 +241,11 @@ def add_documentation_args(parser: argparse.ArgumentParser) -> None:

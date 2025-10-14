@@ -42,12 +42,30 @@ public class ModelCompilationOptions extends BaseModelCompilationOptions {
   public native @ByRef ModelCompilationOptions SetEpContextEmbedMode(@Cast("bool") boolean embed_ep_context_in_model);
   /** Wraps OrtApi::ModelCompilationOptions_SetOutputModelPath */
   public native @ByRef ModelCompilationOptions SetOutputModelPath(@Cast("const ORTCHAR_T*") Pointer output_model_path);
-  /** Wraps OrtApi::ModelCompilationOptions_SetOutputModelExternalInitializersFile */
+  /** Wraps OrtApi::ModelCompilationOptions_SetOutputModelExternalInitializersFile
+   <p>
+   *  Wraps OrtApi::ModelCompilationOptions_SetOutputModelGetInitializerLocationFunc */
   public native @ByRef ModelCompilationOptions SetOutputModelExternalInitializersFile(@Cast("const ORTCHAR_T*") Pointer file_path,
                                                                     @Cast("size_t") long initializer_size_threshold);
-  /** Wraps OrtApi::ModelCompilationOptions_SetOutputModelBuffer */
+  public native @ByRef ModelCompilationOptions SetOutputModelGetInitializerLocationFunc(
+        OrtGetInitializerLocationFunc get_initializer_location_func,
+        Pointer state);
+
+  /** Wraps OrtApi::ModelCompilationOptions_SetOutputModelBuffer
+   <p>
+   *  Wraps OrtApi::ModelCompilationOptions_SetOutputModelWriteFunc */
   public native @ByRef ModelCompilationOptions SetOutputModelBuffer(OrtAllocator allocator, @Cast("void**") PointerPointer output_model_buffer_ptr,
                                                   @Cast("size_t*") SizeTPointer output_model_buffer_size_ptr);
   public native @ByRef ModelCompilationOptions SetOutputModelBuffer(OrtAllocator allocator, @Cast("void**") @ByPtrPtr Pointer output_model_buffer_ptr,
                                                   @Cast("size_t*") SizeTPointer output_model_buffer_size_ptr);
+  public native @ByRef ModelCompilationOptions SetOutputModelWriteFunc(OrtWriteBufferFunc write_func, Pointer state);
+
+  /** Wraps OrtApi::ModelCompilationOptions_SetEpContextBinaryInformation */
+  public native @ByRef ModelCompilationOptions SetEpContextBinaryInformation(@Cast("const ORTCHAR_T*") Pointer output_directory,
+                                                           @Cast("const ORTCHAR_T*") Pointer model_name);
+  /** Wraps OrtApi::ModelCompilationOptions_SetFlags */
+  public native @ByRef ModelCompilationOptions SetFlags(@Cast("uint32_t") int flags);
+
+  /** Wraps OrtApi::ModelCompilationOptions_SetGraphOptimizationLevel */
+  public native @ByRef ModelCompilationOptions SetGraphOptimizationLevel(@Cast("GraphOptimizationLevel") int graph_optimization_level);
 }

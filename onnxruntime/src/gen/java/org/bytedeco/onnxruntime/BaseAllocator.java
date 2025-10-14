@@ -43,6 +43,7 @@ public class BaseAllocator extends Pointer {
   public native @ByRef @Name("operator =") @NoException(true) BaseAllocator put(@ByRef(true) BaseAllocator v);
 
   public native @Cast("Ort::detail::Base<OrtAllocator>::contained_type*") @Name("operator Ort::detail::Base<OrtAllocator>::contained_type*") @NoException(true) OrtAllocator asOrtAllocator();
+  public native @Cast("const Ort::detail::Base<OrtAllocator>::contained_type*") @ByRef @Name("operator *") @NoException(true) OrtAllocator multiply();
 
   /** \brief Relinquishes ownership of the contained C object pointer
    *  The underlying object is not destroyed */
