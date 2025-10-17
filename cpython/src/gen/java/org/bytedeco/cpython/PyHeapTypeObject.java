@@ -48,6 +48,9 @@ public class PyHeapTypeObject extends Pointer {
     public native @Cast("_dictkeysobject*") PyDictKeysObject ht_cached_keys(); public native PyHeapTypeObject ht_cached_keys(PyDictKeysObject setter);
     public native PyObject ht_module(); public native PyHeapTypeObject ht_module(PyObject setter);
     public native @Cast("char*") BytePointer _ht_tpname(); public native PyHeapTypeObject _ht_tpname(BytePointer setter);  // Storage for "tp_name"; see PyType_FromModuleAndSpec
+    public native Pointer ht_token(); public native PyHeapTypeObject ht_token(Pointer setter);  // Storage for the "Py_tp_token" slot
     public native @ByRef _specialization_cache _spec_cache(); public native PyHeapTypeObject _spec_cache(_specialization_cache setter); // For use by the specializer.
+// #ifdef Py_GIL_DISABLED
+// #endif
     /* here are optional user slots, followed by the members. */
 }

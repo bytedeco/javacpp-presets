@@ -9,12 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
+      /* bytes consumed */
 
 
+/* --- Private _PyUnicodeWriter API --------------------------------------- */
 
-/* --- _PyUnicodeWriter API ----------------------------------------------- */
-
- @Properties(inherit = org.bytedeco.cpython.presets.python.class)
+@Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _PyUnicodeWriter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -51,4 +51,4 @@ public class _PyUnicodeWriter extends Pointer {
     /* If readonly is 1, buffer is a shared string (cannot be modified)
        and size is set to 0. */
     public native @Cast("unsigned char") byte readonly(); public native _PyUnicodeWriter readonly(byte setter);
-} 
+}

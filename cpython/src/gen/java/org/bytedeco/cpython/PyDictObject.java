@@ -37,12 +37,13 @@ public class PyDictObject extends Pointer {
     /* Number of items in the dictionary */
     public native @Cast("Py_ssize_t") long ma_used(); public native PyDictObject ma_used(long setter);
 
-    /* Dictionary version: globally unique, value change each time
-       the dictionary is modified */
-// #ifdef Py_BUILD_CORE
-// #else
-    public native @Cast("uint64_t") @Deprecated long ma_version_tag(); public native PyDictObject ma_version_tag(long setter);
-// #endif
+    /* This is a private field for CPython's internal use.
+     * Bits 0-7 are for dict watchers.
+     * Bits 8-11 are for the watched mutation counter (used by tier2 optimization)
+     * Bits 12-31 are currently unused
+     * Bits 32-63 are a unique id in the free threading build (used for per-thread refcounting)
+     */
+    public native @Cast("uint64_t") long _ma_watcher_tag(); public native PyDictObject _ma_watcher_tag(long setter);
 
     public native PyDictKeysObject ma_keys(); public native PyDictObject ma_keys(PyDictKeysObject setter);
 
