@@ -44,6 +44,7 @@ public class PyConfig extends Pointer {
     public native int faulthandler(); public native PyConfig faulthandler(int setter);
     public native int tracemalloc(); public native PyConfig tracemalloc(int setter);
     public native int perf_profiling(); public native PyConfig perf_profiling(int setter);
+    public native int remote_debug(); public native PyConfig remote_debug(int setter);
     public native int import_time(); public native PyConfig import_time(int setter);
     public native int code_debug_ranges(); public native PyConfig code_debug_ranges(int setter);
     public native int show_ref_count(); public native PyConfig show_ref_count(int setter);
@@ -79,6 +80,10 @@ public class PyConfig extends Pointer {
     public native int use_frozen_modules(); public native PyConfig use_frozen_modules(int setter);
     public native int safe_path(); public native PyConfig safe_path(int setter);
     public native int int_max_str_digits(); public native PyConfig int_max_str_digits(int setter);
+    public native int thread_inherit_context(); public native PyConfig thread_inherit_context(int setter);
+    public native int context_aware_warnings(); public native PyConfig context_aware_warnings(int setter);
+// #ifdef __APPLE__
+// #endif
 
     public native int cpu_count(); public native PyConfig cpu_count(int setter);
 // #ifdef Py_GIL_DISABLED

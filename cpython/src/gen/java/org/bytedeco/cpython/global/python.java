@@ -33,7 +33,6 @@ public class python extends org.bytedeco.cpython.helper.python {
 
 
 // Include standard header files
-// When changing these files, remember to update Doc/extending/extending.rst.
 // #include <assert.h>               // assert()
 // #include <inttypes.h>             // uintptr_t
 // #include <limits.h>               // INT_MAX
@@ -73,6 +72,14 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #  include <intrin.h>             // __readgsqword()
 // #endif
 
+// Suppress known warnings in Python header files.
+// #if defined(_MSC_VER)
+// Warning that alignas behaviour has changed. Doesn't affect us, because we
+// never relied on the old behaviour.
+// #pragma warning(push)
+// #pragma warning(disable: 5274)
+// #endif
+
 // Include Python header files
 // #include "pyport.h"
 // #include "pymacro.h"
@@ -83,7 +90,9 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #include "pystats.h"
 // #include "pyatomic.h"
 // #include "lock.h"
+// #include "critical_section.h"
 // #include "object.h"
+// #include "refcount.h"
 // #include "objimpl.h"
 // #include "typeslots.h"
 // #include "pyhash.h"
@@ -137,12 +146,12 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #include "pylifecycle.h"
 // #include "ceval.h"
 // #include "sysmodule.h"
+// #include "audit.h"
 // #include "osmodule.h"
 // #include "intrcheck.h"
 // #include "import.h"
 // #include "abstract.h"
 // #include "bltinmodule.h"
-// #include "critical_section.h"
 // #include "cpython/pyctype.h"
 // #include "pystrtod.h"
 // #include "pystrcmp.h"
@@ -150,12 +159,18 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #include "cpython/pyfpe.h"
 // #include "cpython/tracemalloc.h"
 
+// Restore warning filter
+// #ifdef _MSC_VER
+// #pragma warning(pop)
+// #endif
+
 // #endif /* !Py_PYTHON_H */
 
 
 // Parsed from patchlevel.h
 
-
+// #ifndef _Py_PATCHLEVEL_H
+// #define _Py_PATCHLEVEL_H
 /* Python version identification scheme.
 
    When the major or minor version changes, the VERSION variable in
@@ -174,22 +189,31 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /* Version parsed out into numeric values */
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
-public static final int PY_MINOR_VERSION =        13;
-public static final int PY_MICRO_VERSION =        6;
+public static final int PY_MINOR_VERSION =        14;
+public static final int PY_MICRO_VERSION =        0;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.13.6";
+public static final String PY_VERSION =              "3.14.0";
 /*--end constants--*/
+
+
+// #define _Py_PACK_FULL_VERSION(X, Y, Z, LEVEL, SERIAL) (
+//     (((X) & 0xff) << 24) |
+//     (((Y) & 0xff) << 16) |
+//     (((Z) & 0xff) << 8) |
+//     (((LEVEL) & 0xf) << 4) |
+//     (((SERIAL) & 0xf) << 0))
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
    Use this for numeric comparisons, e.g. #if PY_VERSION_HEX >= ... */
-public static final int PY_VERSION_HEX = ((PY_MAJOR_VERSION << 24) | 
-                        (PY_MINOR_VERSION << 16) | 
-                        (PY_MICRO_VERSION <<  8) | 
-                        (PY_RELEASE_LEVEL <<  4) | 
-                        (PY_RELEASE_SERIAL << 0));
+public static native @MemberGetter int PY_VERSION_HEX();
+public static final int PY_VERSION_HEX = PY_VERSION_HEX();
+
+// Public Py_PACK_VERSION is declared in pymacro.h; it needs <inttypes.h>.
+
+// #endif //_Py_PATCHLEVEL_H
 
 
 // Parsed from pyconfig.h
@@ -213,13 +237,13 @@ public static final int PY_VERSION_HEX = ((PY_MAJOR_VERSION << 24) |
    support for AIX C++ shared extension modules. */
 /* #undef AIX_GENUINE_CPLUSPLUS */
 
-/* The normal alignment of `long', in bytes. */
+/* The normal alignment of 'long', in bytes. */
 public static final int ALIGNOF_LONG = 8;
 
-/* The normal alignment of `max_align_t', in bytes. */
+/* The normal alignment of 'max_align_t', in bytes. */
 public static final int ALIGNOF_MAX_ALIGN_T = 16;
 
-/* The normal alignment of `size_t', in bytes. */
+/* The normal alignment of 'size_t', in bytes. */
 public static final int ALIGNOF_SIZE_T = 8;
 
 /* Alternative SOABI used in debug build to load C extensions built in release
@@ -250,16 +274,16 @@ public static final int ENABLE_IPV6 = 1;
 /* Define if you have the 'accept' function. */
 public static final int HAVE_ACCEPT = 1;
 
-/* Define to 1 if you have the `accept4' function. */
+/* Define to 1 if you have the 'accept4' function. */
 public static final int HAVE_ACCEPT4 = 1;
 
-/* Define to 1 if you have the `acosh' function. */
+/* Define to 1 if you have the 'acosh' function. */
 public static final int HAVE_ACOSH = 1;
 
 /* struct addrinfo (netdb.h) */
 public static final int HAVE_ADDRINFO = 1;
 
-/* Define to 1 if you have the `alarm' function. */
+/* Define to 1 if you have the 'alarm' function. */
 public static final int HAVE_ALARM = 1;
 
 /* Define if aligned memory access is required */
@@ -271,19 +295,22 @@ public static final int HAVE_ALLOCA_H = 1;
 /* Define this if your time.h defines altzone. */
 /* #undef HAVE_ALTZONE */
 
-/* Define to 1 if you have the `asinh' function. */
+/* Define to 1 if you have the 'asinh' function. */
 public static final int HAVE_ASINH = 1;
 
 /* Define to 1 if you have the <asm/types.h> header file. */
 public static final int HAVE_ASM_TYPES_H = 1;
 
-/* Define to 1 if you have the `atanh' function. */
+/* Define to 1 if you have the 'atanh' function. */
 public static final int HAVE_ATANH = 1;
+
+/* Define to 1 if you have the 'backtrace' function. */
+public static final int HAVE_BACKTRACE = 1;
 
 /* Define if you have the 'bind' function. */
 public static final int HAVE_BIND = 1;
 
-/* Define to 1 if you have the `bind_textdomain_codeset' function. */
+/* Define to 1 if you have the 'bind_textdomain_codeset' function. */
 public static final int HAVE_BIND_TEXTDOMAIN_CODESET = 1;
 
 /* Define to 1 if you have the <bluetooth/bluetooth.h> header file. */
@@ -326,43 +353,43 @@ public static final int HAVE_BUILTIN_ATOMIC = 1;
 /* Define to 1 if you have the 'chflags' function. */
 /* #undef HAVE_CHFLAGS */
 
-/* Define to 1 if you have the `chmod' function. */
+/* Define to 1 if you have the 'chmod' function. */
 public static final int HAVE_CHMOD = 1;
 
-/* Define to 1 if you have the `chown' function. */
+/* Define to 1 if you have the 'chown' function. */
 public static final int HAVE_CHOWN = 1;
 
 /* Define if you have the 'chroot' function. */
 public static final int HAVE_CHROOT = 1;
 
-/* Define to 1 if you have the `clock' function. */
+/* Define to 1 if you have the 'clock' function. */
 public static final int HAVE_CLOCK = 1;
 
-/* Define to 1 if you have the `clock_getres' function. */
+/* Define to 1 if you have the 'clock_getres' function. */
 public static final int HAVE_CLOCK_GETRES = 1;
 
-/* Define to 1 if you have the `clock_gettime' function. */
+/* Define to 1 if you have the 'clock_gettime' function. */
 public static final int HAVE_CLOCK_GETTIME = 1;
 
-/* Define to 1 if you have the `clock_nanosleep' function. */
+/* Define to 1 if you have the 'clock_nanosleep' function. */
 public static final int HAVE_CLOCK_NANOSLEEP = 1;
 
-/* Define to 1 if you have the `clock_settime' function. */
+/* Define to 1 if you have the 'clock_settime' function. */
 public static final int HAVE_CLOCK_SETTIME = 1;
 
-/* Define to 1 if the system has the type `clock_t'. */
+/* Define to 1 if the system has the type 'clock_t'. */
 public static final int HAVE_CLOCK_T = 1;
 
-/* Define to 1 if you have the `closefrom' function. */
+/* Define to 1 if you have the 'closefrom' function. */
 public static final int HAVE_CLOSEFROM = 1;
 
-/* Define to 1 if you have the `close_range' function. */
+/* Define to 1 if you have the 'close_range' function. */
 public static final int HAVE_CLOSE_RANGE = 1;
 
 /* Define if the C compiler supports computed gotos. */
 public static final int HAVE_COMPUTED_GOTOS = 1;
 
-/* Define to 1 if you have the `confstr' function. */
+/* Define to 1 if you have the 'confstr' function. */
 public static final int HAVE_CONFSTR = 1;
 
 /* Define to 1 if you have the <conio.h> header file. */
@@ -371,10 +398,10 @@ public static final int HAVE_CONFSTR = 1;
 /* Define if you have the 'connect' function. */
 public static final int HAVE_CONNECT = 1;
 
-/* Define to 1 if you have the `copy_file_range' function. */
+/* Define to 1 if you have the 'copy_file_range' function. */
 public static final int HAVE_COPY_FILE_RANGE = 1;
 
-/* Define to 1 if you have the `ctermid' function. */
+/* Define to 1 if you have the 'ctermid' function. */
 public static final int HAVE_CTERMID = 1;
 
 /* Define if you have the 'ctermid_r' function. */
@@ -419,43 +446,43 @@ public static final int HAVE_CTERMID = 1;
 /* Define to 1 if you have the <db.h> header file. */
 public static final int HAVE_DB_H = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_DEEPBIND', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_DEEPBIND', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_DEEPBIND = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_GLOBAL', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_GLOBAL', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_GLOBAL = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_LAZY', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_LAZY', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_LAZY = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_LOCAL', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_LOCAL', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_LOCAL = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_MEMBER', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_MEMBER', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_MEMBER = 0;
 
-/* Define to 1 if you have the declaration of `RTLD_NODELETE', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_NODELETE', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_NODELETE = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_NOLOAD', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_NOLOAD', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_NOLOAD = 1;
 
-/* Define to 1 if you have the declaration of `RTLD_NOW', and to 0 if you
+/* Define to 1 if you have the declaration of 'RTLD_NOW', and to 0 if you
    don't. */
 public static final int HAVE_DECL_RTLD_NOW = 1;
 
-/* Define to 1 if you have the declaration of `tzname', and to 0 if you don't.
+/* Define to 1 if you have the declaration of 'tzname', and to 0 if you don't.
    */
 /* #undef HAVE_DECL_TZNAME */
 
-/* Define to 1 if you have the declaration of `UT_NAMESIZE', and to 0 if you
+/* Define to 1 if you have the declaration of 'UT_NAMESIZE', and to 0 if you
    don't. */
 public static final int HAVE_DECL_UT_NAMESIZE = 1;
 
@@ -474,26 +501,32 @@ public static final int HAVE_DEV_PTMX = 1;
 /* Define to 1 if the dirent structure has a d_type field */
 public static final int HAVE_DIRENT_D_TYPE = 1;
 
-/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <dirent.h> header file, and it defines 'DIR'.
    */
 public static final int HAVE_DIRENT_H = 1;
 
 /* Define if you have the 'dirfd' function or macro. */
 public static final int HAVE_DIRFD = 1;
 
+/* Define to 1 if you have the 'dladdr' function. */
+public static final int HAVE_DLADDR = 1;
+
+/* Define to 1 if you have the 'dladdr1' function. */
+public static final int HAVE_DLADDR1 = 1;
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 public static final int HAVE_DLFCN_H = 1;
 
-/* Define to 1 if you have the `dlopen' function. */
+/* Define to 1 if you have the 'dlopen' function. */
 // #define HAVE_DLOPEN 1
 
-/* Define to 1 if you have the `dup' function. */
+/* Define to 1 if you have the 'dup' function. */
 public static final int HAVE_DUP = 1;
 
-/* Define to 1 if you have the `dup2' function. */
+/* Define to 1 if you have the 'dup2' function. */
 public static final int HAVE_DUP2 = 1;
 
-/* Define to 1 if you have the `dup3' function. */
+/* Define to 1 if you have the 'dup3' function. */
 public static final int HAVE_DUP3 = 1;
 
 /* Define if you have the '_dyld_shared_cache_contains_path' function. */
@@ -514,10 +547,10 @@ public static final int HAVE_EPOLL = 1;
 /* Define if you have the 'epoll_create1' function. */
 public static final int HAVE_EPOLL_CREATE1 = 1;
 
-/* Define to 1 if you have the `erf' function. */
+/* Define to 1 if you have the 'erf' function. */
 public static final int HAVE_ERF = 1;
 
-/* Define to 1 if you have the `erfc' function. */
+/* Define to 1 if you have the 'erfc' function. */
 public static final int HAVE_ERFC = 1;
 
 /* Define to 1 if you have the <errno.h> header file. */
@@ -526,34 +559,37 @@ public static final int HAVE_ERRNO_H = 1;
 /* Define if you have the 'eventfd' function. */
 public static final int HAVE_EVENTFD = 1;
 
-/* Define to 1 if you have the `execv' function. */
+/* Define to 1 if you have the <execinfo.h> header file. */
+public static final int HAVE_EXECINFO_H = 1;
+
+/* Define to 1 if you have the 'execv' function. */
 public static final int HAVE_EXECV = 1;
 
-/* Define to 1 if you have the `explicit_bzero' function. */
+/* Define to 1 if you have the 'explicit_bzero' function. */
 public static final int HAVE_EXPLICIT_BZERO = 1;
 
-/* Define to 1 if you have the `explicit_memset' function. */
+/* Define to 1 if you have the 'explicit_memset' function. */
 /* #undef HAVE_EXPLICIT_MEMSET */
 
-/* Define to 1 if you have the `expm1' function. */
+/* Define to 1 if you have the 'expm1' function. */
 public static final int HAVE_EXPM1 = 1;
 
-/* Define to 1 if you have the `faccessat' function. */
+/* Define to 1 if you have the 'faccessat' function. */
 public static final int HAVE_FACCESSAT = 1;
 
 /* Define if you have the 'fchdir' function. */
 public static final int HAVE_FCHDIR = 1;
 
-/* Define to 1 if you have the `fchmod' function. */
+/* Define to 1 if you have the 'fchmod' function. */
 public static final int HAVE_FCHMOD = 1;
 
-/* Define to 1 if you have the `fchmodat' function. */
+/* Define to 1 if you have the 'fchmodat' function. */
 public static final int HAVE_FCHMODAT = 1;
 
-/* Define to 1 if you have the `fchown' function. */
+/* Define to 1 if you have the 'fchown' function. */
 public static final int HAVE_FCHOWN = 1;
 
-/* Define to 1 if you have the `fchownat' function. */
+/* Define to 1 if you have the 'fchownat' function. */
 public static final int HAVE_FCHOWNAT = 1;
 
 /* Define to 1 if you have the <fcntl.h> header file. */
@@ -562,13 +598,13 @@ public static final int HAVE_FCNTL_H = 1;
 /* Define if you have the 'fdatasync' function. */
 public static final int HAVE_FDATASYNC = 1;
 
-/* Define to 1 if you have the `fdopendir' function. */
+/* Define to 1 if you have the 'fdopendir' function. */
 public static final int HAVE_FDOPENDIR = 1;
 
-/* Define to 1 if you have the `fdwalk' function. */
+/* Define to 1 if you have the 'fdwalk' function. */
 /* #undef HAVE_FDWALK */
 
-/* Define to 1 if you have the `fexecve' function. */
+/* Define to 1 if you have the 'fexecve' function. */
 public static final int HAVE_FEXECVE = 1;
 
 /* Define if you have the 'ffi_closure_alloc' function. */
@@ -580,58 +616,58 @@ public static final int HAVE_FFI_PREP_CIF_VAR = 1;
 /* Define if you have the 'ffi_prep_closure_loc' function. */
 public static final int HAVE_FFI_PREP_CLOSURE_LOC = 1;
 
-/* Define to 1 if you have the `flock' function. */
+/* Define to 1 if you have the 'flock' function. */
 public static final int HAVE_FLOCK = 1;
 
-/* Define to 1 if you have the `fork' function. */
+/* Define to 1 if you have the 'fork' function. */
 // #define HAVE_FORK 1
 
-/* Define to 1 if you have the `fork1' function. */
+/* Define to 1 if you have the 'fork1' function. */
 /* #undef HAVE_FORK1 */
 
-/* Define to 1 if you have the `forkpty' function. */
+/* Define to 1 if you have the 'forkpty' function. */
 public static final int HAVE_FORKPTY = 1;
 
-/* Define to 1 if you have the `fpathconf' function. */
+/* Define to 1 if you have the 'fpathconf' function. */
 public static final int HAVE_FPATHCONF = 1;
 
-/* Define to 1 if you have the `fseek64' function. */
+/* Define to 1 if you have the 'fseek64' function. */
 /* #undef HAVE_FSEEK64 */
 
-/* Define to 1 if you have the `fseeko' function. */
+/* Define to 1 if you have the 'fseeko' function. */
 public static final int HAVE_FSEEKO = 1;
 
-/* Define to 1 if you have the `fstatat' function. */
+/* Define to 1 if you have the 'fstatat' function. */
 public static final int HAVE_FSTATAT = 1;
 
-/* Define to 1 if you have the `fstatvfs' function. */
+/* Define to 1 if you have the 'fstatvfs' function. */
 public static final int HAVE_FSTATVFS = 1;
 
 /* Define if you have the 'fsync' function. */
 public static final int HAVE_FSYNC = 1;
 
-/* Define to 1 if you have the `ftell64' function. */
+/* Define to 1 if you have the 'ftell64' function. */
 /* #undef HAVE_FTELL64 */
 
-/* Define to 1 if you have the `ftello' function. */
+/* Define to 1 if you have the 'ftello' function. */
 public static final int HAVE_FTELLO = 1;
 
-/* Define to 1 if you have the `ftime' function. */
+/* Define to 1 if you have the 'ftime' function. */
 public static final int HAVE_FTIME = 1;
 
-/* Define to 1 if you have the `ftruncate' function. */
+/* Define to 1 if you have the 'ftruncate' function. */
 public static final int HAVE_FTRUNCATE = 1;
 
-/* Define to 1 if you have the `futimens' function. */
+/* Define to 1 if you have the 'futimens' function. */
 public static final int HAVE_FUTIMENS = 1;
 
-/* Define to 1 if you have the `futimes' function. */
+/* Define to 1 if you have the 'futimes' function. */
 public static final int HAVE_FUTIMES = 1;
 
-/* Define to 1 if you have the `futimesat' function. */
+/* Define to 1 if you have the 'futimesat' function. */
 public static final int HAVE_FUTIMESAT = 1;
 
-/* Define to 1 if you have the `gai_strerror' function. */
+/* Define to 1 if you have the 'gai_strerror' function. */
 public static final int HAVE_GAI_STRERROR = 1;
 
 /* Define if we can use gcc inline assembler to get and set mc68881 fpcr */
@@ -662,40 +698,40 @@ public static final int HAVE_GETADDRINFO = 1;
 /* Define this if you have flockfile(), getc_unlocked(), and funlockfile() */
 public static final int HAVE_GETC_UNLOCKED = 1;
 
-/* Define to 1 if you have the `getegid' function. */
+/* Define to 1 if you have the 'getegid' function. */
 public static final int HAVE_GETEGID = 1;
 
-/* Define to 1 if you have the `getentropy' function. */
+/* Define to 1 if you have the 'getentropy' function. */
 public static final int HAVE_GETENTROPY = 1;
 
-/* Define to 1 if you have the `geteuid' function. */
+/* Define to 1 if you have the 'geteuid' function. */
 public static final int HAVE_GETEUID = 1;
 
-/* Define to 1 if you have the `getgid' function. */
+/* Define to 1 if you have the 'getgid' function. */
 public static final int HAVE_GETGID = 1;
 
-/* Define to 1 if you have the `getgrent' function. */
+/* Define to 1 if you have the 'getgrent' function. */
 public static final int HAVE_GETGRENT = 1;
 
-/* Define to 1 if you have the `getgrgid' function. */
+/* Define to 1 if you have the 'getgrgid' function. */
 public static final int HAVE_GETGRGID = 1;
 
-/* Define to 1 if you have the `getgrgid_r' function. */
+/* Define to 1 if you have the 'getgrgid_r' function. */
 public static final int HAVE_GETGRGID_R = 1;
 
-/* Define to 1 if you have the `getgrnam_r' function. */
+/* Define to 1 if you have the 'getgrnam_r' function. */
 public static final int HAVE_GETGRNAM_R = 1;
 
-/* Define to 1 if you have the `getgrouplist' function. */
+/* Define to 1 if you have the 'getgrouplist' function. */
 public static final int HAVE_GETGROUPLIST = 1;
 
-/* Define to 1 if you have the `getgroups' function. */
+/* Define to 1 if you have the 'getgroups' function. */
 public static final int HAVE_GETGROUPS = 1;
 
 /* Define if you have the 'gethostbyaddr' function. */
 public static final int HAVE_GETHOSTBYADDR = 1;
 
-/* Define to 1 if you have the `gethostbyname' function. */
+/* Define to 1 if you have the 'gethostbyname' function. */
 public static final int HAVE_GETHOSTBYNAME = 1;
 
 /* Define this if you have some version of gethostbyname_r() */
@@ -710,22 +746,22 @@ public static final int HAVE_GETHOSTBYNAME_R = 1;
 /* Define this if you have the 6-arg version of gethostbyname_r(). */
 public static final int HAVE_GETHOSTBYNAME_R_6_ARG = 1;
 
-/* Define to 1 if you have the `gethostname' function. */
+/* Define to 1 if you have the 'gethostname' function. */
 public static final int HAVE_GETHOSTNAME = 1;
 
-/* Define to 1 if you have the `getitimer' function. */
+/* Define to 1 if you have the 'getitimer' function. */
 public static final int HAVE_GETITIMER = 1;
 
-/* Define to 1 if you have the `getloadavg' function. */
+/* Define to 1 if you have the 'getloadavg' function. */
 public static final int HAVE_GETLOADAVG = 1;
 
-/* Define to 1 if you have the `getlogin' function. */
+/* Define to 1 if you have the 'getlogin' function. */
 public static final int HAVE_GETLOGIN = 1;
 
-/* Define to 1 if you have the `getlogin_r' function. */
+/* Define to 1 if you have the 'getlogin_r' function. */
 public static final int HAVE_GETLOGIN_R = 1;
 
-/* Define to 1 if you have the `getnameinfo' function. */
+/* Define to 1 if you have the 'getnameinfo' function. */
 public static final int HAVE_GETNAMEINFO = 1;
 
 /* Define if you have the 'getpagesize' function. */
@@ -734,34 +770,34 @@ public static final int HAVE_GETPAGESIZE = 1;
 /* Define if you have the 'getpeername' function. */
 public static final int HAVE_GETPEERNAME = 1;
 
-/* Define to 1 if you have the `getpgid' function. */
+/* Define to 1 if you have the 'getpgid' function. */
 public static final int HAVE_GETPGID = 1;
 
-/* Define to 1 if you have the `getpgrp' function. */
+/* Define to 1 if you have the 'getpgrp' function. */
 public static final int HAVE_GETPGRP = 1;
 
-/* Define to 1 if you have the `getpid' function. */
+/* Define to 1 if you have the 'getpid' function. */
 public static final int HAVE_GETPID = 1;
 
-/* Define to 1 if you have the `getppid' function. */
+/* Define to 1 if you have the 'getppid' function. */
 public static final int HAVE_GETPPID = 1;
 
-/* Define to 1 if you have the `getpriority' function. */
+/* Define to 1 if you have the 'getpriority' function. */
 public static final int HAVE_GETPRIORITY = 1;
 
 /* Define if you have the 'getprotobyname' function. */
 public static final int HAVE_GETPROTOBYNAME = 1;
 
-/* Define to 1 if you have the `getpwent' function. */
+/* Define to 1 if you have the 'getpwent' function. */
 public static final int HAVE_GETPWENT = 1;
 
-/* Define to 1 if you have the `getpwnam_r' function. */
+/* Define to 1 if you have the 'getpwnam_r' function. */
 public static final int HAVE_GETPWNAM_R = 1;
 
-/* Define to 1 if you have the `getpwuid' function. */
+/* Define to 1 if you have the 'getpwuid' function. */
 public static final int HAVE_GETPWUID = 1;
 
-/* Define to 1 if you have the `getpwuid_r' function. */
+/* Define to 1 if you have the 'getpwuid_r' function. */
 public static final int HAVE_GETPWUID_R = 1;
 
 /* Define to 1 if the getrandom() function is available */
@@ -770,13 +806,13 @@ public static final int HAVE_GETRANDOM = 1;
 /* Define to 1 if the Linux getrandom() syscall is available */
 public static final int HAVE_GETRANDOM_SYSCALL = 1;
 
-/* Define to 1 if you have the `getresgid' function. */
+/* Define to 1 if you have the 'getresgid' function. */
 public static final int HAVE_GETRESGID = 1;
 
-/* Define to 1 if you have the `getresuid' function. */
+/* Define to 1 if you have the 'getresuid' function. */
 public static final int HAVE_GETRESUID = 1;
 
-/* Define to 1 if you have the `getrusage' function. */
+/* Define to 1 if you have the 'getrusage' function. */
 public static final int HAVE_GETRUSAGE = 1;
 
 /* Define if you have the 'getservbyname' function. */
@@ -785,29 +821,29 @@ public static final int HAVE_GETSERVBYNAME = 1;
 /* Define if you have the 'getservbyport' function. */
 public static final int HAVE_GETSERVBYPORT = 1;
 
-/* Define to 1 if you have the `getsid' function. */
+/* Define to 1 if you have the 'getsid' function. */
 public static final int HAVE_GETSID = 1;
 
 /* Define if you have the 'getsockname' function. */
 public static final int HAVE_GETSOCKNAME = 1;
 
-/* Define to 1 if you have the `getspent' function. */
+/* Define to 1 if you have the 'getspent' function. */
 public static final int HAVE_GETSPENT = 1;
 
-/* Define to 1 if you have the `getspnam' function. */
+/* Define to 1 if you have the 'getspnam' function. */
 public static final int HAVE_GETSPNAM = 1;
 
-/* Define to 1 if you have the `getuid' function. */
+/* Define to 1 if you have the 'getuid' function. */
 public static final int HAVE_GETUID = 1;
 
-/* Define to 1 if you have the `getwd' function. */
+/* Define to 1 if you have the 'getwd' function. */
 public static final int HAVE_GETWD = 1;
 
 /* Define if glibc has incorrect _FORTIFY_SOURCE wrappers for memmove and
    bcopy. */
 /* #undef HAVE_GLIBC_MEMMOVE_BUG */
 
-/* Define to 1 if you have the `grantpt' function. */
+/* Define to 1 if you have the 'grantpt' function. */
 public static final int HAVE_GRANTPT = 1;
 
 /* Define to 1 if you have the <grp.h> header file. */
@@ -819,7 +855,7 @@ public static final int HAVE_HSTRERROR = 1;
 /* Define this if you have le64toh() */
 public static final int HAVE_HTOLE64 = 1;
 
-/* Define to 1 if you have the `if_nameindex' function. */
+/* Define to 1 if you have the 'if_nameindex' function. */
 public static final int HAVE_IF_NAMEINDEX = 1;
 
 /* Define if you have the 'inet_aton' function. */
@@ -831,7 +867,7 @@ public static final int HAVE_INET_NTOA = 1;
 /* Define if you have the 'inet_pton' function. */
 public static final int HAVE_INET_PTON = 1;
 
-/* Define to 1 if you have the `initgroups' function. */
+/* Define to 1 if you have the 'initgroups' function. */
 public static final int HAVE_INITGROUPS = 1;
 
 /* Define to 1 if you have the <inttypes.h> header file. */
@@ -843,10 +879,10 @@ public static final int HAVE_INTTYPES_H = 1;
 /* Define if gcc has the ipa-pure-const bug. */
 /* #undef HAVE_IPA_PURE_CONST_BUG */
 
-/* Define to 1 if you have the `kill' function. */
+/* Define to 1 if you have the 'kill' function. */
 public static final int HAVE_KILL = 1;
 
-/* Define to 1 if you have the `killpg' function. */
+/* Define to 1 if you have the 'killpg' function. */
 public static final int HAVE_KILLPG = 1;
 
 /* Define if you have the 'kqueue' function. */
@@ -864,37 +900,31 @@ public static final int HAVE_LANGINFO_H = 1;
 /* Define to 1 if you have the 'lchflags' function. */
 /* #undef HAVE_LCHFLAGS */
 
-/* Define to 1 if you have the `lchmod' function. */
+/* Define to 1 if you have the 'lchmod' function. */
 /* #undef HAVE_LCHMOD */
 
-/* Define to 1 if you have the `lchown' function. */
+/* Define to 1 if you have the 'lchown' function. */
 public static final int HAVE_LCHOWN = 1;
-
-/* Define to 1 if you want to build _blake2 module with libb2 */
-/* #undef HAVE_LIBB2 */
 
 /* Define to 1 if you have the `db' library (-ldb). */
 public static final int HAVE_LIBDB = 1;
 
-/* Define to 1 if you have the `dl' library (-ldl). */
+/* Define to 1 if you have the 'dl' library (-ldl). */
 public static final int HAVE_LIBDL = 1;
 
-/* Define to 1 if you have the `dld' library (-ldld). */
+/* Define to 1 if you have the 'dld' library (-ldld). */
 /* #undef HAVE_LIBDLD */
 
-/* Define to 1 if you have the `ieee' library (-lieee). */
+/* Define to 1 if you have the 'ieee' library (-lieee). */
 /* #undef HAVE_LIBIEEE */
 
 /* Define to 1 if you have the <libintl.h> header file. */
 public static final int HAVE_LIBINTL_H = 1;
 
-/* Define to 1 if you have the `resolv' library (-lresolv). */
-/* #undef HAVE_LIBRESOLV */
-
-/* Define to 1 if you have the `sendfile' library (-lsendfile). */
+/* Define to 1 if you have the 'sendfile' library (-lsendfile). */
 /* #undef HAVE_LIBSENDFILE */
 
-/* Define to 1 if you have the `sqlite3' library (-lsqlite3). */
+/* Define to 1 if you have the 'sqlite3' library (-lsqlite3). */
 /* #undef HAVE_LIBSQLITE3 */
 
 /* Define to 1 if you have the <libutil.h> header file. */
@@ -903,8 +933,11 @@ public static final int HAVE_LIBINTL_H = 1;
 /* Define if you have the 'link' function. */
 public static final int HAVE_LINK = 1;
 
-/* Define to 1 if you have the `linkat' function. */
+/* Define to 1 if you have the 'linkat' function. */
 public static final int HAVE_LINKAT = 1;
+
+/* Define to 1 if you have the <link.h> header file. */
+public static final int HAVE_LINK_H = 1;
 
 /* Define to 1 if you have the <linux/auxvec.h> header file. */
 public static final int HAVE_LINUX_AUXVEC_H = 1;
@@ -936,6 +969,9 @@ public static final int HAVE_LINUX_LIMITS_H = 1;
 /* Define to 1 if you have the <linux/memfd.h> header file. */
 public static final int HAVE_LINUX_MEMFD_H = 1;
 
+/* Define to 1 if you have the <linux/netfilter_ipv4.h> header file. */
+public static final int HAVE_LINUX_NETFILTER_IPV4_H = 1;
+
 /* Define to 1 if you have the <linux/netlink.h> header file. */
 public static final int HAVE_LINUX_NETLINK_H = 1;
 
@@ -944,6 +980,9 @@ public static final int HAVE_LINUX_QRTR_H = 1;
 
 /* Define to 1 if you have the <linux/random.h> header file. */
 public static final int HAVE_LINUX_RANDOM_H = 1;
+
+/* Define to 1 if you have the <linux/sched.h> header file. */
+public static final int HAVE_LINUX_SCHED_H = 1;
 
 /* Define to 1 if you have the <linux/soundcard.h> header file. */
 public static final int HAVE_LINUX_SOUNDCARD_H = 1;
@@ -960,31 +999,31 @@ public static final int HAVE_LINUX_WAIT_H = 1;
 /* Define if you have the 'listen' function. */
 public static final int HAVE_LISTEN = 1;
 
-/* Define to 1 if you have the `lockf' function. */
+/* Define to 1 if you have the 'lockf' function. */
 public static final int HAVE_LOCKF = 1;
 
-/* Define to 1 if you have the `log1p' function. */
+/* Define to 1 if you have the 'log1p' function. */
 public static final int HAVE_LOG1P = 1;
 
-/* Define to 1 if you have the `log2' function. */
+/* Define to 1 if you have the 'log2' function. */
 public static final int HAVE_LOG2 = 1;
 
 /* Define to 1 if you have the `login_tty' function. */
 public static final int HAVE_LOGIN_TTY = 1;
 
-/* Define to 1 if the system has the type `long double'. */
+/* Define to 1 if the system has the type 'long double'. */
 public static final int HAVE_LONG_DOUBLE = 1;
 
-/* Define to 1 if you have the `lstat' function. */
+/* Define to 1 if you have the 'lstat' function. */
 public static final int HAVE_LSTAT = 1;
 
-/* Define to 1 if you have the `lutimes' function. */
+/* Define to 1 if you have the 'lutimes' function. */
 public static final int HAVE_LUTIMES = 1;
 
 /* Define to 1 if you have the <lzma.h> header file. */
 /* #undef HAVE_LZMA_H */
 
-/* Define to 1 if you have the `madvise' function. */
+/* Define to 1 if you have the 'madvise' function. */
 public static final int HAVE_MADVISE = 1;
 
 /* Define this if you have the makedev macro. */
@@ -993,43 +1032,43 @@ public static final int HAVE_MAKEDEV = 1;
 /* Define if you have the 'MAXLOGNAME' constant. */
 /* #undef HAVE_MAXLOGNAME */
 
-/* Define to 1 if you have the `mbrtowc' function. */
+/* Define to 1 if you have the 'mbrtowc' function. */
 public static final int HAVE_MBRTOWC = 1;
 
 /* Define if you have the 'memfd_create' function. */
 public static final int HAVE_MEMFD_CREATE = 1;
 
-/* Define to 1 if you have the `memrchr' function. */
+/* Define to 1 if you have the 'memrchr' function. */
 public static final int HAVE_MEMRCHR = 1;
 
 /* Define to 1 if you have the <minix/config.h> header file. */
 /* #undef HAVE_MINIX_CONFIG_H */
 
-/* Define to 1 if you have the `mkdirat' function. */
+/* Define to 1 if you have the 'mkdirat' function. */
 public static final int HAVE_MKDIRAT = 1;
 
-/* Define to 1 if you have the `mkfifo' function. */
+/* Define to 1 if you have the 'mkfifo' function. */
 public static final int HAVE_MKFIFO = 1;
 
-/* Define to 1 if you have the `mkfifoat' function. */
+/* Define to 1 if you have the 'mkfifoat' function. */
 public static final int HAVE_MKFIFOAT = 1;
 
-/* Define to 1 if you have the `mknod' function. */
+/* Define to 1 if you have the 'mknod' function. */
 public static final int HAVE_MKNOD = 1;
 
-/* Define to 1 if you have the `mknodat' function. */
+/* Define to 1 if you have the 'mknodat' function. */
 public static final int HAVE_MKNODAT = 1;
 
-/* Define to 1 if you have the `mktime' function. */
+/* Define to 1 if you have the 'mktime' function. */
 public static final int HAVE_MKTIME = 1;
 
-/* Define to 1 if you have the `mmap' function. */
+/* Define to 1 if you have the 'mmap' function. */
 public static final int HAVE_MMAP = 1;
 
-/* Define to 1 if you have the `mremap' function. */
+/* Define to 1 if you have the 'mremap' function. */
 public static final int HAVE_MREMAP = 1;
 
-/* Define to 1 if you have the `nanosleep' function. */
+/* Define to 1 if you have the 'nanosleep' function. */
 public static final int HAVE_NANOSLEEP = 1;
 
 /* Define if you have the 'ncurses' library */
@@ -1062,7 +1101,7 @@ public static final int HAVE_NANOSLEEP = 1;
 /* Define to 1 if you have the <ndbm.h> header file. */
 public static final int HAVE_NDBM_H = 1;
 
-/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
+/* Define to 1 if you have the <ndir.h> header file, and it defines 'DIR'. */
 /* #undef HAVE_NDIR_H */
 
 /* Define to 1 if you have the <netcan/can.h> header file. */
@@ -1086,20 +1125,20 @@ public static final int HAVE_NET_ETHERNET_H = 1;
 /* Define to 1 if you have the <net/if.h> header file. */
 public static final int HAVE_NET_IF_H = 1;
 
-/* Define to 1 if you have the `nice' function. */
+/* Define to 1 if you have the 'nice' function. */
 public static final int HAVE_NICE = 1;
 
 /* Define if the internal form of wchar_t in non-Unicode locales is not
    Unicode. */
 /* #undef HAVE_NON_UNICODE_WCHAR_T_REPRESENTATION */
 
-/* Define to 1 if you have the `openat' function. */
+/* Define to 1 if you have the 'openat' function. */
 public static final int HAVE_OPENAT = 1;
 
-/* Define to 1 if you have the `opendir' function. */
+/* Define to 1 if you have the 'opendir' function. */
 public static final int HAVE_OPENDIR = 1;
 
-/* Define to 1 if you have the `openpty' function. */
+/* Define to 1 if you have the 'openpty' function. */
 public static final int HAVE_OPENPTY = 1;
 
 /* Define if you have the 'panel' library */
@@ -1111,53 +1150,53 @@ public static final int HAVE_OPENPTY = 1;
 /* Define to 1 if you have the <panel.h> header file. */
 /* #undef HAVE_PANEL_H */
 
-/* Define to 1 if you have the `pathconf' function. */
+/* Define to 1 if you have the 'pathconf' function. */
 public static final int HAVE_PATHCONF = 1;
 
-/* Define to 1 if you have the `pause' function. */
+/* Define to 1 if you have the 'pause' function. */
 public static final int HAVE_PAUSE = 1;
 
-/* Define to 1 if you have the `pipe' function. */
+/* Define to 1 if you have the 'pipe' function. */
 public static final int HAVE_PIPE = 1;
 
-/* Define to 1 if you have the `pipe2' function. */
+/* Define to 1 if you have the 'pipe2' function. */
 public static final int HAVE_PIPE2 = 1;
 
-/* Define to 1 if you have the `plock' function. */
+/* Define to 1 if you have the 'plock' function. */
 /* #undef HAVE_PLOCK */
 
-/* Define to 1 if you have the `poll' function. */
+/* Define to 1 if you have the 'poll' function. */
 public static final int HAVE_POLL = 1;
 
 /* Define to 1 if you have the <poll.h> header file. */
 public static final int HAVE_POLL_H = 1;
 
-/* Define to 1 if you have the `posix_fadvise' function. */
+/* Define to 1 if you have the 'posix_fadvise' function. */
 public static final int HAVE_POSIX_FADVISE = 1;
 
-/* Define to 1 if you have the `posix_fallocate' function. */
+/* Define to 1 if you have the 'posix_fallocate' function. */
 public static final int HAVE_POSIX_FALLOCATE = 1;
 
-/* Define to 1 if you have the `posix_openpt' function. */
+/* Define to 1 if you have the 'posix_openpt' function. */
 public static final int HAVE_POSIX_OPENPT = 1;
 
-/* Define to 1 if you have the `posix_spawn' function. */
+/* Define to 1 if you have the 'posix_spawn' function. */
 public static final int HAVE_POSIX_SPAWN = 1;
 
-/* Define to 1 if you have the `posix_spawnp' function. */
+/* Define to 1 if you have the 'posix_spawnp' function. */
 public static final int HAVE_POSIX_SPAWNP = 1;
 
-/* Define to 1 if you have the `posix_spawn_file_actions_addclosefrom_np'
+/* Define to 1 if you have the 'posix_spawn_file_actions_addclosefrom_np'
    function. */
 public static final int HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCLOSEFROM_NP = 1;
 
-/* Define to 1 if you have the `pread' function. */
+/* Define to 1 if you have the 'pread' function. */
 public static final int HAVE_PREAD = 1;
 
-/* Define to 1 if you have the `preadv' function. */
+/* Define to 1 if you have the 'preadv' function. */
 public static final int HAVE_PREADV = 1;
 
-/* Define to 1 if you have the `preadv2' function. */
+/* Define to 1 if you have the 'preadv2' function. */
 public static final int HAVE_PREADV2 = 1;
 
 /* Define if you have the 'prlimit' function. */
@@ -1166,77 +1205,92 @@ public static final int HAVE_PRLIMIT = 1;
 /* Define to 1 if you have the <process.h> header file. */
 /* #undef HAVE_PROCESS_H */
 
-/* Define to 1 if you have the `process_vm_readv' function. */
+/* Define to 1 if you have the 'process_vm_readv' function. */
 public static final int HAVE_PROCESS_VM_READV = 1;
 
 /* Define if your compiler supports function prototype */
 public static final int HAVE_PROTOTYPES = 1;
 
-/* Define to 1 if you have the `pthread_condattr_setclock' function. */
+/* Define to 1 if you have the 'pthread_condattr_setclock' function. */
 public static final int HAVE_PTHREAD_CONDATTR_SETCLOCK = 1;
 
-/* Define to 1 if you have the `pthread_cond_timedwait_relative_np' function.
+/* Define to 1 if you have the 'pthread_cond_timedwait_relative_np' function.
    */
 /* #undef HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE_NP */
 
 /* Defined for Solaris 2.6 bug in pthread header. */
 /* #undef HAVE_PTHREAD_DESTRUCTOR */
 
-/* Define to 1 if you have the `pthread_getcpuclockid' function. */
+/* Define to 1 if you have the 'pthread_getattr_np' function. */
+public static final int HAVE_PTHREAD_GETATTR_NP = 1;
+
+/* Define to 1 if you have the 'pthread_getcpuclockid' function. */
 public static final int HAVE_PTHREAD_GETCPUCLOCKID = 1;
+
+/* Define to 1 if you have the 'pthread_getname_np' function. */
+public static final int HAVE_PTHREAD_GETNAME_NP = 1;
+
+/* Define to 1 if you have the 'pthread_get_name_np' function. */
+/* #undef HAVE_PTHREAD_GET_NAME_NP */
 
 /* Define to 1 if you have the <pthread.h> header file. */
 public static final int HAVE_PTHREAD_H = 1;
 
-/* Define to 1 if you have the `pthread_init' function. */
+/* Define to 1 if you have the 'pthread_init' function. */
 /* #undef HAVE_PTHREAD_INIT */
 
-/* Define to 1 if you have the `pthread_kill' function. */
+/* Define to 1 if you have the 'pthread_kill' function. */
 public static final int HAVE_PTHREAD_KILL = 1;
 
-/* Define to 1 if you have the `pthread_sigmask' function. */
+/* Define to 1 if you have the 'pthread_setname_np' function. */
+public static final int HAVE_PTHREAD_SETNAME_NP = 1;
+
+/* Define to 1 if you have the 'pthread_set_name_np' function. */
+/* #undef HAVE_PTHREAD_SET_NAME_NP */
+
+/* Define to 1 if you have the 'pthread_sigmask' function. */
 public static final int HAVE_PTHREAD_SIGMASK = 1;
 
 /* Define if platform requires stubbed pthreads support */
 /* #undef HAVE_PTHREAD_STUBS */
 
-/* Define to 1 if you have the `ptsname' function. */
+/* Define to 1 if you have the 'ptsname' function. */
 public static final int HAVE_PTSNAME = 1;
 
-/* Define to 1 if you have the `ptsname_r' function. */
+/* Define to 1 if you have the 'ptsname_r' function. */
 public static final int HAVE_PTSNAME_R = 1;
 
 /* Define to 1 if you have the <pty.h> header file. */
 public static final int HAVE_PTY_H = 1;
 
-/* Define to 1 if you have the `pwrite' function. */
+/* Define to 1 if you have the 'pwrite' function. */
 public static final int HAVE_PWRITE = 1;
 
-/* Define to 1 if you have the `pwritev' function. */
+/* Define to 1 if you have the 'pwritev' function. */
 public static final int HAVE_PWRITEV = 1;
 
-/* Define to 1 if you have the `pwritev2' function. */
+/* Define to 1 if you have the 'pwritev2' function. */
 public static final int HAVE_PWRITEV2 = 1;
 
 /* Define to 1 if you have the <readline/readline.h> header file. */
 /* #undef HAVE_READLINE_READLINE_H */
 
-/* Define to 1 if you have the `readlink' function. */
+/* Define to 1 if you have the 'readlink' function. */
 public static final int HAVE_READLINK = 1;
 
-/* Define to 1 if you have the `readlinkat' function. */
+/* Define to 1 if you have the 'readlinkat' function. */
 public static final int HAVE_READLINKAT = 1;
 
-/* Define to 1 if you have the `readv' function. */
+/* Define to 1 if you have the 'readv' function. */
 public static final int HAVE_READV = 1;
 
-/* Define to 1 if you have the `realpath' function. */
+/* Define to 1 if you have the 'realpath' function. */
 public static final int HAVE_REALPATH = 1;
 
 /* Define if you have the 'recvfrom' function. */
 public static final int HAVE_RECVFROM = 1;
 
-/* Define to 1 if you have the `renameat' function. */
+/* Define to 1 if you have the 'renameat' function. */
 public static final int HAVE_RENAMEAT = 1;
 
 /* Define if readline supports append_history */
@@ -1245,7 +1299,7 @@ public static final int HAVE_RENAMEAT = 1;
 /* Define if you can turn off readline's signal handling. */
 /* #undef HAVE_RL_CATCH_SIGNAL */
 
-/* Define to 1 if the system has the type `rl_compdisp_func_t'. */
+/* Define to 1 if the system has the type 'rl_compdisp_func_t'. */
 /* #undef HAVE_RL_COMPDISP_FUNC_T */
 
 /* Define if you have readline 2.2 */
@@ -1266,154 +1320,154 @@ public static final int HAVE_RENAMEAT = 1;
 /* Define if you have readline 4.0 */
 /* #undef HAVE_RL_RESIZE_TERMINAL */
 
-/* Define to 1 if you have the `rtpSpawn' function. */
+/* Define to 1 if you have the 'rtpSpawn' function. */
 /* #undef HAVE_RTPSPAWN */
 
-/* Define to 1 if you have the `sched_get_priority_max' function. */
+/* Define to 1 if you have the 'sched_get_priority_max' function. */
 public static final int HAVE_SCHED_GET_PRIORITY_MAX = 1;
 
 /* Define to 1 if you have the <sched.h> header file. */
 public static final int HAVE_SCHED_H = 1;
 
-/* Define to 1 if you have the `sched_rr_get_interval' function. */
+/* Define to 1 if you have the 'sched_rr_get_interval' function. */
 public static final int HAVE_SCHED_RR_GET_INTERVAL = 1;
 
-/* Define to 1 if you have the `sched_setaffinity' function. */
+/* Define to 1 if you have the 'sched_setaffinity' function. */
 public static final int HAVE_SCHED_SETAFFINITY = 1;
 
-/* Define to 1 if you have the `sched_setparam' function. */
+/* Define to 1 if you have the 'sched_setparam' function. */
 public static final int HAVE_SCHED_SETPARAM = 1;
 
-/* Define to 1 if you have the `sched_setscheduler' function. */
+/* Define to 1 if you have the 'sched_setscheduler' function. */
 public static final int HAVE_SCHED_SETSCHEDULER = 1;
 
-/* Define to 1 if you have the `sem_clockwait' function. */
+/* Define to 1 if you have the 'sem_clockwait' function. */
 public static final int HAVE_SEM_CLOCKWAIT = 1;
 
-/* Define to 1 if you have the `sem_getvalue' function. */
+/* Define to 1 if you have the 'sem_getvalue' function. */
 public static final int HAVE_SEM_GETVALUE = 1;
 
-/* Define to 1 if you have the `sem_open' function. */
+/* Define to 1 if you have the 'sem_open' function. */
 public static final int HAVE_SEM_OPEN = 1;
 
-/* Define to 1 if you have the `sem_timedwait' function. */
+/* Define to 1 if you have the 'sem_timedwait' function. */
 public static final int HAVE_SEM_TIMEDWAIT = 1;
 
-/* Define to 1 if you have the `sem_unlink' function. */
+/* Define to 1 if you have the 'sem_unlink' function. */
 public static final int HAVE_SEM_UNLINK = 1;
 
-/* Define to 1 if you have the `sendfile' function. */
+/* Define to 1 if you have the 'sendfile' function. */
 public static final int HAVE_SENDFILE = 1;
 
 /* Define if you have the 'sendto' function. */
 public static final int HAVE_SENDTO = 1;
 
-/* Define to 1 if you have the `setegid' function. */
+/* Define to 1 if you have the 'setegid' function. */
 public static final int HAVE_SETEGID = 1;
 
-/* Define to 1 if you have the `seteuid' function. */
+/* Define to 1 if you have the 'seteuid' function. */
 public static final int HAVE_SETEUID = 1;
 
-/* Define to 1 if you have the `setgid' function. */
+/* Define to 1 if you have the 'setgid' function. */
 public static final int HAVE_SETGID = 1;
 
 /* Define if you have the 'setgroups' function. */
 public static final int HAVE_SETGROUPS = 1;
 
-/* Define to 1 if you have the `sethostname' function. */
+/* Define to 1 if you have the 'sethostname' function. */
 public static final int HAVE_SETHOSTNAME = 1;
 
-/* Define to 1 if you have the `setitimer' function. */
+/* Define to 1 if you have the 'setitimer' function. */
 public static final int HAVE_SETITIMER = 1;
 
 /* Define to 1 if you have the <setjmp.h> header file. */
 public static final int HAVE_SETJMP_H = 1;
 
-/* Define to 1 if you have the `setlocale' function. */
+/* Define to 1 if you have the 'setlocale' function. */
 public static final int HAVE_SETLOCALE = 1;
 
-/* Define to 1 if you have the `setns' function. */
+/* Define to 1 if you have the 'setns' function. */
 public static final int HAVE_SETNS = 1;
 
-/* Define to 1 if you have the `setpgid' function. */
+/* Define to 1 if you have the 'setpgid' function. */
 public static final int HAVE_SETPGID = 1;
 
-/* Define to 1 if you have the `setpgrp' function. */
+/* Define to 1 if you have the 'setpgrp' function. */
 public static final int HAVE_SETPGRP = 1;
 
-/* Define to 1 if you have the `setpriority' function. */
+/* Define to 1 if you have the 'setpriority' function. */
 public static final int HAVE_SETPRIORITY = 1;
 
-/* Define to 1 if you have the `setregid' function. */
+/* Define to 1 if you have the 'setregid' function. */
 public static final int HAVE_SETREGID = 1;
 
-/* Define to 1 if you have the `setresgid' function. */
+/* Define to 1 if you have the 'setresgid' function. */
 public static final int HAVE_SETRESGID = 1;
 
-/* Define to 1 if you have the `setresuid' function. */
+/* Define to 1 if you have the 'setresuid' function. */
 public static final int HAVE_SETRESUID = 1;
 
-/* Define to 1 if you have the `setreuid' function. */
+/* Define to 1 if you have the 'setreuid' function. */
 public static final int HAVE_SETREUID = 1;
 
-/* Define to 1 if you have the `setsid' function. */
+/* Define to 1 if you have the 'setsid' function. */
 public static final int HAVE_SETSID = 1;
 
 /* Define if you have the 'setsockopt' function. */
 public static final int HAVE_SETSOCKOPT = 1;
 
-/* Define to 1 if you have the `setuid' function. */
+/* Define to 1 if you have the 'setuid' function. */
 public static final int HAVE_SETUID = 1;
 
-/* Define to 1 if you have the `setvbuf' function. */
+/* Define to 1 if you have the 'setvbuf' function. */
 public static final int HAVE_SETVBUF = 1;
 
 /* Define to 1 if you have the <shadow.h> header file. */
 public static final int HAVE_SHADOW_H = 1;
 
-/* Define to 1 if you have the `shm_open' function. */
+/* Define to 1 if you have the 'shm_open' function. */
 public static final int HAVE_SHM_OPEN = 1;
 
-/* Define to 1 if you have the `shm_unlink' function. */
+/* Define to 1 if you have the 'shm_unlink' function. */
 public static final int HAVE_SHM_UNLINK = 1;
 
-/* Define to 1 if you have the `shutdown' function. */
+/* Define to 1 if you have the 'shutdown' function. */
 public static final int HAVE_SHUTDOWN = 1;
 
-/* Define to 1 if you have the `sigaction' function. */
+/* Define to 1 if you have the 'sigaction' function. */
 public static final int HAVE_SIGACTION = 1;
 
-/* Define to 1 if you have the `sigaltstack' function. */
+/* Define to 1 if you have the 'sigaltstack' function. */
 public static final int HAVE_SIGALTSTACK = 1;
 
-/* Define to 1 if you have the `sigfillset' function. */
+/* Define to 1 if you have the 'sigfillset' function. */
 public static final int HAVE_SIGFILLSET = 1;
 
-/* Define to 1 if `si_band' is a member of `siginfo_t'. */
+/* Define to 1 if 'si_band' is a member of 'siginfo_t'. */
 public static final int HAVE_SIGINFO_T_SI_BAND = 1;
 
-/* Define to 1 if you have the `siginterrupt' function. */
+/* Define to 1 if you have the 'siginterrupt' function. */
 public static final int HAVE_SIGINTERRUPT = 1;
 
 /* Define to 1 if you have the <signal.h> header file. */
 public static final int HAVE_SIGNAL_H = 1;
 
-/* Define to 1 if you have the `sigpending' function. */
+/* Define to 1 if you have the 'sigpending' function. */
 public static final int HAVE_SIGPENDING = 1;
 
-/* Define to 1 if you have the `sigrelse' function. */
+/* Define to 1 if you have the 'sigrelse' function. */
 public static final int HAVE_SIGRELSE = 1;
 
-/* Define to 1 if you have the `sigtimedwait' function. */
+/* Define to 1 if you have the 'sigtimedwait' function. */
 public static final int HAVE_SIGTIMEDWAIT = 1;
 
-/* Define to 1 if you have the `sigwait' function. */
+/* Define to 1 if you have the 'sigwait' function. */
 public static final int HAVE_SIGWAIT = 1;
 
-/* Define to 1 if you have the `sigwaitinfo' function. */
+/* Define to 1 if you have the 'sigwaitinfo' function. */
 public static final int HAVE_SIGWAITINFO = 1;
 
-/* Define to 1 if you have the `snprintf' function. */
+/* Define to 1 if you have the 'snprintf' function. */
 public static final int HAVE_SNPRINTF = 1;
 
 /* struct sockaddr_alg (linux/if_alg.h) */
@@ -1431,19 +1485,19 @@ public static final int HAVE_SOCKET = 1;
 /* Define if you have the 'socketpair' function. */
 public static final int HAVE_SOCKETPAIR = 1;
 
-/* Define to 1 if the system has the type `socklen_t'. */
+/* Define to 1 if the system has the type 'socklen_t'. */
 public static final int HAVE_SOCKLEN_T = 1;
 
 /* Define to 1 if you have the <spawn.h> header file. */
 public static final int HAVE_SPAWN_H = 1;
 
-/* Define to 1 if you have the `splice' function. */
+/* Define to 1 if you have the 'splice' function. */
 public static final int HAVE_SPLICE = 1;
 
-/* Define to 1 if the system has the type `ssize_t'. */
+/* Define to 1 if the system has the type 'ssize_t'. */
 public static final int HAVE_SSIZE_T = 1;
 
-/* Define to 1 if you have the `statvfs' function. */
+/* Define to 1 if you have the 'statvfs' function. */
 public static final int HAVE_STATVFS = 1;
 
 /* Define if you have struct stat.st_mtim.tv_nsec */
@@ -1464,7 +1518,7 @@ public static final int HAVE_STDLIB_H = 1;
 /* Has stdatomic.h with atomic_int and atomic_uintptr_t */
 public static final int HAVE_STD_ATOMIC = 1;
 
-/* Define to 1 if you have the `strftime' function. */
+/* Define to 1 if you have the 'strftime' function. */
 public static final int HAVE_STRFTIME = 1;
 
 /* Define to 1 if you have the <strings.h> header file. */
@@ -1473,52 +1527,52 @@ public static final int HAVE_STRINGS_H = 1;
 /* Define to 1 if you have the <string.h> header file. */
 public static final int HAVE_STRING_H = 1;
 
-/* Define to 1 if you have the `strlcpy' function. */
+/* Define to 1 if you have the 'strlcpy' function. */
 public static final int HAVE_STRLCPY = 1;
 
 /* Define to 1 if you have the <stropts.h> header file. */
 /* #undef HAVE_STROPTS_H */
 
-/* Define to 1 if you have the `strsignal' function. */
+/* Define to 1 if you have the 'strsignal' function. */
 public static final int HAVE_STRSIGNAL = 1;
 
-/* Define to 1 if `pw_gecos' is a member of `struct passwd'. */
+/* Define to 1 if 'pw_gecos' is a member of 'struct passwd'. */
 public static final int HAVE_STRUCT_PASSWD_PW_GECOS = 1;
 
-/* Define to 1 if `pw_passwd' is a member of `struct passwd'. */
+/* Define to 1 if 'pw_passwd' is a member of 'struct passwd'. */
 public static final int HAVE_STRUCT_PASSWD_PW_PASSWD = 1;
 
-/* Define to 1 if `st_birthtime' is a member of `struct stat'. */
+/* Define to 1 if 'st_birthtime' is a member of 'struct stat'. */
 /* #undef HAVE_STRUCT_STAT_ST_BIRTHTIME */
 
-/* Define to 1 if `st_blksize' is a member of `struct stat'. */
+/* Define to 1 if 'st_blksize' is a member of 'struct stat'. */
 public static final int HAVE_STRUCT_STAT_ST_BLKSIZE = 1;
 
-/* Define to 1 if `st_blocks' is a member of `struct stat'. */
+/* Define to 1 if 'st_blocks' is a member of 'struct stat'. */
 public static final int HAVE_STRUCT_STAT_ST_BLOCKS = 1;
 
-/* Define to 1 if `st_flags' is a member of `struct stat'. */
+/* Define to 1 if 'st_flags' is a member of 'struct stat'. */
 /* #undef HAVE_STRUCT_STAT_ST_FLAGS */
 
-/* Define to 1 if `st_gen' is a member of `struct stat'. */
+/* Define to 1 if 'st_gen' is a member of 'struct stat'. */
 /* #undef HAVE_STRUCT_STAT_ST_GEN */
 
-/* Define to 1 if `st_rdev' is a member of `struct stat'. */
+/* Define to 1 if 'st_rdev' is a member of 'struct stat'. */
 public static final int HAVE_STRUCT_STAT_ST_RDEV = 1;
 
-/* Define to 1 if `tm_zone' is a member of `struct tm'. */
+/* Define to 1 if 'tm_zone' is a member of 'struct tm'. */
 public static final int HAVE_STRUCT_TM_TM_ZONE = 1;
 
 /* Define if you have the 'symlink' function. */
 public static final int HAVE_SYMLINK = 1;
 
-/* Define to 1 if you have the `symlinkat' function. */
+/* Define to 1 if you have the 'symlinkat' function. */
 public static final int HAVE_SYMLINKAT = 1;
 
-/* Define to 1 if you have the `sync' function. */
+/* Define to 1 if you have the 'sync' function. */
 public static final int HAVE_SYNC = 1;
 
-/* Define to 1 if you have the `sysconf' function. */
+/* Define to 1 if you have the 'sysconf' function. */
 public static final int HAVE_SYSCONF = 1;
 
 /* Define to 1 if you have the <sysexits.h> header file. */
@@ -1527,7 +1581,7 @@ public static final int HAVE_SYSEXITS_H = 1;
 /* Define to 1 if you have the <syslog.h> header file. */
 public static final int HAVE_SYSLOG_H = 1;
 
-/* Define to 1 if you have the `system' function. */
+/* Define to 1 if you have the 'system' function. */
 public static final int HAVE_SYSTEM = 1;
 
 /* Define to 1 if you have the <sys/audioio.h> header file. */
@@ -1542,7 +1596,7 @@ public static final int HAVE_SYS_AUXV_H = 1;
 /* Define to 1 if you have the <sys/devpoll.h> header file. */
 /* #undef HAVE_SYS_DEVPOLL_H */
 
-/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <sys/dir.h> header file, and it defines 'DIR'.
    */
 /* #undef HAVE_SYS_DIR_H */
 
@@ -1585,7 +1639,7 @@ public static final int HAVE_SYS_MMAN_H = 1;
 /* Define to 1 if you have the <sys/modem.h> header file. */
 /* #undef HAVE_SYS_MODEM_H */
 
-/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <sys/ndir.h> header file, and it defines 'DIR'.
    */
 /* #undef HAVE_SYS_NDIR_H */
 
@@ -1661,13 +1715,13 @@ public static final int HAVE_SYS_WAIT_H = 1;
 /* Define to 1 if you have the <sys/xattr.h> header file. */
 public static final int HAVE_SYS_XATTR_H = 1;
 
-/* Define to 1 if you have the `tcgetpgrp' function. */
+/* Define to 1 if you have the 'tcgetpgrp' function. */
 public static final int HAVE_TCGETPGRP = 1;
 
-/* Define to 1 if you have the `tcsetpgrp' function. */
+/* Define to 1 if you have the 'tcsetpgrp' function. */
 public static final int HAVE_TCSETPGRP = 1;
 
-/* Define to 1 if you have the `tempnam' function. */
+/* Define to 1 if you have the 'tempnam' function. */
 public static final int HAVE_TEMPNAM = 1;
 
 /* Define to 1 if you have the <termios.h> header file. */
@@ -1676,54 +1730,54 @@ public static final int HAVE_TERMIOS_H = 1;
 /* Define to 1 if you have the <term.h> header file. */
 /* #undef HAVE_TERM_H */
 
-/* Define to 1 if you have the `timegm' function. */
+/* Define to 1 if you have the 'timegm' function. */
 public static final int HAVE_TIMEGM = 1;
 
 /* Define if you have the 'timerfd_create' function. */
 public static final int HAVE_TIMERFD_CREATE = 1;
 
-/* Define to 1 if you have the `times' function. */
+/* Define to 1 if you have the 'times' function. */
 public static final int HAVE_TIMES = 1;
 
-/* Define to 1 if you have the `tmpfile' function. */
+/* Define to 1 if you have the 'tmpfile' function. */
 public static final int HAVE_TMPFILE = 1;
 
-/* Define to 1 if you have the `tmpnam' function. */
+/* Define to 1 if you have the 'tmpnam' function. */
 public static final int HAVE_TMPNAM = 1;
 
-/* Define to 1 if you have the `tmpnam_r' function. */
+/* Define to 1 if you have the 'tmpnam_r' function. */
 public static final int HAVE_TMPNAM_R = 1;
 
-/* Define to 1 if your `struct tm' has `tm_zone'. Deprecated, use
-   `HAVE_STRUCT_TM_TM_ZONE' instead. */
+/* Define to 1 if your 'struct tm' has 'tm_zone'. Deprecated, use
+   'HAVE_STRUCT_TM_TM_ZONE' instead. */
 public static final int HAVE_TM_ZONE = 1;
 
-/* Define to 1 if you have the `truncate' function. */
+/* Define to 1 if you have the 'truncate' function. */
 public static final int HAVE_TRUNCATE = 1;
 
-/* Define to 1 if you have the `ttyname_r' function. */
+/* Define to 1 if you have the 'ttyname_r' function. */
 public static final int HAVE_TTYNAME_R = 1;
 
-/* Define to 1 if you don't have `tm_zone' but do have the external array
-   `tzname'. */
+/* Define to 1 if you don't have 'tm_zone' but do have the external array
+   'tzname'. */
 /* #undef HAVE_TZNAME */
 
-/* Define to 1 if you have the `umask' function. */
+/* Define to 1 if you have the 'umask' function. */
 public static final int HAVE_UMASK = 1;
 
-/* Define to 1 if you have the `uname' function. */
+/* Define to 1 if you have the 'uname' function. */
 public static final int HAVE_UNAME = 1;
 
 /* Define to 1 if you have the <unistd.h> header file. */
 public static final int HAVE_UNISTD_H = 1;
 
-/* Define to 1 if you have the `unlinkat' function. */
+/* Define to 1 if you have the 'unlinkat' function. */
 public static final int HAVE_UNLINKAT = 1;
 
-/* Define to 1 if you have the `unlockpt' function. */
+/* Define to 1 if you have the 'unlockpt' function. */
 public static final int HAVE_UNLOCKPT = 1;
 
-/* Define to 1 if you have the `unshare' function. */
+/* Define to 1 if you have the 'unshare' function. */
 public static final int HAVE_UNSHARE = 1;
 
 /* Define if you have a useable wchar_t type defined in wchar.h; useable means
@@ -1734,10 +1788,10 @@ public static final int HAVE_UNSHARE = 1;
 /* Define to 1 if you have the <util.h> header file. */
 /* #undef HAVE_UTIL_H */
 
-/* Define to 1 if you have the `utimensat' function. */
+/* Define to 1 if you have the 'utimensat' function. */
 public static final int HAVE_UTIMENSAT = 1;
 
-/* Define to 1 if you have the `utimes' function. */
+/* Define to 1 if you have the 'utimes' function. */
 public static final int HAVE_UTIMES = 1;
 
 /* Define to 1 if you have the <utime.h> header file. */
@@ -1749,10 +1803,10 @@ public static final int HAVE_UTMP_H = 1;
 /* Define if you have the 'HAVE_UT_NAMESIZE' constant. */
 public static final int HAVE_UT_NAMESIZE = 1;
 
-/* Define to 1 if you have the `uuid_create' function. */
+/* Define to 1 if you have the 'uuid_create' function. */
 /* #undef HAVE_UUID_CREATE */
 
-/* Define to 1 if you have the `uuid_enc_be' function. */
+/* Define to 1 if you have the 'uuid_enc_be' function. */
 /* #undef HAVE_UUID_ENC_BE */
 
 /* Define if uuid_generate_time_safe() exists. */
@@ -1767,45 +1821,48 @@ public static final int HAVE_UUID_H = 1;
 /* Define to 1 if you have the <uuid/uuid.h> header file. */
 /* #undef HAVE_UUID_UUID_H */
 
-/* Define to 1 if you have the `vfork' function. */
+/* Define to 1 if you have the 'vfork' function. */
 public static final int HAVE_VFORK = 1;
 
-/* Define to 1 if you have the `wait' function. */
+/* Define to 1 if you have the 'wait' function. */
 public static final int HAVE_WAIT = 1;
 
-/* Define to 1 if you have the `wait3' function. */
+/* Define to 1 if you have the 'wait3' function. */
 public static final int HAVE_WAIT3 = 1;
 
-/* Define to 1 if you have the `wait4' function. */
+/* Define to 1 if you have the 'wait4' function. */
 public static final int HAVE_WAIT4 = 1;
 
-/* Define to 1 if you have the `waitid' function. */
+/* Define to 1 if you have the 'waitid' function. */
 public static final int HAVE_WAITID = 1;
 
-/* Define to 1 if you have the `waitpid' function. */
+/* Define to 1 if you have the 'waitpid' function. */
 public static final int HAVE_WAITPID = 1;
 
 /* Define if the compiler provides a wchar.h header file. */
 public static final int HAVE_WCHAR_H = 1;
 
-/* Define to 1 if you have the `wcscoll' function. */
+/* Define to 1 if you have the 'wcscoll' function. */
 public static final int HAVE_WCSCOLL = 1;
 
-/* Define to 1 if you have the `wcsftime' function. */
+/* Define to 1 if you have the 'wcsftime' function. */
 public static final int HAVE_WCSFTIME = 1;
 
-/* Define to 1 if you have the `wcsxfrm' function. */
+/* Define to 1 if you have the 'wcsxfrm' function. */
 public static final int HAVE_WCSXFRM = 1;
 
-/* Define to 1 if you have the `wmemcmp' function. */
+/* Define to 1 if you have the 'wmemcmp' function. */
 public static final int HAVE_WMEMCMP = 1;
 
 /* Define if tzset() actually switches the local timezone in a meaningful way.
    */
 public static final int HAVE_WORKING_TZSET = 1;
 
-/* Define to 1 if you have the `writev' function. */
+/* Define to 1 if you have the 'writev' function. */
 public static final int HAVE_WRITEV = 1;
+
+/* Define to 1 if you have the <zdict.h> header file. */
+/* #undef HAVE_ZDICT_H */
 
 /* Define if the zlib library has inflateCopy */
 public static final int HAVE_ZLIB_COPY = 1;
@@ -1813,17 +1870,20 @@ public static final int HAVE_ZLIB_COPY = 1;
 /* Define to 1 if you have the <zlib.h> header file. */
 /* #undef HAVE_ZLIB_H */
 
-/* Define to 1 if you have the `_getpty' function. */
+/* Define to 1 if you have the <zstd.h> header file. */
+/* #undef HAVE_ZSTD_H */
+
+/* Define to 1 if you have the '_getpty' function. */
 /* #undef HAVE__GETPTY */
 
-/* Define to 1 if the system has the type `__uint128_t'. */
+/* Define to 1 if the system has the type '__uint128_t'. */
 public static final int HAVE___UINT128_T = 1;
 
-/* Define to 1 if `major', `minor', and `makedev' are declared in <mkdev.h>.
+/* Define to 1 if 'major', 'minor', and 'makedev' are declared in <mkdev.h>.
    */
 /* #undef MAJOR_IN_MKDEV */
 
-/* Define to 1 if `major', `minor', and `makedev' are declared in
+/* Define to 1 if 'major', 'minor', and 'makedev' are declared in
    <sysmacros.h>. */
 public static final int MAJOR_IN_SYSMACROS = 1;
 
@@ -1898,6 +1958,9 @@ public static final int Py_ENABLE_SHARED = 1;
    SipHash13: 3, externally defined: 0 */
 /* #undef Py_HASH_ALGORITHM */
 
+/* Define if you want to enable remote debugging support. */
+public static final int Py_REMOTE_DEBUG = 1;
+
 /* Define if rl_startup_hook takes arguments */
 /* #undef Py_RL_STARTUP_HOOK_TAKES_ARGS */
 
@@ -1906,6 +1969,9 @@ public static final int Py_ENABLE_SHARED = 1;
 
 /* The version of SunOS/Solaris as reported by `uname -r' without the dot. */
 /* #undef Py_SUNOS_VERSION */
+
+/* Define if you want to use tail-calling interpreters in CPython. */
+/* #undef Py_TAIL_CALL_INTERP */
 
 /* Define if you want to enable tracing references for debugging purpose */
 /* #undef Py_TRACE_REFS */
@@ -1919,58 +1985,58 @@ public static final int Py_ENABLE_SHARED = 1;
 /* Define if i>>j for signed int i does not extend the sign bit when i < 0 */
 /* #undef SIGNED_RIGHT_SHIFT_ZERO_FILLS */
 
-/* The size of `double', as computed by sizeof. */
+/* The size of 'double', as computed by sizeof. */
 public static final int SIZEOF_DOUBLE = 8;
 
-/* The size of `float', as computed by sizeof. */
+/* The size of 'float', as computed by sizeof. */
 public static final int SIZEOF_FLOAT = 4;
 
-/* The size of `fpos_t', as computed by sizeof. */
+/* The size of 'fpos_t', as computed by sizeof. */
 public static final int SIZEOF_FPOS_T = 16;
 
-/* The size of `int', as computed by sizeof. */
+/* The size of 'int', as computed by sizeof. */
 public static final int SIZEOF_INT = 4;
 
-/* The size of `long', as computed by sizeof. */
+/* The size of 'long', as computed by sizeof. */
 public static final int SIZEOF_LONG = 8;
 
-/* The size of `long double', as computed by sizeof. */
+/* The size of 'long double', as computed by sizeof. */
 public static final int SIZEOF_LONG_DOUBLE = 16;
 
-/* The size of `long long', as computed by sizeof. */
+/* The size of 'long long', as computed by sizeof. */
 public static final int SIZEOF_LONG_LONG = 8;
 
-/* The size of `off_t', as computed by sizeof. */
+/* The size of 'off_t', as computed by sizeof. */
 public static final int SIZEOF_OFF_T = 8;
 
-/* The size of `pid_t', as computed by sizeof. */
+/* The size of 'pid_t', as computed by sizeof. */
 public static final int SIZEOF_PID_T = 4;
 
-/* The size of `pthread_key_t', as computed by sizeof. */
+/* The size of 'pthread_key_t', as computed by sizeof. */
 public static final int SIZEOF_PTHREAD_KEY_T = 4;
 
-/* The size of `pthread_t', as computed by sizeof. */
+/* The size of 'pthread_t', as computed by sizeof. */
 public static final int SIZEOF_PTHREAD_T = 8;
 
-/* The size of `short', as computed by sizeof. */
+/* The size of 'short', as computed by sizeof. */
 public static final int SIZEOF_SHORT = 2;
 
-/* The size of `size_t', as computed by sizeof. */
+/* The size of 'size_t', as computed by sizeof. */
 public static final int SIZEOF_SIZE_T = 8;
 
-/* The size of `time_t', as computed by sizeof. */
+/* The size of 'time_t', as computed by sizeof. */
 public static final int SIZEOF_TIME_T = 8;
 
-/* The size of `uintptr_t', as computed by sizeof. */
+/* The size of 'uintptr_t', as computed by sizeof. */
 public static final int SIZEOF_UINTPTR_T = 8;
 
-/* The size of `void *', as computed by sizeof. */
+/* The size of 'void *', as computed by sizeof. */
 public static final int SIZEOF_VOID_P = 8;
 
-/* The size of `wchar_t', as computed by sizeof. */
+/* The size of 'wchar_t', as computed by sizeof. */
 public static final int SIZEOF_WCHAR_T = 4;
 
-/* The size of `_Bool', as computed by sizeof. */
+/* The size of '_Bool', as computed by sizeof. */
 public static final int SIZEOF__BOOL = 1;
 
 /* Define to 1 if you have the ANSI C header files. */
@@ -1986,13 +2052,13 @@ public static final int SYS_SELECT_WITH_SYS_TIME = 1;
 /* Library needed by timemodule.c: librt may be needed for clock_gettime() */
 /* #undef TIMEMODULE_LIB */
 
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
+/* Define to 1 if your <sys/time.h> declares 'struct tm'. */
 /* #undef TM_IN_SYS_TIME */
 
 /* Define if you want to use computed gotos in ceval.c. */
 /* #undef USE_COMPUTED_GOTOS */
 
-/* Enable extensions on AIX 3, Interix.  */
+/* Enable extensions on AIX, Interix, z/OS.  */
 // #ifndef _ALL_SOURCE
 public static final int _ALL_SOURCE = 1;
 // #endif
@@ -2053,11 +2119,15 @@ public static final int __STDC_WANT_IEC_60559_BFP_EXT__ = 1;
 // #ifndef __STDC_WANT_IEC_60559_DFP_EXT__
 public static final int __STDC_WANT_IEC_60559_DFP_EXT__ = 1;
 // #endif
+/* Enable extensions specified by C23 Annex F.  */
+// #ifndef __STDC_WANT_IEC_60559_EXT__
+public static final int __STDC_WANT_IEC_60559_EXT__ = 1;
+// #endif
 /* Enable extensions specified by ISO/IEC TS 18661-4:2015.  */
 // #ifndef __STDC_WANT_IEC_60559_FUNCS_EXT__
 public static final int __STDC_WANT_IEC_60559_FUNCS_EXT__ = 1;
 // #endif
-/* Enable extensions specified by ISO/IEC TS 18661-3:2015.  */
+/* Enable extensions specified by C23 Annex H and ISO/IEC TS 18661-3:2015.  */
 // #ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
 public static final int __STDC_WANT_IEC_60559_TYPES_EXT__ = 1;
 // #endif
@@ -2100,9 +2170,6 @@ public static final int WITH_DOC_STRINGS = 1;
 
 /* Define to build the readline module against libedit. */
 /* #undef WITH_EDITLINE */
-
-/* Define if you want to compile in object freelists optimization */
-public static final int WITH_FREELISTS = 1;
 
 /* Define to 1 if libintl is needed for locale functions. */
 /* #undef WITH_LIBINTL */
@@ -2162,6 +2229,21 @@ public static final long _POSIX_C_SOURCE = 200809L;
 /* framework name */
 public static final String _PYTHONFRAMEWORK = "";
 
+/* Maximum length in bytes of a thread name */
+public static final int _PYTHREAD_NAME_MAXLEN = 15;
+
+/* Defined if _Complex C type can be used with libffi. */
+public static final int _Py_FFI_SUPPORT_C_COMPLEX = 1;
+
+/* HACL* library can compile SIMD128 implementations */
+public static final int _Py_HACL_CAN_COMPILE_VEC128 = 1;
+
+/* HACL* library can compile SIMD256 implementations */
+public static final int _Py_HACL_CAN_COMPILE_VEC256 = 1;
+
+/* Define if year with century should be normalized for strftime. */
+public static final int _Py_NORMALIZE_CENTURY = 1;
+
 /* Define to force use of thread-safe errno, h_errno, and other functions */
 public static final int _REENTRANT = 1;
 
@@ -2185,16 +2267,16 @@ public static final int __BSD_VISIBLE = 1;
 /* Define to 'long' if <time.h> does not define clock_t. */
 /* #undef clock_t */
 
-/* Define to empty if `const' does not conform to ANSI C. */
+/* Define to empty if 'const' does not conform to ANSI C. */
 /* #undef const */
 
-/* Define to `int' if <sys/types.h> doesn't define. */
+/* Define as 'int' if <sys/types.h> doesn't define. */
 /* #undef gid_t */
 
-/* Define to `int' if <sys/types.h> does not define. */
+/* Define to 'int' if <sys/types.h> does not define. */
 /* #undef mode_t */
 
-/* Define to `long int' if <sys/types.h> does not define. */
+/* Define to 'long int' if <sys/types.h> does not define. */
 /* #undef off_t */
 
 /* Define as a signed integer type capable of holding a process identifier. */
@@ -2203,13 +2285,13 @@ public static final int __BSD_VISIBLE = 1;
 /* Define to empty if the keyword does not work. */
 /* #undef signed */
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Define as 'unsigned int' if <stddef.h> doesn't define. */
 /* #undef size_t */
 
 /* Define to 'int' if <sys/socket.h> does not define. */
 /* #undef socklen_t */
 
-/* Define to `int' if <sys/types.h> doesn't define. */
+/* Define as 'int' if <sys/types.h> doesn't define. */
 /* #undef uid_t */
 
 
@@ -2250,6 +2332,24 @@ public static final int __BSD_VISIBLE = 1;
 // #endif
 
 
+// Preprocessor check for a builtin preprocessor function. Always return 0
+// if __has_builtin() macro is not defined.
+//
+// __has_builtin() is available on clang and GCC 10.
+// #ifdef __has_builtin
+// #  define _Py__has_builtin(x) __has_builtin(x)
+// #else
+// #  define _Py__has_builtin(x) 0
+// #endif
+
+// Preprocessor check for a compiler __attribute__. Always return 0
+// if __has_attribute() macro is not defined.
+// #ifdef __has_attribute
+// #  define _Py__has_attribute(x) __has_attribute(x)
+// #else
+// #  define _Py__has_attribute(x) 0
+// #endif
+
 // Macro to use C++ static_cast<> in the Python C API.
 // #ifdef __cplusplus
 // #  define _Py_STATIC_CAST(type, expr) static_cast<type>(expr)
@@ -2258,6 +2358,16 @@ public static final int __BSD_VISIBLE = 1;
 // #endif
 // Macro to use the more powerful/dangerous C-style cast even in C++.
 // #define _Py_CAST(type, expr) ((type)(expr))
+
+// Cast a function to another function type T.
+//
+// The macro first casts the function to the "void func(void)" type
+// to prevent compiler warnings.
+//
+// Note that using this cast only prevents the compiler from emitting
+// warnings, but does not prevent an undefined behavior at runtime if
+// the original function signature is not respected.
+// #define _Py_FUNC_CAST(T, func) _Py_CAST(T, _Py_CAST(void(*)(void), (func)))
 
 // Static inline functions should use _Py_NULL rather than using directly NULL
 // to prevent C++ compiler warnings. On C23 and newer and on C++11 and newer,
@@ -2420,6 +2530,7 @@ public static final long SIZEOF_PY_UHASH_T = SIZEOF_PY_UHASH_T();
 // #  define Py_LOCAL_INLINE(type) static inline type
 // #endif
 
+// Soft deprecated since Python 3.14, use memcpy() instead.
 // #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
 // #endif
 
@@ -2679,7 +2790,7 @@ public static final long LONG_BIT = LONG_BIT();
  */
 
 // #ifdef WORDS_BIGENDIAN
-public static final int PY_BIG_ENDIAN = 1;
+// #  define PY_BIG_ENDIAN 1
 public static final int PY_LITTLE_ENDIAN = 0;
 // #else
 // #endif
@@ -2745,24 +2856,6 @@ public static final int Py_CAN_START_THREADS = 1;
 // #endif
 
 
-// Preprocessor check for a builtin preprocessor function. Always return 0
-// if __has_builtin() macro is not defined.
-//
-// __has_builtin() is available on clang and GCC 10.
-// #ifdef __has_builtin
-// #  define _Py__has_builtin(x) __has_builtin(x)
-// #else
-// #  define _Py__has_builtin(x) 0
-// #endif
-
-// Preprocessor check for a compiler __attribute__. Always return 0
-// if __has_attribute() macro is not defined.
-// #ifdef __has_attribute
-// #  define _Py__has_attribute(x) __has_attribute(x)
-// #else
-// #  define _Py__has_attribute(x) 0
-// #endif
-
 // _Py_TYPEOF(expr) gets the type of an expression.
 //
 // Example: _Py_TYPEOF(x) x_copy = (x);
@@ -2778,27 +2871,45 @@ public static final int Py_CAN_START_THREADS = 1;
 // #  if __has_feature(memory_sanitizer)
 // #    if !defined(_Py_MEMORY_SANITIZER)
 // #      define _Py_MEMORY_SANITIZER
+// #      define _Py_NO_SANITIZE_MEMORY __attribute__((no_sanitize_memory))
 // #    endif
 // #  endif
 // #  if __has_feature(address_sanitizer)
 // #    if !defined(_Py_ADDRESS_SANITIZER)
 // #      define _Py_ADDRESS_SANITIZER
+// #      define _Py_NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
 // #    endif
 // #  endif
 // #  if __has_feature(thread_sanitizer)
 // #    if !defined(_Py_THREAD_SANITIZER)
 // #      define _Py_THREAD_SANITIZER
+// #      define _Py_NO_SANITIZE_THREAD __attribute__((no_sanitize_thread))
 // #    endif
 // #  endif
 // #elif defined(__GNUC__)
 // #  if defined(__SANITIZE_ADDRESS__)
 // #    define _Py_ADDRESS_SANITIZER
+// #    define _Py_NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
 // #  endif
 // #  if defined(__SANITIZE_THREAD__)
 // #    define _Py_THREAD_SANITIZER
+// #    define _Py_NO_SANITIZE_THREAD __attribute__((no_sanitize_thread))
+// #  elif  __GNUC__ > 5 || (__GNUC__ == 5 && __GNUC_MINOR__ >= 1)
+     // TSAN is supported since GCC 5.1, but __SANITIZE_THREAD__ macro
+     // is provided only since GCC 7.
+// #    define _Py_NO_SANITIZE_THREAD __attribute__((no_sanitize_thread))
 // #  endif
 // #endif
 
+// #ifndef _Py_NO_SANITIZE_ADDRESS
+// #  define _Py_NO_SANITIZE_ADDRESS
+// #endif
+// #ifndef _Py_NO_SANITIZE_THREAD
+// #  define _Py_NO_SANITIZE_THREAD
+// #endif
+// #ifndef _Py_NO_SANITIZE_MEMORY
+// #  define _Py_NO_SANITIZE_MEMORY
+// #endif
 
 /* AIX has __bool__ redefined in it's system header file. */
 // #if defined(_AIX) && defined(__bool__)
@@ -2825,6 +2936,47 @@ public static final int Py_CAN_START_THREADS = 1;
 
 // #if defined(__sgi) && !defined(_SGI_MP_SOURCE)
 // #  define _SGI_MP_SOURCE
+// #endif
+
+// Explicit fallthrough in switch case to avoid warnings
+// with compiler flag -Wimplicit-fallthrough.
+//
+// Usage example:
+//
+//     switch (value) {
+//     case 1: _Py_FALLTHROUGH;
+//     case 2: code; break;
+//     }
+//
+// __attribute__((fallthrough)) was introduced in GCC 7 and Clang 10 /
+// Apple Clang 12.0. Earlier Clang versions support only the C++11
+// style fallthrough attribute, not the GCC extension syntax used here,
+// and __has_attribute(fallthrough) evaluates to 1.
+// #if _Py__has_attribute(fallthrough) && (!defined(__clang__) ||
+//     (!defined(__apple_build_version__) && __clang_major__ >= 10) ||
+//     (defined(__apple_build_version__) && __clang_major__ >= 12))
+// #  define _Py_FALLTHROUGH __attribute__((fallthrough))
+// #else
+// #  define _Py_FALLTHROUGH do { } while (0)
+// #endif
+
+
+// _Py_NO_SANITIZE_UNDEFINED(): Disable Undefined Behavior sanitizer (UBsan)
+// on a function.
+//
+// Clang and GCC 9.0+ use __attribute__((no_sanitize("undefined"))).
+// GCC 4.9+ uses __attribute__((no_sanitize_undefined)).
+// #if defined(__has_feature)
+// #  if __has_feature(undefined_behavior_sanitizer)
+// #    define _Py_NO_SANITIZE_UNDEFINED __attribute__((no_sanitize("undefined")))
+// #  endif
+// #endif
+// #if !defined(_Py_NO_SANITIZE_UNDEFINED) && defined(__GNUC__)
+//     && ((__GNUC__ >= 5) || (__GNUC__ == 4) && (__GNUC_MINOR__ >= 9))
+// #  define _Py_NO_SANITIZE_UNDEFINED __attribute__((no_sanitize_undefined))
+// #endif
+// #ifndef _Py_NO_SANITIZE_UNDEFINED
+// #  define _Py_NO_SANITIZE_UNDEFINED
 // #endif
 
 
@@ -2871,6 +3023,24 @@ public static final int Py_CAN_START_THREADS = 1;
 //      && !defined(__cplusplus) && defined(__STDC_VERSION__)
 //      && __STDC_VERSION__ >= 201112L && __STDC_VERSION__ <= 201710L
 // #  define static_assert _Static_assert
+// #endif
+
+
+// _Py_ALIGN_AS: this compiler's spelling of `alignas` keyword,
+// We currently use alignas for free-threaded builds only; additional compat
+// checking would be great before we add it to the default build.
+// Standards/compiler support:
+// - `alignas` is a keyword in C23 and C++11.
+// - `_Alignas` is a keyword in C11
+// - GCC & clang has __attribute__((aligned))
+//   (use that for older standards in pedantic mode)
+// - MSVC has __declspec(align)
+// - `_Alignas` is common C compiler extension
+// Older compilers may name it differently; to allow compilation on such
+// unsupported platforms, we don't redefine _Py_ALIGN_AS if it's already
+// defined. Note that defining it wrong (including defining it to nothing) will
+// cause ABI incompatibilities.
+// #ifdef Py_GIL_DISABLED
 // #endif
 
 /* Minimum value between x and y */
@@ -3039,6 +3209,14 @@ public static final int Py_CAN_START_THREADS = 1;
 // "comparison of unsigned expression in '< 0' is always false".
 // #define _Py_IS_TYPE_SIGNED(type) ((type)(-1) <= 0)
 
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030E0000 // 3.14
+// Version helpers. These are primarily macros, but have exported equivalents.
+@NoException public static native @Cast("uint32_t") int Py_PACK_VERSION(int x, int y);
+// #define Py_PACK_FULL_VERSION _Py_PACK_FULL_VERSION
+// #define Py_PACK_VERSION(X, Y) Py_PACK_FULL_VERSION(X, Y, 0, 0, 0)
+// #endif // Py_LIMITED_API < 3.14
+
+
 // #endif /* Py_PYMACRO_H */
 
 
@@ -3075,14 +3253,17 @@ public static final double Py_MATH_TAU = 6.2831853071795864769252867665590057683
 
 // Py_IS_NAN(X)
 // Return 1 if float or double arg is a NaN, else 0.
+// Soft deprecated since Python 3.14, use isnan() instead.
 // #define Py_IS_NAN(X) isnan(X)
 
 // Py_IS_INFINITY(X)
 // Return 1 if float or double arg is an infinity, else 0.
+// Soft deprecated since Python 3.14, use isinf() instead.
 // #define Py_IS_INFINITY(X) isinf(X)
 
 // Py_IS_FINITE(X)
 // Return 1 if float or double arg is neither infinite nor NAN, else 0.
+// Soft deprecated since Python 3.14, use isfinite() instead.
 // #define Py_IS_FINITE(X) isfinite(X)
 
 // Py_INFINITY: Value that evaluates to a positive double infinity.
@@ -3093,7 +3274,7 @@ public static final double Py_INFINITY = Py_INFINITY();
 
 /* Py_HUGE_VAL should always be the same as Py_INFINITY.  But historically
  * this was not reliable and Python did not require IEEE floats and C99
- * conformity.  Prefer Py_INFINITY for new code.
+ * conformity.  The macro was soft deprecated in Python 3.14, use Py_INFINITY instead.
  */
 // #ifndef Py_HUGE_VAL
 // #  define Py_HUGE_VAL HUGE_VAL
@@ -3510,6 +3691,8 @@ public static final int
 // #else
 // #  define _Py_INCREF_STAT_INC() ((void)0)
 // #  define _Py_DECREF_STAT_INC() ((void)0)
+// #  define _Py_INCREF_IMMORTAL_STAT_INC() ((void)0)
+// #  define _Py_DECREF_IMMORTAL_STAT_INC() ((void)0)
 // #endif  // !Py_STATS
 
 // #ifdef __cplusplus
@@ -3635,58 +3818,6 @@ whose size is determined when the object is allocated.
 /* PyObject_HEAD defines the initial segment of every PyObject. */
 // #define PyObject_HEAD                   PyObject ob_base;
 
-/*
-Immortalization:
-
-The following indicates the immortalization strategy depending on the amount
-of available bits in the reference count field. All strategies are backwards
-compatible but the specific reference count value or immortalization check
-might change depending on the specializations for the underlying system.
-
-Proper deallocation of immortal instances requires distinguishing between
-statically allocated immortal instances vs those promoted by the runtime to be
-immortal. The latter should be the only instances that require
-cleanup during runtime finalization.
-*/
-
-// #if SIZEOF_VOID_P > 4
-/*
-In 64+ bit systems, an object will be marked as immortal by setting all of the
-lower 32 bits of the reference count field, which is equal to: 0xFFFFFFFF
-
-Using the lower 32 bits makes the value backwards compatible by allowing
-C-Extensions without the updated checks in Py_INCREF and Py_DECREF to safely
-increase and decrease the objects reference count. The object would lose its
-immortality, but the execution would still be correct.
-
-Reference count increases will use saturated arithmetic, taking advantage of
-having all the lower 32 bits set, which will avoid the reference count to go
-beyond the refcount limit. Immortality checks for reference count decreases will
-be done by checking the bit sign flag in the lower 32 bits.
-*/
-public static native @MemberGetter long _Py_IMMORTAL_REFCNT();
-public static final long _Py_IMMORTAL_REFCNT = _Py_IMMORTAL_REFCNT();
-
-// #else
-/*
-In 32 bit systems, an object will be marked as immortal by setting all of the
-lower 30 bits of the reference count field, which is equal to: 0x3FFFFFFF
-
-Using the lower 30 bits makes the value backwards compatible by allowing
-C-Extensions without the updated checks in Py_INCREF and Py_DECREF to safely
-increase and decrease the objects reference count. The object would lose its
-immortality, but the execution would still be correct.
-
-Reference count increases and decreases will first go through an immortality
-check by comparing the reference count field to the immortality reference count.
-*/
-// #endif
-
-// Py_GIL_DISABLED builds indicate immortal objects using `ob_ref_local`, which is
-// always 32-bits.
-// #ifdef Py_GIL_DISABLED
-// #endif
-
 // Kept for backward compatibility. It was needed by Py_TRACE_REFS build.
 // #define _PyObject_EXTRA_INIT
 
@@ -3699,7 +3830,7 @@ check by comparing the reference count field to the immortality reference count.
 // #else
 // #define PyObject_HEAD_INIT(type)
 //     {
-//         { _Py_IMMORTAL_REFCNT },
+//         { _Py_STATIC_IMMORTAL_INITIAL_REFCNT },
 //         (type)
 //     },
 // #endif
@@ -3741,14 +3872,18 @@ public static final long Py_INVALID_SIZE = (long)-1;
 // #if defined(Py_GIL_DISABLED) && !defined(Py_LIMITED_API)
 // #endif
 
-@NoException public static native @Cast("Py_ssize_t") long Py_REFCNT(PyObject ob);
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #endif
-
-
-// bpo-39573: The Py_SET_TYPE() function must be used to set an object type.
+// Py_TYPE() implementation for the stable ABI
 @NoException public static native PyTypeObject Py_TYPE(PyObject ob);
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030e0000
+    // Stable ABI implements Py_TYPE() as a function call
+    // on limited C API version 3.14 and newer.
+// #else
+    @NoException public static native PyTypeObject _Py_TYPE(PyObject ob);
+//     #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
+//     #else
+//     #   define Py_TYPE(ob) _Py_TYPE(ob)
+//     #endif
 // #endif
 
 public static native @ByRef PyTypeObject PyLong_Type(); public static native void PyLong_Type(PyTypeObject setter);
@@ -3759,18 +3894,7 @@ public static native @ByRef PyTypeObject PyBool_Type(); public static native voi
 // #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
 // #endif
 
-@NoException public static native int _Py_IsImmortal(PyObject op);
-// #define _Py_IsImmortal(op) _Py_IsImmortal(_PyObject_CAST(op))
-
 @NoException public static native int Py_IS_TYPE(PyObject ob, PyTypeObject type);
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #endif
-
-
-// Py_SET_REFCNT() implementation for stable ABI
-@NoException public static native void _Py_SetRefcnt(PyObject ob, @Cast("Py_ssize_t") long refcnt);
-
-@NoException public static native void Py_SET_REFCNT(PyObject ob, @Cast("Py_ssize_t") long refcnt);
 // #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
 // #endif
 
@@ -3901,6 +4025,12 @@ public static native @ByRef PyTypeObject PyBool_Type(); public static native voi
 @NoException public static native PyObject PyType_FromMetaclass(PyTypeObject arg0, PyObject arg1, PyType_Spec arg2, PyObject arg3);
 @NoException public static native Pointer PyObject_GetTypeData(PyObject obj, PyTypeObject cls);
 @NoException public static native @Cast("Py_ssize_t") long PyType_GetTypeDataSize(PyTypeObject cls);
+// #endif
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030E0000
+@NoException public static native int PyType_GetBaseByToken(PyTypeObject arg0, Pointer arg1, @Cast("PyTypeObject**") PointerPointer arg2);
+@NoException public static native int PyType_GetBaseByToken(PyTypeObject arg0, Pointer arg1, @ByPtrPtr PyTypeObject arg2);
+public static native @MemberGetter int Py_TP_USE_SPEC();
+public static final int Py_TP_USE_SPEC = Py_TP_USE_SPEC();
 // #endif
 
 /* Generic type check */
@@ -4114,166 +4244,6 @@ public static final long Py_TPFLAGS_HAVE_FINALIZE = (1L << 0);
 public static final long Py_TPFLAGS_HAVE_VERSION_TAG =   (1L << 18);
 
 
-/*
-The macros Py_INCREF(op) and Py_DECREF(op) are used to increment or decrement
-reference counts.  Py_DECREF calls the object's deallocator function when
-the refcount falls to 0; for
-objects that don't contain references to other objects or heap memory
-this can be the standard function free().  Both macros can be used
-wherever a void expression is allowed.  The argument must not be a
-NULL pointer.  If it may be NULL, use Py_XINCREF/Py_XDECREF instead.
-The macro _Py_NewReference(op) initialize reference counts to 1, and
-in special builds (Py_REF_DEBUG, Py_TRACE_REFS) performs additional
-bookkeeping appropriate to the special build.
-
-We assume that the reference count field can never overflow; this can
-be proven when the size of the field is the same as the pointer size, so
-we ignore the possibility.  Provided a C int is at least 32 bits (which
-is implicitly assumed in many parts of this code), that's enough for
-about 2**31 references to an object.
-
-XXX The following became out of date in Python 2.2, but I'm not sure
-XXX what the full truth is now.  Certainly, heap-allocated type objects
-XXX can and should be deallocated.
-Type objects should never be deallocated; the type pointer in an object
-is not considered to be a reference to the type object, to save
-complications in the deallocation function.  (This is actually a
-decision that's up to the implementer of each new type so if you want,
-you can count such references to the type object.)
-*/
-
-// #if defined(Py_REF_DEBUG) && !defined(Py_LIMITED_API)
-// #endif  // Py_REF_DEBUG && !Py_LIMITED_API
-
-@NoException public static native void _Py_Dealloc(PyObject arg0);
-
-/*
-These are provided as conveniences to Python runtime embedders, so that
-they can have object code that is not dependent on Python compilation flags.
-*/
-@NoException public static native void Py_IncRef(PyObject arg0);
-@NoException public static native void Py_DecRef(PyObject arg0);
-
-// Similar to Py_IncRef() and Py_DecRef() but the argument must be non-NULL.
-// Private functions used by Py_INCREF() and Py_DECREF().
-@NoException public static native void _Py_IncRef(PyObject arg0);
-@NoException public static native void _Py_DecRef(PyObject arg0);
-
-@NoException public static native void Py_INCREF(PyObject op);
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #endif
-
-
-// #if !defined(Py_LIMITED_API) && defined(Py_GIL_DISABLED)
-// #endif
-
-// #if defined(Py_LIMITED_API) && (Py_LIMITED_API+0 >= 0x030c0000 || defined(Py_REF_DEBUG))
-
-// #elif defined(Py_GIL_DISABLED) && defined(Py_REF_DEBUG)
-
-// #elif defined(Py_GIL_DISABLED)
-
-// #elif defined(Py_REF_DEBUG)
-
-// #else
-@NoException public static native void Py_DECREF(PyObject op);
-// #define Py_DECREF(op) Py_DECREF(_PyObject_CAST(op))
-// #endif
-
-
-/* Safely decref `op` and set `op` to NULL, especially useful in tp_clear
- * and tp_dealloc implementations.
- *
- * Note that "the obvious" code can be deadly:
- *
- *     Py_XDECREF(op);
- *     op = NULL;
- *
- * Typically, `op` is something like self->containee, and `self` is done
- * using its `containee` member.  In the code sequence above, suppose
- * `containee` is non-NULL with a refcount of 1.  Its refcount falls to
- * 0 on the first line, which can trigger an arbitrary amount of code,
- * possibly including finalizers (like __del__ methods or weakref callbacks)
- * coded in Python, which in turn can release the GIL and allow other threads
- * to run, etc.  Such code may even invoke methods of `self` again, or cause
- * cyclic gc to trigger, but-- oops! --self->containee still points to the
- * object being torn down, and it may be in an insane state while being torn
- * down.  This has in fact been a rich historic source of miserable (rare &
- * hard-to-diagnose) segfaulting (and other) bugs.
- *
- * The safe way is:
- *
- *      Py_CLEAR(op);
- *
- * That arranges to set `op` to NULL _before_ decref'ing, so that any code
- * triggered as a side-effect of `op` getting torn down no longer believes
- * `op` points to a valid object.
- *
- * There are cases where it's safe to use the naive code, but they're brittle.
- * For example, if `op` points to a Python integer, you know that destroying
- * one of those can't cause problems -- but in part that relies on that
- * Python integers aren't currently weakly referencable.  Best practice is
- * to use Py_CLEAR() even if you can't think of a reason for why you need to.
- *
- * gh-98724: Use a temporary variable to only evaluate the macro argument once,
- * to avoid the duplication of side effects if the argument has side effects.
- *
- * gh-99701: If the PyObject* type is used with casting arguments to PyObject*,
- * the code can be miscompiled with strict aliasing because of type punning.
- * With strict aliasing, a compiler considers that two pointers of different
- * types cannot read or write the same memory which enables optimization
- * opportunities.
- *
- * If available, use _Py_TYPEOF() to use the 'op' type for temporary variables,
- * and so avoid type punning. Otherwise, use memcpy() which causes type erasure
- * and so prevents the compiler to reuse an old cached 'op' value after
- * Py_CLEAR().
- */
-// #ifdef _Py_TYPEOF
-// #else
-// #define Py_CLEAR(op)
-//     do {
-//         PyObject **_tmp_op_ptr = _Py_CAST(PyObject**, &(op));
-//         PyObject *_tmp_old_op = (*_tmp_op_ptr);
-//         if (_tmp_old_op != NULL) {
-//             PyObject *_null_ptr = _Py_NULL;
-//             memcpy(_tmp_op_ptr, &_null_ptr, sizeof(PyObject*));
-//             Py_DECREF(_tmp_old_op);
-//         }
-//     } while (0)
-// #endif
-
-
-/* Function to use in case the object pointer can be NULL: */
-@NoException public static native void Py_XINCREF(PyObject op);
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #endif
-
-@NoException public static native void Py_XDECREF(PyObject op);
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #endif
-
-// Create a new strong reference to an object:
-// increment the reference count of the object and return the object.
-@NoException public static native PyObject Py_NewRef(PyObject obj);
-
-// Similar to Py_NewRef(), but the object can be NULL.
-@NoException public static native PyObject Py_XNewRef(PyObject obj);
-
-@NoException public static native PyObject _Py_NewRef(PyObject obj);
-
-@NoException public static native PyObject _Py_XNewRef(PyObject obj);
-
-// Py_NewRef() and Py_XNewRef() are exported as functions for the stable ABI.
-// Names overridden with macros by static inline functions for best
-// performances.
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #else
-// #  define Py_NewRef(obj) _Py_NewRef(obj)
-// #  define Py_XNewRef(obj) _Py_XNewRef(obj)
-// #endif
-
-
 public static final int Py_CONSTANT_NONE = 0;
 public static final int Py_CONSTANT_FALSE = 1;
 public static final int Py_CONSTANT_TRUE = 2;
@@ -4445,6 +4415,10 @@ times.
 @NoException public static native PyObject PyType_GetModuleByDef(PyTypeObject arg0, PyModuleDef arg1);
 // #endif
 
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030e0000
+@NoException public static native int PyType_Freeze(PyTypeObject type);
+// #endif
+
 // #ifdef __cplusplus
 // #endif
 // #endif   // !Py_OBJECT_H
@@ -4459,6 +4433,7 @@ times.
 @NoException public static native void _Py_NewReference(PyObject op);
 @NoException public static native void _Py_NewReferenceNoTotal(PyObject op);
 @NoException public static native void _Py_ResurrectReference(PyObject op);
+@NoException public static native void _Py_ForgetReference(PyObject op);
 // Targeting ../_Py_Identifier.java
 
 
@@ -4494,6 +4469,8 @@ times.
 // Targeting ../PyTypeObject.java
 
 
+
+public static final int _Py_ATTR_CACHE_UNUSED = (30000);
 // Targeting ../_specialization_cache.java
 
 
@@ -4541,7 +4518,7 @@ times.
  * triggered as a side-effect of `dst` getting torn down no longer believes
  * `dst` points to a valid object.
  *
- * Temporary variables are used to only evalutate macro arguments once and so
+ * Temporary variables are used to only evaluate macro arguments once and so
  * avoid the duplication of side effects. _Py_TYPEOF() or memcpy() is used to
  * avoid a miscompilation caused by type punning. See Py_CLEAR() comment for
  * implementation details about type punning.
@@ -4633,83 +4610,14 @@ times.
     String function);
 
 
-/* Trashcan mechanism, thanks to Christian Tismer.
-
-When deallocating a container object, it's possible to trigger an unbounded
-chain of deallocations, as each Py_DECREF in turn drops the refcount on "the
-next" object in the chain to 0.  This can easily lead to stack overflows,
-especially in threads (which typically have less stack space to work with).
-
-A container object can avoid this by bracketing the body of its tp_dealloc
-function with a pair of macros:
-
-static void
-mytype_dealloc(mytype *p)
-{
-    ... declarations go here ...
-
-    PyObject_GC_UnTrack(p);        // must untrack first
-    Py_TRASHCAN_BEGIN(p, mytype_dealloc)
-    ... The body of the deallocator goes here, including all calls ...
-    ... to Py_DECREF on contained objects.                         ...
-    Py_TRASHCAN_END                // there should be no code after this
-}
-
-CAUTION:  Never return from the middle of the body!  If the body needs to
-"get out early", put a label immediately before the Py_TRASHCAN_END
-call, and goto it.  Else the call-depth counter (see below) will stay
-above 0 forever, and the trashcan will never get emptied.
-
-How it works:  The BEGIN macro increments a call-depth counter.  So long
-as this counter is small, the body of the deallocator is run directly without
-further ado.  But if the counter gets large, it instead adds p to a list of
-objects to be deallocated later, skips the body of the deallocator, and
-resumes execution after the END macro.  The tp_dealloc routine then returns
-without deallocating anything (and so unbounded call-stack depth is avoided).
-
-When the call stack finishes unwinding again, code generated by the END macro
-notices this, and calls another routine to deallocate all the objects that
-may have been added to the list of deferred deallocations.  In effect, a
-chain of N deallocations is broken into (N-1)/(Py_TRASHCAN_HEADROOM-1) pieces,
-with the call stack never exceeding a depth of Py_TRASHCAN_HEADROOM.
-
-Since the tp_dealloc of a subclass typically calls the tp_dealloc of the base
-class, we need to ensure that the trashcan is only triggered on the tp_dealloc
-of the actual class being deallocated. Otherwise we might end up with a
-partially-deallocated object. To check this, the tp_dealloc function must be
-passed as second argument to Py_TRASHCAN_BEGIN().
-*/
-
-/* Python 3.9 private API, invoked by the macros below. */
-
-
-
 @NoException public static native void _PyTrash_thread_deposit_object(PyThreadState tstate, PyObject op);
 @NoException public static native void _PyTrash_thread_destroy_chain(PyThreadState tstate);
 
+@NoException public static native int _Py_ReachedRecursionLimitWithMargin(PyThreadState tstate, int margin_count);
 
-/* Python 3.10 private API, invoked by the Py_TRASHCAN_BEGIN(). */
-
-/* To avoid raising recursion errors during dealloc trigger trashcan before we reach
- * recursion limit. To avoid trashing, we don't attempt to empty the trashcan until
- * we have headroom above the trigger limit */
-public static final int Py_TRASHCAN_HEADROOM = 50;
-
+/* For backwards compatibility with the old trashcan mechanism */
 // #define Py_TRASHCAN_BEGIN(op, dealloc)
-// do {
-//     PyThreadState *tstate = PyThreadState_Get();
-//     if (tstate->c_recursion_remaining <= Py_TRASHCAN_HEADROOM && Py_TYPE(op)->tp_dealloc == (destructor)dealloc) {
-//         _PyTrash_thread_deposit_object(tstate, (PyObject *)op);
-//         break;
-//     }
-//     tstate->c_recursion_remaining--;
-    /* The body of the deallocator is here. */
 // #define Py_TRASHCAN_END
-//     tstate->c_recursion_remaining++;
-//     if (tstate->delete_later && tstate->c_recursion_remaining > (Py_TRASHCAN_HEADROOM*2)) {
-//         _PyTrash_thread_destroy_chain(tstate);
-//     }
-// } while (0);
 
 
 @NoException public static native Pointer PyObject_GetItemData(PyObject obj);
@@ -4717,8 +4625,6 @@ public static final int Py_TRASHCAN_HEADROOM = 50;
 @NoException public static native int PyObject_VisitManagedDict(PyObject obj, visitproc visit, Pointer arg);
 @NoException public static native int _PyObject_SetManagedDict(PyObject obj, PyObject new_dict);
 @NoException public static native void PyObject_ClearManagedDict(PyObject obj);
-
-public static final int TYPE_MAX_WATCHERS = 8;
 // Targeting ../PyType_WatchCallback.java
 
 
@@ -4745,6 +4651,29 @@ public static final int
 @NoException public static native int PyRefTracer_SetTracer(PyRefTracer tracer, Pointer data);
 @NoException public static native PyRefTracer PyRefTracer_GetTracer(@Cast("void**") PointerPointer arg0);
 @NoException public static native PyRefTracer PyRefTracer_GetTracer(@Cast("void**") @ByPtrPtr Pointer arg0);
+
+/* Enable PEP-703 deferred reference counting on the object.
+ *
+ * Returns 1 if deferred reference counting was successfully enabled, and
+ * 0 if the runtime ignored it. This function cannot fail.
+ */
+@NoException public static native int PyUnstable_Object_EnableDeferredRefcount(PyObject arg0);
+
+/* Determine if the object exists as a unique temporary variable on the
+ * topmost frame of the interpreter.
+ */
+@NoException public static native int PyUnstable_Object_IsUniqueReferencedTemporary(PyObject arg0);
+
+/* Check whether the object is immortal. This cannot fail. */
+@NoException public static native int PyUnstable_IsImmortal(PyObject arg0);
+
+// Increments the reference count of the object, if it's not zero.
+// PyUnstable_EnableTryIncRef() should be called on the object
+// before calling this function in order to avoid spurious failures.
+@NoException public static native int PyUnstable_TryIncRef(PyObject arg0);
+@NoException public static native void PyUnstable_EnableTryIncRef(PyObject arg0);
+
+@NoException public static native int PyUnstable_Object_IsUniquelyReferenced(PyObject arg0);
 
 
 // Parsed from objimpl.h
@@ -5100,6 +5029,14 @@ public static final int Py_tp_finalize = 80;
 // #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030A0000
 /* New in 3.10 */
 public static final int Py_am_send = 81;
+// #endif
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030E0000
+/* New in 3.14 */
+public static final int Py_tp_vectorcall = 82;
+// #endif
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030E0000
+/* New in 3.14 */
+public static final int Py_tp_token = 83;
 // #endif
 
 
@@ -5473,9 +5410,10 @@ public static native @ByRef PyTypeObject PyBytesIter_Type(); public static nativ
 @NoException public static native @Cast("Py_ssize_t") long PyBytes_GET_SIZE(PyObject op);
 // #define PyBytes_GET_SIZE(self) PyBytes_GET_SIZE(_PyObject_CAST(self))
 
-/* _PyBytes_Join(sep, x) is like sep.join(x).  sep must be PyBytesObject*,
-   x must be an iterable object. */
-@NoException public static native PyObject _PyBytes_Join(PyObject sep, PyObject x);
+@NoException public static native PyObject PyBytes_Join(PyObject sep, PyObject iterable);
+
+// Deprecated alias kept for backward compatibility
+@NoException public static native @Deprecated PyObject _PyBytes_Join(PyObject sep, PyObject iterable);
 
 
 // Parsed from unicodeobject.h
@@ -5863,7 +5801,8 @@ public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
 /* Decode a Unicode object unicode and return the result as Python
    object.
 
-   This API is DEPRECATED. The only supported standard encoding is rot13.
+   This API is DEPRECATED and will be removed in 3.15.
+   The only supported standard encoding is rot13.
    Use PyCodec_Decode() to decode with rot13 and non-standard codecs
    that decode from str. */
 
@@ -5881,7 +5820,8 @@ public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
 /* Decode a Unicode object unicode and return the result as Unicode
    object.
 
-   This API is DEPRECATED. The only supported standard encoding is rot13.
+   This API is DEPRECATED and will be removed in 3.15.
+   The only supported standard encoding is rot13.
    Use PyCodec_Decode() to decode with rot13 and non-standard codecs
    that decode from str to str. */
 
@@ -5899,7 +5839,8 @@ public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
 /* Encodes a Unicode object and returns the result as Python
    object.
 
-   This API is DEPRECATED.  It is superseded by PyUnicode_AsEncodedString()
+   This API is DEPRECATED and will be removed in 3.15.
+   It is superseded by PyUnicode_AsEncodedString()
    since all standard encodings (except rot13) encode str to bytes.
    Use PyCodec_Encode() for encoding with rot13 and non-standard codecs
    that encode form str to non-bytes. */
@@ -5932,7 +5873,8 @@ public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
 /* Encodes a Unicode object and returns the result as Unicode
    object.
 
-   This API is DEPRECATED.  The only supported standard encodings is rot13.
+   This API is DEPRECATED and will be removed in 3.15.
+   The only supported standard encodings is rot13.
    Use PyCodec_Encode() to encode with rot13 and non-standard codecs
    that encode from str to str. */
 
@@ -6682,6 +6624,10 @@ public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
 @NoException public static native int PyUnicode_EqualToUTF8AndSize(PyObject arg0, String arg1, @Cast("Py_ssize_t") long arg2);
 // #endif
 
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030e0000
+@NoException public static native int PyUnicode_Equal(PyObject str1, PyObject str2);
+// #endif
+
 /* Rich compare two strings and return one of the following:
 
    - NULL in case an exception was raised
@@ -6801,23 +6747,22 @@ public static final int SSTATE_INTERNED_IMMORTAL_STATIC = 3;
 @NoException public static native @Cast("unsigned int") int PyUnicode_CHECK_INTERNED(PyObject op);
 // #define PyUnicode_CHECK_INTERNED(op) PyUnicode_CHECK_INTERNED(_PyObject_CAST(op))
 
-/* For backward compatibility */
+/* For backward compatibility. Soft-deprecated. */
 
 // #define PyUnicode_IS_READY(op) PyUnicode_IS_READY(_PyObject_CAST(op))
 
 /* Return true if the string contains only ASCII characters, or 0 if not. The
-   string may be compact (PyUnicode_IS_COMPACT_ASCII) or not, but must be
-   ready. */
+   string may be compact (PyUnicode_IS_COMPACT_ASCII) or not. */
 @NoException public static native @Cast("unsigned int") int PyUnicode_IS_ASCII(PyObject op);
 // #define PyUnicode_IS_ASCII(op) PyUnicode_IS_ASCII(_PyObject_CAST(op))
 
 /* Return true if the string is compact or 0 if not.
-   No type checks or Ready calls are performed. */
+   No type checks are performed. */
 @NoException public static native @Cast("unsigned int") int PyUnicode_IS_COMPACT(PyObject op);
 // #define PyUnicode_IS_COMPACT(op) PyUnicode_IS_COMPACT(_PyObject_CAST(op))
 
 /* Return true if the string is a compact ASCII string (use PyASCIIObject
-   structure), or 0 if not.  No type checks or Ready calls are performed. */
+   structure), or 0 if not.  No type checks are performed. */
 @NoException public static native int PyUnicode_IS_COMPACT_ASCII(PyObject op);
 // #define PyUnicode_IS_COMPACT_ASCII(op) PyUnicode_IS_COMPACT_ASCII(_PyObject_CAST(op))
 
@@ -6827,6 +6772,8 @@ public static final int
     PyUnicode_1BYTE_KIND = 1,
     PyUnicode_2BYTE_KIND = 2,
     PyUnicode_4BYTE_KIND = 4;
+
+@NoException public static native int PyUnicode_KIND(PyObject op);
 
 // PyUnicode_KIND(): Return one of the PyUnicode_*_KIND values defined above.
 //
@@ -6842,7 +6789,9 @@ public static final int
 @NoException public static native Pointer _PyUnicode_NONCOMPACT_DATA(PyObject op);
 
 @NoException public static native Pointer PyUnicode_DATA(PyObject op);
-// #define PyUnicode_DATA(op) PyUnicode_DATA(_PyObject_CAST(op))
+
+@NoException public static native Pointer _PyUnicode_DATA(PyObject op);
+// #define PyUnicode_DATA(op) _PyUnicode_DATA(_PyObject_CAST(op))
 
 /* Return pointers to the canonical representation cast to unsigned char,
    Py_UCS2, or Py_UCS4 for direct character access.
@@ -6869,7 +6818,7 @@ public static final int
 //                     (index), _Py_STATIC_CAST(Py_UCS4, value))
 
 /* Read a code point from the string's canonical representation.  No checks
-   or ready calls are performed. */
+   are performed. */
 @NoException public static native @Cast("Py_UCS4") int PyUnicode_READ(int kind,
                                      @Const Pointer data, @Cast("Py_ssize_t") long index);
 // #define PyUnicode_READ(kind, data, index)
@@ -6903,7 +6852,7 @@ public static final int
     @Cast("Py_UCS4") int maxchar
     );
 
-/* For backward compatibility */
+/* For backward compatibility. Soft-deprecated. */
 
 // #define PyUnicode_READY(op) PyUnicode_READY(_PyObject_CAST(op))
 
@@ -6954,6 +6903,79 @@ public static final int
     int kind,
     @Const Pointer buffer,
     @Cast("Py_ssize_t") long size);
+// Targeting ../PyUnicodeWriter.java
+
+
+
+@NoException public static native PyUnicodeWriter PyUnicodeWriter_Create(@Cast("Py_ssize_t") long length);
+@NoException public static native void PyUnicodeWriter_Discard(PyUnicodeWriter writer);
+@NoException public static native PyObject PyUnicodeWriter_Finish(PyUnicodeWriter writer);
+
+@NoException public static native int PyUnicodeWriter_WriteChar(
+    PyUnicodeWriter writer,
+    @Cast("Py_UCS4") int ch);
+@NoException public static native int PyUnicodeWriter_WriteUTF8(
+    PyUnicodeWriter writer,
+    @Cast("const char*") BytePointer str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteUTF8(
+    PyUnicodeWriter writer,
+    String str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteASCII(
+    PyUnicodeWriter writer,
+    @Cast("const char*") BytePointer str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteASCII(
+    PyUnicodeWriter writer,
+    String str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteWideChar(
+    PyUnicodeWriter writer,
+    @Cast("const wchar_t*") Pointer str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteUCS4(
+    PyUnicodeWriter writer,
+    @Cast("Py_UCS4*") IntPointer str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteUCS4(
+    PyUnicodeWriter writer,
+    @Cast("Py_UCS4*") IntBuffer str,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native int PyUnicodeWriter_WriteUCS4(
+    PyUnicodeWriter writer,
+    @Cast("Py_UCS4*") int[] str,
+    @Cast("Py_ssize_t") long size);
+
+@NoException public static native int PyUnicodeWriter_WriteStr(
+    PyUnicodeWriter writer,
+    PyObject obj);
+@NoException public static native int PyUnicodeWriter_WriteRepr(
+    PyUnicodeWriter writer,
+    PyObject obj);
+@NoException public static native int PyUnicodeWriter_WriteSubstring(
+    PyUnicodeWriter writer,
+    PyObject str,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+@NoException public static native int PyUnicodeWriter_Format(
+    PyUnicodeWriter writer,
+    @Cast("const char*") BytePointer format);
+@NoException public static native int PyUnicodeWriter_Format(
+    PyUnicodeWriter writer,
+    String format);
+@NoException public static native int PyUnicodeWriter_DecodeUTF8Stateful(
+    PyUnicodeWriter writer,
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    @Cast("Py_ssize_t*") SizeTPointer consumed);
+@NoException public static native int PyUnicodeWriter_DecodeUTF8Stateful(
+    PyUnicodeWriter writer,
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    @Cast("Py_ssize_t*") SizeTPointer consumed);
 // Targeting ../_PyUnicodeWriter.java
 
 
@@ -6963,7 +6985,8 @@ public static final int
 // By default, the minimum buffer size is 0 character and overallocation is
 // disabled. Set min_length, min_char and overallocate attributes to control
 // the allocation of the buffer.
-@NoException public static native void _PyUnicodeWriter_Init(_PyUnicodeWriter writer);
+@NoException public static native @Deprecated void _PyUnicodeWriter_Init(
+    _PyUnicodeWriter writer);
 
 /* Prepare the buffer to write 'length' characters
    with the specified maximum character.
@@ -6979,8 +7002,10 @@ public static final int
 
 /* Don't call this function directly, use the _PyUnicodeWriter_Prepare() macro
    instead. */
-@NoException public static native int _PyUnicodeWriter_PrepareInternal(_PyUnicodeWriter writer,
-                                 @Cast("Py_ssize_t") long length, @Cast("Py_UCS4") int maxchar);
+@NoException public static native @Deprecated int _PyUnicodeWriter_PrepareInternal(
+    _PyUnicodeWriter writer,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_UCS4") int maxchar);
 
 /* Prepare the buffer to have at least the kind KIND.
    For example, kind=PyUnicode_2BYTE_KIND ensures that the writer will
@@ -6994,58 +7019,61 @@ public static final int
 
 /* Don't call this function directly, use the _PyUnicodeWriter_PrepareKind()
    macro instead. */
-@NoException public static native int _PyUnicodeWriter_PrepareKindInternal(_PyUnicodeWriter writer,
-                                     int kind);
+@NoException public static native @Deprecated int _PyUnicodeWriter_PrepareKindInternal(
+    _PyUnicodeWriter writer,
+    int kind);
 
 /* Append a Unicode character.
    Return 0 on success, raise an exception and return -1 on error. */
-@NoException public static native int _PyUnicodeWriter_WriteChar(_PyUnicodeWriter writer,
-    @Cast("Py_UCS4") int ch
-    );
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteChar(
+    _PyUnicodeWriter writer,
+    @Cast("Py_UCS4") int ch);
 
 /* Append a Unicode string.
    Return 0 on success, raise an exception and return -1 on error. */
-@NoException public static native int _PyUnicodeWriter_WriteStr(_PyUnicodeWriter writer,
-    PyObject str
-    );
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteStr(
+    _PyUnicodeWriter writer,
+    PyObject str);               /* Unicode string */
 
 /* Append a substring of a Unicode string.
    Return 0 on success, raise an exception and return -1 on error. */
-@NoException public static native int _PyUnicodeWriter_WriteSubstring(_PyUnicodeWriter writer,
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteSubstring(
+    _PyUnicodeWriter writer,
     PyObject str,
     @Cast("Py_ssize_t") long start,
-    @Cast("Py_ssize_t") long end
-    );
+    @Cast("Py_ssize_t") long end);
 
 /* Append an ASCII-encoded byte string.
    Return 0 on success, raise an exception and return -1 on error. */
-@NoException public static native int _PyUnicodeWriter_WriteASCIIString(_PyUnicodeWriter writer,
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteASCIIString(
+    _PyUnicodeWriter writer,
     @Cast("const char*") BytePointer str,
-    @Cast("Py_ssize_t") long len
-    );
-@NoException public static native int _PyUnicodeWriter_WriteASCIIString(_PyUnicodeWriter writer,
+    @Cast("Py_ssize_t") long len);
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteASCIIString(
+    _PyUnicodeWriter writer,
     String str,
-    @Cast("Py_ssize_t") long len
-    );
+    @Cast("Py_ssize_t") long len);           /* number of bytes, or -1 if unknown */
 
 /* Append a latin1-encoded byte string.
    Return 0 on success, raise an exception and return -1 on error. */
-@NoException public static native int _PyUnicodeWriter_WriteLatin1String(_PyUnicodeWriter writer,
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteLatin1String(
+    _PyUnicodeWriter writer,
     @Cast("const char*") BytePointer str,
-    @Cast("Py_ssize_t") long len
-    );
-@NoException public static native int _PyUnicodeWriter_WriteLatin1String(_PyUnicodeWriter writer,
+    @Cast("Py_ssize_t") long len);
+@NoException public static native @Deprecated int _PyUnicodeWriter_WriteLatin1String(
+    _PyUnicodeWriter writer,
     String str,
-    @Cast("Py_ssize_t") long len
-    );
+    @Cast("Py_ssize_t") long len);           /* length in bytes */
 
 /* Get the value of the writer as a Unicode string. Clear the
    buffer of the writer. Raise an exception and return NULL
    on error. */
-@NoException public static native PyObject _PyUnicodeWriter_Finish(_PyUnicodeWriter writer);
+@NoException public static native @Deprecated PyObject _PyUnicodeWriter_Finish(
+    _PyUnicodeWriter writer);
 
 /* Deallocate memory of a writer (clear its internal buffer). */
-@NoException public static native void _PyUnicodeWriter_Dealloc(_PyUnicodeWriter writer);
+@NoException public static native @Deprecated void _PyUnicodeWriter_Dealloc(
+    _PyUnicodeWriter writer);
 
 
 /* --- Manage the default encoding ---------------------------------------- */
@@ -7065,8 +7093,8 @@ public static final int
 
 @NoException public static native @Cast("const char*") BytePointer PyUnicode_AsUTF8(PyObject unicode);
 
-// Alias kept for backward compatibility
-// #define _PyUnicode_AsString PyUnicode_AsUTF8
+// Deprecated alias kept for backward compatibility
+@NoException public static native @Deprecated @Cast("const char*") BytePointer _PyUnicode_AsString(PyObject unicode);
 
 
 /* === Characters Type APIs =============================================== */
@@ -7217,6 +7245,78 @@ public static final int
 @NoException public static native int PyLong_AsInt(PyObject arg0);
 // #endif
 
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030e0000
+@NoException public static native PyObject PyLong_FromInt32(int value);
+@NoException public static native PyObject PyLong_FromUInt32(@Cast("uint32_t") int value);
+@NoException public static native PyObject PyLong_FromInt64(@Cast("int64_t") long value);
+@NoException public static native PyObject PyLong_FromUInt64(@Cast("uint64_t") long value);
+
+@NoException public static native int PyLong_AsInt32(PyObject obj, IntPointer value);
+@NoException public static native int PyLong_AsInt32(PyObject obj, IntBuffer value);
+@NoException public static native int PyLong_AsInt32(PyObject obj, int[] value);
+@NoException public static native int PyLong_AsUInt32(PyObject obj, @Cast("uint32_t*") IntPointer value);
+@NoException public static native int PyLong_AsUInt32(PyObject obj, @Cast("uint32_t*") IntBuffer value);
+@NoException public static native int PyLong_AsUInt32(PyObject obj, @Cast("uint32_t*") int[] value);
+@NoException public static native int PyLong_AsInt64(PyObject obj, @Cast("int64_t*") LongPointer value);
+@NoException public static native int PyLong_AsInt64(PyObject obj, @Cast("int64_t*") LongBuffer value);
+@NoException public static native int PyLong_AsInt64(PyObject obj, @Cast("int64_t*") long[] value);
+@NoException public static native int PyLong_AsUInt64(PyObject obj, @Cast("uint64_t*") LongPointer value);
+@NoException public static native int PyLong_AsUInt64(PyObject obj, @Cast("uint64_t*") LongBuffer value);
+@NoException public static native int PyLong_AsUInt64(PyObject obj, @Cast("uint64_t*") long[] value);
+
+public static final int Py_ASNATIVEBYTES_DEFAULTS = -1;
+public static final int Py_ASNATIVEBYTES_BIG_ENDIAN = 0;
+public static final int Py_ASNATIVEBYTES_LITTLE_ENDIAN = 1;
+public static final int Py_ASNATIVEBYTES_NATIVE_ENDIAN = 3;
+public static final int Py_ASNATIVEBYTES_UNSIGNED_BUFFER = 4;
+public static final int Py_ASNATIVEBYTES_REJECT_NEGATIVE = 8;
+public static final int Py_ASNATIVEBYTES_ALLOW_INDEX = 16;
+
+/* PyLong_AsNativeBytes: Copy the integer value to a native variable.
+   buffer points to the first byte of the variable.
+   n_bytes is the number of bytes available in the buffer. Pass 0 to request
+   the required size for the value.
+   flags is a bitfield of the following flags:
+   * 1 - little endian
+   * 2 - native endian
+   * 4 - unsigned destination (e.g. don't reject copying 255 into one byte)
+   * 8 - raise an exception for negative inputs
+   * 16 - call __index__ on non-int types
+   If flags is -1 (all bits set), native endian is used, value truncation
+   behaves most like C (allows negative inputs and allow MSB set), and non-int
+   objects will raise a TypeError.
+   Big endian mode will write the most significant byte into the address
+   directly referenced by buffer; little endian will write the least significant
+   byte into that address.
+
+   If an exception is raised, returns a negative value.
+   Otherwise, returns the number of bytes that are required to store the value.
+   To check that the full value is represented, ensure that the return value is
+   equal or less than n_bytes.
+   All n_bytes are guaranteed to be written (unless an exception occurs), and
+   so ignoring a positive return value is the equivalent of a downcast in C.
+   In cases where the full value could not be represented, the returned value
+   may be larger than necessary - this function is not an accurate way to
+   calculate the bit length of an integer object.
+   */
+@NoException public static native @Cast("Py_ssize_t") long PyLong_AsNativeBytes(PyObject v, Pointer buffer,
+    @Cast("Py_ssize_t") long n_bytes, int flags);
+
+/* PyLong_FromNativeBytes: Create an int value from a native integer
+   n_bytes is the number of bytes to read from the buffer. Passing 0 will
+   always produce the zero int.
+   PyLong_FromUnsignedNativeBytes always produces a non-negative int.
+   flags is the same as for PyLong_AsNativeBytes, but only supports selecting
+   the endianness or forcing an unsigned buffer.
+
+   Returns the int object, or NULL with an exception set. */
+@NoException public static native PyObject PyLong_FromNativeBytes(@Const Pointer buffer, @Cast("size_t") long n_bytes,
+    int flags);
+@NoException public static native PyObject PyLong_FromUnsignedNativeBytes(@Const Pointer buffer,
+    @Cast("size_t") long n_bytes, int flags);
+
+// #endif
+
 @NoException public static native PyObject PyLong_GetInfo();
 
 /* It may be useful in the future. I've added it in the PyInt -> PyLong
@@ -7362,20 +7462,20 @@ public static final long PyLong_MASK = PyLong_MASK();
 
 
 
-@NoException public static native PyLongObject _PyLong_New(@Cast("Py_ssize_t") long arg0);
+@NoException public static native @Deprecated PyLongObject _PyLong_New(@Cast("Py_ssize_t") long arg0);
 
 // Return a copy of src.
 @NoException public static native PyObject _PyLong_Copy(PyLongObject src);
 
-@NoException public static native PyLongObject _PyLong_FromDigits(
+@NoException public static native @Deprecated PyLongObject _PyLong_FromDigits(
     int negative,
     @Cast("Py_ssize_t") long digit_count,
     @Cast("digit*") IntPointer digits);
-@NoException public static native PyLongObject _PyLong_FromDigits(
+@NoException public static native @Deprecated PyLongObject _PyLong_FromDigits(
     int negative,
     @Cast("Py_ssize_t") long digit_count,
     @Cast("digit*") IntBuffer digits);
-@NoException public static native PyLongObject _PyLong_FromDigits(
+@NoException public static native @Deprecated PyLongObject _PyLong_FromDigits(
     int negative,
     @Cast("Py_ssize_t") long digit_count,
     @Cast("digit*") int[] digits);
@@ -7395,7 +7495,34 @@ public static final int _PyLong_NON_SIZE_BITS = 3;
 @NoException public static native @Cast("Py_ssize_t") long _PyLong_CompactValue(@Const PyLongObject op);
 
 // #define PyUnstable_Long_CompactValue _PyLong_CompactValue
+// Targeting ../PyLongLayout.java
 
+
+
+@NoException public static native @Const PyLongLayout PyLong_GetNativeLayout();
+// Targeting ../PyLongExport.java
+
+
+
+@NoException public static native int PyLong_Export(
+    PyObject obj,
+    PyLongExport export_long);
+@NoException public static native void PyLong_FreeExport(
+    PyLongExport export_long);
+// Targeting ../PyLongWriter.java
+
+
+
+@NoException public static native PyLongWriter PyLongWriter_Create(
+    int negative,
+    @Cast("Py_ssize_t") long ndigits,
+    @Cast("void**") PointerPointer digits);
+@NoException public static native PyLongWriter PyLongWriter_Create(
+    int negative,
+    @Cast("Py_ssize_t") long ndigits,
+    @Cast("void**") @ByPtrPtr Pointer digits);
+@NoException public static native PyObject PyLongWriter_Finish(PyLongWriter writer);
+@NoException public static native void PyLongWriter_Discard(PyLongWriter writer);
 
 // #ifdef __cplusplus
 // #endif
@@ -7483,10 +7610,10 @@ public static native @ByRef PyTypeObject PyFloat_Type(); public static native vo
 // #define Py_RETURN_INF(sign)
 //     do {
 //         if (copysign(1., sign) == 1.) {
-//             return PyFloat_FromDouble(Py_HUGE_VAL);
+//             return PyFloat_FromDouble(Py_INFINITY);
 //         }
 //         else {
-//             return PyFloat_FromDouble(-Py_HUGE_VAL);
+//             return PyFloat_FromDouble(-Py_INFINITY);
 //         }
 //     } while(0)
 
@@ -7910,8 +8037,9 @@ public static native @ByRef PyTypeObject PyDictRevIterValue_Type(); public stati
 
 @NoException public static native PyObject _PyDict_GetItem_KnownHash(PyObject mp, PyObject key,
                                                  @Cast("Py_hash_t") long hash);
-@NoException public static native PyObject _PyDict_GetItemStringWithError(PyObject arg0, @Cast("const char*") BytePointer arg1);
-@NoException public static native PyObject _PyDict_GetItemStringWithError(PyObject arg0, String arg1);
+// PyDict_GetItemStringRef() can be used instead
+@NoException public static native @Deprecated PyObject _PyDict_GetItemStringWithError(PyObject arg0, @Cast("const char*") BytePointer arg1);
+@NoException public static native @Deprecated PyObject _PyDict_GetItemStringWithError(PyObject arg0, String arg1);
 @NoException public static native PyObject PyDict_SetDefault(
     PyObject mp, PyObject key, PyObject defaultobj);
 
@@ -7940,7 +8068,12 @@ public static native @ByRef PyTypeObject PyDictRevIterValue_Type(); public stati
 @NoException public static native int PyDict_PopString(PyObject dict, @Cast("const char*") BytePointer key, @Cast("PyObject**") PointerPointer result);
 @NoException public static native int PyDict_PopString(PyObject dict, @Cast("const char*") BytePointer key, @ByPtrPtr PyObject result);
 @NoException public static native int PyDict_PopString(PyObject dict, String key, @ByPtrPtr PyObject result);
-@NoException public static native PyObject _PyDict_Pop(PyObject dict, PyObject key, PyObject default_value);
+
+// Use PyDict_Pop() instead
+@NoException public static native @Deprecated PyObject _PyDict_Pop(
+    PyObject dict,
+    PyObject key,
+    PyObject default_value);
 
 /* Dictionary watchers */
 
@@ -7990,7 +8123,7 @@ public static final int
  * New definitions are in descrobject.h.
  *
  * However, there's nothing wrong with old code continuing to use it,
- * and there's not much mainenance overhead in maintaining a few aliases.
+ * and there's not much maintenance overhead in maintaining a few aliases.
  * So, don't be too eager to convert old code.
  *
  * It uses names not prefixed with Py_.
@@ -8182,7 +8315,7 @@ public static native @ByRef PyTypeObject PyCFunction_Type(); public static nativ
 // Note that the underscore-prefixed names were documented in public docs;
 // people may be using them.
 
-// Cast an function to the PyCFunction type to use it with PyMethodDef.
+// Cast a function to the PyCFunction type to use it with PyMethodDef.
 //
 // This macro can be used to prevent compiler warnings if the first parameter
 // uses a different pointer type than PyObject* (ex: METH_VARARGS and METH_O
@@ -8199,7 +8332,16 @@ public static native @ByRef PyTypeObject PyCFunction_Type(); public static nativ
 // it triggers an undefined behavior when Python calls it with 2 parameters
 // (bpo-33012).
 // #define _PyCFunction_CAST(func)
-//     _Py_CAST(PyCFunction, _Py_CAST(void(*)(void), (func)))
+//     _Py_FUNC_CAST(PyCFunction, func)
+// The macros below are given for semantic convenience, allowing users
+// to see whether a cast to suppress an undefined behavior is necessary.
+// Note: At runtime, the original function signature must be respected.
+// #define _PyCFunctionFast_CAST(func)
+//     _Py_FUNC_CAST(PyCFunctionFast, func)
+// #define _PyCFunctionWithKeywords_CAST(func)
+//     _Py_FUNC_CAST(PyCFunctionWithKeywords, func)
+// #define _PyCFunctionFastWithKeywords_CAST(func)
+//     _Py_FUNC_CAST(PyCFunctionFastWithKeywords, func)
 
 @NoException public static native PyCFunction PyCFunction_GetFunction(PyObject arg0);
 @NoException public static native PyObject PyCFunction_GetSelf(PyObject arg0);
@@ -8989,28 +9131,6 @@ public static native @ByRef PyTypeObject PyCallIter_Type(); public static native
 // #ifndef Py_GENOBJECT_H
 // #define Py_GENOBJECT_H
 // #ifdef __cplusplus
-// #endif
-
-/* --- Generators --------------------------------------------------------- */
-
-/* _PyGenObject_HEAD defines the initial segment of generator
-   and coroutine objects. */
-// #define _PyGenObject_HEAD(prefix)
-//     PyObject_HEAD
-//     /* List of weak reference. */
-//     PyObject *prefix##_weakreflist;
-//     /* Name of the generator. */
-//     PyObject *prefix##_name;
-//     /* Qualified name of the generator. */
-//     PyObject *prefix##_qualname;
-//     _PyErr_StackItem prefix##_exc_state;
-//     PyObject *prefix##_origin_or_finalizer;
-//     char prefix##_hooks_inited;
-//     char prefix##_closed;
-//     char prefix##_running_async;
-//     /* The frame */
-//     int8_t prefix##_frame_state;
-//     PyObject *prefix##_iframe[1];
 // Targeting ../PyGenObject.java
 
 
@@ -9046,7 +9166,6 @@ public static native @ByRef PyTypeObject _PyAsyncGenASend_Type(); public static 
 // #define PyAsyncGen_CheckExact(op) Py_IS_TYPE((op), &PyAsyncGen_Type)
 
 // #define PyAsyncGenASend_CheckExact(op) Py_IS_TYPE((op), &_PyAsyncGenASend_Type)
-
 
 // #undef _PyGenObject_HEAD
 
@@ -9967,7 +10086,26 @@ public static final int
 
 
 @NoException public static native @Cast("unsigned long") long PyThread_start_new_thread(Arg0_Pointer arg0, Pointer arg1);
-@NoException public static native void PyThread_exit_thread();
+/* Terminates the current thread. Considered unsafe.
+ *
+ * WARNING: This function is only safe to call if all functions in the full call
+ * stack are written to safely allow it.  Additionally, the behavior is
+ * platform-dependent.  This function should be avoided, and is no longer called
+ * by Python itself.  It is retained only for compatibility with existing C
+ * extension code.
+ *
+ * With pthreads, calls `pthread_exit` causes some libcs (glibc?) to attempt to
+ * unwind the stack and call C++ destructors; if a `noexcept` function is
+ * reached, they may terminate the process. Others (macOS) do unwinding.
+ *
+ * On Windows, calls `_endthreadex` which kills the thread without calling C++
+ * destructors.
+ *
+ * In either case there is a risk of invalid references remaining to data on the
+ * thread stack.
+ */
+@NoException public static native @Deprecated void PyThread_exit_thread();
+
 @NoException public static native @Cast("unsigned long") long PyThread_get_thread_ident();
 
 // #if (defined(__APPLE__) || defined(__linux__) || defined(_WIN32)
@@ -10226,6 +10364,33 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
 @NoException public static native int PyContext_Enter(PyObject arg0);
 @NoException public static native int PyContext_Exit(PyObject arg0);
 
+/** enum PyContextEvent */
+public static final int
+    /*
+     * The current context has switched to a different context.  The object
+     * passed to the watch callback is the now-current contextvars.Context
+     * object, or None if no context is current.
+     */
+    Py_CONTEXT_SWITCHED = 1;
+// Targeting ../PyContext_WatchCallback.java
+
+
+
+/*
+ * Register a per-interpreter callback that will be invoked for context object
+ * enter/exit events.
+ *
+ * Returns a handle that may be passed to PyContext_ClearWatcher on success,
+ * or -1 and sets and error if no more handles are available.
+ */
+@NoException public static native int PyContext_AddWatcher(PyContext_WatchCallback callback);
+
+/*
+ * Clear the watcher associated with the watcher_id handle.
+ *
+ * Returns 0 on success or -1 if no watcher exists for the provided id.
+ */
+@NoException public static native int PyContext_ClearWatcher(int watcher_id);
 
 /* Create a new context variable.
 
@@ -10367,6 +10532,21 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
     @Cast("Py_ssize_t") long length, @Cast("wchar_t**") @ByPtrPtr Pointer items);
 
 
+/* --- PyConfig_Get() ----------------------------------------- */
+
+@NoException public static native PyObject PyConfig_Get(@Cast("const char*") BytePointer name);
+@NoException public static native PyObject PyConfig_Get(String name);
+@NoException public static native int PyConfig_GetInt(@Cast("const char*") BytePointer name, IntPointer value);
+@NoException public static native int PyConfig_GetInt(String name, IntBuffer value);
+@NoException public static native int PyConfig_GetInt(@Cast("const char*") BytePointer name, int[] value);
+@NoException public static native int PyConfig_GetInt(String name, IntPointer value);
+@NoException public static native int PyConfig_GetInt(@Cast("const char*") BytePointer name, IntBuffer value);
+@NoException public static native int PyConfig_GetInt(String name, int[] value);
+@NoException public static native PyObject PyConfig_Names();
+@NoException public static native int PyConfig_Set(@Cast("const char*") BytePointer name, PyObject value);
+@NoException public static native int PyConfig_Set(String name, PyObject value);
+
+
 /* --- Helper functions --------------------------------------- */
 
 /* Get the original command line arguments, before Python modified them.
@@ -10375,6 +10555,136 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
 @NoException public static native void Py_GetArgcArgv(IntPointer argc, @Cast("wchar_t***") @ByPtrPtr PointerPointer argv);
 @NoException public static native void Py_GetArgcArgv(IntBuffer argc, @Cast("wchar_t***") @ByPtrPtr PointerPointer argv);
 @NoException public static native void Py_GetArgcArgv(int[] argc, @Cast("wchar_t***") @ByPtrPtr PointerPointer argv);
+// Targeting ../PyInitConfig.java
+
+
+
+@NoException public static native PyInitConfig PyInitConfig_Create();
+@NoException public static native void PyInitConfig_Free(PyInitConfig config);
+
+@NoException public static native int PyInitConfig_GetError(PyInitConfig config,
+    @Cast("const char**") PointerPointer err_msg);
+@NoException public static native int PyInitConfig_GetError(PyInitConfig config,
+    @Cast("const char**") @ByPtrPtr BytePointer err_msg);
+@NoException public static native int PyInitConfig_GetError(PyInitConfig config,
+    @Cast("const char**") @ByPtrPtr ByteBuffer err_msg);
+@NoException public static native int PyInitConfig_GetError(PyInitConfig config,
+    @Cast("const char**") @ByPtrPtr byte[] err_msg);
+@NoException public static native int PyInitConfig_GetExitCode(PyInitConfig config,
+    IntPointer exitcode);
+@NoException public static native int PyInitConfig_GetExitCode(PyInitConfig config,
+    IntBuffer exitcode);
+@NoException public static native int PyInitConfig_GetExitCode(PyInitConfig config,
+    int[] exitcode);
+
+@NoException public static native int PyInitConfig_HasOption(PyInitConfig config,
+    @Cast("const char*") BytePointer name);
+@NoException public static native int PyInitConfig_HasOption(PyInitConfig config,
+    String name);
+@NoException public static native int PyInitConfig_GetInt(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("int64_t*") LongPointer value);
+@NoException public static native int PyInitConfig_GetInt(PyInitConfig config,
+    String name,
+    @Cast("int64_t*") LongBuffer value);
+@NoException public static native int PyInitConfig_GetInt(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("int64_t*") long[] value);
+@NoException public static native int PyInitConfig_GetInt(PyInitConfig config,
+    String name,
+    @Cast("int64_t*") LongPointer value);
+@NoException public static native int PyInitConfig_GetInt(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("int64_t*") LongBuffer value);
+@NoException public static native int PyInitConfig_GetInt(PyInitConfig config,
+    String name,
+    @Cast("int64_t*") long[] value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("char**") PointerPointer value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("char**") @ByPtrPtr BytePointer value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    String name,
+    @Cast("char**") @ByPtrPtr ByteBuffer value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("char**") @ByPtrPtr byte[] value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    String name,
+    @Cast("char**") @ByPtrPtr BytePointer value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("char**") @ByPtrPtr ByteBuffer value);
+@NoException public static native int PyInitConfig_GetStr(PyInitConfig config,
+    String name,
+    @Cast("char**") @ByPtrPtr byte[] value);
+@NoException public static native int PyInitConfig_GetStrList(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("size_t*") SizeTPointer length,
+    @Cast("char***") @ByPtrPtr PointerPointer items);
+@NoException public static native int PyInitConfig_GetStrList(PyInitConfig config,
+    String name,
+    @Cast("size_t*") SizeTPointer length,
+    @Cast("char***") @ByPtrPtr PointerPointer items);
+@NoException public static native void PyInitConfig_FreeStrList(@Cast("size_t") long length, @Cast("char**") PointerPointer items);
+@NoException public static native void PyInitConfig_FreeStrList(@Cast("size_t") long length, @Cast("char**") @ByPtrPtr BytePointer items);
+@NoException public static native void PyInitConfig_FreeStrList(@Cast("size_t") long length, @Cast("char**") @ByPtrPtr ByteBuffer items);
+@NoException public static native void PyInitConfig_FreeStrList(@Cast("size_t") long length, @Cast("char**") @ByPtrPtr byte[] items);
+
+@NoException public static native int PyInitConfig_SetInt(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("int64_t") long value);
+@NoException public static native int PyInitConfig_SetInt(PyInitConfig config,
+    String name,
+    @Cast("int64_t") long value);
+@NoException public static native int PyInitConfig_SetStr(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("const char*") BytePointer value);
+@NoException public static native int PyInitConfig_SetStr(PyInitConfig config,
+    String name,
+    String value);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") PointerPointer items);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") @ByPtrPtr BytePointer items);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    String name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") @ByPtrPtr ByteBuffer items);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") @ByPtrPtr byte[] items);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    String name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") @ByPtrPtr BytePointer items);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") @ByPtrPtr ByteBuffer items);
+@NoException public static native int PyInitConfig_SetStrList(PyInitConfig config,
+    String name,
+    @Cast("size_t") long length,
+    @Cast("char*const*") @ByPtrPtr byte[] items);
+// Targeting ../PyObject_Initfunc.java
+
+
+@NoException public static native int PyInitConfig_AddModule(PyInitConfig config,
+    @Cast("const char*") BytePointer name,
+    PyObject_Initfunc initfunc);
+@NoException public static native int PyInitConfig_AddModule(PyInitConfig config,
+    String name,
+    PyObject_Initfunc initfunc);
+
+@NoException public static native int Py_InitializeFromInitConfig(PyInitConfig config);
+
 
 // #ifdef __cplusplus
 // #endif
@@ -10393,8 +10703,6 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
 
 @NoException public static native int _PyInterpreterState_RequiresIDRef(PyInterpreterState arg0);
 @NoException public static native void _PyInterpreterState_RequireIDRef(PyInterpreterState arg0, int arg1);
-
-@NoException public static native PyObject PyUnstable_InterpreterState_GetMainModule(PyInterpreterState arg0);
 // Targeting ../Py_tracefunc.java
 
 
@@ -10412,30 +10720,23 @@ public static final int PyTrace_C_CALL = 4;
 public static final int PyTrace_C_EXCEPTION = 5;
 public static final int PyTrace_C_RETURN = 6;
 public static final int PyTrace_OPCODE = 7;
+
+/* Remote debugger support */
+public static final int _Py_MAX_SCRIPT_PATH_SIZE = 512;
+// Targeting ../_PyRemoteDebuggerSupport.java
+
+
 // Targeting ../_PyErr_StackItem.java
 
 
 // Targeting ../_PyStackChunk.java
 
 
+
+/* Minimum size of data stack chunk */
+public static final int _PY_DATA_STACK_CHUNK_SIZE = (16*1024);
 // Targeting ../PyThreadState.java
 
-
-
-// #ifdef Py_DEBUG
-// #elif defined(__s390x__)
-public static final int Py_C_RECURSION_LIMIT = 800;
-// #elif defined(_WIN32) && defined(_M_ARM64)
-// #elif defined(_WIN32)
-// #elif defined(__ANDROID__)
-   // On an ARM64 emulator, API level 34 was OK with 10000, but API level 21
-   // crashed in test_compiler_recursion_limit.
-// #elif defined(_Py_ADDRESS_SANITIZER)
-// #elif defined(__wasi__)
-   // Based on wasmtime 16.
-// #else
-   // This value is duplicated in Lib/test/support/__init__.py
-// #endif
 
 
 /* other API */
@@ -10444,9 +10745,8 @@ public static final int Py_C_RECURSION_LIMIT = 800;
  * if it is NULL. */
 @NoException public static native PyThreadState PyThreadState_GetUnchecked();
 
-// Alias kept for backward compatibility
-// #define _PyThreadState_UncheckedGet PyThreadState_GetUnchecked
-
+// Deprecated alias kept for backward compatibility
+@NoException public static native @Deprecated PyThreadState _PyThreadState_UncheckedGet();
 
 // Disable tracing and profiling.
 @NoException public static native void PyThreadState_EnterTracing(PyThreadState tstate);
@@ -10747,7 +11047,7 @@ public static final String PYTHON_ABI_STRING = "3";
      level exceeds "current recursion limit + 50". By construction, this
      protection can only be triggered when the "overflowed" flag is set. It
      means the cleanup code has itself gone into an infinite loop, or the
-     RecursionError has been mistakingly ignored. When this protection is
+     RecursionError has been mistakenly ignored. When this protection is
      triggered, the interpreter aborts with a Fatal Error.
 
    In addition, the "overflowed" flag is automatically reset when the
@@ -10874,6 +11174,24 @@ public static final int FVS_HAVE_SPEC = 0x4;
 
 @NoException public static native int _PyEval_SliceIndex(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
 @NoException public static native int _PyEval_SliceIndexNotNone(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+// Targeting ../PerfMapState.java
+
+
+
+@NoException public static native int PyUnstable_PerfMapState_Init();
+@NoException public static native int PyUnstable_WritePerfMapEntry(
+    @Const Pointer code_addr,
+    @Cast("unsigned int") int code_size,
+    @Cast("const char*") BytePointer entry_name);
+@NoException public static native int PyUnstable_WritePerfMapEntry(
+    @Const Pointer code_addr,
+    @Cast("unsigned int") int code_size,
+    String entry_name);
+@NoException public static native void PyUnstable_PerfMapState_Fini();
+@NoException public static native int PyUnstable_CopyPerfMapFile(@Cast("const char*") BytePointer parent_filename);
+@NoException public static native int PyUnstable_CopyPerfMapFile(String parent_filename);
+@NoException public static native int PyUnstable_PerfTrampoline_CompileCode(PyCodeObject arg0);
+@NoException public static native int PyUnstable_PerfTrampoline_SetPersistAfterFork(int enable);
 
 
 // Parsed from sysmodule.h
@@ -10906,60 +11224,9 @@ public static final int FVS_HAVE_SPEC = 0x4;
 
 @NoException public static native PyObject PySys_GetXOptions();
 
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030d0000
-@NoException public static native int PySys_Audit(
-    @Cast("const char*") BytePointer event,
-    @Cast("const char*") BytePointer argFormat);
-@NoException public static native int PySys_Audit(
-    String event,
-    String argFormat);
-
-@NoException public static native int PySys_AuditTuple(
-    @Cast("const char*") BytePointer event,
-    PyObject args);
-@NoException public static native int PySys_AuditTuple(
-    String event,
-    PyObject args);
-// #endif
-
-// #ifndef Py_LIMITED_API
-// #  define Py_CPYTHON_SYSMODULE_H
-// #  include "cpython/sysmodule.h"
-// #  undef Py_CPYTHON_SYSMODULE_H
-// #endif
-
 // #ifdef __cplusplus
 // #endif
 // #endif /* !Py_SYSMODULE_H */
-
-
-// Parsed from cpython/sysmodule.h
-
-// #ifndef Py_CPYTHON_SYSMODULE_H
-// #  error "this header file must not be included directly"
-// Targeting ../Py_AuditHookFunction.java
-
-
-
-@NoException public static native int PySys_AddAuditHook(Py_AuditHookFunction arg0, Pointer arg1);
-// Targeting ../PerfMapState.java
-
-
-
-@NoException public static native int PyUnstable_PerfMapState_Init();
-@NoException public static native int PyUnstable_WritePerfMapEntry(
-    @Const Pointer code_addr,
-    @Cast("unsigned int") int code_size,
-    @Cast("const char*") BytePointer entry_name);
-@NoException public static native int PyUnstable_WritePerfMapEntry(
-    @Const Pointer code_addr,
-    @Cast("unsigned int") int code_size,
-    String entry_name);
-@NoException public static native void PyUnstable_PerfMapState_Fini();
-@NoException public static native int PyUnstable_CopyPerfMapFile(@Cast("const char*") BytePointer parent_filename);
-@NoException public static native int PyUnstable_CopyPerfMapFile(String parent_filename);
-@NoException public static native int PyUnstable_PerfTrampoline_CompileCode(PyCodeObject arg0);
-@NoException public static native int PyUnstable_PerfTrampoline_SetPersistAfterFork(int enable);
 
 
 // Parsed from osmodule.h
@@ -11126,8 +11393,6 @@ public static final int FVS_HAVE_SPEC = 0x4;
 @NoException public static native int PyImport_ImportFrozenModule(
     String name
     );
-// Targeting ../PyObject_Initfunc.java
-
 
 @NoException public static native int PyImport_AppendInittab(
     @Cast("const char*") BytePointer name,
@@ -11153,9 +11418,6 @@ public static final int FVS_HAVE_SPEC = 0x4;
 
 // #ifndef Py_CPYTHON_IMPORT_H
 // #  error "this header file must not be included directly"
-// #endif
-
-
 // Targeting ../_inittab.java
 
 
@@ -11170,6 +11432,16 @@ public static native _inittab PyImport_Inittab(); public static native void PyIm
    collection of frozen modules: */
 
 public static native @Const _frozen PyImport_FrozenModules(); public static native void PyImport_FrozenModules(_frozen setter);
+
+@NoException public static native PyObject PyImport_ImportModuleAttr(
+    PyObject mod_name,
+    PyObject attr_name);
+@NoException public static native PyObject PyImport_ImportModuleAttrString(
+    @Cast("const char*") BytePointer mod_name,
+    @Cast("const char*") BytePointer attr_name);
+@NoException public static native PyObject PyImport_ImportModuleAttrString(
+    String mod_name,
+    String attr_name);
 
 
 // Parsed from abstract.h
@@ -11593,13 +11865,24 @@ public static final long PY_VECTORCALL_ARGUMENTS_OFFSET = PY_VECTORCALL_ARGUMENT
    This function always succeeds. */
 @NoException public static native int PyAIter_Check(PyObject arg0);
 
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030e0000
+/* Return 1 and set 'item' to the next item of 'iter' on success.
+ * Return 0 and set 'item' to NULL when there are no remaining values.
+ * Return -1, set 'item' to NULL and set an exception on error.
+ */
+@NoException public static native int PyIter_NextItem(PyObject iter, @Cast("PyObject**") PointerPointer item);
+@NoException public static native int PyIter_NextItem(PyObject iter, @ByPtrPtr PyObject item);
+// #endif
+
 /* Takes an iterator object and calls its tp_iternext slot,
    returning the next value.
 
    If the iterator is exhausted, this returns NULL without setting an
    exception.
 
-   NULL with an exception means an error occurred. */
+   NULL with an exception means an error occurred.
+
+   Prefer PyIter_NextItem() instead. */
 @NoException public static native PyObject PyIter_Next(PyObject arg0);
 
 // #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030A0000
@@ -11922,22 +12205,6 @@ public static final long PY_VECTORCALL_ARGUMENTS_OFFSET = PY_VECTORCALL_ARGUMENT
 @NoException public static native PyObject PySequence_Fast(PyObject o, @Cast("const char*") BytePointer m);
 @NoException public static native PyObject PySequence_Fast(PyObject o, String m);
 
-/* Return the size of the sequence 'o', assuming that 'o' was returned by
-   PySequence_Fast and is not NULL. */
-// #define PySequence_Fast_GET_SIZE(o)
-//     (PyList_Check(o) ? PyList_GET_SIZE(o) : PyTuple_GET_SIZE(o))
-
-/* Return the 'i'-th element of the sequence 'o', assuming that o was returned
-   by PySequence_Fast, and that i is within bounds. */
-// #define PySequence_Fast_GET_ITEM(o, i)
-//      (PyList_Check(o) ? PyList_GET_ITEM((o), (i)) : PyTuple_GET_ITEM((o), (i)))
-
-/* Return a pointer to the underlying item array for
-   an object returned by PySequence_Fast */
-// #define PySequence_Fast_ITEMS(sf)
-//     (PyList_Check(sf) ? ((PyListObject *)(sf))->ob_item
-//                       : ((PyTupleObject *)(sf))->ob_item)
-
 /* Return the number of occurrences on value on 'o', that is, return
    the number of keys for which o[key] == value.
 
@@ -12049,15 +12316,15 @@ public static final long PY_VECTORCALL_ARGUMENTS_OFFSET = PY_VECTORCALL_ARGUMENT
 @NoException public static native int PyMapping_HasKeyStringWithError(PyObject o, @Cast("const char*") BytePointer key);
 @NoException public static native int PyMapping_HasKeyStringWithError(PyObject o, String key);
 
-/* On success, return a list or tuple of the keys in mapping object 'o'.
+/* On success, return a list of the keys in mapping object 'o'.
    On failure, return NULL. */
 @NoException public static native PyObject PyMapping_Keys(PyObject o);
 
-/* On success, return a list or tuple of the values in mapping object 'o'.
+/* On success, return a list of the values in mapping object 'o'.
    On failure, return NULL. */
 @NoException public static native PyObject PyMapping_Values(PyObject o);
 
-/* On success, return a list or tuple of the items in mapping object 'o',
+/* On success, return a list of the items in mapping object 'o',
    where each item is a tuple containing a key-value pair. On failure, return
    NULL. */
 @NoException public static native PyObject PyMapping_Items(PyObject o);
@@ -12198,6 +12465,23 @@ public static final long PY_VECTORCALL_ARGUMENTS_OFFSET = PY_VECTORCALL_ARGUMENT
 // #define PySequence_ITEM(o, i)
 //     ( Py_TYPE(o)->tp_as_sequence->sq_item((o), (i)) )
 
+/* Return the size of the sequence 'o', assuming that 'o' was returned by
+   PySequence_Fast and is not NULL. */
+// #define PySequence_Fast_GET_SIZE(o)
+//     (PyList_Check(o) ? PyList_GET_SIZE(o) : PyTuple_GET_SIZE(o))
+
+/* Return the 'i'-th element of the sequence 'o', assuming that o was returned
+   by PySequence_Fast, and that i is within bounds. */
+// #define PySequence_Fast_GET_ITEM(o, i)
+//      (PyList_Check(o) ? PyList_GET_ITEM((o), (i)) : PyTuple_GET_ITEM((o), (i)))
+
+/* Return a pointer to the underlying item array for
+   an object returned by PySequence_Fast */
+// #define PySequence_Fast_ITEMS(sf)
+//     (PyList_Check(sf) ? ((PyListObject *)(sf))->ob_item
+//                       : ((PyTupleObject *)(sf))->ob_item)
+
+
 
 // Parsed from bltinmodule.h
 
@@ -12224,32 +12508,18 @@ public static native @ByRef PyTypeObject PyZip_Type(); public static native void
 // #define Py_CODE_H
 
 // #ifdef __cplusplus
-// #endif
-
-/* Count of all local monitoring events */
-public static final int _PY_MONITORING_LOCAL_EVENTS = 10;
-/* Count of all "real" monitoring events (not derived from other events) */
-public static final int _PY_MONITORING_UNGROUPED_EVENTS = 15;
-/* Count of all  monitoring events */
-public static final int _PY_MONITORING_EVENTS = 17;
-// Targeting ../_Py_LocalMonitors.java
-
-
-// Targeting ../_Py_GlobalMonitors.java
-
-
 // Targeting ../_PyCoCached.java
-
-
-// Targeting ../_PyCoLineInstrumentationData.java
 
 
 // Targeting ../_PyExecutorArray.java
 
 
-// Targeting ../_PyCoMonitoringData.java
 
 
+// #ifdef Py_GIL_DISABLED
+// #else
+// #define _PyCode_DEF_THREAD_LOCAL_BYTECODE()
+// #endif
 
 // To avoid repeating ourselves in deepfreeze.py, all PyCodeObject members are
 // defined in this macro:
@@ -12292,7 +12562,8 @@ public static final int _PY_MONITORING_EVENTS = 17;
 // 
 //     /* redundant values (derived from co_localsplusnames and                   \
 //       co_localspluskinds) */
-//     int co_nlocalsplus;           /* number of local + cell + free variables */
+//     int co_nlocalsplus;           /* number of spaces for holding local, cell, \
+//                                     and free variables */
 //     int co_framesize;             /* Size of frame in words */
 //     int co_nlocals;               /* number of local variables */
 //     int co_ncellvars;             /* total number of cell variables */
@@ -12310,12 +12581,14 @@ public static final int _PY_MONITORING_EVENTS = 17;
 //     _PyExecutorArray *co_executors;      /* executors from optimizer */
 //     _PyCoCached *_co_cached;      /* cached co_* attributes */
 //     uintptr_t _co_instrumentation_version; /* current instrumentation version */
-//     _PyCoMonitoringData *_co_monitoring; /* Monitoring data */
+//     struct _PyCoMonitoringData *_co_monitoring; /* Monitoring data */
+//     Py_ssize_t _co_unique_id;     /* ID used for per-thread refcounting */
 //     int _co_firsttraceable;       /* index of first traceable instruction */
 //     /* Scratch space for extra data relating to the code object.               \
 //       Type is a void* to keep the format private in codeobject.c to force     \
 //       people to go through the proper APIs. */
 //     void *co_extra;
+//     _PyCode_DEF_THREAD_LOCAL_BYTECODE()
 //     char co_code_adaptive[(SIZE)];
 // }
 // Targeting ../PyCodeObject.java
@@ -12351,6 +12624,14 @@ public static final int CO_FUTURE_GENERATOR_STOP =  0x800000;
 public static final int CO_FUTURE_ANNOTATIONS =    0x1000000;
 
 public static final int CO_NO_MONITORING_EVENTS = 0x2000000;
+
+/* Whether the code object has a docstring,
+   If so, it will be the first item in co_consts
+*/
+public static final int CO_HAS_DOCSTRING = 0x4000000;
+
+/* A function defined in class scope */
+public static final int CO_METHOD =  0x8000000;
 
 /* This should be defined if a future statement modifies the syntax.
    For example, when a keyword is added.
@@ -12601,19 +12882,12 @@ public static final int PY_INVALID_STACK_EFFECT = INT_MAX;
 
 public static native Int_PyOS_InputHook PyOS_InputHook(); public static native void PyOS_InputHook(Int_PyOS_InputHook setter);
 
-/* Stack size, in "pointers" (so we get extra safety margins
-   on 64-bit platforms).  On a 32-bit platform, this translates
-   to an 8k margin. */
-public static final int PYOS_STACK_MARGIN = 2048;
-
-// #if defined(WIN32) && !defined(MS_WIN64) && !defined(_M_ARM) && defined(_MSC_VER) && _MSC_VER >= 1300
-/* Enable stack checking under Microsoft C */
-// When changing the platforms, ensure PyOS_CheckStack() docs are still correct
-// #define USE_STACKCHECK
+// #if defined(WIN32)
+// #  define USE_STACKCHECK
 // #endif
-
 // #ifdef USE_STACKCHECK
 // #endif
+
 
 // #ifndef Py_LIMITED_API
 // #  define Py_CPYTHON_PYTHONRUN_H
@@ -12909,9 +13183,6 @@ public static native PyOS_ReadlineFunctionPointer_Pointer_Pointer_BytePointer Py
 @NoException public static native @ByVal PyStatus Py_InitializeFromConfig(
     @Const PyConfig config);
 
-// Python 3.8 provisional API (PEP 587)
-@NoException public static native @ByVal PyStatus _Py_InitializeMain();
-
 @NoException public static native int Py_RunMain();
 
 
@@ -13180,13 +13451,18 @@ public static final int S_IFLNK = 0120000;
 // #  error "this header file must not be included directly"
 // #endif
 
-// Used by _testcapi which must not use the internal C API
-@NoException public static native @Cast("FILE*") Pointer _Py_fopen_obj(
+@NoException public static native @Cast("FILE*") Pointer Py_fopen(
     PyObject path,
     @Cast("const char*") BytePointer mode);
-@NoException public static native @Cast("FILE*") Pointer _Py_fopen_obj(
+@NoException public static native @Cast("FILE*") Pointer Py_fopen(
     PyObject path,
     String mode);
+
+// Deprecated alias kept for backward compatibility
+@NoException public static native @Cast("FILE*") @Deprecated Pointer _Py_fopen_obj(PyObject path, @Cast("const char*") BytePointer mode);
+@NoException public static native @Cast("FILE*") @Deprecated Pointer _Py_fopen_obj(PyObject path, String mode);
+
+@NoException public static native int Py_fclose(@Cast("FILE*") Pointer file);
 
 
 // Parsed from cpython/pyfpe.h
@@ -13241,9 +13517,6 @@ public static final long _PyHASH_IMAG = PyHASH_IMAG;
 
 /* Helpers for hash functions */
 @NoException public static native @Cast("Py_hash_t") long _Py_HashDouble(PyObject arg0, double arg1);
-
-// Kept for backward compatibility
-// #define _Py_HashPointer Py_HashPointer
 // Targeting ../PyHash_FuncDef.java
 
 
@@ -13251,7 +13524,13 @@ public static final long _PyHASH_IMAG = PyHASH_IMAG;
 @NoException public static native PyHash_FuncDef PyHash_GetFuncDef();
 
 @NoException public static native @Cast("Py_hash_t") long Py_HashPointer(@Const Pointer ptr);
+
+// Deprecated alias kept for backward compatibility
+@NoException public static native @Cast("Py_hash_t") @Deprecated long _Py_HashPointer(@Const Pointer ptr);
+
 @NoException public static native @Cast("Py_hash_t") long PyObject_GenericHash(PyObject arg0);
+
+@NoException public static native @Cast("Py_hash_t") long Py_HashBuffer(@Const Pointer ptr, @Cast("Py_ssize_t") long len);
 
 
 // Parsed from cpython/tracemalloc.h

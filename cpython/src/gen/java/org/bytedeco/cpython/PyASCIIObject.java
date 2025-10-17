@@ -83,6 +83,8 @@ public class PyASCIIObject extends Pointer {
     public native @ByRef PyObject ob_base(); public native PyASCIIObject ob_base(PyObject setter);
     public native @Cast("Py_ssize_t") long length(); public native PyASCIIObject length(long setter);          /* Number of code points in the string */
     public native @Cast("Py_hash_t") long hash(); public native PyASCIIObject hash(long setter);             /* Hash value; -1 if not set */
+// #ifdef Py_GIL_DISABLED
+// #endif
         /* If interned is non-zero, the two references from the
            dictionary to this object are *not* counted in ob_refcnt.
            The possible values here are:
@@ -92,7 +94,10 @@ public class PyASCIIObject extends Pointer {
                3: Interned, Immortal, and Static
            This categorization allows the runtime to determine the right
            cleanup mechanism at runtime shutdown. */
+// #ifdef Py_GIL_DISABLED
+// #else
         @Name("state.interned") public native @Cast("unsigned int") @NoOffset int state_interned(); public native PyASCIIObject state_interned(int setter);
+// #endif
         /* Character size:
 
            - PyUnicode_1BYTE_KIND (1):
@@ -127,7 +132,9 @@ public class PyASCIIObject extends Pointer {
         @Name("state.ascii") public native @Cast("unsigned int") @NoOffset int state_ascii(); public native PyASCIIObject state_ascii(int setter);
         /* The object is statically allocated. */
         @Name("state.statically_allocated") public native @Cast("unsigned int") @NoOffset int state_statically_allocated(); public native PyASCIIObject state_statically_allocated(int setter);
+// #ifndef Py_GIL_DISABLED
         /* Padding to ensure that PyUnicode_DATA() is always aligned to
-           4 bytes (see issue #19537 on m68k). */
+           4 bytes (see issue gh-63736 on m68k) */
         
+// #endif
 }

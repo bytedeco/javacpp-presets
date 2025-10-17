@@ -32,7 +32,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDNN=1
     export USE_FAST_NVCC=0
     export CUDA_SEPARABLE_COMPILATION=OFF
-    export TORCH_CUDA_ARCH_LIST="5.0;6.0;7.0;8.0;9.0;10.0"
+    export TORCH_CUDA_ARCH_LIST="7.5;8.0;9.0;10.0;12.0"
 fi
 
 export PYTHON_BIN_PATH=$(which python3)
@@ -77,6 +77,10 @@ git checkout v$PYTORCH_VERSION
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
+# https://github.com/pytorch/pytorch/pull/158184
+# https://github.com/pytorch/pytorch/pull/159869
+patch -Np1 < ../../../pytorch.patch
+
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
@@ -108,14 +112,14 @@ OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 CPYTHON_PATH="$CPYTHON_HOST_PATH"
-if [[ -f "$CPYTHON_PATH/include/python3.13/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.14/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.13"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.13/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.13/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.13/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.13/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.14"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.14/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.14/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.14/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.14/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)

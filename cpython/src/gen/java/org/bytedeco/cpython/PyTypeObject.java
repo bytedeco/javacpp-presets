@@ -108,7 +108,9 @@ public class PyTypeObject extends Pointer {
     public native PyObject tp_weaklist(); public native PyTypeObject tp_weaklist(PyObject setter); /* not used for static builtin types */
     public native destructor tp_del(); public native PyTypeObject tp_del(destructor setter);
 
-    /* Type attribute cache version tag. Added in version 2.6 */
+    /* Type attribute cache version tag. Added in version 2.6.
+     * If zero, the cache is invalid and must be initialized.
+     */
     public native @Cast("unsigned int") int tp_version_tag(); public native PyTypeObject tp_version_tag(int setter);
 
     public native destructor tp_finalize(); public native PyTypeObject tp_finalize(destructor setter);
@@ -116,5 +118,11 @@ public class PyTypeObject extends Pointer {
 
     /* bitset of which type-watchers care about this type */
     public native @Cast("unsigned char") byte tp_watched(); public native PyTypeObject tp_watched(byte setter);
+
+    /* Number of tp_version_tag values used.
+     * Set to _Py_ATTR_CACHE_UNUSED if the attribute cache is
+     * disabled for this type (e.g. due to custom MRO entries).
+     * Otherwise, limited to MAX_VERSIONS_PER_CLASS (defined elsewhere).
+     */
     public native @Cast("uint16_t") short tp_versions_used(); public native PyTypeObject tp_versions_used(short setter);
 }

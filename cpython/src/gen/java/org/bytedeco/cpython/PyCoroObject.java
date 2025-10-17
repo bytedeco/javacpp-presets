@@ -14,39 +14,10 @@ import static org.bytedeco.cpython.global.python.*;
 
 /* --- PyCoroObject ------------------------------------------------------- */
 
-@Properties(inherit = org.bytedeco.cpython.presets.python.class)
+@Opaque @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyCoroObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyCoroObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyCoroObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyCoroObject() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyCoroObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyCoroObject position(long position) {
-        return (PyCoroObject)super.position(position);
-    }
-    @Override public PyCoroObject getPointer(long i) {
-        return new PyCoroObject((Pointer)this).offsetAddress(i);
-    }
-
-    public native @ByRef PyObject ob_base(); public native PyCoroObject ob_base(PyObject setter);
-    /* List of weak reference. */
-    public native PyObject cr_weakreflist(); public native PyCoroObject cr_weakreflist(PyObject setter);
-    /* Name of the generator. */
-    public native PyObject cr_name(); public native PyCoroObject cr_name(PyObject setter);
-    /* Qualified name of the generator. */
-    public native PyObject cr_qualname(); public native PyCoroObject cr_qualname(PyObject setter);
-    public native @ByRef _PyErr_StackItem cr_exc_state(); public native PyCoroObject cr_exc_state(_PyErr_StackItem setter);
-    public native PyObject cr_origin_or_finalizer(); public native PyCoroObject cr_origin_or_finalizer(PyObject setter);
-    public native @Cast("char") byte cr_hooks_inited(); public native PyCoroObject cr_hooks_inited(byte setter);
-    public native @Cast("char") byte cr_closed(); public native PyCoroObject cr_closed(byte setter);
-    public native @Cast("char") byte cr_running_async(); public native PyCoroObject cr_running_async(byte setter);
-    /* The frame */
-    public native byte cr_frame_state(); public native PyCoroObject cr_frame_state(byte setter);
-    public native PyObject cr_iframe(int i); public native PyCoroObject cr_iframe(int i, PyObject setter);
-    @MemberGetter public native @Cast("PyObject**") PointerPointer cr_iframe();
-
 }

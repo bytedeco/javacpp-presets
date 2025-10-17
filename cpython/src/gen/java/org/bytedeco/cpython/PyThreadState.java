@@ -10,7 +10,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-
 @Name("_ts") @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyThreadState extends Pointer {
     static { Loader.load(); }
@@ -54,8 +53,6 @@ public class PyThreadState extends Pointer {
         @Name("_status.bound_gilstate") public native @Cast("unsigned int") @NoOffset int _status_bound_gilstate(); public native PyThreadState _status_bound_gilstate(int setter);
         /* Currently in use (maybe holds the GIL). */
         @Name("_status.active") public native @Cast("unsigned int") @NoOffset int _status_active(); public native PyThreadState _status_active(int setter);
-        /* Currently holds the GIL. */
-        @Name("_status.holds_gil") public native @Cast("unsigned int") @NoOffset int _status_holds_gil(); public native PyThreadState _status_holds_gil(int setter);
 
         /* various stages of finalization */
         @Name("_status.finalizing") public native @Cast("unsigned int") @NoOffset int _status_finalizing(); public native PyThreadState _status_finalizing(int setter);
@@ -66,6 +63,10 @@ public class PyThreadState extends Pointer {
         
 // #ifdef Py_BUILD_CORE
 // #endif
+
+    /* Currently holds the GIL. Must be its own field to avoid data races */
+    public native int holds_gil(); public native PyThreadState holds_gil(int setter);
+
     public native int _whence(); public native PyThreadState _whence(int setter);
 
     /* Thread state (_Py_THREAD_ATTACHED, _Py_THREAD_DETACHED, _Py_THREAD_SUSPENDED).
@@ -74,8 +75,6 @@ public class PyThreadState extends Pointer {
 
     public native int py_recursion_remaining(); public native PyThreadState py_recursion_remaining(int setter);
     public native int py_recursion_limit(); public native PyThreadState py_recursion_limit(int setter);
-
-    public native int c_recursion_remaining(); public native PyThreadState c_recursion_remaining(int setter);
     public native int recursion_headroom(); public native PyThreadState recursion_headroom(int setter); /* Allow 50 more calls to handle any errors. */
 
     /* 'tracing' keeps track of the execution depth when tracing/profiling.
@@ -154,7 +153,7 @@ public class PyThreadState extends Pointer {
     /* The thread's exception stack entry.  (Always the last entry.) */
     public native @ByRef _PyErr_StackItem exc_state(); public native PyThreadState exc_state(_PyErr_StackItem setter);
 
-    public native PyObject previous_executor(); public native PyThreadState previous_executor(PyObject setter);
+    public native PyObject current_executor(); public native PyThreadState current_executor(PyObject setter);
 
     public native @Cast("uint64_t") long dict_global_version(); public native PyThreadState dict_global_version(long setter);
 
@@ -165,4 +164,5 @@ public class PyThreadState extends Pointer {
        The PyThreadObject must hold the only reference to this value.
     */
     public native PyObject threading_local_sentinel(); public native PyThreadState threading_local_sentinel(PyObject setter);
+    public native @ByRef _PyRemoteDebuggerSupport remote_debugger_support(); public native PyThreadState remote_debugger_support(_PyRemoteDebuggerSupport setter);
 }

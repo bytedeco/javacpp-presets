@@ -14,39 +14,10 @@ import static org.bytedeco.cpython.global.python.*;
 
 /* --- Asynchronous Generators -------------------------------------------- */
 
-@Properties(inherit = org.bytedeco.cpython.presets.python.class)
+@Opaque @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyAsyncGenObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyAsyncGenObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyAsyncGenObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyAsyncGenObject() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyAsyncGenObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyAsyncGenObject position(long position) {
-        return (PyAsyncGenObject)super.position(position);
-    }
-    @Override public PyAsyncGenObject getPointer(long i) {
-        return new PyAsyncGenObject((Pointer)this).offsetAddress(i);
-    }
-
-    public native @ByRef PyObject ob_base(); public native PyAsyncGenObject ob_base(PyObject setter);
-    /* List of weak reference. */
-    public native PyObject ag_weakreflist(); public native PyAsyncGenObject ag_weakreflist(PyObject setter);
-    /* Name of the generator. */
-    public native PyObject ag_name(); public native PyAsyncGenObject ag_name(PyObject setter);
-    /* Qualified name of the generator. */
-    public native PyObject ag_qualname(); public native PyAsyncGenObject ag_qualname(PyObject setter);
-    public native @ByRef _PyErr_StackItem ag_exc_state(); public native PyAsyncGenObject ag_exc_state(_PyErr_StackItem setter);
-    public native PyObject ag_origin_or_finalizer(); public native PyAsyncGenObject ag_origin_or_finalizer(PyObject setter);
-    public native @Cast("char") byte ag_hooks_inited(); public native PyAsyncGenObject ag_hooks_inited(byte setter);
-    public native @Cast("char") byte ag_closed(); public native PyAsyncGenObject ag_closed(byte setter);
-    public native @Cast("char") byte ag_running_async(); public native PyAsyncGenObject ag_running_async(byte setter);
-    /* The frame */
-    public native byte ag_frame_state(); public native PyAsyncGenObject ag_frame_state(byte setter);
-    public native PyObject ag_iframe(int i); public native PyAsyncGenObject ag_iframe(int i, PyObject setter);
-    @MemberGetter public native @Cast("PyObject**") PointerPointer ag_iframe();
-
 }

@@ -10,14 +10,20 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #endif
 
+/*
+ * Context object watcher callback function.  The object passed to the callback
+ * is event-specific; see PyContextEvent for details.
+ *
+ * if the callback returns with an exception set, it must return -1. Otherwise
+ * it should return 0
+ */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class Py_AuditHookFunction extends FunctionPointer {
+public class PyContext_WatchCallback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Py_AuditHookFunction(Pointer p) { super(p); }
-    protected Py_AuditHookFunction() { allocate(); }
+    public    PyContext_WatchCallback(Pointer p) { super(p); }
+    protected PyContext_WatchCallback() { allocate(); }
     private native void allocate();
-    public native int call(@Cast("const char*") BytePointer arg0, PyObject arg1, Pointer arg2);
+    public native int call(@Cast("PyContextEvent") int arg0, PyObject arg1);
 }
