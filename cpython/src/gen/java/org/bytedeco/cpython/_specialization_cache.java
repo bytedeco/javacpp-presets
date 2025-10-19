@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
-
+  // (see tp_versions_used)
 
 /* This struct is used by the specializer
  * It should be treated as an opaque blob
@@ -41,7 +41,7 @@ public class _specialization_cache extends Pointer {
     // - If getitem is NULL, then getitem_version is meaningless.
     // - If getitem->func_version == getitem_version, then getitem can be called
     //   with two positional arguments and no keyword arguments, and has neither
-    //   *args nor **kwargs (as required by BINARY_SUBSCR_GETITEM):
+    //   *args nor **kwargs (as required by BINARY_OP_SUBSCR_GETITEM):
     public native PyObject getitem(); public native _specialization_cache getitem(PyObject setter);
     public native @Cast("uint32_t") int getitem_version(); public native _specialization_cache getitem_version(int setter);
     public native PyObject init(); public native _specialization_cache init(PyObject setter);

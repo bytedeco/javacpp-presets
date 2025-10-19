@@ -10,6 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
+// #endif
 
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _inittab extends Pointer {

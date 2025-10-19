@@ -18,5 +18,5 @@ public class PyCMethod extends FunctionPointer {
     protected PyCMethod() { allocate(); }
     private native void allocate();
     public native PyObject call(PyObject arg0, PyTypeObject arg1, @Cast("PyObject*const*") PointerPointer arg2,
-                               @Cast("size_t") long arg3, PyObject arg4);
+                               @Cast("Py_ssize_t") long arg3, PyObject arg4);
 }

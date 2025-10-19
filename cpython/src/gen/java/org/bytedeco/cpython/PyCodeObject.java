@@ -68,7 +68,8 @@ public class PyCodeObject extends Pointer {
 
     /* redundant values (derived from co_localsplusnames and                   \
        co_localspluskinds) */
-    public native int co_nlocalsplus(); public native PyCodeObject co_nlocalsplus(int setter);           /* number of local + cell + free variables */
+    public native int co_nlocalsplus(); public native PyCodeObject co_nlocalsplus(int setter);           /* number of spaces for holding local, cell, \
+                                     and free variables */
     public native int co_framesize(); public native PyCodeObject co_framesize(int setter);             /* Size of frame in words */
     public native int co_nlocals(); public native PyCodeObject co_nlocals(int setter);               /* number of local variables */
     public native int co_ncellvars(); public native PyCodeObject co_ncellvars(int setter);             /* total number of cell variables */
@@ -86,7 +87,8 @@ public class PyCodeObject extends Pointer {
     public native _PyExecutorArray co_executors(); public native PyCodeObject co_executors(_PyExecutorArray setter);      /* executors from optimizer */
     public native _PyCoCached _co_cached(); public native PyCodeObject _co_cached(_PyCoCached setter);      /* cached co_* attributes */
     public native @Cast("uintptr_t") long _co_instrumentation_version(); public native PyCodeObject _co_instrumentation_version(long setter); /* current instrumentation version */
-    public native _PyCoMonitoringData _co_monitoring(); public native PyCodeObject _co_monitoring(_PyCoMonitoringData setter); /* Monitoring data */
+    public native @Cast("_PyCoMonitoringData*") Pointer _co_monitoring(); public native PyCodeObject _co_monitoring(Pointer setter); /* Monitoring data */
+    public native @Cast("Py_ssize_t") long _co_unique_id(); public native PyCodeObject _co_unique_id(long setter);     /* ID used for per-thread refcounting */
     public native int _co_firsttraceable(); public native PyCodeObject _co_firsttraceable(int setter);       /* index of first traceable instruction */
     /* Scratch space for extra data relating to the code object.               \
        Type is a void* to keep the format private in codeobject.c to force     \

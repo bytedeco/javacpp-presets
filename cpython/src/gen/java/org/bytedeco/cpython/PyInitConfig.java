@@ -12,12 +12,12 @@ import static org.bytedeco.cpython.global.python.*;
 
 
 
-@Properties(inherit = org.bytedeco.cpython.presets.python.class)
-public class PyType_WatchCallback extends FunctionPointer {
-    static { Loader.load(); }
+// --- PyInitConfig ---------------------------------------------------------
+
+@Opaque @Properties(inherit = org.bytedeco.cpython.presets.python.class)
+public class PyInitConfig extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyInitConfig() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PyType_WatchCallback(Pointer p) { super(p); }
-    protected PyType_WatchCallback() { allocate(); }
-    private native void allocate();
-    public native int call(PyTypeObject arg0);
+    public PyInitConfig(Pointer p) { super(p); }
 }

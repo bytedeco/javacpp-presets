@@ -43,10 +43,15 @@ public class _object extends Pointer {
     // Ignore MSC warning C4201: "nonstandard extension used:
     // nameless struct/union"
 // #endif
-       public native @Cast("Py_ssize_t") long ob_refcnt(); public native _object ob_refcnt(long setter);
 // #if SIZEOF_VOID_P > 4
-       public native @Cast("uint32_t") int ob_refcnt_split(int i); public native _object ob_refcnt_split(int i, int setter);
-       @MemberGetter public native @Cast("uint32_t*") IntPointer ob_refcnt_split();
+        public native @Cast("int64_t") long ob_refcnt_full(); public native _object ob_refcnt_full(long setter); /* This field is needed for efficient initialization with Clang on ARM */
+// #  if PY_BIG_ENDIAN
+// #  else
+            public native @Cast("uint32_t") int ob_refcnt(); public native _object ob_refcnt(int setter);
+            public native @Cast("uint16_t") short ob_overflow(); public native _object ob_overflow(short setter);
+            public native @Cast("uint16_t") short ob_flags(); public native _object ob_flags(short setter);
+// #  endif
+// #else
 // #endif
 // #ifdef _MSC_VER
     public native PyTypeObject ob_type(); public native _object ob_type(PyTypeObject setter);

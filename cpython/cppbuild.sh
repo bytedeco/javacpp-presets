@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENSSL=openssl-3.5.2
-CPYTHON_VERSION=3.13.6
+OPENSSL=openssl-3.5.4
+CPYTHON_VERSION=3.14.0
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
@@ -195,7 +195,7 @@ case $PLATFORM in
         cp win32/*.dll win32/*.pyd ../../lib/
         cd ..
         cp -r Lib/* ../lib/
-        cp -r Include/* PCbuild/win32/pyconfig.h ../include/
+        cp -r Include/* PC/pyconfig.h ../include/
         unzip -o ../lib/ensurepip/_bundled/pip* -d ../lib/
         # unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
         ;;
@@ -209,7 +209,7 @@ case $PLATFORM in
         cp amd64/*.dll amd64/*.pyd ../../lib/
         cd ..
         cp -r Lib/* ../lib/
-        cp -r Include/* PCbuild/amd64/pyconfig.h ../include/
+        cp -r Include/* PC/pyconfig.h ../include/
         unzip -o ../lib/ensurepip/_bundled/pip* -d ../lib/
         # unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
         ;;

@@ -31,6 +31,8 @@ public class PyTupleObject extends Pointer {
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyTupleObject ob_base(PyVarObject setter);
+    /* Cached hash.  Initially set to -1. */
+    public native @Cast("Py_hash_t") long ob_hash(); public native PyTupleObject ob_hash(long setter);
     /* ob_item contains space for 'ob_size' elements.
        Items must normally not be NULL, except during construction when
        the tuple is not yet visible outside the function that builds it. */

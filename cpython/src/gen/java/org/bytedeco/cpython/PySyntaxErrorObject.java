@@ -41,4 +41,5 @@ public class PySyntaxErrorObject extends Pointer {
     public native PyObject end_offset(); public native PySyntaxErrorObject end_offset(PyObject setter);
     public native PyObject text(); public native PySyntaxErrorObject text(PyObject setter);
     public native PyObject print_file_and_line(); public native PySyntaxErrorObject print_file_and_line(PyObject setter);
+    public native PyObject metadata(); public native PySyntaxErrorObject metadata(PyObject setter);
 }
