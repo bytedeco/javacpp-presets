@@ -8,7 +8,7 @@
  * Introduce CUDA-enabled `linux-arm64-gpu` builds to presets for OpenCV ([pull #1651](https://github.com/bytedeco/javacpp-presets/pull/1651))
  * Reenable again `linux-arm64` builds for CPython and NumPy ([pull #1652](https://github.com/bytedeco/javacpp-presets/pull/1652))
  * Bundle libraries for VA-API 2.x with FFmpeg to avoid loading issues ([issue bytedeco/javacv#2340](https://github.com/bytedeco/javacv/issues/2340))
- * Upgrade presets for OpenCV 4.12.0, FFmpeg 8.0, DNNL 3.9.1, CPython 3.14.0, NumPy 2.3.4, SciPy 1.16.2, LLVM 21.1.0, libffi 3.5.2, PyTorch 2.8.0, SentencePiece 0.2.1, TensorFlow Lite 2.20.0, ONNX 1.19.1, ONNX Runtime 1.23.1, and their dependencies
+ * Upgrade presets for OpenCV 4.12.0, FFmpeg 8.0, DNNL 3.9.2, CPython 3.14.0, NumPy 2.3.4, SciPy 1.16.2, LLVM 21.1.0, libffi 3.5.2, PyTorch 2.8.0, SentencePiece 0.2.1, TensorFlow Lite 2.20.0, ONNX 1.19.1, ONNX Runtime 1.23.1, and their dependencies
 
 ### June 30, 2025 version 1.5.12
  * Add presets for the CUFILE module of CUDA
