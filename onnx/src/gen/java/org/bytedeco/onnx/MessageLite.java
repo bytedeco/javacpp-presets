@@ -61,10 +61,9 @@ public class MessageLite extends Pointer {
   public native Arena GetArena();
 
   // Clear all fields of the message and set them to their default values.
-  // Clear() avoids freeing memory, assuming that any memory allocated
-  // to hold parts of the message will be needed again to hold the next
-  // message.  If you actually want to free the memory used by a Message,
-  // you must delete it.
+  // Clear() assumes that any memory allocated to hold parts of the message
+  // will likely be needed again, so the memory used may not be freed.
+  // To ensure that all memory used by a Message is freed, you must delete it.
   public native void Clear();
 
   // Quickly check if all required fields have values set.
