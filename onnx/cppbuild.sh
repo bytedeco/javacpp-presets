@@ -10,10 +10,10 @@ fi
 export MAX_JOBS=${MAKEJ:-4}
 
 export ONNX=1.19.1
-export PROTO=3.20.3
+export PROTO=3.21.12
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz
-download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
+download https://github.com/google/protobuf/releases/download/v${PROTO:2}/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
