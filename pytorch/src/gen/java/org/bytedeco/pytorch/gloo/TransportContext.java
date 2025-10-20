@@ -54,4 +54,9 @@ public class TransportContext extends Pointer {
   public native void setTimeout(@ByVal Milliseconds timeout);
 
   public native @ByVal Milliseconds getTimeout();
+
+  public native @UniquePtr RemoteKey deserializeRemoteKey(
+        @StdString BytePointer serialized);
+  public native @UniquePtr RemoteKey deserializeRemoteKey(
+        @StdString String serialized);
 }

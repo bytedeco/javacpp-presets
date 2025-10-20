@@ -249,8 +249,11 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // CUDAExceptions.h
 
 // #include <c10/cuda/CUDAMacros.h>
+// #include <cuda_runtime.h>
 
 // #include <mutex>
+// #include <string>
+@Namespace("c10::cuda") public static native @StdString @NoException(true) BytePointer get_cuda_error_help(@Cast("cudaError_t") int arg0);
 @Namespace("c10::cuda") public static native @NoException(true) @Cast("const char*") BytePointer get_cuda_check_suffix();
  // namespace c10::cuda
 
@@ -525,7 +528,10 @@ manage their own state. There is only a single CUDA context/state.
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
 @Namespace("at::cuda") public static native @ByRef T_PointerPointer_TDataPtrMap cublas_handle_stream_to_workspace();
+@Namespace("at::cuda") public static native @ByRef T_PointerPointer_TDataPtrMap cublaslt_handle_stream_to_workspace();
 @Namespace("at::cuda") public static native @Cast("size_t") long getChosenWorkspaceSize();
+@Namespace("at::cuda") public static native @Cast("size_t") long getCUDABlasLtWorkspaceSize();
+@Namespace("at::cuda") public static native Pointer getCUDABlasLtWorkspace();
 
 // #if defined(CUDART_VERSION) || defined(USE_ROCM)
 @Namespace("at::cuda") public static native cusolverDnContext getCurrentCUDASolverDnHandle();
@@ -880,9 +886,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // CUDA Graphs utils used by c10 and aten.
 // aten/cuda/CUDAGraphsUtils.cuh adds utils used by aten only.
-
-// first is set if the instance is created by CUDAGraph::capture_begin.
-// second is set if the instance is created by at::cuda::graph_pool_handle.
 // Targeting ../cuda/CUDAStreamCaptureModeGuard.java
 
 
@@ -905,11 +908,24 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #pragma once
 
 // #include <c10/core/Allocator.h>
+// #include <c10/core/Stream.h>
 // Targeting ../cuda/DeviceStats.java
 
 
 
  // namespace c10::CachingDeviceAllocator
+
+// first is set if the instance is created by Graph mode capture_begin.
+// second is set if the instance is created by Graph mode graph_pool_handle.
+// Targeting ../cuda/DeviceAllocator.java
+
+
+
+// This function is used to get the DeviceAllocator for a specific device type
+// and keep backward compatibility with c10::GetAllocator.
+@Namespace("c10") public static native DeviceAllocator getDeviceAllocator(@Const @ByRef DeviceType t);
+
+ // namespace c10
 
 
 // Parsed from c10/cuda/CUDACachingAllocator.h
@@ -1054,10 +1070,10 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // CUDAGraph interactions
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void beginAllocateToPool(
     byte device,
-    @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
+    @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
     @ByVal StreamFilter filter);
 
-@Namespace("c10::cuda::CUDACachingAllocator") public static native void endAllocateToPool(byte device, @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void endAllocateToPool(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
 
 
@@ -1079,14 +1095,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void createOrIncrefPool(
     byte device,
-    @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
+    @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
     CUDAAllocator allocator_ptr/*=nullptr*/);
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void createOrIncrefPool(
     byte device,
-    @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
-@Namespace("c10::cuda::CUDACachingAllocator") public static native void setUseOnOOM(byte device, @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+    @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setUseOnOOM(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
-@Namespace("c10::cuda::CUDACachingAllocator") public static native int getPoolUseCount(byte device, @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native int getPoolUseCount(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
 // Not part of CUDA_ALLOCATOR_BACKEND_INTERFACE
 
@@ -1100,6 +1116,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
  // namespace c10::cuda::CUDACachingAllocator
+
+// Keep BC only
 // Targeting ../cuda/MemPool.java
 
 
@@ -1207,6 +1225,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 @Namespace("at::native") public static native int dataSize(@Cast("cudnnDataType_t") int dataType);
 
+// NOTE [ cudnn fixSizeOneDimStride ]
 // The stride for a size-1 dimensions is not uniquely determined; in
 // fact, it can be anything you want, because the fact that the
 // tensor is size 1 at this dimension means that you will never actually

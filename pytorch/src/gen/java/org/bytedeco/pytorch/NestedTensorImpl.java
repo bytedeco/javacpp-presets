@@ -51,7 +51,7 @@ public class NestedTensorImpl extends TensorImpl {
         @ByVal Tensor nested_strides,
         @ByVal Tensor storage_offsets);
   // assume contiguous, `nested_strides` and `offsets`
-  // can be infered from `nested_sizes`
+  // can be inferred from `nested_sizes`
   public NestedTensorImpl(
         @Const @ByRef Tensor buffer,
         @Const @ByRef Tensor nested_sizes) { super((Pointer)null); allocate(buffer, nested_sizes); }

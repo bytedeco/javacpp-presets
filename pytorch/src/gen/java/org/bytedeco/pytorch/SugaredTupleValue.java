@@ -55,7 +55,7 @@ public class SugaredTupleValue extends SugaredValue {
   // iterate over its keys
   public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue iter(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
 
-  // Because this is used to contain SugaredValues of Heterogenous types,
+  // Because this is used to contain SugaredValues of Heterogeneous types,
   // we define staticLen() so that when this is iterated over it is emitted
   // as an unrolled loop.
   public native @ByVal LongOptional staticLen();

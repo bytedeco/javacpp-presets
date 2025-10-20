@@ -125,22 +125,34 @@ private native void allocate(@Cast("int64_t") long d);
   public native @Cast("bool") boolean is_heap_allocated();
 
   public native @ByVal @Name("operator +") SymInt add(@Const @ByRef SymInt sci);
+
   public native @ByVal @Name("operator -") SymInt subtract(@Const @ByRef SymInt sci);
+
   public native @ByVal @Name("operator *") SymInt multiply(@Const @ByRef SymInt sci);
+
   public native @ByVal @Name("operator /") SymInt divide(@Const @ByRef SymInt sci);
+
   public native @ByVal @Name("operator %") SymInt mod(@Const @ByRef SymInt sci);
+
   public native @Name("operator *=") void multiplyPut(@Const @ByRef SymInt sci);
+
   public native @Name("operator +=") void addPut(@Const @ByRef SymInt sci);
+
   public native @Name("operator /=") void dividePut(@Const @ByRef SymInt sci);
 
   public native @ByVal SymInt clone();
 
-  public native @ByVal SymBool sym_eq(@Const @ByRef SymInt arg0);
-  public native @ByVal SymBool sym_ne(@Const @ByRef SymInt arg0);
-  public native @ByVal SymBool sym_lt(@Const @ByRef SymInt arg0);
-  public native @ByVal SymBool sym_le(@Const @ByRef SymInt arg0);
-  public native @ByVal SymBool sym_gt(@Const @ByRef SymInt arg0);
-  public native @ByVal SymBool sym_ge(@Const @ByRef SymInt arg0);
+  public native @ByVal SymBool sym_eq(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymBool sym_ne(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymBool sym_lt(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymBool sym_le(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymBool sym_gt(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymBool sym_ge(@Const @ByRef SymInt sci);
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef SymInt o);
   public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef SymInt o);
@@ -150,6 +162,7 @@ private native void allocate(@Cast("int64_t") long d);
   public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef SymInt o);
 
   public native @ByVal SymInt min(@Const @ByRef SymInt sci);
+
   public native @ByVal SymInt max(@Const @ByRef SymInt sci);
 
   // If both are symbolic, this checks if

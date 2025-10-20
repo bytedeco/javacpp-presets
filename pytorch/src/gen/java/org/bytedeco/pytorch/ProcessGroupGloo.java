@@ -28,7 +28,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // multiple process group instances.
 //
 @Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ProcessGroupGloo extends DistributedBackend {
+public class ProcessGroupGloo extends Backend {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ProcessGroupGloo(Pointer p) { super(p); }
@@ -112,6 +112,9 @@ public class ProcessGroupGloo extends DistributedBackend {
 
     public native @Cast("int64_t") long add(@StdString BytePointer key, @Cast("int64_t") long value);
     public native @Cast("int64_t") long add(@StdString String key, @Cast("int64_t") long value);
+// #endif
+
+    public native @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store _getStore();
   }
 
   // For send and recv operations there is no need to pass them to the
@@ -202,7 +205,7 @@ public class ProcessGroupGloo extends DistributedBackend {
     public native @Cast("uint64_t") long getSequencenumber();
   }
 
-  @NoOffset public static class Options extends DistributedBackend.Options {
+  @NoOffset public static class Options extends Backend.Options {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Options(Pointer p) { super(p); }
@@ -219,13 +222,13 @@ public class ProcessGroupGloo extends DistributedBackend {
             @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout);
     public static native @IntrusivePtr("c10d::ProcessGroupGloo::Options") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroupGloo::Options>&"}) Options create();
 
-    public native @Cast("uint64_t*") @StdVector LongPointer global_ranks_in_group(); public native Options global_ranks_in_group(LongPointer setter);
-    public native @StdString BytePointer group_name(); public native Options group_name(BytePointer setter);
     public native @ByRef GlooDeviceVector devices(); public native Options devices(GlooDeviceVector setter);
     public native int threads(); public native Options threads(int setter);
   }
 
   public native @StdString BytePointer getBackendName();
+
+  public native @Cast("bool") boolean supportsSplitting();
 
   // Helper functions to create a new device object.
   // They are static functions on this class to keep them logically
@@ -283,6 +286,29 @@ public class ProcessGroupGloo extends DistributedBackend {
         int size);
 
   public native @IntrusivePtr("c10d::ProcessGroupGloo::Options") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroupGloo::Options>&"}) Options getOptions();
+
+  public native void setTimeout(@ByVal Milliseconds timeout);
+
+  public native @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options getBackendOptions();
+
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @StdVector IntPointer ranks,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @StdVector IntBuffer ranks,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @StdVector int[] ranks,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
+
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend merge(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts,
+        int rank,
+        int size);
 
   public native @Cast("uint64_t*") @StdVector LongPointer groupRanks();
 

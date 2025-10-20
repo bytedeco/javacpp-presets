@@ -45,6 +45,38 @@ public class ProcessGroup extends CustomClassHolder {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ProcessGroup(Pointer p) { super(p); }
 
+  @NoOffset public static class MergeOptions extends CustomClassHolder {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public MergeOptions(Pointer p) { super(p); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public MergeOptions(long size) { super((Pointer)null); allocateArray(size); }
+      private native void allocateArray(long size);
+      @Override public MergeOptions position(long position) {
+          return (MergeOptions)super.position(position);
+      }
+      @Override public MergeOptions getPointer(long i) {
+          return new MergeOptions((Pointer)this).offsetAddress(i);
+      }
+  
+    public MergeOptions(
+            @Const @ByVal(nullValue = "std::chrono::milliseconds(kProcessGroupDefaultTimeout)") Milliseconds timeout,
+            @Const @ByVal(nullValue = "std::optional<std::string>(std::nullopt)") StringOptional group_name,
+            @Const @ByVal(nullValue = "std::optional<std::string>(std::nullopt)") StringOptional group_desc) { super((Pointer)null); allocate(timeout, group_name, group_desc); }
+    private native void allocate(
+            @Const @ByVal(nullValue = "std::chrono::milliseconds(kProcessGroupDefaultTimeout)") Milliseconds timeout,
+            @Const @ByVal(nullValue = "std::optional<std::string>(std::nullopt)") StringOptional group_name,
+            @Const @ByVal(nullValue = "std::optional<std::string>(std::nullopt)") StringOptional group_desc);
+    public MergeOptions() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    
+    
+
+    public native @ByRef Milliseconds timeout(); public native MergeOptions timeout(Milliseconds setter);
+    public native @ByRef StringOptional group_name(); public native MergeOptions group_name(StringOptional setter);
+    public native @ByRef StringOptional group_desc(); public native MergeOptions group_desc(StringOptional setter);
+  }
+
   public enum BackendType {
     UNDEFINED((byte)(0)),
     GLOO((byte)(1)),
@@ -99,6 +131,10 @@ public class ProcessGroup extends CustomClassHolder {
 
   public native @Cast("bool") boolean backendSupportsSequenceNumbers(BackendType backendType);
   public native @Cast("bool") boolean backendSupportsSequenceNumbers(@Cast("c10d::ProcessGroup::BackendType") byte backendType);
+
+  public native void setTimeout(@ByVal Milliseconds timeout);
+
+  public native @Cast("int64_t") long incrementSplitCount();
 
   public native void startCoalescing(DeviceType deviceType);
   public native void startCoalescing(@Cast("c10::DeviceType") byte deviceType);
@@ -275,13 +311,13 @@ public class ProcessGroup extends CustomClassHolder {
   public native void setBackend(
         DeviceType deviceType,
         BackendType backendType,
-        @Const @ByRef DistributedBackendOptional backend);
+        @Const @ByRef BackendOptional backend);
   public native void setBackend(
         @Cast("c10::DeviceType") byte deviceType,
         @Cast("c10d::ProcessGroup::BackendType") byte backendType,
-        @Const @ByRef DistributedBackendOptional backend);
+        @Const @ByRef BackendOptional backend);
 
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getDefaultBackend();
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend getDefaultBackend();
 
   public native void setDefaultBackend(BackendType backendType);
   public native void setDefaultBackend(@Cast("c10d::ProcessGroup::BackendType") byte backendType);
@@ -289,10 +325,10 @@ public class ProcessGroup extends CustomClassHolder {
   public native void setDefaultBackend(@StdString BytePointer backend);
   public native void setDefaultBackend(@StdString String backend);
 
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getBackend(DeviceType deviceType);
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getBackend(@Cast("c10::DeviceType") byte deviceType);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend getBackend(DeviceType deviceType);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend getBackend(@Cast("c10::DeviceType") byte deviceType);
 
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend getBackend(BackendType backendType);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend getBackend(BackendType backendType);
 
   // Return device types supported by this ProcessGroup.
   // Note: the return type is `Device` rather than `DeviceType` for the purpose
@@ -328,5 +364,35 @@ public class ProcessGroup extends CustomClassHolder {
   // here and then down into the actual backend instances.
   public native @ByVal DeviceOptional getBoundDeviceId();
 
+  public native @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store getStore();
+
   public native void setBoundDeviceId(@ByVal DeviceOptional device);
+
+  // This creates a new subgroup using the specified ranks.
+  // The current rank must be included in the list of new_ranks.
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
+        @StdVector IntPointer ranks,
+        @Optional Milliseconds timeout,
+        @Const @ByRef BackendOptionsOptional opts,
+        @Const @ByRef StringOptional name,
+        @Const @ByRef StringOptional groupDesc);
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
+        @StdVector IntBuffer ranks,
+        @Optional Milliseconds timeout,
+        @Const @ByRef BackendOptionsOptional opts,
+        @Const @ByRef StringOptional name,
+        @Const @ByRef StringOptional groupDesc);
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
+        @StdVector int[] ranks,
+        @Optional Milliseconds timeout,
+        @Const @ByRef BackendOptionsOptional opts,
+        @Const @ByRef StringOptional name,
+        @Const @ByRef StringOptional groupDesc);
+
+  // This creates a new subgroup using the specified ranks.
+  // The current rank must be included in the list of new_ranks.
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup mergeRemoteGroup(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @Const @ByRef MergeOptions opts,
+        int size);
 }

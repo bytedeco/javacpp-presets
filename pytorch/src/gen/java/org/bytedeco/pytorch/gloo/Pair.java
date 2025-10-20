@@ -64,6 +64,22 @@ public class Pair extends Pointer {
         UnboundBuffer buf,
         @Cast("uint64_t") long tag);
 
+  public native void put(
+        UnboundBuffer tbuf,
+        @Const @ByRef RemoteKey key,
+        @Cast("uint64_t") long slot,
+        @Cast("size_t") long offset,
+        @Cast("size_t") long roffset,
+        @Cast("size_t") long nbytes);
+
+  public native void get(
+        UnboundBuffer tbuf,
+        @Const @ByRef RemoteKey key,
+        @Cast("uint64_t") long slot,
+        @Cast("size_t") long offset,
+        @Cast("size_t") long roffset,
+        @Cast("size_t") long nbytes);
+
   // Sets the local rank of the process to be localRank
   // (See below for description of local rank)
   public native void setLocalRank(int localRank);

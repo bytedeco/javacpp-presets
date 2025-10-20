@@ -19,7 +19,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// Represents a class, analagous to `int` or `dict`. Instances of classes,
+// Represents a class, analogous to `int` or `dict`. Instances of classes,
 // like `1` or `{"foo": 5}`, are represented as SimpleValues
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ClassValue extends SugaredValue {

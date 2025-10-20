@@ -19,18 +19,18 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @NoOffset @Name("std::optional<c10::intrusive_ptr<c10d::Backend> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DistributedBackendOptional extends Pointer {
+public class BackendOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DistributedBackendOptional(Pointer p) { super(p); }
-    public DistributedBackendOptional(@Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend value) { this(); put(value); }
-    public DistributedBackendOptional()       { allocate();  }
+    public BackendOptional(Pointer p) { super(p); }
+    public BackendOptional(@Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend value) { this(); put(value); }
+    public BackendOptional()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef DistributedBackendOptional put(@ByRef DistributedBackendOptional x);
+    public native @Name("operator =") @ByRef BackendOptional put(@ByRef BackendOptional x);
 
     public native boolean has_value();
     public native void reset();
-    public native @Name("value") @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend get();
-    @ValueSetter public native DistributedBackendOptional put(@IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) DistributedBackend value);
+    public native @Name("value") @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend get();
+    @ValueSetter public native BackendOptional put(@IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend value);
 }
 

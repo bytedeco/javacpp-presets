@@ -269,6 +269,18 @@ public class IValue extends Pointer {
 
   public native @Cast("int64_t") long toInt();
 
+  // Unsigned
+
+
+  // See Note [Meaning of HAS_u]
+  // IValue type model closely follows that of c10::Scalar
+  // Where all integers are upcast to 64-bit representation, and `as_int` is used as default
+  // representation unless value could not be represented as signed int
+  public native @Cast("bool") boolean isUnsigned();
+
+  public native @Cast("uint64_t") long toUInt();
+
+
   // Bool
   public IValue(@Cast("bool") boolean b) { super((Pointer)null); allocate(b); }
   private native void allocate(@Cast("bool") boolean b);

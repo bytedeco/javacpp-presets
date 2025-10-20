@@ -54,13 +54,11 @@ public class MemPool extends Pointer {
   public MemPool(
         CUDAAllocator allocator/*=nullptr*/,
         @Cast("bool") boolean is_user_created/*=true*/,
-        @Cast("bool") boolean use_on_oom/*=false*/,
-        @Cast("bool") boolean symmetric/*=false*/) { super((Pointer)null); allocate(allocator, is_user_created, use_on_oom, symmetric); }
+        @Cast("bool") boolean use_on_oom/*=false*/) { super((Pointer)null); allocate(allocator, is_user_created, use_on_oom); }
   private native void allocate(
         CUDAAllocator allocator/*=nullptr*/,
         @Cast("bool") boolean is_user_created/*=true*/,
-        @Cast("bool") boolean use_on_oom/*=false*/,
-        @Cast("bool") boolean symmetric/*=false*/);
+        @Cast("bool") boolean use_on_oom/*=false*/);
   public MemPool() { super((Pointer)null); allocate(); }
   private native void allocate();
   
@@ -69,11 +67,10 @@ public class MemPool extends Pointer {
   
   public native @ByRef @Name("operator =") MemPool put(@ByRef(true) MemPool arg0);
 
-  public native @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair id();
-  public native @Cast("bool") boolean is_symmetric();
+  public native @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair id();
   public native CUDAAllocator allocator();
   public native int use_count();
   public native byte device();
-  public static native @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair graph_pool_handle(@Cast("bool") boolean is_user_created/*=true*/);
-  public static native @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair graph_pool_handle();
+  public static native @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair graph_pool_handle(@Cast("bool") boolean is_user_created/*=true*/);
+  public static native @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair graph_pool_handle();
 }

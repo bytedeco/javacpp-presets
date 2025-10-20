@@ -54,6 +54,7 @@ public class AllocatorConfigInfo extends Pointer {
   public native @Cast("bool") boolean expandable_segments(); public native AllocatorConfigInfo expandable_segments(boolean setter);
   public native @Cast("bool") boolean release_lock_on_malloc(); public native AllocatorConfigInfo release_lock_on_malloc(boolean setter);
   public native @Cast("bool") boolean pinned_use_host_register(); public native AllocatorConfigInfo pinned_use_host_register(boolean setter);
+  public native @Cast("bool") boolean graph_capture_record_stream_reuse(); public native AllocatorConfigInfo graph_capture_record_stream_reuse(boolean setter);
   public native @StdString BytePointer last_allocator_settings(); public native AllocatorConfigInfo last_allocator_settings(BytePointer setter);
   public native @ByRef @Cast("std::vector<size_t>*") SizeTVector roundup_power2_divisions(); public native AllocatorConfigInfo roundup_power2_divisions(SizeTVector setter);
 }

@@ -112,7 +112,7 @@ public class TensorIteratorConfig extends Pointer {
 
   // Sets the enforce_linear_iteration_ flag, which is false by default.
   // If true, iteration goes in the same order as a C-contiguous tensor
-  // is layed out in memory. i.e. last dimension iterates fastest.
+  // is laid out in memory. i.e. last dimension iterates fastest.
   //
   // This iteration order can be less efficient and may even prevent
   // vectorization. So only use if the correctness of your kernel depends on it.

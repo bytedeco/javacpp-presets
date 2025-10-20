@@ -195,7 +195,7 @@ private native void allocate(MemoryFormat memory_format);
   
   ///
   ///
-  public native Backend backend();
+  public native org.bytedeco.pytorch.global.torch.Backend backend();
 
   /** Return the right-biased merge of two TensorOptions.  This has the
    *  effect of overwriting settings from self with specified options

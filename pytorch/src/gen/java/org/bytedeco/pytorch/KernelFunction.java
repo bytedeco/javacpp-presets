@@ -45,6 +45,10 @@ public class KernelFunction extends Pointer {
   public KernelFunction() { super((Pointer)null); allocate(); }
   private native void allocate();
 
+  public KernelFunction(@Const @ByRef KernelFunction other) { super((Pointer)null); allocate(other); }
+  private native void allocate(@Const @ByRef KernelFunction other);
+  public native @ByRef @Name("operator =") KernelFunction put(@Const @ByRef KernelFunction other);
+
   // Fast path for dispatch to allow not touching the boxed kernel in
   // the common case where unboxed is available.
   public native @Cast("bool") boolean isValidUnboxed();
@@ -185,4 +189,7 @@ public class KernelFunction extends Pointer {
   public native @StdString BytePointer dumpState();
   // For testing internal invariants only
   
+
+  // Register a token to be invalidated when this KernelFunction is destroyed
+  public native void registerToken(@WeakPtr("c10::KernelToken") @ByVal KernelToken token);
 }

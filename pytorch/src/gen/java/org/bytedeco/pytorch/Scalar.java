@@ -158,7 +158,11 @@ public class Scalar extends Pointer {
   public native @Cast("bool") boolean isFloatingPoint();
 
   
+
   public native @Cast("bool") boolean isIntegral(@Cast("bool") boolean includeBool);
+
+  // See Note [Meaning of HAS_u]
+  public native @Cast("bool") boolean isUnsigned();
 
   public native @Cast("bool") boolean isComplex();
   public native @Cast("bool") boolean isBoolean();

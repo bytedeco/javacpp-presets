@@ -47,6 +47,16 @@ public class RecordFunction extends Pointer {
   public RecordFunction(@Cast("at::StepCallbacks*") @ByRef(true) Pointer step_callbacks) { super((Pointer)null); allocate(step_callbacks); }
   private native void allocate(@Cast("at::StepCallbacks*") @ByRef(true) Pointer step_callbacks);
 
+  
+
+  
+
+  
+
+  
+
+  
+
   // Destructor calls end callbacks
 
   
@@ -95,12 +105,7 @@ public class RecordFunction extends Pointer {
 
   // before functions initialize RecordFunction members and call
   // start callbacks
-  public native void before(@Cast("const char*") BytePointer name, @Cast("int64_t") long sequence_nr/*=-1*/);
-  public native void before(@Cast("const char*") BytePointer name);
-  public native void before(String name, @Cast("int64_t") long sequence_nr/*=-1*/);
-  public native void before(String name);
-  public native void before(@ByVal @Cast("at::RecordFunction::schema_ref_t*") Pointer schema, @Cast("int64_t") long sequence_nr/*=-1*/);
-  public native void before(@ByVal @Cast("at::RecordFunction::schema_ref_t*") Pointer schema);
+  
 
   // Sets node ID for distributed profiling
   public static native void setDefaultNodeId(@Cast("int64_t") long defaultNodeId);

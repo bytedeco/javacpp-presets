@@ -99,4 +99,6 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
   public native void resetPeakMemoryStats(@Cast("c10::DeviceIndex") byte arg0);
 
   public native void attachOutOfMemoryObserver(@Cast("PyObject*") Pointer observer);
+
+  public native @Cast("bool") boolean isAvailable();
 }

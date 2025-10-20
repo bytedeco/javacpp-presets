@@ -54,6 +54,8 @@ public class SizesAndStrides extends Pointer {
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef SizesAndStrides other);
 
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef SizesAndStrides other);
+
   public native @ByRef @Name("operator =") SizesAndStrides put(@Const @ByRef SizesAndStrides rhs);
 
   // Move from rhs. rhs.size() == 0 afterwards.

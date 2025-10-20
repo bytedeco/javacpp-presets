@@ -223,7 +223,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
- * PyTorch 2.8.x  https://github.com/pytorch/pytorch
+ * PyTorch 2.9.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.2.x  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.20.x  https://github.com/tensorflow/tensorflow

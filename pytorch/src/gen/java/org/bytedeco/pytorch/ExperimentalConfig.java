@@ -44,7 +44,9 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean disable_external_correlation/*=false*/,
         @Cast("bool") boolean profile_all_threads/*=false*/,
         @Cast("bool") boolean capture_overload_names/*=false*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, adjust_timestamps); }
+        @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @StdString BytePointer custom_profiler_config/*=""*/,
+        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, custom_profiler_config, adjust_timestamps); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
@@ -55,9 +57,37 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean disable_external_correlation/*=false*/,
         @Cast("bool") boolean profile_all_threads/*=false*/,
         @Cast("bool") boolean capture_overload_names/*=false*/,
+        @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @StdString BytePointer custom_profiler_config/*=""*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/);
   public ExperimentalConfig() { super((Pointer)null); allocate(); }
   private native void allocate();
+  public ExperimentalConfig(
+        @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
+        @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
+        @Cast("bool") boolean verbose/*=false*/,
+        @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
+        @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
+        @Cast("bool") boolean adjust_profiler_step/*=false*/,
+        @Cast("bool") boolean disable_external_correlation/*=false*/,
+        @Cast("bool") boolean profile_all_threads/*=false*/,
+        @Cast("bool") boolean capture_overload_names/*=false*/,
+        @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @StdString String custom_profiler_config/*=""*/,
+        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, custom_profiler_config, adjust_timestamps); }
+  private native void allocate(
+        @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
+        @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
+        @Cast("bool") boolean verbose/*=false*/,
+        @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
+        @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
+        @Cast("bool") boolean adjust_profiler_step/*=false*/,
+        @Cast("bool") boolean disable_external_correlation/*=false*/,
+        @Cast("bool") boolean profile_all_threads/*=false*/,
+        @Cast("bool") boolean capture_overload_names/*=false*/,
+        @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @StdString String custom_profiler_config/*=""*/,
+        @Cast("bool") boolean adjust_timestamps/*=false*/);
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 
   public native @ByRef StringVector profiler_metrics(); public native ExperimentalConfig profiler_metrics(StringVector setter);
@@ -95,6 +125,18 @@ public class ExperimentalConfig extends Pointer {
   /* controls whether overload names are queried from an ATen
    * function schema and stored in the profile  */
   public native @Cast("bool") boolean capture_overload_names(); public native ExperimentalConfig capture_overload_names(boolean setter);
+
+  /*
+   * Controls whether or not python gc info is recorded. This is used to
+   * determine if gc collect is slowing down your profile.
+   */
+  public native @Cast("bool") boolean record_python_gc_info(); public native ExperimentalConfig record_python_gc_info(boolean setter);
+
+  /*
+   * A custom_profiler_config option is introduced to allow custom backends
+   * to apply custom configurations as needed.
+   */
+  public native @StdString BytePointer custom_profiler_config(); public native ExperimentalConfig custom_profiler_config(BytePointer setter);
 
   /*
    * Controls whether or not timestamp adjustment occurs after profiling.

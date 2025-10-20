@@ -419,6 +419,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("c10::ScalarType", "at::ScalarType", "torch::Dtype").enumerate().valueTypes("ScalarType").pointerTypes("@Cast(\"c10::ScalarType*\") BytePointer"))
             .put(new Info("torch::jit::AttributeKind").enumerate().valueTypes("JitAttributeKind"))
             .put(new Info("torch::jit::PickleOpCode").enumerate().translate(false).valueTypes("PickleOpCode"))
+            .put(new Info("c10::Backend").enumerate().valueTypes("org.bytedeco.pytorch.global.torch.Backend"))
         ;
 
         //// std::optional
@@ -512,7 +513,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::optional<c10::SafePyObject>").pointerTypes("SafePyObjectOptional").define())
             .put(new Info("std::optional<std::shared_ptr<c10::SafePyObject> >").pointerTypes("SafePyObjectSharedPtrOptional").define())
             .put(new Info("std::optional<std::pair<const char*,const char*> >").pointerTypes("BytePointerPairOptional").define())
-            .put(new Info("std::optional<c10::intrusive_ptr<c10d::Backend> >").pointerTypes("DistributedBackendOptional").define())
+            .put(new Info("std::optional<c10::intrusive_ptr<c10d::Backend> >").pointerTypes("BackendOptional").define())
+            .put(new Info("std::optional<c10::intrusive_ptr<c10d::Backend::Options> >").pointerTypes("BackendOptionsOptional").define())
             .put(new Info("std::optional<std::weak_ptr<c10d::Logger> >").pointerTypes("LoggerOptional").define())
              //.put(new Info("std::optional<std::function<std::string()> >").pointerTypes("StringSupplierOptional").define()) // .get() of the optional would return a std::function
             .put(new Info("std::optional<std::shared_ptr<c10::SafePyObjectT<c10::impl::TorchDispatchModeKey> > >", "std::optional<std::shared_ptr<c10::impl::PyObject_TorchDispatchMode> >").pointerTypes("PyObject_TorchDispatchModeOptional").define())
@@ -663,7 +665,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::array<c10::FunctionalityOffsetAndMask,c10::num_functionality_keys>").cast().pointerTypes("FunctionalityOffsetAndMask"))
             .put(new Info("std::array<uint32_t,at::MERSENNE_STATE_N>", "std::array<at::SDPBackend,at::num_sdp_backends>").pointerTypes("IntPointer").cast())
             .put(new Info("std::array<std::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >,at::COMPILE_TIME_MAX_DEVICE_TYPES>").pointerTypes("PointerPairOptional").cast())
-            .put(new Info("std::array<uint8_t,c10::NumScalarTypes>").pointerTypes("BytePointer").cast())
+            .put(new Info("std::array<uint8_t,c10::NumScalarTypes>", "std::array<uint8_t,NumScalarTypes>").pointerTypes("BytePointer").cast())
         ;
 
 
@@ -757,7 +759,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("FloatComplex") /*.itPointerType("FloatPointer") */.elementTypes("c10::complex<float>"),
             new ArrayInfo("Future").elementTypes("c10::intrusive_ptr<c10::ivalue::Future>"),
             new ArrayInfo("Half") /*.itPointerType("ShortPointer") */.elementTypes("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)"),
-            new ArrayInfo("IValue").elementTypes("c10::IValue", "const at::IValue").otherPointerTypes("IValueVector"),
+            new ArrayInfo("IValue").elementTypes("c10::IValue", "const c10::IValue", "const at::IValue").otherPointerTypes("IValueVector"),
             new ArrayInfo("Int")
                 .itPointerType("IntPointer")
                 .elementTypes("jint", "int", "int32_t", "uint32_t")
@@ -783,7 +785,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("TensorArg").elementTypes("torch::TensorArg", "at::TensorArg"),
             new ArrayInfo("TensorIndex").elementTypes("at::indexing::TensorIndex").otherPointerTypes("TensorIndexVector"),
             new ArrayInfo("TensorOptional").elementTypes("std::optional<at::Tensor>", "std::optional<torch::Tensor>", "std::optional<torch::autograd::Variable>").otherPointerTypes("TensorOptionalVector"),
-            new ArrayInfo("Type").itPointerType("Type.TypePtr").elementTypes("c10::TypePtr", "c10::Type::TypePtr").otherPointerTypes("TypeVector"),
+            new ArrayInfo("Type").itPointerType("Type.TypePtr").elementTypes("c10::TypePtr", "c10::Type::TypePtr", "at::TypePtr").otherPointerTypes("TypeVector"),
             new ArrayInfo("Value").elementTypes("torch::jit::Value*").otherPointerTypes("ValueVector")
 
         }) {
@@ -1119,9 +1121,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new PointerInfo("torch::jit::Tree").otherCppNames("torch::jit::TreeRef"),
 
             new PointerInfo("c10d::Store"),
-            new PointerInfo("c10d::ProcessGroup::Options"),
+            new PointerInfo("c10d::ProcessGroup::Options").javaBaseName("ProcessGroup.Options"),
             new PointerInfo("c10d::Work"),
-            new PointerInfo("c10d::Backend").javaBaseName("DistributedBackend"),
+            new PointerInfo("c10d::Backend"),
+            new PointerInfo("c10d::Backend::Options").javaBaseName("Backend.Options"),
             new PointerInfo("c10d::_SupplementBase"),
             new PointerInfo("c10d::ProcessGroup"),
             new PointerInfo("intra_node_comm::IntraNodeComm"),
@@ -1877,6 +1880,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new PointerInfo("torch::jit::Operator"),
             new PointerInfo("torch::jit::Resolver"),
             new PointerInfo("c10::ClassType"),
+            new PointerInfo("c10::KernelToken"),
             new PointerInfo("c10::TensorType").otherCppNames("c10::TensorTypePtr", "at::TensorTypePtr", "torch::TensorTypePtr"),
             new PointerInfo("torch::nn::Module"),
             new PointerInfo("const at::functorch::FuncTorchTLSBase"),
@@ -1941,12 +1945,13 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::unique_ptr<c10::SafePyObject>").skip()) // A class cannot be handled by both shared and unique ptr
         ;
 
-        // Already defined in gloo
+        // Already defined in gloo or cuda
         infoMap
             .put(new Info("std::shared_ptr<::gloo::transport::Device>").annotations("@SharedPtr").pointerTypes("org.bytedeco.pytorch.gloo.Device"))
             .put(new Info("::gloo::transport::UnboundBuffer").pointerTypes("org.bytedeco.pytorch.gloo.UnboundBuffer"))
             .put(new Info("::gloo::rendezvous::Store").pointerTypes("org.bytedeco.pytorch.gloo.Store"))
             .put(new Info("::gloo::Context").pointerTypes("org.bytedeco.pytorch.gloo.Context"))
+            .put(new Info("c10::CachingDeviceAllocator::DeviceStats", "at::CachingDeviceAllocator::DeviceStats").pointerTypes("org.bytedeco.pytorch.cuda.DeviceStats"))
         ;
 
         // See https://github.com/pytorch/pytorch/issues/127873
@@ -1968,6 +1973,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "torch::autograd::profiler::ProfilerResult", "torch::profiler::impl::ProfilerEventStub",
             "torch::autograd::profiler::enableProfiler", "torch::autograd::profiler::enableProfilerWithEventPostProcess",
             "torch::profiler::impl::ProfilerStateBase", "torch::profiler::impl::ProfilerStubs", "torch::autograd::profiler::KinetoEvent",
+            "at::RecordFunction::before",
             "at::Tensor::wrap_tensor_impl(c10::TensorImpl*)",
             "c10::impl::list_element_to_const_ref",
             "c10::unpackSymInt(at::OptionalSymIntArrayRef)",
@@ -2186,7 +2192,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                .put(new Info("torch::jit::Object").pointerTypes("JitObject"))
                .put(new Info("torch::jit::String").pointerTypes("JitString"))
                .put(new Info("torch::autograd::Error").pointerTypes("AutogradError")) // Clash with c10::Error or Java Error
-               .put(new Info("c10d::Backend").pointerTypes("DistributedBackend").purify())
+               .put(new Info("c10d::Backend").pointerTypes("Backend").purify())
                .put(new Info("torch::dynamo::autograd::TensorArg").pointerTypes("DynamoTensorArg")) // Clash with at::TensorArg
         ;
 
@@ -2734,7 +2740,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::function<std::string(const std::string&)>").pointerTypes("StringMapper"))
             .put(new Info("std::function<void(const c10::DDPLoggingData&)>",
                 "std::function<void(const DDPLoggingData&)>").pointerTypes("DDPLogger"))
-            .put(new Info("std::function<c10::TypePtr(c10::TypePtr)>").pointerTypes("TypeMapper"))
+            .put(new Info("std::function<c10::TypePtr(c10::TypePtr)>", "std::function<at::TypePtr(at::TypePtr)>").pointerTypes("TypeMapper"))
             .put(new Info("c10::detail::infer_schema::ArgumentDef::GetTypeFn").pointerTypes("TypeSupplier").skip())
             .put(new Info("c10::TypePtr (*)()", "c10::detail::infer_schema::ArgumentDef::GetTypeFn*").pointerTypes("TypeSupplier").valueTypes("TypeSupplier").skip())
             .put(new Info("std::function<torch::jit::Value*(torch::jit::Value*)>").pointerTypes("ValueMapper"))

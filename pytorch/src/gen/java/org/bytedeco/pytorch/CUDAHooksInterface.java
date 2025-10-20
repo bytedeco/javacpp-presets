@@ -86,6 +86,10 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
 
   public native @Cast("bool") boolean hasROCM();
 
+  public native @Cast("bool") boolean hasCKSDPA();
+
+  public native @Cast("bool") boolean hasCKGEMM();
+
   public native @Cast("const at::cuda::NVRTC*") @ByRef Pointer nvrtc();
 
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
