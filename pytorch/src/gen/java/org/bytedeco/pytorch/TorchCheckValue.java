@@ -20,25 +20,24 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class WriteableTensorData extends Pointer {
+public class TorchCheckValue extends SugaredValue {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public WriteableTensorData() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public WriteableTensorData(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public WriteableTensorData(Pointer p) { super(p); }
-    private native void allocate();
+    public TorchCheckValue(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TorchCheckValue(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public WriteableTensorData position(long position) {
-        return (WriteableTensorData)super.position(position);
+    @Override public TorchCheckValue position(long position) {
+        return (TorchCheckValue)super.position(position);
     }
-    @Override public WriteableTensorData getPointer(long i) {
-        return new WriteableTensorData((Pointer)this).offsetAddress(i);
+    @Override public TorchCheckValue getPointer(long i) {
+        return new TorchCheckValue((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("const char*") BytePointer data();
-  public native @Cast("size_t") long sizeInBytes();
-  public native @Cast("size_t") long nbytes();
-  public native @Cast("bool") boolean storageHasDeleter();
+  public TorchCheckValue() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @StdString BytePointer kind();
+
+  
 }

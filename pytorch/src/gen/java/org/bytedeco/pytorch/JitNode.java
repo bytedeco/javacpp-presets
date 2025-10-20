@@ -189,7 +189,7 @@ public class JitNode extends Pointer {
   // as the equivalents phi-nodes in standard SSA form,
   // defining a new Value to represent any term that has multiple
   // definitions depending on how control flowed. Outputs of the node containing
-  // control flow serve a similiar purpose defining new values for variables
+  // control flow serve a similar purpose defining new values for variables
   // that would have different definitions depending on which way control
   // flowed.
 

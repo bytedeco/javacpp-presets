@@ -144,8 +144,7 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor toType(ScalarType t);
 
   // TODO: Deprecate me
-  public native @ByVal Tensor toBackend(Backend b);
-  public native @ByVal Tensor toBackend(@Cast("c10::Backend") int b);
+  public native @ByVal Tensor toBackend(org.bytedeco.pytorch.global.torch.Backend b);
 
   
 
@@ -1012,6 +1011,9 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor nansum(@ByVal(nullValue = "at::OptionalIntArrayRef(::std::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor nansum();
   public native @ByVal Tensor nansum(@ByVal(nullValue = "at::OptionalIntArrayRef(::std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
+  public native @ByVal Tensor hash_tensor(@ByVal(nullValue = "at::IntArrayRef{}") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @Cast("int64_t") long mode/*=0*/);
+  public native @ByVal Tensor hash_tensor();
+  public native @ByVal Tensor hash_tensor(@ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("bool") boolean keepdim/*=false*/, @Cast("int64_t") long mode/*=0*/);
   public native @ByVal Tensor sum_to_size(@ByVal LongArrayRef size);
   public native @ByVal Tensor sum_to_size(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
   public native @ByVal Tensor sum_to_size_symint(@ByVal SymIntArrayRef size);

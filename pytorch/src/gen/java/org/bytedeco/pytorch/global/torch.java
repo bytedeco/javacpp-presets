@@ -621,7 +621,10 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../BytePointerPairOptional.java
 
 
-// Targeting ../DistributedBackendOptional.java
+// Targeting ../BackendOptional.java
+
+
+// Targeting ../BackendOptionsOptional.java
 
 
 // Targeting ../LoggerOptional.java
@@ -698,13 +701,13 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #pragma once
 
 
-// Parsed from c10/macros/cmake_macros.h
+// Parsed from torch/headeronly/macros/cmake_macros.h
 
 // #ifndef C10_MACROS_CMAKE_MACROS_H_
 // #define C10_MACROS_CMAKE_MACROS_H_
 
 // Automatically generated header file for the C10 library.
-// Do not include this file directly. Instead, include c10/macros/Macros.h.
+// Do not include this file directly. Instead, include torch/headeronly/macros/Macros.h.
 
 // #define C10_BUILD_SHARED_LIBS
 /* #undef C10_USE_GLOG */
@@ -716,16 +719,94 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #endif // C10_MACROS_CMAKE_MACROS_H_
 
 
-// Parsed from c10/macros/Export.h
+// Parsed from torch/headeronly/macros/Export.h
+
+// #pragma once
 
 // #ifndef C10_MACROS_EXPORT_H_
 // #define C10_MACROS_EXPORT_H_
 
 // #ifndef C10_USING_CUSTOM_GENERATED_MACROS
-// #include <c10/macros/cmake_macros.h>
+// #include <torch/headeronly/macros/cmake_macros.h>
 // #endif // C10_USING_CUSTOM_GENERATED_MACROS
 
-// #include <torch/headeronly/macros/Export.h>
+/* Header file to define the common scaffolding for exported symbols.
+ *
+ * Export is by itself a quite tricky situation to deal with, and if you are
+ * hitting this file, make sure you start with the background here:
+ * - Linux: https://gcc.gnu.org/wiki/Visibility
+ * - Windows:
+ * https://docs.microsoft.com/en-us/cpp/cpp/dllexport-dllimport?view=vs-2017
+ *
+ * Do NOT include this file directly. Instead, use c10/macros/Macros.h
+ */
+
+// You do not need to edit this part of file unless you are changing the core
+// pytorch export abstractions.
+//
+// This part defines the C10 core export and import macros. This is controlled
+// by whether we are building shared libraries or not, which is determined
+// during build time and codified in c10/core/cmake_macros.h.
+// When the library is built as a shared lib, EXPORT and IMPORT will contain
+// visibility attributes. If it is being built as a static lib, then EXPORT
+// and IMPORT basically have no effect.
+
+// As a rule of thumb, you should almost NEVER mix static and shared builds for
+// libraries that depend on c10. AKA, if c10 is built as a static library, we
+// recommend everything dependent on c10 to be built statically. If c10 is built
+// as a shared library, everything dependent on it should be built as shared. In
+// the PyTorch project, all native libraries shall use the macro
+// C10_BUILD_SHARED_LIB to check whether pytorch is building shared or static
+// libraries.
+
+// For build systems that do not directly depend on CMake and directly build
+// from the source directory (such as Buck), one may not have a cmake_macros.h
+// file at all. In this case, the build system is responsible for providing
+// correct macro definitions corresponding to the cmake_macros.h.in file.
+//
+// In such scenarios, one should define the macro
+//     C10_USING_CUSTOM_GENERATED_MACROS
+// to inform this header that it does not need to include the cmake_macros.h
+// file.
+
+// #ifdef _WIN32
+// #else // _WIN32
+// #if defined(__GNUC__)
+// #define C10_EXPORT __attribute__((__visibility__("default")))
+// #define C10_HIDDEN __attribute__((__visibility__("hidden")))
+// #else // defined(__GNUC__)
+// #define C10_EXPORT
+// #define C10_HIDDEN
+// #endif // defined(__GNUC__)
+// #define C10_IMPORT C10_EXPORT
+// #endif // _WIN32
+
+// #ifdef NO_EXPORT
+// #undef C10_EXPORT
+// #define C10_EXPORT
+// #endif
+
+// Definition of an adaptive XX_API macro, that depends on whether you are
+// building the library itself or not, routes to XX_EXPORT and XX_IMPORT.
+// Basically, you will need to do this for each shared library that you are
+// building, and the instruction is as follows: assuming that you are building
+// a library called libawesome.so. You should:
+// (1) for your cmake target (usually done by "add_library(awesome, ...)"),
+//     define a macro called AWESOME_BUILD_MAIN_LIB using
+//     target_compile_options.
+// (2) define the AWESOME_API macro similar to the one below.
+// And in the source file of your awesome library, use AWESOME_API to
+// annotate public symbols.
+
+// Here, for the C10 library, we will define the macro C10_API for both import
+// and export.
+
+// This one is being used by libc10.so
+// #ifdef C10_BUILD_MAIN_LIB
+// #define C10_API C10_EXPORT
+// #else
+// #define C10_API C10_IMPORT
+// #endif
 
 // This one is being used by libtorch.so
 // #ifdef CAFFE2_BUILD_MAIN_LIB
@@ -734,8 +815,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #define TORCH_API C10_IMPORT
 // #endif
 
-// You may be wondering: Whose brilliant idea was it to split torch_cuda into
-// two pieces with confusing names?
+// You may be wondering why we have TORCH_CUDA_CPP_API and TORCH_CUDA_CU_API
+// belonging to the same library instead of just one TORCH_CUDA_API. Well, it
+// can indeed just be one TORCH_CUDA_API (and used to be)! TORCH_CUDA_CPP_API
+// and TORCH_CUDA_CU_API are artifacts of when we needed a split build to
+// avoid relocation marker linking errors. The context is as follows:
+//
 // Once upon a time, there _was_ only TORCH_CUDA_API. All was happy until we
 // tried to compile PyTorch for CUDA 11.1, which ran into relocation marker
 // issues when linking big binaries.
@@ -750,26 +835,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // relocation marker issues, we could link our static libraries to a smaller
 // part of torch_cuda (torch_cuda_cpp) and avoid the issues.
 
-// libtorch_cuda_cu.so
-// #ifdef TORCH_CUDA_CU_BUILD_MAIN_LIB
-// #define TORCH_CUDA_CU_API C10_EXPORT
-// #elif defined(BUILD_SPLIT_CUDA)
-// #define TORCH_CUDA_CU_API C10_IMPORT
-// #endif
-
-// libtorch_cuda_cpp.so
-// #ifdef TORCH_CUDA_CPP_BUILD_MAIN_LIB
-// #define TORCH_CUDA_CPP_API C10_EXPORT
-// #elif defined(BUILD_SPLIT_CUDA)
-// #define TORCH_CUDA_CPP_API C10_IMPORT
-// #endif
-
 // libtorch_cuda.so (where torch_cuda_cu and torch_cuda_cpp are a part of the
 // same api)
 // #ifdef TORCH_CUDA_BUILD_MAIN_LIB
 // #define TORCH_CUDA_CPP_API C10_EXPORT
 // #define TORCH_CUDA_CU_API C10_EXPORT
-// #elif !defined(BUILD_SPLIT_CUDA)
+// #else
 // #define TORCH_CUDA_CPP_API C10_IMPORT
 // #define TORCH_CUDA_CU_API C10_IMPORT
 // #endif
@@ -794,33 +865,19 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #else
 // #define C10_API_ENUM
 // #endif
-
 // #endif // C10_MACROS_EXPORT_H_
 
 
-// Parsed from torch/csrc/Export.h
-
-// #pragma once
-
-// #include <c10/macros/Export.h>
-
-// #ifdef THP_BUILD_MAIN_LIB
-// #define TORCH_PYTHON_API C10_EXPORT
-// #else
-// #define TORCH_PYTHON_API C10_IMPORT
-// #endif
-
-
-// Parsed from c10/macros/Macros.h
+// Parsed from torch/headeronly/macros/Macros.h
 
 // #ifndef C10_MACROS_MACROS_H_
 // #define C10_MACROS_MACROS_H_
 // #include <cassert>
 
-/* Main entry for c10/macros.
+/* Main entry for torch/headeronly/macros (used to be c10/macros).
  *
- * In your code, include c10/macros/Macros.h directly, instead of individual
- * files in this folder.
+ * In your code, include torch/headeronly/macros/Macros.h directly, instead of
+ * individual files in this folder.
  */
 
 // For build systems that do not directly depend on CMake and directly build
@@ -834,10 +891,10 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // file.
 
 // #ifndef C10_USING_CUSTOM_GENERATED_MACROS
-// #include <c10/macros/cmake_macros.h>
+// #include <torch/headeronly/macros/cmake_macros.h>
 // #endif // C10_USING_CUSTOM_GENERATED_MACROS
 
-// #include <c10/macros/Export.h>
+// #include <torch/headeronly/macros/Export.h>
 
 // #if defined(__clang__)
 // #define __ubsan_ignore_float_divide_by_zero__
@@ -1052,7 +1109,8 @@ public static final int C10_UBSAN_ENABLED = 1;
 // #endif
 
 // #if defined(USE_ROCM)
-// #else
+
+// #else // defined(USE_ROCM)
 // #define C10_WARP_SIZE 32
 // #endif
 
@@ -1195,6 +1253,1537 @@ public static final int C10_RETURN_MOVE_IF_OLD_COMPILER = 1;
 // #endif
 
 // #endif // C10_MACROS_MACROS_H_
+
+
+// Parsed from torch/headeronly/util/bit_cast.h
+
+// #pragma once
+
+// #include <cstring>
+// #include <type_traits>
+
+// #include <torch/headeronly/macros/Macros.h>
+
+// #if __has_include(<bit>) && (defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806L)
+// #include <bit>
+public static final int C10_HAVE_STD_BIT_CAST = 1;
+// #else
+// #endif // __has_include(<bit>) && (__cplusplus >= 202002L ||
+       // (defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806L))
+
+// #if C10_HAVE_STD_BIT_CAST
+// #else
+// #endif // C10_HAVE_STD_BIT_CAST
+// #undef C10_HAVE_STD_BIT_CAST
+
+ // namespace torch::headeronly
+ // namespace c10
+
+
+// Parsed from torch/headeronly/util/floating_point_utils.h
+
+// #pragma once
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/bit_cast.h>
+// #include <cstdint>
+
+@Namespace("torch::headeronly::detail") public static native float fp32_from_bits(@Cast("uint32_t") int w);
+
+@Namespace("torch::headeronly::detail") public static native @Cast("uint32_t") int fp32_to_bits(float f);
+
+ // namespace torch::headeronly::detail
+ // namespace c10::detail
+
+
+// Parsed from torch/headeronly/util/BFloat16.h
+
+// #pragma once
+
+// Defines the bloat16 type (brain floating-point). This representation uses
+// 1 bit for the sign, 8 bits for the exponent and 7 bits for the mantissa.
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/bit_cast.h>
+
+// #include <cmath>
+// #include <cstdint>
+// #include <cstring>
+// #include <iosfwd>
+// #include <ostream>
+
+// #if defined(__CUDACC__) && !defined(USE_ROCM)
+// #endif
+
+// #if defined(CL_SYCL_LANGUAGE_VERSION)
+// #include <CL/sycl.hpp> // for SYCL 1.2.1
+// #elif defined(SYCL_LANGUAGE_VERSION)
+// #include <sycl/sycl.hpp>
+// Targeting ../BFloat16.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef BFloat16 value);
+@Namespace("c10::detail") public static native float f32_from_bits(@Cast("uint16_t") short src);
+
+@Namespace("c10::detail") public static native @Cast("uint16_t") short bits_from_f32(float src);
+
+@Namespace("c10::detail") public static native @Cast("uint16_t") short round_to_nearest_even(float src);
+
+ // namespace detail
+
+//-------- the following is copied from c10/util/BFloat16-inl.h ---------//
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+/** Constructors */
+
+
+/** Implicit conversions */
+
+
+// #if defined(__CUDACC__) && !defined(USE_ROCM)
+// #endif
+
+// #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
+// #endif
+
+// CUDA intrinsics
+
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@Const @ByRef BFloat16 a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") BFloat16 addPut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") BFloat16 subtractPut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") BFloat16 multiplyPut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") BFloat16 dividePut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator |") BFloat16 or(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator ^") BFloat16 xor(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator &") BFloat16 and(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal BFloat16 a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal BFloat16 a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal BFloat16 a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal BFloat16 a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal BFloat16 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef BFloat16 b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal BFloat16 a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal BFloat16 a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal BFloat16 a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal BFloat16 a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal BFloat16 b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@ByVal BFloat16 a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@ByVal BFloat16 a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@ByVal BFloat16 a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@ByVal BFloat16 a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(int a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(int a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(int a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(int a, @ByVal BFloat16 b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@ByVal BFloat16 a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@ByVal BFloat16 a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@ByVal BFloat16 a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@ByVal BFloat16 a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@Cast("int64_t") long a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@Cast("int64_t") long a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@Cast("int64_t") long a, @ByVal BFloat16 b);
+@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@Cast("int64_t") long a, @ByVal BFloat16 b);
+
+// Overloading < and > operators, because std::max and std::min use them.
+
+@Namespace("c10") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@ByRef BFloat16 lhs, @ByRef BFloat16 rhs);
+
+@Namespace("c10") public static native @Cast("bool") @Name("operator <") boolean lessThan(@ByRef BFloat16 lhs, @ByRef BFloat16 rhs);
+
+ // namespace c10
+ // namespace detail
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/Float4_e2m1fn_x2.h
+
+// #pragma once
+// #include <cstdint>
+
+
+///
+///
+///
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../Float4_e2m1fn_x2.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/util/Float8_e4m3fn.h
+
+
+///
+// #pragma once
+
+/** Defines the Float8_e4m3fn type (8-bit floating-point) including conversions
+ *  to standard C types and basic arithmetic operations. Note that arithmetic
+ *  operations are implemented by converting to floating point and
+ *  performing the operation in float32.
+ *  Binary configuration:
+ *  s eeee mmm
+ *  1 sign bit
+ *  4 exponent bits
+ *  3 mantissa bits
+ *  bias = 7
+ * 
+ *  Implementation based on the paper https://arxiv.org/pdf/2209.05433.pdf
+ *  and inspired by Half implementation from pytorch/c10/util/Half.h */
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/floating_point_utils.h>
+
+// #if defined(__cplusplus)
+// #include <cmath>
+// #include <cstdint>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #include <stdint.h>
+// #endif
+
+// #ifdef _MSC_VER
+// #include <intrin.h>
+// #endif
+
+// #include <climits>
+// #include <iostream>
+// Targeting ../Float8_e4m3fn.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Float8_e4m3fn value);
+
+/*
+ * Convert a 8-bit floating-point number in fp8 E4M3FN format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format, in bit representation.
+ *
+ * @note The implementation doesn't use any floating-point operations.
+ */
+@Namespace("c10::detail") public static native float fp8e4m3fn_to_fp32_value(@Cast("uint8_t") byte input);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 8-bit floating-point number in fp8 E4M3FN format, in bit representation.
+ */
+@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e4m3fn_from_fp32_value(float f);
+
+ // namespace detail
+
+// -------- below is copied from c10/util/Float8_e4m3fn-inl.h --------//
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+/** Constructors */
+
+
+
+/** Implicit conversions */
+
+
+
+/** Special values helper */
+
+
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@Const @ByRef Float8_e4m3fn a, @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@Const @ByRef Float8_e4m3fn a, @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@Const @ByRef Float8_e4m3fn a, @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(
+    @Const @ByRef Float8_e4m3fn a,
+    @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@Const @ByRef Float8_e4m3fn a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e4m3fn addPut(
+    @ByRef Float8_e4m3fn a,
+    @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e4m3fn subtractPut(
+    @ByRef Float8_e4m3fn a,
+    @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e4m3fn multiplyPut(
+    @ByRef Float8_e4m3fn a,
+    @Const @ByRef Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e4m3fn dividePut(
+    @ByRef Float8_e4m3fn a,
+    @Const @ByRef Float8_e4m3fn b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e4m3fn a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e4m3fn a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e4m3fn a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e4m3fn a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e4m3fn b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e4m3fn a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e4m3fn a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e4m3fn a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e4m3fn a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e4m3fn b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@ByVal Float8_e4m3fn a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@ByVal Float8_e4m3fn a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@ByVal Float8_e4m3fn a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(@ByVal Float8_e4m3fn a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(int a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(int a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(int a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(int a, @ByVal Float8_e4m3fn b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e4m3fn to float. */
+
+ // namespace c10
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/Float8_e4m3fnuz.h
+
+
+///
+// #pragma once
+
+/** Defines the Float8_e4m3fnuz type (8-bit floating-point) including
+ *  conversions to standard C types and basic arithmetic operations. Note that
+ *  arithmetic operations are implemented by converting to floating point and
+ *  performing the operation in float32.
+ *  Binary configuration remains the same as Float8_e4m3fn:
+ *  s eeee mmm
+ *  1 sign bit
+ *  4 exponent bits
+ *  3 mantissa bits
+ *  The key differences versus Float8_e4m3fn are:
+ *  bias = 8
+ *  no infinities or negative zero
+ *  NaN only when sign bit is 1, rest all 0s
+ * 
+ *  Implementation based on the paper https://arxiv.org/pdf/2206.02915.pdf and
+ *  the existing Float8_e4m3fn implementation. */
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Float8_fnuz_cvt.h>
+// #include <torch/headeronly/util/floating_point_utils.h>
+
+// #include <limits>
+
+// #if defined(__cplusplus)
+// #include <cstdint>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #include <stdint.h>
+// #endif
+
+// #include <iosfwd>
+// #include <ostream>
+// Targeting ../Float8_e4m3fnuz.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer out,
+    @Const @ByRef Float8_e4m3fnuz value);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 8-bit floating-point number in fp8 E4M3FNUZ format, in bit representation.
+ */
+@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e4m3fnuz_from_fp32_value(float f);
+
+ // namespace detail
+
+//------ below is copied from c10/util/Float8_e4m3fnuz-inl.h ------//
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+/** Constructors */
+
+
+
+/** Implicit conversions */
+
+
+
+/** Special values helper */
+
+
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(
+    @Const @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Const @ByRef Float8_e4m3fnuz a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e4m3fnuz addPut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e4m3fnuz subtractPut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e4m3fnuz multiplyPut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e4m3fnuz dividePut(
+    @ByRef Float8_e4m3fnuz a,
+    @Const @ByRef Float8_e4m3fnuz b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e4m3fnuz a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e4m3fnuz a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e4m3fnuz a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e4m3fnuz a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e4m3fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e4m3fnuz a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e4m3fnuz a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e4m3fnuz a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e4m3fnuz a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e4m3fnuz b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@ByVal Float8_e4m3fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@ByVal Float8_e4m3fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@ByVal Float8_e4m3fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@ByVal Float8_e4m3fnuz a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(int a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(int a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(int a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(int a, @ByVal Float8_e4m3fnuz b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e4m3fnuz to float. */
+
+ // namespace c10
+ // namespace detail
+
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/Float8_e5m2.h
+
+
+///
+// #pragma once
+
+/** Defines the Float8_e5m2 type (8-bit floating-point) including conversions
+ *  to standard C types and basic arithmetic operations. Note that arithmetic
+ *  operations are implemented by converting to floating point and
+ *  performing the operation in float32.
+ *  Binary configuration:
+ *  s eeeee mm
+ *  1 sign bit
+ *  5 exponent bits
+ *  2 mantissa bits
+ *  bias = 15
+ * 
+ *  Implementation based on the paper https://arxiv.org/pdf/2209.05433.pdf
+ *  and inspired by Half implementation from pytorch/c10/util/Half.h */
+
+// #include <torch/headeronly/util/Half.h>
+
+// #include <limits>
+// Targeting ../Float8_e5m2.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Float8_e5m2 value);
+
+/*
+ * Convert a 8-bit floating-point number in fp8 E5M2 format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format, in bit representation.
+ *
+ * @note The implementation doesn't use any floating-point operations.
+ */
+@Namespace("c10::detail") public static native float fp8e5m2_to_fp32_value(@Cast("uint8_t") byte input);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 8-bit floating-point number in fp8 E5M2 format, in bit representation.
+ */
+@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e5m2_from_fp32_value(float f);
+
+ // namespace detail
+
+// -------- below is copied from c10/util/Float8_e5m2-inl.h --------//
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+public static final int EXP_WIDTH_FP8 = 5;
+public static final int MAN_WIDTH_FP8 = 2;
+public static final int EXP_BIAS_FP8 = 15;
+
+/** Constructors */
+
+
+
+/** Implicit conversions */
+
+
+
+/** Special values helpers */
+
+
+
+
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@Const @ByRef Float8_e5m2 a, @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@Const @ByRef Float8_e5m2 a, @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@Const @ByRef Float8_e5m2 a, @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(
+    @Const @ByRef Float8_e5m2 a,
+    @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@Const @ByRef Float8_e5m2 a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e5m2 addPut(
+    @ByRef Float8_e5m2 a,
+    @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e5m2 subtractPut(
+    @ByRef Float8_e5m2 a,
+    @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e5m2 multiplyPut(
+    @ByRef Float8_e5m2 a,
+    @Const @ByRef Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e5m2 dividePut(
+    @ByRef Float8_e5m2 a,
+    @Const @ByRef Float8_e5m2 b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e5m2 a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e5m2 a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e5m2 a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e5m2 a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e5m2 b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e5m2 a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e5m2 a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e5m2 a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e5m2 a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e5m2 b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@ByVal Float8_e5m2 a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@ByVal Float8_e5m2 a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@ByVal Float8_e5m2 a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(@ByVal Float8_e5m2 a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(int a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(int a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(int a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(int a, @ByVal Float8_e5m2 b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e5m2 to float. */
+ // namespace c10
+ // namespace detail
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/Float8_e5m2fnuz.h
+
+
+///
+// #pragma once
+
+/** Defines the Float8_e5m2fnuz type (8-bit floating-point) including
+ *  conversions to standard C types and basic arithmetic operations. Note that
+ *  arithmetic operations are implemented by converting to floating point and
+ *  performing the operation in float32.
+ *  Binary configuration remains the same as e5m2:
+ *  s eeeee mm
+ *  1 sign bit
+ *  5 exponent bits
+ *  2 mantissa bits
+ *  The key differences that e5m2fnuz brings are:
+ *  bias = 16
+ *  no infinities or negative zero
+ *  NaN only when sign bit is 1, rest all 0s
+ * 
+ *  Implementation based on the paper https://arxiv.org/pdf/2206.02915.pdf and
+ *  the existing Float8_e4m3fn implementation. */
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Float8_fnuz_cvt.h>
+// #include <torch/headeronly/util/TypeSafeSignMath.h>
+// #include <torch/headeronly/util/floating_point_utils.h>
+
+// #if defined(__cplusplus)
+// #include <cstdint>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #include <stdint.h>
+// #endif
+
+// #include <iosfwd>
+// #include <ostream>
+// Targeting ../Float8_e5m2fnuz.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer out,
+    @Const @ByRef Float8_e5m2fnuz value);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 8-bit floating-point number in fp8 E5M2 format, in bit representation.
+ */
+@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e5m2fnuz_from_fp32_value(float f);
+
+ // namespace detail
+
+//------ below is copied from c10/util/Float8_e5m2fnuz-inl.h ------//
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+/** Constructors */
+
+
+
+/** Implicit conversions */
+
+
+
+/** Special values helpers */
+
+
+
+
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(
+    @Const @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Const @ByRef Float8_e5m2fnuz a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e5m2fnuz addPut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e5m2fnuz subtractPut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e5m2fnuz multiplyPut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e5m2fnuz dividePut(
+    @ByRef Float8_e5m2fnuz a,
+    @Const @ByRef Float8_e5m2fnuz b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e5m2fnuz a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e5m2fnuz a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e5m2fnuz a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e5m2fnuz a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e5m2fnuz b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e5m2fnuz a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e5m2fnuz a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e5m2fnuz a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e5m2fnuz a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e5m2fnuz b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@ByVal Float8_e5m2fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@ByVal Float8_e5m2fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@ByVal Float8_e5m2fnuz a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@ByVal Float8_e5m2fnuz a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(int a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(int a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(int a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(int a, @ByVal Float8_e5m2fnuz b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e5m2fnuz to float. */
+
+ // namespace c10
+
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/Float8_e8m0fnu.h
+
+
+///
+// #pragma once
+
+/** Defines the Float8_e8m0fnu type (8-bit floating-point) including
+ *  conversions to standard C types
+ *  Binary configuration :
+ *  eeeeeeee
+ *  no sign bits
+ *  8 exponent bits
+ *  no mantissa bits
+ * 
+ *  This is the E8M0 dtype from the OCP MX format spec
+ *  (https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf,
+ *  Section 5.4.1) */
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/floating_point_utils.h>
+
+// TODO(#146647): do we need to special case OPENCL?
+// #if defined(__cplusplus)
+// #include <cstdint>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #include <stdint.h>
+// #endif
+
+// #include <iosfwd>
+// #include <limits>
+// #include <ostream>
+// Targeting ../Float8_e8m0fnu.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer out,
+    @Const @ByRef Float8_e8m0fnu value);
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 8-bit floating-point number in fp8 e8m0fnu format, in bit representation.
+ */
+@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e8m0fnu_from_fp32_value(float f);
+
+ // namespace detail
+
+//------- the below is from c10/util/Float8_e8m0fnu-inl.h  ------//
+// TODO(#146647): Can we remove the below warning?
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+/** Constructors */
+
+
+/** Implicit conversions */
+
+
+
+/** Special values helper */
+
+
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Float8_e8m0fnu to float. */
+ // namespace c10
+ // namespace detail
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/Half.h
+
+// #pragma once
+
+/** Defines the Half type (half-precision floating-point) including conversions
+ *  to standard C types and basic arithmetic operations. Note that arithmetic
+ *  operations are implemented by converting to floating point and
+ *  performing the operation in float32, instead of using CUDA half intrinsics.
+ *  Most uses of this type within ATen are memory bound, including the
+ *  element-wise kernels, and the half intrinsics aren't efficient on all GPUs.
+ *  If you are writing a compute bound kernel, you can use the CUDA half
+ *  intrinsics directly on the Half type from device code. */
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/bit_cast.h>
+// #include <torch/headeronly/util/floating_point_utils.h>
+
+// #if defined(__cplusplus)
+// #include <cmath>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #endif
+
+// #ifdef _MSC_VER
+// #include <intrin.h>
+// #endif
+
+// #include <cstdint>
+// #include <cstring>
+// #include <ostream>
+
+// #ifdef __CUDACC__
+// #include <cuda_fp16.h>
+// #endif
+
+// #ifdef __HIPCC__
+// #include <hip/hip_fp16.h>
+// #endif
+
+// #if defined(CL_SYCL_LANGUAGE_VERSION)
+// #include <CL/sycl.hpp> // for SYCL 1.2.1
+// #elif defined(SYCL_LANGUAGE_VERSION)
+// #include <sycl/sycl.hpp> // for SYCL 2020
+// #endif
+
+// #if (defined(CPU_CAPABILITY_AVX2) || defined(CPU_CAPABILITY_AVX512)) &&
+//     !defined(__APPLE__)
+// #include <torch/headeronly/cpu/vec/vec_half.h>
+// #endif
+
+// #if defined(__aarch64__) && !defined(__CUDACC__)
+// #endif
+
+// #if defined(__GNUC__) || defined(__clang__)
+// #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) ||
+//     defined(_M_IX86)
+// #if defined(__F16C__) &&
+//     !(defined(__CUDA_ARCH__) || defined(__CUDACC__) ||
+//       defined(__HIP_DEVICE_COMPILE__))
+public static final int C10_X86_F16 = 1;
+// #include <immintrin.h>
+// Targeting ../Half.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Half value);
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format, in bit representation.
+ *
+ * @note The implementation doesn't use any floating-point operations.
+ */
+@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
+
+// #ifdef C10_X86_F16
+// #undef C10_X86_F16
+// #endif // C10_X86_F16
+
+// #if defined(__aarch64__) && !defined(__CUDACC__)
+// #endif
+
+ // namespace detail
+
+//---------- below is copied from c10/util/Half-inl.h ----------------//
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+// #if defined(__aarch64__) && !defined(__CUDACC__)
+// #else
+
+
+
+/** Implicit conversions */
+
+
+
+// #endif /* !defined(__aarch64__) || defined(__CUDACC__) \
+//         */
+
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+// #ifdef SYCL_LANGUAGE_VERSION
+// #endif
+
+// CUDA intrinsics
+
+// #if (defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 350)) ||
+//     (defined(__clang__) && defined(__CUDA__))
+
+// #endif
+
+/** Arithmetic */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@Const @ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@Const @ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@Const @ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@Const @ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@Const @ByRef Half a);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") Half addPut(@ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByRef @Name("operator -=") Half subtractPut(@ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByRef @Name("operator *=") Half multiplyPut(@ByRef Half a, @Const @ByRef Half b);
+
+@Namespace("c10") public static native @ByRef @Name("operator /=") Half dividePut(@ByRef Half a, @Const @ByRef Half b);
+
+/** Arithmetic with floats */
+
+@Namespace("c10") public static native @Name("operator +") float add(@ByVal Half a, float b);
+@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Half a, float b);
+@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Half a, float b);
+@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Half a, float b);
+
+@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Half b);
+@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Half b);
+@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Half b);
+@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Half b);
+
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Half b);
+@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Half b);
+
+/** Arithmetic with doubles */
+
+@Namespace("c10") public static native @Name("operator +") double add(@ByVal Half a, double b);
+@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Half a, double b);
+@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Half a, double b);
+@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Half a, double b);
+
+@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Half b);
+@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Half b);
+@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Half b);
+@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Half b);
+
+/** Arithmetic with ints */
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@ByVal Half a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@ByVal Half a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@ByVal Half a, int b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@ByVal Half a, int b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Half add(int a, @ByVal Half b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(int a, @ByVal Half b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(int a, @ByVal Half b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(int a, @ByVal Half b);
+
+//// Arithmetic with int64_t
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@ByVal Half a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@ByVal Half a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@ByVal Half a, @Cast("int64_t") long b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@ByVal Half a, @Cast("int64_t") long b);
+
+@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@Cast("int64_t") long a, @ByVal Half b);
+@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@Cast("int64_t") long a, @ByVal Half b);
+@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@Cast("int64_t") long a, @ByVal Half b);
+@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@Cast("int64_t") long a, @ByVal Half b);
+
+/** NOTE: we do not define comparisons directly and instead rely on the implicit
+ *  conversion from c10::Half to float. */
+
+ // namespace c10
+// #if defined(__aarch64__) && !defined(__CUDACC__)
+// #endif
+ // namespace detail
+
+ // namespace torch::headeronly
+
+ // namespace std
+
+
+// Parsed from torch/headeronly/util/bits.h
+
+// #pragma once
+// #include <cstdint>
+
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../bits1x8.java
+
+
+// Targeting ../bits2x4.java
+
+
+// Targeting ../bits4x2.java
+
+
+// Targeting ../bits8.java
+
+
+// Targeting ../bits16.java
+
+
+
+ // namespace c10
+
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/util/complex.h
+
+// #pragma once
+
+// #include <complex>
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Half.h>
+
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
+// #endif
+// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
+// #endif
+// Targeting ../DoubleComplex.java
+
+
+// Targeting ../FloatComplex.java
+
+
+// Targeting ../HalfComplex.java
+
+
+
+
+
+
+
+
+
+
+
+ // namespace complex_literals
+
+// Define operators between integral scalars and c10::complex. std::complex does
+// not support this when T is a floating-point number. This is useful because it
+// saves a lot of "static_cast" when operate a complex and an integer. This
+// makes the code both less verbose and potentially more efficient.
+// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+//   typename std::enable_if_t<
+//       std::is_floating_point_v<fT> && std::is_integral_v<iT>,
+//       int> = 0
+
+// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+
+ // namespace c10
+ // namespace complex_literals
+
+ // namespace torch::headeronly
+
+
+
+// Parsed from torch/headeronly/util/qint32.h
+
+// #pragma once
+// #include <cstdint>
+
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../qint32.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/util/qint8.h
+
+// #pragma once
+// #include <cstdint>
+
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../qint8.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/util/quint2x4.h
+
+// #pragma once
+// #include <cstdint>
+
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../quint2x4.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/util/quint4x2.h
+
+// #pragma once
+// #include <cstdint>
+
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../quint4x2.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/util/quint8.h
+
+// #pragma once
+// #include <cstdint>
+
+// #include <torch/headeronly/macros/Macros.h>
+// Targeting ../quint8.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from torch/headeronly/core/ScalarType.h
+
+// #pragma once
+
+// #include <torch/headeronly/util/BFloat16.h>
+// #include <torch/headeronly/util/Float4_e2m1fn_x2.h>
+// #include <torch/headeronly/util/Float8_e4m3fn.h>
+// #include <torch/headeronly/util/Float8_e4m3fnuz.h>
+// #include <torch/headeronly/util/Float8_e5m2.h>
+// #include <torch/headeronly/util/Float8_e5m2fnuz.h>
+// #include <torch/headeronly/util/Float8_e8m0fnu.h>
+// #include <torch/headeronly/util/Half.h>
+// #include <torch/headeronly/util/bits.h>
+// #include <torch/headeronly/util/complex.h>
+// #include <torch/headeronly/util/qint32.h>
+// #include <torch/headeronly/util/qint8.h>
+// #include <torch/headeronly/util/quint2x4.h>
+// #include <torch/headeronly/util/quint4x2.h>
+// #include <torch/headeronly/util/quint8.h>
+
+// #include <cstdint>
+
+// dummy struct for uint1 to uint7, actual functionality
+// of these dtypes will be implemented in python with Tensor subclass
+
+// dummy struct for int1 to int7, actual functionality
+// of these dtypes will be implemented in python with Tensor subclass
+
+// See [dtype Macros note] in c10/core/ScalarType.h regarding macros
+
+// NB: Order matters for this macro; it is relied upon in
+// _promoteTypesLookup and the serialization format.
+// #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX_AND_QINTS(_)
+//   _(uint8_t, Byte) /* 0 */
+//   _(int8_t, Char) /* 1 */
+//   _(int16_t, Short) /* 2 */
+//   _(int, Int) /* 3 */
+//   _(int64_t, Long) /* 4 */
+//   _(at::Half, Half) /* 5 */
+//   _(float, Float) /* 6 */
+//   _(double, Double) /* 7 */
+//   _(c10::complex<c10::Half>, ComplexHalf) /* 8 */
+//   _(c10::complex<float>, ComplexFloat) /* 9 */
+//   _(c10::complex<double>, ComplexDouble) /* 10 */
+//   _(bool, Bool) /* 11 */
+//   _(c10::qint8, QInt8) /* 12 */
+//   _(c10::quint8, QUInt8) /* 13 */
+//   _(c10::qint32, QInt32) /* 14 */
+//   _(at::BFloat16, BFloat16) /* 15 */
+//   _(c10::quint4x2, QUInt4x2) /* 16 */
+//   _(c10::quint2x4, QUInt2x4) /* 17 */
+//   _(c10::bits1x8, Bits1x8) /* 18 */
+//   _(c10::bits2x4, Bits2x4) /* 19 */
+//   _(c10::bits4x2, Bits4x2) /* 20 */
+//   _(c10::bits8, Bits8) /* 21 */
+//   _(c10::bits16, Bits16) /* 22 */
+//   _(c10::Float8_e5m2, Float8_e5m2) /* 23 */
+//   _(c10::Float8_e4m3fn, Float8_e4m3fn) /* 24 */
+//   _(c10::Float8_e5m2fnuz, Float8_e5m2fnuz) /* 25 */
+//   _(c10::Float8_e4m3fnuz, Float8_e4m3fnuz) /* 26 */
+//   _(uint16_t, UInt16) /* 27 */
+//   _(uint32_t, UInt32) /* 28 */
+//   _(uint64_t, UInt64) /* 29 */
+//   _(c10::dummy_uint1_7_t<1>, UInt1) /* 30 */
+//   _(c10::dummy_uint1_7_t<2>, UInt2) /* 31 */
+//   _(c10::dummy_uint1_7_t<3>, UInt3) /* 32 */
+//   _(c10::dummy_uint1_7_t<4>, UInt4) /* 33 */
+//   _(c10::dummy_uint1_7_t<5>, UInt5) /* 34 */
+//   _(c10::dummy_uint1_7_t<6>, UInt6) /* 35 */
+//   _(c10::dummy_uint1_7_t<7>, UInt7) /* 36 */
+//   _(c10::dummy_int1_7_t<1>, Int1) /* 37 */
+//   _(c10::dummy_int1_7_t<2>, Int2) /* 38 */
+//   _(c10::dummy_int1_7_t<3>, Int3) /* 39 */
+//   _(c10::dummy_int1_7_t<4>, Int4) /* 40 */
+//   _(c10::dummy_int1_7_t<5>, Int5) /* 41 */
+//   _(c10::dummy_int1_7_t<6>, Int6) /* 42 */
+//   _(c10::dummy_int1_7_t<7>, Int7) /* 43 */
+//   _(c10::Float8_e8m0fnu, Float8_e8m0fnu) /* 44 */
+//   _(c10::Float4_e2m1fn_x2, Float4_e2m1fn_x2) /* 45 */
+
+@Namespace("c10") public enum ScalarType {
+  Byte((byte)(0)), /* 0 */
+  Char((byte)(1)), /* 1 */
+  Short((byte)(2)), /* 2 */
+  Int((byte)(3)), /* 3 */
+  Long((byte)(4)), /* 4 */
+  Half((byte)(5)), /* 5 */
+  Float((byte)(6)), /* 6 */
+  Double((byte)(7)), /* 7 */
+  ComplexHalf((byte)(8)), /* 8 */
+  ComplexFloat((byte)(9)), /* 9 */
+  ComplexDouble((byte)(10)), /* 10 */
+  Bool((byte)(11)), /* 11 */
+  QInt8((byte)(12)), /* 12 */
+  QUInt8((byte)(13)), /* 13 */
+  QInt32((byte)(14)), /* 14 */
+  BFloat16((byte)(15)), /* 15 */
+  QUInt4x2((byte)(16)), /* 16 */
+  QUInt2x4((byte)(17)), /* 17 */
+  Bits1x8((byte)(18)), /* 18 */
+  Bits2x4((byte)(19)), /* 19 */
+  Bits4x2((byte)(20)), /* 20 */
+  Bits8((byte)(21)), /* 21 */
+  Bits16((byte)(22)), /* 22 */
+  Float8_e5m2((byte)(23)), /* 23 */
+  Float8_e4m3fn((byte)(24)), /* 24 */
+  Float8_e5m2fnuz((byte)(25)), /* 25 */
+  Float8_e4m3fnuz((byte)(26)), /* 26 */
+  UInt16((byte)(27)), /* 27 */
+  UInt32((byte)(28)), /* 28 */
+  UInt64((byte)(29)), /* 29 */
+  UInt1((byte)(30)), /* 30 */
+  UInt2((byte)(31)), /* 31 */
+  UInt3((byte)(32)), /* 32 */
+  UInt4((byte)(33)), /* 33 */
+  UInt5((byte)(34)), /* 34 */
+  UInt6((byte)(35)), /* 35 */
+  UInt7((byte)(36)), /* 36 */
+  Int1((byte)(37)), /* 37 */
+  Int2((byte)(38)), /* 38 */
+  Int3((byte)(39)), /* 39 */
+  Int4((byte)(40)), /* 40 */
+  Int5((byte)(41)), /* 41 */
+  Int6((byte)(42)), /* 42 */
+  Int7((byte)(43)), /* 43 */
+  Float8_e8m0fnu((byte)(44)), /* 44 */
+  Float4_e2m1fn_x2((byte)(45)),
+      Undefined((byte)(46)),
+  NumOptions((byte)(47));
+
+    public final byte value;
+    private ScalarType(byte v) { this.value = v; }
+    private ScalarType(ScalarType e) { this.value = e.value; }
+    public ScalarType intern() { for (ScalarType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10") @MemberGetter public static native @Cast("const uint16_t") short NumScalarTypes();
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
+// Parsed from c10/macros/cmake_macros.h
+
+// This file exists for backwards compatibility and has been moved to
+// torch/headeronly/macros/cmake_macros.h.in. No end user library should be
+// including this file directly anyway (cuz they should be including
+// Macros.h instead).
+// #include <torch/headeronly/macros/cmake_macros.h>
+
+
+// Parsed from c10/macros/Export.h
+
+// #include <torch/headeronly/macros/Export.h>
+
+
+// Parsed from torch/csrc/Export.h
+
+// #pragma once
+
+// #include <c10/macros/Export.h>
+
+// #ifdef THP_BUILD_MAIN_LIB
+// #define TORCH_PYTHON_API C10_EXPORT
+// #else
+// #define TORCH_PYTHON_API C10_IMPORT
+// #endif
+
+
+// Parsed from c10/macros/Macros.h
+
+// #include <torch/headeronly/macros/Macros.h>
 
 
 // Parsed from c10/util/Lazy.h
@@ -1643,6 +3232,10 @@ public static final int C10_RETURN_MOVE_IF_OLD_COMPILER = 1;
 // Used in ATen for functionality that is not implemented.  These turn into
 // NotImplementedError when they cross to Python.
 
+// Used in ATen for buffer-related errors, e.g. trying to create a DLPack of
+// an unsupported device.  These turn into BufferError when they cross to
+// Python.
+
 // Used in ATen for non finite indices.  These turn into
 // ExitException when they cross to Python.
 
@@ -1700,26 +3293,7 @@ public static final int C10_RETURN_MOVE_IF_OLD_COMPILER = 1;
 // https://stackoverflow.com/questions/5134523/msvc-doesnt-expand-va-args-correctly
 // #define C10_EXPAND_MSVC_WORKAROUND(x) x
 
-// On nvcc, C10_UNLIKELY thwarts missing return statement analysis.  In cases
-// where the unlikely expression may be a constant, use this macro to ensure
-// return statement analysis keeps working (at the cost of not getting the
-// likely/unlikely annotation on nvcc).
-// https://github.com/pytorch/pytorch/issues/21418
-//
-// Currently, this is only used in the error reporting macros below.  If you
-// want to use it more generally, move me to Macros.h
-//
-// TODO: Brian Vaughan observed that we might be able to get this to work on
-// nvcc by writing some sort of C++ overload that distinguishes constexpr inputs
-// from non-constexpr.  Since there isn't any evidence that losing C10_UNLIKELY
-// in nvcc is causing us perf problems, this is not yet implemented, but this
-// might be an interesting piece of C++ code for an intrepid bootcamper to
-// write.
-// #if defined(__CUDACC__)
-// #define C10_UNLIKELY_OR_CONST(e) e
-// #else
-// #define C10_UNLIKELY_OR_CONST(e) C10_UNLIKELY(e)
-// #endif
+// #include <torch/headeronly/util/Exception.h>
 
 // ----------------------------------------------------------------------------
 // Error reporting macros
@@ -1983,6 +3557,10 @@ public static final int C10_RETURN_MOVE_IF_OLD_COMPILER = 1;
 // Like TORCH_CHECK, but raises NotImplementedErrors instead of Errors.
 // #define TORCH_CHECK_NOT_IMPLEMENTED(cond, ...)
 //   TORCH_CHECK_WITH_MSG(NotImplementedError, cond, "TYPE", __VA_ARGS__)
+
+// Like TORCH_CHECK, but raises BufferError instead of Errors.
+// #define TORCH_CHECK_BUFFER(cond, ...)
+//   TORCH_CHECK_WITH_MSG(BufferError, cond, "TYPE", __VA_ARGS__)
 
 // #define TORCH_CHECK_ALWAYS_SHOW_CPP_STACKTRACE(cond, ...)
 //   TORCH_CHECK_WITH_MSG(
@@ -3208,24 +4786,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // Parsed from c10/util/bit_cast.h
 
-// #pragma once
-
-// #include <cstring>
-// #include <type_traits>
-
-// #if __has_include(<bit>) && (defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806L)
-// #include <bit>
-public static final int C10_HAVE_STD_BIT_CAST = 1;
-// #else
-// #endif // __has_include(<bit>) && (__cplusplus >= 202002L ||
-       // (defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806L))
-
-// #if C10_HAVE_STD_BIT_CAST
-// #else
-// #endif // C10_HAVE_STD_BIT_CAST
-// #undef C10_HAVE_STD_BIT_CAST
-
- // namespace c10
+// #include <torch/headeronly/util/bit_cast.h>
 
 
 // Parsed from c10/core/DispatchKeySet.h
@@ -3419,31 +4980,33 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
   SparseCUDA(8),
   SparseCsrCPU(9),
   SparseCsrCUDA(10),
-  SparseHIP(11),
-  SparseVE(12),
-  SparseXPU(13),
-  SparsePrivateUse1(14),
-  SparseCsrHIP(15),
-  SparseCsrVE(16),
-  SparseCsrXPU(17),
-  SparseCsrPrivateUse1(18),
-  MAIA(19),
-  XLA(20),
-  Vulkan(21),
-  Metal(22),
-  Meta(23),
-  QuantizedCPU(24),
-  QuantizedCUDA(25),
-  QuantizedXPU(26),
-  QuantizedPrivateUse1(27),
-  Undefined(28),
-  MkldnnCPU(29),
-  MPS(30),
-  HPU(31),
-  Lazy(32),
-  MTIA(33),
-  PrivateUse1(34),
-  NumOptions(35);
+  SparseCsrMPS(11),
+  SparseMPS(12),
+  SparseHIP(13),
+  SparseVE(14),
+  SparseXPU(15),
+  SparsePrivateUse1(16),
+  SparseCsrHIP(17),
+  SparseCsrVE(18),
+  SparseCsrXPU(19),
+  SparseCsrPrivateUse1(20),
+  MAIA(21),
+  XLA(22),
+  Vulkan(23),
+  Metal(24),
+  Meta(25),
+  QuantizedCPU(26),
+  QuantizedCUDA(27),
+  QuantizedXPU(28),
+  QuantizedPrivateUse1(29),
+  Undefined(30),
+  MkldnnCPU(31),
+  MPS(32),
+  HPU(33),
+  Lazy(34),
+  MTIA(35),
+  PrivateUse1(36),
+  NumOptions(37);
 
     public final int value;
     private Backend(int v) { this.value = v; }
@@ -3452,23 +5015,18 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-@Namespace("c10") public static native Backend dispatchKeyToBackend(DispatchKey t);
-@Namespace("c10") public static native @Cast("c10::Backend") int dispatchKeyToBackend(@Cast("c10::DispatchKey") short t);
+@Namespace("c10") public static native org.bytedeco.pytorch.global.torch.Backend dispatchKeyToBackend(DispatchKey t);
+@Namespace("c10") public static native org.bytedeco.pytorch.global.torch.Backend dispatchKeyToBackend(@Cast("c10::DispatchKey") short t);
 
-@Namespace("c10") public static native DispatchKey backendToDispatchKey(Backend b);
-@Namespace("c10") public static native @Cast("c10::DispatchKey") short backendToDispatchKey(@Cast("c10::Backend") int b);
+@Namespace("c10") public static native DispatchKey backendToDispatchKey(org.bytedeco.pytorch.global.torch.Backend b);
 
-@Namespace("c10") public static native DeviceType backendToDeviceType(Backend b);
-@Namespace("c10") public static native @Cast("c10::DeviceType") byte backendToDeviceType(@Cast("c10::Backend") int b);
+@Namespace("c10") public static native DeviceType backendToDeviceType(org.bytedeco.pytorch.global.torch.Backend b);
 
-@Namespace("c10") public static native @Cast("const char*") BytePointer toString(Backend b);
-@Namespace("c10") public static native String toString(@Cast("c10::Backend") int b);
+@Namespace("c10") public static native @Cast("const char*") BytePointer toString(org.bytedeco.pytorch.global.torch.Backend b);
 
-@Namespace("c10") public static native @Cast("bool") boolean isSparse(Backend b);
-@Namespace("c10") public static native @Cast("bool") boolean isSparse(@Cast("c10::Backend") int b);
+@Namespace("c10") public static native @Cast("bool") boolean isSparse(org.bytedeco.pytorch.global.torch.Backend b);
 
-@Namespace("c10") public static native @Cast("bool") boolean isSparseCsr(Backend b);
-@Namespace("c10") public static native @Cast("bool") boolean isSparseCsr(@Cast("c10::Backend") int b);
+@Namespace("c10") public static native @Cast("bool") boolean isSparseCsr(org.bytedeco.pytorch.global.torch.Backend b);
 
  // namespace c10
 
@@ -3500,8 +5058,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-@Namespace("c10") public static native Layout layout_from_backend(Backend backend);
-@Namespace("c10") public static native @Cast("c10::Layout") byte layout_from_backend(@Cast("c10::Backend") int backend);
+@Namespace("c10") public static native Layout layout_from_backend(org.bytedeco.pytorch.global.torch.Backend backend);
 
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @ByVal Layout layout);
 
@@ -4087,653 +5644,42 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
 // Parsed from c10/util/BFloat16.h
 
-// #pragma once
-
-// Defines the bloat16 type (brain floating-point). This representation uses
-// 1 bit for the sign, 8 bits for the exponent and 7 bits for the mantissa.
-
-// #include <c10/macros/Macros.h>
-// #include <cmath>
-// #include <cstdint>
-// #include <cstring>
-// #include <iosfwd>
-// #include <ostream>
-
-// #if defined(__CUDACC__) && !defined(USE_ROCM)
-// #endif
-
-// #if defined(CL_SYCL_LANGUAGE_VERSION)
-// #include <CL/sycl.hpp> // for SYCL 1.2.1
-// #elif defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp> // for SYCL 2020
-// #endif
-@Namespace("c10::detail") public static native float f32_from_bits(@Cast("uint16_t") short src);
-
-@Namespace("c10::detail") public static native @Cast("uint16_t") short bits_from_f32(float src);
-
-@Namespace("c10::detail") public static native @Cast("uint16_t") short round_to_nearest_even(float src);
-
-// Targeting ../BFloat16.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer out,
-    @Const @ByRef BFloat16 value);
-
- // namespace c10
-
-// #include <c10/util/BFloat16-inl.h> // IWYU pragma: keep
+// #include <torch/headeronly/util/BFloat16.h>
 
 
 // Parsed from c10/util/BFloat16-inl.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/bit_cast.h>
-
-// #include <limits>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-// #if defined(CL_SYCL_LANGUAGE_VERSION)
-// #include <CL/sycl.hpp> // for SYCL 1.2.1
-// #elif defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp> // for SYCL 2020
-// #endif
-
-/** Constructors */
-
-
-/** Implicit conversions */
-
-
-// #if defined(__CUDACC__) && !defined(USE_ROCM)
-// #endif
-
-// #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
-// #endif
-
-// CUDA intrinsics
-
-// #if defined(__CUDACC__) || defined(__HIPCC__)
-// #endif
-
-/** Arithmetic */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@Const @ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@Const @ByRef BFloat16 a);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") BFloat16 addPut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator -=") BFloat16 subtractPut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator *=") BFloat16 multiplyPut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator /=") BFloat16 dividePut(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator |") BFloat16 or(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator ^") BFloat16 xor(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator &") BFloat16 and(@ByRef BFloat16 a, @Const @ByRef BFloat16 b);
-
-/** Arithmetic with floats */
-
-@Namespace("c10") public static native @Name("operator +") float add(@ByVal BFloat16 a, float b);
-@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal BFloat16 a, float b);
-@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal BFloat16 a, float b);
-@Namespace("c10") public static native @Name("operator /") float divide(@ByVal BFloat16 a, float b);
-
-@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal BFloat16 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef BFloat16 b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef BFloat16 b);
-
-/** Arithmetic with doubles */
-
-@Namespace("c10") public static native @Name("operator +") double add(@ByVal BFloat16 a, double b);
-@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal BFloat16 a, double b);
-@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal BFloat16 a, double b);
-@Namespace("c10") public static native @Name("operator /") double divide(@ByVal BFloat16 a, double b);
-
-@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal BFloat16 b);
-
-/** Arithmetic with ints */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@ByVal BFloat16 a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@ByVal BFloat16 a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@ByVal BFloat16 a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@ByVal BFloat16 a, int b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(int a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(int a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(int a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(int a, @ByVal BFloat16 b);
-
-//// Arithmetic with int64_t
-
-@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@ByVal BFloat16 a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@ByVal BFloat16 a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@ByVal BFloat16 a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@ByVal BFloat16 a, @Cast("int64_t") long b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") BFloat16 add(@Cast("int64_t") long a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @ByVal @Name("operator -") BFloat16 subtract(@Cast("int64_t") long a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @ByVal @Name("operator *") BFloat16 multiply(@Cast("int64_t") long a, @ByVal BFloat16 b);
-@Namespace("c10") public static native @ByVal @Name("operator /") BFloat16 divide(@Cast("int64_t") long a, @ByVal BFloat16 b);
-
-// Overloading < and > operators, because std::max and std::min use them.
-
-@Namespace("c10") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@ByRef BFloat16 lhs, @ByRef BFloat16 rhs);
-
-@Namespace("c10") public static native @Cast("bool") @Name("operator <") boolean lessThan(@ByRef BFloat16 lhs, @ByRef BFloat16 rhs);
-
- // namespace c10
-
- // namespace std
-
+// #include <torch/headeronly/util/BFloat16.h>
 
 
 // Parsed from c10/util/TypeSafeSignMath.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <limits>
-// #include <type_traits>
-
-// #if C10_CLANG_HAS_WARNING("-Wstring-conversion")
-// #endif
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-/** Returns false since we cannot have x < 0 if x is unsigned. */
-
-/** Returns true if a signed variable x < 0 */
-
-/** Returns true if x < 0
- *  NOTE: Will fail on an unsigned custom type
- *        For the most part it's possible to fix this if
- *        the custom type has a constexpr constructor.
- *        However, notably, c10::Half does not :-( */
-
-/** Returns the sign of an unsigned variable x as 0, 1 */
-
-/** Returns the sign of a signed variable x as -1, 0, 1 */
-
-/** Returns the sign of x as -1, 0, 1
- *  NOTE: Will fail on an unsigned custom type
- *        For the most part it's possible to fix this if
- *        the custom type has a constexpr constructor.
- *        However, notably, c10::Half does not :-( */
-
-/** Returns true if a and b are not both negative */
-
-// Suppress sign compare warning when compiling with GCC
-// as later does not account for short-circuit rule before
-// raising the warning, see https://godbolt.org/z/Tr3Msnz99
-// #ifdef __GNUC__
-// #pragma GCC diagnostic push
-// #pragma GCC diagnostic ignored "-Wsign-compare"
-// #endif
-
-/** Returns true if x is greater than the greatest value of the type Limit */
-
-// #ifdef __GNUC__
-// #pragma GCC diagnostic pop
-// #endif
-
-/** Returns true if x < lowest(Limit). Standard comparison */
-
-/** Returns false since all the limit is signed and therefore includes
- *  negative values but x cannot be negative because it is unsigned */
-
-/** Returns true if x < 0, where 0 is constructed from T.
- *  Limit is not signed, so its lower value is zero */
-
-/** Returns false sign both types are unsigned */
-
-/** Returns true if x is less than the lowest value of type T
- *  NOTE: Will fail on an unsigned custom type
- *        For the most part it's possible to fix this if
- *        the custom type has a constexpr constructor.
- *        However, notably, c10::Half does not : */
-
- // namespace c10
-
+// #include <torch/headeronly/util/TypeSafeSignMath.h>
 
 
 // Parsed from c10/util/floating_point_utils.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/bit_cast.h>
-// #include <cstdint>
-
-@Namespace("c10::detail") public static native float fp32_from_bits(@Cast("uint32_t") int w);
-
-@Namespace("c10::detail") public static native @Cast("uint32_t") int fp32_to_bits(float f);
-
- // namespace c10::detail
+// #include <torch/headeronly/util/floating_point_utils.h>
 
 
 // Parsed from c10/util/Float8_e4m3fn-inl.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <cstdint>
-// #include <limits>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-/** Constructors */
-
-
-
-/** Implicit conversions */
-
-
-
-/** Special values helper */
-
-
-
-/** Arithmetic */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@Const @ByRef Float8_e4m3fn a, @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@Const @ByRef Float8_e4m3fn a, @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@Const @ByRef Float8_e4m3fn a, @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(
-    @Const @ByRef Float8_e4m3fn a,
-    @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@Const @ByRef Float8_e4m3fn a);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e4m3fn addPut(
-    @ByRef Float8_e4m3fn a,
-    @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e4m3fn subtractPut(
-    @ByRef Float8_e4m3fn a,
-    @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e4m3fn multiplyPut(
-    @ByRef Float8_e4m3fn a,
-    @Const @ByRef Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e4m3fn dividePut(
-    @ByRef Float8_e4m3fn a,
-    @Const @ByRef Float8_e4m3fn b);
-
-/** Arithmetic with floats */
-
-@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e4m3fn a, float b);
-@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e4m3fn a, float b);
-@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e4m3fn a, float b);
-@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e4m3fn a, float b);
-
-@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e4m3fn b);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fn b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e4m3fn b);
-
-/** Arithmetic with doubles */
-
-@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e4m3fn a, double b);
-@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e4m3fn a, double b);
-@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e4m3fn a, double b);
-@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e4m3fn a, double b);
-
-@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e4m3fn b);
-
-/** Arithmetic with ints */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@ByVal Float8_e4m3fn a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@ByVal Float8_e4m3fn a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@ByVal Float8_e4m3fn a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(@ByVal Float8_e4m3fn a, int b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(int a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(int a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(int a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(int a, @ByVal Float8_e4m3fn b);
-
-//// Arithmetic with int64_t
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(@ByVal Float8_e4m3fn a, @Cast("int64_t") long b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fn add(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fn subtract(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fn multiply(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fn divide(@Cast("int64_t") long a, @ByVal Float8_e4m3fn b);
-
-/** NOTE: we do not define comparisons directly and instead rely on the implicit
- *  conversion from c10::Float8_e4m3fn to float. */
-
- // namespace c10
-
- // namespace std
-
+// #include <torch/headeronly/util/Float8_e4m3fn.h>
 
 
 // Parsed from c10/util/Float8_e4m3fn.h
 
-
-///
-// #pragma once
-
-/** Defines the Float8_e4m3fn type (8-bit floating-point) including conversions
- *  to standard C types and basic arithmetic operations. Note that arithmetic
- *  operations are implemented by converting to floating point and
- *  performing the operation in float32.
- *  Binary configuration:
- *  s eeee mmm
- *  1 sign bit
- *  4 exponent bits
- *  3 mantissa bits
- *  bias = 7
- * 
- *  Implementation based on the paper https://arxiv.org/pdf/2209.05433.pdf
- *  and inspired by Half implementation from pytorch/c10/util/Half.h */
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/floating_point_utils.h>
-
-// #if defined(__cplusplus)
-// #include <cmath>
-// #include <cstdint>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #include <stdint.h>
-// #endif
-
-// #ifdef _MSC_VER
-// #include <intrin.h>
-// #endif
-
-// #include <climits>
-// #include <iostream>
-
-/*
- * Convert a 8-bit floating-point number in fp8 E4M3FN format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-@Namespace("c10::detail") public static native float fp8e4m3fn_to_fp32_value(@Cast("uint8_t") byte input);
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 8-bit floating-point number in fp8 E4M3FN format, in bit representation.
- */
-@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e4m3fn_from_fp32_value(float f);
-
-
-// Targeting ../Float8_e4m3fn.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer out,
-    @Const @ByRef Float8_e4m3fn value);
-
- // namespace c10
-
-// #include <c10/util/Float8_e4m3fn-inl.h> // IWYU pragma: keep
-
-
-// Parsed from c10/util/Float8_fnuz_cvt.h
-
-// #pragma once
-
-// #include <c10/util/floating_point_utils.h>
-
-// #include <cstdint>
-
-// #if defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp>
-// #endif
-
-/*
- * Convert a 8-bit floating-point number in either f8 E4M3FNUZ or bf8 E5M2FNUZ
- * format, in bit representation, to a 32-bit floating-point number.
- */
-
- // namespace c10::detail
+// #include <torch/headeronly/util/Float8_e4m3fn.h>
 
 
 // Parsed from c10/util/Float8_e4m3fnuz-inl.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/Float8_fnuz_cvt.h>
-// #include <cstring>
-// #include <limits>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-/** Constructors */
-
-
-
-/** Implicit conversions */
-
-
-
-/** Special values helper */
-
-
-
-/** Arithmetic */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@Const @ByRef Float8_e4m3fnuz a, @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(
-    @Const @ByRef Float8_e4m3fnuz a,
-    @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Const @ByRef Float8_e4m3fnuz a);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e4m3fnuz addPut(
-    @ByRef Float8_e4m3fnuz a,
-    @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e4m3fnuz subtractPut(
-    @ByRef Float8_e4m3fnuz a,
-    @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e4m3fnuz multiplyPut(
-    @ByRef Float8_e4m3fnuz a,
-    @Const @ByRef Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e4m3fnuz dividePut(
-    @ByRef Float8_e4m3fnuz a,
-    @Const @ByRef Float8_e4m3fnuz b);
-
-/** Arithmetic with floats */
-
-@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e4m3fnuz a, float b);
-@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e4m3fnuz a, float b);
-@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e4m3fnuz a, float b);
-@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e4m3fnuz a, float b);
-
-@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e4m3fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e4m3fnuz b);
-
-/** Arithmetic with doubles */
-
-@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e4m3fnuz a, double b);
-@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e4m3fnuz a, double b);
-@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e4m3fnuz a, double b);
-@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e4m3fnuz a, double b);
-
-@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e4m3fnuz b);
-
-/** Arithmetic with ints */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@ByVal Float8_e4m3fnuz a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@ByVal Float8_e4m3fnuz a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@ByVal Float8_e4m3fnuz a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@ByVal Float8_e4m3fnuz a, int b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(int a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(int a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(int a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(int a, @ByVal Float8_e4m3fnuz b);
-
-//// Arithmetic with int64_t
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@ByVal Float8_e4m3fnuz a, @Cast("int64_t") long b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e4m3fnuz add(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e4m3fnuz subtract(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e4m3fnuz multiply(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e4m3fnuz divide(@Cast("int64_t") long a, @ByVal Float8_e4m3fnuz b);
-
-/** NOTE: we do not define comparisons directly and instead rely on the implicit
- *  conversion from c10::Float8_e4m3fnuz to float. */
-
- // namespace c10
-
- // namespace std
-
+// #include <torch/headeronly/util/Float8_e4m3fnuz.h>
 
 
 // Parsed from c10/util/Float8_e4m3fnuz.h
 
-
-///
-// #pragma once
-
-/** Defines the Float8_e4m3fnuz type (8-bit floating-point) including
- *  conversions to standard C types and basic arithmetic operations. Note that
- *  arithmetic operations are implemented by converting to floating point and
- *  performing the operation in float32.
- *  Binary configuration remains the same as Float8_e4m3fn:
- *  s eeee mmm
- *  1 sign bit
- *  4 exponent bits
- *  3 mantissa bits
- *  The key differences versus Float8_e4m3fn are:
- *  bias = 8
- *  no infinities or negative zero
- *  NaN only when sign bit is 1, rest all 0s
- * 
- *  Implementation based on the paper https://arxiv.org/pdf/2206.02915.pdf and
- *  the existing Float8_e4m3fn implementation. */
-
-// #include <c10/macros/Export.h>
-// #include <c10/macros/Macros.h>
-// #include <c10/util/floating_point_utils.h>
-// #include <type_traits>
-
-// #if defined(__cplusplus)
-// #include <cstdint>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #include <stdint.h>
-// #endif
-
-// #include <iosfwd>
-// #include <ostream>
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 8-bit floating-point number in fp8 E4M3FNUZ format, in bit representation.
- */
-@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e4m3fnuz_from_fp32_value(float f);
-
-
-// Targeting ../Float8_e4m3fnuz.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer out,
-    @Const @ByRef Float8_e4m3fnuz value);
-
- // namespace c10
-
-// #include <c10/util/Float8_e4m3fnuz-inl.h> // IWYU pragma: keep
+// #include <torch/headeronly/util/Float8_e4m3fnuz.h>
 
 
 // Parsed from c10/util/complex_math.h
@@ -4895,46 +5841,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Half.h>
-
-// #if defined(__CUDACC__) || defined(__HIPCC__)
-// #endif
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
-// #endif
-// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
-// #endif
-// Targeting ../DoubleComplex.java
-
-
-// Targeting ../FloatComplex.java
-
-
-// Targeting ../HalfComplex.java
-
-
-
-
-
-
-
-
-
-
-
- // namespace complex_literals
-
-// Define operators between integral scalars and c10::complex. std::complex does
-// not support this when T is a floating-point number. This is useful because it
-// saves a lot of "static_cast" when operate a complex and an integer. This
-// makes the code both less verbose and potentially more efficient.
-// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-//   typename std::enable_if_t<
-//       std::is_floating_point_v<fT> && std::is_integral_v<iT>,
-//       int> = 0
-
-// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-
- // namespace c10
+// #include <torch/headeronly/util/complex.h>
 
 // std functions
 //
@@ -4964,8 +5871,6 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
  // namespace std
 
- // namespace c10
-
 // #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
 // math functions are included in a separate file
 // #include <c10/util/complex_math.h> // IWYU pragma: keep
@@ -4976,771 +5881,74 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
 // Parsed from c10/util/Half-inl.h
 
-// #pragma once
+// #include <torch/headeronly/util/Half.h>
 
-// #include <c10/macros/Macros.h>
-// #include <c10/util/bit_cast.h>
 
-// #include <cstring>
-// #include <limits>
+// Parsed from c10/util/Half.h
 
-// #ifdef __CUDACC__
-// #include <cuda_fp16.h>
-// #endif
+// #include <torch/headeronly/util/Half.h>
 
-// #ifdef __HIPCC__
-// #include <hip/hip_fp16.h>
-// #endif
-
-// #if defined(CL_SYCL_LANGUAGE_VERSION)
-// #include <CL/sycl.hpp> // for SYCL 1.2.1
-// #elif defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp> // for SYCL 2020
-// #endif
-
+// need to keep the following for BC because the APIs in here were exposed
+// before migrating Half to torch/headeronly
 // #if (defined(CPU_CAPABILITY_AVX2) || defined(CPU_CAPABILITY_AVX512)) &&
 //     !defined(__APPLE__)
 // #include <ATen/cpu/vec/vec_half.h>
 // #endif
 
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-// #if defined(__aarch64__) && !defined(__CUDACC__)
-// #else
-
-
-
-/** Implicit conversions */
-
-
-
-// #endif /* !defined(__aarch64__) || defined(__CUDACC__) \
-//         */
-
-// #if defined(__CUDACC__) || defined(__HIPCC__)
-// #endif
-
-// #ifdef SYCL_LANGUAGE_VERSION
-// #endif
-
-// CUDA intrinsics
-
-// #if (defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 350)) ||
-//     (defined(__clang__) && defined(__CUDA__))
-
-// #endif
-
-/** Arithmetic */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@Const @ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@Const @ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@Const @ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@Const @ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@Const @ByRef Half a);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") Half addPut(@ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByRef @Name("operator -=") Half subtractPut(@ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByRef @Name("operator *=") Half multiplyPut(@ByRef Half a, @Const @ByRef Half b);
-
-@Namespace("c10") public static native @ByRef @Name("operator /=") Half dividePut(@ByRef Half a, @Const @ByRef Half b);
-
-/** Arithmetic with floats */
-
-@Namespace("c10") public static native @Name("operator +") float add(@ByVal Half a, float b);
-@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Half a, float b);
-@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Half a, float b);
-@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Half a, float b);
-
-@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Half b);
-@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Half b);
-@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Half b);
-@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Half b);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Half b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Half b);
-
-/** Arithmetic with doubles */
-
-@Namespace("c10") public static native @Name("operator +") double add(@ByVal Half a, double b);
-@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Half a, double b);
-@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Half a, double b);
-@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Half a, double b);
-
-@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Half b);
-@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Half b);
-@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Half b);
-@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Half b);
-
-/** Arithmetic with ints */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@ByVal Half a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@ByVal Half a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@ByVal Half a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@ByVal Half a, int b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Half add(int a, @ByVal Half b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(int a, @ByVal Half b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(int a, @ByVal Half b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(int a, @ByVal Half b);
-
-//// Arithmetic with int64_t
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@ByVal Half a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@ByVal Half a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@ByVal Half a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@ByVal Half a, @Cast("int64_t") long b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Half add(@Cast("int64_t") long a, @ByVal Half b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Half subtract(@Cast("int64_t") long a, @ByVal Half b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Half multiply(@Cast("int64_t") long a, @ByVal Half b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Half divide(@Cast("int64_t") long a, @ByVal Half b);
-
-/** NOTE: we do not define comparisons directly and instead rely on the implicit
- *  conversion from c10::Half to float. */
-
- // namespace c10
-
- // namespace std
-
-
-
-// Parsed from c10/util/Half.h
-
-// #pragma once
-
-/** Defines the Half type (half-precision floating-point) including conversions
- *  to standard C types and basic arithmetic operations. Note that arithmetic
- *  operations are implemented by converting to floating point and
- *  performing the operation in float32, instead of using CUDA half intrinsics.
- *  Most uses of this type within ATen are memory bound, including the
- *  element-wise kernels, and the half intrinsics aren't efficient on all GPUs.
- *  If you are writing a compute bound kernel, you can use the CUDA half
- *  intrinsics directly on the Half type from device code. */
-
-// #include <c10/macros/Export.h>
-// #include <c10/macros/Macros.h>
-// #include <c10/util/bit_cast.h>
-// #include <c10/util/floating_point_utils.h>
-// #include <type_traits>
-
-// #if defined(__cplusplus)
-// #include <cmath>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #endif
-
-// #ifdef _MSC_VER
-// #include <intrin.h>
-// #endif
-
-// #include <cstdint>
-// #include <cstring>
-// #include <iosfwd>
-// #include <limits>
-// #include <ostream>
-
-// #ifdef __CUDACC__
-// #include <cuda_fp16.h>
-// #endif
-
-// #ifdef __HIPCC__
-// #include <hip/hip_fp16.h>
-// #endif
-
-// #if defined(CL_SYCL_LANGUAGE_VERSION)
-// #include <CL/sycl.hpp> // for SYCL 1.2.1
-// #elif defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp> // for SYCL 2020
-// #endif
-
-// #if defined(__aarch64__) && !defined(__CUDACC__)
-// #endif
-
-// #if defined(__GNUC__) || defined(__clang__)
-// #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) ||
-//     defined(_M_IX86)
-// #if defined(__F16C__) &&
-//     !(defined(__CUDA_ARCH__) || defined(__CUDACC__) ||
-//       defined(__HIP_DEVICE_COMPILE__))
-public static final int C10_X86_F16 = 1;
-// #include <immintrin.h> // import conversion ops from f16cintrin.h
-// #endif // defined(__F16C__) && !(defined(__CUDA_ARCH__) || defined(__CUDACC__)
-       // || defined(__HIP_DEVICE_COMPILE__))
-// #endif // __x86_64__ || _M_X64 || __i386 || _M_IX86
-// #endif // __GNUC__ || __clang__
-
-/*
- * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
-
-/*
- * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format.
- *
- * @note The implementation relies on IEEE-like (no assumption about rounding
- * mode and no operations on denormals) floating-point operations and bitcasts
- * between integer and floating-point variables.
- */
-@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 16-bit floating-point number in IEEE half-precision format, in bit
- * representation.
- *
- * @note The implementation relies on IEEE-like (no assumption about rounding
- * mode and no operations on denormals) floating-point operations and bitcasts
- * between integer and floating-point variables.
- */
-@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
-
-// #ifdef C10_X86_F16
-// #undef C10_X86_F16
-// #endif // C10_X86_F16
-
-// #if defined(__aarch64__) && !defined(__CUDACC__)
-// #endif
-
-
-// Targeting ../Half.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Half value);
-
- // namespace c10
-
-// #include <c10/util/Half-inl.h> // IWYU pragma: keep
-
 
 // Parsed from c10/util/Float8_e5m2-inl.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <cstring>
-// #include <limits>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-public static final int EXP_WIDTH_FP8 = 5;
-public static final int MAN_WIDTH_FP8 = 2;
-public static final int EXP_BIAS_FP8 = 15;
-
-/** Constructors */
-
-
-
-/** Implicit conversions */
-
-
-
-/** Special values helpers */
-
-
-
-
-
-/** Arithmetic */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@Const @ByRef Float8_e5m2 a, @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@Const @ByRef Float8_e5m2 a, @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@Const @ByRef Float8_e5m2 a, @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(
-    @Const @ByRef Float8_e5m2 a,
-    @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@Const @ByRef Float8_e5m2 a);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e5m2 addPut(
-    @ByRef Float8_e5m2 a,
-    @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e5m2 subtractPut(
-    @ByRef Float8_e5m2 a,
-    @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e5m2 multiplyPut(
-    @ByRef Float8_e5m2 a,
-    @Const @ByRef Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e5m2 dividePut(
-    @ByRef Float8_e5m2 a,
-    @Const @ByRef Float8_e5m2 b);
-
-/** Arithmetic with floats */
-
-@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e5m2 a, float b);
-@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e5m2 a, float b);
-@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e5m2 a, float b);
-@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e5m2 a, float b);
-
-@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e5m2 b);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2 b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e5m2 b);
-
-/** Arithmetic with doubles */
-
-@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e5m2 a, double b);
-@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e5m2 a, double b);
-@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e5m2 a, double b);
-@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e5m2 a, double b);
-
-@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e5m2 b);
-
-/** Arithmetic with ints */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@ByVal Float8_e5m2 a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@ByVal Float8_e5m2 a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@ByVal Float8_e5m2 a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(@ByVal Float8_e5m2 a, int b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(int a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(int a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(int a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(int a, @ByVal Float8_e5m2 b);
-
-//// Arithmetic with int64_t
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(@ByVal Float8_e5m2 a, @Cast("int64_t") long b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2 add(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2 subtract(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2 multiply(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2 divide(@Cast("int64_t") long a, @ByVal Float8_e5m2 b);
-
-/** NOTE: we do not define comparisons directly and instead rely on the implicit
- *  conversion from c10::Float8_e5m2 to float. */
-
- // namespace c10
-
- // namespace std
-
+// #include <torch/headeronly/util/Float8_e5m2.h>
 
 
 // Parsed from c10/util/Float8_e5m2.h
 
-
-///
-// #pragma once
-
-/** Defines the Float8_e5m2 type (8-bit floating-point) including conversions
- *  to standard C types and basic arithmetic operations. Note that arithmetic
- *  operations are implemented by converting to floating point and
- *  performing the operation in float32.
- *  Binary configuration:
- *  s eeeee mm
- *  1 sign bit
- *  5 exponent bits
- *  2 mantissa bits
- *  bias = 15
- * 
- *  Implementation based on the paper https://arxiv.org/pdf/2209.05433.pdf
- *  and inspired by Half implementation from pytorch/c10/util/Half.h */
-
-// #include <c10/util/Half.h>
-
-/*
- * Convert a 8-bit floating-point number in fp8 E5M2 format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-@Namespace("c10::detail") public static native float fp8e5m2_to_fp32_value(@Cast("uint8_t") byte input);
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 8-bit floating-point number in fp8 E5M2 format, in bit representation.
- */
-@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e5m2_from_fp32_value(float f);
-
-
-// Targeting ../Float8_e5m2.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer out,
-    @Const @ByRef Float8_e5m2 value);
-
- // namespace c10
-
-// #include <c10/util/Float8_e5m2-inl.h> // IWYU pragma: keep
+// #include <torch/headeronly/util/Float8_e5m2.h>
 
 
 // Parsed from c10/util/Float8_e5m2fnuz-inl.h
 
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/Float8_fnuz_cvt.h>
-// #include <cstring>
-// #include <limits>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-/** Constructors */
-
-
-
-/** Implicit conversions */
-
-
-
-/** Special values helpers */
-
-
-
-
-
-/** Arithmetic */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@Const @ByRef Float8_e5m2fnuz a, @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(
-    @Const @ByRef Float8_e5m2fnuz a,
-    @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Const @ByRef Float8_e5m2fnuz a);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") Float8_e5m2fnuz addPut(
-    @ByRef Float8_e5m2fnuz a,
-    @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator -=") Float8_e5m2fnuz subtractPut(
-    @ByRef Float8_e5m2fnuz a,
-    @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator *=") Float8_e5m2fnuz multiplyPut(
-    @ByRef Float8_e5m2fnuz a,
-    @Const @ByRef Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator /=") Float8_e5m2fnuz dividePut(
-    @ByRef Float8_e5m2fnuz a,
-    @Const @ByRef Float8_e5m2fnuz b);
-
-/** Arithmetic with floats */
-
-@Namespace("c10") public static native @Name("operator +") float add(@ByVal Float8_e5m2fnuz a, float b);
-@Namespace("c10") public static native @Name("operator -") float subtract(@ByVal Float8_e5m2fnuz a, float b);
-@Namespace("c10") public static native @Name("operator *") float multiply(@ByVal Float8_e5m2fnuz a, float b);
-@Namespace("c10") public static native @Name("operator /") float divide(@ByVal Float8_e5m2fnuz a, float b);
-
-@Namespace("c10") public static native @Name("operator +") float add(float a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @Name("operator -") float subtract(float a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @Name("operator *") float multiply(float a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @Name("operator /") float divide(float a, @ByVal Float8_e5m2fnuz b);
-
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatPointer addPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") FloatBuffer addPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator +=") float[] addPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatPointer subtractPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") FloatBuffer subtractPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator -=") float[] subtractPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatPointer multiplyPut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") FloatBuffer multiplyPut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator *=") float[] multiplyPut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatPointer dividePut(@ByRef FloatPointer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") FloatBuffer dividePut(@ByRef FloatBuffer a, @Const @ByRef Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByRef @Name("operator /=") float[] dividePut(@ByRef float[] a, @Const @ByRef Float8_e5m2fnuz b);
-
-/** Arithmetic with doubles */
-
-@Namespace("c10") public static native @Name("operator +") double add(@ByVal Float8_e5m2fnuz a, double b);
-@Namespace("c10") public static native @Name("operator -") double subtract(@ByVal Float8_e5m2fnuz a, double b);
-@Namespace("c10") public static native @Name("operator *") double multiply(@ByVal Float8_e5m2fnuz a, double b);
-@Namespace("c10") public static native @Name("operator /") double divide(@ByVal Float8_e5m2fnuz a, double b);
-
-@Namespace("c10") public static native @Name("operator +") double add(double a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @Name("operator -") double subtract(double a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @Name("operator *") double multiply(double a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @Name("operator /") double divide(double a, @ByVal Float8_e5m2fnuz b);
-
-/** Arithmetic with ints */
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@ByVal Float8_e5m2fnuz a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@ByVal Float8_e5m2fnuz a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@ByVal Float8_e5m2fnuz a, int b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@ByVal Float8_e5m2fnuz a, int b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(int a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(int a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(int a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(int a, @ByVal Float8_e5m2fnuz b);
-
-//// Arithmetic with int64_t
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@ByVal Float8_e5m2fnuz a, @Cast("int64_t") long b);
-
-@Namespace("c10") public static native @ByVal @Name("operator +") Float8_e5m2fnuz add(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator -") Float8_e5m2fnuz subtract(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator *") Float8_e5m2fnuz multiply(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
-@Namespace("c10") public static native @ByVal @Name("operator /") Float8_e5m2fnuz divide(@Cast("int64_t") long a, @ByVal Float8_e5m2fnuz b);
-
-/** NOTE: we do not define comparisons directly and instead rely on the implicit
- *  conversion from c10::Float8_e5m2fnuz to float. */
-
- // namespace c10
-
- // namespace std
-
+// #include <torch/headeronly/util/Float8_e5m2fnuz.h>
 
 
 // Parsed from c10/util/Float8_e5m2fnuz.h
 
-
-///
-// #pragma once
-
-/** Defines the Float8_e5m2fnuz type (8-bit floating-point) including
- *  conversions to standard C types and basic arithmetic operations. Note that
- *  arithmetic operations are implemented by converting to floating point and
- *  performing the operation in float32.
- *  Binary configuration remains the same as e5m2:
- *  s eeeee mm
- *  1 sign bit
- *  5 exponent bits
- *  2 mantissa bits
- *  The key differences that e5m2fnuz brings are:
- *  bias = 16
- *  no infinities or negative zero
- *  NaN only when sign bit is 1, rest all 0s
- * 
- *  Implementation based on the paper https://arxiv.org/pdf/2206.02915.pdf and
- *  the existing Float8_e4m3fn implementation. */
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/TypeSafeSignMath.h>
-// #include <c10/util/floating_point_utils.h>
-
-// #if defined(__cplusplus)
-// #include <cstdint>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #include <stdint.h>
-// #endif
-
-// #include <iosfwd>
-// #include <ostream>
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 8-bit floating-point number in fp8 E5M2 format, in bit representation.
- */
-@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e5m2fnuz_from_fp32_value(float f);
-
-
-// Targeting ../Float8_e5m2fnuz.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer out,
-    @Const @ByRef Float8_e5m2fnuz value);
-
- // namespace c10
-
-// #include <c10/util/Float8_e5m2fnuz-inl.h> // IWYU pragma: keep
+// #include <torch/headeronly/util/Float8_e5m2fnuz.h>
 
 
 // Parsed from c10/util/Float8_e8m0fnu.h
 
-
-///
-// #pragma once
-
-/** Defines the Float8_e8m0fnu type (8-bit floating-point) including
- *  conversions to standard C types
- *  Binary configuration :
- *  eeeeeeee
- *  no sign bits
- *  8 exponent bits
- *  no mantissa bits
- * 
- *  This is the E8M0 dtype from the OCP MX format spec
- *  (https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf,
- *  Section 5.4.1) */
-
-// #include <c10/macros/Export.h>
-// #include <c10/macros/Macros.h>
-// #include <c10/util/floating_point_utils.h>
-// #include <type_traits>
-
-// TODO(#146647): do we need to special case OPENCL?
-// #if defined(__cplusplus)
-// #include <cstdint>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #include <stdint.h>
-// #endif
-
-// #include <iosfwd>
-// #include <ostream>
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 8-bit floating-point number in fp8 e8m0fnu format, in bit representation.
- */
-@Namespace("c10::detail") public static native @Cast("uint8_t") byte fp8e8m0fnu_from_fp32_value(float f);
-
-
-// Targeting ../Float8_e8m0fnu.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer out,
-    @Const @ByRef Float8_e8m0fnu value);
-
- // namespace c10
-
-// #include <c10/util/Float8_e8m0fnu-inl.h> // IWYU pragma: keep
+// #include <torch/headeronly/util/Float8_e8m0fnu.h>
 
 
 // Parsed from c10/util/bits.h
 
-// #pragma once
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// Targeting ../bits1x8.java
-
-
-// Targeting ../bits2x4.java
-
-
-// Targeting ../bits4x2.java
-
-
-// Targeting ../bits8.java
-
-
-// Targeting ../bits16.java
-
-
-
- // namespace c10
+// #include <torch/headeronly/util/bits.h>
 
 
 // Parsed from c10/util/qint32.h
 
-// #pragma once
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// Targeting ../qint32.java
-
-
-
- // namespace c10
+// #include <torch/headeronly/util/qint32.h>
 
 
 // Parsed from c10/util/qint8.h
 
-// #pragma once
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// Targeting ../qint8.java
-
-
-
- // namespace c10
+// #include <torch/headeronly/util/qint8.h>
 
 
 // Parsed from c10/util/quint2x4.h
 
-// #pragma once
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// Targeting ../quint2x4.java
-
-
-
- // namespace c10
+// #include <torch/headeronly/util/quint2x4.h>
 
 
 // Parsed from c10/util/quint4x2.h
 
-// #pragma once
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// Targeting ../quint4x2.java
-
-
-
- // namespace c10
+// #include <torch/headeronly/util/quint4x2.h>
 
 
 // Parsed from c10/util/quint8.h
 
-// #pragma once
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// Targeting ../quint8.java
-
-
-
- // namespace c10
+// #include <torch/headeronly/util/quint8.h>
 
 
 // Parsed from c10/core/ScalarType.h
@@ -5766,19 +5974,14 @@ public static final int EXP_BIAS_FP8 = 15;
 
 // #include <array>
 // #include <cstddef>
-// #include <cstdint>
 // #include <limits>
 // #include <ostream>
 // #include <type_traits>
 // #include <unordered_map>
 
-// dummy struct for uint1 to uint7, actual functionality
-// of these dtypes will be implemented in python with Tensor subclass
+// #include <torch/headeronly/core/ScalarType.h>
 
-// dummy struct for int1 to int7, actual functionality
-// of these dtypes will be implemented in python with Tensor subclass
-
-// For the macros below:
+// [dtype Macros note] For the macros below:
 //
 // For users: If you want to macro some code for all non-QInt scalar types
 // (i.e. types with complete information, you probably want one of the
@@ -5797,56 +6000,6 @@ public static final int EXP_BIAS_FP8 = 15;
 // all of the sites everywhere to figure out how it should work.  Consulting
 // some old PRs where we added new dtypes (check history of this file) can
 // help give you an idea where to start.
-
-// NB: Order matters for this macro; it is relied upon in
-// _promoteTypesLookup and the serialization format.
-// #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX_AND_QINTS(_)
-//   _(uint8_t, Byte) /* 0 */
-//   _(int8_t, Char) /* 1 */
-//   _(int16_t, Short) /* 2 */
-//   _(int, Int) /* 3 */
-//   _(int64_t, Long) /* 4 */
-//   _(at::Half, Half) /* 5 */
-//   _(float, Float) /* 6 */
-//   _(double, Double) /* 7 */
-//   _(c10::complex<c10::Half>, ComplexHalf) /* 8 */
-//   _(c10::complex<float>, ComplexFloat) /* 9 */
-//   _(c10::complex<double>, ComplexDouble) /* 10 */
-//   _(bool, Bool) /* 11 */
-//   _(c10::qint8, QInt8) /* 12 */
-//   _(c10::quint8, QUInt8) /* 13 */
-//   _(c10::qint32, QInt32) /* 14 */
-//   _(at::BFloat16, BFloat16) /* 15 */
-//   _(c10::quint4x2, QUInt4x2) /* 16 */
-//   _(c10::quint2x4, QUInt2x4) /* 17 */
-//   _(c10::bits1x8, Bits1x8) /* 18 */
-//   _(c10::bits2x4, Bits2x4) /* 19 */
-//   _(c10::bits4x2, Bits4x2) /* 20 */
-//   _(c10::bits8, Bits8) /* 21 */
-//   _(c10::bits16, Bits16) /* 22 */
-//   _(c10::Float8_e5m2, Float8_e5m2) /* 23 */
-//   _(c10::Float8_e4m3fn, Float8_e4m3fn) /* 24 */
-//   _(c10::Float8_e5m2fnuz, Float8_e5m2fnuz) /* 25 */
-//   _(c10::Float8_e4m3fnuz, Float8_e4m3fnuz) /* 26 */
-//   _(uint16_t, UInt16) /* 27 */
-//   _(uint32_t, UInt32) /* 28 */
-//   _(uint64_t, UInt64) /* 29 */
-//   _(c10::dummy_uint1_7_t<1>, UInt1) /* 30 */
-//   _(c10::dummy_uint1_7_t<2>, UInt2) /* 31 */
-//   _(c10::dummy_uint1_7_t<3>, UInt3) /* 32 */
-//   _(c10::dummy_uint1_7_t<4>, UInt4) /* 33 */
-//   _(c10::dummy_uint1_7_t<5>, UInt5) /* 34 */
-//   _(c10::dummy_uint1_7_t<6>, UInt6) /* 35 */
-//   _(c10::dummy_uint1_7_t<7>, UInt7) /* 36 */
-//   _(c10::dummy_int1_7_t<1>, Int1) /* 37 */
-//   _(c10::dummy_int1_7_t<2>, Int2) /* 38 */
-//   _(c10::dummy_int1_7_t<3>, Int3) /* 39 */
-//   _(c10::dummy_int1_7_t<4>, Int4) /* 40 */
-//   _(c10::dummy_int1_7_t<5>, Int5) /* 41 */
-//   _(c10::dummy_int1_7_t<6>, Int6) /* 42 */
-//   _(c10::dummy_int1_7_t<7>, Int7) /* 43 */
-//   _(c10::Float8_e8m0fnu, Float8_e8m0fnu) /* 44 */
-//   _(c10::Float4_e2m1fn_x2, Float4_e2m1fn_x2) /* 45 */
 
 // If you want to support ComplexHalf for real, add ComplexHalf
 // into this macro (and change the name).  But beware: convert()
@@ -5892,65 +6045,6 @@ public static final int EXP_BIAS_FP8 = 15;
 //   _(at::Float8_e5m2fnuz, Float8_e5m2fnuz)
 //   _(at::Float8_e4m3fnuz, Float8_e4m3fnuz)
 //   _(at::Float8_e8m0fnu, Float8_e8m0fnu)
-
-@Namespace("c10") public enum ScalarType {
-  Byte((byte)(0)), /* 0 */
-  Char((byte)(1)), /* 1 */
-  Short((byte)(2)), /* 2 */
-  Int((byte)(3)), /* 3 */
-  Long((byte)(4)), /* 4 */
-  Half((byte)(5)), /* 5 */
-  Float((byte)(6)), /* 6 */
-  Double((byte)(7)), /* 7 */
-  ComplexHalf((byte)(8)), /* 8 */
-  ComplexFloat((byte)(9)), /* 9 */
-  ComplexDouble((byte)(10)), /* 10 */
-  Bool((byte)(11)), /* 11 */
-  QInt8((byte)(12)), /* 12 */
-  QUInt8((byte)(13)), /* 13 */
-  QInt32((byte)(14)), /* 14 */
-  BFloat16((byte)(15)), /* 15 */
-  QUInt4x2((byte)(16)), /* 16 */
-  QUInt2x4((byte)(17)), /* 17 */
-  Bits1x8((byte)(18)), /* 18 */
-  Bits2x4((byte)(19)), /* 19 */
-  Bits4x2((byte)(20)), /* 20 */
-  Bits8((byte)(21)), /* 21 */
-  Bits16((byte)(22)), /* 22 */
-  Float8_e5m2((byte)(23)), /* 23 */
-  Float8_e4m3fn((byte)(24)), /* 24 */
-  Float8_e5m2fnuz((byte)(25)), /* 25 */
-  Float8_e4m3fnuz((byte)(26)), /* 26 */
-  UInt16((byte)(27)), /* 27 */
-  UInt32((byte)(28)), /* 28 */
-  UInt64((byte)(29)), /* 29 */
-  UInt1((byte)(30)), /* 30 */
-  UInt2((byte)(31)), /* 31 */
-  UInt3((byte)(32)), /* 32 */
-  UInt4((byte)(33)), /* 33 */
-  UInt5((byte)(34)), /* 34 */
-  UInt6((byte)(35)), /* 35 */
-  UInt7((byte)(36)), /* 36 */
-  Int1((byte)(37)), /* 37 */
-  Int2((byte)(38)), /* 38 */
-  Int3((byte)(39)), /* 39 */
-  Int4((byte)(40)), /* 40 */
-  Int5((byte)(41)), /* 41 */
-  Int6((byte)(42)), /* 42 */
-  Int7((byte)(43)), /* 43 */
-  Float8_e8m0fnu((byte)(44)), /* 44 */
-  Float4_e2m1fn_x2((byte)(45)),
-      Undefined((byte)(46)),
-  NumOptions((byte)(47));
-
-    public final byte value;
-    private ScalarType(byte v) { this.value = v; }
-    private ScalarType(ScalarType e) { this.value = e.value; }
-    public ScalarType intern() { for (ScalarType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-@Namespace("c10") @MemberGetter public static native @Cast("const uint16_t") short NumScalarTypes();
 
 // These are used to map ScalarTypes to C++ types.
 
@@ -6414,6 +6508,7 @@ public static final int EXP_BIAS_FP8 = 15;
 // #include <c10/util/Exception.h>
 // #include <c10/util/Optional.h>
 
+// #include <algorithm>
 // #include <cstdint>
 // #include <iterator>
 // #include <numeric>
@@ -8383,32 +8478,6 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
 
 
-// PyInterpreterStatus describes what the state of its interpreter tag
-// is, relative to the thread currently holding the GIL.
-@Namespace("c10::impl") public enum PyInterpreterStatus {
-  // We just allocated the Tensor, it hasn't escaped to other threads,
-  // we know that it definitely hasn't been tagged to be associated
-  // with an interpreter.
-  DEFINITELY_UNINITIALIZED(0),
-  // We queried the interpreter field and it looked uninitialized.  But
-  // another thread may have raced with us to tag it with some other
-  // interpreter id.  So we will have to do a CEX to make sure we can
-  // actually nab it.
-  MAYBE_UNINITIALIZED(1),
-  // We queried the interpreter field and it was tagged to belong to us.
-  // This means we have sole write access (as we hold the GIL for this
-  // interpreter)
-  TAGGED_BY_US(2),
-  // Someone else tagged this.  We can't use this TensorImpl from Python.
-  TAGGED_BY_OTHER(3);
-
-    public final int value;
-    private PyInterpreterStatus(int v) { this.value = v; }
-    private PyInterpreterStatus(PyInterpreterStatus e) { this.value = e.value; }
-    public PyInterpreterStatus intern() { for (PyInterpreterStatus e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
  // namespace c10::impl
 
 
@@ -8418,6 +8487,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
 // #include <c10/core/impl/HermeticPyObjectTLS.h>
 // #include <c10/core/impl/PyInterpreter.h>
+// #include <c10/core/impl/PyInterpreterHooks.h>
 // #include <c10/util/python_stub.h>
 // #include <optional>
 
@@ -8465,6 +8535,7 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 // Parsed from c10/core/SymbolicShapeMeta.h
 
 // #pragma once
+// #include <c10/core/MemoryFormat.h>
 // #include <c10/core/SymBool.h>
 // #include <c10/core/SymInt.h>
 // #include <c10/macros/Export.h>
@@ -8883,6 +8954,7 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #pragma once
 // #include <c10/macros/Macros.h>
 
+// #include <cstddef>
 // #include <cstdint>
 
 // GCC has __builtin_mul_overflow from before it supported __has_builtin
@@ -9579,6 +9651,19 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 // #pragma once
 
+// See https://github.com/pytorch/pytorch/issues/161660
+// This compile flag is intended to be passed in to CppExtensions that rely on
+// the stable ABI via the `extra_compile_args` argument. This is a stopgap
+// solution to ensure that non-stable libtorch APIs are not used in the extension.
+// The long term solution is to have a torch_stable target that excludes headers
+// that are not in torch/stable or torch/headeronly.
+// See test/cpp_extensions/torch_stable_test_extension/setup.py for an example
+// of how this is used.
+// #ifdef TORCH_STABLE_ONLY
+// #error
+//     "TensorBase.h should not be included when TORCH_STABLE_ONLY compile flag is passed"
+// #endif
+
 // #include <c10/core/Device.h>
 // #include <c10/core/Layout.h>
 // #include <c10/core/MemoryFormat.h>
@@ -9827,6 +9912,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/gt_ops.h>
 // #include <ATen/ops/hardshrink_backward_ops.h>
 // #include <ATen/ops/hardshrink_ops.h>
+// #include <ATen/ops/hash_tensor_ops.h>
 // #include <ATen/ops/heaviside_ops.h>
 // #include <ATen/ops/histc_ops.h>
 // #include <ATen/ops/histogram_ops.h>
@@ -11447,6 +11533,9 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::nansum(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
+
+
+// aten::hash_tensor(Tensor self, int[1] dim=[], *, bool keepdim=False, int mode=0) -> Tensor
 
 
 // aten::sum_to_size(Tensor self, SymInt[] size) -> Tensor
@@ -13339,6 +13428,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 //   _(ScalarType, kDynamicIntTypeBit, 1)
 //   _(Layout, kDynamicIntTypeBit, 1)
 //   _(SymInt, kDynamicIntTypeBit, 1)
+//   _(SymBool, kDynamicIntTypeBit, 1)
 //   _(MemoryFormat, kDynamicIntTypeBit, 1)
 
 // #define FORWARD_DECL_TYPE(NAME, _, __) struct NAME ## Type;
@@ -13399,7 +13489,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 //       static auto type = detail::makeBaseType(tagValue());
 //       return type;
 //     }
-//   }; // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10
+//   }; // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10 // namespace c10
 // #undef DYNAMIC_TYPE_TAG_VALUE
 
  // namespace c10
@@ -14724,6 +14814,7 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/macros/Export.h>
 // #include <c10/util/MaybeOwned.h>
 // #include <c10/util/intrusive_ptr.h>
+// #include <limits>
 // #include <type_traits>
 // #include <unordered_map>
 // #include <unordered_set>
@@ -14787,6 +14878,7 @@ public static final byte min_lookups = min_lookups();
 //   _(Double)
 //   _(ComplexDouble)
 //   _(Int)
+//   _(UInt)
 //   _(SymInt)
 //   _(SymFloat)
 //   _(SymBool)
@@ -15818,9 +15910,7 @@ public static final byte min_lookups = min_lookups();
     @Const @ByRef TensorBase result,
     @ByVal DimnameVector names);
 
-@Namespace("at::namedinference") public static native void propagate_names(
-    @Const @ByRef TensorBase result,
-    @Const @ByRef TensorBase src);
+@Namespace("at::namedinference") public static native void propagate_names(@Const @ByRef TensorBase result, @Const @ByRef TensorBase src);
 
 // result = m1 @ m2 + bias
 @Namespace("at::namedinference") public static native @ByVal DimnameVector propagate_names_for_addmm(
@@ -16773,7 +16863,7 @@ public static final byte min_lookups = min_lookups();
 // So a valid input type is one that our boxed functor wrapper can
 // unbox from an IValue into a C++ value.
 //
-// Whereas a valid output type is one that our wrapper can recieve
+// Whereas a valid output type is one that our wrapper can receive
 // as a C++ value from the unboxed functor, and box into an IValue.
 
 //
@@ -16905,9 +16995,17 @@ public static final byte min_lookups = min_lookups();
 // #include <c10/core/DispatchKeySet.h>
 // #include <c10/util/TypeList.h>
 // #include <c10/util/intrusive_ptr.h>
+// #include <atomic>
+// #include <memory>
 // #include <type_traits> // TODO Instead of this, move torch::jit::Stack
                                  // to the c10 namespace.
 // Targeting ../KernelFunction.java
+
+
+// Targeting ../KernelToken.java
+
+
+// Targeting ../SafeKernelFunction.java
 
 
 
@@ -16943,9 +17041,25 @@ public static final byte min_lookups = min_lookups();
 
 
 
+
+
+
+
+
+
 // This template requires you to explicitly specify the argument you want to
 // forward; it doesn't work if you try to deduce it
 // NB: keep this in sync with cloneWithRealTypes in function_schema.cpp
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -17234,6 +17348,7 @@ public static final byte min_lookups = min_lookups();
 // #include <array>
 // #include <functional>
 // #include <memory>
+// #include <string_view>
 // #include <variant>
 
 
@@ -17400,7 +17515,7 @@ public static final byte min_lookups = min_lookups();
 //         guard, fn, debug_handle, inputs, ##__VA_ARGS__);
 //   }
 
-// Helper macros to record LITE INTERPETER scope events with debug handles
+// Helper macros to record LITE INTERPRETER scope events with debug handles
 // #define RECORD_EDGE_SCOPE_WITH_DEBUG_HANDLE_AND_INPUTS(
 //     fn, debug_handle, inputs)
 //   RECORD_WITH_SCOPE_DEBUG_HANDLE_AND_INPUTS(
@@ -17924,7 +18039,7 @@ public static final byte min_lookups = min_lookups();
 
 // #define HAS_PT2_COMPLIANT_TAG
 
-// For multipy/torchdeploy use case
+// For multipy/torchdeploy use case  // codespell:ignore multipy
 @Namespace("torch") public enum _RegisterOrVerify { REGISTER(0), VERIFY(1);
 
     public final int value;
@@ -18137,7 +18252,7 @@ public static final byte min_lookups = min_lookups();
 /** Macro for defining a function that will be run at static
  *  initialization time to define operator overrides for dispatch key
  *  {@code k} (must be an unqualified enum member of c10::DispatchKey) in
- *  namespace {@code ns} (must be a valid C++ identifer, no quotes).  Use this
+ *  namespace {@code ns} (must be a valid C++ identifier, no quotes).  Use this
  *  macro when you want to implement a preexisting set of custom
  *  operators on a new dispatch key (e.g., you want to provide CUDA
  *  implementations of already existing operators).  One common usage
@@ -18733,6 +18848,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #pragma once
 
+// #include <c10/core/CachingDeviceAllocator.h>
 // #include <c10/core/DeviceType.h>
 // #include <c10/macros/Macros.h>
 
@@ -18790,6 +18906,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // context if the context for device_index is not initialized. Return the
 // original device index that was active before the change.
 @Namespace("at::accelerator") public static native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte device_index);
+
+@Namespace("at::accelerator") public static native void emptyCache();
+
+@Namespace("at::accelerator") public static native @ByVal org.bytedeco.pytorch.cuda.DeviceStats getDeviceStats(
+    @Cast("c10::DeviceIndex") byte device_index);
+
+@Namespace("at::accelerator") public static native void resetAccumulatedStats(@Cast("c10::DeviceIndex") byte device_index);
+
+@Namespace("at::accelerator") public static native void resetPeakStats(@Cast("c10::DeviceIndex") byte device_index);
 
  // namespace at::accelerator
 // Keep BC only
@@ -19220,6 +19345,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/irange.h>
 
 // #include <cstdint>
+// #include <map>
 // #include <mutex>
 
 @Namespace("at") public enum Float32MatmulPrecision { HIGHEST(0), HIGH(1), MEDIUM(2);
@@ -19268,6 +19394,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @Cast("bool") boolean hasKleidiAI();
 
 @Namespace("at") public static native @Cast("bool") boolean hasLAPACK();
+
+@Namespace("at") public static native @Cast("bool") boolean hasEigenSparse();
 
 @Namespace("at") public static native @Cast("bool") boolean hasMAGMA();
 
@@ -19615,8 +19743,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <c10/core/Scalar.h>
 // #include <ATen/core/Tensor.h>
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, Backend b);
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Cast("c10::Backend") int b);
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, org.bytedeco.pytorch.global.torch.Backend b);
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Scalar s);
 @Namespace("c10") public static native @StdString BytePointer toString(@Const @ByRef Scalar s);
 
@@ -20001,7 +20128,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //    ops (ops being called by other ops). After the intermediate op call
 //    finishes it's set back to the original `TracingState` object.
 //
-//    The `TracingState` obect in TLS can also be read/written via its Python
+//    The `TracingState` object in TLS can also be read/written via its Python
 //    binding in `python_tracer.cpp`, and `get/setTracingState()` C++ APIs,
 //    which are also exposed as `TORCH_API`.
 //
@@ -29710,6 +29837,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::fbgemm_linear_fp16_weight(Tensor input, Tensor packed_weight, Tensor bias) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fbgemm_linear_fp16_weight(@Const @ByRef Tensor input, @Const @ByRef Tensor packed_weight, @Const @ByRef Tensor bias);
 
+// aten::fbgemm_linear_fp16_weight.out(Tensor input, Tensor packed_weight, Tensor bias, Tensor(a!) output) -> Tensor
+@Namespace("at") public static native @ByVal Tensor fbgemm_linear_fp16_weight(@Const @ByRef Tensor input, @Const @ByRef Tensor packed_weight, @Const @ByRef Tensor bias, @ByRef Tensor output);
+
 
 
 
@@ -29738,8 +29868,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/fbgemm_linear_fp16_weight_fp32_activation_ops.h>
 
 
-// aten::fbgemm_linear_fp16_weight_fp32_activation(Tensor input, Tensor packed_weight, Tensor bias) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fbgemm_linear_fp16_weight_fp32_activation(@Const @ByRef Tensor input, @Const @ByRef Tensor packed_weight, @Const @ByRef Tensor bias);
+// aten::fbgemm_linear_fp16_weight_fp32_activation(Tensor input, Tensor packed_weight, Tensor? bias) -> Tensor
+@Namespace("at") public static native @ByVal Tensor fbgemm_linear_fp16_weight_fp32_activation(@Const @ByRef Tensor input, @Const @ByRef Tensor packed_weight, @Const @ByRef TensorOptional bias);
+
+// aten::fbgemm_linear_fp16_weight_fp32_activation.out(Tensor input, Tensor packed_weight, Tensor? bias, Tensor(a!) output) -> Tensor
+@Namespace("at") public static native @ByVal Tensor fbgemm_linear_fp16_weight_fp32_activation(@Const @ByRef Tensor input, @Const @ByRef Tensor packed_weight, @Const @ByRef TensorOptional bias, @ByRef Tensor output);
 
 
 
@@ -59899,6 +60032,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_cslt_sparse_mm_search.h>
 // #include <ATen/ops/_ctc_loss.h>
 // #include <ATen/ops/_ctc_loss_backward.h>
+// #include <ATen/ops/_cudnn_attention_backward.h>
 // #include <ATen/ops/_cudnn_attention_forward.h>
 // #include <ATen/ops/_cudnn_ctc_loss.h>
 // #include <ATen/ops/_cudnn_init_dropout_state.h>
@@ -59998,6 +60132,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_fused_dropout.h>
 // #include <ATen/ops/_fused_moving_avg_obs_fq_helper.h>
 // #include <ATen/ops/_fused_rms_norm.h>
+// #include <ATen/ops/_fused_rms_norm_backward.h>
 // #include <ATen/ops/_fused_sdp_choice.h>
 // #include <ATen/ops/_fused_sgd.h>
 // #include <ATen/ops/_fw_primal.h>
@@ -60560,6 +60695,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/hardswish_backward.h>
 // #include <ATen/ops/hardtanh.h>
 // #include <ATen/ops/hardtanh_backward.h>
+// #include <ATen/ops/hash_tensor.h>
 // #include <ATen/ops/heaviside.h>
 // #include <ATen/ops/hinge_embedding_loss.h>
 // #include <ATen/ops/histc.h>
@@ -61072,6 +61208,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/swapdims.h>
 // #include <ATen/ops/sym_constrain_range.h>
 // #include <ATen/ops/sym_constrain_range_for_size.h>
+// #include <ATen/ops/sym_is_contiguous.h>
 // #include <ATen/ops/sym_numel.h>
 // #include <ATen/ops/sym_size.h>
 // #include <ATen/ops/sym_storage_offset.h>
@@ -63354,6 +63491,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_cslt_sparse_mm_search_native.h>
 // #include <ATen/ops/_ctc_loss_native.h>
 // #include <ATen/ops/_ctc_loss_backward_native.h>
+// #include <ATen/ops/_cudnn_attention_backward_native.h>
 // #include <ATen/ops/_cudnn_attention_forward_native.h>
 // #include <ATen/ops/_cudnn_ctc_loss_native.h>
 // #include <ATen/ops/_cudnn_init_dropout_state_native.h>
@@ -63453,6 +63591,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_fused_dropout_native.h>
 // #include <ATen/ops/_fused_moving_avg_obs_fq_helper_native.h>
 // #include <ATen/ops/_fused_rms_norm_native.h>
+// #include <ATen/ops/_fused_rms_norm_backward_native.h>
 // #include <ATen/ops/_fused_sdp_choice_native.h>
 // #include <ATen/ops/_fused_sgd_native.h>
 // #include <ATen/ops/_fw_primal_native.h>
@@ -64015,6 +64154,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/hardswish_backward_native.h>
 // #include <ATen/ops/hardtanh_native.h>
 // #include <ATen/ops/hardtanh_backward_native.h>
+// #include <ATen/ops/hash_tensor_native.h>
 // #include <ATen/ops/heaviside_native.h>
 // #include <ATen/ops/hinge_embedding_loss_native.h>
 // #include <ATen/ops/histc_native.h>
@@ -64527,6 +64667,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/swapdims_native.h>
 // #include <ATen/ops/sym_constrain_range_native.h>
 // #include <ATen/ops/sym_constrain_range_for_size_native.h>
+// #include <ATen/ops/sym_is_contiguous_native.h>
 // #include <ATen/ops/sym_numel_native.h>
 // #include <ATen/ops/sym_size_native.h>
 // #include <ATen/ops/sym_storage_offset_native.h>
@@ -66498,7 +66639,7 @@ public static final int kPrevDirection = kPrevDirection();
 
 
 // {source range, node name, InlinedCallStack}
-// We store node name because same debug infor will be used for
+// We store node name because same debug info will be used for
 // profiling as well, so we need to know op names as well.
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kDebugInfoTupleSourceRangeIndex();
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kDebugInfoTupleNodeNameIndex();
@@ -69189,6 +69330,7 @@ public static final int AT_PARALLEL_NATIVE = 0;
 // #define AT_BLAS_F2C() 0
 // #define AT_BLAS_USE_CBLAS_DOT() 1
 // #define AT_KLEIDIAI_ENABLED() 0
+// #define AT_USE_EIGEN_SPARSE() 0
 
 
 // Parsed from ATen/Parallel-inl.h
@@ -69270,12 +69412,12 @@ ident: identity for binary combination function sf. sf(ident, x) needs to return
 x.
 
 f: function for reduction over a chunk. f needs to be of signature scalar_t
-f(int64_t partial_begin, int64_t partial_end, scalar_t identifiy)
+f(int64_t partial_begin, int64_t partial_end, scalar_t identify)
 
 sf: function to combine two partial results. sf needs to be of signature
 scalar_t sf(scalar_t x, scalar_t y)
 
-For example, you might have a tensor of 10000 entires and want to sum together
+For example, you might have a tensor of 10000 entries and want to sum together
 all the elements. Parallel_reduce with a grain_size of 2500 will then allocate
 an intermediate result tensor with 4 elements. Then it will execute the function
 "f" you provide and pass the beginning and end index of these chunks, so
@@ -78663,7 +78805,7 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 public static final int TORCH_VERSION_MAJOR = 2;
 
 /** Indicates the minor version of LibTorch. */
-public static final int TORCH_VERSION_MINOR = 8;
+public static final int TORCH_VERSION_MINOR = 9;
 
 /** Indicates the patch version of LibTorch. */
 public static final int TORCH_VERSION_PATCH = 0;
@@ -78673,7 +78815,7 @@ public static final int TORCH_VERSION_ABI_TAG = 0;
 
 /** Indicates the version of LibTorch as a string literal. */
 public static final String TORCH_VERSION = 
-  "2.8.0";
+  "2.9.0";
 
 /** Indicates the ABI version of LibTorch as a single uint64.
  *  [ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ]
@@ -78892,9 +79034,10 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // #include <ATen/core/ivalue.h>
 // #include <c10/util/ArrayRef.h>
 // #include <caffe2/serialize/inline_container.h>
+
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/jit/frontend/script_type_parser.h>
-// #include <torch/csrc/jit/serialization/pickler.h>
+// #include <torch/csrc/jit/serialization/pickler_helper.h>
 // Targeting ../DeserializationStorageContext.java
 
 
@@ -79036,6 +79179,9 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // Targeting ../SliceValue.java
 
 
+// Targeting ../TorchCheckValue.java
+
+
 
  // namespace torch::jit
 
@@ -79045,6 +79191,7 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // #pragma once
 
 // #include <torch/csrc/jit/frontend/tree.h>
+// #include <mutex>
 // Targeting ../Call.java
 
 
@@ -79743,7 +79890,6 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 
 // #pragma once
 
-// #include <ATen/core/qualified_name.h>
 // #include <string>
 // #include <string_view>
 // #include <utility>
@@ -79752,144 +79898,15 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // #include <ATen/Utils.h>
 // #include <ATen/core/ivalue.h>
 // #include <ATen/core/jit_type.h>
+// #include <ATen/core/qualified_name.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/FbcodeMaps.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <torch/csrc/Export.h>
-
-// See Python's pickletools.py for a detailed description of each of these codes
-@Namespace("torch::jit") public enum PickleOpCode {
-  MARK((byte)('(')),
-  STOP((byte)('.')),
-  POP((byte)('0')),
-  POP_MARK((byte)('1')),
-  DUP((byte)('2')),
-  FLOAT((byte)('F')),
-  INT((byte)('I')),
-  BININT((byte)('J')),
-  BININT1((byte)('K')),
-  LONG((byte)('L')),
-  BININT2((byte)('M')),
-  NONE((byte)('N')),
-  PERSID((byte)('P')),
-  BINPERSID((byte)('Q')),
-  REDUCE((byte)('R')),
-  STRING((byte)('S')),
-  BINSTRING((byte)('T')),
-  SHORT_BINSTRING((byte)('U')),
-  // NB: Avoid using UNICODE as it is a macro in the Windows API
-  UNICODE_((byte)('V')),
-  BINUNICODE((byte)('X')),
-  APPEND((byte)('a')),
-  BUILD((byte)('b')),
-  GLOBAL((byte)('c')),
-  DICT((byte)('d')),
-  EMPTY_DICT((byte)('}')),
-  APPENDS((byte)('e')),
-  GET((byte)('g')),
-  BINGET((byte)('h')),
-  INST((byte)('i')),
-  LONG_BINGET((byte)('j')),
-  LIST((byte)('l')),
-  EMPTY_LIST((byte)(']')),
-  OBJ((byte)('o')),
-  PUT((byte)('p')),
-  BINPUT((byte)('q')),
-  LONG_BINPUT((byte)('r')),
-  SETITEM((byte)('s')),
-  TUPLE((byte)('t')),
-  EMPTY_TUPLE((byte)(')')),
-  SETITEMS((byte)('u')),
-  BINFLOAT((byte)('G')),
-
-  // Protocol 2
-  PROTO((byte)(0x80)),
-  NEWOBJ((byte)(0x81)),
-  EXT1((byte)(0x82)),
-  EXT2((byte)(0x83)),
-  EXT4((byte)(0x84)),
-  TUPLE1((byte)(0x85)),
-  TUPLE2((byte)(0x86)),
-  TUPLE3((byte)(0x87)),
-  NEWTRUE((byte)(0x88)),
-  NEWFALSE((byte)(0x89)),
-  LONG1((byte)(0x8a)),
-  LONG4((byte)(0x8b)),
-
-  // Protocol 3 (Python 3.x)
-  BINBYTES((byte)('B')),
-  SHORT_BINBYTES((byte)('C')),
-
-  // Protocol 4
-  SHORT_BINUNICODE((byte)(0x8c)),
-  BINUNICODE8((byte)(0x8d)),
-  BINBYTES8((byte)(0x8e)),
-  EMPTY_SET((byte)(0x8f)),
-  ADDITEMS((byte)(0x90)),
-  FROZENSET((byte)(0x91)),
-  NEWOBJ_EX((byte)(0x92)),
-  STACK_GLOBAL((byte)(0x93)),
-  MEMOIZE((byte)(0x94)),
-  FRAME((byte)(0x95));
-
-    public final byte value;
-    private PickleOpCode(byte v) { this.value = v; }
-    private PickleOpCode(PickleOpCode e) { this.value = e.value; }
-    public PickleOpCode intern() { for (PickleOpCode e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../WriteableTensorData.java
-
-
+// #include <torch/csrc/jit/serialization/pickler_helper.h>
 // Targeting ../Pickler.java
 
 
-
-// returns a (tensor, record_size) for a tensor, converting it to a CPU tensor
-// if it was CUDA and to_cpu is True.
-@Namespace("torch::jit") public static native @ByVal WriteableTensorData getWriteableTensorData(@Const @ByRef Tensor tensor, @Cast("bool") boolean to_cpu/*=true*/);
-@Namespace("torch::jit") public static native @ByVal WriteableTensorData getWriteableTensorData(@Const @ByRef Tensor tensor);
-
-// if the cls has __getstate__/__setstate__
-// assert they have the right schema and return true,
-// otherwise return false
-
-
-// Declare BackendMeta serialization and deserialization function pointer types.
-
-// A allowlist of device type, currently available is PrivateUse1
-@Namespace("torch::jit") public static native @ByRef DeviceTypeSet GetBackendMetaAllowlist();
-
-// Dynamically obtain serialization function pairs
-// that require the corresponding backend.
-@Namespace("torch::jit") public static native @Cast("std::array<std::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >,at::COMPILE_TIME_MAX_DEVICE_TYPES>*") @ByRef PointerPairOptional GetBackendMetaSerialization();
-
-// Register function pointer of Tensor BackendMetadata for serialization.
-@Namespace("torch::jit") public static native void TensorBackendMetaRegistry(
-    DeviceType t,
-    @Cast("const torch::jit::BackendMetaPtr*") @ByRef Pointer get_fptr,
-    @Cast("const torch::jit::BackendMetaPtr*") @ByRef Pointer set_fptr);
-@Namespace("torch::jit") public static native void TensorBackendMetaRegistry(
-    @Cast("c10::DeviceType") byte t,
-    @Cast("const torch::jit::BackendMetaPtr*") @ByRef Pointer get_fptr,
-    @Cast("const torch::jit::BackendMetaPtr*") @ByRef Pointer set_fptr);
-
-// Return a map of Tensor Metadata which including BackendMetaData for
-// serialization. For now, it only takes care of `conj` and `neg` bit.
-@Namespace("torch::jit") public static native @ByVal StringBoolMap getTensorMetadata(
-    @Const @ByRef Tensor t);
-
-// set Tensor Metadata based on the map.
-// Refer: getTensorMetadata
-@Namespace("torch::jit") public static native void setTensorMetadata(
-    @Const @ByRef Tensor t,
-    @ByVal StringBoolMap metadata);
-
-// set Tensor metadata based on the map.
-// NOTE: This overload is required by unpickler.cpp
-@Namespace("torch::jit") public static native void setTensorMetadata(
-    @Const @ByRef Tensor t,
-    @Const @ByRef GenericDict metadata_idict);
 
  // namespace torch::jit
 
@@ -80554,6 +80571,8 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // Targeting ../ReduceOp.java
 
 
+
+@Namespace("c10d") public static native @Cast("bool") boolean isComplexViewAsRealAllowed(@Const @ByRef ReduceOp reduceOp);
 // Targeting ../BroadcastOptions.java
 
 
@@ -80804,7 +80823,11 @@ public static final int C10D_ENV_NOT_SET = -2;
     @StdVector TensorVector tensors,
     @Cast("size_t") long deviceIdx);
 
-@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(@ByRef TensorVector tensors);
+@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(
+    @ByRef TensorVector tensors,
+    @Cast("bool") boolean preserve_strides/*=true*/);
+@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(
+    @ByRef TensorVector tensors);
 
 @Namespace("c10d") public static native @Cast("std::vector<int64_t>*") @StdVector LongVector getSizes(
     @Const @ByRef TensorVector tensors);
@@ -81036,7 +81059,7 @@ public static final int C10D_ENV_NOT_SET = -2;
     public ErrorType intern() { for (ErrorType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-// Targeting ../DistributedBackend.java
+// Targeting ../Backend.java
 
 
 
@@ -81093,6 +81116,10 @@ public static final int C10D_ENV_NOT_SET = -2;
 // Targeting ../ProcessGroup.java
 
 
+
+// Thread local functions for managing the currently active process group.
+@Namespace("c10d") public static native @IntrusivePtr("c10d::ProcessGroup") @ByRef ProcessGroup currentProcessGroup();
+@Namespace("c10d") public static native void setProcessGroup(@IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup processGroup);
 
  // namespace c10d
 

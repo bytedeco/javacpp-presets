@@ -31,7 +31,7 @@ import static org.bytedeco.pytorch.global.torch_cuda.*;
 
 
 @Namespace("c10::cuda::CUDACachingAllocator") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
-public class CUDAAllocator extends Allocator {
+public class CUDAAllocator extends DeviceAllocator {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDAAllocator(Pointer p) { super(p); }
@@ -40,46 +40,41 @@ public class CUDAAllocator extends Allocator {
   public native Pointer raw_alloc_with_stream(@Cast("size_t") long nbytes, CUstream_st stream);
   public native void raw_delete(Pointer ptr);
   public native void init(int device_count);
-  public native @Cast("bool") boolean initialized();
   public native double getMemoryFraction(byte device);
   public native void setMemoryFraction(double fraction, byte device);
-  public native void emptyCache(@ByVal(nullValue = "c10::cuda::MempoolId_t({0, 0})") @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
-  public native void emptyCache();
   public native void enable(@Cast("bool") boolean value);
   public native @Cast("bool") boolean isEnabled();
   public native void cacheInfo(byte device, @Cast("size_t*") SizeTPointer largestBlock);
   public native Pointer getBaseAllocation(Pointer ptr, @Cast("size_t*") SizeTPointer size);
-  public native void recordStream(@StdMove DataPtr arg0, @ByVal CUDAStream stream);
-  public native @ByVal DeviceStats getDeviceStats(
-        byte device);
-  public native void resetAccumulatedStats(byte device);
-  public native void resetPeakStats(byte device);
-  public native @ByVal SnapshotInfo snapshot(@ByVal(nullValue = "c10::cuda::MempoolId_t({0, 0})") @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+  // Keep for BC only
+  public native void recordStream(@StdMove DataPtr ptr, @ByVal CUDAStream stream);
+  public native void recordStream(@StdMove DataPtr ptr, @ByVal Stream stream);
+  public native @ByVal SnapshotInfo snapshot(@ByVal(nullValue = "c10::MempoolId_t({0, 0})") @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
   public native @ByVal SnapshotInfo snapshot();
   public native void beginAllocateToPool(
         byte device,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id,
         @ByVal StreamFilter filter);
   public native void endAllocateToPool(
         byte device,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
-  public native void releasePool(byte device, @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+  public native void releasePool(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
   public native int getPoolUseCount(
         byte arg0,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1);
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1);
   public native void createOrIncrefPool(
         byte arg0,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1,
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1,
         CUDAAllocator allocator/*=nullptr*/);
   public native void createOrIncrefPool(
         byte arg0,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1);
-  public native void setUseOnOOM(byte device, @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1);
+  public native void setUseOnOOM(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
   // returns true if the allocated blocks are equal to expected live allocations
   public native @Cast("bool") boolean checkPoolLiveAllocations(
         byte arg0,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1,
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1,
         @Const @ByRef PointerSet arg2);
   public native @ByVal ShareableHandle shareIpcHandle(Pointer ptr);
   public native @SharedPtr Pointer getIpcDevPtr(@StdString BytePointer handle);
@@ -136,7 +131,7 @@ public class CUDAAllocator extends Allocator {
         @Cast("bool") boolean p2p_enabled);
   public native @SharedPtr("c10::cuda::CUDACachingAllocator::AllocatorState") @ByVal AllocatorState getCheckpointState(
         byte device,
-        @ByVal @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair id);
+        @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair id);
   public native @ByVal CheckpointDelta setCheckpointPoolState(
         byte device,
         @SharedPtr("c10::cuda::CUDACachingAllocator::AllocatorState") @ByVal AllocatorState pps);

@@ -148,6 +148,17 @@ public class TensorBase extends AbstractTensor {
   public native @Cast("bool") boolean is_contiguous(@ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
   public native @Cast("bool") boolean is_contiguous();
 
+  // Like is_contiguous, but more dynamic shape-friendly. May return a symbolic representation of
+  // contiguity instead of SymTrue SymFalse, when results are data-dependent.
+  public native @ByVal SymBool sym_is_contiguous(@ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
+  public native @ByVal SymBool sym_is_contiguous();
+
+  // Like is_contiguous, but more dynamic shape-friendly. Can returns
+  // false instead of throwing data-dependent errors for tensors with unbacked
+  // sizes or strides.
+  public native @Cast("bool") boolean is_contiguous_or_false(@ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
+  public native @Cast("bool") boolean is_contiguous_or_false();
+
   public native @Cast("bool") boolean is_non_overlapping_and_dense();
 
   public native @ByVal MemoryFormat suggest_memory_format(

@@ -2,6 +2,7 @@
 //#include "gloo/common/logging.h"
 #include "gloo/transport/address.h"
 #include "gloo/transport/buffer.h"
+#include "gloo/transport/remote_key.h"
 #include "gloo/transport/unbound_buffer.h"
 #include "gloo/transport/pair.h"
 //#include "gloo/context.h"

@@ -117,7 +117,7 @@ public class TensorIteratorBase extends MetaBase {
 
   /** Return scalar value from original_tensor_base if it is defined. When
    *  common_dtype is Half, casting scalar input to common_dtype might overflow.
-   *  If the scalar is aleady given in the type of Half, then return scalar
+   *  If the scalar is already given in the type of Half, then return scalar
    *  value from tensor_base. */
   
 
@@ -164,7 +164,7 @@ public class TensorIteratorBase extends MetaBase {
    *  kernels */
   public native @Cast("bool") boolean can_use_32bit_indexing();
 
-  /** An "iteratable" object that recursively splits this iterator into
+  /** An "iterable" object that recursively splits this iterator into
    *  sub-iterators that can use 32-bit indexing. */
   public native @ByVal SplitUntil32Bit with_32bit_indexing();
 

@@ -58,7 +58,7 @@ public class SegmentInfo extends Pointer {
   public native CUstream_st stream(); public native SegmentInfo stream(CUstream_st setter);
   public native @Cast("bool") boolean is_large(); public native SegmentInfo is_large(boolean setter);
   public native @Cast("bool") boolean is_expandable(); public native SegmentInfo is_expandable(boolean setter);
-  public native @ByRef @Cast("c10::cuda::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair owner_private_pool_id(); public native SegmentInfo owner_private_pool_id(DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair setter);
+  public native @ByRef @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair owner_private_pool_id(); public native SegmentInfo owner_private_pool_id(DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair setter);
   public native @StdVector BlockInfo blocks(); public native SegmentInfo blocks(BlockInfo setter);
   public native @SharedPtr GatheredContext context_when_allocated(); public native SegmentInfo context_when_allocated(GatheredContext setter);
 }

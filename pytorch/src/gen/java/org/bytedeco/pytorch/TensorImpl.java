@@ -222,54 +222,6 @@ public class TensorImpl extends Pointer {
 
   public native @ByVal SymIntArrayRef sym_sizes_default();
 
-  // From https://stackoverflow.com/a/3057522/23845
-  // TODO: does C++14 have a stdlib template for this?
-  @Name("identity<c10::SymInt>") public static class SymIntIdentity extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public SymIntIdentity() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public SymIntIdentity(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public SymIntIdentity(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public SymIntIdentity position(long position) {
-          return (SymIntIdentity)super.position(position);
-      }
-      @Override public SymIntIdentity getPointer(long i) {
-          return new SymIntIdentity((Pointer)this).offsetAddress(i);
-      }
-  
-  }
-  @Name("identity<int64_t>") public static class LongIdentity extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public LongIdentity() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public LongIdentity(long size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public LongIdentity(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(long size);
-      @Override public LongIdentity position(long position) {
-          return (LongIdentity)super.position(position);
-      }
-      @Override public LongIdentity getPointer(long i) {
-          return new LongIdentity((Pointer)this).offsetAddress(i);
-      }
-  
-  }
-
-  public native @ByVal LongArrayRef _generic_sizes(@ByVal LongIdentity arg0);
-  public native @ByVal SymIntArrayRef _generic_sizes(@ByVal SymIntIdentity arg0);
-
-  public native @ByVal LongArrayRef _generic_strides(@ByVal LongIdentity arg0);
-  public native @ByVal SymIntArrayRef _generic_strides(@ByVal SymIntIdentity arg0);
-
-  public native @Cast("int64_t") long _generic_storage_offset(@ByVal LongIdentity arg0);
-  public native @ByVal SymInt _generic_storage_offset(@ByVal SymIntIdentity arg0);
-
   /**
    * The number of elements in a tensor.
    *
@@ -321,6 +273,14 @@ public class TensorImpl extends Pointer {
 
   public native @ByVal SymIntArrayRef sym_strides_default();
 
+  public native @ByVal SymBool sym_is_contiguous(
+        @ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
+  public native @ByVal SymBool sym_is_contiguous();
+
+  public native @Cast("bool") boolean is_contiguous_default(@ByVal MemoryFormat memory_format);
+
+  public native @ByVal SymBool sym_is_contiguous_default(@ByVal MemoryFormat memory_format);
+
   /**
    * Whether or not a tensor is laid out in contiguous memory.
    *
@@ -332,11 +292,9 @@ public class TensorImpl extends Pointer {
         @ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
   public native @Cast("bool") boolean is_contiguous();
 
-  // These are factored into separate functions in case subclasses
-  // want to use them
-  public native @Cast("bool") boolean is_contiguous_default(@ByVal MemoryFormat memory_format);
-
   public native @Cast("bool") boolean is_strides_like_default(@ByVal MemoryFormat memory_format);
+
+  public native @ByVal SymBool sym_is_non_overlapping_and_dense_default();
 
   public native @Cast("bool") boolean is_non_overlapping_and_dense_default();
 
@@ -383,9 +341,9 @@ public class TensorImpl extends Pointer {
       public SizesStridesPolicy intern() { for (SizesStridesPolicy e : values()) if (e.value == value) return e; return this; }
       @Override public String toString() { return intern().name(); }
   }
-  /**
-   * True if this tensor has storage. See storage() for details.
-   */
+/**
+ * True if this tensor has storage. See storage() for details.
+ */
 // #ifdef DEBUG
   // Allow subclasses to check that their storage_ is never getting set in debug
   // builds.
@@ -1023,7 +981,11 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_strides_like_channels_last_3d();
 
+  public native @Cast("bool") boolean is_non_overlapping_and_dense_or_false();
+
   public native @Cast("bool") boolean is_non_overlapping_and_dense();
+
+  public native @ByVal SymBool sym_is_non_overlapping_and_dense();
 
   // if this returns true, then it is guaranteed that this tensor has symbolic
   // sizes/strides

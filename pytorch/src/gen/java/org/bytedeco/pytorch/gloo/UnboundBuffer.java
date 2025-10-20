@@ -45,6 +45,8 @@ public class UnboundBuffer extends Pointer {
 
   // If specified, the destination of this send is stored in the rank pointer.
   // Returns true if it completed, false if it was aborted.
+  // put/get are both considered sends since they're initiated by the sender so
+  // you need to call waitSend for those operations.
   public native @Cast("bool") boolean waitSend(IntPointer rank, @ByVal Milliseconds timeout);
   public native @Cast("bool") boolean waitSend(IntBuffer rank, @ByVal Milliseconds timeout);
   public native @Cast("bool") boolean waitSend(int[] rank, @ByVal Milliseconds timeout);
@@ -127,4 +129,24 @@ public class UnboundBuffer extends Pointer {
   public native void recv(
         @StdVector int[] srcRanks,
         @Cast("uint64_t") long slot);
+
+  public native @UniquePtr RemoteKey getRemoteKey();
+
+  // Asymmetrically send data to the given remote key.
+  // Call waitSend to wait on the results of this.
+  public native void put(
+        @Const @ByRef RemoteKey key,
+        @Cast("uint64_t") long slot,
+        @Cast("size_t") long offset,
+        @Cast("size_t") long roffset,
+        @Cast("size_t") long nbytes);
+
+  // Asymmetrically receive data from the given remote key.
+  // Call waitRecv to wait on the results of this.
+  public native void get(
+        @Const @ByRef RemoteKey key,
+        @Cast("uint64_t") long slot,
+        @Cast("size_t") long offset,
+        @Cast("size_t") long roffset,
+        @Cast("size_t") long nbytes);
 }

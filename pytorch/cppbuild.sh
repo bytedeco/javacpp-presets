@@ -40,7 +40,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.8.0
+PYTORCH_VERSION=2.9.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -79,7 +79,7 @@ git submodule foreach --recursive 'git reset --hard'
 
 # https://github.com/pytorch/pytorch/pull/158184
 # https://github.com/pytorch/pytorch/pull/159869
-patch -Np1 < ../../../pytorch.patch
+#patch -Np1 < ../../../pytorch.patch
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
@@ -135,7 +135,7 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
+export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
 export PYTHONNOUSERSITE=1
 $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.8.0
 
@@ -177,7 +177,6 @@ case $PLATFORM in
             export CUDA_HOME="$CUDA_PATH"
             export CUDNN_HOME="$CUDA_PATH"
         fi
-        export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -187,6 +186,7 @@ esac
 
 # work around issues with the build system
 sedinplace '/Werror/d' CMakeLists.txt third_party/fbgemm/CMakeLists.txt third_party/fmt/CMakeLists.txt
+sedinplace '/setuptools.command.bdist_wheel/d' setup.py
 sedinplace 's/build_python=True/build_python=False/g' setup.py
 sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake

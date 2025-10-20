@@ -64,6 +64,8 @@ public class Context extends Pointer {
   public static native @Cast("bool") boolean hasKleidiAI();
   public static native @Cast("bool") boolean hasLAPACK();
   public static native @Cast("bool") boolean hasMKLDNN();
+  public static native @Cast("bool") boolean ckSupported();
+  public static native @Cast("bool") boolean hasEigenSparse();
   public static native @Cast("bool") boolean hasMAGMA();
   public static native @Cast("bool") boolean hasCUDA();
   public static native @Cast("bool") boolean hasMTIA();
@@ -74,6 +76,8 @@ public class Context extends Pointer {
   public static native @Cast("bool") boolean hasCuSOLVER();
   public static native @Cast("bool") boolean hasCuBLASLt();
   public static native @Cast("bool") boolean hasROCM();
+  public static native @Cast("bool") boolean hasCKSDPA();
+  public static native @Cast("bool") boolean hasCKGEMM();
   public static native @Cast("bool") boolean hasHIP();
   public static native @Cast("bool") boolean hasMPS();
   public static native @Cast("bool") boolean hasIPU();
@@ -99,6 +103,8 @@ public class Context extends Pointer {
   public native void setBenchmarkCuDNN(@Cast("bool") boolean arg0);
   public native int benchmarkLimitCuDNN();
   public native void setBenchmarkLimitCuDNN(int arg0);
+  public native @Cast("bool") boolean immediateMiopen();
+  public native void setImmediateMiopen(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean deterministicCuDNN();
   public native void setDeterministicCuDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean deterministicMkldnn();
@@ -236,15 +242,29 @@ public class Context extends Pointer {
 
   public native void setFloat32MatmulPrecision(@StdString BytePointer s);
   public native void setFloat32MatmulPrecision(@StdString String s);
+  public native void setFloat32Precision(
+        @StdString BytePointer backend,
+        @StdString BytePointer op,
+        @StdString BytePointer s);
+  public native void setFloat32Precision(
+        @StdString String backend,
+        @StdString String op,
+        @StdString String s);
+  public native @Cast("bool") boolean allowTF32CuDNN(@StdString BytePointer op/*=std::string()*/);
   public native @Cast("bool") boolean allowTF32CuDNN();
+  public native @Cast("bool") boolean allowTF32CuDNN(@StdString String op/*=std::string()*/);
   public native void setAllowTF32CuDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowTF32OneDNN();
   public native void setAllowTF32OneDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowTF32CuBLAS();
   public native void setAllowTF32CuBLAS(@Cast("bool") boolean arg0);
   public native Float32MatmulPrecision float32MatmulPrecision();
-  public native void setFloat32MatmulPrecision(Float32MatmulPrecision p);
-  public native void setFloat32MatmulPrecision(@Cast("at::Float32MatmulPrecision") int p);
+  public native @StdString BytePointer float32Precision(
+        @StdString BytePointer backend,
+        @StdString BytePointer op);
+  public native @StdString String float32Precision(
+        @StdString String backend,
+        @StdString String op);
   public native @Cast("bool") boolean allowFP16ReductionCuBLAS();
   public native void setAllowFP16ReductionCuBLAS(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowBF16ReductionCuBLAS();

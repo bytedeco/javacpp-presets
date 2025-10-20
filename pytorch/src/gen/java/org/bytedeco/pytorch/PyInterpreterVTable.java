@@ -170,6 +170,9 @@ public class PyInterpreterVTable extends Pointer {
         IValueVector stack);
 
   public native @Cast("bool") boolean is_contiguous(@Const TensorImpl self, @ByVal MemoryFormat arg1);
+  public native @ByVal SymBool sym_is_contiguous(
+        @Const TensorImpl self,
+        @ByVal MemoryFormat arg1);
   public native @Cast("bool") boolean is_strides_like(@Const TensorImpl self, @ByVal MemoryFormat arg1);
   public native @Cast("bool") boolean is_non_overlapping_and_dense(@Const TensorImpl self);
   public native @ByVal Device device(@Const TensorImpl self);

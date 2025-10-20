@@ -69,6 +69,8 @@ public class SymbolicShapeMeta extends Pointer {
   // DO NOT call with mutables_ lock held
   public native @Const @ByRef SymInt numel();
 
+  public native @Const @ByRef SymBool is_contiguous(@ByVal MemoryFormat memory_format);
+
   public native @Const @ByRef SymBool is_contiguous();
 
   public native @Const @ByRef SymBool is_channels_last_contiguous();

@@ -101,7 +101,7 @@ public class SugaredValue extends Pointer {
 
   // If we are iterating over a Sugared Value and it returns a value from this
   // function, then we emit an unrolled loop over the variable. This allows us
-  // to support containers of Heterogenous types, like Module Containers &
+  // to support containers of Heterogeneous types, like Module Containers &
   // Tuples
   public native @ByVal LongOptional staticLen();
 
@@ -115,7 +115,7 @@ public class SugaredValue extends Pointer {
   // Value *
   public native Value len(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
 
-  // expression for ith elemement for iterable value
+  // expression for ith element for iterable value
   public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue getitem(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,

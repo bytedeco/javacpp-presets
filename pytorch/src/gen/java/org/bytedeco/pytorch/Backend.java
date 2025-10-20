@@ -19,11 +19,11 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Name("c10d::Backend") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DistributedBackend extends CustomClassHolder {
+@Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class Backend extends CustomClassHolder {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DistributedBackend(Pointer p) { super(p); }
+    public Backend(Pointer p) { super(p); }
 
   // Backend Options is a base struct that defines the basic options
   // when constructing a Backend. Each Backend subclass should
@@ -37,22 +37,22 @@ public class DistributedBackend extends CustomClassHolder {
     public Options(
             @StdString BytePointer backend,
             @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout) { super((Pointer)null); allocate(backend, timeout); }
-    private native void allocate(
+    @IntrusivePtr @Name("c10::make_intrusive<c10d::Backend::Options>") private native void allocate(
             @StdString BytePointer backend,
             @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout);
     public Options(
             @StdString BytePointer backend) { super((Pointer)null); allocate(backend); }
-    private native void allocate(
+    @IntrusivePtr @Name("c10::make_intrusive<c10d::Backend::Options>") private native void allocate(
             @StdString BytePointer backend);
     public Options(
             @StdString String backend,
             @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout) { super((Pointer)null); allocate(backend, timeout); }
-    private native void allocate(
+    @IntrusivePtr @Name("c10::make_intrusive<c10d::Backend::Options>") private native void allocate(
             @StdString String backend,
             @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout);
     public Options(
             @StdString String backend) { super((Pointer)null); allocate(backend); }
-    private native void allocate(
+    @IntrusivePtr @Name("c10::make_intrusive<c10d::Backend::Options>") private native void allocate(
             @StdString String backend);
 
     public native @ByRef Milliseconds timeout(); public native Options timeout(Milliseconds setter);
@@ -60,6 +60,8 @@ public class DistributedBackend extends CustomClassHolder {
     // backend name
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     @MemberGetter public native @StdString BytePointer backend();
+    public native @StdString BytePointer group_name(); public native Options group_name(BytePointer setter);
+    public native @Cast("uint64_t*") @StdVector LongPointer global_ranks_in_group(); public native Options global_ranks_in_group(LongPointer setter);
   }
 
   public native int getRank();
@@ -76,12 +78,17 @@ public class DistributedBackend extends CustomClassHolder {
 
   public native @Cast("bool") boolean supportsTimeEstimation();
 
+  public native void setTimeout(@ByVal Milliseconds timeout);
+
   public native void startCoalescing();
 
   public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work endCoalescing();
 
   // Subclasses must override this method to return the backend name
   public native @StdString BytePointer getBackendName();
+
+  // Subclasses must override this method to return the backend name
+  public native @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options getBackendOptions();
 
   public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work broadcast(
         @ByRef TensorVector arg0,
@@ -259,6 +266,25 @@ public class DistributedBackend extends CustomClassHolder {
   public native void waitForPendingWorks();
 
   public native void enableCollectivesTiming();
+
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @StdVector IntPointer ranks,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @StdVector IntBuffer ranks,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @StdVector int[] ranks,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
+
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend merge(
+        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts,
+        int rank,
+        int size);
 
   public native @Cast("bool") boolean hasHooks();
 

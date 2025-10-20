@@ -56,6 +56,9 @@ public class OperatorHandle extends Pointer {
   public native @Cast("bool") boolean hasComputedKernelForDispatchKey(DispatchKey k);
   public native @Cast("bool") boolean hasComputedKernelForDispatchKey(@Cast("c10::DispatchKey") short k);
 
+  public native @ByVal SafeKernelFunction getComputedKernelForDispatchKey(DispatchKey k);
+  public native @ByVal SafeKernelFunction getComputedKernelForDispatchKey(@Cast("c10::DispatchKey") short k);
+
   public native @StdString BytePointer dumpComputedTable();
 
   public native void checkInvariants();

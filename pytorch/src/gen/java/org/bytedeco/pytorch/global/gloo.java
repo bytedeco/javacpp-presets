@@ -86,6 +86,19 @@ public class gloo extends org.bytedeco.pytorch.presets.gloo {
  // namespace gloo
 
 
+// Parsed from gloo/transport/remote_key.h
+
+// #pragma once
+
+// #include <string>
+// Targeting ../gloo/RemoteKey.java
+
+
+
+ // namespace transport
+ // namespace gloo
+
+
 // Parsed from gloo/transport/unbound_buffer.h
 
 /**
@@ -102,7 +115,11 @@ public class gloo extends org.bytedeco.pytorch.presets.gloo {
 // #include <cstddef>
 // #include <cstdint>
 // #include <limits>
+// #include <memory>
+// #include <stdexcept>
 // #include <vector>
+
+// #include <gloo/transport/remote_key.h>
 // Targeting ../gloo/UnboundBuffer.java
 
 
@@ -177,6 +194,7 @@ public class gloo extends org.bytedeco.pytorch.presets.gloo {
 
 // #pragma once
 
+// #include <cstdint>
 // #include <iostream>
 
 // #ifdef __CUDA_ARCH__

@@ -17,7 +17,11 @@ import org.bytedeco.javacpp.chrono.*;
 import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
- // namespace detail
+ // import conversion ops from f16cintrin.h
+// #endif // defined(__F16C__) && !(defined(__CUDA_ARCH__) || defined(__CUDACC__)
+       // || defined(__HIP_DEVICE_COMPILE__))
+// #endif // __x86_64__ || _M_X64 || __i386 || _M_IX86
+// #endif // __GNUC__ || __clang__
 
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Half extends Pointer {

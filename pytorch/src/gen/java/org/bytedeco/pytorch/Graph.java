@@ -184,7 +184,7 @@ public class Graph extends Pointer {
   // kwargs using Python argument matching rules, and checks that the op matches
   // a known schema.
   //
-  // If this node successfully completes, it guarentees the node
+  // If this node successfully completes, it guarantees the node
   // is a correctly-formed invocation of opname
   public native Value insert(
         @ByVal Symbol opname,

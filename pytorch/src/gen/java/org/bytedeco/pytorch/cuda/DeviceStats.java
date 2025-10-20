@@ -31,7 +31,7 @@ import static org.bytedeco.pytorch.global.torch_cuda.*;
 
 
 // Struct containing memory allocator summary statistics for a device.
-@Namespace("c10::CachingDeviceAllocator") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
+@Name("c10::CachingDeviceAllocator::DeviceStats") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class DeviceStats extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
