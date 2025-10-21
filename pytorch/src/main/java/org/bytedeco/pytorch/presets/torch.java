@@ -192,11 +192,12 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("nccl") ? "@.2"
                     : lib.equals("myelin") ? "@.1"
                     : lib.equals("nvinfer") ? "@.10"
-                    : lib.equals("cufft") ? "@.11"
+                    : lib.equals("cufft") ? "@.12"
                     : lib.equals("curand") ? "@.10"
-                    : lib.equals("cusolver") ? "@.11"
-                    : lib.equals("nvrtc-builtins") ? "@.12.9"
-                    : "@.12";
+                    : lib.equals("cusparse") ? "@.12"
+                    : lib.equals("cusolver") ? "@.12"
+                    : lib.equals("nvrtc-builtins") ? "@.13.0"
+                    : "@.13";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_9"
                     : lib.equals("cufile") ? "64_0"
@@ -204,14 +205,15 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("nccl") ? "64_2"
                     : lib.equals("myelin") ? "64_1"
                     : lib.equals("nvinfer") ? "64_10"
-                    : lib.equals("cufft") ? "64_11"
+                    : lib.equals("cufft") ? "64_12"
                     : lib.equals("curand") ? "64_10"
-                    : lib.equals("cusolver") ? "64_11"
-                    : lib.equals("nvrtc") ? "64_120_0"
-                    : lib.equals("nvrtc-builtins") ? "64_129"
-                    : lib.equals("nvJitLink") ? "_120_0"
-                    : lib.equals("cupti") ? "64_2025.2.1"
-                    : "64_12";
+                    : lib.equals("cusparse") ? "64_12"
+                    : lib.equals("cusolver") ? "64_12"
+                    : lib.equals("nvrtc") ? "64_130_0"
+                    : lib.equals("nvrtc-builtins") ? "64_130"
+                    : lib.equals("nvJitLink") ? "_130_0"
+                    : lib.equals("cupti") ? "64_2025.3.1"
+                    : "64_13";
             } else {
                 continue; // no CUDA
             }

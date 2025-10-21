@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Samuel Audet
+ * Copyright (C) 2018-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvrtc.h>", link = "nvrtc@.12", preload = "nvrtc-builtins@.12.9"),
-    @Platform(value = "windows-x86_64", preload = {"nvrtc64_120_0", "nvrtc-builtins64_129"})},
+    @Platform(include = "<nvrtc.h>", link = "nvrtc@.13", preload = "nvrtc-builtins@.13.0"),
+    @Platform(value = "windows-x86_64", preload = {"nvrtc64_130_0", "nvrtc-builtins64_130"})},
         target = "org.bytedeco.cuda.nvrtc", global = "org.bytedeco.cuda.global.nvrtc")
 @NoException
 public class nvrtc implements InfoMapper {

@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jeonghwan Park
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvjpeg.h>", link = "nvjpeg@.12"),
-    @Platform(value = "windows-x86_64", preload = "nvjpeg64_12")},
+    @Platform(include = "<nvjpeg.h>", link = "nvjpeg@.13"),
+    @Platform(value = "windows-x86_64", preload = "nvjpeg64_13")},
         target = "org.bytedeco.cuda.nvjpeg", global = "org.bytedeco.cuda.global.nvjpeg")
 @NoException
 public class nvjpeg implements InfoMapper {

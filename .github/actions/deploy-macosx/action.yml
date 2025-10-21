@@ -56,9 +56,9 @@ runs:
         sudo ln -sf /usr/local/opt/apache-maven-3.9.6/bin/mvn /usr/local/bin/mvn
 
         echo Installing an older less buggy version of CMake
-        curl -LO https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-macos-universal.tar.gz
-        sudo tar -xzf cmake-3.31.6-macos-universal.tar.gz -C /usr/local/opt
-        sudo ln -sf /usr/local/opt/cmake-3.31.6-macos-universal/CMake.app/Contents/bin/* /usr/local/bin/
+        curl -LO https://github.com/Kitware/CMake/releases/download/v3.31.8/cmake-3.31.8-macos-universal.tar.gz
+        sudo tar -xzf cmake-3.31.8-macos-universal.tar.gz -C /usr/local/opt
+        sudo ln -sf /usr/local/opt/cmake-3.31.8-macos-universal/CMake.app/Contents/bin/* /usr/local/bin/
 
         PIP_BREAK_SYSTEM_PACKAGES=1 python3 -m pip install gdown || python3 -m pip install gdown
 

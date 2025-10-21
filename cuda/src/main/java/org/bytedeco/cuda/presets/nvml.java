@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Samuel Audet
+ * Copyright (C) 2018-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(value = {"linux-x86_64", "linux-ppc64le", "windows-x86_64"}, define = "NVML_NO_UNVERSIONED_FUNC_DEFS", include = "<nvml.h>", link = "nvidia-ml@.1#"),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le", "windows-x86_64"}, define = "NVML_NO_UNVERSIONED_FUNC_DEFS", include = "<nvml.h>", link = "nvidia-ml@.1#"),
     @Platform(value = "windows-x86_64", link = "nvml", preloadpath = "C:/Program Files/NVIDIA Corporation/NVSMI/")},
         target = "org.bytedeco.cuda.nvml", global = "org.bytedeco.cuda.global.nvml")
 @NoException

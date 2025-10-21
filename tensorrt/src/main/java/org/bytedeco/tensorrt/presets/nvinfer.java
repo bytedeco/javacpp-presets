@@ -52,7 +52,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource@.10.12.0"
+            preload = "nvinfer_builder_resource@.10.13.3"
         ),
         @Platform(
             value = "linux-arm64",
@@ -101,9 +101,9 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                          "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cudart") ? "@.13" : lib.equals("nvrtc") ? "@.13" : "@.13";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cudart") ? "64_13" : lib.equals("nvrtc") ? "64_130_0" : "64_13";
             } else {
                 continue; // no CUDA
             }

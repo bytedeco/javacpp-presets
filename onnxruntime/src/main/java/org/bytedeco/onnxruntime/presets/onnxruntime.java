@@ -100,9 +100,9 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                          "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.11" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.12" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.13" : "@.13";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_11" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_12" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_12" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_13" : "64_13";
             } else {
                 continue; // no CUDA
             }
