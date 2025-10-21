@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,12 +34,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_arithmetic_and_logical_operations.h>", link = "nppial@.12"),
-    @Platform(value = "windows-x86_64", preload = "nppial64_12")},
+    @Platform(include = "<nppi_arithmetic_and_logical_operations.h>", link = "nppial@.13"),
+    @Platform(value = "windows-x86_64", preload = "nppial64_13")},
         global = "org.bytedeco.cuda.global.nppial")
 @NoException
 public class nppial implements InfoMapper {
     public void map(InfoMap infoMap) {
+        nppc.initSkips(infoMap, "nppi_arithmetic_and_logical_operations.h");
         infoMap.put(new Info("nppiSub_32s_C4IRSfs", "nppiSub_32s_C4RSfs", "nppiSub_32s_C4IRSfs_Ctx", "nppiSub_32s_C4RSfs_Ctx").skip());
     }
 }

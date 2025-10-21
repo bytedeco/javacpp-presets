@@ -69,6 +69,8 @@ case $PLATFORM in
         ;;
 esac
 
+patch -p1 < ../../../onnxruntime-cuda13.patch
+
 #if [[ -n "$ARCH_FLAGS" ]]; then
 #    # build host version of protoc
 #    cd ../build
@@ -129,7 +131,7 @@ sedinplace '/cvtfp16Avx/d' cmake/onnxruntime_mlas.cmake
 sedinplace 's/MlasCastF16ToF32KernelAvx;/MlasCastF16ToF32KernelAvx2;/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # compile for all CUDA archs instead of using PTX to reduce load time
-sedinplace 's/"60;70;75;80;86;89;90;100;120"/"50;60;70;80;90;100;120"/g' cmake/external/cuda_configuration.cmake
+sedinplace 's/"60;70;75;80;86;89;90;100;120"/"75;80;90;100;120"/g' cmake/external/cuda_configuration.cmake
 sedinplace 's/"all"/"50-real;60-real;70-real;80-real;90-real;100-real;120-real"/g' cmake/CMakeLists.txt
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_90,code=sm_90/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt

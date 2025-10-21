@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,12 +36,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = nppc.class, value = {
     @Platform(include = {"<npps.h>", "<npps_support_functions.h>", "<npps_initialization.h>",
             "<npps_conversion_functions.h>", "<npps_arithmetic_and_logical_operations.h>",
-            "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.12"),
-    @Platform(value = "windows-x86_64", preload = "npps64_12")},
+            "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.13"),
+    @Platform(value = "windows-x86_64", preload = "npps64_13")},
         global = "org.bytedeco.cuda.global.npps")
 @NoException
 public class npps implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("nppsIntegral_32s_Ctx").skip());
+        infoMap.put(new Info("nppsIntegral_32s_Ctx").skip())
+               .put(new Info("NPP_EXTERN_C", "NPP_DECLSPEC").cppTypes().annotations());
     }
 }

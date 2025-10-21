@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,12 +34,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_filtering_functions.h>", link = "nppif@.12"),
-    @Platform(value = "windows-x86_64", preload = "nppif64_12")},
+    @Platform(include = "<nppi_filtering_functions.h>", link = "nppif@.13"),
+    @Platform(value = "windows-x86_64", preload = "nppif64_13")},
         global = "org.bytedeco.cuda.global.nppif")
 @NoException
 public class nppif implements InfoMapper {
     public void map(InfoMap infoMap) {
+        nppc.initSkips(infoMap, "nppi_filtering_functions.h");
         infoMap.put(new Info("nppiFloodFillBoundary_8u_C3IR", "nppiFloodFillBoundary_16u_C3IR").skip());
     }
 }

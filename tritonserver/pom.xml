@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tritonserver</artifactId>
-  <version>2.59.0-${project.parent.version}</version>
+  <version>2.61.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Triton Inference Server</name>
 
   <dependencies>
@@ -53,11 +53,50 @@
               </includes>
             </configuration>
           </execution>
+          <execution>
+            <id>javacpp-${javacpp.platform}-redist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>${javacpp.platform}-redist</classifier>
+              <classesDirectory>${project.build.directory}/native</classesDirectory>
+              <includes>
+                <include>org/bytedeco/tritonserver/${javacpp.platform}/</include>
+                <include>META-INF/native-image/${javacpp.platform}/</include>
+              </includes>
+              <excludes>
+                <exclude>org/bytedeco/tritonserver/${javacpp.platform}/*jni*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-module-info-redist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <modules>
+                <module>
+                  <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}-redist.jar</file>
+                  <moduleInfoSource>
+                    open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module}.redist {
+                      requires transitive org.bytedeco.${javacpp.packageName};
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -73,69 +112,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>redist</id>
-      <activation>
-        <property>
-          <name>redist</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>javacpp-${javacpp.platform}-redist</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <configuration>
-                  <classifier>${javacpp.platform}-redist</classifier>
-                  <classesDirectory>${project.build.directory}/native</classesDirectory>
-                  <includes>
-                    <include>org/bytedeco/tritonserver/${javacpp.platform}/</include>
-                    <include>META-INF/native-image/${javacpp.platform}/</include>
-                  </includes>
-                  <excludes>
-                    <exclude>org/bytedeco/tritonserver/${javacpp.platform}/*jni*</exclude>
-                  </excludes>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.moditect</groupId>
-            <artifactId>moditect-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>add-module-info-redist</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>add-module-info</goal>
-                </goals>
-                <configuration>
-                  <modules>
-                    <module>
-                      <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}-redist.jar</file>
-                      <moduleInfoSource>
-                        open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module}.redist {
-                          requires transitive org.bytedeco.${javacpp.packageName};
-                        }
-                      </moduleInfoSource>
-                    </module>
-                  </modules>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
