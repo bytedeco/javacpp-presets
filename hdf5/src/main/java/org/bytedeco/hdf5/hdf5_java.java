@@ -40,7 +40,7 @@ import org.bytedeco.hdf5.presets.*;
         hdf5.class,
     },
     value = {
-        @Platform(preload = {"hdf5_java"}),
+        @Platform(preload = {"hdf5_java", "hdf5"}),
     }
 )
 public class hdf5_java {
