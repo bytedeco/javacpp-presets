@@ -4,6 +4,7 @@ package org.bytedeco.pytorch.global;
 
 import org.bytedeco.pytorch.gloo.*;
 
+import org.bytedeco.pytorch.gloo.Device;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -493,6 +494,200 @@ public static final int GLOO_STORE_HAS_STORE_V2 = 1;
 
 
 
+ // namespace transport
+ // namespace gloo
+
+
+// Parsed from gloo/transport/tcp/attr.h
+
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// #pragma once
+
+// #include <string>
+
+// #include <sys/socket.h>
+// Targeting ../gloo/attr.java
+
+
+
+ // namespace tcp
+ // namespace transport
+ // namespace gloo
+
+
+// Parsed from gloo/transport/tcp/error.h
+
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// #pragma once
+
+// #include <gloo/transport/tcp/address.h>
+// #include <string>
+// Targeting ../gloo/Error.java
+
+
+// Targeting ../gloo/SystemError.java
+
+
+// Targeting ../gloo/ShortReadError.java
+
+
+// Targeting ../gloo/ShortWriteError.java
+
+
+// Targeting ../gloo/TimeoutError.java
+
+
+// Targeting ../gloo/LoopError.java
+
+
+
+ // namespace tcp
+ // namespace transport
+ // namespace gloo
+
+
+// Parsed from gloo/transport/tcp/listener.h
+
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// #pragma once
+
+// #include <list>
+// #include <unordered_map>
+
+// #include <gloo/transport/tcp/address.h>
+// #include <gloo/transport/tcp/attr.h>
+// #include <gloo/transport/tcp/error.h>
+// #include <gloo/transport/tcp/loop.h>
+// #include <gloo/transport/tcp/socket.h>
+// Targeting ../gloo/Listener.java
+
+
+
+ // namespace tcp
+ // namespace transport
+ // namespace gloo
+
+
+// Parsed from gloo/transport/tcp/loop.h
+
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// #pragma once
+
+// #include <atomic>
+// #include <condition_variable>
+// #include <functional>
+// #include <list>
+// #include <memory>
+// #include <mutex>
+// #include <thread>
+// #include <unordered_set>
+
+// #include <sys/epoll.h>
+// Targeting ../gloo/Handler.java
+
+
+// Targeting ../gloo/Deferrables.java
+
+
+// Targeting ../gloo/Loop.java
+
+
+
+ // namespace tcp
+ // namespace transport
+ // namespace gloo
+
+
+// Parsed from gloo/transport/tcp/socket.h
+
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// #pragma once
+
+// #include <netinet/in.h>
+// #include <sys/socket.h>
+
+// #include <chrono>
+// #include <memory>
+
+// #include <gloo/transport/tcp/address.h>
+// Targeting ../gloo/Socket.java
+
+
+
+ // namespace tcp
+ // namespace transport
+ // namespace gloo
+
+
+// Parsed from gloo/transport/tcp/device.h
+
+/**
+ * Copyright (c) 2017-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// #pragma once
+
+// #include <array>
+// #include <atomic>
+// #include <condition_variable>
+// #include <memory>
+// #include <mutex>
+// #include <thread>
+
+// #include <gloo/transport/device.h>
+// #include <gloo/transport/tcp/attr.h>
+// #include <gloo/transport/tcp/error.h>
+// #include <gloo/transport/tcp/listener.h>
+// #include <gloo/transport/tcp/loop.h>
+// #include <gloo/transport/tcp/socket.h>
+
+@Namespace("gloo::transport::tcp") public static native @ByVal attr CreateDeviceAttr(@Const @ByRef attr src);
+
+@Namespace("gloo::transport::tcp") public static native @SharedPtr("gloo::transport::Device") @ByVal Device CreateDevice(@Const @ByRef attr arg0);
+@Namespace("gloo::transport::tcp") public static native @SharedPtr("gloo::transport::Device") @ByVal Device CreateLazyDevice(@Const @ByRef attr arg0);
+
+// Forward declarations
+
+ // namespace tcp
  // namespace transport
  // namespace gloo
 

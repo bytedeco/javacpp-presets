@@ -18,15 +18,17 @@ import static org.bytedeco.pytorch.global.torch.*;
 import static org.bytedeco.pytorch.global.gloo.*;
 
 
-@Namespace("gloo::transport") @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
-public class Address extends Pointer {
+// Handler abstract base class called by the epoll(2) event loop.
+// Dispatch to multiple types is needed because we must deal with a
+// single listening socket on the device instance and I/O for all pair
+// instances. Before this approach, we'd exclusively deal with `Pair`
+// instances and didn't need to dispatch events to different types.
+@Namespace("gloo::transport::tcp") @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+public class Handler extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Address(Pointer p) { super(p); }
+    public Handler(Pointer p) { super(p); }
 
-  // Upper bound for an address' byte representation.
 
-  public native @StdString BytePointer str();
-
-  public native @ByVal @Cast("std::vector<char>*") ByteVector bytes();
+  public native void handleEvents(@ByRef Loop loop, int events);
 }

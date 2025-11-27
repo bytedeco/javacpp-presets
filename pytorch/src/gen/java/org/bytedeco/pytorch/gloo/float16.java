@@ -2,6 +2,7 @@
 
 package org.bytedeco.pytorch.gloo;
 
+import org.bytedeco.pytorch.gloo.Device;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
