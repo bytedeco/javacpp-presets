@@ -1,4 +1,5 @@
 
+ * Include `FileStore.hpp`, `TCPStore.hpp`, and `gloo/transport/tcp/device.h` header files in presets for PyTorch ([discussion #1712](https://github.com/bytedeco/javacpp-presets/discussions/1712))
  * Introduce `linux-arm64` builds for ONNX ([pull #1697](https://github.com/bytedeco/javacpp-presets/pull/1697))
  * Include CUDA GPU compute capabilities 10.0 and 12.0 in builds for PyTorch ([issue #1696](https://github.com/bytedeco/javacpp-presets/issues/1696))
  * Enable DNNL and CoreML in `linux-arm64` and `macosx-arm64` builds for ONNX Runtime ([pull #1689](https://github.com/bytedeco/javacpp-presets/pull/1689))

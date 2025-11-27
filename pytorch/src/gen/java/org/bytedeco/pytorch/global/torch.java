@@ -81388,6 +81388,53 @@ public static final int C10D_ENV_NOT_SET = -2;
  // namespace c10d
 
 
+// Parsed from torch/csrc/distributed/c10d/FileStore.hpp
+
+// #pragma once
+
+// #include <sys/types.h>
+
+// #include <mutex>
+// #include <unordered_map>
+
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// Targeting ../FileStore.java
+
+
+
+ // namespace c10d
+
+
+// Parsed from torch/csrc/distributed/c10d/TCPStore.hpp
+
+// #pragma once
+
+// #include <cstddef>
+// #include <cstdint>
+// #include <memory>
+
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// Targeting ../TCPServer.java
+
+
+// Targeting ../TCPClient.java
+
+
+// Targeting ../SocketAddress.java
+
+
+
+
+// Targeting ../TCPStoreOptions.java
+
+
+// Targeting ../TCPStore.java
+
+
+
+ // namespace c10d
+
+
 // Parsed from torch/csrc/distributed/c10d/logger.hpp
 
 // #pragma once
