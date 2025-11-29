@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Hervé Guillemet
+ * Copyright (C) 2024-2025 Hervé Guillemet, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,7 +34,9 @@ import org.bytedeco.javacpp.tools.*;
 @Properties(
     inherit = torch.class,
     value = @Platform(
+        value = {"linux"}, //// Not really usable on Mac and Windows anyway
         include = {
+            "gloo/transport/tcp/device.h",
             "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
         }
     ),
@@ -50,6 +52,25 @@ public class gloo implements LoadEnabled, InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
+        infoMap
+            .put(new Info().javaText("import org.bytedeco.pytorch.gloo.Device;").enumerate())
+            .put(new Info("std::enable_shared_from_this<Socket>",
+                          "std::enable_shared_from_this<gloo::transport::tcp::Loop>",
+                          "sockaddr", "sockaddr_storage").cast().pointerTypes("Pointer"))
+            .put(new Info("sa_family_t", "socklen_t",
+                          "gloo::transport::tcp::sequence_number_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
+            .put(new Info("gloo::transport::Address",
+                          "gloo::transport::tcp::SystemError",
+                          "gloo::transport::tcp::ShortReadError",
+                          "gloo::transport::tcp::ShortWriteError").purify())
+            .put(new Info("gloo::transport::tcp::Loop::defer",
+                          "gloo::transport::tcp::Deferrables::defer",
+                          "gloo::transport::tcp::Socket::sockName",
+                          "gloo::transport::tcp::Socket::peerName",
+                          "gloo::transport::tcp::Socket::safePeerName",
+                          "gloo::transport::tcp::Listener::nextAddress",
+                          "gloo::transport::tcp::Listener::waitForConnection").skip())
+        ;
 
         //// Instantiation of class templates.
         infoMap

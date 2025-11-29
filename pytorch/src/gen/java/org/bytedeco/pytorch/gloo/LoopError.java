@@ -18,15 +18,16 @@ import static org.bytedeco.pytorch.global.torch.*;
 import static org.bytedeco.pytorch.global.gloo.*;
 
 
-@Namespace("gloo::transport") @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
-public class Address extends Pointer {
+@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+public class LoopError extends Error {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Address(Pointer p) { super(p); }
+    public LoopError(Pointer p) { super(p); }
 
-  // Upper bound for an address' byte representation.
+  public LoopError(@StdString BytePointer msg) { super((Pointer)null); allocate(msg); }
+  private native void allocate(@StdString BytePointer msg);
+  public LoopError(@StdString String msg) { super((Pointer)null); allocate(msg); }
+  private native void allocate(@StdString String msg);
 
-  public native @StdString BytePointer str();
-
-  public native @ByVal @Cast("std::vector<char>*") ByteVector bytes();
+  public native @StdString BytePointer what();
 }

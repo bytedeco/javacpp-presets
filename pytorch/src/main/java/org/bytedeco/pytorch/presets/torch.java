@@ -69,6 +69,8 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
+                "torch/csrc/distributed/c10d/FileStore.hpp",
+                "torch/csrc/distributed/c10d/TCPStore.hpp",
                 "torch/csrc/distributed/c10d/logger.hpp",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
@@ -90,15 +92,15 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
-            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/include/"},
+            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/include/"},
             preloadpath = {
-                "/usr/local/cuda-12.9/lib64/",
-                "/usr/local/cuda-12.9/extras/CUPTI/lib64/",
+                "/usr/local/cuda-13.0/lib64/",
+                "/usr/local/cuda-13.0/extras/CUPTI/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/local/cuda/extras/CUPTI/lib64/",
                 "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.9/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
             extension = "-gpu"
