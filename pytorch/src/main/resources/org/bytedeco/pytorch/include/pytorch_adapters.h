@@ -30,7 +30,7 @@ template<class T, class NullType = c10::detail::intrusive_target_default_null_ty
 public:
     typedef c10::intrusive_ptr<T,NullType> I;
     IntrusivePtrAdapter(const T* ptr, size_t size, void* owner) : ptr((T*)ptr), size(size), owner(owner),
-            intrusivePtr2(owner != NULL && owner != ptr ? *(I*)owner : I::reclaim((T*)ptr)), intrusivePtr(intrusivePtr2) { }
+            intrusivePtr2(owner != NULL && owner != ptr ? *(I*)owner : I::unsafe_steal_from_new((T*)ptr)), intrusivePtr(intrusivePtr2) { }
     IntrusivePtrAdapter(const I& intrusivePtr) : ptr(0), size(0), owner(0), intrusivePtr2(intrusivePtr), intrusivePtr(intrusivePtr2) { }
     IntrusivePtrAdapter(      I& intrusivePtr) : ptr(0), size(0), owner(0), intrusivePtr(intrusivePtr) { }
     IntrusivePtrAdapter(const I* intrusivePtr) : ptr(0), size(0), owner(0), intrusivePtr(*(I*)intrusivePtr) { }
@@ -45,11 +45,17 @@ public:
     static void deallocate(void* owner) { delete (I*)owner; }
 
     operator T*() {
-        if (ptr == NULL) ptr = intrusivePtr.get();
+        ptr = intrusivePtr.get();
+        if (owner == NULL || owner == ptr) {
+            owner = new I(intrusivePtr);
+        }
         return ptr;
     }
     operator T&() {
-        if (ptr == NULL) ptr = intrusivePtr.get();
+        ptr = intrusivePtr.get();
+        if (owner == NULL || owner == ptr) {
+            owner = new I(intrusivePtr);
+        }
         return *ptr;
     }
     /* Necessary because, without it, assigning an adapter to an optional<I> will
