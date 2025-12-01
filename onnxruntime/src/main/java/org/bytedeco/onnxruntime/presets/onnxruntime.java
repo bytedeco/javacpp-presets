@@ -61,7 +61,7 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/migraphx/migraphx_provider_factory.h",
 //                "onnxruntime/core/providers/acl/acl_provider_factory.h",
 //                "onnxruntime/core/providers/armnn/armnn_provider_factory.h",
-//                 "onnxruntime/core/providers/coreml/coreml_provider_factory.h",
+//                "onnxruntime/core/providers/coreml/coreml_provider_factory.h",
 //                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
             },
