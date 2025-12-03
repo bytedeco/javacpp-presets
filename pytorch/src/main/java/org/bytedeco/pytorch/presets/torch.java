@@ -966,6 +966,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// std::tuple
         infoMap
             .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T").define()) // Needed for CUDAStream
+            .put(new Info("std::tuple<int,int,int>").pointerTypes("T_IntIntInt_T").define()) // Needed for NCCL
             .put(new Info("std::tuple<int64_t,int64_t>").pointerTypes("T_LongLong_T").define())
             .put(new Info("std::tuple<void*,void*>").pointerTypes("T_PointerPointer_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor>", "std::tuple<torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensor_T").define())
@@ -1131,7 +1132,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new PointerInfo("c10d::Backend::Options").javaBaseName("Backend.Options"),
             new PointerInfo("c10d::_SupplementBase"),
             new PointerInfo("c10d::ProcessGroup"),
-            new PointerInfo("intra_node_comm::IntraNodeComm"),
+            //new PointerInfo("intra_node_comm::IntraNodeComm"),
             //new PointerInfo("torch::distributed::rpc::Message"), // Not on Windows
             new PointerInfo("c10d::ProcessGroupGloo::AsyncWork"),
             new PointerInfo("c10d::ProcessGroupGloo::Options"),
