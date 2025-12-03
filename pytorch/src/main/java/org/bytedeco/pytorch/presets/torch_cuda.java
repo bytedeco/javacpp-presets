@@ -171,7 +171,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("c10d::Store", "c10d::ScatterOptions", "c10d::ReduceScatterOptions", "c10d::AllToAllOptions", "c10d::BarrierOptions", "c10d::AllreduceCoalescedOptions"))
             .put(new Info("c10d::BroadcastOptions", "c10d::ReduceOptions", "c10d::AllreduceOptions", "c10d::AllgatherOptions", "c10d::GatherOptions"))
             .put(new Info("CUDAContextLight.h").linePatterns("struct Allocator;").skip()) // Prevent regeneration of Allocator class in cuda package
-            .put(new Info("c10d::Backend::Options").pointerTypes("DistributedBackend.Options"))
+            .put(new Info("c10d::Backend::Options").pointerTypes("Backend.Options"))
 
             .put(new Info("c10::DeviceIndex", "at::DeviceIndex").valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
             .put(new Info("c10::StreamId").valueTypes("long"))
@@ -232,8 +232,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             "c10::cuda::OptionalCUDAStreamGuard",
             "c10::cuda::impl::CUDAGuardImpl",
             "c10::FreeMemoryCallback", // in API, but useless as long as we don't map FreeCudaMemoryCallbacksRegistry,
-            "AT_DISALLOW_COPY_AND_ASSIGN",
-            "c10d::NCCLComm", "std::shared_ptr<c10d::NCCLComm>" // See getNcclErrorDetailStr below
+            "AT_DISALLOW_COPY_AND_ASSIGN"
+            //"c10d::NCCLComm", "std::shared_ptr<c10d::NCCLComm>" // See getNcclErrorDetailStr below
         ).skip())
         ;
 

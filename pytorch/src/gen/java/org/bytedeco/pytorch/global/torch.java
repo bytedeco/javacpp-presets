@@ -276,6 +276,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_IntInt_T.java
 
 
+// Targeting ../T_IntIntInt_T.java
+
+
 // Targeting ../T_LongLong_T.java
 
 

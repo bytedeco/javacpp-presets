@@ -21,15 +21,16 @@ export NCCL_VERSION="2"
 export MAX_JOBS=$MAKEJ
 export USE_CUDA=0
 export USE_CUDNN=0
+export USE_NCCL=0
 export USE_NUMPY=0
 export USE_OPENMP=1
 export USE_SYSTEM_NCCL=1
 export USE_DISTRIBUTED=1
-export USE_NCCL=0 # Not supported on Windows
 
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
     export USE_CUDNN=1
+    export USE_NCCL=1
     export USE_FAST_NVCC=0
     export CUDA_SEPARABLE_COMPILATION=OFF
     export TORCH_CUDA_ARCH_LIST="7.5;8.0;9.0;10.0;12.0"
@@ -177,6 +178,7 @@ case $PLATFORM in
             export CUDA_HOME="$CUDA_PATH"
             export CUDNN_HOME="$CUDA_PATH"
         fi
+        export USE_NCCL=0 # Not supported on Windows
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
