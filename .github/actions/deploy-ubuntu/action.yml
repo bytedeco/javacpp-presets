@@ -166,9 +166,9 @@ runs:
         fi
 
         if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
-          curl -LO https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
-          unzip -qq android-ndk-r27c-linux.zip
-          ln -sf android-ndk-r27c android-ndk
+          curl -LO https://dl.google.com/android/repository/android-ndk-r29-linux.zip
+          unzip -qq android-ndk-r29-linux.zip
+          ln -sf android-ndk-r29 android-ndk
           export MAVEN_OPTIONS="-Djavacpp.platform.root=$(pwd)/android-ndk/ -Djava.library.path="
         else
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
