@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2018-2025 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by

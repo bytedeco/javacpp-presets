@@ -4278,6 +4278,12 @@ public static native int PyArray_RUNTIME_VERSION(); public static native void Py
 // #if !defined(NO_IMPORT_ARRAY) && !defined(NO_IMPORT)
 @NoException public static native int _import_array();
 
+// #if (SWIG_VERSION < 0x040400)
+// #define _RETURN_VALUE NULL
+// #else
+// #define _RETURN_VALUE 0
+// #endif
+
 // #define import_array() {
 //   if (_import_array() < 0) {
 //     PyErr_Print();
@@ -4285,7 +4291,7 @@ public static native int PyArray_RUNTIME_VERSION(); public static native void Py
 //         PyExc_ImportError,
 //         "numpy._core.multiarray failed to import"
 //     );
-//     return NULL;
+//     return _RETURN_VALUE;
 //   }
 // }
 

@@ -33,22 +33,22 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.5.2
+OPENSSL=openssl-3.5.4
 OPENH264_VERSION=2.6.0
 X264=x264-stable
 X265=3.4
 VPX_VERSION=1.15.2
 ALSA_VERSION=1.2.14
-FREETYPE_VERSION=2.13.3
+FREETYPE_VERSION=2.14.1
 MFX_VERSION=1.35.1
 NVCODEC_VERSION=13.0.19.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.4
 WEBP_VERSION=1.6.0
 AOMAV1_VERSION=3.9.1
-SVTAV1_VERSION=3.1.1
+SVTAV1_VERSION=3.1.2
 ZIMG_VERSION=3.0.6
-FFMPEG_VERSION=8.0
+FFMPEG_VERSION=8.0.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -1009,15 +1009,15 @@ EOF
         make -j $MAKEJ
         make install
         LIBS=
-        if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
-            cd ../mfx_dispatch-$MFX_VERSION
-            autoreconf -fiv
-            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
-            make -j $MAKEJ
-            make install
-            ENABLE="$ENABLE --enable-libmfx"
-            LIBS="-lva-drm -lva-x11 -lva"
-        fi
+#        if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
+#            cd ../mfx_dispatch-$MFX_VERSION
+#            autoreconf -fiv
+#            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
+#            make -j $MAKEJ
+#            make install
+#            ENABLE="$ENABLE --enable-libmfx"
+#            LIBS="-lva-drm -lva-x11 -lva"
+#        fi
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../libaom-$AOMAV1_VERSION

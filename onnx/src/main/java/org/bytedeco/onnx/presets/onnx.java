@@ -190,7 +190,8 @@ public class onnx implements InfoMapper {
                              "onnx::OpSchema::GetDataPropagationFunction", "onnx::RegisterSchema", "onnx::ReplaceAll", "onnx::DbgOperatorSetTracker::Instance",
                              "onnx::OpSchema::Attr(std::string, std::string, std::string, onnx::AttributeProto::AttributeType)",
                              "onnx::shape_inference::checkShapesAndTypes(const onnx::TypeProto_Sequence&, const onnx::TypeProto_Sequence&)",
-                             "onnx::shape_inference::mergeShapesAndTypes(const onnx::TypeProto_Sequence&, onnx::TypeProto_Tensor*)").skip())
+                             "onnx::shape_inference::mergeShapesAndTypes(const onnx::TypeProto_Sequence&, onnx::TypeProto_Tensor*)",
+                             "onnx::OpSchema::NodeDeterminism::Unknown").skip())
 
                .put(new Info("onnx::RetrieveValues<float>").javaNames("RetrieveValuesFloat"))
                .put(new Info("onnx::RetrieveValues<int64_t>").javaNames("RetrieveValuesLong"))

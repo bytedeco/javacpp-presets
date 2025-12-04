@@ -68,7 +68,9 @@ public class OpSchemaRegistry extends ISchemaRegistry {
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public OpSchemaRegisterOnce(Pointer p) { super(p); }
   
-    // Export to cpp custom register macro
+    // Export to cpp custom register macro.
+    // DO NOT decorate the constructor as "explicit" because that breaks the macro ONNX_OPERATOR_SCHEMA_UNIQ.
+    // NOLINTNEXTLINE(google-explicit-constructor)
     public OpSchemaRegisterOnce(
             @ByVal OpSchema op_schema,
             int opset_version_to_load/*=0*/,

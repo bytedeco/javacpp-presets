@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.19.1-1.5.13-SNAPSHOT</version>
+            <version>1.20.0-1.5.13-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

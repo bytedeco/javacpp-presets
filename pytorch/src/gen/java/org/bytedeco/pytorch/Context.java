@@ -73,6 +73,8 @@ public class Context extends Pointer {
   public static native long versionCUDART();
   public static native @Cast("bool") boolean hasCuDNN();
   public static native long versionCuDNN();
+  public static native long versionRuntimeCuDNN();
+  public static native long versionCuDNNFrontend();
   public static native @Cast("bool") boolean hasCuSOLVER();
   public static native @Cast("bool") boolean hasCuBLASLt();
   public static native @Cast("bool") boolean hasROCM();

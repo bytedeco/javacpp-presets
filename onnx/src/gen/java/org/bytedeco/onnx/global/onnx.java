@@ -93,7 +93,6 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 
 // #pragma once
 
-// #include <climits>
 // #include <cstring>
 // #include <functional>
 // #include <initializer_list>
@@ -215,11 +214,8 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // #define ONNX_OPERATOR_SCHEMA(name) ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
 // #define ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(Counter, name) ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
 // #define ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
-//   static ONNX_NAMESPACE::OpSchemaRegistry::OpSchemaRegisterOnce(op_schema_register_once##name##Counter) ONNX_UNUSED =
-//       OpSchema(#name, __FILE__, __LINE__)
-
-// Helper function
-
+//   static ONNX_NAMESPACE::OpSchemaRegistry::OpSchemaRegisterOnce op_schema_register_once##name##Counter ONNX_UNUSED =
+//       ONNX_NAMESPACE::OpSchema(#name, __FILE__, __LINE__)
 
 @Namespace("onnx") public static native @StdString BytePointer GenerateOptionalArgumentsDoc();
 
@@ -2115,6 +2111,63 @@ support).
 // Targeting ../OpSet_Onnx_ver24.java
 
 
+// Targeting ../Cast_Onnx_ver25.java
+
+
+// Targeting ../CastLike_Onnx_ver25.java
+
+
+// Targeting ../Constant_Onnx_ver25.java
+
+
+// Targeting ../ConstantOfShape_Onnx_ver25.java
+
+
+// Targeting ../DequantizeLinear_Onnx_ver25.java
+
+
+// Targeting ../Flatten_Onnx_ver25.java
+
+
+// Targeting ../Identity_Onnx_ver25.java
+
+
+// Targeting ../Reshape_Onnx_ver25.java
+
+
+// Targeting ../Shape_Onnx_ver25.java
+
+
+// Targeting ../Size_Onnx_ver25.java
+
+
+// Targeting ../If_Onnx_ver25.java
+
+
+// Targeting ../Loop_Onnx_ver25.java
+
+
+// Targeting ../Scan_Onnx_ver25.java
+
+
+// Targeting ../Pad_Onnx_ver25.java
+
+
+// Targeting ../Squeeze_Onnx_ver25.java
+
+
+// Targeting ../Transpose_Onnx_ver25.java
+
+
+// Targeting ../Unsqueeze_Onnx_ver25.java
+
+
+// Targeting ../QuantizeLinear_Onnx_ver25.java
+
+
+// Targeting ../OpSet_Onnx_ver25.java
+
+
 
 @Namespace("onnx") public static native void RegisterOnnxOperatorSetSchema();
 
@@ -2123,6 +2176,20 @@ support).
 
 @Namespace("onnx") public static native void DeregisterOnnxOperatorSetSchema();
 
+// Returns true if ONNX was built with static schema registration disabled
+// (i.e., with __ONNX_DISABLE_STATIC_REGISTRATION defined).
+//
+// When static registration is disabled, the linking module is responsible for
+// calling the desired registration methods to register the required opsets:
+//   - RegisterOnnxOperatorSetSchema() for ai.onnx domain operators
+//   - RegisterOnnxMLOperatorSetSchema() for ai.onnx.ml domain operators (if ONNX_ML is enabled)
+//   - RegisterOnnxTrainingOperatorSetSchema() for ai.onnx.training domain operators
+//   - RegisterOnnxPreviewOperatorSetSchema() for ai.onnx.preview domain operators
+//
+// When static registration is enabled (this function returns false), the above
+// opsets are automatically registered during ONNX library initialization, and
+// the linking module should not call the registration methods again to avoid
+// duplicate schema registration errors.
 @Namespace("onnx") public static native @Cast("bool") boolean IsOnnxStaticRegistrationDisabled();
 
  // namespace ONNX_NAMESPACE
@@ -5321,7 +5388,9 @@ public static final int
   TensorProto_DataType_UINT4 = 21,
   TensorProto_DataType_INT4 = 22,
   TensorProto_DataType_FLOAT4E2M1 = 23,
-  TensorProto_DataType_FLOAT8E8M0 = 24;
+  TensorProto_DataType_FLOAT8E8M0 = 24,
+  TensorProto_DataType_UINT2 = 25,
+  TensorProto_DataType_INT2 = 26;
 @Namespace("onnx") public static native @Cast("bool") boolean TensorProto_DataType_IsValid(int value);
 @Namespace("onnx") @MemberGetter public static native @Cast("const onnx::TensorProto_DataType") int TensorProto_DataType_DataType_MIN();
 @Namespace("onnx") @MemberGetter public static native @Cast("const onnx::TensorProto_DataType") int TensorProto_DataType_DataType_MAX();
@@ -5376,7 +5445,8 @@ public static final int
   IR_VERSION_2023_5_5 = 9,
   IR_VERSION_2024_3_25 = 10,
   IR_VERSION_2025_05_12 = 11,
-  IR_VERSION = 12;
+  IR_VERSION_2025_08_26 = 12,
+  IR_VERSION = 13;
 @Namespace("onnx") public static native @Cast("bool") boolean Version_IsValid(int value);
 @Namespace("onnx") @MemberGetter public static native @Cast("const onnx::Version") int Version_MIN();
 @Namespace("onnx") @MemberGetter public static native @Cast("const onnx::Version") int Version_MAX();
@@ -7988,7 +8058,7 @@ public static final byte
 // `captured` nodes in subgraph determines which value it captures
 // by storing the value's unique name, so old unique names in `captured` nodes
 // should also be updated.
-// Initializer names are also storaged in graph.initializer_names_, it should be
+// Initializer names are also stored in graph.initializer_names_, it should be
 // updated too.
 
 

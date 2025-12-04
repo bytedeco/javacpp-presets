@@ -78811,14 +78811,14 @@ public static final int TORCH_VERSION_MAJOR = 2;
 public static final int TORCH_VERSION_MINOR = 9;
 
 /** Indicates the patch version of LibTorch. */
-public static final int TORCH_VERSION_PATCH = 0;
+public static final int TORCH_VERSION_PATCH = 1;
 
 /** Indicates the ABI version tag of LibTorch. */
 public static final int TORCH_VERSION_ABI_TAG = 0;
 
 /** Indicates the version of LibTorch as a string literal. */
 public static final String TORCH_VERSION = 
-  "2.9.0";
+  "2.9.1";
 
 /** Indicates the ABI version of LibTorch as a single uint64.
  *  [ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ]
@@ -80826,11 +80826,7 @@ public static final int C10D_ENV_NOT_SET = -2;
     @StdVector TensorVector tensors,
     @Cast("size_t") long deviceIdx);
 
-@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(
-    @ByRef TensorVector tensors,
-    @Cast("bool") boolean preserve_strides/*=true*/);
-@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(
-    @ByRef TensorVector tensors);
+@Namespace("c10d") public static native @ByVal Tensor newLikeFlat(@ByRef TensorVector tensors);
 
 @Namespace("c10d") public static native @Cast("std::vector<int64_t>*") @StdVector LongVector getSizes(
     @Const @ByRef TensorVector tensors);

@@ -86,6 +86,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gettext-runtime-0.22.5-2-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-ncurses-6.4.20231217-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-readline-8.2.013-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tcl-8.6.13-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tk-8.6.13-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
@@ -107,6 +109,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gettext-runtime-0.22.5-2-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-ncurses-6.4.20231217-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-readline-8.2.013-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tcl-8.6.13-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tk-8.6.13-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst

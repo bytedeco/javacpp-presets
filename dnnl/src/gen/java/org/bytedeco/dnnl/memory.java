@@ -189,6 +189,8 @@ public class memory extends dnnl_memory_handle {
         blocked(dnnl_blocked),
         /** Format kind for sparse tensors. */
         sparse(dnnl_format_kind_sparse),
+        /** Format kind for host scalars. */
+        host_scalar(dnnl_format_kind_host_scalar),
         /** A special format kind that indicates that tensor format is opaque. */
         opaque(dnnl_format_kind_opaque);
 
@@ -971,6 +973,13 @@ public class memory extends dnnl_memory_handle {
         ABcde8b16a(dnnl_ABcde8b16a),
         AcdeB8b16a(dnnl_AcdeB8b16a),
         AB8b8a(dnnl_AB8b8a),
+        abDC8d8c(dnnl_abDC8d8c),
+        abDC16d8c(dnnl_abDC16d8c),
+        aCB8c8b(dnnl_aCB8c8b),
+        aCB16c8b(dnnl_aCB16c8b),
+        BA8b8a(dnnl_BA8b8a),
+        BA16b8a(dnnl_BA16b8a),
+        AB2a4b(dnnl_AB2a4b),
 
         format_tag_last(dnnl_format_tag_last),
 
@@ -2046,7 +2055,19 @@ public class memory extends dnnl_memory_handle {
         decbA4a(dnnl_decbA4a),
         defcbA4a(dnnl_defcbA4a),
         hwioG4g(dnnl_hwioG4g),
-        dhwioG4g(dnnl_dhwioG4g);
+        dhwioG4g(dnnl_dhwioG4g),
+        aCBd4b4c(dnnl_aCBd4b4c),
+        aCBde4b4c(dnnl_aCBde4b4c),
+        aCBdef4b4c(dnnl_aCBdef4b4c),
+        BAc4a4b(dnnl_BAc4a4b),
+        BAcd4a4b(dnnl_BAcd4a4b),
+        BAcde4a4b(dnnl_BAcde4a4b),
+        IOw4o4i(dnnl_IOw4o4i),
+        IOhw4o4i(dnnl_IOhw4o4i),
+        IOdhw4o4i(dnnl_IOdhw4o4i),
+        gIOw4o4i(dnnl_gIOw4o4i),
+        gIOhw4o4i(dnnl_gIOhw4o4i),
+        gIOdhw4o4i(dnnl_gIOdhw4o4i);
 
         public final int value;
         private format_tag(int v) { this.value = v; }
@@ -2266,6 +2287,14 @@ public class memory extends dnnl_memory_handle {
         public static native @ByVal desc packed(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, @Cast("dnnl::memory::dim") long nnz,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public static native @ByVal desc packed(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, @Cast("dnnl::memory::dim") long nnz);
+
+        /** Creates a memory descriptor for a scalar value that resides on the host.
+         * 
+         *  @param adata_type Data type of the scalar.
+         *  @return A memory descriptor for host-side scalar input. */
+        
+        ///
+        public static native @ByVal desc host_scalar(memory.data_type adata_type);
 
         /** Construct a memory descriptor from a C API ::dnnl_memory_desc_t
          *  handle. The resulting handle is not weak and the C handle will be
@@ -2634,8 +2663,23 @@ public class memory extends dnnl_memory_handle {
      *  library.
      *  @param md Memory descriptor.
      *  @param aengine Engine to store the data on. */
+    
+    ///
+    ///
+    ///
     public memory(@Const @ByRef org.bytedeco.dnnl.memory.desc md, @Const @ByRef engine aengine) { super((Pointer)null); allocate(md, aengine); }
     private native void allocate(@Const @ByRef org.bytedeco.dnnl.memory.desc md, @Const @ByRef engine aengine);
+
+    /** Constructs a memory object that wraps a host-side scalar value.
+     * 
+     *  \note The scalar value is copied into the newly allocated memory storage,
+     *      so the user does not need to manage the lifetime of the original scalar data.
+     * 
+     *  \tparam T Type of the scalar value.
+     *  @param md Memory descriptor describing a scalar value residing on the host.
+     *  @param value The scalar value to be wrapped by the memory object.
+     * 
+     *  @throws error if the memory object could not be created. */
 
     /** Returns the associated memory descriptor. */
     public native @ByVal org.bytedeco.dnnl.memory.desc get_desc();
@@ -2663,12 +2707,19 @@ public class memory extends dnnl_memory_handle {
      *  @param index Memory index to attach the buffer. Defaults to 0. */
     
     ///
-    ///
-    ///
-    ///
-    ///
     public native void set_data_handle(Pointer handle, int index/*=0*/);
     public native void set_data_handle(Pointer handle);
+
+    /** Returns the scalar value stored in the memory object as type T.
+     * 
+     *  \tparam T Type to cast the scalar value to. */
+
+    /** Sets the scalar value stored in the memory object.
+     * 
+     *  \note The scalar value is copied into the memory storage, so the user
+     *      does not need to manage the lifetime of the original scalar data.
+     * 
+     *  @param value Pointer to the scalar value to set. */
 
     /** Maps a memory object and returns a host-side pointer to a memory
      *  buffer with a copy of its contents. The memory buffer corresponds to

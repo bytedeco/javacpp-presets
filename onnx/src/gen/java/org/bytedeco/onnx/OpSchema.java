@@ -73,6 +73,10 @@ public class OpSchema extends Pointer {
     // This formal parameter is not differentiable. That is, this formal
     // parameter can not be differentiable input of Gradient operator.
     NonDifferentiable = (byte)(2);
+  /** enum class onnx::OpSchema::NodeDeterminism */
+  public static final byte
+    NonDeterministic = (byte)(1),
+    Deterministic = (byte)(2);
 
   // Formal parameter representation, including input/output name, typeStr,
   // description, and type constraints.
@@ -311,7 +315,7 @@ public class OpSchema extends Pointer {
   public native @ByRef OpSchema TypeAndShapeInferenceFunction(@ByVal InferenceFunction inferenceFunction);
   
 
-  public native @ByRef OpSchema PartialDataPropagationFunction(@ByVal DataPropagationFunction dataProgationFunction);
+  public native @ByRef OpSchema PartialDataPropagationFunction(@ByVal DataPropagationFunction dataPropagationFunction);
   
 
   // Set the support level for the op schema.
@@ -585,6 +589,8 @@ public class OpSchema extends Pointer {
 
   public static native @Const @ByRef StringVector numeric_types_for_math_reduction();
 
+  public static native @Const @ByRef StringVector all_numeric_types_ir13();
+
   public static native @Const @ByRef StringVector all_numeric_types_ir12();
 
   public static native @Const @ByRef StringVector all_numeric_types_ir11();
@@ -627,6 +633,10 @@ public class OpSchema extends Pointer {
 
   public static native @Const @ByRef StringVector all_non_complex_tensor_types_ir12();
 
+  public static native @Const @ByRef StringVector all_tensor_types_ir13();
+
+  public static native @Const @ByRef StringVector all_non_complex_tensor_types_ir13();
+
   public static native @Const @ByRef StringVector all_tensor_sequence_types();
 
   public static native @Const @ByRef StringVector all_tensor_sequence_types_ir4();
@@ -639,6 +649,8 @@ public class OpSchema extends Pointer {
 
   public static native @Const @ByRef StringVector all_tensor_sequence_types_ir12();
 
+  public static native @Const @ByRef StringVector all_tensor_sequence_types_ir13();
+
   public static native @Const @ByRef StringVector all_optional_types();
 
   public static native @Const @ByRef StringVector all_optional_types_ir4();
@@ -650,6 +662,8 @@ public class OpSchema extends Pointer {
   public static native @Const @ByRef StringVector all_optional_types_ir11();
 
   public static native @Const @ByRef StringVector all_optional_types_ir12();
+
+  public static native @Const @ByRef StringVector all_optional_types_ir13();
 
   // Calls the passed function with `this` as an argument. Useful for
   // adding docs for templated/macro ops.
@@ -759,4 +773,7 @@ public class OpSchema extends Pointer {
 
   // Build function with information stored in opschema
   public native void BuildFunction(@ByRef FunctionProto function_body);
+
+  public native @Cast("onnx::OpSchema::NodeDeterminism") byte GetNodeDeterminism();
+  public native @ByRef OpSchema SetNodeDeterminism(@Cast("onnx::OpSchema::NodeDeterminism") byte node_determinism);
 }

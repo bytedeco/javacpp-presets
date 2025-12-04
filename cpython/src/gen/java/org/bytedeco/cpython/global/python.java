@@ -33,6 +33,7 @@ public class python extends org.bytedeco.cpython.helper.python {
 
 
 // Include standard header files
+// When changing these files, remember to update Doc/extending/extending.rst.
 // #include <assert.h>               // assert()
 // #include <inttypes.h>             // uintptr_t
 // #include <limits.h>               // INT_MAX
@@ -190,12 +191,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        14;
-public static final int PY_MICRO_VERSION =        0;
+public static final int PY_MICRO_VERSION =        1;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.14.0";
+public static final String PY_VERSION =              "3.14.1";
 /*--end constants--*/
 
 
@@ -2241,8 +2242,8 @@ public static final int _Py_HACL_CAN_COMPILE_VEC128 = 1;
 /* HACL* library can compile SIMD256 implementations */
 public static final int _Py_HACL_CAN_COMPILE_VEC256 = 1;
 
-/* Define if year with century should be normalized for strftime. */
-public static final int _Py_NORMALIZE_CENTURY = 1;
+/* Define to 1 if the machine stack grows down (default); 0 if it grows up. */
+public static final int _Py_STACK_GROWS_DOWN = 1;
 
 /* Define to force use of thread-safe errno, h_errno, and other functions */
 public static final int _REENTRANT = 1;
@@ -2372,8 +2373,9 @@ public static final int __BSD_VISIBLE = 1;
 // Static inline functions should use _Py_NULL rather than using directly NULL
 // to prevent C++ compiler warnings. On C23 and newer and on C++11 and newer,
 // _Py_NULL is defined as nullptr.
-// #if (defined (__STDC_VERSION__) && __STDC_VERSION__ > 201710L)
-//         || (defined(__cplusplus) && __cplusplus >= 201103)
+// #if !defined(_MSC_VER) &&
+//     ((defined (__STDC_VERSION__) && __STDC_VERSION__ >= 202311L)
+//         || (defined(__cplusplus) && __cplusplus >= 201103))
 // #  define _Py_NULL nullptr
 // #else
 // #  define _Py_NULL NULL
@@ -2992,6 +2994,11 @@ public static final int Py_CAN_START_THREADS = 1;
 // #  define _Py_NONSTRING __attribute__((nonstring))
 // #else
 // #  define _Py_NONSTRING
+// #endif
+
+
+// Assume the stack grows down unless specified otherwise
+// #ifndef _Py_STACK_GROWS_DOWN
 // #endif
 
 
@@ -4297,8 +4304,13 @@ public static native @ByRef PyObject _Py_NotImplementedStruct(); public static n
 // #  define Py_NotImplemented (&_Py_NotImplementedStruct)
 // #endif
 
-/* Macro for returning Py_NotImplemented from a function */
-// #define Py_RETURN_NOTIMPLEMENTED return Py_NotImplemented
+/* Macro for returning Py_NotImplemented from a function. Only treat
+ * Py_NotImplemented as immortal in the limited C API 3.12 and newer. */
+// #if defined(Py_LIMITED_API) && Py_LIMITED_API+0 < 0x030c0000
+// #  define Py_RETURN_NOTIMPLEMENTED return Py_NewRef(Py_NotImplemented)
+// #else
+// #  define Py_RETURN_NOTIMPLEMENTED return Py_NotImplemented
+// #endif
 
 /* Rich comparison opcodes */
 public static final int Py_LT = 0;
@@ -10767,6 +10779,18 @@ public static final int _PY_DATA_STACK_CHUNK_SIZE = (16*1024);
    thread id to that thread's current frame.
 */
 @NoException public static native PyObject _PyThread_CurrentFrames();
+
+// Set the stack protection start address and stack protection size
+// of a Python thread state
+@NoException public static native int PyUnstable_ThreadState_SetStackProtection(
+    PyThreadState tstate,
+    Pointer stack_start_addr,
+    @Cast("size_t") long stack_size);      // Stack size (in bytes)
+
+// Reset the stack protection start address and stack protection size
+// of a Python thread state
+@NoException public static native void PyUnstable_ThreadState_ResetStackProtection(
+    PyThreadState tstate);
 
 /* Routines for advanced debuggers, requested by David Beazley.
    Don't use unless you know what you are doing! */

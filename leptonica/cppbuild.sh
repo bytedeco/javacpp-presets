@@ -11,16 +11,16 @@ NASM_VERSION=2.14
 ZLIB=zlib-1.3.1
 GIFLIB=giflib-5.2.2
 LIBJPEG=libjpeg-turbo-3.0.1
-LIBPNG=libpng-1.6.47 # warning: libpng16 doesn't work on CentOS 6 for some reason
-LIBTIFF=tiff-4.7.0
-LIBWEBP=libwebp-1.5.0
-OPENJPEG_VERSION=2.5.3
-LEPTONICA_VERSION=1.85.0
+LIBPNG=libpng-1.6.52 # warning: libpng16 doesn't work on CentOS 6 for some reason
+LIBTIFF=tiff-4.7.1
+LIBWEBP=libwebp-1.6.0
+OPENJPEG_VERSION=2.5.4
+LEPTONICA_VERSION=1.86.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download https://sourceforge.net/projects/libpng/files/libpng16/1.6.47/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download https://sourceforge.net/projects/libpng/files/libpng16/1.6.52/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download https://github.com/uclouvain/openjpeg/archive/refs/tags/v$OPENJPEG_VERSION.tar.gz openjpeg-$OPENJPEG_VERSION.tar.gz

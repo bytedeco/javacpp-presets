@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Samuel Audet
+ * Copyright (C) 2020-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
