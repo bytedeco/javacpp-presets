@@ -161,13 +161,19 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
     
     ///
     ///
+    ///
     public native void set_scales_mask(int arg, int mask);
 
     /** Sets scaling factors for primitive operations for a given memory
      *  argument. The scaling factors must be passed at execution time
      *  as an argument with index #DNNL_ARG_ATTR_SCALES | arg.
      * 
-     *  @see dnnl_primitive_attr_set_scales
+     *  \note If {@code is_on_host} is true, sets a single host-side scalar scaling
+     *  factor for the specified memory argument. The scaling factor should be
+     *  passed as a host scalar memory object at execution time with index
+     *  #DNNL_ARG_ATTR_SCALES | arg.
+     * 
+     *  @see dnnl_primitive_attr_set_scales_v2
      * 
      *  @param arg Parameter argument index as passed to the
      *      primitive::execute() call.
@@ -180,19 +186,45 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      correspondence between the tensor dimensions and the scales array.
      *      The set i-th dimension indicates a number of groups of scaling
      *      factors used for that logical dimension in a memory indicated by \p arg.
+     *  @param data_type Scaling factors data_type.
+     *  @param is_on_host Indicates whether the scaling factor is a host-side scalar. */
+    
+    ///
+    ///
+    ///
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
+                @Cast("bool") boolean is_on_host/*=false*/);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
+                @Cast("bool") boolean is_on_host/*=false*/);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
+                @Cast("bool") boolean is_on_host/*=false*/);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups);
+
+    /** Sets a single host-side scalar scaling
+     *  factor for the specified memory argument. The scaling factor should be
+     *  passed as a host scalar memory object at execution time with index
+     *  #DNNL_ARG_ATTR_SCALES | arg.
+     * 
+     *  \note Using this API to set the scaling factor implies that the scales
+     *  attribute has {@code mask == 0} and an empty groups vector.
+     * 
+     *  @see dnnl_primitive_attr_set_scales_v2
+     * 
+     *  @param arg Parameter argument index as passed to the
+     *      primitive::execute() call.
      *  @param data_type Scaling factors data_type. */
     
     ///
     ///
-    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,
-                memory.data_type data_type/*=dnnl::memory::data_type::f32*/);
-    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups);
-    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups,
-                memory.data_type data_type/*=dnnl::memory::data_type::f32*/);
-    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups);
-    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups,
-                memory.data_type data_type/*=dnnl::memory::data_type::f32*/);
-    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups);
+    public native void set_host_scale(
+                int arg, memory.data_type data_type/*=dnnl::memory::data_type::f32*/);
+    public native void set_host_scale(
+                int arg);
 
     /** Sets zero points for primitive operations for a given memory argument.
      *  The zero points must be passed at execution time as an argument with
@@ -210,37 +242,109 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
     
     ///
     ///
+    ///
     public native void set_zero_points_mask(int arg, int mask);
 
     /** Sets zero points for primitive operations for a given memory argument.
      *  The zero points must be passed at execution time as an argument with
      *  index #DNNL_ARG_ATTR_ZERO_POINTS | arg.
      * 
+     *  \note If {@code is_on_host} is true, sets a single host-side zero point
+     *  for the specified memory argument. The zero point should be
+     *  passed as a host scalar memory object at execution time with index
+     *  #DNNL_ARG_ATTR_ZERO_POINTS | arg.
+     * 
      *  @see dnnl_primitive_attr_set_zero_points
      * 
      *  @param arg Parameter argument index as passed to the
      *      primitive::execute() call.
      *  @param mask Zero point correspondence mask that defines the
-     *      correspondence between the tensor dimensions and the \p
-     *      zero_points vector. The set i-th bit indicates that a dedicated
-     *      zero point is used for each index along that dimension. Set the
-     *      mask to 0 to use a common zero point for the whole output tensor.
+     *      correspondence between the tensor dimensions and the zero points
+     *      vector. The set i-th bit indicates that a dedicated zero point is
+     *      used for each index along that dimension. Set the mask to 0 to use
+     *      a common zero point for the whole output tensor.
      *  @param groups Zero point factors correspondence groups that define the
-     *      correspondence between the tensor dimensions and the zero_points array.
+     *      correspondence between the tensor dimensions and the zero points
+     *      array.
      *      The set i-th dimension indicates a number of groups of zero point
-     *      factors used for that logical dimension in a memory indicated by \p arg.
-     *  @param data_type Zero point factors data_type. */
+     *      factors used for that logical dimension in a memory indicated by
+     *      \p arg.
+     *  @param data_type Zero point factors data_type.
+     *  @param is_on_host Indicates whether the zero point is a host-side scalar. */
     
     ///
+    ///
+    ///
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,
-                memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+                memory.data_type data_type/*=dnnl::memory::data_type::s32*/,
+                @Cast("bool") boolean is_on_host/*=false*/);
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups);
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups,
-                memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+                memory.data_type data_type/*=dnnl::memory::data_type::s32*/,
+                @Cast("bool") boolean is_on_host/*=false*/);
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups);
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups,
-                memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+                memory.data_type data_type/*=dnnl::memory::data_type::s32*/,
+                @Cast("bool") boolean is_on_host/*=false*/);
     public native void set_zero_points(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups);
+
+    /** Sets a single host-side zero point for the specified memory argument.
+     *  The zero point should be passed as a host scalar memory object at
+     *  execution time with index #DNNL_ARG_ATTR_ZERO_POINTS | arg.
+     * 
+     *  \note Using this API to set the zero point implies that the zero
+     *  point attribute has {@code mask == 0} and an empty groups vector.
+     * 
+     *  @see dnnl_primitive_attr_set_zero_points_v2
+     * 
+     *  @param arg Parameter argument index as passed to the
+     *      primitive::execute() call.
+     *  @param data_type Zero point data type. */
+    
+    ///
+    ///
+    public native void set_host_zero_point(
+                int arg, memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+    public native void set_host_zero_point(
+                int arg);
+
+    /** Sets precomputed reductions for primitive operations for a given memory
+     *  argument. The precomputed reductions must be passed at execution time as
+     *  an argument with index #DNNL_ARG_ATTR_PRECOMPUTED_REDUCTIONS | arg.
+     * 
+     *  @see dnnl_primitive_attr_set_precomputed_reductions
+     * 
+     *  @param arg Parameter argument index as passed to the
+     *      primitive::execute() call.
+     *  @param mask Precomputed reductions correspondence mask that defines the
+     *      correspondence between the tensor dimensions and the precomputed
+     *      reductions vector. The set i-th bit indicates that a dedicated
+     *      precomputed reduction point is used for each index along that
+     *      dimension.
+     *  @param groups Precomputed reduction factors correspondence groups that
+     *      define the correspondence between the tensor dimensions and the
+     *      precomputed reductions array.
+     *      The set i-th dimension indicates a number of groups of precomputed
+     *      reduction factors used for that logical dimension in a memory
+     *      indicated by \p arg.
+     *  @param data_type Precomputed reduction factors data_type. */
+    
+    ///
+    public native void set_precomputed_reductions(int arg, int mask,
+                @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+    public native void set_precomputed_reductions(int arg, int mask,
+                @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups);
+    public native void set_precomputed_reductions(int arg, int mask,
+                @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+    public native void set_precomputed_reductions(int arg, int mask,
+                @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups);
+    public native void set_precomputed_reductions(int arg, int mask,
+                @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::s32*/);
+    public native void set_precomputed_reductions(int arg, int mask,
+                @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups);
 
     /** Returns post-ops previously set via set_post_ops().
      * 

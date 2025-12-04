@@ -331,6 +331,8 @@ public static final int
     dnnl_format_kind_opaque = 3,
     /** Format kind for sparse tensors. */
     dnnl_format_kind_sparse = 4,
+    /** Format kind for host scalars. */
+    dnnl_format_kind_host_scalar = 5,
 
     // Max value to prevent UB for internal-use-only values.
     dnnl_format_kind_max = 0x7fff;
@@ -1368,10 +1370,23 @@ public static final int
     dnnl_abDC24d8c = 849,
     dnnl_decbA4a = 850,
     dnnl_defcbA4a = 851,
+    dnnl_abDC8d8c = 852,
+    dnnl_abDC16d8c = 853,
+    dnnl_aCB8c8b = 854,
+    dnnl_aCB16c8b = 855,
+    dnnl_BA8b8a = 856,
+    dnnl_BA16b8a = 857,
+    dnnl_AB2a4b = 858,
+    dnnl_aCBd4b4c = 859,
+    dnnl_aCBde4b4c = 860,
+    dnnl_aCBdef4b4c = 861,
+    dnnl_BAc4a4b = 862,
+    dnnl_BAcd4a4b = 863,
+    dnnl_BAcde4a4b = 864,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 852,
+    dnnl_format_tag_last = 865,
 
     // Aliases
 
@@ -1596,6 +1611,7 @@ public static final int
     dnnl_OI8i8o = dnnl_AB8b8a,
 
     // weights, 3D
+    dnnl_IOw4o4i = dnnl_BAc4a4b,
     dnnl_IOw8o8i = dnnl_BAc8a8b,
     dnnl_IOw16o16i = dnnl_BAc16a16b,
     dnnl_IOw16i16o = dnnl_BAc16b16a,
@@ -1667,6 +1683,7 @@ public static final int
 
     // weights, 4D
     dnnl_IOhw16i16o = dnnl_BAcd16b16a,
+    dnnl_IOhw4o4i = dnnl_BAcd4a4b,
     dnnl_IOhw8o8i = dnnl_BAcd8a8b,
     dnnl_IOhw16o16i = dnnl_BAcd16a16b,
     dnnl_Ohwi16o = dnnl_Acdb16a,
@@ -1800,6 +1817,7 @@ public static final int
     dnnl_OIdhw8o4i = dnnl_ABcde8a4b,
     dnnl_IOdhw16i16o = dnnl_BAcde16b16a,
     dnnl_OIdhw4o8i8o4i = dnnl_ABcde4a8b8a4b,
+    dnnl_IOdhw4o4i = dnnl_BAcde4a4b,
     dnnl_IOdhw8o8i = dnnl_BAcde8a8b,
     dnnl_IOdhw16o16i = dnnl_BAcde16a16b,
     dnnl_OIdhw16o16i2o = dnnl_ABcde16a16b2a,
@@ -1814,6 +1832,7 @@ public static final int
     dnnl_Goiw16g = dnnl_Abcd16a,
     dnnl_Goiw8g = dnnl_Abcd8a,
     dnnl_Goiw4g = dnnl_Abcd4a,
+    dnnl_gIOw4o4i = dnnl_aCBd4b4c,
     dnnl_gIOw8o8i = dnnl_aCBd8b8c,
     dnnl_gIOw16o16i = dnnl_aCBd16b16c,
     dnnl_gIOw16i16o = dnnl_aCBd16c16b,
@@ -1860,6 +1879,7 @@ public static final int
 
     // weights w/ groups, 4D
     dnnl_gIOhw16i16o = dnnl_aCBde16c16b,
+    dnnl_gIOhw4o4i = dnnl_aCBde4b4c,
     dnnl_gIOhw8o8i = dnnl_aCBde8b8c,
     dnnl_gIOhw16o16i = dnnl_aCBde16b16c,
     dnnl_gOhwi16o = dnnl_aBdec16b,
@@ -1928,6 +1948,7 @@ public static final int
 
     // weights w/ groups, 6D
     dnnl_gIOdhw16i16o = dnnl_aCBdef16c16b,
+    dnnl_gIOdhw4o4i = dnnl_aCBdef4b4c,
     dnnl_gIOdhw8o8i = dnnl_aCBdef8b8c,
     dnnl_gIOdhw16o16i = dnnl_aCBdef16b16c,
     dnnl_gOdhwi16o = dnnl_aBdefc16b,
@@ -2951,8 +2972,13 @@ public static final int DNNL_ARG_ATTR_DROPOUT_PROBABILITY = 510;
 /** Dropout RNG seed value passed via a buffer. */
 public static final int DNNL_ARG_ATTR_DROPOUT_SEED = 511;
 
-/** Output scaling factors provided at execution time.
- *  Deprecated value. */
+/** Precomputed reductions argument. */
+public static final int DNNL_ARG_ATTR_PRECOMPUTED_REDUCTIONS = 512;
+
+/** Deprecated value.
+ *  Output scaling factors provided at execution time.
+ *  Note: there's a collision with
+ *  {@code DNNL_ARG_ATTR_PRECOMPUTED_REDUCTIONS | DNNL_ARG_SRC}. */
 public static final int DNNL_ARG_ATTR_OUTPUT_SCALES = 513;
 
 /** Starting index for source arguments for primitives that take a variable
@@ -2995,35 +3021,35 @@ public static final int DNNL_ARG_ATTR_MULTIPLE_POST_OP_BASE = 32768;
  * 
  *  Query kind                      | Type of query result
  *  --------------------------------|-----------------------------
- *  dnnl_query_*_engine             | #dnnl_engine_t *
- *  #dnnl_query_primitive_kind      | #dnnl_primitive_kind_t *
- *  dnnl_query_*_s32                | int *
- *  dnnl_query_*_s64                | #dnnl_dim_t * (same as int64_t *)
- *  dnnl_query_*_f32                | float *
- *  dnnl_query_*_f64                | double *
- *  dnnl_query_*_str                | const char **
- *  dnnl_query_*_md                 | #const_dnnl_memory_desc_t *
- *  dnnl_query_*_pd                 | #const_dnnl_primitive_desc_t *
- *  dnnl_query_cache_blob_id        | const uint8_t **
- *  dnnl_query_strides              | const #dnnl_dims_t **
- *  dnnl_query_dilations            | const #dnnl_dims_t **
- *  dnnl_query_padding_l            | const #dnnl_dims_t **
- *  dnnl_query_padding_r            | const #dnnl_dims_t **
- *  dnnl_query_flags                | unsigned *
- *  dnnl_query_alg_kind             | #dnnl_alg_kind_t *
- *  dnnl_query_factors              | const float **
- *  dnnl_query_cell_kind            | #dnnl_alg_kind_t *
- *  dnnl_query_direction            | #dnnl_rnn_direction_t *
- *  dnnl_query_activation_kind      | #dnnl_alg_kind_t *
- *  dnnl_query_kernel               | const #dnnl_dims_t **
- *  dnnl_query_dims                 | const #dnnl_dims_t **
- *  dnnl_query_data_type            | #dnnl_data_type_t *
- *  dnnl_query_padded_dims          | const #dnnl_dims_t **
- *  dnnl_query_padded_offsets       | const #dnnl_dims_t **
- *  dnnl_query_format_kind          | #dnnl_format_kind_t *
- *  dnnl_query_inner_blks           | const #dnnl_dims_t **
- *  dnnl_query_inner_idxs           | const #dnnl_dims_t **
- *  dnnl_query_sparse_encoding      | #dnnl_sparse_encoding_t *
+ *  dnnl_query_*_engine             | {@code #dnnl_engine_t *}
+ *  #dnnl_query_primitive_kind      | {@code #dnnl_primitive_kind_t *}
+ *  dnnl_query_*_s32                | {@code int *}
+ *  dnnl_query_*_s64                | {@code #dnnl_dim_t *} (same as {@code int64_t *})
+ *  dnnl_query_*_f32                | {@code float *}
+ *  dnnl_query_*_f64                | {@code double *}
+ *  dnnl_query_*_str                | {@code const char **}
+ *  dnnl_query_*_md                 | {@code #const_dnnl_memory_desc_t *}
+ *  dnnl_query_*_pd                 | {@code #const_dnnl_primitive_desc_t *}
+ *  dnnl_query_cache_blob_id        | {@code const uint8_t **}
+ *  dnnl_query_strides              | {@code const #dnnl_dims_t **}
+ *  dnnl_query_dilations            | {@code const #dnnl_dims_t **}
+ *  dnnl_query_padding_l            | {@code const #dnnl_dims_t **}
+ *  dnnl_query_padding_r            | {@code const #dnnl_dims_t **}
+ *  dnnl_query_flags                | {@code unsigned *}
+ *  dnnl_query_alg_kind             | {@code #dnnl_alg_kind_t *}
+ *  dnnl_query_factors              | {@code const float **}
+ *  dnnl_query_cell_kind            | {@code #dnnl_alg_kind_t *}
+ *  dnnl_query_direction            | {@code #dnnl_rnn_direction_t *}
+ *  dnnl_query_activation_kind      | {@code #dnnl_alg_kind_t *}
+ *  dnnl_query_kernel               | {@code const #dnnl_dims_t **}
+ *  dnnl_query_dims                 | {@code const #dnnl_dims_t **}
+ *  dnnl_query_data_type            | {@code #dnnl_data_type_t *}
+ *  dnnl_query_padded_dims          | {@code const #dnnl_dims_t **}
+ *  dnnl_query_padded_offsets       | {@code const #dnnl_dims_t **}
+ *  dnnl_query_format_kind          | {@code #dnnl_format_kind_t *}
+ *  dnnl_query_inner_blks           | {@code const #dnnl_dims_t **}
+ *  dnnl_query_inner_idxs           | {@code const #dnnl_dims_t **}
+ *  dnnl_query_sparse_encoding      | {@code #dnnl_sparse_encoding_t *}
  * 
  *  \note
  *      Rule of thumb: all opaque types and structures are returned by
@@ -3754,10 +3780,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 9;
+public static final int DNNL_VERSION_MINOR = 10;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 1;
+public static final int DNNL_VERSION_PATCH = 2;
 
 // clang-format on
 
@@ -4336,7 +4362,7 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_m
  *      The set i-th bit indicates that a dedicated scaling factor is used for
  *      each index along that dimension. Set the mask to 0 to use a common
  *      scaling factor for the whole output tensor.
- *  @param ndims Number of group dimensions.
+ *  @param group_ndims Number of group dimensions.
  *  @param group_dims Scaling factors correspondence groups that define the
  *      correspondence between the tensor dimensions and the scales array.
  *      The group dimensions should only be provided for each logical dimension
@@ -4349,21 +4375,61 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_m
 ///
 ///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales(
-        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
         @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type);
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales(
-        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
         @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type);
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales(
-        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
         @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type);
+
+/** Sets primitive attributes scaling factors for primitive operations for a
+ *  given memory argument. The scaling factors must be passed at execution time
+ *  as an argument with index #DNNL_ARG_ATTR_SCALES | arg.
+ *  If {@code is_on_host} is true, sets a single host-side scalar scaling factor
+ *  for the specified memory argument. In this case, the scaling factor must
+ *  be provided as a host scalar memory object at execution time with index
+ *  #DNNL_ARG_ATTR_SCALES | arg.
+ * 
+ *  @see dnnl_primitive_attr_set_scales
+ * 
+ * 
+ *  @param attr Primitive attributes.
+ *  @param arg Parameter argument index as passed to the
+ *      dnnl_primitive_execute() call.
+ *  @param mask Scaling factors correspondence mask that defines the
+ *      correspondence between the tensor dimensions and the \p scales array.
+ *      The set i-th bit indicates that a dedicated scaling factor is used for
+ *      each index along that dimension. Set the mask to 0 to use a common
+ *      scaling factor for the whole output tensor.
+ *  @param ndims Number of group dimensions.
+ *  @param group_dims Scaling factors correspondence groups that define the
+ *      correspondence between the tensor dimensions and the scales array.
+ *      The group dimensions should only be provided for each logical dimension
+ *      that has correspondence mask \p mask set.
+ *  @param data_type Scaling factors data_type.
+ *  @param is_on_host Indicates whether the zero point is a host-side scalar.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v2(
+        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v2(
+        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v2(
+        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host);
 
 /** Sets primitive attributes zero points for primitive operations for a given
  *  memory argument. The zero points must be passed at execution time
  *  as an argument with index #DNNL_ARG_ATTR_ZERO_POINTS | arg.
- * 
- *  @see dnnl_primitive_attr_set_zero_points_mask
- * 
  * 
  *  @param attr Primitive attributes.
  *  @param arg Parameter argument index as passed to the
@@ -4393,6 +4459,83 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_poi
  *  @param arg Parameter argument index as passed to the
  *      dnnl_primitive_execute() call.
  *  @param mask Zero point correspondence mask that defines the
+ *      correspondence between the tensor dimensions and the
+ *      zero points array. The set i-th bit indicates that a dedicated
+ *      zero point is used for each index along that dimension. Set the
+ *      mask to 0 to use a common zero point for the whole output tensor.
+ *  @param group_ndims Number of group dimensions.
+ *  @param group_dims Zero point factors correspondence groups that define the
+ *      correspondence between the tensor dimensions and the zero points array.
+ *      The group dimensions should be only provided for each logical dimension
+ *      that has the bit set correspondence mask \p mask set.
+ *  @param data_type Zero points factors data_type.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
+        @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
+        @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
+        @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type);
+
+/** Sets primitive attributes precomputed reductions for primitive operations
+ *  for a given memory argument. The precomputed reductions must be passed at
+ *  execution time as an argument with index
+ *  #DNNL_ARG_ATTR_PRECOMPUTED_REDUCTIONS | arg.
+ * 
+ *  @see dnnl_primitive_attr_set_precomputed_reductions
+ * 
+ * 
+ *  @param attr Primitive attributes.
+ *  @param arg Parameter argument index as passed to the
+ *      dnnl_primitive_execute() call.
+ *  @param mask Precomputed reductions correspondence mask that defines the
+ *      correspondence between the tensor dimensions and the precomputed
+ *      reductions array. The set i-th bit indicates that a dedicated
+ *      precomputed reductions is used for each index along that dimension.
+ *  @param group_ndims Number of group dimensions.
+ *  @param group_dims Precomputed reduction factors correspondence groups that
+ *      define the correspondence between the tensor dimensions and the
+ *      precomputed reductions array.
+ *      The group dimensions should be only provided for each logical dimension
+ *      that has the bit set correspondence mask \p mask set.
+ *  @param data_type Precomputed reduction factors data_type.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_precomputed_reductions(
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
+        @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_precomputed_reductions(
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
+        @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_precomputed_reductions(
+        dnnl_primitive_attr attr, int arg, int mask, int group_ndims,
+        @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type);
+
+/** Sets primitive attributes zero points for primitive operations for a given
+ *  memory argument. The zero points must be passed at execution time
+ *  as an argument with index #DNNL_ARG_ATTR_ZERO_POINTS | arg.
+ *  If {@code is_on_host} is true, sets a single host-side scalar zero point
+ *  for the specified memory argument. In this case, the zero point must
+ *  be provided as a host scalar memory object at execution time with index
+ *  #DNNL_ARG_ATTR_ZERO_POINTS | arg.
+ * 
+ *  @see dnnl_primitive_attr_set_zero_points
+ * 
+ *  @param attr Primitive attributes.
+ *  @param arg Parameter argument index as passed to the
+ *      dnnl_primitive_execute() call.
+ *  @param mask Zero point correspondence mask that defines the
  *      correspondence between the tensor dimensions and the \p
  *      zero_points array. The set i-th bit indicates that a dedicated
  *      zero point is used for each index along that dimension. Set the
@@ -4403,19 +4546,23 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_poi
  *      The group dimensions should be only provided for each logical dimension
  *      that has the bit set correspondence mask \p mask set.
  *  @param data_type Zero points factors data_type.
+ *  @param is_on_host Indicates whether the zero point is a host-side scalar.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
 ///
-public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points_v2(
         dnnl_primitive_attr attr, int arg, int mask, int ndims,
-        @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type);
-public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
+        @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points_v2(
         dnnl_primitive_attr attr, int arg, int mask, int ndims,
-        @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type);
-public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points(
+        @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_zero_points_v2(
         dnnl_primitive_attr attr, int arg, int mask, int ndims,
-        @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type);
+        @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host);
 
 /** Sets the rounding mode attribute value for a given argument
  * 
@@ -5178,6 +5325,19 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_desc_create_with_pac
         @Cast("dnnl_memory_desc_t*") PointerPointer memory_desc, int ndims, @Cast("const int64_t*") long[] dims,
         @Cast("dnnl_data_type_t") int data_type, @Cast("dnnl_dim_t") long nnz);
 
+/** Creates a memory descriptor for a scalar value that resides on the host.
+ * 
+ *  @param memory_desc Output memory descriptor.
+ *  @param data_type Elements data type.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_memory_desc_create_host_scalar(
+        @ByPtrPtr dnnl_memory_desc memory_desc, @Cast("dnnl_data_type_t") int data_type);
+public static native @Cast("dnnl_status_t") int dnnl_memory_desc_create_host_scalar(
+        @Cast("dnnl_memory_desc_t*") PointerPointer memory_desc, @Cast("dnnl_data_type_t") int data_type);
+
 /** Creates a memory descriptor for a region inside an area
  *  described by an existing memory descriptor.
  * 
@@ -5580,6 +5740,7 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_create(@Cast("dnnl_m
  *      otherwise. */
 
 ///
+///
 public static native @Cast("dnnl_status_t") int dnnl_memory_create_v2(@ByPtrPtr dnnl_memory memory,
         @Const dnnl_memory_desc memory_desc, dnnl_engine engine,
         int nhandles, @Cast("void**") PointerPointer handles);
@@ -5589,6 +5750,25 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_create_v2(@ByPtrPtr 
 public static native @Cast("dnnl_status_t") int dnnl_memory_create_v2(@Cast("dnnl_memory_t*") PointerPointer memory,
         @Const dnnl_memory_desc memory_desc, dnnl_engine engine,
         int nhandles, @Cast("void**") @ByPtrPtr Pointer handles);
+
+/** Creates a memory object for a scalar value located on the host.
+ * 
+ *  \note The scalar value is copied from the provided pointer into the newly
+ *      allocated memory storage, so the user does not need to manage the
+ *      lifetime of the original scalar data.
+ * 
+ *  @param memory Output host-side scalar memory object.
+ *  @param memory_desc Memory descriptor describing a scalar value residing on the host.
+ *  @param scalar_ptr Pointer to the scalar value to be copied into the memory
+ *      object. This should be a host pointer to the scalar data.
+ *  @return #dnnl_success on success; otherwise, returns a status code
+ *      describing the error. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_memory_create_host_scalar(@ByPtrPtr dnnl_memory memory,
+        @Const dnnl_memory_desc memory_desc, Pointer scalar_ptr);
+public static native @Cast("dnnl_status_t") int dnnl_memory_create_host_scalar(@Cast("dnnl_memory_t*") PointerPointer memory,
+        @Const dnnl_memory_desc memory_desc, Pointer scalar_ptr);
 
 /** Returns the memory descriptor for a memory object.
  * 
@@ -5784,6 +5964,36 @@ public static native @Cast("dnnl_status_t") int dnnl_memory_get_data_handle_v2(
 ///
 public static native @Cast("dnnl_status_t") int dnnl_memory_set_data_handle_v2(
         dnnl_memory memory, Pointer handle, int index);
+
+/** Returns the value stored in a scalar memory object as a host pointer.
+ * 
+ *  @param memory Host-side scalar memory object.
+ *  @param value Output pointer to the scalar value. The type of the value
+ *      depends on the data type of the memory object.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_memory_get_host_scalar_value(
+        @Const dnnl_memory memory, Pointer value);
+
+/** Sets the value of a scalar memory object from a host pointer.
+ * 
+ *  \note The value would be copied from the provided pointer into the
+ *      memory object, so the user does not need to manage the lifetime of the
+ *      original scalar data.
+ * 
+ *  @param memory Host-side scalar memory object.
+ *  @param value Pointer to the scalar value to be copied into the
+ *      memory object. The type of the value must match the data type of the
+ *      memory object.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_memory_set_host_scalar_value(
+        dnnl_memory memory, @Const Pointer value);
 
 /** Destroys a memory object.
  * 

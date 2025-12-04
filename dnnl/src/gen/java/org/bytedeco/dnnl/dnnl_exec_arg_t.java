@@ -13,6 +13,9 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
+// Dev note: `idx=31` for `DNNL_ARG_ATTR_MULTIPLE_POST_OP` stands right on
+// `1 << 20` (or `1048576`), thus, this value can't be used until future rework.
+
 /** A structure that contains an index and a memory object, and is used to pass
  *  arguments to dnnl_primitive_execute(). */
 @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)

@@ -146,7 +146,7 @@ public class numpy implements InfoMapper {
                              "NPY_ALLOW_C_API_DEF", "NPY_ALLOW_C_API", "NPY_DISABLE_C_API",
                              "PyArray_IsNativeByteOrder", "NPY_REFCOUNT", "NUMPY_IMPORT_ARRAY_RETVAL",
                              "NPY_LOOP_BEGIN_THREADS", "NPY_LOOP_END_THREADS", "NUMPY_IMPORT_UMATH_RETVAL", "UFUNC_NOFPE",
-                             "NPY_API_SYMBOL_ATTRIBUTE").cppTypes().annotations())
+                             "NPY_API_SYMBOL_ATTRIBUTE", "_RETURN_VALUE").cppTypes().annotations())
 
                .put(new Info("defined(_MSC_VER) && defined(_WIN64) && (_MSC_VER > 1400) ||"
                            + "    defined(__MINGW32__) || defined(__MINGW64__)",

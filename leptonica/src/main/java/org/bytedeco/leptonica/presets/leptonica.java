@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2024 Samuel Audet
+ * Copyright (C) 2014-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
     @Platform(value = "android", link = "leptonica"),
-    @Platform(value = "windows", preload = {"libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "libleptonica"}),
+    @Platform(value = "windows", preload = {"libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "libleptonica", "libleptonica-6"}),
     @Platform(value = "windows-x86", preloadpath = "C:/msys64/mingw32/bin/"),
     @Platform(value = "windows-x86_64", preloadpath = "C:/msys64/mingw64/bin/") })
 @NoException

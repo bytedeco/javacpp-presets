@@ -112,6 +112,10 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
 
   public native long versionCuDNN();
 
+  public native long versionRuntimeCuDNN();
+
+  public native long versionCuDNNFrontend();
+
   public native long versionMIOpen();
 
   public native long versionCUDART();

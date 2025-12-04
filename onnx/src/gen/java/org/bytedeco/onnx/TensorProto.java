@@ -115,6 +115,10 @@ public class TensorProto extends MessageLite {
   public static final int FLOAT4E2M1 = FLOAT4E2M1();
   @MemberGetter public static native @Cast("const onnx::TensorProto::DataType") int FLOAT8E8M0();
   public static final int FLOAT8E8M0 = FLOAT8E8M0();
+  @MemberGetter public static native @Cast("const onnx::TensorProto::DataType") int UINT2();
+  public static final int UINT2 = UINT2();
+  @MemberGetter public static native @Cast("const onnx::TensorProto::DataType") int INT2();
+  public static final int INT2 = INT2();
   public static native @Cast("bool") boolean DataType_IsValid(int value);
   @MemberGetter public static native @Cast("const onnx::TensorProto::DataType") int DataType_MIN();
   public static final int DataType_MIN = DataType_MIN();
