@@ -32,7 +32,7 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-import static org.bytedeco.pytorch.global.nccl.*;
+import static org.bytedeco.pytorch.global.torch_nccl.*;
 
 
 // ProcessGroupNCCL implements NCCL bindings for c10d.
@@ -70,7 +70,7 @@ import static org.bytedeco.pytorch.global.nccl.*;
 //   work->wait()
 //
 //   // Now continue on other work in the current stream.
-@Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.nccl.class)
+@Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_nccl.class)
 public class ProcessGroupNCCL extends Backend {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

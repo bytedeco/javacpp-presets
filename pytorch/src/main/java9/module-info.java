@@ -5,5 +5,6 @@ module org.bytedeco.pytorch {
   exports org.bytedeco.pytorch.presets;
   exports org.bytedeco.pytorch.cuda;
   exports org.bytedeco.pytorch.gloo;
+  exports org.bytedeco.pytorch.nccl;
   exports org.bytedeco.pytorch;
 }

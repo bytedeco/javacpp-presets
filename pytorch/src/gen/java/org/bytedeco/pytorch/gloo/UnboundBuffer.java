@@ -15,7 +15,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
 // The unbound buffer class represents a chunk of memory.
@@ -28,7 +28,7 @@ import static org.bytedeco.pytorch.global.gloo.*;
 // been available since the inception of Gloo. It is unbound in that
 // it is not tied to a particular pair.
 //
-@Namespace("gloo::transport") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Namespace("gloo::transport") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class UnboundBuffer extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

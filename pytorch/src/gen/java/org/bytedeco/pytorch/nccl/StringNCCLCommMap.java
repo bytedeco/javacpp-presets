@@ -32,9 +32,9 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-import static org.bytedeco.pytorch.global.nccl.*;
+import static org.bytedeco.pytorch.global.torch_nccl.*;
 
-@Name("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >") @Properties(inherit = org.bytedeco.pytorch.presets.nccl.class)
+@Name("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch_nccl.class)
 public class StringNCCLCommMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

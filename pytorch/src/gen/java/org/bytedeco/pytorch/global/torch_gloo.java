@@ -17,7 +17,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-public class gloo extends org.bytedeco.pytorch.presets.gloo {
+public class torch_gloo extends org.bytedeco.pytorch.presets.torch_gloo {
     static { Loader.load(); }
 
 // Parsed from gloo/common/string.h

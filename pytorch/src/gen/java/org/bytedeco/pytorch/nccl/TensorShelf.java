@@ -32,13 +32,13 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-import static org.bytedeco.pytorch.global.nccl.*;
+import static org.bytedeco.pytorch.global.torch_nccl.*;
 
 // #endif
 
 // A shelf for stashing tensors between op call and `work.wait()`.
 // Used in case of async ops.
-@Namespace("c10d") @Properties(inherit = org.bytedeco.pytorch.presets.nccl.class)
+@Namespace("c10d") @Properties(inherit = org.bytedeco.pytorch.presets.torch_nccl.class)
 public class TensorShelf extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

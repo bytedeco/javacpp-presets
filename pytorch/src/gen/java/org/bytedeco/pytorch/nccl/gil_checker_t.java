@@ -32,13 +32,13 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-import static org.bytedeco.pytorch.global.nccl.*;
+import static org.bytedeco.pytorch.global.torch_nccl.*;
 
 
 // Similar to get_cpp_trace_dumper, this stores a function defined in
 // torch-python layer that lets us check whether the GIL can be acquired,
 // helpful for instrumenting in cases where a hang was observed.
-@Properties(inherit = org.bytedeco.pytorch.presets.nccl.class)
+@Properties(inherit = org.bytedeco.pytorch.presets.torch_nccl.class)
 public class gil_checker_t extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -15,7 +15,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
 // The context represents a set of pairs that belong to the same
@@ -27,7 +27,7 @@ import static org.bytedeco.pytorch.global.gloo.*;
 // pairs in a group, to arbitrate between multiple pairs attempting to
 // send to the same buffer.
 //
-@Name("gloo::transport::Context") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Name("gloo::transport::Context") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class TransportContext extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

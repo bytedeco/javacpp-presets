@@ -21,18 +21,18 @@
  */
 package org.bytedeco.pytorch.presets;
 
+import org.bytedeco.cuda.presets.nccl;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.presets.chrono;
 import org.bytedeco.javacpp.tools.*;
 
 /**
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {org.bytedeco.cuda.presets.nccl.class, torch_cuda.class},
+    inherit = {nccl.class, torch_cuda.class},
     value = @Platform(
         value = {"linux"}, //// Not on Mac or Windows
         extension = "-gpu",
@@ -44,9 +44,9 @@ import org.bytedeco.javacpp.tools.*;
         }
     ),
     target = "org.bytedeco.pytorch.nccl",
-    global = "org.bytedeco.pytorch.global.nccl"
+    global = "org.bytedeco.pytorch.global.torch_nccl"
 )
-public class nccl implements LoadEnabled, InfoMapper {
+public class torch_nccl implements LoadEnabled, InfoMapper {
 
     @Override
     public void init(ClassProperties properties) {

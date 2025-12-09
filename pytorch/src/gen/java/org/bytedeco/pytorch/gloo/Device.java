@@ -15,7 +15,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
 // The device abstraction can be considered as a factory for all
@@ -27,7 +27,7 @@ import static org.bytedeco.pytorch.global.gloo.*;
 // the pair; every receive buffer must be paired with a corresponding
 // send buffer and vice versa. The device abstraction may start a
 // background thread to handle I/O multiplexing (not configurable).
-@Namespace("gloo::transport") @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Namespace("gloo::transport") @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class Device extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

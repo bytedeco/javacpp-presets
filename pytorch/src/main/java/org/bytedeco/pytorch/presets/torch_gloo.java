@@ -41,9 +41,9 @@ import org.bytedeco.javacpp.tools.*;
         }
     ),
     target = "org.bytedeco.pytorch.gloo",
-    global = "org.bytedeco.pytorch.global.gloo"
+    global = "org.bytedeco.pytorch.global.torch_gloo"
 )
-public class gloo implements LoadEnabled, InfoMapper {
+public class torch_gloo implements LoadEnabled, InfoMapper {
 
     @Override
     public void init(ClassProperties properties) {

@@ -15,7 +15,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
 // Listener deals with incoming connections. Incoming connections
@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.gloo.*;
 // number. If there is a match, the socket is passed to the
 // corresponding pair. If it can't be matched, it is stashed until a
 // pair with the sequence number calls `waitForConnection`.
-@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class Listener extends Handler {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
