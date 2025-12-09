@@ -15,7 +15,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
 // Handler abstract base class called by the epoll(2) event loop.
@@ -23,7 +23,7 @@ import static org.bytedeco.pytorch.global.gloo.*;
 // single listening socket on the device instance and I/O for all pair
 // instances. Before this approach, we'd exclusively deal with `Pair`
 // instances and didn't need to dispatch events to different types.
-@Namespace("gloo::transport::tcp") @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Namespace("gloo::transport::tcp") @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class Handler extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

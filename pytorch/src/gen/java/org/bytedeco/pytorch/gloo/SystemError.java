@@ -15,10 +15,10 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
-@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class SystemError extends Error {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

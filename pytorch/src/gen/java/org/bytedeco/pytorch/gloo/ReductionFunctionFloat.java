@@ -15,10 +15,10 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
-@Name("gloo::ReductionFunction<float>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Name("gloo::ReductionFunction<float>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class ReductionFunctionFloat extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

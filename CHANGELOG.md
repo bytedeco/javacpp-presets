@@ -1,4 +1,5 @@
 
+ * Rename `gloo` and `nccl` modules of PyTorch to `torch_gloo` and `torch_nccl` to avoid conflicts
  * Upgrade to NDK r29 for Android builds on GitHub Actions ([issue #1670](https://github.com/bytedeco/javacpp-presets/issues/1670))
  * Enable distributed package using NCCL in presets for PyTorch ([issue #1402](https://github.com/bytedeco/javacpp-presets/issues/1402))
  * Fix adapter for `c10::intrusive_ptr` in presets for PyTorch ([issue #1678](https://github.com/bytedeco/javacpp-presets/issues/1678))

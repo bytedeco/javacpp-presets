@@ -34,7 +34,7 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-public class nccl extends org.bytedeco.pytorch.presets.nccl {
+public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
     static { Loader.load(); }
 
 // Targeting ../nccl/ScalaTypeDataTypeMap.java

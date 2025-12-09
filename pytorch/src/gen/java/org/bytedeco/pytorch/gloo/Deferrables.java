@@ -15,12 +15,12 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import org.bytedeco.pytorch.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
-import static org.bytedeco.pytorch.global.gloo.*;
+import static org.bytedeco.pytorch.global.torch_gloo.*;
 
 
 // Functions can be deferred to the epoll(2) thread through the this
 // class. It uses readability of a pipe to wake up the event loop.
-@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.gloo.class)
+@Namespace("gloo::transport::tcp") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_gloo.class)
 public class Deferrables extends Handler {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

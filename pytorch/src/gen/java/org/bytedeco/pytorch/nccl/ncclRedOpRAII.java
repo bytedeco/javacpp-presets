@@ -32,11 +32,11 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-import static org.bytedeco.pytorch.global.nccl.*;
+import static org.bytedeco.pytorch.global.torch_nccl.*;
 
 
 // Helper that automatically cleans up premul sums.
-@Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.nccl.class)
+@Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_nccl.class)
 public class ncclRedOpRAII extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
