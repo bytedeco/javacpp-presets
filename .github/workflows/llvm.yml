@@ -38,11 +38,11 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-arm64:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-arm64:
@@ -70,11 +70,11 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions
   samples:
-    needs: redeploy
+    needs: platform
     strategy:
       matrix:
 #        os: [ubuntu-22.04, macos-13, windows-11-arm, windows-2022]
-        os: [ubuntu-22.04, macos-13, windows-2022]
+        os: [ubuntu-22.04, macos-15, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2

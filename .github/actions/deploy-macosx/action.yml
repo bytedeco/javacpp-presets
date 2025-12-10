@@ -112,7 +112,7 @@ runs:
         if [[ -n ${JAVA_HOME_11_arm64:-} ]]; then
           export JAVA_HOME=$JAVA_HOME_11_arm64
         else
-          export JAVA_HOME=$JAVA_HOME_8_X64
+          export JAVA_HOME=$JAVA_HOME_11_X64
         fi
 
         git --version
