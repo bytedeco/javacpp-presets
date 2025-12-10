@@ -55,11 +55,11 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-arm64:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
 #  windows-x86:
