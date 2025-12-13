@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2024 Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2017-2025 Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -91,6 +91,13 @@ public class macosx implements LoadEnabled, BuildEnabled, InfoMapper {
 
                .put(new Info("__BEGIN_DECLS").cppText("#define __BEGIN_DECLS"))
                .put(new Info("__END_DECLS").cppText("#define __END_DECLS"))
+               .put(new Info("_LIBC_CSTR").cppText("#define _LIBC_CSTR"))
+               .put(new Info("_LIBC_COUNT").cppText("#define _LIBC_COUNT(N)"))
+               .put(new Info("_LIBC_SIZE").cppText("#define _LIBC_SIZE(N)"))
+               .put(new Info("_LIBC_SIZE_OR_NULL").cppText("#define _LIBC_SIZE_OR_NULL(N)"))
+               .put(new Info("_LIBC_NULL_TERMINATED").cppText("#define _LIBC_NULL_TERMINATED"))
+               .put(new Info("_LIBC_UNSAFE_INDEXABLE").cppText("#define _LIBC_UNSAFE_INDEXABLE"))
+               .put(new Info("_LIBC_SINGLE_BY_DEFAULT").cppText("#define _LIBC_SINGLE_BY_DEFAULT()"))
                .put(new Info("__sized_by").cppText("#define __sized_by(N)"))
 
                .put(new Info("__LP64__", "__x86_64__").define(is64bits))
@@ -108,7 +115,7 @@ public class macosx implements LoadEnabled, BuildEnabled, InfoMapper {
                              "__extension__", "__header_always_inline", "__inline", "__mode__",
                              "__nonnull", "_Nullable", "__restrict", "__CLOCK_AVAILABILITY", "__OS_AVAILABILITY_MSG",
                              "__DYLDDL_DRIVERKIT_UNAVAILABLE", "__IOS_PROHIBITED", "__TVOS_PROHIBITED", "__WATCHOS_PROHIBITED",
-                             "ru_first", "ru_last", "sv_onstack").annotations().cppTypes())
+                             "__DYLDDL_DLSYM_UNAVAILABLE", "__DYLDDL_UNAVAILABLE", "ru_first", "ru_last", "sv_onstack").annotations().cppTypes())
 
                .put(new Info("_POSIX2_VERSION", "_POSIX2_C_VERSION", "_POSIX2_C_BIND",
                              "_POSIX2_C_DEV", "_POSIX2_SW_DEV", "_POSIX2_LOCALEDEF").cppTypes("long"))
