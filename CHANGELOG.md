@@ -1,4 +1,5 @@
 
+ * Rename `gloo` and `nccl` modules of PyTorch to `torch_gloo` and `torch_nccl` to avoid conflicts
  * Upgrade to NDK r29 for Android builds on GitHub Actions ([issue #1670](https://github.com/bytedeco/javacpp-presets/issues/1670))
  * Enable distributed package using NCCL in presets for PyTorch ([issue #1402](https://github.com/bytedeco/javacpp-presets/issues/1402))
  * Fix adapter for `c10::intrusive_ptr` in presets for PyTorch ([issue #1678](https://github.com/bytedeco/javacpp-presets/issues/1678))
@@ -8,7 +9,8 @@
  * Enable DNNL and CoreML in `linux-arm64` and `macosx-arm64` builds for ONNX Runtime ([pull #1689](https://github.com/bytedeco/javacpp-presets/pull/1689))
  * Refactor the `redist` artifacts for CUDA into multiple smaller main artifacts ([issue #1638](https://github.com/bytedeco/javacpp-presets/issues/1638))
  * Introduce `macosx-arm64` builds for DNNL, OpenCL ([issue #1681](https://github.com/bytedeco/javacpp-presets/issues/1681))
- * Add `windows-arm64` builds for LLVM ([pull #1656](https://github.com/bytedeco/javacpp-presets/pull/1656)), and system APIs with upgrade to Windows SDK 10.0 ([pull #1659](https://github.com/bytedeco/javacpp-presets/pull/1659))
+ * Upgrade presets for system APIs on Ubuntu 22.04 LTS (Jammy), macOS 15, Windows SDK 10.0 ([pull #1659](https://github.com/bytedeco/javacpp-presets/pull/1659))
+ * Add `windows-arm64` builds for LLVM ([pull #1656](https://github.com/bytedeco/javacpp-presets/pull/1656))
  * Introduce CUDA-enabled `linux-arm64-gpu` builds to presets for OpenCV ([pull #1651](https://github.com/bytedeco/javacpp-presets/pull/1651))
  * Reenable again `linux-arm64` builds for CPython and NumPy ([pull #1652](https://github.com/bytedeco/javacpp-presets/pull/1652))
  * Bundle libraries for VA-API 2.x with FFmpeg to avoid loading issues ([issue bytedeco/javacv#2340](https://github.com/bytedeco/javacv/issues/2340))

@@ -32,9 +32,9 @@ import static org.bytedeco.cuda.global.cupti.*;
 import org.bytedeco.pytorch.cuda.*;
 import static org.bytedeco.pytorch.global.torch_cuda.*;
 
-import static org.bytedeco.pytorch.global.nccl.*;
+import static org.bytedeco.pytorch.global.torch_nccl.*;
 
-@Name("std::map<at::ScalarType,ncclDataType_t>") @Properties(inherit = org.bytedeco.pytorch.presets.nccl.class)
+@Name("std::map<at::ScalarType,ncclDataType_t>") @Properties(inherit = org.bytedeco.pytorch.presets.torch_nccl.class)
 public class ScalaTypeDataTypeMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
