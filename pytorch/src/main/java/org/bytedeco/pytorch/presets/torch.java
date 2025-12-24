@@ -66,6 +66,7 @@ import org.bytedeco.openblas.presets.openblas;
             include = {
                 "torch/torch.h",
                 "torch/script.h",
+                "ATen/autocast_mode.h",
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
@@ -670,6 +671,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::array<uint32_t,at::MERSENNE_STATE_N>", "std::array<at::SDPBackend,at::num_sdp_backends>").pointerTypes("IntPointer").cast())
             .put(new Info("std::array<std::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >,at::COMPILE_TIME_MAX_DEVICE_TYPES>").pointerTypes("PointerPairOptional").cast())
             .put(new Info("std::array<uint8_t,c10::NumScalarTypes>", "std::array<uint8_t,NumScalarTypes>").pointerTypes("BytePointer").cast())
+            .put(new Info("std::array<at::DeviceType,10>").cast().pointerTypes("BytePointer"))
         ;
 
 

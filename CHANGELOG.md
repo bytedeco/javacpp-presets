@@ -4,7 +4,7 @@
  * Upgrade to NDK r29 for Android builds on GitHub Actions ([issue #1670](https://github.com/bytedeco/javacpp-presets/issues/1670))
  * Enable distributed package using NCCL in presets for PyTorch ([issue #1402](https://github.com/bytedeco/javacpp-presets/issues/1402))
  * Fix adapter for `c10::intrusive_ptr` in presets for PyTorch ([issue #1678](https://github.com/bytedeco/javacpp-presets/issues/1678))
- * Include `FileStore.hpp`, `TCPStore.hpp`, and `gloo/transport/tcp/device.h` header files in presets for PyTorch ([discussion #1712](https://github.com/bytedeco/javacpp-presets/discussions/1712))
+ * Include `autocast_mode.h`, `FileStore.hpp`, `TCPStore.hpp`, and `gloo/transport/tcp/device.h` header files in presets for PyTorch ([discussion #1712](https://github.com/bytedeco/javacpp-presets/discussions/1712))
  * Introduce `linux-arm64` builds for ONNX ([pull #1697](https://github.com/bytedeco/javacpp-presets/pull/1697))
  * Include CUDA GPU compute capabilities 10.0 and 12.0 in builds for PyTorch ([issue #1696](https://github.com/bytedeco/javacpp-presets/issues/1696))
  * Enable DNNL and CoreML in `linux-arm64` and `macosx-arm64` builds for ONNX Runtime ([pull #1689](https://github.com/bytedeco/javacpp-presets/pull/1689))
