@@ -1253,6 +1253,7 @@
 #include "ATen/core/Scalar.h"
 #include "ATen/core/UnsafeFromTH.h"
 #include "ATen/ATen.h"
+#include "ATen/autocast_mode.h"
 #include "torch/csrc/api/include/torch/detail/TensorDataContainer.h"
 #include "torch/csrc/autograd/generated/variable_factories.h"
 #include "torch/csrc/jit/frontend/function_schema_parser.h"

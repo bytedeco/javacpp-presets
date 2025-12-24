@@ -65219,6 +65219,731 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/NativeFunctions.h>
 
 
+// Parsed from ATen/autocast_mode.h
+
+// #pragma once
+
+// #include <ATen/ATen.h>
+// #include <ATen/NativeFunctions.h>
+// #include <ATen/Operators.h>
+// #include <torch/library.h>
+
+// #include <c10/core/impl/LocalDispatchKeySet.h>
+// #include <c10/util/intrusive_ptr.h>
+
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_autocast_enabled(@ByVal DeviceType device_type);
+@Namespace("at::autocast") public static native void set_autocast_enabled(@ByVal DeviceType device_type, @Cast("bool") boolean enabled);
+@Namespace("at::autocast") public static native ScalarType get_autocast_dtype(@ByVal DeviceType device_type);
+@Namespace("at::autocast") public static native void set_autocast_dtype(
+    @ByVal DeviceType device_type,
+    ScalarType dtype);
+@Namespace("at::autocast") public static native void clear_cache();
+@Namespace("at::autocast") public static native int increment_nesting();
+@Namespace("at::autocast") public static native int decrement_nesting();
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_autocast_cache_enabled();
+@Namespace("at::autocast") public static native void set_autocast_cache_enabled(@Cast("bool") boolean enabled);
+
+// deprecated CUDA-specific autocast APIs
+@Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_enabled();
+@Namespace("at::autocast") public static native @Deprecated void set_enabled(@Cast("bool") boolean enabled);
+@Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_gpu_dtype();
+@Namespace("at::autocast") public static native @Deprecated void set_autocast_gpu_dtype(ScalarType dtype);
+
+// #define DECLARE_DEPRECATED_AUTOCAST_APIS(name, device_type)
+//   C10_DEPRECATED_MESSAGE(
+//       "at::autocast::is_" #name
+//       "_enabled() is deprecated. Please use at::autocast::is_autocast_enabled(" #device_type
+//       ") instead.")
+//   inline bool is_##name##_enabled() {
+//     TORCH_WARN_DEPRECATION(
+//         "at::autocast::",
+//         __func__,
+//         "() is deprecated. Please use at::autocast::is_autocast_enabled(" #device_type
+//         ") instead.")
+//     return is_autocast_enabled(device_type);
+//   }
+// 
+//   C10_DEPRECATED_MESSAGE(
+//       "at::autocast::set_" #name
+//       "_enabled(enabled) is deprecated. Please use at::autocast::set_autocast_enabled(" #device_type
+//       ", enabled) instead.")
+//   inline void set_##name##_enabled(bool enabled) {
+//     TORCH_WARN_DEPRECATION(
+//         "at::autocast::",
+//         __func__,
+//         "(enabled) is deprecated. Please use at::autocast::set_autocast_enabled(" #device_type
+//         ", enabled) instead.")
+//     set_autocast_enabled(device_type, enabled);
+//   }
+// 
+//   C10_DEPRECATED_MESSAGE(
+//       "at::autocast::get_autocast_" #name
+//       "_dtype() is deprecated. Please use at::autocast::get_autocast_dtype(" #device_type
+//       ") instead.")
+//   inline at::ScalarType get_autocast_##name##_dtype() {
+//     TORCH_WARN_DEPRECATION(
+//         "at::autocast::",
+//         __func__,
+//         "() is deprecated. Please at::autocast::get_autocast_dtype(" #device_type
+//         ") instead.")
+//     return get_autocast_dtype(device_type);
+//   }
+// 
+//   C10_DEPRECATED_MESSAGE(
+//       "at::autocast::set_autocast_" #name
+//       "_dtype(dtype) is deprecated. Please use at::autocast::set_autocast_dtype(" #device_type
+//       ", dtype) instead.")
+//   inline void set_autocast_##name##_dtype(at::ScalarType dtype) {
+//     TORCH_WARN_DEPRECATION(
+//         "at::autocast::",
+//         __func__,
+//         "(dtype) is deprecated. Please use at::autocast::set_autocast_dtype(" #device_type
+//         ", dtype) instead.")
+//     set_autocast_dtype(device_type, dtype);
+//   }
+
+// #define AT_FORALL_DEPRECATED_AUTOCAST_BACKENDS(_)
+//   _(cpu, at::kCPU)
+//   _(mtia, at::kMTIA)
+//   _(xpu, at::kXPU)
+//   _(xla, at::kXLA)
+//   _(hpu, at::kHPU)
+//   _(ipu, at::kIPU)
+//   _(privateuseone, at::kPrivateUse1)
+
+// deprecated other backend specific autocast APIs
+// NOLINTNEXTLINE(misc-use-internal-linkage)
+@Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_cpu_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_cpu_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_cpu_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_cpu_dtype(ScalarType dtype);
+  @Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_mtia_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_mtia_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_mtia_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_mtia_dtype(ScalarType dtype);
+  @Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_xpu_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_xpu_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_xpu_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_xpu_dtype(ScalarType dtype);
+  @Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_xla_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_xla_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_xla_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_xla_dtype(ScalarType dtype);
+  @Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_hpu_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_hpu_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_hpu_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_hpu_dtype(ScalarType dtype);
+  @Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_ipu_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_ipu_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_ipu_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_ipu_dtype(ScalarType dtype);
+  @Namespace("at::autocast") public static native @Cast("bool") @Deprecated boolean is_privateuseone_enabled();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_privateuseone_enabled(@Cast("bool") boolean enabled);
+
+  @Namespace("at::autocast") public static native @Deprecated ScalarType get_autocast_privateuseone_dtype();
+
+  @Namespace("at::autocast") public static native @Deprecated void set_autocast_privateuseone_dtype(ScalarType dtype);
+
+@Namespace("at::autocast") @MemberGetter public static native @ByRef @Cast("const std::array<at::DeviceType,10>*") BytePointer _AUTOCAST_SUPPORTED_DEVICES();
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_autocast_eligible(
+    @Const @ByRef Tensor tensor,
+    DeviceType device_type);
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_autocast_eligible(
+    @Const @ByRef Tensor tensor,
+    @Cast("c10::DeviceType") byte device_type);
+ // namespace
+
+@Namespace("at::autocast") public static native DispatchKey get_autocast_dispatch_key_from_device_type(
+    DeviceType device_type);
+@Namespace("at::autocast") public static native @Cast("c10::DispatchKey") short get_autocast_dispatch_key_from_device_type(
+    @Cast("c10::DeviceType") byte device_type);
+
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_autocast_available(DeviceType device_type);
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_autocast_available(@Cast("c10::DeviceType") byte device_type);
+
+@Namespace("at::autocast") public static native ScalarType get_lower_precision_fp_from_device_type(
+    DeviceType device_type);
+@Namespace("at::autocast") public static native ScalarType get_lower_precision_fp_from_device_type(
+    @Cast("c10::DeviceType") byte device_type);
+
+/********************************************************************
+Logic to extract the promote type from any Tensor or TensorList args.
+********************************************************************/
+
+// Overload to catch Tensor args.
+// If nextArg is floating-point, compare its scalar_type with our
+// current best guess for the promote type, and update if necessary.
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef Tensor nextArg,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef Tensor nextArg);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef Tensor nextArg,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+
+// Overload to catch TensorList args (for e.g. cat, stack).
+// Reuses the overload above to process each Tensor in the list.
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef TensorArrayRef list,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef TensorArrayRef list);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef TensorVector list,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef TensorVector list);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef TensorVector list,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native ScalarType prioritize(
+    ScalarType current,
+    @Const @ByRef TensorArrayRef list,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+
+// Template to catch non-Tensor args (no-op that returns current best guess)
+
+// Overload for the tail case.
+@Namespace("at::autocast") public static native ScalarType promote_type(
+    ScalarType current,
+    DeviceType device_type);
+@Namespace("at::autocast") public static native ScalarType promote_type(
+    ScalarType current,
+    @Cast("c10::DeviceType") byte device_type);
+
+// Unpack args and determine if incoming lower_precision_fp tensors need to be
+// promoted to float32. Non-Tensor arguments are ignored.
+
+/****************************************************
+Logic to apply cached casting to any Tensor argument.
+****************************************************/
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_eligible(
+    @Const @ByRef Tensor arg,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_eligible(
+    @Const @ByRef Tensor arg);
+@Namespace("at::autocast") public static native @Cast("bool") boolean is_eligible(
+    @Const @ByRef Tensor arg,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+
+// Overload to catch Tensor args
+@Namespace("at::autocast") public static native @ByVal Tensor cached_cast(
+    ScalarType to_type,
+    @Const @ByRef Tensor arg,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native @ByVal Tensor cached_cast(
+    ScalarType to_type,
+    @Const @ByRef Tensor arg);
+@Namespace("at::autocast") public static native @ByVal Tensor cached_cast(
+    ScalarType to_type,
+    @Const @ByRef Tensor arg,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+
+// Overload to process std::optional<Tensor>
+@Namespace("at::autocast") public static native @ByVal TensorOptional cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorOptional arg,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native @ByVal TensorOptional cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorOptional arg);
+@Namespace("at::autocast") public static native @ByVal TensorOptional cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorOptional arg,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+
+// Overload to process TensorLists
+@Namespace("at::autocast") public static native @ByVal TensorVector cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorArrayRef arg,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native @ByVal TensorVector cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorArrayRef arg);
+@Namespace("at::autocast") public static native @ByVal TensorVector cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorVector arg,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native @ByVal TensorVector cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorVector arg);
+@Namespace("at::autocast") public static native @ByVal TensorVector cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorVector arg,
+    DeviceType device_type/*=c10::DeviceType::CUDA*/);
+@Namespace("at::autocast") public static native @ByVal TensorVector cached_cast(
+    ScalarType to_type,
+    @Const @ByRef TensorArrayRef arg,
+    @Cast("c10::DeviceType") byte device_type/*=c10::DeviceType::CUDA*/);
+
+// Template to catch non-Tensor args.
+
+/*******************************************************
+Logic to flip an output dtype flag.
+Keep it simple for now by assuming only one such flag is
+present in the argument list.  If I ever need a function
+with more than flag I'll figure out something else.
+The policy is:
+If the user has explicitly specified a dtype, respect it.
+Otherwise, set it to the autocast type.
+********************************************************/
+
+// Overload to catch dtype flags
+@Namespace("at::autocast") public static native @ByVal ScalarTypeOptional set_opt_dtype(
+    ScalarType to_type,
+    @Const @ByRef ScalarTypeOptional dtype);
+
+// Template to catch other args
+
+// Policies correspond to op categories that need code-divergent handling.
+// Wrapper templates below are specialized based on a policy template parameter.
+@Namespace("at::autocast") public enum CastPolicy {
+  lower_precision_fp((byte)(0)), // Cast all inputs to lower_precision_fp before
+                          // running the op. Currently, lower_precision_fp is
+                          // fp16 for AutocastCUDA, and is defined by user
+                          // (default bf16) for AutocastCPU or other device.
+  fp32((byte)(1)), // Cast all inputs to at::kFloat before running the op.
+  fp32_set_opt_dtype((byte)(2)), // Treats functions (like softmax) that
+                      //  1. we'd like to run in fp32 and
+                      //  2. have a std::optional<ScalarType> arg that controls
+                      //  the output type.
+                      // fp32_set_opt_dtype wrappers' policy is: if the output
+                      // type is already set, don't touch it, otherwise, set
+                      // it to at::kFloat.
+  fp32_append_dtype((byte)(3)), // Treats functions (like norm) that
+                     //  1. we'd like to run in fp32 and
+                     //  2. have some overloads that accept an output type and
+                     //  other overloads that don't.
+                     // fp32_append_dtype wrappers wrap the overloads that don't
+                     // have an output dtype.
+                     // The wrapper policy is:  append at::kFloat to the args,
+                     // and redispatch to the type-aware overload.
+  promote((byte)(4));// Run in the widest dtype among several args.
+
+    public final byte value;
+    private CastPolicy(byte v) { this.value = v; }
+    private CastPolicy(CastPolicy e) { this.value = e.value; }
+    public CastPolicy intern() { for (CastPolicy e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/********************************************************************************************************
+Templates to provide wrapper functions
+<p>
+I'm copying the pattern used in core/boxing/impl/WrapFunctionIntoFunctor.h to
+extract args and return type. (see also
+https://stackoverflow.com/questions/46533698/how-to-deduce-argument-list-from-function-pointer)
+<p>
+This strategy uses an exterior "WrapFunction" that extracts arguments on behalf
+of (in my case several specializations of) an interior "WrapFunction_".
+Interior WrapFunction_ specializations are defined for each CastPolicy.
+********************************************************************************************************/
+
+// Base template for WrapFunction_, which is specialized to contain a "call"
+// method each CastPolicy
+
+// CastPolicy::lower_precision_fp General_DeviceType
+
+// CastPolicy::fp32 General_DeviceType
+
+// CastPolicy::fp32_set_opt_dtype General_DeviceType
+
+// CastPolicy::fp32_append_dtype General_DeviceType
+
+// CastPolicy::promote General_DeviceType
+
+// Wrapper to infer return_type and parameter_types for WrapFunction_ (imitating
+// core/boxing/impl/WrapFunctionIntoFunctor.h)
+
+/*****************************************************************************************************************
+This section performs load-time registration for autocast wrappers.
+<p>
+It's debatable at what level operations should be patched.  We'd like casts to
+be autograd-exposed and precede autograd history recording, so that for
+lower_precision_fp ops, input tensors are saved for backward in
+lower_precision_fp rather than fp32.  Saving inputs in lower_precision_fp
+can significantly reduce a model's memory footprint.
+<p>
+Option 1 (strawman):  Patch only at the level of explicit calls into
+cudnn/cublas (cudnn_convolution, etc), because those are the code paths that are
+guaranteed to use Tensor Cores, therefore they're the ones that will benefit
+most from lower_precision_fp.   Potential pitfall:  convolutions (and other ops)
+are wrapped in several layers of at::* calls.  If one of those happens to record
+autograd history, then we've lost the opportunity to save inputs in
+lower_precision_fp.
+<p>
+Option 2:  Patch the Python-exposed surface of calls, to make 100% sure autograd
+history recording can't sneak in ahead of autocast.  This mirrors Apex most
+closely.
+<p>
+I think Option 2 is the right answer for all ops, not just convolutions. Option
+2 is what I implement here.
+*****************************************************************************************************************/
+
+/********************************************************************************************************************
+Explicit registration for out-of-place ops
+<p>
+The stuff below could be codegenned.  Ed said
+> you are going to have to write the function definition at some point, I
+wouldn't try to get clever about it Therefore, for the moment, this is all
+copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
+********************************************************************************************************************/
+
+ // namespace at::autocast
+
+// #define ADD_NS(RAW_OP) at::RAW_OP
+
+// #define _KERNEL_OVERLOAD_NARG_IMPL(_0, _1, _2, N, ...) N
+// #define _KERNEL_OVERLOAD_NARG(...)
+//   C10_EXPAND_MSVC_WORKAROUND(_KERNEL_OVERLOAD_NARG_IMPL(__VA_ARGS__, 2, 1))
+
+// Common cases where registration signature matches redispatch signature
+// (that's why SIGNATURE is repeated in the WrapFunction instantiation)
+// #define KERNEL1(DISPATCHKEY, OP, POLICY)
+//   m.impl(
+//       TORCH_SELECTIVE_NAME("aten::" #OP),
+//       &::at::autocast::WrapFunction<
+//           ::at::autocast::CastPolicy::POLICY,
+//           DISPATCHKEY,
+//           decltype(ATEN_FN(OP)),
+//           decltype(ATEN_FN(OP)),
+//           &ATEN_FN(OP)>::type::call);
+
+// #define KERNEL2(DISPATCHKEY, OP, OVERLOAD, POLICY)
+//   m.impl(
+//       TORCH_SELECTIVE_NAME("aten::" #OP "." #OVERLOAD),
+//       &::at::autocast::WrapFunction<
+//           ::at::autocast::CastPolicy::POLICY,
+//           DISPATCHKEY,
+//           decltype(ATEN_FN2(OP, OVERLOAD)),
+//           decltype(ATEN_FN2(OP, OVERLOAD)),
+//           &ATEN_FN2(OP, OVERLOAD)>::type::call);
+
+// #define _KERNEL_DISPATCH(DISPATCHKEY, NARG, ...)
+//   C10_CONCATENATE(KERNEL, NARG)(DISPATCHKEY, __VA_ARGS__)
+
+// #define _KERNEL_IMPL(DISPATCHKEY, ...)
+//   _KERNEL_DISPATCH(DISPATCHKEY, _KERNEL_OVERLOAD_NARG(__VA_ARGS__), __VA_ARGS__)
+
+// It will dispatch to KERNEL1 or KERNEL2 based on its inputs.
+// #define KERNEL(DISPATCHKEY, ...) _KERNEL_IMPL(DISPATCHKEY, __VA_ARGS__)
+
+// Less-common but still useful case: redispatching to a function
+// with a new signature (e.g. appending a dtype)
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//     DISPATCHKEY,
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   m.impl(
+//       TORCH_SELECTIVE_NAME("aten::" REGISTER_NAME),
+//       &::at::autocast::WrapFunction<
+//           ::at::autocast::CastPolicy::POLICY,
+//           DISPATCHKEY,
+//           REGISTER_SIGNATURE,
+//           REDISPATCH_SIGNATURE,
+//           &REDISPATCH_FUNC>::type::call);
+
+// KERNEL_CPU/KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_CPU
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastCPU
+// #define KERNEL_CPU(...) KERNEL(c10::DeviceType::CPU, __VA_ARGS__)
+
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_CPU(
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//       c10::DeviceType::CPU,
+//       REDISPATCH_FUNC,
+//       REGISTER_NAME,
+//       REGISTER_SIGNATURE,
+//       REDISPATCH_SIGNATURE,
+//       POLICY)
+
+// KERNEL_CUDA/KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_CUDA
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastCUDA
+// #define KERNEL_CUDA(...) KERNEL(c10::DeviceType::CUDA, __VA_ARGS__)
+
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_CUDA(
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//       c10::DeviceType::CUDA,
+//       REDISPATCH_FUNC,
+//       REGISTER_NAME,
+//       REGISTER_SIGNATURE,
+//       REDISPATCH_SIGNATURE,
+//       POLICY)
+
+// KERNEL_MTIA/KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_MTIA
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastMTIA
+// #define KERNEL_MTIA(...) KERNEL(c10::DeviceType::MTIA, __VA_ARGS__)
+
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_MTIA(
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//       c10::DeviceType::MTIA,
+//       REDISPATCH_FUNC,
+//       REGISTER_NAME,
+//       REGISTER_SIGNATURE,
+//       REDISPATCH_SIGNATURE,
+//       POLICY)
+
+// KERNEL_MAIA/KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_MAIA
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastMAIA
+// #define KERNEL_MAIA(...) KERNEL(c10::DeviceType::MAIA, __VA_ARGS__)
+
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_MAIA(
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//       c10::DeviceType::MAIA,
+//       REDISPATCH_FUNC,
+//       REGISTER_NAME,
+//       REGISTER_SIGNATURE,
+//       REDISPATCH_SIGNATURE,
+//       POLICY)
+
+// KERNEL_XPU/KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_XPU
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastXPU
+// #define KERNEL_XPU(...) KERNEL(c10::DeviceType::XPU, __VA_ARGS__)
+
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_XPU(
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//       c10::DeviceType::XPU,
+//       REDISPATCH_FUNC,
+//       REGISTER_NAME,
+//       REGISTER_SIGNATURE,
+//       REDISPATCH_SIGNATURE,
+//       POLICY)
+
+// KERNEL_PRIVATEUSEONE/KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_PRIVATEUSEONE
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastPrivateUse1
+// #define KERNEL_PRIVATEUSEONE(...)
+//   KERNEL(c10::DeviceType::PrivateUse1, __VA_ARGS__)
+
+// #define KERNEL_DIFFERENT_REDISPATCH_SIGNATURE_PRIVATEUSEONE(
+//     REDISPATCH_FUNC,
+//     REGISTER_NAME,
+//     REGISTER_SIGNATURE,
+//     REDISPATCH_SIGNATURE,
+//     POLICY)
+//   KERNEL_DIFFERENT_REDISPATCH_SIGNATURE(
+//       c10::DeviceType::PrivateUse1,
+//       REDISPATCH_FUNC,
+//       REGISTER_NAME,
+//       REGISTER_SIGNATURE,
+//       REDISPATCH_SIGNATURE,
+//       POLICY)
+
+// KERNEL_MPS
+// registration (OP, POLICY) or (OP, OVERLOAD, POLICY) for AutocastMPS
+// #define KERNEL_MPS(...) KERNEL(c10::DeviceType::MPS, __VA_ARGS__)
+
+// Op lists for different policies.
+// To make sure other backends can reuse the policy op list.
+// #define AT_FORALL_LOWER_PRECISION_FP(_)
+//   _(_convolution, deprecated)
+//   _(_convolution)
+//   _(conv1d)
+//   _(conv2d)
+//   _(conv3d)
+//   _(conv_tbc)
+//   _(conv_transpose1d)
+//   _(conv_transpose2d, input)
+//   _(conv_transpose3d, input)
+//   _(convolution)
+//   _(prelu)
+//   _(addmm)
+//   _(addmv)
+//   _(addr)
+//   _(matmul)
+//   _(einsum)
+//   _(mm)
+//   _(mv)
+//   _(linalg_vecdot)
+//   _(linear)
+//   _(addbmm)
+//   _(baddbmm)
+//   _(bmm)
+//   _(chain_matmul)
+//   _(linalg_multi_dot)
+//   _(_thnn_fused_lstm_cell)
+//   _(_thnn_fused_gru_cell)
+//   _(lstm_cell)
+//   _(gru_cell)
+//   _(rnn_tanh_cell)
+//   _(rnn_relu_cell)
+//   _(_scaled_dot_product_flash_attention)
+//   _(scaled_dot_product_attention)
+
+// #define AT_FORALL_FP32(_)
+//   _(acos)
+//   _(asin)
+//   _(cosh)
+//   _(erfinv)
+//   _(exp)
+//   _(expm1)
+//   _(log)
+//   _(log10)
+//   _(log2)
+//   _(log1p)
+//   _(reciprocal)
+//   _(rsqrt)
+//   _(sinh)
+//   _(tan)
+//   _(pow, Tensor_Scalar)
+//   _(pow, Tensor_Tensor)
+//   _(pow, Scalar)
+//   _(softplus)
+//   _(layer_norm)
+//   _(native_layer_norm)
+//   _(group_norm)
+//   _(frobenius_norm, dim)
+//   _(nuclear_norm)
+//   _(nuclear_norm, dim)
+//   _(cosine_similarity)
+//   _(poisson_nll_loss)
+//   _(cosine_embedding_loss)
+//   _(nll_loss)
+//   _(nll_loss2d)
+//   _(hinge_embedding_loss)
+//   _(kl_div)
+//   _(l1_loss)
+//   _(smooth_l1_loss)
+//   _(huber_loss)
+//   _(mse_loss)
+//   _(margin_ranking_loss)
+//   _(multilabel_margin_loss)
+//   _(soft_margin_loss)
+//   _(triplet_margin_loss)
+//   _(multi_margin_loss)
+//   _(binary_cross_entropy_with_logits)
+//   _(dist)
+//   _(pdist)
+//   _(cdist)
+//   _(renorm)
+//   _(logsumexp)
+//   _(upsample_nearest1d)
+//   _(_upsample_nearest_exact1d)
+//   _(upsample_nearest2d)
+//   _(_upsample_nearest_exact2d)
+//   _(upsample_nearest3d)
+//   _(_upsample_nearest_exact3d)
+//   _(upsample_linear1d)
+//   _(upsample_bilinear2d)
+//   _(_upsample_bilinear2d_aa)
+//   _(upsample_trilinear3d)
+//   _(upsample_bicubic2d)
+//   _(_upsample_bicubic2d_aa)
+
+// #define AT_FORALL_FP32_SET_OPT_DTYPE(_)
+//   _(prod)
+//   _(prod, dim_int)
+//   _(prod, dim_Dimname)
+//   _(softmax, int)
+//   _(softmax, Dimname)
+//   _(log_softmax, int)
+//   _(log_softmax, Dimname)
+//   _(cumprod)
+//   _(cumprod, dimname)
+//   _(cumsum)
+//   _(cumsum, dimname)
+//   _(linalg_vector_norm)
+//   _(linalg_matrix_norm)
+//   _(linalg_matrix_norm, str_ord)
+//   _(sum)
+//   _(sum, dim_IntList)
+//   _(sum, dim_DimnameList)
+
+// #define AT_FORALL_DIFFERENT_REDISPATCH_SIGNATURE(_)
+//   _(ADD_NS(norm),
+//     "norm.Scalar",
+//     Tensor(const Tensor&, const Scalar&),
+//     Tensor(const Tensor&, const std::optional<Scalar>&, ScalarType),
+//     fp32_append_dtype)
+//   _(ADD_NS(norm),
+//     "norm.ScalarOpt_dim",
+//     Tensor(const Tensor&, const std::optional<Scalar>&, IntArrayRef, bool),
+//     Tensor(
+//         const Tensor&,
+//         const std::optional<Scalar>&,
+//         IntArrayRef,
+//         bool,
+//         ScalarType),
+//     fp32_append_dtype)
+//   _(ADD_NS(norm),
+//     "norm.names_ScalarOpt_dim",
+//     Tensor(const Tensor&, const std::optional<Scalar>&, DimnameList, bool),
+//     Tensor(
+//         const Tensor&,
+//         const std::optional<Scalar>&,
+//         DimnameList,
+//         bool,
+//         ScalarType),
+//     fp32_append_dtype)
+
+// #define AT_FORALL_PROMOTE(_)
+//   _(addcdiv)
+//   _(addcmul)
+//   _(atan2)
+//   _(bilinear)
+//   _(cross)
+//   _(dot)
+//   _(vdot)
+//   _(grid_sampler)
+//   _(index_put)
+//   _(tensordot)
+//   _(scatter_add)
+
+
 // Parsed from torch/csrc/api/include/torch/detail/TensorDataContainer.h
 
 // #pragma once
