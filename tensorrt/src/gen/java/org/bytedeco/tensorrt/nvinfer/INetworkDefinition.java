@@ -586,10 +586,60 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) IReduceLayer addReduce(
             @ByRef ITensor input, ReduceOperation operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
     public native @NoException(true) IReduceLayer addReduce(
             @ByRef ITensor input, @Cast("nvinfer1::ReduceOperation") int operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
+
+    /**
+     *  \brief Add a TopK layer to the network.
+     * 
+     *  The TopK layer has two outputs of the same dimensions. The first contains data values,
+     *  the second contains index positions for the values. Output values are sorted, largest first
+     *  for operation kMAX and smallest first for operation kMIN.
+     * 
+     *  Currently only values of K up to 3840 are supported.
+     * 
+     *  The default indices tensor (the second output) data type is DataType::kINT32.
+     * 
+     *  @param input The input tensor to the layer.
+     * 
+     *  @param op Operation to perform.
+     * 
+     *  @param k The number of elements to keep. For dynamic k, use the setInput() method to pass in k as a tensor
+     *         instead, which will override the static k value passed here in calculations.
+     * 
+     *  @param reduceAxes The reduction dimensions.
+     *         The bit in position i of bitmask reduceAxes corresponds to explicit dimension i of the result.
+     *         E.g., the least significant bit corresponds to the first explicit dimension and the next to least
+     *         significant bit corresponds to the second explicit dimension.
+     * 
+     *         Currently reduceAxes must specify exactly one dimension, and it must be one of the last four dimensions.
+     * 
+     *  @see ITopKLayer
+     * 
+     *  @return The new TopK layer, or nullptr if it could not be created.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.14. Superseded by five-argument addTopK.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, TopKOperation op, int k, @Cast("uint32_t") int reduceAxes);
+    public native @Deprecated @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, @Cast("nvinfer1::TopKOperation") int op, int k, @Cast("uint32_t") int reduceAxes);
 
     /**
      *  \brief Add a TopK layer to the network.
@@ -614,6 +664,8 @@ public class INetworkDefinition extends INoCopy {
      * 
      *         Currently reduceAxes must specify exactly one dimension, and it must be one of the last four dimensions.
      * 
+     *  @param indicesType Indices tensor (the second output) data type, must be DataType::kINT32 or DataType::kINT64.
+     * 
      *  @see ITopKLayer
      * 
      *  @return The new TopK layer, or nullptr if it could not be created.
@@ -625,8 +677,8 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, TopKOperation op, int k, @Cast("uint32_t") int reduceAxes);
-    public native @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, @Cast("nvinfer1::TopKOperation") int op, int k, @Cast("uint32_t") int reduceAxes);
+    public native @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, TopKOperation op, int k, @Cast("uint32_t") int reduceAxes, DataType indicesType);
+    public native @NoException(true) ITopKLayer addTopK(@ByRef ITensor input, @Cast("nvinfer1::TopKOperation") int op, int k, @Cast("uint32_t") int reduceAxes, @Cast("nvinfer1::DataType") int indicesType);
 
     /**
      *  \brief Add gather with mode GatherMode::kDEFAULT and specified axis and nbElementWiseDims=0.
@@ -718,6 +770,8 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) IMatrixMultiplyLayer addMatrixMultiply(
             @ByRef ITensor input0, MatrixOperation op0, @ByRef ITensor input1, MatrixOperation op1);
     public native @NoException(true) IMatrixMultiplyLayer addMatrixMultiply(
@@ -726,11 +780,36 @@ public class INetworkDefinition extends INoCopy {
     /**
      *  \brief Add a nonzero layer to the network.
      * 
+     *  The default indices tensor (the first output) data type is DataType::kINT32.
+     * 
      *  @param input The input tensor to the layer.
      * 
      *  @see INonZeroLayer
      * 
-     *  @return The new nonzero layer, or nullptr if it could be created.
+     *  @return The new nonzero layer, or nullptr if it could not be created.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.14. Superseded by two-argument addNonZero.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) INonZeroLayer addNonZero(@ByRef ITensor input);
+
+    /**
+     *  \brief Add a nonzero layer to the network.
+     * 
+     *  @param input The input tensor to the layer.
+     * 
+     *  @param indicesType Indices tensor (the first output) data type, must be DataType::kINT32 or DataType::kINT64.
+     * 
+     *  @see INonZeroLayer
+     * 
+     *  @return The new nonzero layer, or nullptr if it could not be created.
      *  */
     
     
@@ -742,7 +821,8 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) INonZeroLayer addNonZero(@ByRef ITensor input);
+    public native @NoException(true) INonZeroLayer addNonZero(@ByRef ITensor input, DataType indicesType);
+    public native @NoException(true) INonZeroLayer addNonZero(@ByRef ITensor input, @Cast("nvinfer1::DataType") int indicesType);
 
     /**
      *  \brief Add a constant layer to the network.
@@ -1658,7 +1738,7 @@ public class INetworkDefinition extends INoCopy {
      * 
      *  This layer performs dynamic block quantization of its input tensor and outputs the
      *  quantized data and the computed block scale-factors.
-     *  The block size is currently limited to 16 and the size of the blocked axis must be divisible by 16.
+     *  The blocked axis dimension size must be divisible by the block size.
      * 
      *  @param input The input tensor to be quantized. Its data type must be one of DataType::kFLOAT,
      *  DataType::kHALF, or DataType::kBF16. Currently only 2D and 3D inputs are supported.
@@ -1730,7 +1810,38 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) IGridSampleLayer addGridSample(@ByRef ITensor input, @ByRef ITensor grid);
+
+    /**
+     *  \brief Add a non-maximum suppression layer to the network.
+     * 
+     *  The default indices tensor (the first output) data type is DataType::kINT32.
+     * 
+     *  @param boxes The input boxes tensor to the layer.
+     * 
+     *  @param scores The input scores tensor to the layer.
+     * 
+     *  @param maxOutputBoxesPerClass The input maxOutputBoxesPerClass tensor to the layer.
+     * 
+     *  @see INMSLayer
+     * 
+     *  @return The new NMS layer, or nullptr if it could not be created.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.14. Superseded by four-argument addNMS.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) INMSLayer addNMS(@ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass);
 
     /**
      *  \brief Add a non-maximum suppression layer to the network.
@@ -1740,6 +1851,8 @@ public class INetworkDefinition extends INoCopy {
      *  @param scores The input scores tensor to the layer.
      * 
      *  @param maxOutputBoxesPerClass The input maxOutputBoxesPerClass tensor to the layer.
+     * 
+     *  @param indicesType Indices tensor (the first output) data type, must be DataType::kINT32 or DataType::kINT64.
      * 
      *  @see INMSLayer
      * 
@@ -1753,7 +1866,8 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) INMSLayer addNMS(@ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass);
+    public native @NoException(true) INMSLayer addNMS(@ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass, DataType indicesType);
+    public native @NoException(true) INMSLayer addNMS(@ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass, @Cast("nvinfer1::DataType") int indicesType);
 
     /**
      *  \brief Add a ReverseSequence layer to the network.
@@ -1831,8 +1945,44 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) ICumulativeLayer addCumulative(@ByRef ITensor input, @ByRef ITensor axis, CumulativeOperation operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
     public native @NoException(true) ICumulativeLayer addCumulative(@ByRef ITensor input, @ByRef ITensor axis, @Cast("nvinfer1::CumulativeOperation") int operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
+
+    /**
+     *  \brief Add an attention to the network.
+     * 
+     *  @param query A 4d input query tensor to the layer.
+     *  @param key A 4d input key tensor to the layer.
+     *  @param value A 4d input value tensor to the layer.
+     *  @param normOp The normalization operation to perform.
+     *  @param causal Use causual inference or not.
+     * 
+     *  query must have shape [batchSize, numHeadsQuery, sequenceLengthQuery, dimHead].
+     *  key and value must have shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead].
+     *  pastKey and pastValue must have shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead].
+     *  normOp defaults to kSOFTMAX isCausal defaults to false.
+     * 
+     *  By default, IAttention is not decomposable and TensorRT will try to use a single fused kernel, which may be more
+     *  efficient than if the subgraph is expressed without IAttention. Setting the IAttention to decomposable=True can
+     *  allow IAttention to be to use multiple kernels if no fused kernel support found.
+     * 
+     *  @see IAttention
+     * 
+     *  @return The new attention, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) IAttention addAttention(
+            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean causal);
+    public native @NoException(true) IAttention addAttention(
+            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean causal);
 
     /**
      *  \brief Return the builder from which this INetworkDefinition was created.

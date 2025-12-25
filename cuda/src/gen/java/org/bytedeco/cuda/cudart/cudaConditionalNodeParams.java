@@ -61,4 +61,6 @@ public class cudaConditionalNodeParams extends Pointer {
                                                       no body graph is executed.
                                              */
     public native @ByPtrPtr CUgraph_st phGraph_out(); public native cudaConditionalNodeParams phGraph_out(CUgraph_st setter);
+    /** CUDA Execution Context */
+    public native cudaExecutionContext_st ctx(); public native cudaConditionalNodeParams ctx(cudaExecutionContext_st setter);
 }

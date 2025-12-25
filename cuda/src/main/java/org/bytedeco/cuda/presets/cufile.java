@@ -44,6 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class cufile implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUFILE_OP", "CUFILEOP_STATUS_ENTRIES").cppTypes().annotations())
+               .put(new Info("CU_FILE_P2P_FLAG_PCI_P2PDMA", "CU_FILE_P2P_FLAG_NVFS", "CU_FILE_P2P_FLAG_DMABUF", "CU_FILE_P2P_FLAG_C2C").translate(false))
                .put(new Info("timespec", "loff_t").cast().pointerTypes("Pointer"));
     }
 }

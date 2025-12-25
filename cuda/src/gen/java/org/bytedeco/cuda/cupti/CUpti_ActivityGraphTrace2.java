@@ -15,6 +15,7 @@ import static org.bytedeco.cuda.global.cupti.*;
 
 
 
+
 /**
  * \brief The activity record for trace of graph execution.
  *

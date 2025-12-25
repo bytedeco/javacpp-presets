@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+ // IWYU pragma: export
 /** Forward declaration of IPluginFactory for use by other interfaces. */
 @Namespace("nvinfer1") @Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginFactory extends Pointer {

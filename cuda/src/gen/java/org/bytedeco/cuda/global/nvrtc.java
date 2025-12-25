@@ -960,6 +960,18 @@ public static native @Cast("nvrtcResult") int nvrtcSetFlowCallback(_nvrtcProgram
  *     - \c --disable-warnings (\c -w)
  * 
  *       Inhibit all warning messages.
+ * 
+ *     - \c --Wreorder (\c -Wreorder)
+ *    
+ *       Generate warnings when member initializers are reordered.
+ *  
+ *     - \c --warning-as-error=<kind>,... (\c -Werror)
+ *       
+ *       Make warnings of the specified kinds into errors.
+ *       The following is the list of warning kinds accepted by this option:
+ *         - \c all-warnings : treat all warnings as errors.
+ *         - \c reorder : generate errors when member initializers are reordered.
+ *         - \c deprecated-declarations: generate error on use of a deprecated entity.
  *
  *     - \c --restrict (\c -restrict)
  * 

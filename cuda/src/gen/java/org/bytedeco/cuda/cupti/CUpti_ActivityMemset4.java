@@ -14,6 +14,7 @@ import static org.bytedeco.cuda.global.cupti.*;
 
 
 
+
 /**
  * \brief The activity record for memset.
  *
@@ -137,7 +138,7 @@ public class CUpti_ActivityMemset4 extends Pointer {
    * This field is used to indicate if the memset operation is part of a device graph launch.
    */
   public native @Cast("uint8_t") byte isDeviceLaunched(); public native CUpti_ActivityMemset4 isDeviceLaunched(byte setter);
-  
+
   /**
    *  Undefined. Reserved for internal use
    */

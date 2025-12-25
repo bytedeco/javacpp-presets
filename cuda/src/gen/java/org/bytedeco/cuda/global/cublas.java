@@ -98,9 +98,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 13;
-public static final int CUBLAS_VER_MINOR = 1;
+public static final int CUBLAS_VER_MINOR = 2;
 public static final int CUBLAS_VER_PATCH = 0;
-public static final int CUBLAS_VER_BUILD = 3;
+public static final int CUBLAS_VER_BUILD = 9;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 10000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -13538,7 +13538,11 @@ public static final int
   /** Scaling factors are tensors that contain a dedicated CUDA_R_32F scaling factor for each 128x128-element block in
    * the the corresponding data tensor. */
   CUBLASLT_MATMUL_MATRIX_SCALE_BLK128x128_32F = 5,
-  CUBLASLT_MATMUL_MATRIX_SCALE_END = 6;
+  /** Experimental: Scaling factors are single precision scalars applied to the whole tensor. Each batch has its own
+   * scaling factor.
+   */
+  CUBLASLT_MATMUL_MATRIX_SCALE_PER_BATCH_SCALAR_32F = 6,
+  CUBLASLT_MATMUL_MATRIX_SCALE_END = 7;
 
 /** Pointer mode to use for alpha/beta */
 /** enum cublasLtPointerMode_t */
@@ -13700,7 +13704,22 @@ public static final int
    *
    * The address of the matrix of each instance of the batch are read from arrays of pointers.
    */
-  CUBLASLT_BATCH_MODE_POINTER_ARRAY = 1;
+  CUBLASLT_BATCH_MODE_POINTER_ARRAY = 1,
+  /** Grouped
+   *
+   * Experimental: The address of the matrix of each instance of the group are read from device arrays of pointers.
+   * Each group can have different columns, rows, and leading dimensions.
+   * The shapes are read from device arrays of pointers.
+   */
+  CUBLASLT_BATCH_MODE_GROUPED = 2;
+
+/** Experimental: Enum for integer width of array pointer elements */
+/** enum cublasLtIntegerWidth_t */
+public static final int
+  /** 32-bit integer width */
+  CUBLASLT_INTEGER_WIDTH_32 = 0,
+  /** 64-bit integer width */
+  CUBLASLT_INTEGER_WIDTH_64 = 1;
 
 /** Attributes of memory layout */
 /** enum cublasLtMatrixLayoutAttribute_t */
@@ -13747,7 +13766,8 @@ public static final int
 
   /** Number of matmul operations to perform in the batch.
    *
-   * See also CUBLASLT_ALGO_CAP_STRIDED_BATCH_SUPPORT and CUBLASLT_ALGO_CAP_POINTER_ARRAY_BATCH_SUPPORT
+   * See also CUBLASLT_ALGO_CAP_STRIDED_BATCH_SUPPORT, CUBLASLT_ALGO_CAP_POINTER_ARRAY_BATCH_SUPPORT, and
+   * CUBLASLT_ALGO_CAP_POINTER_ARRAY_GROUPED_SUPPORT
    *
    * int32_t, default: 1
    */
@@ -13780,7 +13800,37 @@ public static final int
    *
    * uint32_t, default: 0 - 0 means that batch mode is CUBLASLT_BATCH_MODE_STRIDED.
    */
-  CUBLASLT_MATRIX_LAYOUT_BATCH_MODE = 8;
+  CUBLASLT_MATRIX_LAYOUT_BATCH_MODE = 8,
+
+  /** Experimental: Device pointer to array of rows.
+   *
+   * int64_t*, default: NULL
+   */
+  CUBLASLT_GROUPED_MATRIX_LAYOUT_ROWS_ARRAY = 9,
+
+  /** Experimental: Device pointer to array of columns.
+   *
+   * int64_t*, default: NULL
+   */
+  CUBLASLT_GROUPED_MATRIX_LAYOUT_COLS_ARRAY = 10,
+
+  /** Experimental: Device pointer to array of leading dimensions.
+   *
+   * int64_t*, default: NULL
+   */
+  CUBLASLT_GROUPED_MATRIX_LAYOUT_LD_ARRAY = 11,
+
+  /** Experimental: Int width for rows and cols arrays.
+   *
+   * int32_t, default: CUBLASLT_INTEGER_WIDTH_32. See cublasLtIntegerWidth_t for possible values.
+   */
+  CUBLASLT_GROUPED_MATRIX_LAYOUT_ROWS_COLS_ARRAY_INTEGER_WIDTH = 12,
+
+  /** Experimental: Int width for ld arrays.
+   *
+   * int32_t, default: CUBLASLT_INTEGER_WIDTH_32. See cublasLtIntegerWidth_t for possible values.
+   */
+  CUBLASLT_GROUPED_MATRIX_LAYOUT_LD_ARRAY_INTEGER_WIDTH = 13;
 
 /** Internal. Do not use directly.
  */
@@ -13800,6 +13850,29 @@ public static native @Cast("cublasStatus_t") int cublasLtMatrixLayoutInit_intern
 public static native @Cast("cublasStatus_t") int cublasLtMatrixLayoutInit(
     @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t matLayout, @Cast("cudaDataType") int type, @Cast("uint64_t") long rows, @Cast("uint64_t") long cols, @Cast("int64_t") long ld);
 
+/** Experimental: Internal. Do not use directly.
+ */
+public static native @Cast("cublasStatus_t") int cublasLtGroupedMatrixLayoutInit_internal(
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t matLayout,
+    @Cast("size_t") long size,
+    @Cast("cudaDataType") int type,
+    int groupCount,
+    @Const Pointer rows_array,
+    @Const Pointer cols_array,
+    @Const Pointer ld_array);
+
+/** Experimental: Initialize grouped matrix layout descriptor in pre-allocated space.
+ *
+ * \retval     CUBLAS_STATUS_ALLOC_FAILED  if size of the pre-allocated space is insufficient
+ * \retval     CUBLAS_STATUS_SUCCESS       if desciptor was created successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtGroupedMatrixLayoutInit(@Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t matLayout,
+                                                             @Cast("cudaDataType") int type,
+                                                             int groupCount,
+                                                             @Const Pointer rows_array,
+                                                             @Const Pointer cols_array,
+                                                             @Const Pointer ld_array);
+
 /** Create new matrix layout descriptor.
  *
  * \retval     CUBLAS_STATUS_ALLOC_FAILED  if memory could not be allocated
@@ -13811,6 +13884,18 @@ public static native @Cast("cublasStatus_t") int cublasLtMatrixLayoutCreate(
     @Cast("uint64_t") long rows,
     @Cast("uint64_t") long cols,
     @Cast("int64_t") long ld);
+
+/** Experimental: Create new grouped matrix layout descriptor.
+ *
+ * \retval     CUBLAS_STATUS_ALLOC_FAILED  if memory could not be allocated
+ * \retval     CUBLAS_STATUS_SUCCESS       if desciptor was created successfully
+ */
+public static native @Cast("cublasStatus_t") int cublasLtGroupedMatrixLayoutCreate(@Cast("cublasLtMatrixLayout_t*") PointerPointer matLayout,
+                                                              @Cast("cudaDataType") int type,
+                                                              int groupCount,
+                                                              @Const Pointer rows_array,
+                                                              @Const Pointer cols_array,
+                                                              @Const Pointer ld_array);
 
 /** Destroy matrix layout descriptor.
  *
@@ -14188,7 +14273,21 @@ public static final int
    *
    * cublasLtEmulationDesc_t, default: NULL
    */
-  CUBLASLT_MATMUL_DESC_EMULATION_DESCRIPTOR = 38;
+  CUBLASLT_MATMUL_DESC_EMULATION_DESCRIPTOR = 38,
+
+  /** Experimental: Batch stride for alpha.
+   *
+   * Used when matrix D's CUBLASLT_MATRIX_LAYOUT_BATCH_COUNT > 1.
+   * int64_t, default: 0
+   */
+  CUBLASLT_MATMUL_DESC_ALPHA_BATCH_STRIDE = 39,
+
+  /** Experimental: Batch stride for beta.
+   *
+   * Used when matrix D's CUBLASLT_MATRIX_LAYOUT_BATCH_COUNT > 1.
+   * int64_t, default: 0
+   */
+  CUBLASLT_MATMUL_DESC_BETA_BATCH_STRIDE = 40;
 
 /** Internal. Do not use directly.
  */
@@ -14737,7 +14836,25 @@ public static final int
    *
    * uint64_t, default: uint64_t(-1) (allow everything)
    */
-  CUBLASLT_MATMUL_PREF_IMPL_MASK = 12;
+  CUBLASLT_MATMUL_PREF_IMPL_MASK = 12,
+
+  /** Experimental: Average reduction dimension.
+   *
+   * uint32_t, default: 0
+   */
+  CUBLASLT_MATMUL_PREF_GROUPED_AVERAGE_REDUCTION_DIM = 13,
+
+  /** Experimental: Average rows of matrix D.
+   *
+   * uint32_t, default: 0
+   */
+  CUBLASLT_MATMUL_PREF_GROUPED_DESC_D_AVERAGE_ROWS = 14,
+
+  /** Experimental: Average columns of matrix D.
+   *
+   * uint32_t, default: 0
+   */
+  CUBLASLT_MATMUL_PREF_GROUPED_DESC_D_AVERAGE_COLS = 15;
 
 /** Internal. Do not use directly.
  */
@@ -15084,7 +15201,13 @@ public static final int
    *
    * int32_t, 0 means no support, supported otherwise
    */
-  CUBLASLT_ALGO_CAP_FLOATING_POINT_EMULATION_SUPPORT = 22;
+  CUBLASLT_ALGO_CAP_FLOATING_POINT_EMULATION_SUPPORT = 22,
+
+  /** support pointer array grouped
+   *
+   * int32_t, 0 means no support, supported otherwise
+   */
+  CUBLASLT_ALGO_CAP_POINTER_ARRAY_GROUPED_SUPPORT = 23;
 
 /** Get algo capability attribute.
  *
@@ -15334,7 +15457,7 @@ public static native @Cast("cublasStatus_t") int cublasLtLoggerForceDisable();
 // #include "driver_types.h"
 // #include "cuComplex.h" /* import complex data type */
 
-// #include "cublas_api.h"
+// #include "cublas_v2.h"
 
 // #if defined(__cplusplus)
 // Targeting ../cublas/cublasXtContext.java

@@ -13,6 +13,8 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cupti.*;
 
 
+// Common structures
+
 /**
  * \brief The base activity record.
  *

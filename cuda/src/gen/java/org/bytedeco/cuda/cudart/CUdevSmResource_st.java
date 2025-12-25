@@ -14,6 +14,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 /**
  * \struct CUdevSmResource
  * Data for SM-related resources
+ * All parameters in this structure are OUTPUT only. Do not write to any of the fields in this structure.
  */
 @Name("CUdevSmResource") @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class CUdevSmResource_st extends Pointer {
@@ -33,13 +34,14 @@ public class CUdevSmResource_st extends Pointer {
         return new CUdevSmResource_st((Pointer)this).offsetAddress(i);
     }
 
-    /** The amount of streaming multiprocessors available in this resource. This is an output parameter only, do not write to this field. */
+    /** The amount of streaming multiprocessors available in this resource. */
     public native @Cast("unsigned int") int smCount(); public native CUdevSmResource_st smCount(int setter);
-    /** The minimum number of streaming multiprocessors required to partition this resource.
-                                               This is an output parameter only, do not write to this field. */
+    /** The minimum number of streaming multiprocessors required to partition this resource. */
     public native @Cast("unsigned int") int minSmPartitionSize(); public native CUdevSmResource_st minSmPartitionSize(int setter);
     /** The number of streaming multiprocessors in this resource that are guaranteed to
-                                                  be co-scheduled on the same GPU processing cluster. smCount is a multiple of this value.
-                                                  This is an output parameter only, do not write to this field. */
+                                                       be co-scheduled on the same GPU processing cluster. smCount will be a multiple of this value,
+                                                       unless the backfill flag is set. */
     public native @Cast("unsigned int") int smCoscheduledAlignment(); public native CUdevSmResource_st smCoscheduledAlignment(int setter);
+    /** The flags set on this SM resource. For possible values see ::CUdevSmResourceGroup_flags. */
+    public native @Cast("unsigned int") int flags(); public native CUdevSmResource_st flags(int setter);
 }

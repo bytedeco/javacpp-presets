@@ -50,7 +50,7 @@ runs:
           done
         done
 
-        curl -LO https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+        curl -LO https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.tar.gz
         sudo mkdir -p /usr/local/opt
         sudo tar -xzf apache-maven-3.9.6-bin.tar.gz -C /usr/local/opt
         sudo ln -sf /usr/local/opt/apache-maven-3.9.6/bin/mvn /usr/local/bin/mvn

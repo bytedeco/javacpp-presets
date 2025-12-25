@@ -86,9 +86,9 @@ public class nvcuvid implements LoadEnabled, InfoMapper {
 
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
+                lib += lib.equals("cudart") ? "@.13" : lib.equals("nvrtc") ? "@.13" : "@.13";
             } else if (platform.startsWith("windows")) {
-                lib += lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
+                lib += lib.equals("cudart") ? "64_13" : lib.equals("nvrtc") ? "64_130_0" : "64_13";
             } else {
                 continue;
             }

@@ -31,17 +31,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(inherit = cudart.class, value = {
     @Platform(value = {"linux-x86_64", "linux-arm64", "windows-x86_64"},
-            include = {"<nvcomp/shared_types.h>", "<nvcomp.h>", "<nvcomp/nvcompManager.hpp>", "<nvcomp/nvcompManagerFactory.hpp>",
+            include = {"<nvcomp/shared_types.h>", "<nvcomp.h>", "<nvcomp.hpp>", "<nvcomp/nvcompManager.hpp>", "<nvcomp/nvcompManagerFactory.hpp>",
                     "<nvcomp/ans.h>", "<nvcomp/ans.hpp>", "<nvcomp/bitcomp.h>", "<nvcomp/bitcomp.hpp>", "<nvcomp/cascaded.h>",
                     "<nvcomp/crc32.h>", "<nvcomp/deflate.h>", "<nvcomp/deflate.hpp>", "<nvcomp/gdeflate.h>", "<nvcomp/gdeflate.hpp>",
                     "<nvcomp/gzip.h>", "<nvcomp/lz4.h>", "<nvcomp/lz4.hpp>", "<nvcomp/snappy.h>", "<nvcomp/snappy.hpp>", "<nvcomp/zstd.h>",
                     "<nvcomp/zstd.hpp>"}, link = {"nvcomp@.5", "nvcomp_cpu@.5"}),
     @Platform(value = "windows-x86_64", preload = {"nvcomp64_5", "nvcomp_cpu64_5"})},
     target = "org.bytedeco.cuda.nvcomp", global = "org.bytedeco.cuda.global.nvcomp")
-@NoException
 public class nvcomp implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NVCOMP_EXPORT").cppTypes().annotations())
+               .put(new Info("std::runtime_error").pointerTypes("Pointer"))
                .put(new Info("nvcompCRC32IgnoredInputChunkBytes").javaText("@MemberGetter public static native @Cast(\"const size_t*\") SizeTPointer nvcompCRC32IgnoredInputChunkBytes();"))
                .put(new Info("nvcomp::detail::PimplManager").purify())
                .put(new Info("nvcompDecompressGetMetadata",

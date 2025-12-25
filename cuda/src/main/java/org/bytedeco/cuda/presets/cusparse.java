@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<cusparse.h>", link = "cusparse@.12", preload = "nvJitLink@.13"),
+    @Platform(define = "CUSPARSE_ENABLE_EXPERIMENTAL_API", include = "<cusparse.h>", link = "cusparse@.12", preload = "nvJitLink@.13"),
     @Platform(value = "windows-x86_64", preload = {"nvJitLink_130_0", "cusparse64_12"})},
         target = "org.bytedeco.cuda.cusparse", global = "org.bytedeco.cuda.global.cusparse")
 @NoException
@@ -62,6 +62,8 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseDnVecDescr_t", "cusparseConstDnVecDescr_t").cast().valueTypes("cusparseDnVecDescr").pointerTypes("@ByPtrPtr cusparseDnVecDescr"))
                .put(new Info("cusparseSpMatDescr_t", "cusparseConstSpMatDescr_t").cast().valueTypes("cusparseSpMatDescr").pointerTypes("@ByPtrPtr cusparseSpMatDescr"))
                .put(new Info("cusparseDnMatDescr_t", "cusparseConstDnMatDescr_t").cast().valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"))
+               .put(new Info("cusparseSpMVOpDescr_t").valueTypes("cusparseSpMVOpDescr").pointerTypes("@ByPtrPtr cusparseSpMVOpDescr"))
+               .put(new Info("cusparseSpMVOpPlan_t").valueTypes("cusparseSpMVOpPlan").pointerTypes("@ByPtrPtr cusparseSpMVOpPlan"))
                .put(new Info("cusparseSpSVDescr_t").valueTypes("cusparseSpSVDescr").pointerTypes("@ByPtrPtr cusparseSpSVDescr"))
                .put(new Info("cusparseSpSMDescr_t").valueTypes("cusparseSpSMDescr").pointerTypes("@ByPtrPtr cusparseSpSMDescr"))
                .put(new Info("cusparseSpGEMMDescr_t").valueTypes("cusparseSpGEMMDescr").pointerTypes("@ByPtrPtr cusparseSpGEMMDescr"))

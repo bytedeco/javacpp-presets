@@ -29,10 +29,12 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  intersection-over-union (IoU) with previously selected boxes is less than or equal to a given threshold.
  *  This layer implements NMS per batch item and per class.
  * 
- *  Per batch item, boxes are initially sorted by their scores without regard to class. Only boxes up to a maximum of the TopK limit are considered for selection (per batch).
- *  During selection, only overlapping boxes of the same class are compared, so that overlapping boxes of different classes do not suppress each other.
+ *  Per batch item, boxes are initially sorted by their scores without regard to class. Only boxes up to a maximum of
+ *  the TopK limit are considered for selection (per batch). During selection, only overlapping boxes of the same class
+ *  are compared, so that overlapping boxes of different classes do not suppress each other.
  * 
- *  For each batch item, the ordering of candidate bounding boxes with the same score is unspecified, but the ordering will be consistent across different runs for the same inputs.
+ *  For each batch item, the ordering of candidate bounding boxes with the same score is unspecified, but the ordering
+ *  will be consistent across different runs for the same inputs.
  * 
  *  The layer has the following inputs, in order of input index:
  * 
@@ -45,19 +47,21 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *    It is a scalar (0D tensor) of type kINT32.
  *  * IoUThreshold is the maximum IoU for selected boxes. It is a scalar (0D tensor) of type kFLOAT in the range
  *    [0.0f, 1.0f]. It is an optional input with default 0.0f.
- *  * ScoreThreshold is the value that a box score must exceed in order to be selected. It is a scalar (0D tensor) of type kFLOAT. It is an optional
+ *  * ScoreThreshold is the value that a box score must exceed in order to be selected. It is a scalar (0D tensor) of
+ *  type kFLOAT. It is an optional
  *    input with default 0.0f.
  * 
  *  The layer has the following outputs, in order of output index:
  * 
- *  * SelectedIndices contains the indices of the selected boxes. It is a linear tensor of type kINT32. It has shape
+ *  * SelectedIndices contains the indices of the selected boxes. It is a linear tensor of type kINT32 or kINT64. It has
+ *  shape
  *    [NumOutputBoxes, 3]. Each row contains a (batchIndex, classIndex, boxIndex) tuple.
- *    The output boxes are sorted in order of increasing batchIndex and then in order of decreasing score within each batchIndex.
- *    For each batchIndex, the ordering of output boxes with the same score is unspecified.
- *    If MaxOutputBoxesPerClass is a constant input, the maximum number of output boxes is
- *    batchSize * numClasses * min(numInputBoundingBoxes, MaxOutputBoxesPerClass).
- *    Otherwise, the maximum number of output boxes is batchSize * numClasses * numInputBoundingBoxes.
- *    The maximum number of output boxes is used to determine the upper-bound on allocated memory for this output tensor.
+ *    The output boxes are sorted in order of increasing batchIndex and then in order of decreasing score within each
+ *    batchIndex. For each batchIndex, the ordering of output boxes with the same score is unspecified. If
+ *    MaxOutputBoxesPerClass is a constant input, the maximum number of output boxes is batchSize * numClasses *
+ *    min(numInputBoundingBoxes, MaxOutputBoxesPerClass). Otherwise, the maximum number of output boxes is batchSize *
+ *    numClasses * numInputBoundingBoxes. The maximum number of output boxes is used to determine the upper-bound on
+ *    allocated memory for this output tensor.
  *  * NumOutputBoxes is the number of output boxes in SelectedIndices. It is a scalar (0D tensor) of type kINT32.
  * 
  *  \warning There is a hardware-dependent limit K such that only the K highest scoring boxes in each batch item
@@ -153,4 +157,38 @@ public class INMSLayer extends ILayer {
      *  then afterwards getNbInputs() returns index + 1, and any missing intervening
      *  inputs are set to null. Note that only optional inputs can be missing.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+
+    /**
+     *  \brief Set the indices type for the layer.
+     * 
+     *  @param type The DataType of the indices tensor.
+     * 
+     *  @return true if set successfully, false otherwise.
+     * 
+     *  Set the indices (the first output) type of the NMS layer. Valid values are DataType::kINT32 and
+     *  DataType::kINT64, otherwise an error occurs and the type is not updated.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(DataType type);
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(@Cast("nvinfer1::DataType") int type);
+
+    /**
+     *  \brief Return the NMS layer indices type.
+     * 
+     *  @return indices type set during layer creation or by setIndicesType().
+     *  The return value is the indices type of the NMS layer.
+     *  The default value is DataType::kINT32.
+     *  */
+    public native @NoException(true) DataType getIndicesType();
 }

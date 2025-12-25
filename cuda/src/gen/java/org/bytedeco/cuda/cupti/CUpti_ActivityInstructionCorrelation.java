@@ -14,6 +14,7 @@ import static org.bytedeco.cuda.global.cupti.*;
 
 
 
+
 /**
  * \brief The activity record for source-level sass/source
  * line-by-line correlation.

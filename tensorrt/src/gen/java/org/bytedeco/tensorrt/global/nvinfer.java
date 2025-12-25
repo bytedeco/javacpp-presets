@@ -49,9 +49,9 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #define NV_INFER_VERSION_H
 
 public static final int TRT_MAJOR_ENTERPRISE = 10;
-public static final int TRT_MINOR_ENTERPRISE = 13;
-public static final int TRT_PATCH_ENTERPRISE = 3;
-public static final int TRT_BUILD_ENTERPRISE = 9;
+public static final int TRT_MINOR_ENTERPRISE = 14;
+public static final int TRT_PATCH_ENTERPRISE = 1;
+public static final int TRT_BUILD_ENTERPRISE = 48;
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
@@ -214,6 +214,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 /**
  *  \enum DataType
  *  \brief The type of weights and tensors.
+ *   The datatypes other than kBOOL, kINT32, and kINT64 are "activation datatypes,"
+ *   as they often represent values corresponding to inference results.
  *  */
 @Namespace("nvinfer1") public enum DataType {
     /** 32-bit floating point format. */
@@ -674,8 +676,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  *  This is the top-level API file for TensorRT extended runtime library.
  *  */
 
-// #include "NvInferImpl.h"
-// #include "NvInferPluginBase.h" // IWYU pragma: exports
+// #include "NvInferImpl.h" // IWYU pragma: export
+// #include "NvInferPluginBase.h" // IWYU pragma: export
 // #undef NV_INFER_INTERNAL_INCLUDE
 // #include "NvInferRuntimeCommon.h"
 // Targeting ../nvinfer/IPluginFactory.java
@@ -1323,6 +1325,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  *  */
 
 
+
 //!
 //!
 //!
@@ -1473,7 +1476,9 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     /** Exclude the weights that can be refitted. */
     kEXCLUDE_WEIGHTS(0),
     /** Exclude the lean runtime. */
-    kEXCLUDE_LEAN_RUNTIME(1);
+    kEXCLUDE_LEAN_RUNTIME(1),
+    /** Remain refittable if originally so. */
+    kINCLUDE_REFIT(2);
 
     public final int value;
     private SerializationFlag(int v) { this.value = v; }
@@ -1522,6 +1527,35 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
 // Targeting ../nvinfer/IRuntimeConfig.java
 
+ // class IRuntimeConfig
+
+/**
+ *  \enum EngineStat
+ * 
+ *  \brief The kind of engine statistics that queried from the ICudaEngine.
+ * 
+ *  @see ICudaEngine::getEngineStat()
+ *  @see BuilderFlag::kSTRIP_PLAN
+ *  */
+@Namespace("nvinfer1") public enum EngineStat {
+    /** Return the total weight size in bytes. */
+    kTOTAL_WEIGHTS_SIZE(0),
+
+    /** Return the stripped weight size in bytes for engines built with BuilderFlag::kSTRIP_PLAN. */
+    kSTRIPPED_WEIGHTS_SIZE(1);
+
+    public final int value;
+    private EngineStat(int v) { this.value = v; }
+    private EngineStat(EngineStat e) { this.value = e.value; }
+    public EngineStat intern() { for (EngineStat e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/**
+ *  \brief Maximum number of engine statistic kinds in EngineStat enum.
+ * 
+ *  @see EngineStat
+ *  */
 
 // Targeting ../nvinfer/ICudaEngine.java
 
@@ -1770,7 +1804,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
 //!
 //!
 //!
-// #include "NvInferRuntime.h"
+// #include "NvInferRuntime.h" // IWYU pragma: export
 
 /**
  *  \mainpage
@@ -1905,7 +1939,11 @@ public static native @NoException(true) int getInferLibBuildVersion();
     /** Cumulative layer. */
     kCUMULATIVE(49),
     /** Dynamic Quantize layer. */
-    kDYNAMIC_QUANTIZE(50);
+    kDYNAMIC_QUANTIZE(50),
+    /** Attention Input. */
+    kATTENTION_INPUT(51),
+    /** Attention Output. */
+    kATTENTION_OUTPUT(52);
 
     public final int value;
     private LayerType(int v) { this.value = v; }
@@ -3015,6 +3053,44 @@ public static native @NoException(true) int getInferLibBuildVersion();
 // Targeting ../nvinfer/ICumulativeLayer.java
 
 
+
+/**
+ *  \enum AttentionNormalizationOp
+ * 
+ *  \brief Enumerates the operations that may be performed by the normalization in the attention subgraph.
+ *  */
+@Namespace("nvinfer1") public enum AttentionNormalizationOp {
+    /** Apply no normalization on the attention scores. Must be used with decomposable=True on pre-Blackwell GPUs */
+    kNONE
+    (0),
+    /** Apply softmax normalization on the attention scores on the {@code s_kv} dimension. */
+    kSOFTMAX(1);
+
+    public final int value;
+    private AttentionNormalizationOp(int v) { this.value = v; }
+    private AttentionNormalizationOp(AttentionNormalizationOp e) { this.value = e.value; }
+    public AttentionNormalizationOp intern() { for (AttentionNormalizationOp e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/**
+ *  Maximum number of elements in AttentionNormalizationOp enum.
+ * 
+ *  @see AttentionNormalizationOp
+ *  */
+
+
+// Targeting ../nvinfer/IAttentionBoundaryLayer.java
+
+
+// Targeting ../nvinfer/IAttentionInputLayer.java
+
+
+// Targeting ../nvinfer/IAttentionOutputLayer.java
+
+
+// Targeting ../nvinfer/IAttention.java
+
+
 // Targeting ../nvinfer/INetworkDefinition.java
 
 
@@ -3459,7 +3535,17 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  All non-reduction axes are distributive axes.
      *  For layers that perform einsum:
      *  Let n be the leftmost reduction axis. The axes to the left of n are distributive axes. */
-    kDISTRIBUTIVE_INDEPENDENCE(28);
+    kDISTRIBUTIVE_INDEPENDENCE(28),
+
+// #if ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
+    /** Build an engine that requires user allocation when creating an execution context.
+     *  This means that runtime allocation will not be enabled even when the tensor dimensions
+     *  exceed the limits for static allocation, and ensures that inference will support graph
+     *  capture unless the network includes operations such as data-dependent dynamic shapes
+     *  (INonZeroLayer, ITripLimitLayer, etc.) that require runtime allocation. If such operations
+     *  are present, the engine build will fail with an error message. */
+    kREQUIRE_USER_ALLOCATION(29);
+// #endif // ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
 
     public final int value;
     private BuilderFlag(int v) { this.value = v; }
@@ -3920,6 +4006,8 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 
 /** enum class nvinfer1::ActivationType */
 ;
+/** enum class nvinfer1::AttentionNormalizationOp */
+;
 /** enum class nvinfer1::BoundingBoxFormat */
 ;
 /** enum class nvinfer1::BuilderFlag */
@@ -4001,6 +4089,8 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 /** enum class nvinfer1::RuntimePlatform */
 ;
 /** enum class nvinfer1::TilingOptimizationLevel */
+;
+/** enum class nvinfer1::EngineStat */
 ;
 
 
@@ -4158,6 +4248,18 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 
 
 // Targeting ../nvinfer/VIfConditional.java
+
+
+// Targeting ../nvinfer/VAttentionBoundaryLayer.java
+
+
+// Targeting ../nvinfer/VAttentionInputLayer.java
+
+
+// Targeting ../nvinfer/VAttentionOutputLayer.java
+
+
+// Targeting ../nvinfer/VAttention.java
 
 
 // Targeting ../nvinfer/VSelectLayer.java

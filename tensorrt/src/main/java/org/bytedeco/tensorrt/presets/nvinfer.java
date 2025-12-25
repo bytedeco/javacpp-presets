@@ -47,12 +47,13 @@ import org.bytedeco.cuda.presets.nvrtc;
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
+            define = "ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION 1",
             include = {"NvInferVersion.h", "NvInferRuntimeBase.h", "NvInferRuntimeCommon.h",
                        "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h",
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource@.10.13.3"
+            preload = "nvinfer_builder_resource_ptx@.10.14.1"
         ),
         @Platform(
             value = "linux-arm64",
@@ -148,6 +149,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
                              "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer",
                              "nvinfer1::ICumulativeLayer", "nvinfer1::IDynamicQuantizeLayer", "nvinfer1::ISqueezeLayer", "nvinfer1::IUnsqueezeLayer", "nvinfer1::IPluginV3Layer",
+                             "nvinfer1::IAttention", "nvinfer1::IAttentionBoundaryLayer", "nvinfer1::IAttentionInputLayer", "nvinfer1::IAttentionOutputLayer",
                              "nvinfer1::IOneHotLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",

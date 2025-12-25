@@ -50,4 +50,6 @@ public class cudaKernelNodeParamsV2 extends Pointer {
     /** Pointer to kernel arguments in the "extra" format */
     public native Pointer extra(int i); public native cudaKernelNodeParamsV2 extra(int i, Pointer setter);
     public native @Cast("void**") PointerPointer extra(); public native cudaKernelNodeParamsV2 extra(PointerPointer setter);
+    /** Context in which to run the kernel. If NULL will try to use the current context. */
+    public native cudaExecutionContext_st ctx(); public native cudaKernelNodeParamsV2 ctx(cudaExecutionContext_st setter);
 }

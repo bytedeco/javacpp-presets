@@ -30,4 +30,7 @@ public class VNMSLayer extends VRoot {
     public native @NoException(true) BoundingBoxFormat getBoundingBoxFormat();
     public native @NoException(true) void setTopKBoxLimit(int _limit);
     public native @NoException(true) int getTopKBoxLimit();
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(DataType type);
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(@Cast("nvinfer1::DataType") int type);
+    public native @NoException(true) DataType getIndicesType();
 }

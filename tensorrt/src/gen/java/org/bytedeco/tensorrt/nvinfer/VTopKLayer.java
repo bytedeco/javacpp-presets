@@ -32,4 +32,7 @@ public class VTopKLayer extends VRoot {
     public native @NoException(true) int getK();
     public native @NoException(true) void setReduceAxes(@Cast("uint32_t") int reduceAxes);
     public native @Cast("uint32_t") @NoException(true) int getReduceAxes();
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(DataType type);
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(@Cast("nvinfer1::DataType") int type);
+    public native @NoException(true) DataType getIndicesType();
 }

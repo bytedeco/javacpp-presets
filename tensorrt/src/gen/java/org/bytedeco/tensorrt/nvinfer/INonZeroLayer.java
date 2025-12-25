@@ -28,7 +28,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  The input may have type kFLOAT, kHALF, kINT32, or kBOOL.
  * 
- *  The output is a matrix of type kINT32.
+ *  The output is a matrix of type kINT32 or kINT64.
  *  For an input with dimensions [L1, L2, ..., Lm], the output has dimensions [m,n],
  *  where n is the number of non-zero elements. I.e., each column denotes a m-D position.
  * 
@@ -46,4 +46,30 @@ public class INonZeroLayer extends ILayer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public INonZeroLayer(Pointer p) { super(p); }
 
+    /**
+     *  \brief Set the indices type for the layer.
+     * 
+     *  @param type The DataType of the indices tensor.
+     * 
+     *  @return true if set successfully, false otherwise.
+     * 
+     *  Set the indices (the first output) type of the NonZero layer. Valid values are DataType::kINT32 and
+     *  DataType::kINT64, otherwise an error occurs and the type is not updated.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(DataType type);
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(@Cast("nvinfer1::DataType") int type);
+
+    /**
+     *  \brief Return the NonZero layer indices type.
+     * 
+     *  @return indices type set during layer creation or by setIndicesType().
+     *  The return value is the indices type of the NonZero layer.
+     *  The default value is DataType::kINT32.
+     *  */
+    public native @NoException(true) DataType getIndicesType();
 }

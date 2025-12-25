@@ -137,4 +137,38 @@ public class ITopKLayer extends ILayer {
      *       elements to retrieve. Values larger than 3840 will result in a runtime error. If provided,
      *       this will override the static k value in calculations.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+
+    /**
+     *  \brief Set the indices type for the layer.
+     * 
+     *  @param type The DataType of the indices tensor.
+     * 
+     *  @return true if set successfully, false otherwise.
+     * 
+     *  Set the indices (the second output) type of the TopK layer. Valid values are DataType::kINT32 and
+     *  DataType::kINT64, otherwise an error occurs and the type is not updated.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(DataType type);
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(@Cast("nvinfer1::DataType") int type);
+
+    /**
+     *  \brief Return the TopK layer indices type.
+     * 
+     *  @return indices type set during layer creation or by setIndicesType().
+     *  The return value is the indices type of the TopK layer.
+     *  The default value is DataType::kINT32.
+     *  */
+    public native @NoException(true) DataType getIndicesType();
 }

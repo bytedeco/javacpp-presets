@@ -73,7 +73,7 @@ public class cufile extends org.bytedeco.cuda.presets.cufile {
  * This file contains all the C APIs to perform GPUDirect Storage supported IO operations
  */
 
-// #ifdef __cplusplus
+// #if __cplusplus
 // #endif
 
 /** \cond DOXYGEN_SKIP_MACRO */
@@ -263,10 +263,14 @@ public static final int
     /** Support for BeeGFS */
     CU_FILE_BEEGFS_SUPPORTED = 9,
     //10 is reserved for YRCloudFile
-    /** Support for NVMe using PCI P2PDMA */
+    /** Do not use this macro. This is deprecated now */
     CU_FILE_NVME_P2P_SUPPORTED = 11,
     /** Support for ScateFS */
-    CU_FILE_SCATEFS_SUPPORTED = 12;
+    CU_FILE_SCATEFS_SUPPORTED = 12,
+    /**Support for VirtioFS */
+    CU_FILE_VIRTIOFS_SUPPORTED = 13,
+    /**Maximum FS supported */
+    CU_FILE_MAX_TARGET_TYPES = 14;
 
 /** enum CUfileDriverControlFlags_t */
 public static final int
@@ -281,14 +285,45 @@ public static final int
         /** Support for Dynamic routing to handle devices across the PCIe bridges */
         CU_FILE_DYN_ROUTING_SUPPORTED = 0,
 
-        /**  Unsupported */
+        /**  Supported */
         CU_FILE_BATCH_IO_SUPPORTED = 1,
 
-        /**  Unsupported */
+        /**  Supported */
         CU_FILE_STREAMS_SUPPORTED = 2,
 
-        /**  Unsupported */
-        CU_FILE_PARALLEL_IO_SUPPORTED = 3;
+        /**  Supported */
+        CU_FILE_PARALLEL_IO_SUPPORTED = 3,
+
+        /** Support for PCI P2PDMA */
+        CU_FILE_P2P_SUPPORTED = 4;
+
+/** enum CUfileP2PFlags_t */
+public static final int
+        /** Support for PCI P2PDMA */
+        CUFILE_P2PDMA = 0,
+        /** Support for nvidia-fs */
+        CUFILE_NVFS = 1,
+        /** Support for DMA Buffer */
+        CUFILE_DMABUF = 2,
+        /** Support for Chip-to-Chip (Grace-based systems) */
+        CUFILE_C2C = 3,
+        /** Only for IBM Spectrum Scale and WekaFS */
+        CUFILE_NVIDIA_PEERMEM = 4;
+
+/* P2P Flag constants for use with cuFileDriverSetP2PFlags */
+public static native @MemberGetter int CU_FILE_P2P_FLAG_PCI_P2PDMA();
+public static final int CU_FILE_P2P_FLAG_PCI_P2PDMA = CU_FILE_P2P_FLAG_PCI_P2PDMA();
+public static native @MemberGetter int CU_FILE_P2P_FLAG_NVFS();
+public static final int CU_FILE_P2P_FLAG_NVFS = CU_FILE_P2P_FLAG_NVFS();
+public static native @MemberGetter int CU_FILE_P2P_FLAG_DMABUF();
+public static final int CU_FILE_P2P_FLAG_DMABUF = CU_FILE_P2P_FLAG_DMABUF();
+public static native @MemberGetter int CU_FILE_P2P_FLAG_C2C();
+public static final int CU_FILE_P2P_FLAG_C2C = CU_FILE_P2P_FLAG_C2C();
+
+/** enum CUfileOpcode_t */
+public static final int
+		CUFILE_READ = 0,
+		CUFILE_WRITE = 1;
 // Targeting ../cufile/CUfileDrvProps_t.java
 
 
@@ -564,10 +599,6 @@ public static native @ByVal CUfileError_t cuFileDriverSetMaxPinnedMemSize(@Cast(
 //Experimental Batch API's
 
 
-/** enum CUfileOpcode_t */
-public static final int
-		CUFILE_READ = 0,
-		CUFILE_WRITE = 1;
 
 /** enum CUfileStatus_t */
 public static final int
@@ -768,7 +799,7 @@ public static final int
 	CUFILE_PARAM_FORCE_COMPAT_MODE = 2,
 	CUFILE_PARAM_FS_MISC_API_CHECK_AGGRESSIVE = 3,
 	CUFILE_PARAM_EXECUTION_PARALLEL_IO = 4,
-	CUFILE_PARAM_PROFILE_NVTX = 5,
+	CUFILE_PARAM_PROFILE_NVTX = 5, //Do not use this macro. This is deprecated now.
 	CUFILE_PARAM_PROPERTIES_ALLOW_SYSTEM_MEMORY = 6,
 	CUFILE_PARAM_USE_PCIP2PDMA = 7,
 	CUFILE_PARAM_PREFER_IO_URING = 8,
@@ -989,6 +1020,86 @@ public static native @ByVal CUfileError_t cuFileGetParameterPosixPoolSlabArray(
                                      @Cast("size_t*") SizeTPointer size_values,
                                      @Cast("size_t*") SizeTPointer count_values,
                                      int len);
+
+/**
+ * \brief
+ * Gets the P2P flags for a specific filesystem or block device
+ *
+ * @param  status_flag The filesystem/device status flag (e.g., CU_FILE_LUSTRE_SUPPORTED)
+ * @param  p2p_flags Pointer to store the P2P flags
+ *
+ * @return CU_FILE_SUCCESS on success
+ * @return CU_FILE_DRIVER_NOT_INITIALIZED if the driver is not initialized
+ * @return CU_FILE_INVALID_VALUE if p2p_flags is NULL
+ *
+ * @see cuFileDriverSetP2PFlags
+ * @see cuFileDriverGetProperties
+ */
+public static native @ByVal CUfileError_t cuFileDriverGetP2PFlags(@Cast("CUfileDriverStatusFlags_t") int status_flag, @Cast("CUfileP2PFlags_t*") IntPointer p2p_flags);
+public static native @ByVal CUfileError_t cuFileDriverGetP2PFlags(@Cast("CUfileDriverStatusFlags_t") int status_flag, @Cast("CUfileP2PFlags_t*") IntBuffer p2p_flags);
+public static native @ByVal CUfileError_t cuFileDriverGetP2PFlags(@Cast("CUfileDriverStatusFlags_t") int status_flag, @Cast("CUfileP2PFlags_t*") int[] p2p_flags);
+
+/**
+ * \brief
+ * Sets the P2P flags for a specific filesystem or block device
+ *
+ * This function configures the P2P and NVFS capabilities for a given filesystem
+ * or block device type. The flags parameter should be a bitmask of the desired
+ * P2P capabilities.
+ *
+ * @param status_flag [in] The filesystem/device status flag (e.g., CU_FILE_LUSTRE_SUPPORTED,
+ *                        CU_FILE_NVME_SUPPORTED, etc.)
+ * @param p [in] 2p_flags   The P2P flags bitmask to set
+ *
+ * @return CU_FILE_SUCCESS on success
+ * @return CU_FILE_DRIVER_NOT_INITIALIZED if the cuFile driver is not initialized
+ * @return CU_FILE_INVALID_VALUE if status_flag is invalid
+ * @return CU_FILE_P2P_FLAG_NOT_SUPPORTED if p2p_flags contains flags not supported
+ *                               on the current platform
+ *
+ * \par Platform-Specific Restrictions:
+ * This API enforces strict platform-specific flag restrictions:
+ * - **x86_64 platforms**: Only CU_FILE_P2P_FLAG_PCI_P2PDMA is allowed
+ * - **AARCH64 platforms**: Only CU_FILE_P2P_FLAG_C2C is allowed
+ * - **Cross-platform flags**: CU_FILE_P2P_FLAG_NVFS and CU_FILE_P2P_FLAG_DMABUF are NOT allowed
+ *                            to be set via this API (they are managed internally by the driver)
+ *
+ * \par Usage Example:
+ * <pre>{@code
+ * // x86_64 platform - only P2PDMA allowed
+ * #ifndef AARCH64_PLATFORM
+ *     CUfileP2PFlags_t flags = CU_FILE_P2P_FLAG_PCI_P2PDMA;
+ *     CUfileError_t error = cuFileDriverSetP2PFlags(CU_FILE_NVME_SUPPORTED, flags);
+ *     if (error.err != CU_FILE_SUCCESS) {
+ *         fprintf(stderr, "Failed to set P2P flags: %d\n", error.err);
+ *     }
+ * #endif
+ * 
+ * // AARCH64 platform - only C2C allowed
+ * #ifdef AARCH64_PLATFORM
+ *     CUfileP2PFlags_t flags = CU_FILE_P2P_FLAG_C2C;
+ *     CUfileError_t error = cuFileDriverSetP2PFlags(CU_FILE_NVME_SUPPORTED, flags);
+ *     if (error.err != CU_FILE_SUCCESS) {
+ *         fprintf(stderr, "Failed to set P2P flags: %d\n", error.err);
+ *     }
+ * #endif
+ * 
+ * // This will fail on any platform (NVFS not allowed via API)
+ * CUfileP2PFlags_t invalid_flags = CU_FILE_P2P_FLAG_NVFS;
+ * error = cuFileDriverSetP2PFlags(CU_FILE_NVME_SUPPORTED, invalid_flags);
+ * // error.err will be CU_FILE_P2P_FLAG_NOT_SUPPORTED
+ * }</pre>
+ *
+ * \warning This API only allows platform-specific P2P flags (P2PDMA on x86_64, C2C on AARCH64)
+ * \warning NVFS and DMABUF flags are managed internally by the driver and cannot be set via this API
+ * \warning Setting unsupported flags will result in CU_FILE_P2P_FLAG_NOT_SUPPORTED error
+ *
+ * \note The function validates that only platform-appropriate flags are provided
+ * \note Use cuFileDriverGetP2PFlags() to query current flag status including NVFS and DMABUF
+ *
+ * @see cuFileDriverGetP2PFlags
+ */
+public static native @ByVal CUfileError_t cuFileDriverSetP2PFlags(@Cast("CUfileDriverStatusFlags_t") int status_flag, @Cast("CUfileP2PFlags_t") int p2p_flags);
 
 // #pragma GCC visibility pop
 

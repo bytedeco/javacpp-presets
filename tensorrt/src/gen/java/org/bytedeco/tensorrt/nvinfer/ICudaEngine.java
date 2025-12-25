@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // class IRuntimeConfig
+
 
 /**
  *  \class ICudaEngine
@@ -869,6 +869,7 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) ISerializationConfig createSerializationConfig();
 
     /**
@@ -879,6 +880,10 @@ public class ICudaEngine extends INoCopy {
      *  The network may be deserialized with IRuntime::deserializeCudaEngine().
      *  Serializing plan file with SerializationFlag::kEXCLUDE_WEIGHTS requires building the engine with kREFIT,
      *  kREFIT_IDENTICAL or kREFIT_INDIVIDUAL.
+     * 
+     *  The only applicable scenario for SerializationFlag::kINCLUDE_REFIT is when serializing weight-stripping
+     *  engines without kEXCLUDE_WEIGHTS. By default, the resulting serialized engine is unrefittable. Setting
+     *  SerializationFlag::kINCLUDE_REFIT ensures that the serialized engine remains refittable.
      * 
      *  @see IRuntime::deserializeCudaEngine()
      *  */
@@ -1200,8 +1205,44 @@ public class ICudaEngine extends INoCopy {
      * 
      *  \warning If input shapes are set with setShapeValues, getProfileTensorValuesV2 will return nullptr
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Cast("const int64_t*") @NoException(true) LongPointer getProfileTensorValuesV2(
             String tensorName, int profileIndex, OptProfileSelector select);
     public native @Cast("const int64_t*") @NoException(true) LongBuffer getProfileTensorValuesV2(
             @Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
+
+    /**
+     *  \brief Get engine statistics according to the given enum value.
+     * 
+     *  @param stat The kind of statistics to query.
+     * 
+     *  If stat is kTOTAL_WEIGHTS_SIZE, the return value is the total weights size in bytes in the engine.
+     *  If stat is kSTRIPPED_WEIGHTS_SIZE, the return value is the stripped weight size in bytes for engines
+     *  built with BuilderFlag::kSTRIP_PLAN.
+     * 
+     *  When the BuilderFlag::kWEIGHT_STREAMING flag is enabled, engine weights may not be fully copied to the device.
+     *  The reported total weight size reflects the sum of all weights utilized by the engine,
+     *  which does not necessarily correspond to the actual GPU memory allocated.
+     * 
+     *  @return The kind of statistics specified by EngineStat.
+     * 
+     *  \warning if kSTRIPPED_WEIGHTS_SIZE is passed to query a normal engine, this function will
+     *  return -1 to indicate invalid enum value.
+     * 
+     *  @see EngineStat
+     *  @see BuilderFlag::kWEIGHT_STREAMING
+     *  @see setWeightStreamingBudget()
+     *  @see getStreamableWeightsSize()
+     *  */
+    public native @Cast("int64_t") @NoException(true) long getEngineStat(EngineStat stat);
+    public native @Cast("int64_t") @NoException(true) long getEngineStat(@Cast("nvinfer1::EngineStat") int stat);
 }

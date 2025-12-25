@@ -96,7 +96,7 @@ Online documentation for this library is available at http://docs.nvidia.com/dep
  * On Windows, set up methods for DLL export
  * define NVML_STATIC_IMPORT when using nvml_loader library
  */
-// #if defined _WINDOWS
+// #if defined(_WINDOWS) || defined(_WIN32)
 //     #if !defined NVML_STATIC_IMPORT
 //         #if defined NVML_LIB_EXPORT
 //             #define DECLDIR __declspec(dllexport)
@@ -111,21 +111,23 @@ Online documentation for this library is available at http://docs.nvidia.com/dep
 // #endif
 
 /*
- * Deprecation definition. Starting CUDA 13.1 this will change to:
- * #if defined _WINDOWS
- *    #define DEPRECATED(ver) __declspec(deprecated)
- * #else
- *    #define DEPRECATED(ver) __attribute__((deprecated))
- * #endif
+ * Deprecation definition.
  */
-// #define DEPRECATED(ver) /* nop in CUDA 13.0, enabled in CUDA 13.1 */
+// #if defined(_WINDOWS) || defined(_WIN32)
+//    #define DEPRECATED(ver) __declspec(deprecated)
+// #else
+//    #define DEPRECATED(ver) __attribute__((deprecated))
+// #endif
 
+/** Definition to enable MCDM support. */
 //     #define NVML_MCDM_SUPPORT
 
 /**
  * NVML API versioning support
  */
+/** NVML API version identifier. */
 public static final int NVML_API_VERSION =            13;
+/** NVML API version identifier as a string. */
 public static final String NVML_API_VERSION_STR =        "13";
 /**
  * Defining NVML_NO_UNVERSIONED_FUNC_DEFS will disable "auto upgrading" of APIs.
@@ -150,6 +152,7 @@ public static final String NVML_API_VERSION_STR =        "13";
  *
  * Each structure explicitly states when to check for this value.
  */
+/** Macro for unavailable values. */
 public static final int NVML_VALUE_NOT_AVAILABLE = (-1);
 // Targeting ../nvml/nvmlDevice_st.java
 
@@ -161,15 +164,18 @@ public static final int NVML_VALUE_NOT_AVAILABLE = (-1);
 /**
  * Buffer size guaranteed to be large enough for pci bus id
  */
+/** Buffer size for PCI bus ID. */
 public static final int NVML_DEVICE_PCI_BUS_ID_BUFFER_SIZE =      32;
 
 /**
  * Buffer size guaranteed to be large enough for pci bus id for \p busIdLegacy
  */
+/** Buffer size for legacy PCI bus ID. */
 public static final int NVML_DEVICE_PCI_BUS_ID_BUFFER_V2_SIZE =   16;
 // Targeting ../nvml/nvmlPciInfoExt_v1_t.java
 
 
+/** Version macro for \a nvmlPciInfoExt_v1_t */
 public static native @MemberGetter int nvmlPciInfoExt_v1();
 public static final int nvmlPciInfoExt_v1 = nvmlPciInfoExt_v1();
 // Targeting ../nvml/nvmlPciInfo_t.java
@@ -179,16 +185,19 @@ public static final int nvmlPciInfoExt_v1 = nvmlPciInfoExt_v1();
 /**
  * PCI format string for \p busIdLegacy
  */
+/** Legacy PCI bus ID format. */
 public static final String NVML_DEVICE_PCI_BUS_ID_LEGACY_FMT =           "%04X:%02X:%02X.0";
 
 /**
  * PCI format string for \p busId
  */
+/** PCI bus ID format. */
 public static final String NVML_DEVICE_PCI_BUS_ID_FMT =                  "%08X:%02X:%02X.0";
 
 /**
  * Utility macro for filling the pci bus id format from a nvmlPciInfo_t
  */
+/** Macro for formatting PCI bus ID arguments. */
 // #define NVML_DEVICE_PCI_BUS_ID_FMT_ARGS(pciInfo)    (pciInfo)->domain,
 //                                                     (pciInfo)->bus,
 //                                                     (pciInfo)->device
@@ -205,6 +214,7 @@ public static final String NVML_DEVICE_PCI_BUS_ID_FMT =                  "%08X:%
 
 
 
+/** Version macro for \a nvmlMemory_v2_t */
 public static native @MemberGetter int nvmlMemory_v2();
 public static final int nvmlMemory_v2 = nvmlMemory_v2();
 // Targeting ../nvml/nvmlBAR1Memory_t.java
@@ -226,6 +236,7 @@ public static final int nvmlMemory_v2 = nvmlMemory_v2();
 /**
  * nvmlProcessDetailList version
  */
+/** Version macro for \a nvmlProcessDetailList_v1_t */
 public static native @MemberGetter int nvmlProcessDetailList_v1();
 public static final int nvmlProcessDetailList_v1 = nvmlProcessDetailList_v1();
 // Targeting ../nvml/nvmlDeviceAttributes_t.java
@@ -235,6 +246,7 @@ public static final int nvmlProcessDetailList_v1 = nvmlProcessDetailList_v1();
 
 
 
+/** Version macro for \a nvmlC2cModeInfo_v1_t */
 public static native @MemberGetter int nvmlC2cModeInfo_v1();
 public static final int nvmlC2cModeInfo_v1 = nvmlC2cModeInfo_v1();
 
@@ -253,14 +265,19 @@ public static final int
 
 
 
+/** Version macro for \a nvmlDeviceAddressingMode_v1_t */
 public static native @MemberGetter int nvmlDeviceAddressingMode_v1();
 public static final int nvmlDeviceAddressingMode_v1 = nvmlDeviceAddressingMode_v1();
 // Targeting ../nvml/nvmlRepairStatus_v1_t.java
 
 
 
+/** Version macro for \a nvmlRepairStatus_v1_t */
 public static native @MemberGetter int nvmlRepairStatus_v1();
 public static final int nvmlRepairStatus_v1 = nvmlRepairStatus_v1();
+// Targeting ../nvml/nvmlUnrepairableMemoryStatus_v1_t.java
+
+
 // Targeting ../nvml/nvmlRowRemapperHistogramValues_t.java
 
 
@@ -276,6 +293,7 @@ public static final int
 /**
  * Maximum number of NvLink links supported
  */
+/** Maximum number of NVLink links supported. */
 public static final int NVML_NVLINK_MAX_LINKS = 18;
 
 /**
@@ -366,6 +384,7 @@ public static final int
     // there is purposefully no COUNT here because of the need for spacing above
 
 /* Compatibility for CPU->NODE renaming */
+/** Topology level for node. */
 public static final int NVML_TOPOLOGY_CPU = NVML_TOPOLOGY_NODE;
 
 /* P2P Capability Index Status*/
@@ -398,6 +417,7 @@ public static final int
 /**
  * Maximum limit on Physical Bridges per Board
  */
+/** Maximum number of physical bridges. */
 public static final int NVML_MAX_PHYSICAL_BRIDGE =                         (128);
 // Targeting ../nvml/nvmlBridgeChipInfo_t.java
 
@@ -497,6 +517,7 @@ public static final int
 
 
 
+/** Maximum number of thermal sensors per GPU. */
 public static final int NVML_MAX_THERMAL_SENSORS_PER_GPU =  3;
 
 /**
@@ -585,17 +606,20 @@ public static final int
 
 
 
+/** Version macro for \a nvmlCoolerInfo_v1_t */
 public static native @MemberGetter int nvmlCoolerInfo_v1();
 public static final int nvmlCoolerInfo_v1 = nvmlCoolerInfo_v1();
 
 /**
  * UUID length in ASCII format
  */
+/** Length of UUID in ASCII format. */
 public static final int NVML_DEVICE_UUID_ASCII_LEN =  41;
 
 /**
  * UUID length in binary format
  */
+/** Length of UUID in binary format. */
 public static final int NVML_DEVICE_UUID_BINARY_LEN = 16;
 
 /**
@@ -616,12 +640,14 @@ public static final int
 
 
 
+/** Version macro for \a nvmlUUID_v1_t */
 public static native @MemberGetter int nvmlUUID_v1();
 public static final int nvmlUUID_v1 = nvmlUUID_v1();
 // Targeting ../nvml/nvmlPdi_v1_t.java
 
 
 
+/** Version macro for \a nvmlPdi_v1_t */
 public static native @MemberGetter int nvmlPdi_v1();
 public static final int nvmlPdi_v1 = nvmlPdi_v1();
 
@@ -644,13 +670,16 @@ public static final int
     NVML_FEATURE_ENABLED     = 1;
 
 /** Generic flag used to specify the default behavior of some functions. See description of particular functions for details. */
+/** Default flag. */
 public static final int nvmlFlagDefault =     0x00;
 /** Generic flag used to force some behavior. See description of particular functions for details. */
+/** Force flag. */
 public static final int nvmlFlagForce =       0x01;
 // Targeting ../nvml/nvmlDramEncryptionInfo_v1_t.java
 
 
 
+/** Version macro for \a nvmlDramEncryptionInfo_v1_t */
 public static native @MemberGetter int nvmlDramEncryptionInfo_v1();
 public static final int nvmlDramEncryptionInfo_v1 = nvmlDramEncryptionInfo_v1();
 
@@ -718,6 +747,7 @@ public static final int
 
 
 
+/** Version macro for \a nvmlMarginTemperature_v1_t */
 public static native @MemberGetter int nvmlMarginTemperature_v1();
 public static final int nvmlMarginTemperature_v1 = nvmlMarginTemperature_v1();
 
@@ -745,6 +775,7 @@ public static final int
 /**
  * Max Clock Monitors available
  */
+/** Maximum number of clock domains. */
 public static final int MAX_CLK_DOMAINS =            32;
 // Targeting ../nvml/nvmlClkMonFaultInfo_t.java
 
@@ -758,6 +789,7 @@ public static final int MAX_CLK_DOMAINS =            32;
  *
  * @deprecated See \ref nvmlMemoryErrorType_t for a more flexible type
  */
+/** Deprecated ECC bit type. See \ref nvmlMemoryErrorType_t. */
 // #define nvmlEccBitType_t nvmlMemoryErrorType_t
 
 /**
@@ -765,6 +797,7 @@ public static final int MAX_CLK_DOMAINS =            32;
  *
  * @deprecated Mapped to \ref NVML_MEMORY_ERROR_TYPE_CORRECTED
  */
+/** Deprecated single bit ECC error. See \ref NVML_MEMORY_ERROR_TYPE_CORRECTED. */
 public static native @MemberGetter int NVML_SINGLE_BIT_ECC();
 public static final int NVML_SINGLE_BIT_ECC = NVML_SINGLE_BIT_ECC();
 
@@ -773,6 +806,7 @@ public static final int NVML_SINGLE_BIT_ECC = NVML_SINGLE_BIT_ECC();
  *
  * @deprecated Mapped to \ref NVML_MEMORY_ERROR_TYPE_UNCORRECTED
  */
+/** Deprecated double bit ECC error. See \ref NVML_MEMORY_ERROR_TYPE_UNCORRECTED. */
 public static native @MemberGetter int NVML_DOUBLE_BIT_ECC();
 public static final int NVML_DOUBLE_BIT_ECC = NVML_DOUBLE_BIT_ECC();
 
@@ -889,6 +923,7 @@ public static final int
     /** MCDM driver model -- GPU treated as a Microsoft compute device */
     NVML_DRIVER_MCDM      = 2;
 
+/** Maximum number of GPU performance states. */
 public static final int NVML_MAX_GPU_PERF_PSTATES = 16;
 
 /**
@@ -934,26 +969,31 @@ public static final int
 
 
 
+/** Version macro for \a nvmlClockOffset_v1_t */
 public static native @MemberGetter int nvmlClockOffset_v1();
 public static final int nvmlClockOffset_v1 = nvmlClockOffset_v1();
 // Targeting ../nvml/nvmlFanSpeedInfo_v1_t.java
 
 
 
+/** Version macro for \a nvmlFanSpeedInfo_v1_t */
 public static native @MemberGetter int nvmlFanSpeedInfo_v1();
 public static final int nvmlFanSpeedInfo_v1 = nvmlFanSpeedInfo_v1();
 
+/** Buffer size for performance modes strings. */
 public static final int NVML_PERF_MODES_BUFFER_SIZE =       2048;
 // Targeting ../nvml/nvmlDevicePerfModes_v1_t.java
 
 
 
+/** Version macro for \a nvmlDevicePerfModes_v1_t */
 public static native @MemberGetter int nvmlDevicePerfModes_v1();
 public static final int nvmlDevicePerfModes_v1 = nvmlDevicePerfModes_v1();
 // Targeting ../nvml/nvmlDeviceCurrentClockFreqs_v1_t.java
 
 
 
+/** Version macro for \a nvmlDeviceCurrentClockFreqs_v1_t */
 public static native @MemberGetter int nvmlDeviceCurrentClockFreqs_v1();
 public static final int nvmlDeviceCurrentClockFreqs_v1 = nvmlDeviceCurrentClockFreqs_v1();
 
@@ -1149,22 +1189,26 @@ public static final int nvmlProcessesUtilizationInfo_v1 = nvmlProcessesUtilizati
 // Targeting ../nvml/nvmlEccSramErrorStatus_v1_t.java
 
 
+/** Version macro for \a nvmlEccSramErrorStatus_v1_t */
 public static native @MemberGetter int nvmlEccSramErrorStatus_v1();
 public static final int nvmlEccSramErrorStatus_v1 = nvmlEccSramErrorStatus_v1();
 // Targeting ../nvml/nvmlPlatformInfo_v1_t.java
 
 
+/** Version macro for \a nvmlPlatformInfo_v1_t */
 public static native @MemberGetter int nvmlPlatformInfo_v1();
 public static final int nvmlPlatformInfo_v1 = nvmlPlatformInfo_v1();
 // Targeting ../nvml/nvmlPlatformInfo_v2_t.java
 
 
+/** Version macro for \a nvmlPlatformInfo_v2_t */
 public static native @MemberGetter int nvmlPlatformInfo_v2();
 public static final int nvmlPlatformInfo_v2 = nvmlPlatformInfo_v2();
 
 /**
  * Structure to store hostname information
  */
+/** Buffer size for hostname string. */
 public static final int NVML_DEVICE_HOSTNAME_BUFFER_SIZE = 64;
 // Targeting ../nvml/nvmlHostname_v1_t.java
 
@@ -1175,37 +1219,81 @@ public static final int NVML_DEVICE_HOSTNAME_BUFFER_SIZE = 64;
 // Targeting ../nvml/nvmlEccSramUniqueUncorrectedErrorCounts_v1_t.java
 
 
+/** Version macro for \a nvmlEccSramUniqueUncorrectedErrorCounts_v1_t */
 public static native @MemberGetter int nvmlEccSramUniqueUncorrectedErrorCounts_v1();
 public static final int nvmlEccSramUniqueUncorrectedErrorCounts_v1 = nvmlEccSramUniqueUncorrectedErrorCounts_v1();
+
+/** Disable RUSD polling on all metric groups */
+public static final int NVML_RUSD_POLL_NONE =        0x0;
+/** Enable RUSD polling on clock group */
+public static final int NVML_RUSD_POLL_CLOCK =       0x1;
+/** Enable RUSD polling on performance group */
+public static final int NVML_RUSD_POLL_PERF =        0x2;
+/** Enable RUSD polling on memory group */
+public static final int NVML_RUSD_POLL_MEMORY =      0x4;
+/** Enable RUSD polling on power group */
+public static final int NVML_RUSD_POLL_POWER =       0x8;
+/** Enable RUSD polling on thermal group */
+public static final int NVML_RUSD_POLL_THERMAL =     0x10;
+/** Enable RUSD polling on pci group */
+public static final int NVML_RUSD_POLL_PCI =         0x20;
+/** Enable RUSD polling on fan group */
+public static final int NVML_RUSD_POLL_FAN =         0x40;
+/** Enable RUSD polling on process utilization group */
+public static final int NVML_RUSD_POLL_PROC_UTIL =   0x80;
+/** Enable RUSD polling on all groups */
+public static final long NVML_RUSD_POLL_ALL =         0xFFFFFFFFFFFFFFFFL;
+// Targeting ../nvml/nvmlRusdSettings_v1_t.java
+
+
+/** Version macro for \a nvmlRusdSettings_v1_t */
+public static native @MemberGetter int nvmlRusdSettings_v1();
+public static final int nvmlRusdSettings_v1 = nvmlRusdSettings_v1();
 
 /**
  * GSP firmware
  */
+/** Buffer size for GSP firmware version string. */
 public static final int NVML_GSP_FIRMWARE_VERSION_BUF_SIZE = 0x40;
 
 /**
  * Simplified chip architecture
  */
-public static final int NVML_DEVICE_ARCH_KEPLER =    2; // Devices based on the NVIDIA Kepler architecture
-public static final int NVML_DEVICE_ARCH_MAXWELL =   3; // Devices based on the NVIDIA Maxwell architecture
-public static final int NVML_DEVICE_ARCH_PASCAL =    4; // Devices based on the NVIDIA Pascal architecture
-public static final int NVML_DEVICE_ARCH_VOLTA =     5; // Devices based on the NVIDIA Volta architecture
-public static final int NVML_DEVICE_ARCH_TURING =    6; // Devices based on the NVIDIA Turing architecture
-public static final int NVML_DEVICE_ARCH_AMPERE =    7; // Devices based on the NVIDIA Ampere architecture
-public static final int NVML_DEVICE_ARCH_ADA =       8; // Devices based on the NVIDIA Ada architecture
-public static final int NVML_DEVICE_ARCH_HOPPER =    9; // Devices based on the NVIDIA Hopper architecture
+/** Devices based on the NVIDIA Kepler architecture */
+public static final int NVML_DEVICE_ARCH_KEPLER =    2;
+/** Devices based on the NVIDIA Maxwell architecture */
+public static final int NVML_DEVICE_ARCH_MAXWELL =   3;
+/** Devices based on the NVIDIA Pascal architecture */
+public static final int NVML_DEVICE_ARCH_PASCAL =    4;
+/** Devices based on the NVIDIA Volta architecture */
+public static final int NVML_DEVICE_ARCH_VOLTA =     5;
+/** Devices based on the NVIDIA Turing architecture */
+public static final int NVML_DEVICE_ARCH_TURING =    6;
+/** Devices based on the NVIDIA Ampere architecture */
+public static final int NVML_DEVICE_ARCH_AMPERE =    7;
+/** Devices based on the NVIDIA Ada architecture */
+public static final int NVML_DEVICE_ARCH_ADA =       8;
+/** Devices based on the NVIDIA Hopper architecture */
+public static final int NVML_DEVICE_ARCH_HOPPER =    9;
 
-public static final int NVML_DEVICE_ARCH_BLACKWELL = 10; // Devices based on the NVIDIA Blackwell architecture
+/** Devices based on the NVIDIA Blackwell architecture */
+public static final int NVML_DEVICE_ARCH_BLACKWELL = 10;
 
-public static final int NVML_DEVICE_ARCH_UNKNOWN =   0xffffffff; // Anything else, presumably something newer
+/** Anything else, presumably something newer */
+public static final int NVML_DEVICE_ARCH_UNKNOWN =   0xffffffff;
 
 /**
  * PCI bus types
  */
+/** Unknown bus type. */
 public static final int NVML_BUS_TYPE_UNKNOWN =  0;
+/** PCI bus. */
 public static final int NVML_BUS_TYPE_PCI =      1;
+/** PCI-Express bus. */
 public static final int NVML_BUS_TYPE_PCIE =     2;
+/** FPCI bus. */
 public static final int NVML_BUS_TYPE_FPCI =     3;
+/** AGP bus. */
 public static final int NVML_BUS_TYPE_AGP =      4;
 
 /**
@@ -1215,33 +1303,48 @@ public static final int NVML_BUS_TYPE_AGP =      4;
 /**
  * Device Fan control policy
  */
+/** Temperature-controlled fan policy. */
 public static final int NVML_FAN_POLICY_TEMPERATURE_CONTINOUS_SW = 0;
+/** Manual fan control policy. */
 public static final int NVML_FAN_POLICY_MANUAL =                   1;
 
 /**
  * Device Power Source
  */
+/** AC power source. */
 public static final int NVML_POWER_SOURCE_AC =         0x00000000;
+/** Battery power source. */
 public static final int NVML_POWER_SOURCE_BATTERY =    0x00000001;
+/** Undersized power source. */
 public static final int NVML_POWER_SOURCE_UNDERSIZED = 0x00000002;
 
 /**
  * Device PCIE link Max Speed
  */
+/** Invalid PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_INVALID =   0x00000000;
+/** 2500 MB/s PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_2500MBPS =  0x00000001;
+/** 5000 MB/s PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_5000MBPS =  0x00000002;
+/** 8000 MB/s PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_8000MBPS =  0x00000003;
+/** 16000 MB/s PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_16000MBPS = 0x00000004;
+/** 32000 MB/s PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_32000MBPS = 0x00000005;
+/** 64000 MB/s PCIe link speed. */
 public static final int NVML_PCIE_LINK_MAX_SPEED_64000MBPS = 0x00000006;
 
 /**
  * Adaptive clocking status
  */
+/** Adaptive clocking is disabled. */
 public static final int NVML_ADAPTIVE_CLOCKING_INFO_STATUS_DISABLED = 0x00000000;
+/** Adaptive clocking is enabled. */
 public static final int NVML_ADAPTIVE_CLOCKING_INFO_STATUS_ENABLED =  0x00000001;
 
+/** Maximum number of GPU utilization domains. */
 public static final int NVML_MAX_GPU_UTILIZATIONS = 8;
 
 /**
@@ -1264,13 +1367,21 @@ public static final int
 /*
  * PCIe outbound/inbound atomic operations capability
  */
+/** 32-bit fetch and add. */
 public static final int NVML_PCIE_ATOMICS_CAP_FETCHADD32 =  0x01;
+/** 64-bit fetch and add. */
 public static final int NVML_PCIE_ATOMICS_CAP_FETCHADD64 =  0x02;
+/** 32-bit swap. */
 public static final int NVML_PCIE_ATOMICS_CAP_SWAP32 =      0x04;
+/** 64-bit swap. */
 public static final int NVML_PCIE_ATOMICS_CAP_SWAP64 =      0x08;
+/** 32-bit compare and swap. */
 public static final int NVML_PCIE_ATOMICS_CAP_CAS32 =       0x10;
+/** 64-bit compare and swap. */
 public static final int NVML_PCIE_ATOMICS_CAP_CAS64 =       0x20;
+/** 128-bit compare and swap. */
 public static final int NVML_PCIE_ATOMICS_CAP_CAS128 =      0x40;
+/** Maximum number of PCIe atomics operations. */
 public static final int NVML_PCIE_ATOMICS_OPS_MAX =         7;
 
 /**
@@ -1286,6 +1397,7 @@ public static final int NVML_POWER_SCOPE_MEMORY =  2;
 
 
 
+/** Version macro for \a nvmlPowerValue_v2_t */
 public static native @MemberGetter int nvmlPowerValue_v2();
 public static final int nvmlPowerValue_v2 = nvmlPowerValue_v2();
 
@@ -1468,21 +1580,29 @@ public static final int NVML_INVALID_VGPU_PLACEMENT_ID =      0xFFFF;
 /**
  * Macros for vGPU instance's virtualization capabilities bitfield.
  */
+/** vGPU migration capability. */
 // #define NVML_VGPU_VIRTUALIZATION_CAP_MIGRATION         0:0
+/** vGPU migration is not supported. */
 public static final int NVML_VGPU_VIRTUALIZATION_CAP_MIGRATION_NO =      0x0;
+/** vGPU migration is supported. */
 public static final int NVML_VGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x1;
 
 /**
  * Macros for pGPU's virtualization capabilities bitfield.
  */
+/** Physical GPU migration capability. */
 // #define NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION         0:0
+/** Physical GPU migration is not supported. */
 public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_NO =      0x0;
+/** Physical GPU migration is supported. */
 public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x1;
 
 /**
  * Macros to indicate the vGPU mode of the GPU.
  */
+/** Heterogeneous vGPU mode. */
 public static final int NVML_VGPU_PGPU_HETEROGENEOUS_MODE =    0;
+/** Homogeneous vGPU mode. */
 public static final int NVML_VGPU_PGPU_HOMOGENEOUS_MODE =      1;
 
 /** \} */
@@ -1495,26 +1615,31 @@ public static final int NVML_VGPU_PGPU_HOMOGENEOUS_MODE =      1;
 // Targeting ../nvml/nvmlVgpuHeterogeneousMode_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuHeterogeneousMode_v1_t */
 public static native @MemberGetter int nvmlVgpuHeterogeneousMode_v1();
 public static final int nvmlVgpuHeterogeneousMode_v1 = nvmlVgpuHeterogeneousMode_v1();
 // Targeting ../nvml/nvmlVgpuPlacementId_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuPlacementId_v1_t */
 public static native @MemberGetter int nvmlVgpuPlacementId_v1();
 public static final int nvmlVgpuPlacementId_v1 = nvmlVgpuPlacementId_v1();
 // Targeting ../nvml/nvmlVgpuPlacementList_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuPlacementList_v1_t */
 public static native @MemberGetter int nvmlVgpuPlacementList_v1();
 public static final int nvmlVgpuPlacementList_v1 = nvmlVgpuPlacementList_v1();
 // Targeting ../nvml/nvmlVgpuPlacementList_v2_t.java
 
 
+/** Version macro for \a nvmlVgpuPlacementList_v2_t */
 public static native @MemberGetter int nvmlVgpuPlacementList_v2();
 public static final int nvmlVgpuPlacementList_v2 = nvmlVgpuPlacementList_v2();
 // Targeting ../nvml/nvmlVgpuTypeBar1Info_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuTypeBar1Info_v1_t */
 public static native @MemberGetter int nvmlVgpuTypeBar1Info_v1();
 public static final int nvmlVgpuTypeBar1Info_v1 = nvmlVgpuTypeBar1Info_v1();
 // Targeting ../nvml/nvmlVgpuInstanceUtilizationSample_t.java
@@ -1526,6 +1651,7 @@ public static final int nvmlVgpuTypeBar1Info_v1 = nvmlVgpuTypeBar1Info_v1();
 // Targeting ../nvml/nvmlVgpuInstancesUtilizationInfo_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuInstancesUtilizationInfo_v1_t */
 public static native @MemberGetter int nvmlVgpuInstancesUtilizationInfo_v1();
 public static final int nvmlVgpuInstancesUtilizationInfo_v1 = nvmlVgpuInstancesUtilizationInfo_v1();
 // Targeting ../nvml/nvmlVgpuProcessUtilizationSample_t.java
@@ -1537,34 +1663,47 @@ public static final int nvmlVgpuInstancesUtilizationInfo_v1 = nvmlVgpuInstancesU
 // Targeting ../nvml/nvmlVgpuProcessesUtilizationInfo_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuProcessesUtilizationInfo_v1_t */
 public static native @MemberGetter int nvmlVgpuProcessesUtilizationInfo_v1();
 public static final int nvmlVgpuProcessesUtilizationInfo_v1 = nvmlVgpuProcessesUtilizationInfo_v1();
 // Targeting ../nvml/nvmlVgpuRuntimeState_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuRuntimeState_v1_t */
 public static native @MemberGetter int nvmlVgpuRuntimeState_v1();
 public static final int nvmlVgpuRuntimeState_v1 = nvmlVgpuRuntimeState_v1();
 
 /**
  * vGPU scheduler policies
  */
+/** Unknown scheduler policy. */
 public static final int NVML_VGPU_SCHEDULER_POLICY_UNKNOWN =      0;
+/** Best effort scheduler policy. */
 public static final int NVML_VGPU_SCHEDULER_POLICY_BEST_EFFORT =  1;
+/** Equal share scheduler policy. */
 public static final int NVML_VGPU_SCHEDULER_POLICY_EQUAL_SHARE =  2;
+/** Fixed share scheduler policy. */
 public static final int NVML_VGPU_SCHEDULER_POLICY_FIXED_SHARE =  3;
 
+/** Number of supported vGPU scheduler policies. */
 public static final int NVML_SUPPORTED_VGPU_SCHEDULER_POLICY_COUNT = 3;
 
+/** Maximum number of scheduler log entries. */
 public static final int NVML_SCHEDULER_SW_MAX_LOG_ENTRIES = 200;
 
+/** Default Adaptive Round Robin mode. */
 public static final int NVML_VGPU_SCHEDULER_ARR_DEFAULT =   0;
+/** Disable Adaptive Round Robin mode. */
 public static final int NVML_VGPU_SCHEDULER_ARR_DISABLE =   1;
+/** Enable Adaptive Round Robin mode. */
 public static final int NVML_VGPU_SCHEDULER_ARR_ENABLE =    2;
 
 /**
  * vGPU scheduler engine types
  */
+/** Graphics engine. */
 public static final int NVML_VGPU_SCHEDULER_ENGINE_TYPE_GRAPHICS =  1;
+public static final int NVML_VGPU_SCHEDULER_ENGINE_TYPE_NVENC1 =    2;
 // Targeting ../nvml/nvmlVgpuSchedulerParams_t.java
 
 
@@ -1631,36 +1770,43 @@ public static final int
 // Targeting ../nvml/nvmlVgpuTypeIdInfo_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuTypeIdInfo_v1_t */
 public static native @MemberGetter int nvmlVgpuTypeIdInfo_v1();
 public static final int nvmlVgpuTypeIdInfo_v1 = nvmlVgpuTypeIdInfo_v1();
 // Targeting ../nvml/nvmlVgpuTypeMaxInstance_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuTypeMaxInstance_v1_t */
 public static native @MemberGetter int nvmlVgpuTypeMaxInstance_v1();
 public static final int nvmlVgpuTypeMaxInstance_v1 = nvmlVgpuTypeMaxInstance_v1();
 // Targeting ../nvml/nvmlActiveVgpuInstanceInfo_v1_t.java
 
 
+/** Version macro for \a nvmlActiveVgpuInstanceInfo_v1_t */
 public static native @MemberGetter int nvmlActiveVgpuInstanceInfo_v1();
 public static final int nvmlActiveVgpuInstanceInfo_v1 = nvmlActiveVgpuInstanceInfo_v1();
 // Targeting ../nvml/nvmlVgpuSchedulerState_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuSchedulerState_v1_t */
 public static native @MemberGetter int nvmlVgpuSchedulerState_v1();
 public static final int nvmlVgpuSchedulerState_v1 = nvmlVgpuSchedulerState_v1();
 // Targeting ../nvml/nvmlVgpuSchedulerStateInfo_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuSchedulerStateInfo_v1_t */
 public static native @MemberGetter int nvmlVgpuSchedulerStateInfo_v1();
 public static final int nvmlVgpuSchedulerStateInfo_v1 = nvmlVgpuSchedulerStateInfo_v1();
 // Targeting ../nvml/nvmlVgpuSchedulerLogInfo_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuSchedulerLogInfo_v1_t */
 public static native @MemberGetter int nvmlVgpuSchedulerLogInfo_v1();
 public static final int nvmlVgpuSchedulerLogInfo_v1 = nvmlVgpuSchedulerLogInfo_v1();
 // Targeting ../nvml/nvmlVgpuCreatablePlacementInfo_v1_t.java
 
 
+/** Version macro for \a nvmlVgpuCreatablePlacementInfo_v1_t */
 public static native @MemberGetter int nvmlVgpuCreatablePlacementInfo_v1();
 public static final int nvmlVgpuCreatablePlacementInfo_v1 = nvmlVgpuCreatablePlacementInfo_v1();
 
@@ -2441,8 +2587,100 @@ public static final int NVML_FI_DEV_CLOCKS_EVENT_REASON_HW_POWER_BRAKE_SLOWDOWN 
 public static final int NVML_FI_DEV_POWER_SYNC_BALANCING_FREQ =                    272;
 /** Accumulated activity factor of the GPU to be used for averaging */
 public static final int NVML_FI_DEV_POWER_SYNC_BALANCING_AF =                      273;
+/** EDPp multiplier expressed as a percentage */
+public static final int NVML_FI_DEV_EDPP_MULTIPLIER =                                     274;
+/**
+ * Current primary power floor value in Watts.
+ * This value is calculated by doing "TMP ceiling value * (% TMP floor value)".
+ */
+public static final int NVML_FI_PWR_SMOOTHING_PRIMARY_POWER_FLOOR =                       275;
+/**
+ * Current secondary power floor value in Watts.
+ * This is the power floor that is applied during active workload periods on the GPU when primary
+ * floor activation window multiplier is set to a non-zero value.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_SECONDARY_POWER_FLOOR =                     276;
+/**
+ * Minimum primary floor activation offset value in Watts.
+ * This is the minimum primary floor activation offset accepted by the driver specified in Watts.
+ * This is a static field.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_MIN_PRIMARY_FLOOR_ACT_OFFSET =              277;
+/**
+ * Minimum primary floor activation point value in Watts.
+ * This is the minimum absolute raw value specified in Watts that the driver will use for switching
+ * between primary and secondary floor. This point is calculated as "secondary power floor +
+ * primary floor activation offset", and then computed value is floored to "min primary floor
+ * activation point" by the driver at run time. This value is used to avoid setting of switch point
+ * too low accidentally.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_MIN_PRIMARY_FLOOR_ACT_POINT =               278;
+/**
+ * Window Multiplier value in ms.
+ * This is the multiplier unit specified in ms for other multipliers in the profile (primary floor
+ * activation window multiplier and primary floor target window multiplier). This is a static field.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_WINDOW_MULTIPLIER =                         279;
+/**
+ * Support (0/Not Supported or 1/Supported) for delayed power smoothing.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_DELAYED_PWR_SMOOTHING_SUPPORTED =           280;
+/**
+ * Current secondary power floor value in Watts for a given profile.
+ * This is the power floor that will be applied during active workload periods on the GPU when
+ * primary floor activation window multiplier is set to a non-zero value.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_SECONDARY_POWER_FLOOR =             281;
+/**
+ * Current primary floor activation window multiplier value for a given profile.
+ * This is the "X" ms time multiplier for the activation moving average window size. The activation
+ * moving average is compared against the (secondary floor + primary floor activation offset value)
+ * to determine if the controller should switch from the secondary floor to the primary floor.
+ * Setting this to 0 will disable switching to the secondary floor.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_PRIMARY_FLOOR_ACT_WIN_MULT =        282;
+/**
+ * Current primary floor target window multiplier value for a given profile.
+ * This is the "X" ms time multiplier for the target moving average window size. When set to
+ * non-zero value, the target moving average power determines the primary floor. When set to 0,
+ * driver will use the Floor percentage instead to derive the primary floor.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_PRIMARY_FLOOR_TAR_WIN_MULT =        283;
+/**
+ * Current primary floor activation offset value in Watts for a given profile.
+ * If the target moving average falls below the secondary floor plus this offset, the primary floor
+ * will be activated.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_PROFILE_PRIMARY_FLOOR_ACT_OFFSET =          284;
+/**
+ * Current secondary power floor value in Watts for admin override.
+ * This is the power floor that will be applied during active workload periods on the GPU when
+ * primary floor activation window multiplier is set to a non-zero value.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_SECONDARY_POWER_FLOOR =      285;
+/**
+ * Current primary floor activation window multiplier value for admin override.
+ * This is the "X" ms time multiplier for the activation moving average window size. The activation
+ * moving average is compared against the (secondary floor + primary floor activation offset value)
+ * to determine if the controller should switch from the secondary floor to the primary floor.
+ * Setting this to 0 will disable switching to the secondary floor.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_PRIMARY_FLOOR_ACT_WIN_MULT = 286;
+/**
+ * Current primary floor target window multiplier value for admin override.
+ * This is the "X" ms time multiplier for the target moving average window size. When set to
+ * non-zero value, the target moving average power determines the primary floor. When set to 0,
+ * driver will use the Floor percentage instead to derive the primary floor.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_PRIMARY_FLOOR_TAR_WIN_MULT = 287;
+/**
+ * Current primary floor activation offset value in Watts for admin override.
+ * If the target moving average falls below the secondary floor plus this offset, the primary floor
+ * will be activated.
+ */
+public static final int NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_PRIMARY_FLOOR_ACT_OFFSET =   288;
 /** One greater than the largest field ID defined above */
-public static final int NVML_FI_MAX =                                              274;
+public static final int NVML_FI_MAX =                                              289;
 
 /**
  * NVML_FI_DEV_NVLINK_GET_POWER_THRESHOLD_UNITS
@@ -2538,18 +2776,21 @@ public static final int
  * Types can be combined with bitwise or operator '|' when passed to \ref nvmlDeviceRegisterEvents
  */
 /** Mask with no events */
+/** No event. */
 public static final long nvmlEventTypeNone =                       0x0000000000000000L;
 
 /** Event about single bit ECC errors
 /**
  * \note A corrected texture memory error is not an ECC error, so it does not generate a single bit event
  */
+/** Single bit ECC error event. */
 public static final long nvmlEventTypeSingleBitEccError =          0x0000000000000001L;
 
 /** Event about double bit ECC errors
 /**
  * \note An uncorrected texture memory error is not an ECC error, so it does not generate a double bit event
  */
+/** Double bit ECC error event. */
 public static final long nvmlEventTypeDoubleBitEccError =          0x0000000000000002L;
 
 /** Event about PState changes
@@ -2558,45 +2799,58 @@ public static final long nvmlEventTypeDoubleBitEccError =          0x00000000000
  *  no work being executed on the GPU, power capping or thermal capping. In a typical situation,
  *  Fermi-based GPU should stay in P0 for the duration of the execution of the compute process.
  */
+/** PState change event. */
 public static final long nvmlEventTypePState =                     0x0000000000000004L;
 
 /** Event that Xid critical error occurred */
+/** XID critical error event. */
 public static final long nvmlEventTypeXidCriticalError =           0x0000000000000008L;
 
 /** Event about clock changes
 /**
  * Kepler only
  */
+/** Clock change event. */
 public static final long nvmlEventTypeClock =                      0x0000000000000010L;
 
 /** Event about AC/Battery power source changes */
+/** Power source change event. */
 public static final long nvmlEventTypePowerSourceChange =          0x0000000000000080L;
 
 /** Event about MIG configuration changes */
+/** MIG configuration change event. */
 public static final long nvmlEventMigConfigChange =                0x0000000000000100L;
 
 /** Event about single bit ECC error storm */
+/** Single bit ECC error storm event. */
 public static final long nvmlEventTypeSingleBitEccErrorStorm =     0x0000000000000200L;
 
 /** Event about DRAM retirement event */
+/** DRAM retirement event. */
 public static final long nvmlEventTypeDramRetirementEvent =        0x0000000000000400L;
 
 /** Event about DRAM retirement failure */
+/** DRAM retirement failure event. */
 public static final long nvmlEventTypeDramRetirementFailure =      0x0000000000000800L;
 
 /** Event for Non Fatal Poison */
+/** Non-fatal poison error event. */
 public static final long nvmlEventTypeNonFatalPoisonError =        0x0000000000001000L;
 
 /** Event for Fatal Poison */
+/** Fatal poison error event. */
 public static final long nvmlEventTypeFatalPoisonError =           0x0000000000002000L;
 
 /** Event for GPU Unavailable */
+/** GPU unavailable error event. */
 public static final long nvmlEventTypeGpuUnavailableError =        0x0000000000004000L;
 
 /** Event for GPU Recovery Action */
+/** GPU recovery action event. */
 public static final long nvmlEventTypeGpuRecoveryAction =          0x0000000000008000L;
 
 /** Mask of all events */
+/** Mask of all event types. */
 public static final long nvmlEventTypeAll = (nvmlEventTypeNone    
         | nvmlEventTypeSingleBitEccError       
         | nvmlEventTypeDoubleBitEccError       
@@ -2625,6 +2879,7 @@ public static final long nvmlSystemEventTypeGpuDriverUnbind =  0x000000000000000
 /** Bitmask value of Driver Bind System Event */
 public static final long nvmlSystemEventTypeGpuDriverBind =    0x0000000000000002L;
 
+/** Number of system event types. */
 public static final int nvmlSystemEventTypeCount = 2;
 // Targeting ../nvml/nvmlSystemEventSetCreateRequest_v1_t.java
 
@@ -2661,17 +2916,20 @@ public static final int nvmlSystemEventSetWaitRequest_v1 = nvmlSystemEventSetWai
 /** Nothing is running on the GPU and the clocks are dropping to Idle state
  * \note This limiter may be removed in a later release
  */
+/** GPU is idle. */
 public static final long nvmlClocksEventReasonGpuIdle =                   0x0000000000000001L;
 
 /*
  * @deprecated No longer used
  */
+/** Clocks are set to application-specific values. */
 public static final long nvmlClocksEventReasonApplicationsClocksSetting = 0x0000000000000002L;
 
 /**
  * @deprecated Renamed to \ref nvmlClocksThrottleReasonApplicationsClocksSetting
  *             as the name describes the situation more accurately.
  */
+/** Deprecated: User-defined clocks. */
 public static final long nvmlClocksThrottleReasonUserDefinedClocks =         nvmlClocksEventReasonApplicationsClocksSetting;
 
 /** The clocks have been optimized to ensure not to exceed currently set power limits
@@ -2680,6 +2938,7 @@ public static final long nvmlClocksThrottleReasonUserDefinedClocks =         nvm
  * @see nvmlDeviceSetPowerManagementLimit
  * @see nvmlDeviceGetPowerManagementLimit
  */
+/** Software power cap activated. */
 public static final long nvmlClocksEventReasonSwPowerCap =                0x0000000000000004L;
 
 /** HW Slowdown (reducing the core clocks by a factor of 2 or more) is engaged
@@ -2695,6 +2954,7 @@ public static final long nvmlClocksEventReasonSwPowerCap =                0x0000
  * @see nvmlDeviceGetTemperatureThreshold
  * @see nvmlDeviceGetPowerUsage
  */
+/** Hardware slowdown activated. */
 public static final long nvmlClocksThrottleReasonHwSlowdown =                0x0000000000000008L;
 
 /** Sync Boost
@@ -2706,6 +2966,7 @@ public static final long nvmlClocksThrottleReasonHwSlowdown =                0x0
  * holding this one at lower clocks.
  *
  */
+/** Sync boost activated. */
 public static final long nvmlClocksEventReasonSyncBoost =                 0x0000000000000010L;
 
 /** SW Thermal Slowdown
@@ -2715,6 +2976,7 @@ public static final long nvmlClocksEventReasonSyncBoost =                 0x0000
  *  - Current memory temperature does not exceeed Memory Max Operating Temperature
  *
  */
+/** Software thermal slowdown activated. */
 public static final long nvmlClocksEventReasonSwThermalSlowdown =         0x0000000000000020L;
 
 /** HW Thermal Slowdown (reducing the core clocks by a factor of 2 or more) is engaged
@@ -2726,6 +2988,7 @@ public static final long nvmlClocksEventReasonSwThermalSlowdown =         0x0000
  * @see nvmlDeviceGetTemperatureThreshold
  * @see nvmlDeviceGetPowerUsage
  */
+/** Hardware thermal slowdown activated. */
 public static final long nvmlClocksThrottleReasonHwThermalSlowdown =         0x0000000000000040L;
 
 /** HW Power Brake Slowdown (reducing the core clocks by a factor of 2 or more) is engaged
@@ -2737,57 +3000,69 @@ public static final long nvmlClocksThrottleReasonHwThermalSlowdown =         0x0
  * @see nvmlDeviceGetTemperatureThreshold
  * @see nvmlDeviceGetPowerUsage
  */
+/** Hardware power brake slowdown activated. */
 public static final long nvmlClocksThrottleReasonHwPowerBrakeSlowdown =      0x0000000000000080L;
 
 /** GPU clocks are limited by current setting of Display clocks
  *
  * @see bug 1997531
  */
+/** Display clock setting limited. */
 public static final long nvmlClocksEventReasonDisplayClockSetting =       0x0000000000000100L;
 
 /** Bit mask representing no clocks throttling
  *
  * Clocks are as high as possible.
  * */
+/** No clock throttling. */
 public static final long nvmlClocksEventReasonNone =                      0x0000000000000000L;
 
 /** Bit mask representing all supported clocks throttling reasons
  * New reasons might be added to this list in the future
  */
+/** Bitmask of all clock event reasons. */
 public static native @MemberGetter int nvmlClocksEventReasonAll();
 public static final int nvmlClocksEventReasonAll = nvmlClocksEventReasonAll();
 
 /**
  * @deprecated Use \ref nvmlClocksEventReasonGpuIdle instead
  */
+/** Deprecated: GPU idle. */
 public static final long nvmlClocksThrottleReasonGpuIdle =                      nvmlClocksEventReasonGpuIdle;
 /**
  * @deprecated
  */
+/** Deprecated: Application clocks setting. */
 public static final long nvmlClocksThrottleReasonApplicationsClocksSetting =    nvmlClocksEventReasonApplicationsClocksSetting;
 /**
  * @deprecated Use \ref nvmlClocksEventReasonSyncBoost instead
  */
+/** Deprecated: Sync boost. */
 public static final long nvmlClocksThrottleReasonSyncBoost =                    nvmlClocksEventReasonSyncBoost;
 /**
  * @deprecated Use \ref nvmlClocksEventReasonSwPowerCap instead
  */
+/** Deprecated: Software power cap. */
 public static final long nvmlClocksThrottleReasonSwPowerCap =                   nvmlClocksEventReasonSwPowerCap;
 /**
  * @deprecated Use \ref nvmlClocksEventReasonSwThermalSlowdown instead
  */
+/** Deprecated: Software thermal slowdown. */
 public static final long nvmlClocksThrottleReasonSwThermalSlowdown =            nvmlClocksEventReasonSwThermalSlowdown;
 /**
  * @deprecated Use \ref nvmlClocksEventReasonDisplayClockSetting instead
  */
+/** Deprecated: Display clock setting. */
 public static final long nvmlClocksThrottleReasonDisplayClockSetting =          nvmlClocksEventReasonDisplayClockSetting;
 /**
  * @deprecated Use \ref nvmlClocksEventReasonNone instead
  */
+/** Deprecated: No clock throttling. */
 public static final long nvmlClocksThrottleReasonNone =                         nvmlClocksEventReasonNone;
 /**
  * @deprecated Use \ref nvmlClocksEventReasonAll instead
  */
+/** Deprecated: All clock throttling reasons. */
 public static final int nvmlClocksThrottleReasonAll =                          nvmlClocksEventReasonAll;
 // Targeting ../nvml/nvmlAccountingStats_t.java
 
@@ -2893,16 +3168,23 @@ public static final int
 /**
  * Confidential Compute CPU Capabilities values
  */
+/** No confidential compute CPU capability. */
 public static final int NVML_CC_SYSTEM_CPU_CAPS_NONE =         0;
+/** AMD SEV CPU capability. */
 public static final int NVML_CC_SYSTEM_CPU_CAPS_AMD_SEV =      1;
+/** Intel TDX CPU capability. */
 public static final int NVML_CC_SYSTEM_CPU_CAPS_INTEL_TDX =    2;
+/** AMD SEV-SNP CPU capability. */
 public static final int NVML_CC_SYSTEM_CPU_CAPS_AMD_SEV_SNP =  3;
+/** AMD SNP-VTOM CPU capability. */
 public static final int NVML_CC_SYSTEM_CPU_CAPS_AMD_SNP_VTOM = 4;
 
 /**
  * Confidenial Compute GPU Capabilities values
  */
+/** GPUs are not confidential compute capable. */
 public static final int NVML_CC_SYSTEM_GPUS_CC_NOT_CAPABLE = 0;
+/** GPUs are confidential compute capable. */
 public static final int NVML_CC_SYSTEM_GPUS_CC_CAPABLE =     1;
 // Targeting ../nvml/nvmlConfComputeSystemCaps_t.java
 
@@ -2911,20 +3193,27 @@ public static final int NVML_CC_SYSTEM_GPUS_CC_CAPABLE =     1;
 /**
  * Confidential Compute DevTools Mode values
  */
+/** DevTools mode is off. */
 public static final int NVML_CC_SYSTEM_DEVTOOLS_MODE_OFF = 0;
+/** DevTools mode is on. */
 public static final int NVML_CC_SYSTEM_DEVTOOLS_MODE_ON =  1;
 
 /**
  * Confidential Compute Environment values
  */
+/** Environment is unavailable. */
 public static final int NVML_CC_SYSTEM_ENVIRONMENT_UNAVAILABLE = 0;
+/** Environment is simulation. */
 public static final int NVML_CC_SYSTEM_ENVIRONMENT_SIM =         1;
+/** Environment is production. */
 public static final int NVML_CC_SYSTEM_ENVIRONMENT_PROD =        2;
 
 /**
  * Confidential Compute Feature Status values
  */
+/** Feature is disabled. */
 public static final int NVML_CC_SYSTEM_FEATURE_DISABLED = 0;
+/** Feature is enabled. */
 public static final int NVML_CC_SYSTEM_FEATURE_ENABLED =  1;
 // Targeting ../nvml/nvmlConfComputeSystemState_t.java
 
@@ -2933,12 +3222,16 @@ public static final int NVML_CC_SYSTEM_FEATURE_ENABLED =  1;
 /**
  * Confidential Compute Multigpu mode values
  */
+/** Multi-GPU mode is none. */
 public static final int NVML_CC_SYSTEM_MULTIGPU_NONE =           0;
+/** Multi-GPU mode is protected PCIe. */
 public static final int NVML_CC_SYSTEM_MULTIGPU_PROTECTED_PCIE = 1;
+/** Multi-GPU mode is NVLE. */
 public static final int NVML_CC_SYSTEM_MULTIGPU_NVLE =           2;
 // Targeting ../nvml/nvmlSystemConfComputeSettings_v1_t.java
 
 
+/** Version macro for \a nvmlSystemConfComputeSettings_v1_t */
 public static native @MemberGetter int nvmlSystemConfComputeSettings_v1();
 public static final int nvmlSystemConfComputeSettings_v1 = nvmlSystemConfComputeSettings_v1();
 // Targeting ../nvml/nvmlConfComputeMemSizeInfo_t.java
@@ -2948,13 +3241,17 @@ public static final int nvmlSystemConfComputeSettings_v1 = nvmlSystemConfCompute
 /**
  * Confidential Compute GPUs/System Ready State values
  */
+/** Client requests are not accepted. */
 public static final int NVML_CC_ACCEPTING_CLIENT_REQUESTS_FALSE = 0;
+/** Client requests are accepted. */
 public static final int NVML_CC_ACCEPTING_CLIENT_REQUESTS_TRUE =  1;
 
 /**
  * GPU Certificate Details
  */
+/** Size of the certificate chain. */
 public static final int NVML_GPU_CERT_CHAIN_SIZE = 0x1000;
+/** Size of the attestation certificate chain. */
 public static final int NVML_GPU_ATTESTATION_CERT_CHAIN_SIZE = 0x1400;
 // Targeting ../nvml/nvmlConfComputeGpuCertificate_t.java
 
@@ -2963,12 +3260,19 @@ public static final int NVML_GPU_ATTESTATION_CERT_CHAIN_SIZE = 0x1400;
 /**
  * GPU Attestation Report
  */
+/** Size of the CEC nonce. */
 public static final int NVML_CC_GPU_CEC_NONCE_SIZE = 0x20;
+/** Size of the attestation report. */
 public static final int NVML_CC_GPU_ATTESTATION_REPORT_SIZE = 0x2000;
+/** Size of the CEC attestation report. */
 public static final int NVML_CC_GPU_CEC_ATTESTATION_REPORT_SIZE = 0x1000;
+/** CEC attestation report is not present. */
 public static final int NVML_CC_CEC_ATTESTATION_REPORT_NOT_PRESENT = 0;
+/** CEC attestation report is present. */
 public static final int NVML_CC_CEC_ATTESTATION_REPORT_PRESENT = 1;
+/** Minimum attacker advantage for key rotation threshold. */
 public static final int NVML_CC_KEY_ROTATION_THRESHOLD_ATTACKER_ADVANTAGE_MIN = 50;
+/** Maximum attacker advantage for key rotation threshold. */
 public static final int NVML_CC_KEY_ROTATION_THRESHOLD_ATTACKER_ADVANTAGE_MAX = 65;
 // Targeting ../nvml/nvmlConfComputeGpuAttestationReport_t.java
 
@@ -2976,11 +3280,13 @@ public static final int NVML_CC_KEY_ROTATION_THRESHOLD_ATTACKER_ADVANTAGE_MAX = 
 // Targeting ../nvml/nvmlConfComputeSetKeyRotationThresholdInfo_v1_t.java
 
 
+/** Version macro for \a nvmlConfComputeSetKeyRotationThresholdInfo_v1_t */
 public static native @MemberGetter int nvmlConfComputeSetKeyRotationThresholdInfo_v1();
 public static final int nvmlConfComputeSetKeyRotationThresholdInfo_v1 = nvmlConfComputeSetKeyRotationThresholdInfo_v1();
 // Targeting ../nvml/nvmlConfComputeGetKeyRotationThresholdInfo_v1_t.java
 
 
+/** Version macro for \a nvmlConfComputeGetKeyRotationThresholdInfo_v1_t */
 public static native @MemberGetter int nvmlConfComputeGetKeyRotationThresholdInfo_v1();
 public static final int nvmlConfComputeGetKeyRotationThresholdInfo_v1 = nvmlConfComputeGetKeyRotationThresholdInfo_v1();
 
@@ -3116,6 +3422,7 @@ public static final int NVML_GPU_FABRIC_HEALTH_SUMMARY_LIMITED_CAPACITY = 3;
  * using the below macro.
  * Ex - NVML_GPU_FABRIC_HEALTH_GET(var, _DEGRADED_BW)
  */
+/** Macro to get GPU fabric health status. */
 // #define NVML_GPU_FABRIC_HEALTH_GET(var, type)
 //     (((var) >> NVML_GPU_FABRIC_HEALTH_MASK_SHIFT##type) &
 //      (NVML_GPU_FABRIC_HEALTH_MASK_WIDTH##type))
@@ -3125,6 +3432,7 @@ public static final int NVML_GPU_FABRIC_HEALTH_SUMMARY_LIMITED_CAPACITY = 3;
  * using the below macro.
  * Ex - NVML_GPU_FABRIC_HEALTH_TEST(var, _DEGRADED_BW, _TRUE)
  */
+/** Macro to test GPU fabric health status. */
 // #define NVML_GPU_FABRIC_HEALTH_TEST(var, type, val)
 //     (NVML_GPU_FABRIC_HEALTH_GET(var, type) ==
 //      NVML_GPU_FABRIC_HEALTH_MASK##type##val)
@@ -3135,6 +3443,7 @@ public static final int NVML_GPU_FABRIC_HEALTH_SUMMARY_LIMITED_CAPACITY = 3;
 /**
 * Version identifier value for \ref nvmlGpuFabricInfo_v2_t.version.
 */
+/** Version macro for \a nvmlGpuFabricInfo_v2_t */
 public static native @MemberGetter int nvmlGpuFabricInfo_v2();
 public static final int nvmlGpuFabricInfo_v2 = nvmlGpuFabricInfo_v2();
 // Targeting ../nvml/nvmlGpuFabricInfo_v3_t.java
@@ -3144,6 +3453,7 @@ public static final int nvmlGpuFabricInfo_v2 = nvmlGpuFabricInfo_v2();
 /**
 * Version identifier value for \ref nvmlGpuFabricInfo_v3_t.version.
 */
+/** Version macro for \a nvmlGpuFabricInfo_v3_t */
 public static native @MemberGetter int nvmlGpuFabricInfo_v3();
 public static final int nvmlGpuFabricInfo_v3 = nvmlGpuFabricInfo_v3();
 
@@ -3396,7 +3706,9 @@ public static native @Cast("nvmlReturn_t") int nvmlSystemGetCudaDriverVersion_v2
 /**
  * Macros for converting the CUDA driver version number to Major and Minor version numbers.
  */
+/** Macro to extract the major version number from the CUDA driver version. */
 // #define NVML_CUDA_DRIVER_VERSION_MAJOR(v) ((v)/1000)
+/** Macro to extract the minor version number from the CUDA driver version. */
 // #define NVML_CUDA_DRIVER_VERSION_MINOR(v) (((v)%1000)/10)
 
 /**
@@ -3470,6 +3782,7 @@ public static native @Cast("nvmlReturn_t") int nvmlSystemGetTopologyGpuSet(@Cast
 // Targeting ../nvml/nvmlSystemDriverBranchInfo_v1_t.java
 
 
+/** Version macro for \a nvmlSystemDriverBranchInfo_v1_t */
 public static native @MemberGetter int nvmlSystemDriverBranchInfo_v1();
 public static final int nvmlSystemDriverBranchInfo_v1 = nvmlSystemDriverBranchInfo_v1();
 
@@ -4232,6 +4545,24 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetAddressingMode(nvmlD
  *         - \ref NVML_ERROR_UNKNOWN                    on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetRepairStatus(nvmlDevice_st device, @Cast("nvmlRepairStatus_t*") nvmlRepairStatus_v1_t repairStatus);
+
+/**
+ * Get the unrepairable memory flag for a given GPU
+ *
+ * For Hopper &tm; or newer fully supported devices.
+ *
+ * @param device [in]                               The identifier of the target device
+ * @param unrepairableMemoryStatus [out]             Reference to \a nvmlUnrepairableMemoryStatus_v1_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                          if the query was successful
+ *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH  if the provided version is invalid/unsupported
+ *         - \ref NVML_ERROR_UNINITIALIZED              if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT           if \a device is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED              if the device does not support this feature
+ *         - \ref NVML_ERROR_UNKNOWN                    on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetUnrepairableMemoryFlag_v1(nvmlDevice_st device, nvmlUnrepairableMemoryStatus_v1_t unrepairableMemoryStatus);
 
 /**
  * Retrieve the common ancestor for two devices
@@ -5180,6 +5511,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetCoolerInfo(nvmlDevic
 
 
 
+/** Version macro for \a nvmlTemperature_v1_t */
 public static native @MemberGetter int nvmlTemperature_v1();
 public static final int nvmlTemperature_v1 = nvmlTemperature_v1();
 
@@ -8645,10 +8977,14 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceClearAccountingPids(nvm
  */
 /***************************************************************************************************/
 
+/** Shift for NVLink BER mantissa. */
 public static final int NVML_NVLINK_BER_MANTISSA_SHIFT = 8;
+/** Width for NVLink BER mantissa. */
 public static final int NVML_NVLINK_BER_MANTISSA_WIDTH = 0xf;
 
+/** Shift for NVLink BER exponent. */
 public static final int NVML_NVLINK_BER_EXP_SHIFT = 0;
+/** Width for NVLink BER exponent. */
 public static final int NVML_NVLINK_BER_EXP_WIDTH = 0xff;
 
 /**
@@ -8662,37 +8998,51 @@ public static final int NVML_NVLINK_BER_EXP_WIDTH = 0xff;
 /*
  * NVML_FI_DEV_NVLINK_GET_STATE state enums
  */
+/** NVLink is inactive. */
 public static final int NVML_NVLINK_STATE_INACTIVE = 0x0;
+/** NVLink is active. */
 public static final int NVML_NVLINK_STATE_ACTIVE =   0x1;
+/** NVLink is in sleep state. */
 public static final int NVML_NVLINK_STATE_SLEEP =    0x2;
 
+/** Total supported NVLink bandwidth modes. */
 public static final int NVML_NVLINK_TOTAL_SUPPORTED_BW_MODES = 23;
 // Targeting ../nvml/nvmlNvlinkSupportedBwModes_v1_t.java
 
 
+/** Version macro for \a nvmlNvlinkSupportedBwModes_v1_t */
 public static native @MemberGetter int nvmlNvlinkSupportedBwModes_v1();
 public static final int nvmlNvlinkSupportedBwModes_v1 = nvmlNvlinkSupportedBwModes_v1();
 // Targeting ../nvml/nvmlNvlinkGetBwMode_v1_t.java
 
 
+/** Version macro for \a nvmlNvlinkGetBwMode_v1_t */
 public static native @MemberGetter int nvmlNvlinkGetBwMode_v1();
 public static final int nvmlNvlinkGetBwMode_v1 = nvmlNvlinkGetBwMode_v1();
 // Targeting ../nvml/nvmlNvlinkSetBwMode_v1_t.java
 
 
+/** Version macro for \a nvmlNvlinkSetBwMode_v1_t */
 public static native @MemberGetter int nvmlNvlinkSetBwMode_v1();
 public static final int nvmlNvlinkSetBwMode_v1 = nvmlNvlinkSetBwMode_v1();
 // Targeting ../nvml/nvmlNvLinkInfo_v1_t.java
 
 
+/** Version macro for \a nvmlNvLinkInfo_v1_t */
 public static native @MemberGetter int nvmlNvLinkInfo_v1();
 public static final int nvmlNvLinkInfo_v1 = nvmlNvLinkInfo_v1();
 
+/** MSE ucode type. */
 public static final int NVML_NVLINK_FIRMWARE_UCODE_TYPE_MSE =        0x1;
+/** NETIR ucode type. */
 public static final int NVML_NVLINK_FIRMWARE_UCODE_TYPE_NETIR =      0x2;
+/** NETIR UPHY ucode type. */
 public static final int NVML_NVLINK_FIRMWARE_UCODE_TYPE_NETIR_UPHY = 0x3;
+/** NETIR CLN ucode type. */
 public static final int NVML_NVLINK_FIRMWARE_UCODE_TYPE_NETIR_CLN =  0x4;
+/** NETIR DLN ucode type. */
 public static final int NVML_NVLINK_FIRMWARE_UCODE_TYPE_NETIR_DLN =  0x5;
+/** Length of firmware version string. */
 public static final int NVML_NVLINK_FIRMWARE_VERSION_LENGTH =        100;
 // Targeting ../nvml/nvmlNvlinkFirmwareVersion_t.java
 
@@ -8703,6 +9053,7 @@ public static final int NVML_NVLINK_FIRMWARE_VERSION_LENGTH =        100;
 // Targeting ../nvml/nvmlNvLinkInfo_v2_t.java
 
 
+/** Version macro for \a nvmlNvLinkInfo_v2_t */
 public static native @MemberGetter int nvmlNvLinkInfo_v2();
 public static final int nvmlNvLinkInfo_v2 = nvmlNvLinkInfo_v2();
 
@@ -11477,6 +11828,7 @@ public static native @Cast("nvmlReturn_t") int nvmlGetExcludedDeviceInfoByIndex(
  */
 /***************************************************************************************************/
 
+/** Maximum size of the PRM data. */
 public static final int NVML_PRM_DATA_MAX_SIZE = 496;
 // Targeting ../nvml/nvmlPRMTLV_v1_t.java
 
@@ -11501,11 +11853,67 @@ public static final int NVML_PRM_DATA_MAX_SIZE = 496;
  *        - \ref NVML_ERROR_INVALID_ARGUMENT            if \p device or \p buffer are invalid
  *        - \ref NVML_ERROR_NO_PERMISSION               if user does not have permission to perform this operation
  *        - \ref NVML_ERROR_NOT_SUPPORTED               if this feature is not supported by the device
- *        - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH   if the version specified in \p buffer is not supported
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceReadWritePRM_v1(nvmlDevice_st device, nvmlPRMTLV_v1_t buffer);
 
 /** \} */
+
+/**
+ * PRM Counter IDs
+ */
+/** enum nvmlPRMCounterId_t */
+public static final int
+    NVML_PRM_COUNTER_ID_NONE = 0,
+    /* Physical Layer Counters (PPCNT group 0x12) */
+    NVML_PRM_COUNTER_ID_PPCNT_PHYSICAL_LAYER_CTRS_LINK_DOWN_EVENTS = 1,
+    NVML_PRM_COUNTER_ID_PPCNT_PHYSICAL_LAYER_CTRS_SUCCESSFUL_RECOVERY_EVENTS = 2,
+    /* Recovery counters (PPCNT group 0x1A) */
+    NVML_PRM_COUNTER_ID_PPCNT_RECOVERY_CTRS_TOTAL_SUCCESSFUL_RECOVERY_EVENTS = 101,
+    NVML_PRM_COUNTER_ID_PPCNT_RECOVERY_CTRS_TIME_SINCE_LAST_RECOVERY = 102,
+    NVML_PRM_COUNTER_ID_PPCNT_RECOVERY_CTRS_TIME_BETWEEN_LAST_TWO_RECOVERIES = 103,
+    /* Infiniband PortCounters Attribute (PPCNT group 0x20) */
+    NVML_PRM_COUNTER_ID_PPCNT_PORTCOUNTERS_PORT_XMIT_WAIT = 201,
+    /* PLR counters (PPCNT group 0x22) */
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_RCV_CODES = 301,
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_RCV_CODE_ERR = 302,
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_RCV_UNCORRECTABLE_CODE = 303,
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_XMIT_CODES = 304,
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_XMIT_RETRY_CODES = 305,
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_XMIT_RETRY_EVENTS = 306,
+    NVML_PRM_COUNTER_ID_PPCNT_PLR_SYNC_EVENTS = 307,
+    /* PPRM counters */
+    NVML_PRM_COUNTER_ID_PPRM_OPER_RECOVERY = 1001;
+// Targeting ../nvml/nvmlPRMCounterInput_v1_t.java
+
+
+// Targeting ../nvml/nvmlPRMCounterValue_v1_t.java
+
+
+// Targeting ../nvml/nvmlPRMCounter_v1_t.java
+
+
+// Targeting ../nvml/nvmlPRMCounterList_v1_t.java
+
+
+
+/**
+ * Read a list of GPU PRM Counters.
+ *
+ * For Blackwell &tm; or newer fully supported devices.
+ *
+ * Supported on Linux only.
+ *
+ * @param device                                    Identifer of target GPU device
+ * @param counterList                               Structure holding the input parameters as well as the retrieved counter values
+ *
+ * @return
+ *        - \ref NVML_SUCCESS                           on success
+ *        - \ref NVML_ERROR_INVALID_ARGUMENT            if \p device is invalid or \p counterList is NULL
+ *        - \ref NVML_ERROR_NO_PERMISSION               if user does not have permission to perform this operation
+ *        - \ref NVML_ERROR_NOT_SUPPORTED               if this feature is not supported by the device
+ *        - \ref NVML_ERROR_UNKNOWN                     on any other error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceReadPRMCounters_v1(nvmlDevice_st device, nvmlPRMCounterList_v1_t counterList);
 
 /***************************************************************************************************/
 /** \defgroup nvmlMultiInstanceGPU Multi Instance GPU Management
@@ -11517,11 +11925,13 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceReadWritePRM_v1(nvmlDev
 /**
  * Disable Multi Instance GPU mode.
  */
+/** Disable Multi Instance GPU mode. */
 public static final int NVML_DEVICE_MIG_DISABLE = 0x0;
 
 /**
  * Enable Multi Instance GPU mode.
  */
+/** Enable Multi Instance GPU mode. */
 public static final int NVML_DEVICE_MIG_ENABLE = 0x1;
 
 /**
@@ -11530,32 +11940,48 @@ public static final int NVML_DEVICE_MIG_ENABLE = 0x1;
  * These macros should be passed to \ref nvmlDeviceGetGpuInstanceProfileInfo to retrieve the
  * detailed information about a GPU instance such as profile ID, engine counts.
  */
+/** 1_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE =      0x0;
+/** 2_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE =      0x1;
+/** 3_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_3_SLICE =      0x2;
+/** 4_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_4_SLICE =      0x3;
+/** 7_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_7_SLICE =      0x4;
+/** 8_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_8_SLICE =      0x5;
+/** 6_SLICE GPU instance profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_6_SLICE =      0x6;
 // 1_SLICE profile with at least one (if supported at all) of Decoder, Encoder, JPEG, OFA engines.
+/** 1_SLICE GPU instance profile (rev1). */
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_REV1 = 0x7;
 // 2_SLICE profile with at least one (if supported at all) of Decoder, Encoder, JPEG, OFA engines.
+/** 2_SLICE GPU instance profile (rev1). */
 public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_REV1 = 0x8;
 // 1_SLICE profile with twice the amount of memory resources.
+/** 1_SLICE GPU instance profile (rev2). */
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_REV2 = 0x9;
 // 1_SLICE gfx capable profile
+/** 1_SLICE gfx capable profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_GFX =      0x0A;
 // 2_SLICE gfx capable profile
+/** 2_SLICE gfx capable profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_GFX =      0x0B;
 // 4_SLICE gfx capable profile
+/** 4_SLICE gfx capable profile. */
 public static final int NVML_GPU_INSTANCE_PROFILE_4_SLICE_GFX =      0x0C;
 // 1_SLICE profile with none of Decode, Encoder, JPEG, OFA engines.
+/** 1_SLICE profile with none of Decode, Encoder, JPEG, OFA engines. */
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_NO_ME =    0x0D;
 // 2_SLICE profile with none of Decode, Encoder, JPEG, OFA engines.
+/** 2_SLICE profile with none of Decode, Encoder, JPEG, OFA engines. */
 public static final int NVML_GPU_INSTANCE_PROFILE_2_SLICE_NO_ME =    0x0E;
 // 1_SLICE profile with all of GPU Decode, Encoder, JPEG, OFA engines.
 // Allocation of instance of this profile prevents allocation of
 // all but _NO_ME profiles.
+/** 1_SLICE profile with all of GPU Decode, Encoder, JPEG, OFA engines. */
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_ALL_ME =   0x0F;
 // 2_SLICE profile with all of GPU Decode, Encoder, JPEG, OFA engines.
 // Allocation of instance of this profile prevents allocation of
@@ -11569,9 +11995,11 @@ public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =            0x11;
  * Bit field values representing MIG profile capabilities
  * \ref nvmlGpuInstanceProfileInfo_v3_t.capabilities
  */
+/** Peer-to-Peer support. */
 public static final int NVML_GPU_INSTANCE_PROFILE_CAPS_P2P =     0x1;
 /** Deprecated, do not use */
 public static final int NVML_GPU_INTSTANCE_PROFILE_CAPS_P2P =    0x1;
+/** GFX support. */
 public static final int NVML_GPU_INSTANCE_PROFILE_CAPS_GFX =     0x2;
 
 /**
@@ -11615,18 +12043,28 @@ public static final int nvmlGpuInstanceProfileInfo_v3 = nvmlGpuInstanceProfileIn
  * These macros should be passed to \ref nvmlGpuInstanceGetComputeInstanceProfileInfo to retrieve the
  * detailed information about a compute instance such as profile ID, engine counts
  */
+/** 1_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_1_SLICE =       0x0;
+/** 2_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_2_SLICE =       0x1;
+/** 3_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_3_SLICE =       0x2;
+/** 4_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_4_SLICE =       0x3;
+/** 7_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_7_SLICE =       0x4;
+/** 8_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_8_SLICE =       0x5;
+/** 6_SLICE compute instance profile. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_6_SLICE =       0x6;
+/** 1_SLICE compute instance profile (rev1). */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_1_SLICE_REV1 =  0x7;
+/** Number of compute instance profiles. */
 public static final int NVML_COMPUTE_INSTANCE_PROFILE_COUNT =         0x8;
 
-/** All the engines except multiprocessors would be shared */
+/** All the engines except multiprocessors would be shared. */
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_SHARED = 0x0;
+/** Number of engine profiles. */
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
 // Targeting ../nvml/nvmlComputeInstancePlacement_t.java
 
@@ -12894,6 +13332,7 @@ public static native @Cast("nvmlReturn_t") int nvmlGpmSetStreamingEnabled(nvmlDe
 /** \} */ // @defgroup nvmlGpmFunctions
 /** \} */ // @defgroup GPM
 
+/** Extended GPU memory */
 public static final int NVML_DEV_CAP_EGM = (1 << 0);
 // Targeting ../nvml/nvmlDeviceCapabilities_v1_t.java
 
@@ -12925,17 +13364,23 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetCapabilities(nvmlDev
 /*
  * Generic bitmask to hold 255 bits, represented by 8 elements of 32 bits
  */
+/** Number of bits per element. */
 public static final int NVML_255_MASK_BITS_PER_ELEM =     32;
+/** Number of elements. */
 public static final int NVML_255_MASK_NUM_ELEMS =         8;
+/** Set bit at index. */
 // #define NVML_255_MASK_BIT_SET(index, nvmlMask)
 //     nvmlMask.mask[index / NVML_255_MASK_BITS_PER_ELEM] |= (1 << (index % NVML_255_MASK_BITS_PER_ELEM))
 
+/** Get bit at index. */
 // #define NVML_255_MASK_BIT_GET(index, nvmlMask)
 //     nvmlMask.mask[index / NVML_255_MASK_BITS_PER_ELEM] & (1 << (index % NVML_255_MASK_BITS_PER_ELEM))
 
+/** Set bit at index. */
 // #define NVML_255_MASK_BIT_SET_PTR(index, nvmlMask)
 //     nvmlMask->mask[index / NVML_255_MASK_BITS_PER_ELEM] |= (1 << (index % NVML_255_MASK_BITS_PER_ELEM))
 
+/** Get bit at index. */
 // #define NVML_255_MASK_BIT_GET_PTR(index, nvmlMask)
 //     nvmlMask->mask[index / NVML_255_MASK_BITS_PER_ELEM] & (1 << (index % NVML_255_MASK_BITS_PER_ELEM))
 // Targeting ../nvml/nvmlMask255_t.java
@@ -12967,14 +13412,31 @@ public static final int
     NVML_POWER_PROFILE_MIG              = 14,
 
     NVML_POWER_PROFILE_MAX              = 15;
+
+/**
+ * Enum for operation to perform on the requested profiles
+ */
+/** enum nvmlPowerProfileOperation_t */
+public static final int
+    /** Remove the requested profiles from the existing list of requested profiles */
+    NVML_POWER_PROFILE_OPERATION_CLEAR = 0,
+    /** Add the requested profiles to the existing list of requested profiles */
+    NVML_POWER_PROFILE_OPERATION_SET = 1,
+    /** Overwrite the existing list of requested profiles with just the requested profiles */
+    NVML_POWER_PROFILE_OPERATION_SET_AND_OVERWRITE = 2,
+
+    /** Max value above +1 */
+    NVML_POWER_PROFILE_OPERATION_MAX = 3;
 // Targeting ../nvml/nvmlWorkloadPowerProfileInfo_v1_t.java
 
 
+/** Version macro for \a nvmlWorkloadPowerProfileInfo_v1_t */
 public static native @MemberGetter int nvmlWorkloadPowerProfileInfo_v1();
 public static final int nvmlWorkloadPowerProfileInfo_v1 = nvmlWorkloadPowerProfileInfo_v1();
 // Targeting ../nvml/nvmlWorkloadPowerProfileProfilesInfo_v1_t.java
 
 
+/** Version macro for \a nvmlWorkloadPowerProfileProfilesInfo_v1_t */
 public static native @MemberGetter int nvmlWorkloadPowerProfileProfilesInfo_v1();
 public static final int nvmlWorkloadPowerProfileProfilesInfo_v1 = nvmlWorkloadPowerProfileProfilesInfo_v1();
 // Targeting ../nvml/nvmlWorkloadPowerProfileCurrentProfiles_v1_t.java
@@ -12985,8 +13447,14 @@ public static final int nvmlWorkloadPowerProfileCurrentProfiles_v1 = nvmlWorkloa
 // Targeting ../nvml/nvmlWorkloadPowerProfileRequestedProfiles_v1_t.java
 
 
+/** Version macro for \a nvmlWorkloadPowerProfileRequestedProfiles_v1_t */
 public static native @MemberGetter int nvmlWorkloadPowerProfileRequestedProfiles_v1();
 public static final int nvmlWorkloadPowerProfileRequestedProfiles_v1 = nvmlWorkloadPowerProfileRequestedProfiles_v1();
+// Targeting ../nvml/nvmlWorkloadPowerProfileUpdateProfiles_v1_t.java
+
+
+public static native @MemberGetter int nvmlWorkloadPowerProfileUpdateProfiles_v1();
+public static final int nvmlWorkloadPowerProfileUpdateProfiles_v1 = nvmlWorkloadPowerProfileUpdateProfiles_v1();
 
 /**
  * Get Performance Profiles Information
@@ -13040,6 +13508,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileGet
 public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileGetCurrentProfiles(nvmlDevice_st device,
                                                                       @Cast("nvmlWorkloadPowerProfileCurrentProfiles_t*") nvmlWorkloadPowerProfileCurrentProfiles_v1_t currentProfiles);
 /**
+ * @deprecated Use \ref nvmlDeviceWorkloadPowerProfileUpdateProfiles_v1 instead
  * Set Requested Performance Profiles
  *
  * For Blackwell &tm; or newer fully supported devices.
@@ -13062,9 +13531,10 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileGet
  *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH If the provided version is invalid/unsupported
  *         - \ref NVML_ERROR_UNKNOWN                   On any unexpected error
  */
-public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileSetRequestedProfiles(nvmlDevice_st device,
-                                                                        @Cast("nvmlWorkloadPowerProfileRequestedProfiles_t*") nvmlWorkloadPowerProfileRequestedProfiles_v1_t requestedProfiles);
+public static native @Cast("nvmlReturn_t") @Deprecated int nvmlDeviceWorkloadPowerProfileSetRequestedProfiles(nvmlDevice_st device,
+                                                                                           @Cast("nvmlWorkloadPowerProfileRequestedProfiles_t*") nvmlWorkloadPowerProfileRequestedProfiles_v1_t requestedProfiles);
 /**
+ * @deprecated Use \ref nvmlDeviceWorkloadPowerProfileUpdateProfiles_v1 instead
  * Clear Requested Performance Profiles
  *
  * For Blackwell &tm; or newer fully supported devices.
@@ -13087,8 +13557,34 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileSet
  *         - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH If the provided version is invalid/unsupported
  *         - \ref NVML_ERROR_UNKNOWN                   On any unexpected error
  */
-public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileClearRequestedProfiles(nvmlDevice_st device,
-                                                                          @Cast("nvmlWorkloadPowerProfileRequestedProfiles_t*") nvmlWorkloadPowerProfileRequestedProfiles_v1_t requestedProfiles);
+public static native @Cast("nvmlReturn_t") @Deprecated int nvmlDeviceWorkloadPowerProfileClearRequestedProfiles(nvmlDevice_st device,
+                                                                                           @Cast("nvmlWorkloadPowerProfileRequestedProfiles_t*") nvmlWorkloadPowerProfileRequestedProfiles_v1_t requestedProfiles);
+
+/**
+ * Update Requested Performance Profiles
+ *
+ * For Blackwell &tm; or newer fully supported devices.
+ * See \ref nvmlWorkloadPowerProfileUpdateProfiles_v1_t for more information on the struct.
+ * Update the requested performance profiles using the input bitmask
+ * \a updateProfilesMask, where each bit set corresponds to a supported bit from
+ * the \a perfProfilesMask.
+ * The \a operation parameter specifies the operation to perform, see \ref nvmlPowerProfileOperation_t for more information.
+ * Requires root/admin permissions.
+ *
+ * @param device                The identifier of the target device
+ * @param updateProfiles        Reference to struct \a nvmlWorkloadPowerProfileUpdateProfiles_v1_t
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                         If the query is successful
+ *         - \ref NVML_ERROR_UNINITIALIZED             If the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT          If \a device is invalid or \a pointer to struct is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED             If the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST               If the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN                   On any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileUpdateProfiles_v1(nvmlDevice_st device,
+                                                                     nvmlWorkloadPowerProfileUpdateProfiles_v1_t updateProfiles);
+
 /** \} */ // @defgroup
 
 /***************************************************************************************************/
@@ -13096,24 +13592,50 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceWorkloadPowerProfileCle
  *  \{
  */
 /***************************************************************************************************/
+/**
+ * Macro for accomodating the gap in field values for delayed power smoothing.
+ */
+/** Index from field value. */
 // #define NVML_POWER_SMOOTHING_IDX_FROM_FIELD_VAL(field_val)
-//  (field_val - NVML_FI_PWR_SMOOTHING_ENABLED)
+//     (
+//         (field_val > NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_DOWN_HYST_VAL) ?
+//         (field_val - NVML_FI_PWR_SMOOTHING_ENABLED -
+//             (NVML_FI_PWR_SMOOTHING_PRIMARY_POWER_FLOOR - NVML_FI_PWR_SMOOTHING_ADMIN_OVERRIDE_RAMP_DOWN_HYST_VAL - 1)) :
+//         (field_val - NVML_FI_PWR_SMOOTHING_ENABLED)
+//     )
 
+/** Maximum number of profiles. */
 public static final int NVML_POWER_SMOOTHING_MAX_NUM_PROFILES =                   5;
-public static final int NVML_POWER_SMOOTHING_NUM_PROFILE_PARAMS =                 4;
+/** Number of profile parameters. */
+public static final int NVML_POWER_SMOOTHING_NUM_PROFILE_PARAMS =                 8;
+/** Admin override not set. */
 public static final int NVML_POWER_SMOOTHING_ADMIN_OVERRIDE_NOT_SET =             0xFFFFFFFF;
+/** Percent temperature floor. */
 public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_PERCENT_TMP_FLOOR =    0;
+/** Ramp up rate. */
 public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_RAMP_UP_RATE =         1;
+/** Ramp down rate. */
 public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_RAMP_DOWN_RATE =       2;
+/** Ramp down hysteresis. */
 public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_RAMP_DOWN_HYSTERESIS = 3;
+/** Secondary power floor value in Watts for a given profile */
+public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_SECONDARY_POWER_FLOOR =      4;
+/** Primary floor activation window multiplier value for a given profile */
+public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_PRIMARY_FLOOR_ACT_WIN_MULT = 5;
+/** Primary floor target window multiplier value for a given profile */
+public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_PRIMARY_FLOOR_TAR_WIN_MULT = 6;
+/** Primary floor activation offset value in Watts for a given profile */
+public static final int NVML_POWER_SMOOTHING_PROFILE_PARAM_PRIMARY_FLOOR_ACT_OFFSET =   7;
 // Targeting ../nvml/nvmlPowerSmoothingProfile_v1_t.java
 
 
+/** Version macro for \a nvmlPowerSmoothingProfile_v1_t */
 public static native @MemberGetter int nvmlPowerSmoothingProfile_v1();
 public static final int nvmlPowerSmoothingProfile_v1 = nvmlPowerSmoothingProfile_v1();
 // Targeting ../nvml/nvmlPowerSmoothingState_v1_t.java
 
 
+/** Version macro for \a nvmlPowerSmoothingState_v1_t */
 public static native @MemberGetter int nvmlPowerSmoothingState_v1();
 public static final int nvmlPowerSmoothingState_v1 = nvmlPowerSmoothingState_v1();
 
@@ -13223,6 +13745,23 @@ public static native @Cast("nvmlReturn_t") int nvmlDevicePowerSmoothingSetState(
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSramUniqueUncorrectedEccErrorCounts(nvmlDevice_st device,
                                                                       @Cast("nvmlEccSramUniqueUncorrectedErrorCounts_t*") nvmlEccSramUniqueUncorrectedErrorCounts_v1_t errorCounts);
+
+/**
+ * Set Read-only user shared data (RUSD) settings for GPU.
+ * Requires root/admin permissions.
+ *
+ * @param device                    The identifier of the target device
+ * @param settings                  Reference to \ref nvmlRusdSettings_t struct
+ *
+ * @return
+ *        - \ref NVML_SUCCESS                         if the RUSD setting  was successfully set
+ *        - \ref NVML_ERROR_INVALID_ARGUMENT          if device is invalid or state is NULL
+ *        - \ref NVML_ERROR_NO_PERMISSION             if user does not have permission to change feature state
+ *        - \ref NVML_ERROR_NOT_SUPPORTED             if this feature is not supported by NVIDIA kernel driver
+ *        - \ref NVML_ERROR_ARGUMENT_VERSION_MISMATCH if the input version is not supported
+ *
+ **/
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetRusdSettings_v1(nvmlDevice_st device, nvmlRusdSettings_v1_t settings);
 
 /**
  * NVML API versioning support

@@ -47,7 +47,7 @@ runs:
             exit 0
         fi
 
-        curl -LO https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz || curl -LO https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+        curl -LO https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.tar.gz
         sudo tar -xzf apache-maven-3.9.6-bin.tar.gz -C /opt/
         sudo ln -sf /opt/apache-maven-3.9.6/bin/mvn /usr/bin/mvn
 

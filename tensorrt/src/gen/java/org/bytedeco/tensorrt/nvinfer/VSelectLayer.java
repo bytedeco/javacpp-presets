@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-
+     // class VAttention
 
 @Namespace("nvinfer1::apiv") @Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class VSelectLayer extends VRoot {
