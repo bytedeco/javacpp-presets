@@ -19,12 +19,16 @@ import static org.bytedeco.cuda.global.cudart.*;
  *     CUdevResourceType type;
  *     union {
  *         CUdevSmResource sm;
+           CUdevWorkqueueConfigResource wqConfig;
+           CUdevWorkqueueResource wq;
  *     };
  * };
  * }</pre>
  * - If \p type is \p CU_DEV_RESOURCE_TYPE_INVALID, this resoure is not valid and cannot be further accessed.
  * - If \p type is \p CU_DEV_RESOURCE_TYPE_SM, the ::CUdevSmResource structure \p sm is filled in. For example,
  * \p sm.smCount will reflect the amount of streaming multiprocessors available in this resource.
+ * - If \p type is \p CU_DEV_RESOURCE_TYPE_WORKQUEUE_CONFIG, the ::CUdevWorkqueueConfigResource structure \p wqConfig is filled in.
+ * - If \p type is \p CU_DEV_RESOURCE_TYPE_WORKQUEUE, the ::CUdevWorkqueueResource structure \p wq is filled in.
  */
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class CUdevResource_st extends Pointer {
@@ -50,6 +54,11 @@ public class CUdevResource_st extends Pointer {
     @MemberGetter public native @Cast("unsigned char*") BytePointer _internal_padding();
         /** Resource corresponding to CU_DEV_RESOURCE_TYPE_SM \p type. */
         public native @ByRef CUdevSmResource_st sm(); public native CUdevResource_st sm(CUdevSmResource_st setter);
+        /** Resource corresponding to CU_DEV_RESOURCE_TYPE_WORKQUEUE_CONFIG \p type. */
+        public native @ByRef CUdevWorkqueueConfigResource wqConfig(); public native CUdevResource_st wqConfig(CUdevWorkqueueConfigResource setter);
+        /** Resource corresponding to CU_DEV_RESOURCE_TYPE_WORKQUEUE \p type. */
+        public native @ByRef CUdevWorkqueueResource wq(); public native CUdevResource_st wq(CUdevWorkqueueResource setter);
         public native @Cast("unsigned char") byte _oversize(int i); public native CUdevResource_st _oversize(int i, byte setter);
         @MemberGetter public native @Cast("unsigned char*") BytePointer _oversize();
+    public native CUdevResource_st nextResource(); public native CUdevResource_st nextResource(CUdevResource_st setter);
 }

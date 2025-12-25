@@ -35,8 +35,9 @@ public class cudaMemcpyNodeParams extends Pointer {
     /** Must be zero */
     public native int flags(); public native cudaMemcpyNodeParams flags(int setter);
     /** Must be zero */
-    public native int reserved(int i); public native cudaMemcpyNodeParams reserved(int i, int setter);
-    @MemberGetter public native IntPointer reserved();
+    public native int reserved(); public native cudaMemcpyNodeParams reserved(int setter);
+    /** Context in which to run the memcpy. If NULL will try to use the current context. */
+    public native cudaExecutionContext_st ctx(); public native cudaMemcpyNodeParams ctx(cudaExecutionContext_st setter);
     /** Parameters for the memory copy */
     public native @ByRef cudaMemcpy3DParms copyParams(); public native cudaMemcpyNodeParams copyParams(cudaMemcpy3DParms setter);
 }

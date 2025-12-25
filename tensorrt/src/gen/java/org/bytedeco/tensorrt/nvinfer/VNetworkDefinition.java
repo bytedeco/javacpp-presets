@@ -153,4 +153,18 @@ public class VNetworkDefinition extends VRoot {
             @ByRef ITensor input, @ByRef ITensor axis, @Cast("nvinfer1::CumulativeOperation") int operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
     public native @Cast("bool") @NoException(true) boolean markUnfusedTensorsAsDebugTensors();
     public native @Cast("bool") @NoException(true) boolean unmarkUnfusedTensorsAsDebugTensors();
+    public native @NoException(true) ITopKLayer addTopKV2(
+            @ByRef ITensor input, TopKOperation op, int k, @Cast("uint32_t") int reduceAxes, DataType indicesType);
+    public native @NoException(true) ITopKLayer addTopKV2(
+            @ByRef ITensor input, @Cast("nvinfer1::TopKOperation") int op, int k, @Cast("uint32_t") int reduceAxes, @Cast("nvinfer1::DataType") int indicesType);
+    public native @NoException(true) INonZeroLayer addNonZeroV2(@ByRef ITensor input, DataType indicesType);
+    public native @NoException(true) INonZeroLayer addNonZeroV2(@ByRef ITensor input, @Cast("nvinfer1::DataType") int indicesType);
+    public native @NoException(true) INMSLayer addNMSV2(
+            @ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass, DataType indicesType);
+    public native @NoException(true) INMSLayer addNMSV2(
+            @ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass, @Cast("nvinfer1::DataType") int indicesType);
+    public native @NoException(true) IAttention addAttention(
+            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean isCausal);
+    public native @NoException(true) IAttention addAttention(
+            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean isCausal);
 }

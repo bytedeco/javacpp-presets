@@ -16,7 +16,7 @@ import static org.bytedeco.cuda.global.nvcomp.*;
 /**
  * \brief High-level interface class for the LZ4 compressor.
  *
- * \note Any uncompressed data buffer to be compressed MUST be a size that is a
+ * \warning Any uncompressed data buffer to be compressed MUST be a size that is a
  * multiple of the data type size, else compression may crash or result in
  * invalid output.
  *

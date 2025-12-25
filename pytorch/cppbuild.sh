@@ -82,6 +82,9 @@ git submodule foreach --recursive 'git reset --hard'
 # https://github.com/pytorch/pytorch/pull/159869
 #patch -Np1 < ../../../pytorch.patch
 
+# https://github.com/pytorch/pytorch/pull/164570
+patch -Np1 < ../../../pytorch-cuda.patch
+
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
@@ -234,7 +237,7 @@ rm -f cmake/Modules/FindOpenMP.cmake
 sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find_package(OpenMP)/g' cmake/Dependencies.cmake
 
 # delete broken CUDA kernels at least on Windows with CUDA 12.9
-rm -f aten/src/ATen/native/cuda/SegmentReduce.cu
+#rm -f aten/src/ATen/native/cuda/SegmentReduce.cu
 
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build

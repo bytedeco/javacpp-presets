@@ -22,19 +22,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1::apiv") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class VNonZeroLayer extends VRoot {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public VNonZeroLayer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public VNonZeroLayer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VNonZeroLayer(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public VNonZeroLayer position(long position) {
-        return (VNonZeroLayer)super.position(position);
-    }
-    @Override public VNonZeroLayer getPointer(long i) {
-        return new VNonZeroLayer((Pointer)this).offsetAddress(i);
-    }
 
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(DataType type);
+    public native @Cast("bool") @NoException(true) boolean setIndicesType(@Cast("nvinfer1::DataType") int type);
+    public native @NoException(true) DataType getIndicesType();
 }

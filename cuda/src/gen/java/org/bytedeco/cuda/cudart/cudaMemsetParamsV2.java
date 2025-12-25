@@ -44,4 +44,6 @@ public class cudaMemsetParamsV2 extends Pointer {
     public native @Cast("size_t") long width(); public native cudaMemsetParamsV2 width(long setter);
     /** Number of rows */
     public native @Cast("size_t") long height(); public native cudaMemsetParamsV2 height(long setter);
+    /** Context in which to run the memset. If NULL will try to use the current context. */
+    public native cudaExecutionContext_st ctx(); public native cudaMemsetParamsV2 ctx(cudaExecutionContext_st setter);
 }

@@ -83,9 +83,9 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 12;
-public static final int CUSPARSE_VER_MINOR = 6;
-public static final int CUSPARSE_VER_PATCH = 3;
-public static final int CUSPARSE_VER_BUILD = 3;
+public static final int CUSPARSE_VER_MINOR = 7;
+public static final int CUSPARSE_VER_PATCH = 2;
+public static final int CUSPARSE_VER_BUILD = 19;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -614,7 +614,7 @@ public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZgemvi_bu
                           int nnz,
                           int[] pBufferSize);
 
-public static native @Cast("cusparseStatus_t") int cusparseSbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -629,7 +629,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSbsrmv(cusparseContex
                @Const FloatPointer x,
                @Const FloatPointer beta,
                FloatPointer y);
-public static native @Cast("cusparseStatus_t") int cusparseSbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -644,7 +644,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSbsrmv(cusparseContex
                @Const FloatBuffer x,
                @Const FloatBuffer beta,
                FloatBuffer y);
-public static native @Cast("cusparseStatus_t") int cusparseSbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -660,7 +660,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSbsrmv(cusparseContex
                @Const float[] beta,
                float[] y);
 
-public static native @Cast("cusparseStatus_t") int cusparseDbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -675,7 +675,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDbsrmv(cusparseContex
                @Const DoublePointer x,
                @Const DoublePointer beta,
                DoublePointer y);
-public static native @Cast("cusparseStatus_t") int cusparseDbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -690,7 +690,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDbsrmv(cusparseContex
                @Const DoubleBuffer x,
                @Const DoubleBuffer beta,
                DoubleBuffer y);
-public static native @Cast("cusparseStatus_t") int cusparseDbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseDbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -706,7 +706,7 @@ public static native @Cast("cusparseStatus_t") int cusparseDbsrmv(cusparseContex
                @Const double[] beta,
                double[] y);
 
-public static native @Cast("cusparseStatus_t") int cusparseCbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -721,7 +721,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCbsrmv(cusparseContex
                @Cast("const cuComplex*") float2 x,
                @Cast("const cuComplex*") float2 beta,
                @Cast("cuComplex*") float2 y);
-public static native @Cast("cusparseStatus_t") int cusparseCbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -736,7 +736,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCbsrmv(cusparseContex
                @Cast("const cuComplex*") float2 x,
                @Cast("const cuComplex*") float2 beta,
                @Cast("cuComplex*") float2 y);
-public static native @Cast("cusparseStatus_t") int cusparseCbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseCbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -752,7 +752,7 @@ public static native @Cast("cusparseStatus_t") int cusparseCbsrmv(cusparseContex
                @Cast("const cuComplex*") float2 beta,
                @Cast("cuComplex*") float2 y);
 
-public static native @Cast("cusparseStatus_t") int cusparseZbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -767,7 +767,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZbsrmv(cusparseContex
                @Cast("const cuDoubleComplex*") double2 x,
                @Cast("const cuDoubleComplex*") double2 beta,
                @Cast("cuDoubleComplex*") double2 y);
-public static native @Cast("cusparseStatus_t") int cusparseZbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -782,7 +782,7 @@ public static native @Cast("cusparseStatus_t") int cusparseZbsrmv(cusparseContex
                @Cast("const cuDoubleComplex*") double2 x,
                @Cast("const cuDoubleComplex*") double2 beta,
                @Cast("cuDoubleComplex*") double2 y);
-public static native @Cast("cusparseStatus_t") int cusparseZbsrmv(cusparseContext handle,
+public static native @Cast("cusparseStatus_t") @Deprecated int cusparseZbsrmv(cusparseContext handle,
                @Cast("cusparseDirection_t") int dirA,
                @Cast("cusparseOperation_t") int transA,
                int mb,
@@ -10638,6 +10638,52 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMV_preprocess(cuspa
                         @Cast("cudaDataType") int computeType,
                         @Cast("cusparseSpMVAlg_t") int alg,
                         Pointer externalBuffer);
+// Targeting ../cusparse/cusparseSpMVOpDescr.java
+
+
+// Targeting ../cusparse/cusparseSpMVOpPlan.java
+
+
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_createDescr(cusparseContext handle,
+                           @ByPtrPtr cusparseSpMVOpDescr desc,
+                           @Cast("cusparseOperation_t") int opA,
+                           @Cast("cusparseConstSpMatDescr_t") cusparseSpMatDescr matA,
+                           @Cast("cusparseConstDnVecDescr_t") cusparseDnVecDescr vecX,
+                           @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecY,
+                           @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecZ,
+                           @Cast("cudaDataType") int computeType);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_destroyDescr(cusparseSpMVOpDescr desc);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_createPlan(cusparseContext handle,
+                          cusparseSpMVOpDescr desc,
+                          @ByPtrPtr cusparseSpMVOpPlan plan,
+                          @Const Pointer code,
+                          @Cast("size_t") long codeSize);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_destroyPlan(cusparseSpMVOpPlan plan);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_setGlobalUserData(cusparseContext handle,
+                                 cusparseSpMVOpPlan plan,
+                                 @Cast("const char*") BytePointer global_data_name,
+                                 Pointer input_data,
+                                 @Cast("size_t") long data_size);
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_setGlobalUserData(cusparseContext handle,
+                                 cusparseSpMVOpPlan plan,
+                                 String global_data_name,
+                                 Pointer input_data,
+                                 @Cast("size_t") long data_size);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp(cusparseContext handle,
+               cusparseSpMVOpPlan plan,
+               @Const Pointer alpha,
+               @Const Pointer beta,
+               @Cast("cusparseConstDnVecDescr_t") cusparseDnVecDescr vecX,
+               @Cast("cusparseConstDnVecDescr_t") cusparseDnVecDescr vecY,
+               @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecZ);
+// #endif
+
 // #############################################################################
 // # SPARSE TRIANGULAR VECTOR SOLVE
 // #############################################################################
@@ -10986,11 +11032,11 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMMOp_createPlan(cus
                           @Cast("cusparseDnMatDescr_t") cusparseDnMatDescr matC,
                           @Cast("cudaDataType") int computeType,
                           @Cast("cusparseSpMMOpAlg_t") int alg,
-                          @Const Pointer addOperationNvvmBuffer,
+                          @Const Pointer addOperationLtoirBuffer,
                           @Cast("size_t") long addOperationBufferSize,
-                          @Const Pointer mulOperationNvvmBuffer,
+                          @Const Pointer mulOperationLtoirBuffer,
                           @Cast("size_t") long mulOperationBufferSize,
-                          @Const Pointer epilogueNvvmBuffer,
+                          @Const Pointer epilogueLtoirBuffer,
                           @Cast("size_t") long epilogueBufferSize,
                           @Cast("size_t*") SizeTPointer SpMMWorkspaceSize);
 

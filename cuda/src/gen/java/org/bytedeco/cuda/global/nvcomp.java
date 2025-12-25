@@ -57,6 +57,7 @@ public static final int
   nvcompErrorChunkSizeTooLarge = 18,
   nvcompErrorCannotCompress = 19,
   nvcompErrorWrongInputLength = 20,
+  nvcompErrorBatchSizeTooLarge = 21,
   nvcompErrorCudaError = 1000,
   nvcompErrorInternal = 10000;
 
@@ -136,6 +137,70 @@ public static native @Cast("nvcompStatus_t") int nvcompGetProperties(nvcompPrope
 
 // #ifdef __cplusplus
 // #endif
+
+
+// Parsed from <nvcomp.hpp>
+
+/*
+ * SPDX-FileCopyrightText: Copyright (c) 2020-2025 NVIDIA CORPORATION & AFFILIATES.
+ * All rights reserved. SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+ *
+ * NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+ * property and proprietary rights in and to this material, related
+ * documentation and any modifications thereto. Any use, reproduction,
+ * disclosure or distribution of this material and related documentation
+ * without an express license agreement from NVIDIA CORPORATION or
+ * its affiliates is strictly prohibited.
+*/
+
+// #pragma once
+
+// #include <cstdint>
+// #include <stdexcept>
+// #include <string>
+
+// #include "nvcomp.h"
+
+/**
+ * \brief nvCOMP supported compression formats.
+*/
+/** enum class nvcomp::nvcompFormatType_t */
+public static final byte
+  LZ4 = (byte)(0),
+  Snappy = (byte)(1),
+  ANS = (byte)(2),
+  GDeflate = (byte)(3),
+  Cascaded = (byte)(4),
+  Bitcomp = (byte)(5),
+  Zstd = (byte)(6),
+  Deflate = (byte)(7),
+  Gzip = (byte)(8),
+  NotSupportedError = (byte)(255);
+// Targeting ../nvcomp/NVCompException.java
+
+
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+/**
+ * \brief Retrieve the applicable nvCOMP type for a standard type.
+ *
+ * \tparam T A standard C/C++ type.
+ *
+ * @return The applicable nvCOMP type.
+ */
+
+/**
+ * \brief Retrieve the applicable nvCOMP type for a standard type with checks.
+ *
+ * \tparam T A standard C/C++ type.
+ *
+ * @return The applicable nvCOMP type.
+ */
+
+// #endif // DOXYGEN_SHOULD_SKIP_THIS
+
+ // namespace nvcomp
 
 
 // Parsed from <nvcomp/nvcompManager.hpp>
@@ -310,6 +375,33 @@ public static final int
 @Namespace("nvcomp") public static native @SharedPtr nvcompManagerBase create_manager(
     @Cast("const uint8_t*") byte[] comp_buffer);
 
+
+/**
+ * \brief Returns the compression format for a given HLIF compressed buffer.
+ *
+ * \note This operation synchronizes the host with the stream.
+ *
+ * @param comp_buffer [in] The HLIF compressed buffer from which we intend to create the manager.
+ * @param stream [in] The CUDA stream to perform the operation on.
+ *
+ * @return Compression format.
+ */
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
+    @Cast("const uint8_t*") BytePointer comp_buffer,
+    CUstream_st stream/*=0*/);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
+    @Cast("const uint8_t*") BytePointer comp_buffer);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
+    @Cast("const uint8_t*") ByteBuffer comp_buffer,
+    CUstream_st stream/*=0*/);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
+    @Cast("const uint8_t*") ByteBuffer comp_buffer);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
+    @Cast("const uint8_t*") byte[] comp_buffer,
+    CUstream_st stream/*=0*/);
+@Namespace("nvcomp") public static native @Cast("nvcomp::nvcompFormatType_t") byte get_compression_format(
+    @Cast("const uint8_t*") byte[] comp_buffer);
+
  // namespace nvcomp
 
 
@@ -476,7 +568,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxO
 /**
  * \brief Perform batched asynchronous compression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -516,7 +608,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressGetMaxO
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
+ *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedANSCompressAsync(
@@ -637,6 +731,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTe
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -686,7 +781,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressGetTe
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -725,7 +820,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSi
  * This function is used to decompress compressed buffers produced by
  * \ref nvcompBatchedANSCompressAsync .
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -764,6 +859,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSGetDecompressSi
  * {@code nvcompSuccess}. If the decompression is not successful, for example due to
  * the corrupted input or out-of-bound errors, the status will be set to
  * {@code nvcompErrorCannotDecompress}.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -1006,7 +1102,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
 /**
  * \brief Perform batched asynchronous compression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -1044,6 +1140,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompCompressGet
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -1167,6 +1264,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressG
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -1216,7 +1314,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompDecompressG
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -1255,8 +1353,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompre
  * \ref nvcompBatchedBitcompCompressAsync . It can also decompress buffers
  * compressed with the native Bitcomp API.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
+ * 
+ * \warning Providing a corrupt buffer for decompression will result in undefined 
+ * behavior.
  *
  * \note The function is not completely asynchronous, as it needs to look
  * at the compressed data in order to create the proper bitcomp handle.
@@ -1295,9 +1396,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedBitcompGetDecompre
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -1543,7 +1645,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * \note The current implementation does not support uncompressed size larger
  * than 4,294,967,295 bytes (max uint32_t).
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -1581,6 +1683,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedCompressGe
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -1703,6 +1806,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -1752,7 +1856,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedDecompress
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -1791,8 +1895,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompr
  * This function is used to decompress compressed buffers produced by
  * \ref nvcompBatchedCascadedCompressAsync.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
+ *
+ * \warning Providing a corrupt buffer for decompression will result in undefined
+ * behavior.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -1824,9 +1931,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedCascadedGetDecompr
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -2390,7 +2497,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * \brief Perform batched asynchronous compression.
  *
  * \note For best performance, a chunk size of 65536 bytes is recommended.
- * Violating any of the conditions listed in the parameter descriptions
+ *
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -2431,6 +2539,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateCompressGet
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -2553,6 +2662,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressG
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -2604,9 +2714,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateDecompressG
  *
  * This is needed when we do not know the expected output size.
  *
- * \note If the stream is corrupt, the calculated sizes will be invalid.
+ * \warning If the stream is corrupt, the calculated sizes will be invalid.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -2639,8 +2749,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompre
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
+ *
+ * \warning Providing a corrupt buffer for decompression will result in undefined
+ * behavior irrespective of the decompression backend used.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -2678,9 +2791,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedDeflateGetDecompre
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
  * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -2935,7 +3048,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * \brief Perform batched asynchronous compression.
  *
  * \note For best performance, a chunk size of 65536 bytes is recommended.
- * Violating any of the conditions listed in the parameter descriptions
+ * 
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -2976,6 +3090,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateCompressGe
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -3098,6 +3213,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -3149,9 +3265,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateDecompress
  *
  * This is needed when we do not know the expected output size.
  *
- * \note If the stream is corrupt, the calculated sizes will be invalid.
+ * \warning If the stream is corrupt, the calculated sizes will be invalid.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -3184,12 +3300,15 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompr
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
- * \note In the case where a chunk of compressed data is not a valid GDeflate
- * stream, 0 will be written for the size of the invalid chunk and
+ * \warning In the case where a chunk of compressed data is not a valid GDeflate
+ * stream, the calculated sizes of the uncompressed chunk will be invalid and
  * nvcompStatusCannotDecompress will be flagged for that chunk.
+ *
+ * \warning Providing a corrupt buffer for decompression will result in undefined
+ * behavior.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -3225,9 +3344,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGdeflateGetDecompr
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
  * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -3449,7 +3568,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetTem
  * \brief Perform batched asynchronous compression.
  *
  * \note For best performance, a chunk size of 65536 bytes is recommended.
- * Violating any of the conditions listed in the parameter descriptions
+ * 
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -3476,6 +3596,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipCompressGetTem
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -3552,7 +3673,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetT
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
  * @param stream [in] The CUDA stream to operate on.
- *
+ * Can be NULL if desired, in which case error status is not reported.
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
 public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetTempSizeSync(
@@ -3602,9 +3723,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipDecompressGetT
  *
  * This is needed when we do not know the expected output size.
  *
- * \note If the stream is corrupt, the calculated sizes will be invalid.
+ * \warning If the stream is corrupt, the calculated sizes will be invalid.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -3637,8 +3758,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressS
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
+ * 
+ * \warning Providing a corrupt buffer for decompression will result in undefined 
+ * behavior irrespective of the decompression backend used.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -3676,9 +3800,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedGzipGetDecompressS
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
  * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -3899,7 +4023,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetMaxO
  * \brief Perform batched asynchronous compression.
  *
  * \note For best performance, a chunk size of 65536 bytes is recommended.
- * Violating any of the conditions listed in the parameter descriptions
+ * 
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -3942,6 +4067,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4CompressGetMaxO
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -4064,6 +4190,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTe
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -4115,9 +4242,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4DecompressGetTe
  *
  * This is needed when we do not know the expected output size.
  *
- * \note If the stream is corrupt, the calculated sizes will be invalid.
+ * \warning If the stream is corrupt, the calculated sizes will be invalid.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -4151,8 +4278,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSi
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
- * below may result in undefined behaviour.
+ * \warning Violating any of the conditions listed in the parameter descriptions
+ * below may result in undefined behaviour. 
+ * 
+ * \warning Providing a corrupt compressed buffer 
+ * for decompression on the hardware decompress engine will result in undefined behavior.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -4190,9 +4320,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedLZ4GetDecompressSi
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. If decompression using the CUDA backend is not successful,
+ * for example due to the corrupted input or out-of-bound errors, the {@code device_statuses}
+ * will be set to {@code nvcompErrorCannotDecompress}. If using the hardware backend,
+ * any corrupted input leads to undefined behavior and the {@code device_statuses}
+ * are always set to {@code nvcompSuccess}.
  * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -4442,7 +4574,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetM
 /**
  * \brief Perform batched asynchronous compression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -4484,6 +4616,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyCompressGetM
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the compression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -4606,6 +4739,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -4655,7 +4789,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -4667,9 +4801,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyDecompressGe
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
- * If there is an error when retrieving the size of a chunk, the
- * uncompressed size of that chunk will be set to 0. This argument needs to
- * be preallocated in device-accessible memory.
+ * This argument needs to be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -4691,8 +4823,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompres
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
+ * 
+ * \warning Providing a corrupt buffer for decompression will result in undefined 
+ * behavior irrespective of the decompression backend used.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -4730,9 +4865,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedSnappyGetDecompres
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
  * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -4895,6 +5030,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetReq
  * asynchronously.
  *
  * \note For best performance, a chunk size of 65536 bytes is recommended.
+ * 
+ * \note This function must be called using the same CUDA device as the 
+ * subsequent compression operations, since temporary storage requirements 
+ * are architecture-specific.
  *
  * @param num_chunks [in] The number of chunks of memory in the batch.
  * @param max_uncompressed_chunk_bytes [in] The maximum size of a chunk in the
@@ -4983,7 +5122,8 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMax
  * \brief Perform batched asynchronous compression.
  *
  * \note For best performance, a chunk size of 65536 bytes is recommended.
- * Violating any of the conditions listed in the parameter descriptions
+ * 
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_uncompressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
@@ -5023,8 +5163,9 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdCompressGetMax
  * @param compress_opts [in] The Zstd compression options to use. Currently empty.
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
- * chunk, if the compression is successful, the status will be set to
+ * chunk, if the decompression is successful, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.
@@ -5147,6 +5288,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetT
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the data can be parsed successfully, the status will be set to
  * {@code nvcompSuccess}, and an error code otherwise.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
@@ -5196,7 +5338,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetT
  * \brief Asynchronously compute the number of bytes of uncompressed data for
  * each compressed chunk.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of
@@ -5208,9 +5350,7 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdDecompressGetT
  * of the compressed buffers in bytes. The sizes should reside in device-accessible memory.
  * @param device_uncompressed_chunk_bytes [out] Array with size \p num_chunks
  * to be filled with the sizes, in bytes, of each uncompressed data chunk.
- * If there is an error when retrieving the size of a chunk, the
- * uncompressed size of that chunk will be set to 0. This argument needs to
- * be preallocated in device-accessible memory.
+ * This argument needs to be preallocated in device-accessible memory.
  * @param num_chunks [in] Number of data chunks to compute sizes of.
  * @param stream [in] The CUDA stream to operate on.
  *
@@ -5232,8 +5372,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressS
 /**
  * \brief Perform batched asynchronous decompression.
  *
- * \note Violating any of the conditions listed in the parameter descriptions
+ * \warning Violating any of the conditions listed in the parameter descriptions
  * below may result in undefined behaviour.
+ *
+ * \warning Providing a corrupt buffer for decompression will result in undefined
+ * behavior.
  *
  * @param device_compressed_chunk_ptrs [in] Array with size \p num_chunks of pointers
  * in device-accessible memory to device-accessible compressed buffers.
@@ -5267,9 +5410,10 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedZstdGetDecompressS
  * @param device_statuses [out] Array with size \p num_chunks of statuses in
  * device-accessible memory. This argument needs to be preallocated. For each
  * chunk, if the decompression is successful, the status will be set to
- * {@code nvcompSuccess}. If the decompression is not successful, for example due to
- * the corrupted input or out-of-bound errors, the status will be set to
- * {@code nvcompErrorCannotDecompress}.
+ * {@code nvcompSuccess}. Passing corrupt, invalid, or insufficient data leads to
+ * undefined behavior or out-of-bound errors. Error reporting cannot be guaranteed
+ * in this scenario as only a limited validation is performed to maintain performance.
+ * Can be NULL if desired, in which case error status is not reported.
  * @param stream [in] The CUDA stream to operate on.
  *
  * @return nvcompSuccess if successfully launched, and an error code otherwise.

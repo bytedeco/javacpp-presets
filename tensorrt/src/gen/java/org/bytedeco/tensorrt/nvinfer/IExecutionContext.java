@@ -1179,5 +1179,30 @@ public class IExecutionContext extends INoCopy {
      * 
      *  @return true if unfused tensors debug state is on. False if unfused tensors debug state is off.
      *  */
+    
+    //!
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean getUnfusedTensorsDebugState();
+// #if ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
+    /**
+     *  \brief Check if a subsequent call to enqueueV3 is graph-capturable on the provided stream.
+     * 
+     *  @param stream The stream to check.
+     * 
+     *  @return true if a subsequent call to enqueueV3 is graph-capturable on the provided stream.
+     *  Reasons why graph capture may fail include:
+     *   - blocking runtime allocation due to large dynamically sized tensors that cannot be
+     *      statically allocated,
+     *   - dynamically shaped tensors whose size contains on the tensor contents, like the output
+     *      of an INonZeroLayer,
+     *   - conditional control flow depending on the contents of on-device tensors, like an
+     *      ITripLimitLayer whose input tensor resides on the device,
+     *   - engines that have been built for weight streaming.
+     * 
+     *  \note If this API returns false, enqueueV3 may not be called on a capturable stream
+     *  (i.e. users may not call cudaStreamBeingCapture before starting inference). Otherwise,
+     *  inference will fail with an error message. */
+    public native @Cast("bool") @NoException(true) boolean isStreamCapturable(CUstream_st stream);
 }

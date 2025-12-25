@@ -22,34 +22,58 @@ import static org.bytedeco.cuda.global.cudart.*;
  * (___CURRENT_FILE___) ___ENDMANBRIEF___
  *
  * This section describes the APIs for creation and manipulation of green contexts in the CUDA
- * driver. Green contexts are a lightweight alternative to traditional contexts, with the ability
- * to pass in a set of resources that they should be initialized with. This allows the developer to
- * represent distinct spatial partitions of the GPU, provision resources for them, and target them
- * via the same programming model that CUDA exposes (streams, kernel launches, etc.).
+ * driver. Green contexts are a lightweight alternative to traditional contexts, that can be used to select
+ * a subset of device resources. This allows the developer to, for example, select SMs from distinct spatial
+ * partitions of the GPU and target them via CUDA stream operations, kernel launches, etc.
  *
- * There are 4 main steps to using these new set of APIs.
- * - (1) Start with an initial set of resources, for example via ::cuDeviceGetDevResource. Only SM type is supported today.
- * - (2) Partition this set of resources by providing them as input to a partition API, for example: ::cuDevSmResourceSplitByCount.
+ * Here are the broad initial steps to follow to get started:
+ * - (1) Start with an initial set of resources. For SM resources, they can be fetched via ::cuDeviceGetDevResource.
+ *  In case of workqueues, a new configuration can be used or an existing one queried via the ::cuDeviceGetDevResource API.
+ * - (2) Modify these resources by either partitioning them (in case of SMs) or changing the configuration (in case of workqueues).
+ *  To partition SMs, we recommend ::cuDevSmResourceSplit. Changing the workqueue configuration can be done directly in place.
  * - (3) Finalize the specification of resources by creating a descriptor via ::cuDevResourceGenerateDesc.
- * - (4) Provision the resources and create a green context via ::cuGreenCtxCreate.
+ * - (4) Create a green context via ::cuGreenCtxCreate. This provisions the resource, such as workqueues
+ *  (until this step it was only a configuration specification).
+ * - (5) Create a stream via ::cuGreenCtxStreamCreate, and use it throughout your application.
  *
- * For \p CU_DEV_RESOURCE_TYPE_SM, the partitions created have minimum SM count requirements, often rounding up and aligning the
- * minCount provided to ::cuDevSmResourceSplitByCount. These requirements can be queried with ::cuDeviceGetDevResource from step (1)
- * above to determine the minimum partition size (\p sm.minSmPartitionSize) and alignment granularity (\p sm.smCoscheduledAlignment).
+ * <br><b>SMs</b><br>
  *
- * While it's recommended to use ::cuDeviceGetDevResource for accurate information, here is a guideline for each compute architecture:
- * - On Compute Architecture 6.X: The minimum count is 2 SMs and must be a multiple of 2.
- * - On Compute Architecture 7.X: The minimum count is 2 SMs and must be a multiple of 2.
- * - On Compute Architecture 8.X: The minimum count is 4 SMs and must be a multiple of 2.
- * - On Compute Architecture 9.0+: The minimum count is 8 SMs and must be a multiple of 8.
+ * There are two possible partition operations - with cuDevSmResourceSplitByCount the partitions created have to follow default
+ * SM count granularity requirements, so it will often be rounded up and aligned to a default value. On the other hand,
+ * ::cuDevSmResourceSplit is explicit and allows for creation of non-equal groups. It will not round up automatically - instead
+ * it is the developer’s responsibility to query and set the correct values.
+ * These requirements can be queried with cuDeviceGetDevResource to determine the alignment granularity (sm.smCoscheduledAlignment).
+ * A general guideline on the default values for each compute architecture:
+ * - On Compute Architecture 7.X, 8.X, and all Tegra SoC:
+ *   - The smCount must be a multiple of 2.
+ *   - The alignment (and default value of coscheduledSmCount) is 2.
+ * - On Compute Architecture 9.0+:
+ *   - The smCount must be a multiple of 8, or coscheduledSmCount if provided.
+ *   - The alignment (and default value of coscheduledSmCount) is 8.
+ * While the maximum value for coscheduled SM count is 32 on all Compute Architecture 9.0+, it's recommended to follow cluster size requirements.
+ * The portable cluster size and the max cluster size should be used in order to benefit from this co-scheduling.
  *
- * In the future, flags can be provided to tradeoff functional and performance characteristics versus finer grained SM partitions.
+ * <br><b>Workqueues</b><br>
  *
- * Even if the green contexts have disjoint SM partitions, it is not guaranteed that the kernels launched
- * in them will run concurrently or have forward progress guarantees. This is due to other resources (like HW connections,
- * see ::CUDA_DEVICE_MAX_CONNECTIONS) that could cause a dependency. Additionally, in certain scenarios,
- * it is possible for the workload to run on more SMs than was provisioned (but never less).
- * The following are two scenarios which can exhibit this behavior:
+ * For \p CU_DEV_RESOURCE_TYPE_WORKQUEUE_CONFIG, the resource specifies the expected maximum number of concurrent stream-ordered
+ * workloads via the \p wqConcurrencyLimit field. The \p sharingScope field determines how workqueue resources are shared:
+ * - \p CU_WORKQUEUE_SCOPE_DEVICE_CTX: Use all shared workqueue resources across all contexts (default driver behavior).
+ * - \p CU_WORKQUEUE_SCOPE_GREEN_CTX_BALANCED: When possible, use non-overlapping workqueue resources with other balanced green contexts.
+ *
+ * The maximum concurrency limit depends on ::CUDA_DEVICE_MAX_CONNECTIONS and can be queried from the primary context via ::cuCtxGetDevResource.
+ * Configurations may exceed this concurrency limit, but the driver will not guarantee that work submission remains non-overlapping.
+ *
+ * For \p CU_DEV_RESOURCE_TYPE_WORKQUEUE, the resource represents a pre-existing workqueue that can be retrieved from existing
+ * contexts or green contexts. This allows reusing workqueue resources across different green contexts.
+ *
+ * <br><b>On Concurrency</b><br>
+ *
+ * Even if the green contexts have disjoint SM partitions, it is not guaranteed that the kernels launched in them will run concurrently
+ * or have forward progress guarantees. This is due to other resources that could cause a dependency. Using a combination of disjoint SMs
+ * and CU_WORKQUEUE_SCOPE_GREEN_CTX_BALANCED workqueue configurations can provide the best chance of avoiding interference.
+ * More resources will be added in the future to provide stronger guarantees.
+ *
+ * Additionally, there are two known scenarios, where its possible for the workload to run on more SMs than was provisioned (but never less).
  * - On Volta+ MPS: When \p CUDA_MPS_ACTIVE_THREAD_PERCENTAGE is used,
  * the set of SMs that are used for running kernels can be scaled up to the value of SMs used for the MPS client.
  * - On Compute Architecture 9.x: When a module with dynamic parallelism (CDP) is loaded, all future

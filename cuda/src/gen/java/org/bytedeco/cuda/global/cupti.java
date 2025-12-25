@@ -330,6 +330,10 @@ public static final int
      */
     CUPTI_ERROR_INVALID_CHIP_NAME = 46,
     /**
+     * Hardware Event System (HES) trace is not supported on MPS.
+     */
+    CUPTI_ERROR_HES_TRACE_NOT_SUPPORTED_ON_MPS = 47,
+    /**
      * An unknown internal error has occurred.
      */
     CUPTI_ERROR_UNKNOWN                                  = 999,
@@ -510,11 +514,12 @@ public static native @Cast("CUptiResult") int cuptiGetErrorMessage(@Cast("CUptiR
  *
  * Important:
  *   - The CUPTI API version (CUPTI_API_VERSION) is distinct from CUDA_VERSION and CUDA_RUNTIME_VERSION.
- *
+ * 
  * v130000 : CUDA Toolkit 13.0
- * v130001 : CUDA Toolkit 13.0 Update 1
+ * v130001 : CUDA Toolkit 13.0 with CUPTI update 1
+ * v130100 : CUDA Toolkit 13.1
  */
-public static final int CUPTI_API_VERSION = 130001;
+public static final int CUPTI_API_VERSION = 130100;
 
 /**
  * \brief Get the CUPTI API version.
@@ -649,6 +654,7 @@ public static final int invalidNumaId = ((int) 0xFFFFFFFF);
  * @see CUpti_ActivityContext
  * @see CUpti_ActivityContext2
  * @see CUpti_ActivityContext3
+ * @see CUpti_ActivityContext4
  * @see CUpti_ActivityDevice
  * @see CUpti_ActivityDevice2
  * @see CUpti_ActivityDevice3
@@ -667,6 +673,7 @@ public static final int invalidNumaId = ((int) 0xFFFFFFFF);
  * @see CUpti_ActivityKernel8
  * @see CUpti_ActivityKernel9
  * @see CUpti_ActivityKernel10
+ * @see CUpti_ActivityKernel11
  * @see CUpti_ActivityCdpKernel
  * @see CUpti_ActivityPreemption
  * @see CUpti_ActivityMemcpy
@@ -728,6 +735,7 @@ public static final int invalidNumaId = ((int) 0xFFFFFFFF);
  * @see CUpti_ActivityNvLink4
  * @see CUpti_ActivityPcie
  * @see CUpti_ActivityConfidentialComputeRotation
+ * @see CUpti_ActivityComputeEngineCtxSwitch
  */
 
 /** enum CUpti_ActivityKind */
@@ -756,7 +764,7 @@ public static final int
    * the overall performance characteristics of the application because all
    * kernel executions are serialized on the GPU. Other activity kind for kernel
    * CUPTI_ACTIVITY_KIND_CONCURRENT_KERNEL doesn't break kernel concurrency.
-   * The corresponding activity record structure is \ref CUpti_ActivityKernel10.
+   * The corresponding activity record structure is \ref CUpti_ActivityKernel11.
    */
   CUPTI_ACTIVITY_KIND_KERNEL   = 3,
 
@@ -798,14 +806,14 @@ public static final int
 
   /**
    * Information about a CUDA context. The corresponding activity record
-   * structure is \ref CUpti_ActivityContext3.
+   * structure is \ref CUpti_ActivityContext4.
    */
   CUPTI_ACTIVITY_KIND_CONTEXT  = 9,
 
   /**
    * A kernel executing on the GPU. This activity kind doesn't break
    * kernel concurrency. The corresponding activity record structure
-   * is \ref CUpti_ActivityKernel10.
+   * is \ref CUpti_ActivityKernel11.
    */
   CUPTI_ACTIVITY_KIND_CONCURRENT_KERNEL = 10,
 
@@ -964,7 +972,7 @@ public static final int
   /**
    * PC sampling information for kernels. This will serialize
    * kernels. The corresponding activity record structure
-   * is \ref CUpti_ActivityPCSampling3. 
+   * is \ref CUpti_ActivityPCSampling3.
    * Starting with the CUDA 13.0 release, this enum is unsupported and should no longer be used.
    * Enabling it will return the error code CUPTI_ERROR_LEGACY_PROFILER_NOT_SUPPORTED.
    * Instead, use the PC Sampling API from the cupti_pcsampling.h header, which
@@ -975,7 +983,7 @@ public static final int
   /**
    * Summary information about PC sampling records. The
    * corresponding activity record structure is \ref
-   * CUpti_ActivityPCSamplingRecordInfo. 
+   * CUpti_ActivityPCSamplingRecordInfo.
    * Starting with the CUDA 13.0 release, this enum is unsupported and should no longer be used.
    * Enabling it will return the error code CUPTI_ERROR_LEGACY_PROFILER_NOT_SUPPORTED.
    * Instead, use the PC Sampling API from the cupti_pcsampling.h header.
@@ -1153,7 +1161,7 @@ public static final int
   /**
    * JIT (Just-in-time) operation tracking.
    * The corresponding activity record structure is \ref
-   * CUpti_ActivityJit.
+   * CUpti_ActivityJit2.
    */
   CUPTI_ACTIVITY_KIND_JIT = 52,
 
@@ -1180,12 +1188,31 @@ public static final int
    * CUpti_ActivityConfidentialComputeRotation.
    */
   CUPTI_ACTIVITY_KIND_CONFIDENTIAL_COMPUTE_ROTATION = 55,
+  /**
+   * Tracing of host execution nodes of the CUDA graph, i.e. nodes of type CU_GRAPH_NODE_TYPE_HOST.
+   * The corresponding activity record structure is \ref
+   * CUpti_ActivityGraphHostNode.
+   */
+  CUPTI_ACTIVITY_KIND_GRAPH_HOST_NODE = 56,
 
+  /**
+   * An activity denoting the switching of Compute Engine contexts in/out of the GPU.
+   * The corresponding activity record structure is \ref CUpti_ActivityComputeEngineCtxSwitch.
+   */
+  CUPTI_ACTIVITY_KIND_COMPUTE_ENGINE_CTX_SWITCH = 57,
+
+  /**
+   * An activity kind denoting the launch of a host function through cu(da)LaunchHostFunc API.
+   * The corresponding activity record structure is \ref CUpti_ActivityHostLaunch.
+   */
+  CUPTI_ACTIVITY_KIND_HOST_LAUNCH = 58,
 
   /**
    * Count of supported activity kinds.
    */
-  CUPTI_ACTIVITY_KIND_COUNT = 56,
+  CUPTI_ACTIVITY_KIND_COUNT = 59,
+
+
 
   CUPTI_ACTIVITY_KIND_FORCE_INT     = 0x7fffffff;
 
@@ -2575,7 +2602,7 @@ public static final int
     CUPTI_FUNC_SHMEM_LIMIT_OPTIN                = 0x01,
 
     CUPTI_FUNC_SHMEM_LIMIT_FORCE_INT            = 0x7fffffff;
-// Targeting ../cupti/CUpti_ActivityKernel10.java
+// Targeting ../cupti/CUpti_ActivityKernel11.java
 
 
 // Targeting ../cupti/CUpti_ActivityCdpKernel.java
@@ -2614,7 +2641,7 @@ public static final int
 // Targeting ../cupti/CUpti_ActivityDeviceAttribute.java
 
 
-// Targeting ../cupti/CUpti_ActivityContext3.java
+// Targeting ../cupti/CUpti_ActivityContext4.java
 
 
 // Targeting ../cupti/CUpti_ActivityName.java
@@ -2974,6 +3001,7 @@ public static final int
 
 
 
+
 /**
  * \brief The launch mode for device graph execution.
  */
@@ -2987,6 +3015,34 @@ public static final int
 
 
 // Targeting ../cupti/CUpti_ActivityMemDecompress.java
+
+
+// Targeting ../cupti/CUpti_ActivityGraphHostNode.java
+
+
+
+
+/**
+ * \brief The operation type of CUDA context switch event records.
+ */
+/** enum CUpti_ComputeEngineCtxSwitchOperationType */
+public static final int
+  CUPTI_COMPUTE_ENGINE_CTX_SWITCH_OPERATION_INVALID = 0,
+  /**
+   * The start of the CUDA context switch operation.
+   */
+  CUPTI_COMPUTE_ENGINE_CTX_SWITCH_OPERATION_START = 1,
+  /**
+   * The end of the CUDA context switch operation.
+   */
+  CUPTI_COMPUTE_ENGINE_CTX_SWITCH_OPERATION_END = 2,
+
+  CUPTI_COMPUTE_ENGINE_CTX_SWITCH_OPERATION_COUNT = 0x7fffffff;
+// Targeting ../cupti/CUpti_ActivityComputeEngineCtxSwitch.java
+
+
+// Targeting ../cupti/CUpti_ActivityHostLaunch.java
+
 
 
 
@@ -3493,6 +3549,7 @@ public static native @Cast("CUptiResult") int cuptiActivityDisable(@Cast("CUpti_
 
 
 
+
 /**
  * \brief Enable collection of a specific kind of activity record for
  * a context.
@@ -3811,7 +3868,7 @@ public static native @Cast("CUptiResult") int cuptiGetAutoBoostState(CUctx_st co
  *
  * For Volta and newer GPU architectures if this API is called in the middle of
  * execution, PC sampling configuration will be updated for subsequent kernel launches.
- * 
+ *
  * Starting with CUDA 13.0, this function is unsupported and should not be used. It always returns the error code CUPTI_ERROR_LEGACY_PROFILER_NOT_SUPPORTED.
  *
  * @param ctx The context
@@ -4020,7 +4077,7 @@ public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelatio
  * \brief Controls the collection of queued and submitted timestamps for kernels.
  *
  * This API is used to control the collection of queued and submitted timestamps
- * for kernels whose records are provided through the struct \ref CUpti_ActivityKernel10.
+ * for kernels whose records are provided through the struct \ref CUpti_ActivityKernel11.
  * Default value is 0, i.e. these timestamps are not collected. This API needs
  * to be called before initialization of CUDA and this setting should not be
  * changed during the profiling session.
@@ -4067,7 +4124,7 @@ public static native @Cast("CUptiResult") int cuptiActivityFlushPeriod(@Cast("ui
  * \brief Controls the collection of launch attributes for kernels.
  *
  * This API is used to control the collection of launch attributes for kernels whose
- * records are provided through the struct \ref CUpti_ActivityKernel10.
+ * records are provided through the struct \ref CUpti_ActivityKernel11.
  * Default value is 0, i.e. these attributes are not collected.
  *
  * @param enable is a boolean denoting whether these launch attributes should be collected
@@ -4122,7 +4179,7 @@ public static native @Cast("CUptiResult") int cuptiActivityRegisterTimestampCall
  * \brief Controls the collection of records for device launched graphs.
  *
  * This API is used to control the collection of records for device launched graphs.
- * Default value is 0, i.e. these records are not collected. 
+ * Default value is 0, i.e. these records are not collected.
  * Default value is 1 if HW trace is enabled using API cuptiActivityEnableHWTrace.
  * This API needs to be called before initialization of CUDA and this setting should not be
  * changed during the profiling session.
@@ -4200,6 +4257,7 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableRuntimeApi(@Cas
  * \retval CUPTI_ERROR_MIG_DEVICE_NOT_SUPPORTED
  * \retval CUPTI_ERROR_SLI_DEVICE_NOT_SUPPORTED
  * \retval CUPTI_ERROR_WSL_DEVICE_NOT_SUPPORTED
+ * \retval CUPTI_ERROR_HES_TRACE_NOT_SUPPORTED_ON_MPS
  */
 public static native @Cast("CUptiResult") int cuptiActivityEnableHWTrace(@Cast("uint8_t") byte enable);
 
@@ -4253,6 +4311,7 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableAllSyncRecords(
  * \retval CUPTI_ERROR_NOT_INITIALIZED
  */
 public static native @Cast("CUptiResult") int cuptiActivityEnableCudaEventDeviceTimestamps(@Cast("uint8_t") byte enable);
+
 
 /** \} */ /* END CUPTI_ACTIVITY_API */
 
@@ -8101,7 +8160,7 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuEventElapsedTime_v2                                          = 780,
     CUPTI_DRIVER_TRACE_CBID_cuTensorMapEncodeIm2colWide                                    = 781,
     CUPTI_DRIVER_TRACE_CBID_cuGreenCtxGetId                                                = 782,
-    CUPTI_DRIVER_TRACE_CBID_cuStreamCreateForCaptureToCig                                  = 783,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamBeginCaptureToCig                                      = 783,
     CUPTI_DRIVER_TRACE_CBID_cuMemPrefetchBatchAsync                                        = 784,
     CUPTI_DRIVER_TRACE_CBID_cuMemPrefetchBatchAsync_ptsz                                   = 785,
     CUPTI_DRIVER_TRACE_CBID_cuSemaphoreCreate                                              = 786,
@@ -8125,7 +8184,23 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuDeviceGetP2PAtomicCapabilities                               = 804,
     CUPTI_DRIVER_TRACE_CBID_cuDeviceGetHostAtomicCapabilities                              = 805,
     CUPTI_DRIVER_TRACE_CBID_cuDriverGetGpuCodeIsaVersion                                   = 806,
-    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 807,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamGetDevResource                                         = 807,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamGetDevResource_ptsz                                    = 808,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphNodeGetContainingGraph                                  = 809,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphNodeGetLocalId                                          = 810,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphNodeGetToolsId                                          = 811,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphGetId                                                   = 812,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphExecGetId                                               = 813,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamBeginCaptureToCig_ptsz                                 = 814,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamEndCaptureToCig                                        = 815,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamEndCaptureToCig_ptsz                                   = 816,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphCreateWithArguments                                     = 817,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphNodeAddRelocation                                       = 818,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphLaunchWithArguments                                     = 819,
+    CUPTI_DRIVER_TRACE_CBID_cuMulticastBindMem_v2                                          = 820,
+    CUPTI_DRIVER_TRACE_CBID_cuMulticastBindAddr_v2                                         = 821,
+    CUPTI_DRIVER_TRACE_CBID_cuDevSmResourceSplit                                           = 822,
+    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 823,
     CUPTI_DRIVER_TRACE_CBID_FORCE_INT                                                      = 0x7fffffff;
 
 // #endif
@@ -8669,7 +8744,34 @@ public static final int
     CUPTI_RUNTIME_TRACE_CBID_cudaMemSetMemPool_v13000                                      = 520,
     CUPTI_RUNTIME_TRACE_CBID_cudaDeviceGetHostAtomicCapabilities_v13000                    = 521,
     CUPTI_RUNTIME_TRACE_CBID_cudaDeviceGetP2PAtomicCapabilities_v13000                     = 522,
-    CUPTI_RUNTIME_TRACE_CBID_SIZE                                                          = 523,
+    CUPTI_RUNTIME_TRACE_CBID_cudaDeviceGetDevResource_v13010                               = 523,
+    CUPTI_RUNTIME_TRACE_CBID_cudaDevSmResourceSplitByCount_v13010                          = 524,
+    CUPTI_RUNTIME_TRACE_CBID_cudaDevResourceGenerateDesc_v13010                            = 525,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGreenCtxCreate_v13010                                     = 526,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxDestroy_v13010                                = 527,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxGetDevResource_v13010                         = 528,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxGetDevice_v13010                              = 529,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxGetId_v13010                                  = 530,
+    CUPTI_RUNTIME_TRACE_CBID_cuda531_v13010                                                = 531,
+    CUPTI_RUNTIME_TRACE_CBID_cuda532_v13010                                                = 532,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxStreamCreate_v13010                           = 533,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxSynchronize_v13010                            = 534,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGraphConditionalHandleCreate_v2_v13010                    = 535,
+    CUPTI_RUNTIME_TRACE_CBID_cudaStreamGetDevResource_v13010                               = 536,
+    CUPTI_RUNTIME_TRACE_CBID_cudaStreamGetDevResource_ptsz_v13010                          = 537,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGraphNodeGetContainingGraph_v13010                        = 538,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGraphNodeGetLocalId_v13010                                = 539,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGraphNodeGetToolsId_v13010                                = 540,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGraphGetId_v13010                                         = 541,
+    CUPTI_RUNTIME_TRACE_CBID_cudaGraphExecGetId_v13010                                     = 542,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxRecordEvent_v13010                            = 543,
+    CUPTI_RUNTIME_TRACE_CBID_cudaExecutionCtxWaitEvent_v13010                              = 544,
+    CUPTI_RUNTIME_TRACE_CBID_cuda545_v13010                                                = 545,
+    CUPTI_RUNTIME_TRACE_CBID_cuda546_v13010                                                = 546,
+    CUPTI_RUNTIME_TRACE_CBID_cuda547_v13010                                                = 547,
+    CUPTI_RUNTIME_TRACE_CBID_cudaDeviceGetExecutionCtx_v13010                              = 548,
+    CUPTI_RUNTIME_TRACE_CBID_cudaDevSmResourceSplit_v13010                                 = 549,
+    CUPTI_RUNTIME_TRACE_CBID_SIZE                                                          = 550,
     CUPTI_RUNTIME_TRACE_CBID_FORCE_INT                                                     = 0x7fffffff;
 
 // #endif
@@ -8677,8 +8779,10 @@ public static final int
 
 // Parsed from cupti_nvtx_cbid.h
 
+// #ifndef CUPTI_NVTX_CBID_
+// #define CUPTI_NVTX_CBID_
 /*
- * Copyright 2013-2017 NVIDIA Corporation.  All rights reserved.
+ * Copyright 2013-2025 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -8787,7 +8891,9 @@ public static final int
 
 // #if defined(__GNUC__) && defined(CUPTI_LIB)
 //     #pragma GCC visibility pop
-// #endif    
+// #endif
+
+// #endif // CUPTI_NVTX_CBID_
 
 
 }

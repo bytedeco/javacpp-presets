@@ -125,7 +125,7 @@ public class cudart extends org.bytedeco.cuda.presets.cudart {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 13000;
+public static final int CUDA_VERSION = 13010;
 
 // #ifdef __cplusplus
 // #endif
@@ -401,6 +401,39 @@ public static final int
     CU_EVENT_WAIT_EXTERNAL = 0x1;
 
 /**
+ * CUDA-valid Atomic Operations
+ */
+/** enum CUatomicOperation */
+public static final int
+    CU_ATOMIC_OPERATION_INTEGER_ADD         = 0,
+    CU_ATOMIC_OPERATION_INTEGER_MIN         = 1,
+    CU_ATOMIC_OPERATION_INTEGER_MAX         = 2,
+    CU_ATOMIC_OPERATION_INTEGER_INCREMENT   = 3,
+    CU_ATOMIC_OPERATION_INTEGER_DECREMENT   = 4,
+    CU_ATOMIC_OPERATION_AND                 = 5,
+    CU_ATOMIC_OPERATION_OR                  = 6,
+    CU_ATOMIC_OPERATION_XOR                 = 7,
+    CU_ATOMIC_OPERATION_EXCHANGE            = 8,
+    CU_ATOMIC_OPERATION_CAS                 = 9,
+    CU_ATOMIC_OPERATION_FLOAT_ADD           = 10,
+    CU_ATOMIC_OPERATION_FLOAT_MIN           = 11,
+    CU_ATOMIC_OPERATION_FLOAT_MAX           = 12,
+    CU_ATOMIC_OPERATION_MAX = 13;
+
+/** 
+ * CUDA-valid Atomic Operation capabilities
+ */
+/** enum CUatomicOperationCapability */
+public static final int
+    CU_ATOMIC_CAPABILITY_SIGNED         = 1<<0,
+    CU_ATOMIC_CAPABILITY_UNSIGNED       = 1<<1,
+    CU_ATOMIC_CAPABILITY_REDUCTION      = 1<<2,
+    CU_ATOMIC_CAPABILITY_SCALAR_32      = 1<<3,
+    CU_ATOMIC_CAPABILITY_SCALAR_64      = 1<<4,
+    CU_ATOMIC_CAPABILITY_SCALAR_128     = 1<<5,
+    CU_ATOMIC_CAPABILITY_VECTOR_32x4    = 1<<6;
+
+/**
  * Flags for ::cuStreamWaitValue32 and ::cuStreamWaitValue64
  */
 /** enum CUstreamWaitValue_flags */
@@ -459,6 +492,8 @@ public static final int
     CU_STREAM_MEM_OP_WRITE_VALUE_64 = 5,
     /** Insert a memory barrier of the specified type */
     CU_STREAM_MEM_OP_BARRIER = 6, 
+    /** Perform a atomic reduction. See ::CUstreamBatchMemOpParams::atomicReduction */
+    CU_STREAM_MEM_OP_ATOMIC_REDUCTION = 8,
     /** This has the same effect as ::CU_STREAM_WAIT_VALUE_FLUSH, but as a
                                                   standalone operation. */
     CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES = 3;
@@ -472,6 +507,26 @@ public static final int
     CU_STREAM_MEMORY_BARRIER_TYPE_SYS = 0x0,
     /** Limit memory barrier scope to the GPU. */
     CU_STREAM_MEMORY_BARRIER_TYPE_GPU = 0x1;
+
+/**
+ * Atomic reduction operation types for ::CUstreamBatchMemOpParams::atomicReduction::reductionOp
+ */
+/** enum CUstreamAtomicReductionOpType */
+public static final int
+    /** Performs an atomic OR: *(address) = *(address) | value */
+    CU_STREAM_ATOMIC_REDUCTION_OP_OR =  CU_ATOMIC_OPERATION_OR,
+    /** Performs an atomic AND: *(address) = *(address) & value */
+    CU_STREAM_ATOMIC_REDUCTION_OP_AND = CU_ATOMIC_OPERATION_AND,
+    /** Performs an atomic ADD: *(address) = *(address) + value */
+    CU_STREAM_ATOMIC_REDUCTION_OP_ADD = CU_ATOMIC_OPERATION_INTEGER_ADD;
+
+/**
+ * Atomic reduction data types for ::CUstreamBatchMemOpParams::atomicReduction::dataType
+ */
+/** enum CUstreamAtomicReductionDataType */
+public static final int
+    CU_STREAM_ATOMIC_REDUCTION_UNSIGNED_32 = CU_ATOMIC_CAPABILITY_UNSIGNED | CU_ATOMIC_CAPABILITY_SCALAR_32 | CU_ATOMIC_CAPABILITY_REDUCTION,
+    CU_STREAM_ATOMIC_REDUCTION_UNSIGNED_64 = CU_ATOMIC_CAPABILITY_UNSIGNED | CU_ATOMIC_CAPABILITY_SCALAR_64 | CU_ATOMIC_CAPABILITY_REDUCTION;
 // Targeting ../cudart/CUstreamBatchMemOpParams_v1.java
 
 
@@ -623,6 +678,34 @@ public static final int
     CU_AD_FORMAT_YUV444_16bit_SemiPlanar  = 0xb5,
     /** 4 channel unorm R10G10B10A2 RGB format */
     CU_AD_FORMAT_UNORM_INT_101010_2       = 0x50,
+    /** 4 channel unsigned 8-bit YUV packed format, with 4:2:2 sampling */
+    CU_AD_FORMAT_UINT8_PACKED_422 = 0x51,
+    /** 4 channel unsigned 8-bit YUV packed format, with 4:4:4 sampling */
+    CU_AD_FORMAT_UINT8_PACKED_444 = 0x52,
+    /** 3 channel unsigned 8-bit YUV semi-planar format, with 4:2:0 sampling */
+    CU_AD_FORMAT_UINT8_SEMIPLANAR_420 = 0x53,
+    /** 3 channel unsigned 16-bit YUV semi-planar format, with 4:2:0 sampling */
+    CU_AD_FORMAT_UINT16_SEMIPLANAR_420 = 0x54,
+    /** 3 channel unsigned 8-bit YUV semi-planar format, with 4:2:2 sampling */
+    CU_AD_FORMAT_UINT8_SEMIPLANAR_422 = 0x55,
+    /** 3 channel unsigned 16-bit YUV semi-planar format, with 4:2:2 sampling */
+    CU_AD_FORMAT_UINT16_SEMIPLANAR_422 = 0x56,
+    /** 3 channel unsigned 8-bit YUV semi-planar format, with 4:4:4 sampling */
+    CU_AD_FORMAT_UINT8_SEMIPLANAR_444 = 0x57,
+    /** 3 channel unsigned 16-bit YUV semi-planar format, with 4:4:4 sampling */
+    CU_AD_FORMAT_UINT16_SEMIPLANAR_444 = 0x58,
+    /** 3 channel unsigned 8-bit YUV planar format, with 4:2:0 sampling */
+    CU_AD_FORMAT_UINT8_PLANAR_420 = 0x59,
+    /** 3 channel unsigned 16-bit YUV planar format, with 4:2:0 sampling */
+    CU_AD_FORMAT_UINT16_PLANAR_420 = 0x5a,
+    /** 3 channel unsigned 8-bit YUV planar format, with 4:2:2 sampling */
+    CU_AD_FORMAT_UINT8_PLANAR_422 = 0x5b,
+    /** 3 channel unsigned 16-bit YUV planar format, with 4:2:2 sampling */
+    CU_AD_FORMAT_UINT16_PLANAR_422 = 0x5c,
+    /** 3 channel unsigned 8-bit YUV planar format, with 4:4:4 sampling */
+    CU_AD_FORMAT_UINT8_PLANAR_444 = 0x5d,
+    /** 3 channel unsigned 16-bit YUV planar format, with 4:4:4 sampling */
+    CU_AD_FORMAT_UINT16_PLANAR_444 = 0x5e,
     CU_AD_FORMAT_MAX                      = 0x7FFFFFFF;
 
 /**
@@ -960,7 +1043,9 @@ public static final int
     CU_DEVICE_ATTRIBUTE_HOST_ALLOC_DMA_BUF_SUPPORTED = 146,
     /** Link between the device and the host supports only some native atomic operations */
     CU_DEVICE_ATTRIBUTE_ONLY_PARTIAL_HOST_NATIVE_ATOMIC_SUPPORTED = 147,
-    CU_DEVICE_ATTRIBUTE_MAX = 148;
+    /** Device supports atomic reduction operations in stream batch memory operations */
+    CU_DEVICE_ATTRIBUTE_ATOMIC_REDUCTION_SUPPORTED = 148,
+    CU_DEVICE_ATTRIBUTE_MAX = 149;
 // Targeting ../cudart/CUdevprop_v1.java
 
 
@@ -1635,7 +1720,19 @@ public static final int
      */
     CU_JIT_SPLIT_COMPILE = 34,
 
-    CU_JIT_NUM_OPTIONS = 35;
+    /**
+     * This option specifies the maximum number of concurrent threads to use
+     * when compiling device code. If the specified value is 1, the option will
+     * be ignored. If the specified value is 0, the number of threads will match
+     * the number of CPUs on the underlying machine. Otherwise, if the option is
+     * N, then up to N threads will be used.
+     * This option is ignored if the env var CUDA_BINARY_LOADER_THREAD_COUNT is set.
+     * Option type: unsigned int\n
+     * Applies to: compiler and linker
+     */
+     CU_JIT_BINARY_LOADER_THREAD_COUNT = 35,
+
+    CU_JIT_NUM_OPTIONS = 36;
 
 /*
  * Indicates that compute device class supports accelerated features.
@@ -3080,6 +3177,13 @@ public static final int
     CUDA_ERROR_KEY_ROTATION                   = 916,
 
     /**
+     * This error indicates that the requested operation is not permitted because the
+     * stream is in a detached state. This can occur if the green context associated
+     * with the stream has been destroyed, limiting the stream's operational capabilities.
+     */
+    CUDA_ERROR_STREAM_DETACHED                = 917,
+
+    /**
      * This indicates that an unknown internal error has occurred.
      */
     CUDA_ERROR_UNKNOWN                        = 999;
@@ -3101,39 +3205,6 @@ public static final int
     CU_DEVICE_P2P_ATTRIBUTE_CUDA_ARRAY_ACCESS_SUPPORTED          = 0x04,
     /** Only some CUDA-valid atomic operations over the link are supported. */
     CU_DEVICE_P2P_ATTRIBUTE_ONLY_PARTIAL_NATIVE_ATOMIC_SUPPORTED = 0x05;
-
-/**
- * CUDA-valid Atomic Operations
- */
-/** enum CUatomicOperation */
-public static final int
-    CU_ATOMIC_OPERATION_INTEGER_ADD         = 0,
-    CU_ATOMIC_OPERATION_INTEGER_MIN         = 1,
-    CU_ATOMIC_OPERATION_INTEGER_MAX         = 2,
-    CU_ATOMIC_OPERATION_INTEGER_INCREMENT   = 3,
-    CU_ATOMIC_OPERATION_INTEGER_DECREMENT   = 4,
-    CU_ATOMIC_OPERATION_AND                 = 5,
-    CU_ATOMIC_OPERATION_OR                  = 6,
-    CU_ATOMIC_OPERATION_XOR                 = 7,
-    CU_ATOMIC_OPERATION_EXCHANGE            = 8,
-    CU_ATOMIC_OPERATION_CAS                 = 9,
-    CU_ATOMIC_OPERATION_FLOAT_ADD           = 10,
-    CU_ATOMIC_OPERATION_FLOAT_MIN           = 11,
-    CU_ATOMIC_OPERATION_FLOAT_MAX           = 12,
-    CU_ATOMIC_OPERATION_MAX = 13;
-
-/** 
- * CUDA-valid Atomic Operation capabilities
- */
-/** enum CUatomicOperationCapability */
-public static final int
-    CU_ATOMIC_CAPABILITY_SIGNED         = 1<<0,
-    CU_ATOMIC_CAPABILITY_UNSIGNED       = 1<<1,
-    CU_ATOMIC_CAPABILITY_REDUCTION      = 1<<2,
-    CU_ATOMIC_CAPABILITY_SCALAR_32      = 1<<3,
-    CU_ATOMIC_CAPABILITY_SCALAR_64      = 1<<4,
-    CU_ATOMIC_CAPABILITY_SCALAR_128     = 1<<5,
-    CU_ATOMIC_CAPABILITY_VECTOR_32x4    = 1<<6;
 // Targeting ../cudart/CUstreamCallback.java
 
 
@@ -5842,7 +5913,8 @@ public static native @Cast("CUresult") int cuCtxGetId(CUctx_st ctx, @Cast("unsig
  * ::CUDA_SUCCESS,
  * ::CUDA_ERROR_DEINITIALIZED,
  * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_CONTEXT
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_STREAM_CAPTURE_UNSUPPORTED
  * \notefnerr
  *
  * @see ::cuCtxCreate,
@@ -5880,7 +5952,8 @@ public static native @Cast("CUresult") int cuCtxSynchronize();
  * ::CUDA_ERROR_DEINITIALIZED,
  * ::CUDA_ERROR_NOT_INITIALIZED,
  * ::CUDA_ERROR_INVALID_CONTEXT,
- * ::CUDA_ERROR_INVALID_VALUE
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_STREAM_CAPTURE_UNSUPPORTED
  * \notefnerr
  *
  * @see ::cuCtxGetCurrent,
@@ -6544,7 +6617,8 @@ public static native @Cast("CUresult") @Deprecated int cuCtxSetSharedMemConfig(@
  * data (constant and global) needed by the module cannot be allocated,
  * ::cuModuleLoad() fails. The file should be a \e cubin file as output by
  * \b nvcc, or a \e PTX file either as output by \b nvcc or handwritten, or
- * a \e fatbin file as output by \b nvcc from toolchain 4.0 or later.
+ * a \e fatbin file as output by \b nvcc from toolchain 4.0 or 
+ * later, or a \e Tile IR file.
  *
  * @param module - Returned module
  * @param fname  - Filename of module to load
@@ -6583,7 +6657,7 @@ public static native @Cast("CUresult") int cuModuleLoad(@ByPtrPtr CUmod_st modul
  * Takes a pointer \p image and loads the corresponding module \p module into
  * the current context. The \p image may be a \e cubin or \e fatbin
  * as output by \b nvcc, or a NULL-terminated \e PTX, either as output by \b nvcc
- * or hand-written.
+ * or hand-written, or \e Tile IR data.
  *
  * @param module - Returned module
  * @param image  - Module data to load
@@ -6619,7 +6693,7 @@ public static native @Cast("CUresult") int cuModuleLoadData(@ByPtrPtr CUmod_st m
  * Takes a pointer \p image and loads the corresponding module \p module into
  * the current context. The \p image may be a \e cubin or \e fatbin
  * as output by \b nvcc, or a NULL-terminated \e PTX, either as output by \b nvcc
- * or hand-written.
+ * or hand-written, or \e Tile IR data.
  *
  * @param module       - Returned module
  * @param image        - Module data to load
@@ -7182,7 +7256,8 @@ public static native @Cast("CUresult") @Deprecated int cuModuleGetSurfRef(@ByPtr
  * "CUDA environment variables" section.
  *
  * The \p code may be a \e cubin or \e fatbin as output by \b nvcc,
- * or a NULL-terminated \e PTX, either as output by \b nvcc or hand-written.
+ * or a NULL-terminated \e PTX, either as output by \b nvcc
+ * or hand-written, or \e Tile IR data.
  * A fatbin should also contain relocatable code when doing separate compilation.
  *
  * Options are passed as an array via \p jitOptions and any corresponding parameters are passed in
@@ -7253,7 +7328,8 @@ public static native @Cast("CUresult") int cuLibraryLoadData(@ByPtrPtr CUlib_st 
  * "CUDA environment variables" section.
  *
  * The file should be a \e cubin file as output by \b nvcc, or a \e PTX file either
- * as output by \b nvcc or handwritten, or a \e fatbin file as output by \b nvcc.
+ * as output by \b nvcc or handwritten, or a \e fatbin file as output by \b nvcc
+ * or hand-written, or \e Tile IR file.
  * A fatbin should also contain relocatable code when doing separate compilation.
  *
  * Options are passed as an array via \p jitOptions and any corresponding parameters are
@@ -8050,10 +8126,9 @@ public static native @Cast("CUresult") int cuMemFree(@Cast("CUdeviceptr") long d
 /**
  * \brief Get information on memory allocations
  *
- * Returns the base address in \p *pbase and size in \p *psize of the
- * allocation by ::cuMemAlloc() or ::cuMemAllocPitch() that contains the input
- * pointer \p dptr. Both parameters \p pbase and \p psize are optional. If one
- * of them is NULL, it is ignored.
+ * Returns the base address in \p *pbase and size in \p *psize of the allocation
+ * that contains the input pointer \p dptr. Both parameters \p pbase and \p
+ * psize are optional. If one of them is NULL, it is ignored.
  *
  * @param pbase - Returned base address
  * @param psize - Returned size of device memory allocation
@@ -11145,6 +11220,20 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
         CU_AD_FORMAT_YUV444_8bit_SemiPlanar = 0xb4,
         CU_AD_FORMAT_YUV444_16bit_SemiPlanar = 0xb5,
         CU_AD_FORMAT_UNORM_INT_101010_2 = 0x50,
+        CU_AD_FORMAT_UINT8_PACKED_422 = 0x51,
+        CU_AD_FORMAT_UINT8_PACKED_444 = 0x52,
+        CU_AD_FORMAT_UINT8_SEMIPLANAR_420 = 0x53,
+        CU_AD_FORMAT_UINT16_SEMIPLANAR_420 = 0x54,
+        CU_AD_FORMAT_UINT8_SEMIPLANAR_422 = 0x55,
+        CU_AD_FORMAT_UINT16_SEMIPLANAR_422 = 0x56,
+        CU_AD_FORMAT_UINT8_SEMIPLANAR_444 = 0x57,
+        CU_AD_FORMAT_UINT16_SEMIPLANAR_444 = 0x58,
+        CU_AD_FORMAT_UINT8_PLANAR_420 = 0x59,
+        CU_AD_FORMAT_UINT16_PLANAR_420 = 0x5a,
+        CU_AD_FORMAT_UINT8_PLANAR_422 = 0x5b,
+        CU_AD_FORMAT_UINT16_PLANAR_422 = 0x5c,
+        CU_AD_FORMAT_UINT8_PLANAR_444 = 0x5d,
+        CU_AD_FORMAT_UINT16_PLANAR_444 = 0x5e,
    } CUarray_format;
  *  }</pre>
  * - \p NumChannels specifies the number of packed components per CUDA array
@@ -11772,6 +11861,20 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(@Cast("CUDA_AR
         CU_AD_FORMAT_YUV444_8bit_SemiPlanar = 0xb4,
         CU_AD_FORMAT_YUV444_16bit_SemiPlanar = 0xb5,
         CU_AD_FORMAT_UNORM_INT_101010_2 = 0x50,
+        CU_AD_FORMAT_UINT8_PACKED_422 = 0x51,
+        CU_AD_FORMAT_UINT8_PACKED_444 = 0x52,
+        CU_AD_FORMAT_UINT8_SEMIPLANAR_420 = 0x53,
+        CU_AD_FORMAT_UINT16_SEMIPLANAR_420 = 0x54,
+        CU_AD_FORMAT_UINT8_SEMIPLANAR_422 = 0x55,
+        CU_AD_FORMAT_UINT16_SEMIPLANAR_422 = 0x56,
+        CU_AD_FORMAT_UINT8_SEMIPLANAR_444 = 0x57,
+        CU_AD_FORMAT_UINT16_SEMIPLANAR_444 = 0x58,
+        CU_AD_FORMAT_UINT8_PLANAR_420 = 0x59,
+        CU_AD_FORMAT_UINT16_PLANAR_420 = 0x5a,
+        CU_AD_FORMAT_UINT8_PLANAR_422 = 0x5b,
+        CU_AD_FORMAT_UINT16_PLANAR_422 = 0x5c,
+        CU_AD_FORMAT_UINT8_PLANAR_444 = 0x5d,
+        CU_AD_FORMAT_UINT16_PLANAR_444 = 0x5e,
     } CUarray_format;
  *  }</pre>
  *
@@ -12888,6 +12991,14 @@ public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess
  * native calls like mknod on Linux. For example: To create channel0 with the major number from /proc/devices
  * users can execute the following command: {@code mknod /dev/nvidia-caps-imex-channels/channel0 c <major number> 0}
  *
+ * To create a managed memory pool, applications must set ::CUmemPoolProps::CUmemAllocationType to CU_MEM_ALLOCATION_TYPE_MANAGED.
+ * ::CUmemPoolProps::CUmemAllocationHandleType must also be set to CU_MEM_HANDLE_TYPE_NONE since IPC is not supported.
+ * For managed memory pools, ::CUmemPoolProps::CUmemLocation will be treated as the preferred location for all allocations created from the pool.
+ * An application can also set CU_MEM_LOCATION_TYPE_NONE to indicate no preferred location.
+ * ::CUmemPoolProps::maxSize must be set to zero for managed memory pools.
+ * ::CUmemPoolProps::usage should be zero as decompress for managed memory is not supported.
+ * For managed memory pools, all devices on the system must have non-zero ::concurrentManagedAccess. If not, this call returns CUDA_ERROR_NOT_SUPPORTED
+ *
  * \note Specifying CU_MEM_HANDLE_TYPE_NONE creates a memory pool that will not support IPC.
  *
  * @return
@@ -13074,7 +13185,6 @@ public static native @Cast("CUresult") int cuMemPoolExportToShareableHandle(Poin
  * If \p handleType is ::CU_MEM_HANDLE_TYPE_FABRIC and the importer process has not been
  * granted access to the same IMEX channel as the exporter process, this API will error
  * as ::CUDA_ERROR_NOT_PERMITTED.
- * 
  *
  * \note Imported memory pools do not support creating new allocations.
  *       As such imported memory pools may not be used in cuDeviceSetMemPool
@@ -13168,7 +13278,9 @@ public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdevic
  * A multicast object created via ::cuMulticastCreate enables certain memory
  * operations to be broadcast to a team of devices. Devices can be added to a
  * multicast object via ::cuMulticastAddDevice. Memory can be bound on each
- * participating device via either ::cuMulticastBindMem or ::cuMulticastBindAddr.
+ * participating device via
+ * ::cuMulticastBindMem, ::cuMulticastBindMem_v2, ::cuMulticastBindAddr, or
+ * ::cuMulticastBindAddr_v2.
  * Multicast objects can be mapped into a device's virtual address space using
  * the virtual memmory management APIs (see ::cuMemMap and ::cuMemSetAccess).
  *
@@ -13185,14 +13297,16 @@ public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdevic
  * participating devices is specified by ::CUmulticastObjectProp::numDevices.
  * Devices can be added to the multicast object via ::cuMulticastAddDevice.
  * All participating devices must be added to the multicast object before memory
- * can be bound to it. Memory is bound to the multicast object via either
- * ::cuMulticastBindMem or ::cuMulticastBindAddr, and can be unbound via
- * ::cuMulticastUnbind. The total amount of memory that can be bound per device
- * is specified by :CUmulticastObjectProp::size. This size must be a multiple of
- * the value returned by ::cuMulticastGetGranularity with the flag
- * ::CU_MULTICAST_GRANULARITY_MINIMUM. For best performance however, the size
- * should be aligned to the value returned by ::cuMulticastGetGranularity with
- * the flag ::CU_MULTICAST_GRANULARITY_RECOMMENDED.
+ * can be bound to it. Memory is bound to the multicast object via
+ * ::cuMulticastBindMem, ::cuMulticastBindMem_v2, ::cuMulticastBindAddr, or
+ * ::cuMulticastBindAddr_v2.
+ * and can be unbound via ::cuMulticastUnbind. The total amount of memory that
+ * can be bound per device is specified by :CUmulticastObjectProp::size. This
+ * size must be a multiple of the value returned by ::cuMulticastGetGranularity
+ * with the flag ::CU_MULTICAST_GRANULARITY_MINIMUM. For best performance
+ * however, the size should be aligned to the value returned by
+ * ::cuMulticastGetGranularity with the flag
+ * ::CU_MULTICAST_GRANULARITY_RECOMMENDED.
  *
  * After all participating devices have been added, multicast objects can also
  * be mapped to a device's virtual address space using the virtual memory
@@ -13218,6 +13332,7 @@ public static native @Cast("CUresult") int cuMemPoolImportPointer(@Cast("CUdevic
  *
  * @see ::cuMulticastAddDevice, ::cuMulticastBindMem, ::cuMulticastBindAddr, ::cuMulticastUnbind
  * @see ::cuMemCreate, ::cuMemRelease, ::cuMemExportToShareableHandle, ::cuMemImportFromShareableHandle
+ * @see ::cuMulticastBindAddr_v2, ::cuMulticastBindMem_v2
  */
 public static native @Cast("CUresult") int cuMulticastCreate(@Cast("CUmemGenericAllocationHandle*") LongPointer mcHandle, @Cast("const CUmulticastObjectProp*") CUmulticastObjectProp_v1 prop);
 public static native @Cast("CUresult") int cuMulticastCreate(@Cast("CUmemGenericAllocationHandle*") LongBuffer mcHandle, @Cast("const CUmulticastObjectProp*") CUmulticastObjectProp_v1 prop);
@@ -13232,8 +13347,9 @@ public static native @Cast("CUresult") int cuMulticastCreate(@Cast("CUmemGeneric
  * The association of the device to the multicast object is permanent during
  * the life time of the multicast object.
  * All devices must be added to the multicast team before any memory can be
- * bound to any device in the team. Any calls to ::cuMulticastBindMem or
- * ::cuMulticastBindAddr will block until all devices have been added.
+ * bound to any device in the team. Any calls to
+ * ::cuMulticastBindMem, ::cuMulticastBindMem_v2, ::cuMulticastBindAddr, or ::cuMulticastBindAddr_v2
+ * will block until all devices have been added.
  * Similarly all devices must be added to the multicast team before a virtual
  * address range can be mapped to the multicast object. A call to ::cuMemMap
  * will block until all devices have been added.
@@ -13308,8 +13424,74 @@ public static native @Cast("CUresult") int cuMulticastAddDevice(@Cast("CUmemGene
  * ::CUDA_ERROR_ILLEGAL_STATE
  *
  * @see ::cuMulticastCreate, ::cuMulticastAddDevice, ::cuMemCreate
+ * @see ::cuMulticastBindMem_v2
  */
 public static native @Cast("CUresult") int cuMulticastBindMem(@Cast("CUmemGenericAllocationHandle") long mcHandle, @Cast("size_t") long mcOffset, @Cast("CUmemGenericAllocationHandle") long memHandle, @Cast("size_t") long memOffset, @Cast("size_t") long size, @Cast("unsigned long long") long flags);
+
+/**
+ * \brief Bind a memory allocation represented by a handle to a multicast object.
+ *
+ * Binds a memory allocation specified by \p memHandle and created via
+ * ::cuMemCreate to a multicast object represented by \p mcHandle and created
+ * via ::cuMulticastCreate. The binding will be applicable for the device \p dev.
+ * The intended \p size of the bind, the offset in the multicast range
+ * \p mcOffset as well as the offset in the memory \p memOffset must be a
+ * multiple of the value returned by ::cuMulticastGetGranularity with the flag
+ * ::CU_MULTICAST_GRANULARITY_MINIMUM. For best performance however, \p size,
+ * \p mcOffset and \p memOffset should be aligned to the granularity of the
+ * memory allocation(see ::cuMemGetAllocationGranularity) or to the value
+ * returned by ::cuMulticastGetGranularity with the flag
+ * ::CU_MULTICAST_GRANULARITY_RECOMMENDED.
+ *
+ * The \p size + \p memOffset cannot be larger than the size of the allocated
+ * memory. Similarly the \p size + \p mcOffset cannot be larger than the size
+ * of the multicast object.
+ * The memory allocation must have beeen created on one of the devices
+ * that was added to the multicast team via ::cuMulticastAddDevice.
+ * For device memory, i.e., type ::CU_MEM_LOCATION_TYPE_DEVICE, the memory
+ * allocation must have been created on the device specified by \p dev.
+ * For host NUMA memory, i.e., type ::CU_MEM_LOCATION_TYPE_HOST_NUMA, the memory
+ * allocation must have been created on the CPU NUMA node closest to \p dev.
+ * That is, the value returned when querying ::CU_DEVICE_ATTRIBUTE_HOST_NUMA_ID
+ * for \p dev, must be the CPU NUMA node where the memory was allocated.
+ * In both cases, the device named by \p dev must have been added to the
+ * multicast team via ::cuMulticastAddDevice.
+ * Externally shareable as well as imported multicast objects can be bound only
+ * to externally shareable memory.
+ * Note that this call will return CUDA_ERROR_OUT_OF_MEMORY if there are
+ * insufficient resources required to perform the bind. This call may also
+ * return CUDA_ERROR_SYSTEM_NOT_READY if the necessary system software is not
+ * initialized or running.
+ *
+ * This call may return CUDA_ERROR_ILLEGAL_STATE if the system configuration
+ * is in an illegal state. In such cases, to continue using multicast, verify
+ * that the system configuration is in a valid state and all required driver
+ * daemons are running properly.
+ *
+ * @param mcHandle [in]     Handle representing a multicast object.
+ * @param dev [in]          The device that for which the multicast memory binding will be applicable.
+ * @param mcOffset [in]     Offset into the multicast object for attachment.
+ * @param memHandle [in]    Handle representing a memory allocation.
+ * @param memOffset [in]    Offset into the memory for attachment.
+ * @param size [in]         Size of the memory that will be bound to the
+ *                          multicast object.
+ * @param flags [in]        Flags for future use, must be zero for now.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see ::cuMulticastCreate, ::cuMulticastAddDevice, ::cuMemCreate
+ */
+public static native @Cast("CUresult") int cuMulticastBindMem_v2(@Cast("CUmemGenericAllocationHandle") long mcHandle, @Cast("CUdevice") int dev, @Cast("size_t") long mcOffset, @Cast("CUmemGenericAllocationHandle") long memHandle, @Cast("size_t") long memOffset, @Cast("size_t") long size, @Cast("unsigned long long") long flags);
 
 /**
  * \brief Bind a memory allocation represented by a virtual address to a multicast object.
@@ -13361,8 +13543,70 @@ public static native @Cast("CUresult") int cuMulticastBindMem(@Cast("CUmemGeneri
  * ::CUDA_ERROR_ILLEGAL_STATE
  *
  * @see ::cuMulticastCreate, ::cuMulticastAddDevice, ::cuMemCreate
+ * @see ::cuMulticastBindAddr_v2
  */
 public static native @Cast("CUresult") int cuMulticastBindAddr(@Cast("CUmemGenericAllocationHandle") long mcHandle, @Cast("size_t") long mcOffset, @Cast("CUdeviceptr") long memptr, @Cast("size_t") long size, @Cast("unsigned long long") long flags);
+
+/**
+ * \brief Bind a memory allocation represented by a virtual address to a multicast object.
+ *
+ * Binds a memory allocation specified by its mapped address \p memptr to a
+ * multicast object represented by \p mcHandle. The binding will be applicable
+ * for the device \p dev. The memory must have been allocated via
+ * ::cuMemCreate or ::cudaMallocAsync. The intended \p size of the bind, the
+ * offset in the multicast range \p mcOffset and \p memptr must be a multiple of
+ * the value returned by ::cuMulticastGetGranularity with the flag
+ * ::CU_MULTICAST_GRANULARITY_MINIMUM. For best performance however, \p size,
+ * \p mcOffset and \p memptr should be aligned to the value returned by
+ * ::cuMulticastGetGranularity with the flag
+ * ::CU_MULTICAST_GRANULARITY_RECOMMENDED.
+ *
+ * The \p size cannot be larger than the size of the allocated memory.
+ * Similarly the \p size + \p mcOffset cannot be larger than the total size
+ * of the multicast object.
+ * For device memory, i.e., type ::CU_MEM_LOCATION_TYPE_DEVICE, the memory
+ * allocation must have been created on the device specified by \p dev.
+ * For host NUMA memory, i.e., type ::CU_MEM_LOCATION_TYPE_HOST_NUMA, the memory
+ * allocation must have been created on the CPU NUMA node closest to \p dev.
+ * That is, the value returned when querying ::CU_DEVICE_ATTRIBUTE_HOST_NUMA_ID
+ * for \p dev, must be the CPU NUMA node where the memory was allocated.
+ * In both cases, the device named by \p dev must have been added to the
+ * multicast team via ::cuMulticastAddDevice.
+ * Externally shareable as well as imported multicast objects can be bound only
+ * to externally shareable memory.
+ * Note that this call will return CUDA_ERROR_OUT_OF_MEMORY if there are
+ * insufficient resources required to perform the bind. This call may also
+ * return CUDA_ERROR_SYSTEM_NOT_READY if the necessary system software is not
+ * initialized or running.
+ *
+ * This call may return CUDA_ERROR_ILLEGAL_STATE if the system configuration
+ * is in an illegal state. In such cases, to continue using multicast, verify
+ * that the system configuration is in a valid state and all required driver
+ * daemons are running properly.
+ *
+ * @param mcHandle [in]     Handle representing a multicast object.
+ * @param dev [in]          The device that for which the multicast memory binding will be applicable.
+ * @param mcOffset [in]     Offset into multicast va range for attachment.
+ * @param memptr [in]       Virtual address of the memory allocation.
+ * @param size [in]         Size of memory that will be bound to the
+ *                          multicast object.
+ * @param flags [in]        Flags for future use, must be zero now.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see ::cuMulticastCreate, ::cuMulticastAddDevice, ::cuMemCreate
+ */
+public static native @Cast("CUresult") int cuMulticastBindAddr_v2(@Cast("CUmemGenericAllocationHandle") long mcHandle, @Cast("CUdevice") int dev, @Cast("size_t") long mcOffset, @Cast("CUdeviceptr") long memptr, @Cast("size_t") long size, @Cast("unsigned long long") long flags);
 
 /**
  * \brief Unbind any memory allocations bound to a multicast object at a given offset and upto a given size.
@@ -13395,6 +13639,7 @@ public static native @Cast("CUresult") int cuMulticastBindAddr(@Cast("CUmemGener
  * ::CUDA_ERROR_NOT_SUPPORTED
  *
  * @see ::cuMulticastBindMem, ::cuMulticastBindAddr
+ * @see ::cuMulticastBindMem_v2, ::cuMulticastBindAddr_v2
  */
 public static native @Cast("CUresult") int cuMulticastUnbind(@Cast("CUmemGenericAllocationHandle") long mcHandle, @Cast("CUdevice") int dev, @Cast("size_t") long mcOffset, @Cast("size_t") long size);
 
@@ -13419,6 +13664,7 @@ public static native @Cast("CUresult") int cuMulticastUnbind(@Cast("CUmemGeneric
 * ::CUDA_ERROR_NOT_SUPPORTED
 *
 * @see ::cuMulticastCreate, ::cuMulticastBindMem, ::cuMulticastBindAddr, ::cuMulticastUnbind
+ * @see ::cuMulticastBindMem_v2, ::cuMulticastBindAddr_v2
 */
 public static native @Cast("CUresult") int cuMulticastGetGranularity(@Cast("size_t*") SizeTPointer granularity, @Cast("const CUmulticastObjectProp*") CUmulticastObjectProp_v1 prop, @Cast("CUmulticastGranularity_flags") int option);
 
@@ -13720,7 +13966,8 @@ public static native @Cast("CUresult") int cuPointerGetAttribute(Pointer data, @
  * base device pointer of the memory to be prefetched and \p location specifies the
  * destination location. \p count specifies the number of bytes to copy. \p hStream
  * is the stream in which the operation is enqueued. The memory range must refer
- * to managed memory allocated via ::cuMemAllocManaged or declared via __managed__ variables.
+ * to managed memory allocated via ::cuMemAllocManaged, via ::cuMemAllocFromPool 
+ * from a managed memory pool or declared via __managed__ variables.
  *
  * Specifying ::CU_MEM_LOCATION_TYPE_DEVICE for ::CUmemLocation::type will prefetch memory to GPU
  * specified by device ordinal ::CUmemLocation::id which must have non-zero value for the device attribute
@@ -18068,6 +18315,7 @@ public static native @Cast("CUresult") @Deprecated int cuFuncSetSharedMemConfig(
  */
 public static native @Cast("CUresult") int cuGraphCreate(@ByPtrPtr CUgraph_st phGraph, @Cast("unsigned int") int flags);
 
+
 /**
  * \brief Creates a kernel execution node and adds it to a graph
  *
@@ -18170,6 +18418,7 @@ public static native @Cast("CUresult") int cuGraphCreate(@ByPtrPtr CUgraph_st ph
  * ::cuGraphAddMemsetNode
  */
 public static native @Cast("CUresult") int cuGraphAddKernelNode(@ByPtrPtr CUgraphNode_st phGraphNode, CUgraph_st hGraph, @Cast("const CUgraphNode*") @ByPtrPtr CUgraphNode_st dependencies, @Cast("size_t") long numDependencies, @Cast("const CUDA_KERNEL_NODE_PARAMS*") CUDA_KERNEL_NODE_PARAMS_v2 nodeParams);
+
 
 /**
  * \brief Returns a kernel node's parameters
@@ -19508,6 +19757,123 @@ public static native @Cast("CUresult") int cuGraphNodeGetType(CUgraphNode_st hNo
 public static native @Cast("CUresult") int cuGraphNodeGetType(CUgraphNode_st hNode, @Cast("CUgraphNodeType*") int[] type);
 
 /**
+ * \brief Returns the graph that contains a given graph node
+ *
+ * Returns the graph that contains \p hNode in \p *phGraph.
+ * If \p hNode is in a child graph, the child graph it is in is returned.
+ *
+ * @param hNode - Node to query
+ * @param *phGraph - Pointer to return the containing graph
+ * @return
+ * ::CUDA_SUCCESS
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuGraphGetNodes,
+ * ::cuGraphDebugDotPrint
+ * ::cuGraphNodeGetLocalId
+ * ::cuGraphNodeGetToolsId
+ * ::cuGraphGetId
+ * ::cuGraphExecGetId
+ */
+public static native @Cast("CUresult") int cuGraphNodeGetContainingGraph(CUgraphNode_st hNode, @ByPtrPtr CUgraph_st phGraph);
+
+/**
+ * \brief Returns the local node id of a given graph node
+ *
+ * Returns the node id of \p hNode in \p *nodeId.
+ * The nodeId matches that referenced by ::cuGraphDebugDotPrint.
+ * The local nodeId and graphId together can uniquely identify the node. 
+ *
+ * @param hNode - Node to query
+ * @param nodeId - Pointer to return the nodeId 
+ * @return
+ * ::CUDA_SUCCESS
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuGraphGetNodes,
+ * ::cuGraphDebugDotPrint
+ * ::cuGraphNodeGetContainingGraph
+ * ::cuGraphNodeGetToolsId
+ * ::cuGraphGetId
+ * ::cuGraphExecGetId
+ <p>
+ */
+public static native @Cast("CUresult") int cuGraphNodeGetLocalId(CUgraphNode_st hNode, @Cast("unsigned int*") IntPointer nodeId);
+public static native @Cast("CUresult") int cuGraphNodeGetLocalId(CUgraphNode_st hNode, @Cast("unsigned int*") IntBuffer nodeId);
+public static native @Cast("CUresult") int cuGraphNodeGetLocalId(CUgraphNode_st hNode, @Cast("unsigned int*") int[] nodeId);
+
+/**
+ * \brief Returns an id used by tools to identify a given node 
+ *
+ * @param hNode - Node to query
+ * @param *toolsNodeId - Pointer to return the id used by tools 
+ * @return
+ * ::CUDA_SUCCESS
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuGraphGetNodes,
+ * ::cuGraphDebugDotPrint
+ * ::cuGraphNodeGetContainingGraph
+ * ::cuGraphNodeGetLocalId
+ * ::cuGraphGetId
+ * ::cuGraphExecGetId
+ */
+public static native @Cast("CUresult") int cuGraphNodeGetToolsId(CUgraphNode_st hNode,  @Cast("unsigned long long*") LongPointer toolsNodeId);
+public static native @Cast("CUresult") int cuGraphNodeGetToolsId(CUgraphNode_st hNode,  @Cast("unsigned long long*") LongBuffer toolsNodeId);
+public static native @Cast("CUresult") int cuGraphNodeGetToolsId(CUgraphNode_st hNode,  @Cast("unsigned long long*") long[] toolsNodeId);
+
+/**
+ * \brief Returns the id of a given graph
+ *
+ * Returns the id of \p hGraph in \p *graphId.
+ * The value in \p *graphId will match that referenced by ::cuGraphDebugDotPrint.
+ *
+ * @param hGraph - Graph to query
+ * @param *graphId - Pointer to return the graphId 
+ * @return
+ * ::CUDA_SUCCESS
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuGraphGetNodes,
+ * ::cuGraphDebugDotPrint
+ * ::cuGraphNodeGetContainingGraph
+ * ::cuGraphNodeGetLocalId
+ * ::cuGraphNodeGetToolsId
+ * ::cuGraphExecGetId
+ */
+public static native @Cast("CUresult") int cuGraphGetId(CUgraph_st hGraph, @Cast("unsigned int*") IntPointer graphId);
+public static native @Cast("CUresult") int cuGraphGetId(CUgraph_st hGraph, @Cast("unsigned int*") IntBuffer graphId);
+public static native @Cast("CUresult") int cuGraphGetId(CUgraph_st hGraph, @Cast("unsigned int*") int[] graphId);
+
+/**
+ * \brief Returns the id of a given graph exec
+ *
+ * Returns the id of \p hGraphExec in \p *graphId.
+ * The value in \p *graphId will match that referenced by ::cuGraphDebugDotPrint.
+ *
+ * @param hGraphExec - Graph to query
+ * @param *graphId - Pointer to return the graphId 
+ * @return
+ * ::CUDA_SUCCESS
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * @see
+ * ::cuGraphGetNodes,
+ * ::cuGraphDebugDotPrint
+ * ::cuGraphNodeGetContainingGraph
+ * ::cuGraphNodeGetLocalId
+ * ::cuGraphNodeGetToolsId
+ * ::cuGraphGetId
+ */
+public static native @Cast("CUresult") int cuGraphExecGetId(CUgraphExec_st hGraphExec, @Cast("unsigned int*") IntPointer graphId);
+public static native @Cast("CUresult") int cuGraphExecGetId(CUgraphExec_st hGraphExec, @Cast("unsigned int*") IntBuffer graphId);
+public static native @Cast("CUresult") int cuGraphExecGetId(CUgraphExec_st hGraphExec, @Cast("unsigned int*") int[] graphId);
+
+/**
  * \brief Returns a graph's nodes
  *
  * Returns a list of \p hGraph's nodes. \p nodes may be NULL, in which case this
@@ -20512,6 +20878,7 @@ public static native @Cast("CUresult") int cuGraphUpload(CUgraphExec_st hGraphEx
  * ::cuGraphExecDestroy
  */
 public static native @Cast("CUresult") int cuGraphLaunch(CUgraphExec_st hGraphExec, CUstream_st hStream);
+
 
 /**
  * \brief Destroys an executable graph
@@ -23884,6 +24251,7 @@ public static final int
     CU_COREDUMP_SKIP_LOCAL_MEMORY            = (1 << 3),
     CU_COREDUMP_SKIP_ABORT                   = (1 << 4),
     CU_COREDUMP_SKIP_CONSTBANK_MEMORY        = (1 << 5),
+    CU_COREDUMP_GZIP_COMPRESS                = (1 << 6),
 
     CU_COREDUMP_LIGHTWEIGHT_FLAGS = CU_COREDUMP_SKIP_NONRELOCATED_ELF_IMAGES
                                      | CU_COREDUMP_SKIP_GLOBAL_MEMORY
@@ -24189,13 +24557,18 @@ public static final int
     /** Required. Creates a default stream to use inside the green context */
     CU_GREEN_CTX_DEFAULT_STREAM = 0x1;
 
-/** enum CUdevSmResourceSplit_flags */
+/** enum CUdevSmResourceGroup_flags */
+public static final int
+    CU_DEV_SM_RESOURCE_GROUP_DEFAULT = 0,
+    CU_DEV_SM_RESOURCE_GROUP_BACKFILL = 0x1;
+
+/** enum CUdevSmResourceSplitByCount_flags */
 public static final int
     CU_DEV_SM_RESOURCE_SPLIT_IGNORE_SM_COSCHEDULING = 0x1,
     CU_DEV_SM_RESOURCE_SPLIT_MAX_POTENTIAL_CLUSTER_SIZE = 0x2;
 
 public static final int RESOURCE_ABI_VERSION = 1;
-public static final int RESOURCE_ABI_EXTERNAL_BYTES = 48;
+public static final int RESOURCE_ABI_BYTES = 40;
 
 // #define _CONCAT_INNER(x, y) x ## y
 // #define _CONCAT_OUTER(x, y) _CONCAT_INNER(x, y)
@@ -24209,10 +24582,31 @@ public static final int
     CU_DEV_RESOURCE_TYPE_INVALID = 0,
     /** Streaming multiprocessors related information */
     CU_DEV_RESOURCE_TYPE_SM = 1,
-// #if defined(__CUDA_API_VERSION_INTERNAL) && !defined(__CUDA_API_VERSION_INTERNAL_ODR)
-    CU_DEV_RESOURCE_TYPE_MAX = 2;
-// #endif
+    /** Workqueue configuration related information */
+    CU_DEV_RESOURCE_TYPE_WORKQUEUE_CONFIG = 1000,
+    /** Pre-existing workqueue related information */
+    CU_DEV_RESOURCE_TYPE_WORKQUEUE = 10000;
 // Targeting ../cudart/CUdevSmResource_st.java
+
+
+
+/**
+ * \typedef enum CUdevWorkqueueConfigScope
+ * Sharing scope for workqueues
+ */
+/** enum CUdevWorkqueueConfigScope */
+public static final int
+    /** Use all shared workqueue resources across all contexts. Default driver behaviour. */
+    CU_WORKQUEUE_SCOPE_DEVICE_CTX = 0,
+    /** When possible, use non-overlapping workqueue resources with other balanced green contexts. */
+    CU_WORKQUEUE_SCOPE_GREEN_CTX_BALANCED = 1;
+// Targeting ../cudart/CUdevWorkqueueConfigResource.java
+
+
+// Targeting ../cudart/CUdevWorkqueueResource.java
+
+
+// Targeting ../cudart/CU_DEV_SM_RESOURCE_GROUP_PARAMS.java
 
 
 // Targeting ../cudart/CUdevResource_st.java
@@ -24222,8 +24616,8 @@ public static final int
 // #undef _CONCAT_INNER
 // #undef _CONCAT_OUTER
 
-// #undef ABI_PER_RESOURCE_EXTERNAL_BYTES
-// #undef ABI_RESOURCE_VERSION
+// #undef RESOURCE_ABI_BYTES
+// #undef RESOURCE_ABI_VERSION
 
 /**
  * \brief Creates a green context with a specified set of resources.
@@ -24277,9 +24671,11 @@ public static native @Cast("CUresult") int cuGreenCtxCreate(@ByPtrPtr CUgreenCtx
  * Any resources provisioned for this green context (that were initially available via the resource descriptor)
  * are released as well.
  * The API does not destroy streams created via ::cuGreenCtxStreamCreate, ::cuStreamCreate, or ::cuStreamCreateWithPriority.
- * Once the green context is destroyed, any subsequent API calls involving these streams (including ::cuStreamDestroy) will return
- * ::CUDA_ERROR_CONTEXT_IS_DESTROYED.
- * Users must explicitly destroy all such streams before invoking ::cuGreenCtxDestroy. Failure to do so will result in a memory leak.
+ * Users are expected to destroy these streams explicitly using ::cuStreamDestroy to avoid resource leaks. Once the green context is destroyed,
+ * any subsequent API calls involving these streams will return ::CUDA_ERROR_STREAM_DETACHED with the exception of the following APIs:
+ * - ::cuStreamDestroy.
+ *
+ * Additionally, the API will invalidate all active captures on these streams.
  *
  * @param hCtx - Green context to be destroyed
  *
@@ -24397,7 +24793,7 @@ public static native @Cast("CUresult") int cuGreenCtxGetDevResource(CUgreenCtx_s
  * \brief Splits \p CU_DEV_RESOURCE_TYPE_SM resources.
  *
  * Splits \p CU_DEV_RESOURCE_TYPE_SM resources into \p nbGroups, adhering to the minimum SM count specified in \p minCount
- * and the usage flags in \p useFlags. If \p result is NULL, the API simulates a split and provides the amount of groups that
+ * and the usage flags in \p flags. If \p result is NULL, the API simulates a split and provides the amount of groups that
  * would be created in \p nbGroups. Otherwise, \p nbGroups must point to the amount of elements in \p result and on return,
  * the API will overwrite \p nbGroups with the amount actually created. The groups are written to the array in \p result.
  * \p nbGroups can be less than the total amount if a smaller number of groups is needed.
@@ -24426,9 +24822,9 @@ public static native @Cast("CUresult") int cuGreenCtxGetDevResource(CUgreenCtx_s
  *
  * A successful API call must either have:
  * - A valid array of \p result pointers of size passed in \p nbGroups, with \p input of type \p CU_DEV_RESOURCE_TYPE_SM.
- * Value of \p minCount must be between 0 and the SM count specified in \p input. \p remaining may be NULL.
+ * Value of \p minCount must be between 0 and the SM count specified in \p input. \p remainder may be NULL.
  * - NULL passed in for \p result, with a valid integer pointer in \p nbGroups and \p input of type \p CU_DEV_RESOURCE_TYPE_SM.
- * Value of \p minCount must be between 0 and the SM count specified in \p input. \p remaining may be NULL.
+ * Value of \p minCount must be between 0 and the SM count specified in \p input. \p remainder may be NULL.
  * This queries the number of groups that would be created by the API.
  *
  * Note: The API is not supported on 32-bit platforms.
@@ -24436,9 +24832,9 @@ public static native @Cast("CUresult") int cuGreenCtxGetDevResource(CUgreenCtx_s
  * @param result - Output array of \p CUdevResource resources. Can be NULL to query the number of groups.
  * @param nbGroups - This is a pointer, specifying the number of groups that would be or should be created as described below.
  * @param input - Input SM resource to be split. Must be a valid \p CU_DEV_RESOURCE_TYPE_SM resource.
- * @param remaining - If the input resource cannot be cleanly split among \p nbGroups, the remaining is placed in here.
+ * @param remainder - If the input resource cannot be cleanly split among \p nbGroups, the remainder is placed in here.
  * Can be ommitted (NULL) if the user does not need the remaining set.
- * @param useFlags - Flags specifying how these partitions are used or which constraints to abide by when splitting the input. Zero is valid for default behavior.
+ * @param flags - Flags specifying how these partitions are used or which constraints to abide by when splitting the input. Zero is valid for default behavior.
  * @param minCount - Minimum number of SMs required
  *
  * @return
@@ -24456,11 +24852,116 @@ public static native @Cast("CUresult") int cuGreenCtxGetDevResource(CUgreenCtx_s
  * ::cuDeviceGetDevResource
  */
 public static native @Cast("CUresult") int cuDevSmResourceSplitByCount(
-    CUdevResource_st result, @Cast("unsigned int*") IntPointer nbGroups, @Const CUdevResource_st input, CUdevResource_st remaining, @Cast("unsigned int") int useFlags, @Cast("unsigned int") int minCount);
+    CUdevResource_st result, @Cast("unsigned int*") IntPointer nbGroups, @Const CUdevResource_st input, CUdevResource_st remainder, @Cast("unsigned int") int flags, @Cast("unsigned int") int minCount);
 public static native @Cast("CUresult") int cuDevSmResourceSplitByCount(
-    CUdevResource_st result, @Cast("unsigned int*") IntBuffer nbGroups, @Const CUdevResource_st input, CUdevResource_st remaining, @Cast("unsigned int") int useFlags, @Cast("unsigned int") int minCount);
+    CUdevResource_st result, @Cast("unsigned int*") IntBuffer nbGroups, @Const CUdevResource_st input, CUdevResource_st remainder, @Cast("unsigned int") int flags, @Cast("unsigned int") int minCount);
 public static native @Cast("CUresult") int cuDevSmResourceSplitByCount(
-    CUdevResource_st result, @Cast("unsigned int*") int[] nbGroups, @Const CUdevResource_st input, CUdevResource_st remaining, @Cast("unsigned int") int useFlags, @Cast("unsigned int") int minCount);
+    CUdevResource_st result, @Cast("unsigned int*") int[] nbGroups, @Const CUdevResource_st input, CUdevResource_st remainder, @Cast("unsigned int") int flags, @Cast("unsigned int") int minCount);
+
+/**
+ * \brief Splits a \p CU_DEV_RESOURCE_TYPE_SM resource into structured groups.
+ *
+ * This API will split a resource of ::CU_DEV_RESOURCE_TYPE_SM into \p nbGroups structured device resource groups (the \p result array),
+ * as well as an optional \p remainder, according to a set of requirements specified in the \p groupParams array. The term “structured”
+ * is a trait that specifies the \p result has SMs that are co-scheduled together. This co-scheduling can be specified via the \p coscheduledSmCount
+ * field of the \p groupParams structure, while the \p smCount will specify how many SMs are required in total for that result.
+ * The remainder is always “unstructured”, it does not have any set guarantees with respect to co-scheduling and those properties will need to
+ * either be queried via the occupancy set of APIs or further split into structured groups by this API.
+ *
+ * The API has a discovery mode for use cases where it is difficult to know ahead of time what the SM count should be.
+ * Discovery happens when the \p smCount field of a given \p groupParams array entry is set to 0 - the smCount will be filled in by the API
+ * with the derived SM count according to the provided \p groupParams fields and constraints. Discovery can be used with both a valid result
+ * array and with a NULL \p result pointer value. The latter is useful in situations where the smCount will end up being zero, which is an invalid
+ * value to create a result entry with, but allowed for discovery purposes when the \p result is NULL.
+ *
+ * The \p groupParams array is evaluated from index 0 to \p nbGroups - 1. For each index in the \p groupParams array,
+ * the API will evaluate which SMs may be a good fit based on constraints and assign those SMs to \p result.
+ * This evaluation order is important to consider when using discovery mode, as it helps discover the remaining SMs.
+ *
+ * For a valid call:
+ * - \p result should point to a \p CUdevResource array of size \p nbGroups, or alternatively, may be NULL, if the developer wishes for only the groupParams entries to be updated
+ *
+ * - \p input should be a valid ::CU_DEV_RESOURCE_TYPE_SM resource that originates from querying the green context, device context, or device.
+ *
+ * - The \p remainder group may be NULL.
+ *
+ * - There are no API \p flags at this time, so the value passed in should be 0.
+ *
+ * - A ::CU_DEV_SM_RESOURCE_GROUP_PARAMS array of size \p nbGroups. Each entry must be zero-initialized.
+ *     - \p smCount: must be either 0 or in the range of [2,inputSmCount] where inputSmCount is the amount of SMs the \p input resource has.
+ *     \p smCount must be a multiple of 2, as well as a multiple of \p coscheduledSmCount. When assigning SMs to a group (and if results are
+ *     expected by having the \p result parameter set), \p smCount cannot end up with 0 or a value less than \p coscheduledSmCount
+ *     otherwise CUDA_ERROR_INVALID_RESOURCE_CONFIGURATION will be returned.
+ *     - \p coscheduledSmCount: allows grouping SMs together in order to be able to launch clusters on Compute Architecture 9.0+.
+ *     The default value may be queried from the device’s ::CU_DEV_RESOURCE_TYPE_SM resource (8 on Compute Architecture 9.0+ and 2 otherwise).
+ *     The maximum is 32 on Compute Architecture 9.0+ and 2 otherwise.
+ *     - \p preferredCoscheduledSmCount: Attempts to merge \p coscheduledSmCount groups into larger groups,
+ *     in order to make use of \p preferredClusterDimensions on Compute Architecture 10.0+. The default value is set to \p coscheduledSmCount.
+ *     - \p flags:
+ *         - \p CU_DEV_SM_RESOURCE_SPLIT_BACKFILL: lets \p smCount be a non-multiple of \p coscheduledSmCount, filling the difference between SM count
+ *         and already assigned co-scheduled groupings with other SMs. This lets any resulting group behave similar to the \p remainder group for example.
+ *
+ * <b>Example params and their effect:</b>
+ *
+ * A groupParams array element is defined in the following order:
+ * <pre>{@code
+ * { .smCount, .coscheduledSmCount, .preferredCoscheduledSmCount, .flags, \/\* .reserved \*\/ }
+ * }</pre>
+ *
+ * <pre>{@code
+// Example 1
+// Will discover how many SMs there are, that are co-scheduled in groups of smCoscheduledAlignment.
+// The rest is placed in the optional remainder.
+CU_DEV_SM_RESOURCE_GROUP_PARAMS params { 0, 0, 0, 0 };
+ * }</pre>
+ * <pre>{@code
+// Example 2
+// Assuming the device has 10+ SMs, the result will have 10 SMs that are co-scheduled in groups of 2 SMs.
+// The rest is placed in the optional remainder.
+CU_DEV_SM_RESOURCE_GROUP_PARAMS params { 10, 2, 0, 0};
+// Setting the coscheduledSmCount to 2 guarantees that we can always have a valid result
+// as long as the SM count is less than or equal to the input resource SM count.
+ * }</pre>
+ * <pre>{@code
+// Example 3
+// A single piece is split-off, but instead of assigning the rest to the remainder, a second group contains everything else
+// This assumes the device has 10+ SMs (8 of which are coscheduled in groups of 4),
+// otherwise the second group could end up with 0 SMs, which is not allowed.
+CU_DEV_SM_RESOURCE_GROUP_PARAMS params { {8, 4, 0, 0}, {0, 2, 0, CU_DEV_SM_RESOURCE_SPLIT_BACKFILL } }
+ * }</pre>
+ *
+ * The difference between a catch-all param group as the last entry and the remainder is in two aspects:
+ * - The remainder may be NULL / _TYPE_INVALID (if there are no SMs remaining), while a result group must always be valid.
+ * - The remainder does not have a structure, while the result group will always need to adhere to a structure
+ * of coscheduledSmCount (even if its just 2), and therefore must always have enough coscheduled SMs to cover
+ * that requirement (even with the \p CU_DEV_SM_RESOURCE_SPLIT_BACKFILL flag enabled).
+ *
+ * Splitting an input into N groups, can be accomplished by repeatedly splitting off 1 group and re-splitting
+ * the remainder (a bisect operation). However, it's recommended to accomplish this with a single call wherever possible.
+ *
+ * @param result - Output array of \p CUdevResource resources. Can be NULL, alongside an smCount of 0, for discovery purpose.
+ * @param nbGroups - Specifies the number of groups in \p result and \p groupParams
+ * @param input - Input SM resource to be split. Must be a valid \p CU_DEV_RESOURCE_TYPE_SM resource.
+ * @param remainder - If splitting the input resource leaves any SMs, the remainder is placed in here.
+ * @param flags - Flags specifying how the API should behave. The value should be 0 for now.
+ * @param groupParams - Description of how the SMs should be split and assigned to the corresponding result entry.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_RESOURCE_TYPE,
+ * ::CUDA_ERROR_INVALID_RESOURCE_CONFIGURATION
+ *
+ * @see
+ * ::cuGreenCtxGetDevResource,
+ * ::cuCtxGetDevResource,
+ * ::cuDeviceGetDevResource
+ */
+public static native @Cast("CUresult") int cuDevSmResourceSplit(
+    CUdevResource_st result, @Cast("unsigned int") int nbGroups, @Const CUdevResource_st input, CUdevResource_st remainder, @Cast("unsigned int") int flags, CU_DEV_SM_RESOURCE_GROUP_PARAMS groupParams);
 
 /**
  * \brief Generate a resource descriptor
@@ -24475,8 +24976,8 @@ public static native @Cast("CUresult") int cuDevSmResourceSplitByCount(
  * If multiple resources are provided in \p resources, the device they came from must be the same,
  * otherwise CUDA_ERROR_INVALID_RESOURCE_CONFIGURATION is returned.
  * If multiple resources are provided in \p resources and they are of type ::CU_DEV_RESOURCE_TYPE_SM,
- * they must be outputs (whether \p result or \p remaining) from the same split API instance,
- * otherwise CUDA_ERROR_INVALID_RESOURCE_CONFIGURATION is returned.
+ * they must be outputs (whether \p result or \p remaining) from the same split API instance and have
+ * the same smCoscheduledAlignment values, otherwise CUDA_ERROR_INVALID_RESOURCE_CONFIGURATION is returned.
  *
  * Note: The API is not supported on 32-bit platforms.
  *
@@ -24700,6 +25201,37 @@ public static native @Cast("CUresult") int cuGreenCtxStreamCreate(@ByPtrPtr CUst
 public static native @Cast("CUresult") int cuGreenCtxGetId(CUgreenCtx_st greenCtx, @Cast("unsigned long long*") LongPointer greenCtxId);
 public static native @Cast("CUresult") int cuGreenCtxGetId(CUgreenCtx_st greenCtx, @Cast("unsigned long long*") LongBuffer greenCtxId);
 public static native @Cast("CUresult") int cuGreenCtxGetId(CUgreenCtx_st greenCtx, @Cast("unsigned long long*") long[] greenCtxId);
+
+/**
+ * \brief Get stream resources
+ *
+ * Get the \p type resources available to the \p hStream and store them in \p resource.
+ *
+ * Note: The API will return ::CUDA_ERROR_INVALID_RESOURCE_TYPE is \p type is
+ * \p CU_DEV_RESOURCE_TYPE_WORKQUEUE_CONFIG or \p CU_DEV_RESOURCE_TYPE_WORKQUEUE.
+ *
+ * @param hStream - Stream to get resource for
+ * @param resource - Output pointer to a CUdevResource structure
+ * @param type - Type of resource to retrieve
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_RESOURCE_TYPE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_HANDLE
+ * \notefnerr
+ *
+ * @see
+ * ::cuGreenCtxCreate,
+ * ::cuGreenCtxStreamCreate,
+ * ::cuStreamCreate,
+ * ::cuDevSmResourceSplitByCount,
+ * ::cuDevResourceGenerateDesc,
+ * ::cudaStreamGetDevResource
+ */
+public static native @Cast("CUresult") int cuStreamGetDevResource(CUstream_st hStream, CUdevResource_st resource, @Cast("CUdevResourceType") int type);
 
 /** \} */
 
@@ -25240,6 +25772,10 @@ public static native @Cast("CUresult") int cuCheckpointProcessUnlock(int pid, CU
 // #define __tile_global__
 //         __location__(tile_global)
 // #endif /* defined(__CUDACC__) || !defined(__tile_global__) */
+// #if defined(__CUDACC__) || !defined(__tile__)
+// #define __tile__
+//         __location__(tile)
+// #endif /* defined(__CUDACC__) || !defined(__tile__) */
 // #if defined(__CUDACC__) || !defined(__tile__)
 // #define __tile__
 //         __location__(tile)
@@ -26577,6 +27113,13 @@ public static final int
     cudaErrorInvalidResourceConfiguration = 915,
 
     /**
+     * This error indicates that the requested operation is not permitted because the
+     * stream is in a detached state. This can occur if the green context associated
+     * with the stream has been destroyed, limiting the stream's operational capabilities.
+     */
+    cudaErrorStreamDetached               = 917,
+
+    /**
      * This indicates that an unknown internal error has occurred.
      */
     cudaErrorUnknown                      = 999, cudaErrorApiFailureBase               = 10000;
@@ -26650,6 +27193,14 @@ public static final int
     cudaChannelFormatKindUnsignedBlockCompressed7SRGB   = 30,
     /** 4 channel unsigned normalized (10-bit, 10-bit, 10-bit, 2-bit) format */
     cudaChannelFormatKindUnsignedNormalized1010102      = 31;
+
+/**
+ * An opaque descriptor handle. The descriptor encapsulates multiple created and configured resources.
+ * Created via ::cudaDeviceResourceGenerateDesc
+ */
+// Targeting ../cudart/cudaExecutionContext_st.java
+
+
 // Targeting ../cudart/cudaChannelFormatDesc.java
 
 
@@ -27897,6 +28448,56 @@ public static final int
 // Targeting ../cudart/cudaExternalSemaphoreWaitParams.java
 
 
+
+/** enum cudaDevSmResourceGroup_flags */
+public static final int
+    cudaDevSmResourceGroupDefault = 0,
+    cudaDevSmResourceGroupBackfill = 0x1;
+
+/** enum cudaDevSmResourceSplitByCount_flags */
+public static final int
+    cudaDevSmResourceSplitIgnoreSmCoscheduling = 0x1,
+    cudaDevSmResourceSplitMaxPotentialClusterSize = 0x2;
+
+/**
+ * Type of resource
+ */
+/** enum cudaDevResourceType */
+public static final int
+    cudaDevResourceTypeInvalid    = 0,
+    /** Streaming multiprocessors related information */
+    cudaDevResourceTypeSm         = 1,
+    /** Workqueue configuration related information */
+    cudaDevResourceTypeWorkqueueConfig = 1000,
+    /** Pre-existing workqueue related information */
+    cudaDevResourceTypeWorkqueue = 10000;
+// Targeting ../cudart/cudaDevSmResource.java
+
+
+
+/**
+ * Sharing scope for workqueues
+ */
+/** enum cudaDevWorkqueueConfigScope */
+public static final int
+    /** Use all shared workqueue resources on the device. Default driver behaviour. */
+    cudaDevWorkqueueConfigScopeDeviceCtx = 0,
+    /** When possible, use non-overlapping workqueue resources with other balanced green contexts. */
+    cudaDevWorkqueueConfigScopeGreenCtxBalanced = 1;
+// Targeting ../cudart/cudaDevWorkqueueConfigResource.java
+
+
+// Targeting ../cudart/cudaDevWorkqueueResource.java
+
+
+// Targeting ../cudart/cudaDevSmResourceGroupParams.java
+
+
+// Targeting ../cudart/cudaDevResource_st.java
+
+
+
+// #undef RESOURCE_ABI_BYTES
 
 /*******************************************************************************
 *                                                                              *
@@ -29589,7 +30190,7 @@ public static final int
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  13000;
+public static final int CUDART_VERSION =  13010;
 
 // #if defined(__CUDA_API_VER_MAJOR__) && defined(__CUDA_API_VER_MINOR__)
 public static native @MemberGetter int __CUDART_API_VERSION();
@@ -29613,6 +30214,9 @@ public static final int __CUDART_API_VERSION = __CUDART_API_VERSION();
 //     #define __CUDART_API_PTDS(api) api
 //     #define __CUDART_API_PTSZ(api) api
 // #endif
+
+
+
 
 // #if defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)
 // #endif
@@ -29720,7 +30324,8 @@ public static native @Cast("cudaError_t") int cudaDeviceReset();
  * its work.
  *
  * @return
- * ::cudaSuccess
+ * ::cudaSuccess,
+ * ::cudaErrorStreamCaptureUnsupported
  * \note_device_sync_deprecated
  * \notefnerr
  * \note_init_rt
@@ -30495,6 +31100,7 @@ public static native @Cast("cudaError_t") @Deprecated int cudaDeviceGetSharedMem
  */
 public static native @Cast("cudaError_t") @Deprecated int cudaDeviceSetSharedMemConfig(@Cast("cudaSharedMemConfig") int config);
 /** \} */ /* END CUDART_DEVICE_DEPRECATED */
+
 
 /**
  * \defgroup CUDART_ERROR Error Handling
@@ -31273,6 +31879,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigne
  * ::cudaStreamGetPriority,
  * ::cudaStreamGetFlags,
  * ::cudaStreamGetDevice,
+ * ::cudaStreamGetDevResource,
  * ::cudaStreamQuery,
  * ::cudaStreamSynchronize,
  * ::cudaStreamWaitEvent,
@@ -31309,6 +31916,7 @@ public static native @Cast("cudaError_t") int cudaStreamCreate(@ByPtrPtr CUstrea
  * ::cudaStreamCreateWithPriority,
  * ::cudaStreamGetFlags,
  * ::cudaStreamGetDevice,
+ * ::cudaStreamGetDevResource,
  * ::cudaStreamQuery,
  * ::cudaStreamSynchronize,
  * ::cudaStreamWaitEvent,
@@ -31395,6 +32003,7 @@ public static native @Cast("cudaError_t") int cudaStreamCreateWithPriority(@ByPt
  * ::cudaDeviceGetStreamPriorityRange,
  * ::cudaStreamGetFlags,
  * ::cudaStreamGetDevice,
+ * ::cudaStreamGetDevResource,
  * ::cuStreamGetPriority
  */
 public static native @Cast("cudaError_t") int cudaStreamGetPriority(CUstream_st hStream, IntPointer priority);
@@ -32048,6 +32657,7 @@ public static native @Cast("cudaError_t") int cudaStreamIsCapturing(CUstream_st 
 public static native @Cast("cudaError_t") int cudaStreamIsCapturing(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") IntBuffer pCaptureStatus);
 public static native @Cast("cudaError_t") int cudaStreamIsCapturing(CUstream_st stream, @Cast("cudaStreamCaptureStatus*") int[] pCaptureStatus);
 
+
 /**
  * \brief Query a stream's capture state
  *
@@ -32127,6 +32737,7 @@ public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo(CUstream_
     @Const @ByPtrPtr cudaGraphEdgeData edgeData_out/*=0*/, @Cast("size_t*") SizeTPointer numDependencies_out/*=0*/);
 public static native @Cast("cudaError_t") int cudaStreamGetCaptureInfo(CUstream_st stream,
     @Cast("cudaStreamCaptureStatus*") int[] captureStatus_out);
+
 
 /**
  * \brief Update the set of dependencies in a capturing stream
@@ -33531,6 +34142,7 @@ public static native @Cast("cudaError_t") int cudaFuncGetName(@Cast("const char*
  * \note_cudaKernel_t
  */
 public static native @Cast("cudaError_t") int cudaFuncGetParamInfo(@Const Pointer func, @Cast("size_t") long paramIndex, @Cast("size_t*") SizeTPointer paramOffset, @Cast("size_t*") SizeTPointer paramSize);
+
 
 /**
  * \brief Enqueues a host function call in a stream
@@ -36563,6 +37175,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolAddress(@Cast("void**
  */
 public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*") SizeTPointer size, @Const Pointer symbol);
 
+
 /**
  * \brief Prefetches memory to the specified destination location
  *
@@ -36571,6 +37184,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*")
  * destination location. \p count specifies the number of bytes to copy. \p stream
  * is the stream in which the operation is enqueued. The memory range must refer
  * to managed memory allocated via ::cudaMallocManaged or declared via __managed__ variables, 
+ * or it may also refer to memory allocated from a managed memory pool,
  * or it may also refer to system-allocated memory on systems with non-zero
  * cudaDevAttrPageableMemoryAccess.
  * 
@@ -36774,6 +37388,7 @@ public static native @Cast("cudaError_t") int cudaMemDiscardAndPrefetchBatchAsyn
 public static native @Cast("cudaError_t") int cudaMemDiscardAndPrefetchBatchAsync(@Cast("void**") @ByPtrPtr Pointer dptrs, @Cast("size_t*") SizeTPointer sizes, @Cast("size_t") long count,
                                                               cudaMemLocation prefetchLocs, @Cast("size_t*") SizeTPointer prefetchLocIdxs, @Cast("size_t") long numPrefetchLocs,
                                                               @Cast("unsigned long long") long flags, CUstream_st stream);
+
 
 /**
  * \brief Advise about the usage of a given memory range
@@ -37557,7 +38172,15 @@ public static native @Cast("cudaError_t") int cudaMemPoolGetAccess(@Cast("cudaMe
  * native calls like mknod on Linux. For example: To create channel0 with the major number from /proc/devices
  * users can execute the following command: {@code mknod /dev/nvidia-caps-imex-channels/channel0 c <major number> 0}
  *
- * \note Specifying cudaMemHandleTypeNone creates a memory pool that will not support IPC.
+ * To create a managed memory pool, applications must set ::cudaMemPoolProps:cudaMemAllocationType to ::cudaMemAllocationTypeManaged.
+ * ::cudaMemPoolProps::cudaMemAllocationHandleType must also be set to ::cudaMemHandleTypeNone since IPC is not supported.
+ * For managed memory pools, ::cudaMemPoolProps::cudaMemLocation will be treated as the preferred location for all allocations created from the pool.
+ * An application can also set ::cudaMemLocationTypeNone to indicate no preferred location.
+ * ::cudaMemPoolProps::maxSize must be set to zero for managed memory pools. 
+ * ::cudaMemPoolProps::usage should be zero as decompress for managed memory is not supported.
+ * For managed memory pools, all devices on the system must have non-zero ::concurrentManagedAccess. If not, this call returns ::cudaErrorNotSupported
+ *
+ * \note Specifying ::cudaMemHandleTypeNone creates a memory pool that will not support IPC.
  *
  * @return
  * ::cudaSuccess,
@@ -37592,73 +38215,72 @@ public static native @Cast("cudaError_t") int cudaMemPoolCreate(@ByPtrPtr CUmemP
 public static native @Cast("cudaError_t") int cudaMemPoolDestroy(CUmemPoolHandle_st memPool);
 
 /**
- * \brief Returns the default memory pool for a given location and allocation type
- * 
- * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
- * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
- * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
- * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
- * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
- *
- * @return
- * ::cudaSuccess,
- * ::cudaErrorInvalidValue,
- * ::cudaErrorNotSupported,
- * \notefnerr
- *
- * @see ::cuMemAllocAsync, ::cuMemPoolTrimTo, ::cuMemPoolGetAttribute, ::cuMemPoolSetAttribute, cuMemPoolSetAccess, ::cuMemGetMemPool, ::cuMemPoolCreate
- */
+ * \brief Returns the default memory pool for a given location and allocation type 
+ *
+ * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
+ * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or
+ * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged,
+ * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
+ * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported,
+ *
+ * @see ::cuMemAllocAsync, ::cuMemPoolTrimTo, ::cuMemPoolGetAttribute, ::cuMemPoolSetAttribute, cuMemPoolSetAccess, ::cuMemGetMemPool, ::cuMemPoolCreate
+ */
 public static native @Cast("cudaError_t") int cudaMemGetDefaultMemPool(@ByPtrPtr CUmemPoolHandle_st memPool, cudaMemLocation location, @Cast("cudaMemAllocationType") int type);
 
 /**
- * \brief Gets the current memory pool for a given memory location and allocation type
- * 
- * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
- * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
- * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
- * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
- * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
- *
- * Returns the last pool provided to ::cudaMemSetMemPool or ::cudaDeviceSetMemPool for this location and allocation type
- * or the location's default memory pool if ::cudaMemSetMemPool or ::cudaDeviceSetMemPool for that allocType and location 
- * has never been called. 
- * By default the current mempool of a location is the default mempool for a device that can be obtained via cudaMemGetDefaultMemPool
- * Otherwise the returned pool must have been set with ::cudaDeviceSetMemPool.
- *
- * @return
- * ::cudaSuccess,
- * ::cudaErrorInvalidValue
- *
- * @see ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuDeviceSetMemPool, ::cuMemSetMemPool
- */
+ * \brief Gets the current memory pool for a given memory location and allocation type
+ * 
+ * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
+ * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
+ * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
+ * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
+ * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
+ *
+ * Returns the last pool provided to ::cudaMemSetMemPool or ::cudaDeviceSetMemPool for this location and allocation type
+ * or the location's default memory pool if ::cudaMemSetMemPool or ::cudaDeviceSetMemPool for that allocType and location 
+ * has never been called. 
+ * By default the current mempool of a location is the default mempool for a device that can be obtained via cudaMemGetDefaultMemPool
+ * Otherwise the returned pool must have been set with ::cudaDeviceSetMemPool.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see ::cuDeviceGetDefaultMemPool, ::cuMemPoolCreate, ::cuDeviceSetMemPool, ::cuMemSetMemPool
+ */
 public static native @Cast("cudaError_t") int cudaMemGetMemPool(@ByPtrPtr CUmemPoolHandle_st memPool, cudaMemLocation location, @Cast("cudaMemAllocationType") int type);
 
 /**
- * \brief Sets the current memory pool for a memory location and allocation type
- *
- * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
- * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
- * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
- * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
- * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
- *
- * When a memory pool is set as the current memory pool, the location parameter should be the same as the location of the pool.
- * If the location type or index don't match, the call returns ::cudaErrorInvalidValue.
- * The type of memory pool should also match the parameter allocType. Else the call returns ::cudaErrorInvalidValue.  
- * By default, a memory location's current memory pool is its default memory pool.
- * If the location type is ::cudaMemLocationTypeDevice and the allocation type is ::cudaMemAllocationTypePinned, then 
- * this API is the equivalent of calling ::cudaDeviceSetMemPool with the location id as the device. 
- * For further details on the implications, please refer to the documentation for ::cudaDeviceSetMemPool.
- * 
- * \note Use ::cudaMallocFromPoolAsync to specify asynchronous allocations from a device different
- * than the one the stream runs on.
- *
- * @return
- * ::cudaSuccess,
- * ::cudaErrorInvalidValue
- *
- * @see ::cuDeviceGetDefaultMemPool, ::cuDeviceGetMemPool, ::cuMemGetMemPool, ::cuMemPoolCreate, ::cuMemPoolDestroy, ::cuMemAllocFromPoolAsync
- */
+ * \brief Sets the current memory pool for a memory location and allocation type
+ *
+ * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
+ * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
+ * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
+ * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
+ * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
+ *
+ * When a memory pool is set as the current memory pool, the location parameter should be the same as the location of the pool.
+ * If the location type or index don't match, the call returns ::cudaErrorInvalidValue.
+ * The type of memory pool should also match the parameter allocType. Else the call returns ::cudaErrorInvalidValue.  
+ * By default, a memory location's current memory pool is its default memory pool.
+ * If the location type is ::cudaMemLocationTypeDevice and the allocation type is ::cudaMemAllocationTypePinned, then 
+ * this API is the equivalent of calling ::cudaDeviceSetMemPool with the location id as the device. 
+ * For further details on the implications, please refer to the documentation for ::cudaDeviceSetMemPool.
+ * 
+ * \note Use ::cudaMallocFromPoolAsync to specify asynchronous allocations from a device different
+ * than the one the stream runs on.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see ::cuDeviceGetDefaultMemPool, ::cuDeviceGetMemPool, ::cuMemGetMemPool, ::cuMemPoolCreate, ::cuMemPoolDestroy, ::cuMemAllocFromPoolAsync
+ */
 public static native @Cast("cudaError_t") int cudaMemSetMemPool(cudaMemLocation location, @Cast("cudaMemAllocationType") int type, CUmemPoolHandle_st memPool);
 
 /**
@@ -40778,6 +41400,123 @@ public static native @Cast("cudaError_t") int cudaGraphNodeGetType(CUgraphNode_s
 public static native @Cast("cudaError_t") int cudaGraphNodeGetType(CUgraphNode_st node, @Cast("cudaGraphNodeType*") int[] pType);
 
 /**
+ * \brief Returns the graph that contains a given graph node
+ *
+ * Returns the graph that contains \p hNode in \p *phGraph.
+ * If hNode is in a child graph, the child graph it is in is returned.
+ *
+ * @param hNode - Node to query
+ * @param phGraph - Pointer to return the containing graph
+ * @return
+ * ::cudaSuccess
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaGraphGetNodes,
+ * ::cudaGraphDebugDotPrint
+ * ::cudaGraphNodeGetLocalId
+ * ::cudaGraphNodeGetToolsId
+ * ::cudaGraphGetId
+ * ::cudaGraphExecGetId
+ */
+public static native @Cast("cudaError_t") int cudaGraphNodeGetContainingGraph(CUgraphNode_st hNode, @ByPtrPtr CUgraph_st phGraph);
+
+/**
+ * \brief Returns the node id of a given graph node
+ *
+ * Returns the node id of \p hNode in \p *nodeId.
+ * The nodeId matches that referenced by ::cudaGraphDebugDotPrint.
+ * The local nodeId and graphId together can uniquely identify the node.
+ *
+ * @param hNode - Node to query
+ * @param nodeId - Pointer to return the nodeId 
+ * @return
+ * ::cudaSuccess
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaGraphGetNodes,
+ * ::cudaGraphDebugDotPrint
+ * ::cudaGraphNodeGetContainingGraph
+ * ::cudaGraphNodeGetToolsId
+ * ::cudaGraphGetId
+ * ::cudaGraphExecGetId
+ */
+public static native @Cast("cudaError_t") int cudaGraphNodeGetLocalId(CUgraphNode_st hNode, @Cast("unsigned int*") IntPointer nodeId);
+public static native @Cast("cudaError_t") int cudaGraphNodeGetLocalId(CUgraphNode_st hNode, @Cast("unsigned int*") IntBuffer nodeId);
+public static native @Cast("cudaError_t") int cudaGraphNodeGetLocalId(CUgraphNode_st hNode, @Cast("unsigned int*") int[] nodeId);
+
+/**
+ * \brief Returns an id used by tools to identify a given node 
+ *
+ * @param hNode - Node to query
+ * @param *toolsNodeId - Pointer to return the id used by tools 
+ * @return
+ * ::CUDA_SUCCESS
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaGraphGetNodes,
+ * ::cudaGraphDebugDotPrint
+ * ::cudaGraphNodeGetContainingGraph
+ * ::cudaGraphNodeGetLocalId
+ * ::cudaGraphGetId
+ * ::cudaGraphExecGetId
+ <p>
+ */
+public static native @Cast("cudaError_t") int cudaGraphNodeGetToolsId(CUgraphNode_st hNode, @Cast("unsigned long long*") LongPointer toolsNodeId);
+public static native @Cast("cudaError_t") int cudaGraphNodeGetToolsId(CUgraphNode_st hNode, @Cast("unsigned long long*") LongBuffer toolsNodeId);
+public static native @Cast("cudaError_t") int cudaGraphNodeGetToolsId(CUgraphNode_st hNode, @Cast("unsigned long long*") long[] toolsNodeId);
+
+/**
+ * \brief Returns the id of a given graph
+ *
+ * Returns the id of \p hGraph in \p *graphId.
+ * The value in \p *graphId matches that referenced by ::cudaGraphDebugDotPrint.
+ *
+ * @param hGraph - Graph to query
+ * @param graphId - Pointer to return the graphId 
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaGraphGetNodes,
+ * ::cudaGraphDebugDotPrint
+ * ::cudaGraphNodeGetContainingGraph
+ * ::cudaGraphNodeGetLocalId
+ * ::cudaGraphNodeGetToolsId
+ * ::cudaGraphExecGetId
+ */
+public static native @Cast("cudaError_t") int cudaGraphGetId(CUgraph_st hGraph, @Cast("unsigned int*") IntPointer graphID);
+public static native @Cast("cudaError_t") int cudaGraphGetId(CUgraph_st hGraph, @Cast("unsigned int*") IntBuffer graphID);
+public static native @Cast("cudaError_t") int cudaGraphGetId(CUgraph_st hGraph, @Cast("unsigned int*") int[] graphID);
+
+/**
+ * \brief Returns the id of a given graph exec
+ *
+ * Returns the id of \p hGraphExec in \p *graphId.
+ * The value in \p *graphId matches that referenced by ::cudaGraphDebugDotPrint.
+ *
+ * @param hGraphExec - Graph to query
+ * @param graphId - Pointer to return the graphId 
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue
+ *
+ * @see
+ * ::cudaGraphGetNodes,
+ * ::cudaGraphDebugDotPrint
+ * ::cudaGraphNodeGetContainingGraph
+ * ::cudaGraphNodeGetLocalId
+ * ::cudaGraphNodeGetToolsId
+ * ::cudaGraphGetId
+ */
+public static native @Cast("cudaError_t") int cudaGraphExecGetId(CUgraphExec_st hGraphExec, @Cast("unsigned int*") IntPointer graphID);
+public static native @Cast("cudaError_t") int cudaGraphExecGetId(CUgraphExec_st hGraphExec, @Cast("unsigned int*") IntBuffer graphID);
+public static native @Cast("cudaError_t") int cudaGraphExecGetId(CUgraphExec_st hGraphExec, @Cast("unsigned int*") int[] graphID);
+
+/**
  * \brief Returns a graph's nodes
  *
  * Returns a list of \p graph's nodes. \p nodes may be NULL, in which case this
@@ -40839,6 +41578,7 @@ public static native @Cast("cudaError_t") int cudaGraphGetNodes(CUgraph_st graph
  */
 public static native @Cast("cudaError_t") int cudaGraphGetRootNodes(CUgraph_st graph, @ByPtrPtr CUgraphNode_st pRootNodes, @Cast("size_t*") SizeTPointer pNumRootNodes);
 
+
 /**
  * \brief Returns a graph's dependency edges
  *
@@ -40879,6 +41619,7 @@ public static native @Cast("cudaError_t") int cudaGraphGetRootNodes(CUgraph_st g
  */
 public static native @Cast("cudaError_t") int cudaGraphGetEdges(CUgraph_st graph, @ByPtrPtr CUgraphNode_st from, @ByPtrPtr CUgraphNode_st to, cudaGraphEdgeData edgeData, @Cast("size_t*") SizeTPointer numEdges);
 
+
 /**
  * \brief Returns a node's dependencies
  *
@@ -40915,6 +41656,7 @@ public static native @Cast("cudaError_t") int cudaGraphGetEdges(CUgraph_st graph
  * ::cudaGraphRemoveDependencies
  */
 public static native @Cast("cudaError_t") int cudaGraphNodeGetDependencies(CUgraphNode_st node, @ByPtrPtr CUgraphNode_st pDependencies, cudaGraphEdgeData edgeData, @Cast("size_t*") SizeTPointer pNumDependencies);
+
 
 /**
  * \brief Returns a node's dependent nodes
@@ -40954,6 +41696,7 @@ public static native @Cast("cudaError_t") int cudaGraphNodeGetDependencies(CUgra
  */
 public static native @Cast("cudaError_t") int cudaGraphNodeGetDependentNodes(CUgraphNode_st node, @ByPtrPtr CUgraphNode_st pDependentNodes, cudaGraphEdgeData edgeData, @Cast("size_t*") SizeTPointer pNumDependentNodes);
 
+
 /**
  * \brief Adds dependency edges to a graph.
  *
@@ -40985,6 +41728,7 @@ public static native @Cast("cudaError_t") int cudaGraphNodeGetDependentNodes(CUg
  * ::cudaGraphNodeGetDependentNodes
  */
 public static native @Cast("cudaError_t") int cudaGraphAddDependencies(CUgraph_st graph, @Cast("const cudaGraphNode_t*") @ByPtrPtr CUgraphNode_st from, @Cast("const cudaGraphNode_t*") @ByPtrPtr CUgraphNode_st to, @Const cudaGraphEdgeData edgeData, @Cast("size_t") long numDependencies);
+
 
 /**
  * \brief Removes dependency edges from a graph.
@@ -42388,6 +43132,7 @@ public static native @Cast("cudaError_t") int cudaGraphRetainUserObject(CUgraph_
 public static native @Cast("cudaError_t") int cudaGraphReleaseUserObject(CUgraph_st graph, CUuserObject_st object, @Cast("unsigned int") int count/*=1*/);
 public static native @Cast("cudaError_t") int cudaGraphReleaseUserObject(CUgraph_st graph, CUuserObject_st object);
 
+
 /**
  * \brief Adds a node of arbitrary type to a graph
  *
@@ -42520,7 +43265,7 @@ public static native @Cast("cudaError_t") int cudaGraphExecNodeSetParams(CUgraph
  * Handles not associated with a conditional node may cause graph instantiation to fail. 
  *
  * @param pHandle_out        - Pointer used to return the handle to the caller.
- * @param hGraph             - Graph which will contain the conditional node using this handle.
+ * @param graph              - Graph which will contain the conditional node using this handle.
  * @param defaultLaunchValue - Optional initial value for the conditional variable.
  *                             Applied at the beginning of each graph execution if cudaGraphCondAssignDefault is set in \p flags.
  * @param flags              - Currently must be cudaGraphCondAssignDefault or 0.
@@ -42541,6 +43286,39 @@ public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate(@
 public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate(@Cast("cudaGraphConditionalHandle*") LongBuffer pHandle_out, CUgraph_st graph);
 public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate(@Cast("cudaGraphConditionalHandle*") long[] pHandle_out, CUgraph_st graph, @Cast("unsigned int") int defaultLaunchValue/*=0*/, @Cast("unsigned int") int flags/*=0*/);
 public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate(@Cast("cudaGraphConditionalHandle*") long[] pHandle_out, CUgraph_st graph);
+
+/**
+ * \brief Create a conditional handle
+ *
+ * Creates a conditional handle associated with \p hGraph.
+ *
+ * The conditional handle must be associated with a conditional node in this graph or one of its children.
+ *  
+ * Handles not associated with a conditional node may cause graph instantiation to fail. 
+ *
+ * @param pHandle_out        - Pointer used to return the handle to the caller.
+ * @param graph              - Graph which will contain the conditional node using this handle.
+ * @param ctx                - Execution context for the handle and associated conditional node. If NULL, current context will be used.
+ * @param defaultLaunchValue - Optional initial value for the conditional variable.
+ *                             Applied at the beginning of each graph execution if cudaGraphCondAssignDefault is set in \p flags.
+ * @param flags              - Currently must be cudaGraphCondAssignDefault or 0.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_SUPPORTED
+ * \note_graph_thread_safety
+ * \notefnerr
+ *
+ * @see
+ * ::cuGraphAddNode,
+ */
+public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v2(@Cast("cudaGraphConditionalHandle*") LongPointer pHandle_out, CUgraph_st graph, cudaExecutionContext_st ctx/*=NULL*/, @Cast("unsigned int") int defaultLaunchValue/*=0*/, @Cast("unsigned int") int flags/*=0*/);
+public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v2(@Cast("cudaGraphConditionalHandle*") LongPointer pHandle_out, CUgraph_st graph);
+public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v2(@Cast("cudaGraphConditionalHandle*") LongBuffer pHandle_out, CUgraph_st graph, cudaExecutionContext_st ctx/*=NULL*/, @Cast("unsigned int") int defaultLaunchValue/*=0*/, @Cast("unsigned int") int flags/*=0*/);
+public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v2(@Cast("cudaGraphConditionalHandle*") LongBuffer pHandle_out, CUgraph_st graph);
+public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v2(@Cast("cudaGraphConditionalHandle*") long[] pHandle_out, CUgraph_st graph, cudaExecutionContext_st ctx/*=NULL*/, @Cast("unsigned int") int defaultLaunchValue/*=0*/, @Cast("unsigned int") int flags/*=0*/);
+public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v2(@Cast("cudaGraphConditionalHandle*") long[] pHandle_out, CUgraph_st graph);
 
 /** \} */ /* END CUDART_GRAPH */
 
@@ -42754,7 +43532,8 @@ public static native @Cast("cudaError_t") int cudaGetDriverEntryPointByVersion(S
  * "CUDA environment variables" section.
  *
  * The \p code may be a \e cubin or \e fatbin as output by \b nvcc,
- * or a NULL-terminated \e PTX, either as output by \b nvcc or hand-written.
+ * or a NULL-terminated \e PTX, either as output by \b nvcc
+ * or hand-written, or \e Tile IR data.
  * A fatbin should also contain relocatable code when doing separate compilation.
  * Please also see the documentation for nvrtc (https://docs.nvidia.com/cuda/nvrtc/index.html), 
  * nvjitlink (https://docs.nvidia.com/cuda/nvjitlink/index.html), and nvfatbin
@@ -42823,7 +43602,8 @@ public static native @Cast("cudaError_t") int cudaLibraryLoadData(@ByPtrPtr CUli
  * "CUDA environment variables" section.
  *
  * The file should be a \e cubin file as output by \b nvcc, or a \e PTX file either
- * as output by \b nvcc or handwritten, or a \e fatbin file as output by \b nvcc.
+ * as output by \b nvcc or handwritten, or a \e fatbin file as output by \b nvcc
+ * or hand-written, or \e Tile IR file.
  * A fatbin should also contain relocatable code when doing separate compilation.
  * Please also see the documentation for nvrtc (https://docs.nvidia.com/cuda/nvrtc/index.html), 
  * nvjitlink (https://docs.nvidia.com/cuda/nvjitlink/index.html), and nvfatbin
@@ -43147,6 +43927,785 @@ public static native @Cast("cudaError_t") int cudaKernelSetAttributeForDevice(CU
 
 /** \} */ /* END CUDART_LIBRARY */
 
+/**
+ * \defgroup CUDART_EXECUTION_CONTEXT Execution Context Management
+ *
+ * ___MANBRIEF___ execution context management functions of the CUDA runtime API
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the execution context management functions of the CUDA runtime
+ * application programming interface.
+ *
+ * \{
+ *
+ * \section CUDART_EXECUTION_CONTEXT_overview Overview
+ *
+ * A CUDA execution context ::cudaExecutionContext_t serves as an abstraction for the contexts exposed by the CUDA Runtime,
+ * specifically green contexts and the primary context, and provides a unified programming model and API interface for contexts
+ * in the Runtime.
+ *
+ * There are two primary ways today to obtain an execution context:
+ * - ::cudaDeviceGetExecutionCtx: Returns the execution context that corresponds to the primary context of the specified device.
+ * - ::cudaGreenCtxCreate: Creates a green context with the specified resources and returns an execution context.
+ *
+ * Once you have an execution context at hand, you can perform context-level operations via the CUDA Runtime APIs. This includes:
+ * - Submitting work via streams created with ::cudaExecutionCtxStreamCreate.
+ * - Querying context via ::cudaExecutionCtxGetDevResource, ::cudaExecutionCtxGetDevice, etc.
+ * - Synchronizing and tracking context-level operations via ::cudaExecutionCtxSynchronize, ::cudaExecutionCtxRecordEvent, ::cudaExecutionCtxWaitEvent.
+ * - Performing context-level graph node operations via ::cudaGraphAddNode by specifying the context in \p nodeParams. Note that individual node creation APIs,
+ *   such as ::cudaGraphAddKernelNode, do not support specifying an execution context.
+ *
+ * Note: The above APIs take in an explicit cudaExecutionContext_t handle and ignores the context that is current to the calling thread.
+ * This enables explicit context-based programming without relying on thread-local state. If no context is specified,
+ * the APIs return ::cudaErrorInvalidValue.
+ *
+ * Note: Developers should treat ::cudaExecutionContext_t as an opaque handle and avoid assumptions
+ * about its underlying representation. The CUDA Runtime does not provide a way to convert this
+ * handle into driver-level contexts, such as ::CUcontext or ::CUgreenCtx.
+ *
+ * \section CUDART_EXECUTION_CONTEXT_lifetimeOfCUDAResources Lifetime of CUDA Resources
+ * The lifetime of CUDA resources (memory, streams, events, modules, etc) is not tied to the lifetime
+ * of the execution context. Their lifetime is tied to the device against which they were created.
+ * As such, usage of ::cudaDeviceReset() should be avoided to persist the lifetime of these resources.
+ *
+ * \section CUDART_EXECUTION_CONTEXT APIs Operating on Current Context
+ * The CUDA runtime does not provide a way to set an execution context as current. Since, the majority of
+ * the runtime APIs operate on the current context, we document below how the developer can work with
+ * these APIs.
+ *
+ * \subsection CUDART_EXECUTION_CONTEXT_currentContext_deviceResources APIs Operating on Device Resources
+ * To work with these APIs (for example, ::cudaMalloc, ::cudaEventCreate, etc), developers are expected
+ * to call ::cudaSetDevice() prior to invoking them. Doing so does not impact functional correctness as
+ * these APIs operate on resources that are device-wide. If users have a context handle at hand, they
+ * can get the device handle from the context handle using ::cudaExecutionCtxGetDevice().
+ *
+ * \subsection CUDART_EXECUTION_CONTEXT_currentContext_contextResources APIs Operating on Context Resources
+ * These APIs (for example, ::cudaLaunchKernel, ::cudaMemcpyAsync, ::cudaMemsetAsync, etc) take in
+ * a stream and resources are inferred from the context bound to the stream at creation. See ::cudaExecutionCtxStreamCreate
+ * for more details. Developers are expected to use the stream-based APIs for context awareness and
+ * always pass an explicit stream handle to ensure context-awareness, and avoid reliance on the default NULL stream,
+ * which implicitly binds to the current context.
+ *
+ * \section CUDART_CONTEXT_greencontexts Green Contexts
+ *
+ * Green contexts are a lightweight alternative to traditional contexts, that can be used to select
+ * a subset of device resources. This allows the developer to, for example, select SMs from distinct spatial
+ * partitions of the GPU and target them via CUDA stream operations, kernel launches, etc.
+ *
+ * Here are the broad initial steps to follow to get started:
+ * - (1) Start with an initial set of resources. For SM resources, they can be fetched via ::cudaDeviceGetDevResource.
+ *  In case of workqueues, a new configuration can be used or an existing one queried via the ::cudaDeviceGetDevResource API.
+ * - (2) Modify these resources by either partitioning them (in case of SMs) or changing the configuration (in case of workqueues).
+ *  To partition SMs, we recommend ::cudaDevSmResourceSplit. Changing the workqueue configuration can be done directly in place.
+ * - (3) Finalize the specification of resources by creating a descriptor via ::cudaDevResourceGenerateDesc.
+ * - (4) Create a green context via ::cudaGreenCtxCreate. This provisions the resource, such as workqueues
+ *  (until this step it was only a configuration specification).
+ * - (5) Create a stream via ::cudaExecutionCtxStreamCreate, and use it throughout your application.
+ *
+ * <b>SMs</b>
+ *
+ * There are two possible partition operations - with ::cudaDevSmResourceSplitByCount the partitions created have to follow default
+ * SM count granularity requirements, so it will often be rounded up and aligned to a default value. On the other hand,
+ * ::cudaDevSmResourceSplit is explicit and allows for creation of non-equal groups. It will not round up automatically - instead
+ * it is the developer’s responsibility to query and set the correct values.
+ * These requirements can be queried with ::cudaDeviceGetDevResource to determine the alignment granularity (sm.smCoscheduledAlignment).
+ * A general guideline on the default values for each compute architecture:
+ * - On Compute Architecture 7.X, 8.X, and all Tegra SoC:
+ *   - The smCount must be a multiple of 2.
+ *   - The alignment (and default value of coscheduledSmCount) is 2.
+ * - On Compute Architecture 9.0+:
+ *   - The smCount must be a multiple of 8, or coscheduledSmCount if provided.
+ *   - The alignment (and default value of coscheduledSmCount) is 8.
+ * While the maximum value for coscheduled SM count is 32 on all Compute Architecture 9.0+, it's recommended to follow cluster size requirements.
+ * The portable cluster size and the max cluster size should be used in order to benefit from this co-scheduling.
+ *
+ * <b>Workqueues</b>
+ *
+ * For \p cudaDevResourceTypeWorkqueueConfig, the resource specifies the expected maximum number of concurrent stream-ordered
+ * workloads via the \p wqConcurrencyLimit field. The \p sharingScope field determines how workqueue resources are shared:
+ * - \p cudaDevWorkqueueConfigScopeDeviceCtx: Use all shared workqueue resources across all contexts (default driver behavior).
+ * - \p cudaDevWorkqueueConfigScopeGreenCtxBalanced: When possible, use non-overlapping workqueue resources with other balanced green contexts.
+ *
+ * The maximum concurrency limit depends on ::CUDA_DEVICE_MAX_CONNECTIONS and can be queried from the device via ::cudaDeviceGetDevResource.
+ * Configurations may exceed this concurrency limit, but the driver will not guarantee that work submission remains non-overlapping.
+ *
+ * For \p cudaDevResourceTypeWorkqueue, the resource represents a pre-existing workqueue that can be retrieved from existing
+ * execution contexts. This allows reusing workqueue resources across different execution contexts.
+ *
+ * <b>On Concurrency</b>
+ *
+ * Even if the green contexts have disjoint SM partitions, it is not guaranteed that the kernels launched in them will run concurrently
+ * or have forward progress guarantees. This is due to other resources that could cause a dependency. Using a combination of disjoint SMs
+ * and \p cudaDevWorkqueueConfigScopeGreenCtxBalanced workqueue configurations can provide the best chance of avoiding interference.
+ * More resources will be added in the future to provide stronger guarantees.
+ *
+ * Additionally, there are two known scenarios, where its possible for the workload to run on more SMs than was provisioned (but never less).
+ *
+ * - On Volta+ MPS: When \p CUDA_MPS_ACTIVE_THREAD_PERCENTAGE is used,
+ * the set of SMs that are used for running kernels can be scaled up to the value of SMs used for the MPS client.
+ * - On Compute Architecture 9.x: When a module with dynamic parallelism (CDP) is loaded, all future
+ * kernels running under green contexts may use and share an additional set of 2 SMs.
+ */
+
+/**
+ * \brief Get device resources
+ *
+ * Get the \p type resources available to the \p device.
+ * This may often be the starting point for further partitioning or configuring
+ * of resources.
+ *
+ * Note: The API is not supported on 32-bit platforms.
+ *
+ * @param device - Device to get resource for
+ * @param resource - Output pointer to a cudaDevResource structure
+ * @param type - Type of resource to retrieve
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorInvalidDevice,
+ * ::cudaErrorInvalidResourceType,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \note_callback
+ *
+ * @see
+ * ::cuDeviceGetDevResource,
+ * ::cudaExecutionCtxGetDevResource,
+ * ::cudaDevSmResourceSplit,
+ * ::cudaDevResourceGenerateDesc
+ */
+public static native @Cast("cudaError_t") int cudaDeviceGetDevResource(int device, cudaDevResource_st resource, @Cast("cudaDevResourceType") int type);
+
+/**
+ * \brief Splits \p cudaDevResourceTypeSm resources.
+ *
+ * Splits \p cudaDevResourceTypeSm resources into \p nbGroups, adhering to the
+ * minimum SM count specified in \p minCount and the usage flags in \p flags.
+ * If \p result is NULL, the API simulates a split and provides the amount of groups that
+ * would be created in \p nbGroups. Otherwise, \p nbGroups must point to the amount of elements
+ * in \p result and on return, the API will overwrite \p nbGroups with the amount actually created.
+ * The groups are written to the array in \p result.
+ * \p nbGroups can be less than the total amount if a smaller number of groups is needed.
+ *
+ * This API is used to spatially partition the input resource. The input resource needs to come
+ * from one of ::cudaDeviceGetDevResource, or ::cudaExecutionCtxGetDevResource.
+ * A limitation of the API is that the output results cannot be split again without
+ * first creating a descriptor and a green context with that descriptor.
+ *
+ * When creating the groups, the API will take into account the performance and functional
+ * characteristics of the input resource, and guarantee a split that will create a disjoint
+ * set of symmetrical partitions. This may lead to fewer groups created than purely dividing
+ * the total SM count by the \p minCount due to cluster requirements or alignment and granularity
+ * requirements for the minCount.
+ * These requirements can be queried with ::cudaDeviceGetDevResource, or ::cudaExecutionCtxGetDevResource
+ * for ::cudaDevResourceTypeSm, using the \p minSmPartitionSize and \p smCoscheduledAlignment fields
+ * to determine minimum partition size and alignment granularity, respectively.
+ *
+ * The \p remainder set does not have the same functional or performance guarantees as the groups
+ * in \p result. Its use should be carefully planned and future partitions of the \p remainder set
+ * are discouraged.
+ *
+ * The following flags are supported:
+ * - \p cudaDevSmResourceSplitIgnoreSmCoscheduling : Lower the minimum SM count and alignment, and
+ *   treat each SM independent of its hierarchy. This allows more fine grained partitions but at the
+ *   cost of advanced features (such as large clusters on compute capability 9.0+).
+ * - \p cudaDevSmResourceSplitMaxPotentialClusterSize : Compute Capability 9.0+ only. Attempt to
+ *   create groups that may allow for maximally sized thread clusters. This can be queried post
+ *   green context creation using ::cudaOccupancyMaxPotentialClusterSize.
+ *
+ * A successful API call must either have:
+ * - A valid array of \p result pointers of size passed in \p nbGroups, with \p input of type
+ *   \p cudaDevResourceTypeSm. Value of \p minCount must be between 0 and the SM count specified
+ *   in \p input. \p remaining may be NULL.
+ * - NULL passed in for \p result, with a valid integer pointer in \p nbGroups and \p input of
+ *   type \p cudaDevResourceTypeSm. Value of \p minCount must be between 0 and the SM count
+ *   specified in \p input. \p remaining may be NULL. This queries the number of groups that
+ *   would be created by the API.
+ *
+ * Note: The API is not supported on 32-bit platforms.
+ *
+ * @param result - Output array of \p cudaDevResource resources. Can be NULL to query the
+ * number of groups.
+ * @param nbGroups - This is a pointer, specifying the number of groups that would be or
+ * should be created as described below.
+ * @param input - Input SM resource to be split. Must be a valid \p cudaDevSmResource resource.
+ * @param remaining - If the input resource cannot be cleanly split among \p nbGroups,
+ * the remaining is placed in here. Can be ommitted (NULL) if the user does not need the remaining set.
+ * @param flags - Flags specifying how these partitions are used or which constraints to abide by
+ * when splitting the input. Zero is valid for default behavior.
+ * @param minCount - Minimum number of SMs required
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorInvalidResourceType,
+ * ::cudaErrorInvalidResourceConfiguration,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \note_callback
+ *
+ * @see
+ * ::cuDevSmResourceSplitByCount,
+ * ::cudaDeviceGetDevResource,
+ * ::cudaExecutionCtxGetDevResource,
+ * ::cudaDevResourceGenerateDesc
+ */
+public static native @Cast("cudaError_t") int cudaDevSmResourceSplitByCount(
+    cudaDevResource_st result, @Cast("unsigned int*") IntPointer nbGroups, @Const cudaDevResource_st input, cudaDevResource_st remaining, @Cast("unsigned int") int flags, @Cast("unsigned int") int minCount);
+public static native @Cast("cudaError_t") int cudaDevSmResourceSplitByCount(
+    cudaDevResource_st result, @Cast("unsigned int*") IntBuffer nbGroups, @Const cudaDevResource_st input, cudaDevResource_st remaining, @Cast("unsigned int") int flags, @Cast("unsigned int") int minCount);
+public static native @Cast("cudaError_t") int cudaDevSmResourceSplitByCount(
+    cudaDevResource_st result, @Cast("unsigned int*") int[] nbGroups, @Const cudaDevResource_st input, cudaDevResource_st remaining, @Cast("unsigned int") int flags, @Cast("unsigned int") int minCount);
+
+/**
+ * \brief Splits a \p cudaDevResourceTypeSm resource into structured groups.
+ *
+ * This API will split a resource of ::cudaDevResourceTypeSm into \p nbGroups structured device resource groups (the \p result array),
+ * as well as an optional \p remainder, according to a set of requirements specified in the \p groupParams array. The term “structured”
+ * is a trait that specifies the \p result has SMs that are co-scheduled together. This co-scheduling can be specified via the \p coscheduledSmCount
+ * field of the \p groupParams structure, while the \p smCount will specify how many SMs are required in total for that result.
+ * The remainder is always “unstructured”, it does not have any set guarantees with respect to co-scheduling and those properties will need to
+ * either be queried via the occupancy set of APIs or further split into structured groups by this API.
+ *
+ * The API has a discovery mode for use cases where it is difficult to know ahead of time what the SM count should be.
+ * Discovery happens when the \p smCount field of a given \p groupParams array entry is set to 0 - the smCount will be filled in by the API
+ * with the derived SM count according to the provided \p groupParams fields and constraints. Discovery can be used with both a valid result
+ * array and with a NULL \p result pointer value. The latter is useful in situations where the smCount will end up being zero, which is an invalid
+ * value to create a result entry with, but allowed for discovery purposes when the \p result is NULL.
+ *
+ * The \p groupParams array is evaluated from index 0 to \p nbGroups - 1. For each index in the \p groupParams array,
+ * the API will evaluate which SMs may be a good fit based on constraints and assign those SMs to \p result.
+ * This evaluation order is important to consider when using discovery mode, as it helps discover the remaining SMs.
+ *
+ * For a valid call:
+ * - \p result should point to a \p cudaDevResource array of size \p nbGroups, or alternatively, may be NULL, if the developer wishes for only the groupParams entries to be updated
+ *
+ * - \p input should be a valid ::cudaDevResourceTypeSm resource that originates from querying the execution context, or device.
+ *
+ * - The \p remainder group may be NULL.
+ *
+ * - There are no API \p flags at this time, so the value passed in should be 0.
+ *
+ * - A ::cudaDevSmResourceGroupParams array of size \p nbGroups. Each entry must be zero-initialized.
+ *     - \p smCount: must be either 0 or in the range of [2,inputSmCount] where inputSmCount is the amount of SMs the \p input resource has.
+ *     \p smCount must be a multiple of 2, as well as a multiple of \p coscheduledSmCount. When assigning SMs to a group (and if results are
+ *     expected by having the \p result parameter set), \p smCount cannot end up with 0 or a value less than \p coscheduledSmCount
+ *     otherwise ::cudaErrorInvalidResourceConfiguration will be returned.
+ *     - \p coscheduledSmCount: allows grouping SMs together in order to be able to launch clusters on Compute Architecture 9.0+.
+ *     The default value may be queried from the device’s ::cudaDevResourceTypeSm resource (8 on Compute Architecture 9.0+ and 2 otherwise).
+ *     The maximum is 32 on Compute Architecture 9.0+ and 2 otherwise.
+ *     - \p preferredCoscheduledSmCount: Attempts to merge \p coscheduledSmCount groups into larger groups,
+ *     in order to make use of \p preferredClusterDimensions on Compute Architecture 10.0+. The default value is set to \p coscheduledSmCount.
+ *     - \p flags:
+ *         - \p cudaDevSmResourceGroupBackfill: lets \p smCount be a non-multiple of \p coscheduledSmCount, filling the difference between SM count
+ *         and already assigned co-scheduled groupings with other SMs. This lets any resulting group behave similar to the \p remainder group for example.
+ *
+ * <b>Example params and their effect:</b>
+ *
+ * A groupParams array element is defined in the following order:
+ * <pre>{@code
+ * { .smCount, .coscheduledSmCount, .preferredCoscheduledSmCount, .flags, \/\* .reserved \*\/ }
+ * }</pre>
+ *
+ * <pre>{@code
+// Example 1
+// Will discover how many SMs there are, that are co-scheduled in groups of smCoscheduledAlignment.
+// The rest is placed in the optional remainder.
+cudaDevSmResourceGroupParams params { 0, 0, 0, 0 };
+ * }</pre>
+ * <pre>{@code
+// Example 2
+// Assuming the device has 10+ SMs, the result will have 10 SMs that are co-scheduled in groups of 2 SMs.
+// The rest is placed in the optional remainder.
+cudaDevSmResourceGroupParams params { 10, 2, 0, 0};
+// Setting the coscheduledSmCount to 2 guarantees that we can always have a valid result
+// as long as the SM count is less than or equal to the input resource SM count.
+ * }</pre>
+ * <pre>{@code
+// Example 3
+// A single piece is split-off, but instead of assigning the rest to the remainder, a second group contains everything else
+// This assumes the device has 10+ SMs (8 of which are coscheduled in groups of 4),
+// otherwise the second group could end up with 0 SMs, which is not allowed.
+cudaDevSmResourceGroupParams params { {8, 4, 0, 0}, {0, 2, 0, cudaDevSmResourceGroupBackfill } }
+ * }</pre>
+ *
+ * The difference between a catch-all param group as the last entry and the remainder is in two aspects:
+ * - The remainder may be NULL / _TYPE_INVALID (if there are no SMs remaining), while a result group must always be valid.
+ * - The remainder does not have a structure, while the result group will always need to adhere to a structure
+ * of coscheduledSmCount (even if its just 2), and therefore must always have enough coscheduled SMs to cover
+ * that requirement (even with the \p cudaDevSmResourceGroupBackfill flag enabled).
+ *
+ * Splitting an input into N groups, can be accomplished by repeatedly splitting off 1 group and re-splitting
+ * the remainder (a bisect operation). However, it's recommended to accomplish this with a single call wherever possible.
+ *
+ * @param result - Output array of \p cudaDevResource resources. Can be NULL, alongside an smCount of 0, for discovery purpose.
+ * @param nbGroups - Specifies the number of groups in \p result and \p groupParams
+ * @param input - Input SM resource to be split. Must be a valid \p cudaDevResourceTypeSm resource.
+ * @param remainder - If splitting the input resource leaves any SMs, the remainder is placed in here.
+ * @param flags - Flags specifying how the API should behave. The value should be 0 for now.
+ * @param groupParams - Description of how the SMs should be split and assigned to the corresponding result entry.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorInvalidResourceType,
+ * ::cudaErrorInvalidResourceConfiguration,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \note_callback
+ *
+ * @see
+ * ::cuDevSmResourceSplit,
+ * ::cudaDeviceGetDevResource,
+ * ::cudaExecutionCtxGetDevResource,
+ * ::cudaDevResourceGenerateDesc
+ */
+public static native @Cast("cudaError_t") int cudaDevSmResourceSplit(
+    cudaDevResource_st result, @Cast("unsigned int") int nbGroups, @Const cudaDevResource_st input, cudaDevResource_st remainder, @Cast("unsigned int") int flags, cudaDevSmResourceGroupParams groupParams);
+
+/**
+ * \brief Generate a resource descriptor
+ *
+ * Generates a single resource descriptor with the set of resources specified in \p resources.
+ * The generated resource descriptor is necessary for the creation of green contexts via the
+ * ::cudaGreenCtxCreate API. Resources of the same type can be passed in, provided they meet
+ * the requirements as noted below.
+ *
+ * A successful API call must have:
+ * - A valid output pointer for the \p phDesc descriptor as well as a valid array of \p resources pointers,
+ * with the array size passed in \p nbResources.
+ * If multiple resources are provided in \p resources, the device they came from must be the same,
+ * otherwise ::cudaErrorInvalidResourceConfiguration is returned.
+ * If multiple resources are provided in \p resources and they are of type ::cudaDevResourceTypeSm,
+ * they must be outputs (whether \p result or \p remaining) from the same split API instance and have
+ * the same smCoscheduledAlignment values, otherwise ::cudaErrorInvalidResourceConfiguration is returned.
+ *
+ * Note: The API is not supported on 32-bit platforms.
+ *
+ * @param phDesc - Output descriptor
+ * @param resources - Array of resources to be included in the descriptor
+ * @param nbResources - Number of resources passed in \p resources
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorInvalidResourceType,
+ * ::cudaErrorInvalidResourceConfiguration,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorOutOfMemory,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \note_callback
+ *
+ * @see
+ * ::cuDevResourceGenerateDesc,
+ * ::cudaDeviceGetDevResource,
+ * ::cudaExecutionCtxGetDevResource,
+ * ::cudaDevSmResourceSplit,
+ * ::cudaGreenCtxCreate
+ */
+public static native @Cast("cudaError_t") int cudaDevResourceGenerateDesc(@ByPtrPtr CUdevResourceDesc_st phDesc, cudaDevResource_st resources, @Cast("unsigned int") int nbResources);
+
+/**
+ * \brief Creates a green context with a specified set of resources.
+ *
+ * This API creates a green context with the resources specified in the descriptor \p desc and
+ * returns it in the handle represented by \p phCtx.
+ *
+ * This API retains the device’s primary context for the lifetime of the green context.
+ * The primary context will be released when the green context is destroyed. To avoid the
+ * overhead of repeated initialization and teardown, it is recommended to explicitly
+ * initialize the device's primary context ahead of time using ::cudaInitDevice. This
+ * ensures that the primary context remains initialized throughout the program’s lifetime,
+ * minimizing overhead during green context creation and destruction.
+ *
+ * The API does not create a default stream for the green context. Developers are expected
+ * to create streams explicitly using ::cudaExecutionCtxStreamCreate to submit work
+ * to the green context.
+ *
+ * Note: The API is not supported on 32-bit platforms.
+ *
+ * @param phCtx - Pointer for the output handle to the green context
+ * @param desc - Descriptor generated via ::cudaDevResourceGenerateDesc which contains the set of resources to be used
+ * @param device - Device on which to create the green context.
+ * @param flags - Green context creation flags. Must be 0, currently reserved for future use.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevice,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorOutOfMemory,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \note_callback
+ *
+ * @see
+ * ::cudaDeviceGetDevResource,
+ * ::cudaDevSmResourceSplit,
+ * ::cudaDevResourceGenerateDesc,
+ * ::cudaExecutionCtxGetDevResource,
+ * ::cudaExecutionCtxDestroy,
+ * ::cudaInitDevice,
+ * ::cudaExecutionCtxStreamCreate
+ */
+public static native @Cast("cudaError_t") int cudaGreenCtxCreate(@ByPtrPtr cudaExecutionContext_st phCtx, CUdevResourceDesc_st desc, int device, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Destroy a execution context
+ *
+ * Destroys the specified execution context \p ctx. It is the responsibility of the caller
+ * to ensure that no API call issues using \p ctx while ::cudaExecutionCtxDestroy() is executing or
+ * subsequently.
+ *
+ * If \p ctx is a green context, any resources provisioned for it (that were initially available via the resource descriptor)
+ * are released as well.
+ *
+ * The API does not destroy streams created via ::cudaExecutionCtxStreamCreate. Users are expected to
+ * destroy these streams explicitly using ::cudaStreamDestroy to avoid resource leaks. Once the
+ * execution context is destroyed, any subsequent API calls involving these streams will return
+ * ::cudaErrorStreamDetached with the exception of the following APIs:
+ * - ::cudaStreamDestroy. Note this is only supported on CUDA drivers 13.1 and above.
+ *
+ * Additionally, the API will invalidate all active captures on these streams.
+ *
+ * Passing in a \p ctx that was not explicitly created via CUDA Runtime APIs is not allowed and will
+ * result in undefined behavior.
+ *
+ * @param ctx - Execution context to destroy (required parameter, see note below)
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see
+ * ::cudaGreenCtxCreate
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxDestroy(cudaExecutionContext_st ctx);
+
+/**
+ * \brief Get context resources
+ *
+ * Get the \p type resources available to context represented by \p ctx.
+ *
+ * Note: The API is not supported on 32-bit platforms.
+ *
+ * @param ctx - Execution context to get resource for (required parameter, see note below)
+ * @param resource - Output pointer to a cudaDevResource structure
+ * @param type - Type of resource to retrieve
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotSupported,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see
+ * ::cudaDeviceGetDevResource,
+ * ::cudaDevSmResourceSplit,
+ * ::cudaDevResourceGenerateDesc,
+ * ::cudaGreenCtxCreate
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetDevResource(cudaExecutionContext_st ctx, cudaDevResource_st resource, @Cast("cudaDevResourceType") int type);
+
+/**
+ * \brief Returns the device handle for the execution context
+ *
+ * Returns in \p *device the handle of the specified execution context's device.
+ * The execution context should not be NULL.
+ *
+ * @param device - Returned device handle for the specified execution context
+ * @param ctx - Execution context for which to obtain the device (required parameter, see note below)
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see ::cudaGreenCtxCreate,
+ * ::cudaExecutionCtxDestroy,
+ * ::cuCtxGetDevice
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetDevice(IntPointer device, cudaExecutionContext_st ctx);
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetDevice(IntBuffer device, cudaExecutionContext_st ctx);
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetDevice(int[] device, cudaExecutionContext_st ctx);
+
+/**
+ * \brief Returns the unique Id associated with the execution context supplied
+ *
+ * Returns in \p ctxId the unique Id which is associated with a given context.
+ * The Id is unique for the life of the program for this instance of CUDA.
+ * The execution context should not be NULL.
+ *
+ * @param ctx - Context for which to obtain the Id (required parameter, see note below)
+ * @param ctxId - Pointer to store the Id of the context
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see ::cudaGreenCtxCreate,
+ * ::cudaExecutionCtxDestroy,
+ * ::cudaExecutionCtxGetDevice,
+ * ::cuCtxGetId
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetId(cudaExecutionContext_st ctx, @Cast("unsigned long long*") LongPointer ctxId);
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetId(cudaExecutionContext_st ctx, @Cast("unsigned long long*") LongBuffer ctxId);
+public static native @Cast("cudaError_t") int cudaExecutionCtxGetId(cudaExecutionContext_st ctx, @Cast("unsigned long long*") long[] ctxId);
+
+/**
+ * \brief Creates a stream and initializes it for the given execution context.
+ *
+ * The API creates a CUDA stream with the specified \p flags and \p priority,
+ * initializing it with resources as defined at the time of creating the specified \p ctx.
+ * Additionally, the API also enables work submitted to to the stream to be tracked under \p ctx.
+ *
+ * The supported values for \p flags are:
+ * - ::cudaStreamDefault: Default stream creation flag. This would be ::cudaStreamNonBlocking for
+ *   streams created on a green context.
+ * - ::cudaStreamNonBlocking: Specifies that work running in the created stream may run concurrently
+ *   with work in stream 0 (the NULL stream), and that the created stream should perform no implicit
+ *   synchronization with stream 0
+ *
+ * Specifying \p priority affects the scheduling priority of work in the stream. Priorities provide a
+ * hint to preferentially run work with higher priority when possible, but do not preempt
+ * already-running work or provide any other functional guarantee on execution order.
+ * \p priority follows a convention where lower numbers represent higher priorities.
+ * '0' represents default priority. The range of meaningful numerical priorities can
+ * be queried using ::cudaDeviceGetStreamPriorityRange. If the specified priority is
+ * outside the numerical range returned by ::cudaDeviceGetStreamPriorityRange,
+ * it will automatically be clamped to the lowest or the highest number in the range.
+ *
+ * @param phStream - Returned stream handle
+ * @param ctx      - Execution context to initialize the stream with (required parameter, see note below)
+ * @param flags    - Flags for stream creation
+ * @param priority - Stream priority
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorOutOfMemory,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * \note In the current implementation, only compute kernels launched in
+ * priority streams are affected by the stream's priority. Stream priorities have
+ * no effect on host-to-device and device-to-host memory operations.
+ *
+ * @see ::cudaStreamDestroy,
+ * ::cudaGreenCtxCreate,
+ * ::cudaDeviceGetStreamPriorityRange,
+ * ::cudaStreamGetFlags,
+ * ::cudaStreamGetPriority,
+ * ::cudaStreamGetDevice,
+ * ::cudaStreamGetDevResource,
+ * ::cudaLaunchKernel,
+ * ::cudaEventRecord,
+ * ::cudaStreamWaitEvent,
+ * ::cudaStreamQuery,
+ * ::cudaStreamSynchronize,
+ * ::cudaStreamAddCallback
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxStreamCreate(@ByPtrPtr CUstream_st phStream, cudaExecutionContext_st ctx, @Cast("unsigned int") int flags, int priority);
+
+/**
+ * \brief Block for the specified execution context's tasks to complete
+ *
+ * Blocks until the specified execution context has completed all preceding requested tasks.
+ * If the specified execution context is the device (primary) context obtained via ::cudaDeviceGetExecutionCtx,
+ * green contexts that have been created on the device will also be synchronized.
+ *
+ * The API returns an error if one of the preceding tasks failed.
+ *
+ * @param ctx - Execution context to synchronize (required parameter, see note below)
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorDeviceUninitialized,
+ * ::cudaErrorInvalidValue
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see
+ * ::cudaGreenCtxCreate,
+ * ::cudaExecutionCtxDestroy,
+ * ::cudaDeviceSynchronize,
+ * ::cuCtxSynchronize_v2
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxSynchronize(cudaExecutionContext_st ctx);
+
+/**
+ * \brief Get stream resources
+ *
+ * Get the \p type resources available to the \p hStream and store them in \p resource.
+ *
+ * Note: The API will return ::cudaErrorInvalidResourceType is \p type is
+ * \p cudaDevResourceTypeWorkqueueConfig or \p cudaDevResourceTypeWorkqueue.
+ *
+ * @param hStream - Stream to get resource for
+ * @param resource - Output pointer to a cudaDevResource structure
+ * @param type - Type of resource to retrieve
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorDeviceUninitialized,
+ * ::cudaErrorInvalidResourceType,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidHandle,
+ * ::cudaErrorNotPermitted,
+ * ::cudaErrorCallRequiresNewerDriver,
+ * \notefnerr
+ * \note_callback
+ *
+ * @see
+ * ::cudaGreenCtxCreate,
+ * ::cudaExecutionCtxStreamCreate,
+ * ::cudaStreamCreate,
+ * ::cudaDevSmResourceSplit,
+ * ::cudaDevResourceGenerateDesc,
+ * ::cuStreamGetDevResource
+ */
+public static native @Cast("cudaError_t") int cudaStreamGetDevResource(CUstream_st hStream, cudaDevResource_st resource, @Cast("cudaDevResourceType") int type);
+
+/**
+ * \brief Records an event for the specified execution context
+ *
+ * Captures in \p event all the activities of the execution context \p ctx
+ * at the time of this call. \p event and \p ctx must be from the same
+ * CUDA device, otherwise ::cudaErrorInvalidHandle will be returned.
+ * Calls such as ::cudaEventQuery() or ::cudaExecutionCtxWaitEvent() will then examine
+ * or wait for completion of the work that was captured.
+ * Uses of \p ctx after this call do not modify \p event.
+ * If the execution context passed to \p ctx is the device (primary) context obtained via
+ * ::cudaDeviceGetExecutionCtx(), \p event will capture all the activities of the green
+ * contexts created on the device as well.
+ *
+ * \note The API will return ::cudaErrorStreamCaptureUnsupported if the
+ * specified execution context \p ctx has a stream in the capture mode. In such a case,
+ * the call will invalidate all the conflicting captures.
+ *
+ * @param ctx - Execution context to record event for (required parameter, see note below)
+ * @param event - Event to record
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorInvalidHandle,
+ * ::cudaErrorStreamCaptureUnsupported
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see
+ * ::cudaEventRecord,
+ * ::cudaExecutionCtxWaitEvent,
+ * ::cuCtxRecordEvent,
+ * ::cuGreenCtxRecordEvent
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxRecordEvent(cudaExecutionContext_st ctx, CUevent_st event);
+
+/**
+ * \brief Make an execution context wait on an event
+ *
+ * Makes all future work submitted to execution context \p ctx wait for all work
+ * captured in \p event. The synchronization will be performed on the device
+ * and will not block the calling CPU thread. See ::cudaExecutionCtxRecordEvent()
+ * for details on what is captured by an event.
+ * If the execution context passed to \p ctx is the device (primary) context obtained via
+ * ::cudaDeviceGetExecutionCtx(), all green contexts created on the device will wait for
+ * \p event as well.
+ *
+ * \note \p event may be from a different execution context or device than \p ctx.
+ *
+ * \note The API will return ::cudaErrorStreamCaptureUnsupported and
+ * invalidate the capture if the specified event \p event is part of an ongoing
+ * capture sequence or if the specified execution context \p ctx has a stream in the capture mode.
+ *
+ * @param ctx    - Execution context to wait for (required parameter, see note below)
+ * @param event  - Event to wait on
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorInvalidHandle,
+ * ::cudaErrorStreamCaptureUnsupported
+ * \notefnerr
+ * \note_callback
+ * \note_cudaExecutionContext_t_required_param
+ *
+ * @see
+ * ::cudaExecutionCtxRecordEvent,
+ * ::cudaStreamWaitEvent,
+ * ::cuCtxWaitEvent,
+ * ::cuGreenCtxWaitEvent
+ */
+public static native @Cast("cudaError_t") int cudaExecutionCtxWaitEvent(cudaExecutionContext_st ctx, CUevent_st event);
+
+/**
+ * \brief Returns the execution context for a device
+ *
+ * Returns in \p ctx the execution context for the specified device. This is the device's primary context.
+ * The returned context can then be passed to APIs that take in a cudaExecutionContext_t enabling explicit
+ * context-based programming without relying on thread-local state.
+ *
+ * Passing the returned execution context to ::cudaExecutionCtxDestroy() is not allowed and will result in undefined behavior.
+ *
+ * @param ctx - Returns the device execution context
+ * @param device - Device to get the execution context for
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevice
+ *
+ * @see
+ * cudaExecutionCtxGetDevice,
+ * cudaExecutionCtxGetId
+ */
+public static native @Cast("cudaError_t") int cudaDeviceGetExecutionCtx(@ByPtrPtr cudaExecutionContext_st ctx, int device);
+
+/** \} */ /* END CUDART_CONTEXT */
+
 /** \cond impl_private */
 public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const void**") PointerPointer ppExportTable, @Const cudaUUID_t pExportTableId);
 public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const void**") @ByPtrPtr Pointer ppExportTable, @Const cudaUUID_t pExportTableId);
@@ -43175,33 +44734,39 @@ public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const vo
  *
  * \{
  *
- * \section CUDART_CUDA_primary Primary Contexts
+ * \section CUDART_CUDA_execution_context Execution Contexts
  *
- * There exists a one to one relationship between CUDA devices in the CUDA Runtime
- * API and ::CUcontext s in the CUDA Driver API within a process.  The specific
- * context which the CUDA Runtime API uses for a device is called the device's
- * primary context.  From the perspective of the CUDA Runtime API, a device and 
- * its primary context are synonymous.
+ * The CUDA Runtime provides ::cudaExecutionContext_t as an abstraction over
+ * driver-level contexts—specifically, green contexts and the primary context.
+ *
+ * There are two primary ways to obtain an execution context:
+ * - ::cudaDeviceGetExecutionCtx: Returns the execution context that corresponds to the primary context of the specified device.
+ * - ::cudaGreenCtxCreate: Creates a green context with the specified resources and returns an execution context.
+ *
+ * Note: Developers should treat ::cudaExecutionContext_t as an opaque handle and avoid assumptions
+ * about its underlying representation. The CUDA Runtime does not provide a way to convert this
+ * handle into a ::CUcontext or ::CUgreenCtx.
+ *
+ *
+ * \section CUDART_CUDA_primary Primary Context (aka Device Execution Context)
+ *
+ * The primary context is the default execution context associated with a device in the Runtime.
+ * It can be obtained via a call to ::cudaDeviceGetExecutionCtx(). There is a one-to-one mapping
+ * between CUDA devices in the runtime and their primary contexts within a process.
+ * 
+ * From the CUDA Runtime’s perspective, a device and its primary context are functionally synonymous.
+ *
+ * Unless explicitly overridden, either by making a different context current via the Driver API
+ * (e.g., ::cuCtxSetCurrent()) or by using an explicit execution context handle, the Runtime will
+ * implicitly initialize and use the primary context for API calls as needed.
  *
  * \section CUDART_CUDA_init Initialization and Tear-Down
  *
- * CUDA Runtime API calls operate on the CUDA Driver API ::CUcontext which is current to
- * to the calling host thread.
- * 
- * The function ::cudaInitDevice() ensures that the primary context is initialized
- * for the requested device but does not make it current to the calling thread. 
- *
- * The function ::cudaSetDevice() initializes the primary context for the
- * specified device and makes it current to the calling thread by calling ::cuCtxSetCurrent().
- *
- * The CUDA Runtime API will automatically initialize the primary context for
- * a device at the first CUDA Runtime API call which requires an active context.
- * If no ::CUcontext is current to the calling thread when a CUDA Runtime API call 
- * which requires an active context is made, then the primary context for a device 
- * will be selected, made current to the calling thread, and initialized.
- *
- * The context which the CUDA Runtime API initializes will be initialized using 
- * the parameters specified by the CUDA Runtime API functions
+ * Unless an explicit execution context is specified (see “Execution Context Management” for APIs),
+ * CUDA Runtime API calls operate on the CUDA Driver ::CUcontext which is current to the calling host thread.
+ * If no ::CUcontext is current to the calling thread when a CUDA Runtime API call which requires an active context is made,
+ * then the primary context (device execution context) for a device will be selected, made current to the calling thread, and initialized.
+ * The context will be initialized using the parameters specified by the CUDA Runtime API functions
  * ::cudaSetDeviceFlags(), 
  * ::cudaD3D9SetDirect3DDevice(), 
  * ::cudaD3D10SetDirect3DDevice(), 
@@ -43211,6 +44776,12 @@ public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const vo
  * Note that these functions will fail with ::cudaErrorSetOnActiveProcess if they are 
  * called when the primary context for the specified device has already been initialized,
  * except for ::cudaSetDeviceFlags() which will simply overwrite the previous settings.
+ *
+ * The function ::cudaInitDevice() ensures that the primary context is initialized
+ * for the requested device but does not make it current to the calling thread.
+ *
+ * The function ::cudaSetDevice() initializes the primary context for the
+ * specified device and makes it current to the calling thread by calling ::cuCtxSetCurrent().
  *
  * Primary contexts will remain active until they are explicitly deinitialized 
  * using ::cudaDeviceReset().  The function ::cudaDeviceReset() will deinitialize the 
@@ -43223,31 +44794,28 @@ public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const vo
  * the primary context not be reset except just before exit or to recover from an
  * unspecified launch failure.
  * 
- * \section CUDART_CUDA_context Context Interoperability
+ * \section CUDART_CUDA_CUcontext CUcontext Interoperability
  *
  * Note that the use of multiple ::CUcontext s per device within a single process 
  * will substantially degrade performance and is strongly discouraged.  Instead,
- * it is highly recommended that the implicit one-to-one device-to-context mapping
- * for the process provided by the CUDA Runtime API be used.
+ * it is highly recommended to either use execution contexts ::cudaExecutionContext_t or the implicit
+ * one-to-one device-to-primary context mapping for the process provided by the CUDA Runtime API.
  *
  * If a non-primary ::CUcontext created by the CUDA Driver API is current to a
  * thread then the CUDA Runtime API calls to that thread will operate on that 
  * ::CUcontext, with some exceptions listed below.  Interoperability between data
  * types is discussed in the following sections.
  *
- * The function ::cudaPointerGetAttributes() will return the error 
- * ::cudaErrorIncompatibleDriverContext if the pointer being queried was allocated by a 
- * non-primary context.  The function ::cudaDeviceEnablePeerAccess() and the rest of 
- * the peer access API may not be called when a non-primary ::CUcontext is current.  
- * To use the pointer query and peer access APIs with a context created using the 
- * CUDA Driver API, it is necessary that the CUDA Driver API be used to access
- * these features.
+ * The function cudaDeviceEnablePeerAccess() and the rest of the peer access API may not
+ * be called when a non-primary CUcontext is current. To use the peer access APIs with a
+ * context created using the CUDA Driver API, it is necessary that the CUDA Driver API
+ * be used to access these features.
  *
  * All CUDA Runtime API state (e.g, global variables' addresses and values) travels
  * with its underlying ::CUcontext.  In particular, if a ::CUcontext is moved from one 
  * thread to another then all CUDA Runtime API state will move to that thread as well.
  *
- * Please note that attaching to legacy contexts (those with a version of 3010 as returned
+ * Please note that attaching to legacy CUcontext (those with a version of 3010 as returned
  * by ::cuCtxGetApiVersion()) is not possible. The CUDA Runtime will return
  * ::cudaErrorIncompatibleDriverContext in such cases.
  *
@@ -43364,6 +44932,7 @@ public static native @Cast("cudaError_t") int cudaGetKernel(@ByPtrPtr CUkern_st 
 /** \} */ /* END CUDART_DRIVER */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL)
+
 
 // #elif defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)
 // #endif
@@ -47637,7 +49206,7 @@ public static native float __internal_half2float(@Cast("const unsigned short") s
 // Parsed from <cuda_bf16.h>
 
 /*
-* Copyright 1993-2024 NVIDIA Corporation.  All rights reserved.
+* Copyright 1993-2025 NVIDIA Corporation.  All rights reserved.
 *
 * NOTICE TO LICENSEE:
 *

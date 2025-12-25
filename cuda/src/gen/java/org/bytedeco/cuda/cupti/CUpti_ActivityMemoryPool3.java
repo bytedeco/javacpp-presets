@@ -115,7 +115,7 @@ public class CUpti_ActivityMemoryPool3 extends Pointer {
   public native @Cast("uint64_t") long utilizedSize(); public native CUpti_ActivityMemoryPool3 utilizedSize(long setter);
 
   /**
-   * Whether the pool is of managed memory allocation or pinned memory allocation. 
+   * Whether the pool is of managed memory allocation or pinned memory allocation.
    * If it is 0, it is pinned and if it is 1, the memory pool allocation is of managed memory type.
    */
   public native @Cast("uint8_t") byte isManagedPool(); public native CUpti_ActivityMemoryPool3 isManagedPool(byte setter);

@@ -95,4 +95,7 @@ public class VExecutionContext extends VRoot {
     public native @NoException(true) IRuntimeConfig getRuntimeConfig();
     public native @Cast("bool") @NoException(true) boolean setUnfusedTensorsDebugState(@Cast("bool") boolean flag);
     public native @Cast("bool") @NoException(true) boolean getUnfusedTensorsDebugState();
+// #if ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
+    public native @Cast("bool") @NoException(true) boolean isStreamCapturable(CUstream_st stream);
+// #endif // ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
 }

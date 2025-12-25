@@ -199,7 +199,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("curand") ? "@.10"
                     : lib.equals("cusparse") ? "@.12"
                     : lib.equals("cusolver") ? "@.12"
-                    : lib.equals("nvrtc-builtins") ? "@.13.0"
+                    : lib.equals("nvrtc-builtins") ? "@.13.1"
                     : "@.13";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_9"
@@ -213,9 +213,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("cusparse") ? "64_12"
                     : lib.equals("cusolver") ? "64_12"
                     : lib.equals("nvrtc") ? "64_130_0"
-                    : lib.equals("nvrtc-builtins") ? "64_130"
+                    : lib.equals("nvrtc-builtins") ? "64_131"
                     : lib.equals("nvJitLink") ? "_130_0"
-                    : lib.equals("cupti") ? "64_2025.3.1"
+                    : lib.equals("cupti") ? "64_2025.4.0"
                     : "64_13";
             } else {
                 continue; // no CUDA

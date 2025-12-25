@@ -21,64 +21,64 @@ import static org.bytedeco.cuda.global.cupti.*;
  * CUPTI_ACTIVITY_KIND_CONCURRENT_KERNEL)
  */
 @Properties(inherit = org.bytedeco.cuda.presets.cupti.class)
-public class CUpti_ActivityKernel10 extends Pointer {
+public class CUpti_ActivityKernel11 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CUpti_ActivityKernel10() { super((Pointer)null); allocate(); }
+    public CUpti_ActivityKernel11() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CUpti_ActivityKernel10(long size) { super((Pointer)null); allocateArray(size); }
+    public CUpti_ActivityKernel11(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CUpti_ActivityKernel10(Pointer p) { super(p); }
+    public CUpti_ActivityKernel11(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public CUpti_ActivityKernel10 position(long position) {
-        return (CUpti_ActivityKernel10)super.position(position);
+    @Override public CUpti_ActivityKernel11 position(long position) {
+        return (CUpti_ActivityKernel11)super.position(position);
     }
-    @Override public CUpti_ActivityKernel10 getPointer(long i) {
-        return new CUpti_ActivityKernel10((Pointer)this).offsetAddress(i);
+    @Override public CUpti_ActivityKernel11 getPointer(long i) {
+        return new CUpti_ActivityKernel11((Pointer)this).offsetAddress(i);
     }
 
   /**
    * The activity record kind, must be CUPTI_ACTIVITY_KIND_KERNEL or
    * CUPTI_ACTIVITY_KIND_CONCURRENT_KERNEL.
    */
-  public native @Cast("CUpti_ActivityKind") int kind(); public native CUpti_ActivityKernel10 kind(int setter);
+  public native @Cast("CUpti_ActivityKind") int kind(); public native CUpti_ActivityKernel11 kind(int setter);
 
   /**
    * For devices with compute capability 7.5+ cacheConfig values are not updated
    * in case field isSharedMemoryCarveoutRequested is set
    */
-    @Name("cacheConfig.both") public native @Cast("uint8_t") byte cacheConfig_both(); public native CUpti_ActivityKernel10 cacheConfig_both(byte setter);
+    @Name("cacheConfig.both") public native @Cast("uint8_t") byte cacheConfig_both(); public native CUpti_ActivityKernel11 cacheConfig_both(byte setter);
       /**
        * The cache configuration requested by the kernel. The value is one
        * of the CUfunc_cache enumeration values from cuda.h.
        */
-      @Name("cacheConfig.config.requested") public native @Cast("uint8_t") @NoOffset byte cacheConfig_config_requested(); public native CUpti_ActivityKernel10 cacheConfig_config_requested(byte setter);
+      @Name("cacheConfig.config.requested") public native @Cast("uint8_t") @NoOffset byte cacheConfig_config_requested(); public native CUpti_ActivityKernel11 cacheConfig_config_requested(byte setter);
 
       /**
        * The cache configuration used for the kernel. The value is one of
        * the CUfunc_cache enumeration values from cuda.h.
        */
-      @Name("cacheConfig.config.executed") public native @Cast("uint8_t") @NoOffset byte cacheConfig_config_executed(); public native CUpti_ActivityKernel10 cacheConfig_config_executed(byte setter);
+      @Name("cacheConfig.config.executed") public native @Cast("uint8_t") @NoOffset byte cacheConfig_config_executed(); public native CUpti_ActivityKernel11 cacheConfig_config_executed(byte setter);
 
   /**
    * The shared memory configuration used for the kernel. The value is one of
    * the CUsharedconfig enumeration values from cuda.h.
    */
-  public native @Cast("uint8_t") byte sharedMemoryConfig(); public native CUpti_ActivityKernel10 sharedMemoryConfig(byte setter);
+  public native @Cast("uint8_t") byte sharedMemoryConfig(); public native CUpti_ActivityKernel11 sharedMemoryConfig(byte setter);
 
   /**
    * The number of registers required for each thread executing the
    * kernel.
    */
-  public native @Cast("uint16_t") short registersPerThread(); public native CUpti_ActivityKernel10 registersPerThread(short setter);
+  public native @Cast("uint16_t") short registersPerThread(); public native CUpti_ActivityKernel11 registersPerThread(short setter);
 
   /**
    * The partitioned global caching requested for the kernel. Partitioned
    * global caching is required to enable caching on certain chips, such as
    * devices with compute capability 5.2.
    */
-  public native @Cast("CUpti_ActivityPartitionedGlobalCacheConfig") int partitionedGlobalCacheRequested(); public native CUpti_ActivityKernel10 partitionedGlobalCacheRequested(int setter);
+  public native @Cast("CUpti_ActivityPartitionedGlobalCacheConfig") int partitionedGlobalCacheRequested(); public native CUpti_ActivityKernel11 partitionedGlobalCacheRequested(int setter);
 
   /**
    * The partitioned global caching executed for the kernel. Partitioned
@@ -87,21 +87,21 @@ public class CUpti_ActivityKernel10 extends Pointer {
    * automatically disabled if the occupancy requirement of the launch cannot
    * support caching.
    */
-  public native @Cast("CUpti_ActivityPartitionedGlobalCacheConfig") int partitionedGlobalCacheExecuted(); public native CUpti_ActivityKernel10 partitionedGlobalCacheExecuted(int setter);
+  public native @Cast("CUpti_ActivityPartitionedGlobalCacheConfig") int partitionedGlobalCacheExecuted(); public native CUpti_ActivityKernel11 partitionedGlobalCacheExecuted(int setter);
 
   /**
    * The start timestamp for the kernel execution, in ns. A value of 0
    * for both the start and end timestamps indicates that timestamp
    * information could not be collected for the kernel.
    */
-  public native @Cast("uint64_t") long start(); public native CUpti_ActivityKernel10 start(long setter);
+  public native @Cast("uint64_t") long start(); public native CUpti_ActivityKernel11 start(long setter);
 
   /**
    * The end timestamp for the kernel execution, in ns. A value of 0
    * for both the start and end timestamps indicates that timestamp
    * information could not be collected for the kernel.
    */
-  public native @Cast("uint64_t") long end(); public native CUpti_ActivityKernel10 end(long setter);
+  public native @Cast("uint64_t") long end(); public native CUpti_ActivityKernel11 end(long setter);
 
   /**
    * The completed timestamp for the kernel execution, in ns.  It
@@ -109,74 +109,74 @@ public class CUpti_ActivityKernel10 extends Pointer {
    * kernel itself. A value of CUPTI_TIMESTAMP_UNKNOWN indicates that
    * the completion time is unknown.
    */
-  public native @Cast("uint64_t") long completed(); public native CUpti_ActivityKernel10 completed(long setter);
+  public native @Cast("uint64_t") long completed(); public native CUpti_ActivityKernel11 completed(long setter);
 
   /**
    * The ID of the device where the kernel is executing.
    */
-  public native @Cast("uint32_t") int deviceId(); public native CUpti_ActivityKernel10 deviceId(int setter);
+  public native @Cast("uint32_t") int deviceId(); public native CUpti_ActivityKernel11 deviceId(int setter);
 
   /**
    * The ID of the context where the kernel is executing.
    */
-  public native @Cast("uint32_t") int contextId(); public native CUpti_ActivityKernel10 contextId(int setter);
+  public native @Cast("uint32_t") int contextId(); public native CUpti_ActivityKernel11 contextId(int setter);
 
   /**
    * The ID of the stream where the kernel is executing.
    */
-  public native @Cast("uint32_t") int streamId(); public native CUpti_ActivityKernel10 streamId(int setter);
+  public native @Cast("uint32_t") int streamId(); public native CUpti_ActivityKernel11 streamId(int setter);
 
   /**
    * The X-dimension grid size for the kernel.
    */
-  public native int gridX(); public native CUpti_ActivityKernel10 gridX(int setter);
+  public native int gridX(); public native CUpti_ActivityKernel11 gridX(int setter);
 
   /**
    * The Y-dimension grid size for the kernel.
    */
-  public native int gridY(); public native CUpti_ActivityKernel10 gridY(int setter);
+  public native int gridY(); public native CUpti_ActivityKernel11 gridY(int setter);
 
   /**
    * The Z-dimension grid size for the kernel.
    */
-  public native int gridZ(); public native CUpti_ActivityKernel10 gridZ(int setter);
+  public native int gridZ(); public native CUpti_ActivityKernel11 gridZ(int setter);
 
   /**
    * The X-dimension block size for the kernel.
    */
-  public native int blockX(); public native CUpti_ActivityKernel10 blockX(int setter);
+  public native int blockX(); public native CUpti_ActivityKernel11 blockX(int setter);
 
   /**
    * The Y-dimension block size for the kernel.
    */
-  public native int blockY(); public native CUpti_ActivityKernel10 blockY(int setter);
+  public native int blockY(); public native CUpti_ActivityKernel11 blockY(int setter);
 
   /**
    * The Z-dimension grid size for the kernel.
    */
-  public native int blockZ(); public native CUpti_ActivityKernel10 blockZ(int setter);
+  public native int blockZ(); public native CUpti_ActivityKernel11 blockZ(int setter);
 
   /**
    * The static shared memory allocated for the kernel, in bytes.
    */
-  public native int staticSharedMemory(); public native CUpti_ActivityKernel10 staticSharedMemory(int setter);
+  public native int staticSharedMemory(); public native CUpti_ActivityKernel11 staticSharedMemory(int setter);
 
   /**
    * The dynamic shared memory reserved for the kernel, in bytes.
    */
-  public native int dynamicSharedMemory(); public native CUpti_ActivityKernel10 dynamicSharedMemory(int setter);
+  public native int dynamicSharedMemory(); public native CUpti_ActivityKernel11 dynamicSharedMemory(int setter);
 
   /**
    * The amount of local memory reserved for each thread, in bytes.
    */
-  public native @Cast("uint32_t") int localMemoryPerThread(); public native CUpti_ActivityKernel10 localMemoryPerThread(int setter);
+  public native @Cast("uint32_t") int localMemoryPerThread(); public native CUpti_ActivityKernel11 localMemoryPerThread(int setter);
 
   /**
    * The total amount of local memory reserved for the kernel, in
    * bytes (deprecated in CUDA 11.8).
    * Refer field localMemoryTotal_v2
    */
-  public native @Cast("uint32_t") int localMemoryTotal(); public native CUpti_ActivityKernel10 localMemoryTotal(int setter);
+  public native @Cast("uint32_t") int localMemoryTotal(); public native CUpti_ActivityKernel11 localMemoryTotal(int setter);
 
   /**
    * The correlation ID of the kernel. Each kernel execution is
@@ -184,25 +184,25 @@ public class CUpti_ActivityKernel10 extends Pointer {
    * correlation ID in the driver or runtime API activity record that
    * launched the kernel.
    */
-  public native @Cast("uint32_t") int correlationId(); public native CUpti_ActivityKernel10 correlationId(int setter);
+  public native @Cast("uint32_t") int correlationId(); public native CUpti_ActivityKernel11 correlationId(int setter);
 
   /**
    * The grid ID of the kernel. Each kernel is assigned a unique
    * grid ID at runtime.
    */
-  public native @Cast("int64_t") long gridId(); public native CUpti_ActivityKernel10 gridId(long setter);
+  public native @Cast("int64_t") long gridId(); public native CUpti_ActivityKernel11 gridId(long setter);
 
   /**
    * The name of the kernel. This name is shared across all activity
    * records representing the same kernel, and so should not be
    * modified.
    */
-  public native @Cast("const char*") BytePointer name(); public native CUpti_ActivityKernel10 name(BytePointer setter);
+  public native @Cast("const char*") BytePointer name(); public native CUpti_ActivityKernel11 name(BytePointer setter);
 
   /**
    * Undefined. Reserved for internal use.
    */
-  public native Pointer reserved0(); public native CUpti_ActivityKernel10 reserved0(Pointer setter);
+  public native Pointer reserved0(); public native CUpti_ActivityKernel11 reserved0(Pointer setter);
 
   /**
    * The timestamp when the kernel is queued up in the command buffer, in ns.
@@ -217,7 +217,7 @@ public class CUpti_ActivityKernel10 extends Pointer {
    * the launch by writing commands into the command buffer, then returns
    * without checking the GPU's progress.
    */
-  public native @Cast("uint64_t") long queued(); public native CUpti_ActivityKernel10 queued(long setter);
+  public native @Cast("uint64_t") long queued(); public native CUpti_ActivityKernel11 queued(long setter);
 
   /**
    * The timestamp when the command buffer containing the kernel launch
@@ -226,115 +226,121 @@ public class CUpti_ActivityKernel10 extends Pointer {
    * This timestamp is not collected by default. Use API \ref
    * cuptiActivityEnableLatencyTimestamps() to enable collection.
    */
-  public native @Cast("uint64_t") long submitted(); public native CUpti_ActivityKernel10 submitted(long setter);
+  public native @Cast("uint64_t") long submitted(); public native CUpti_ActivityKernel11 submitted(long setter);
 
   /**
    * The indicates if the kernel was executed via a regular launch or via a
    * single/multi device cooperative launch. @see CUpti_ActivityLaunchType
    */
-  public native @Cast("uint8_t") byte launchType(); public native CUpti_ActivityKernel10 launchType(byte setter);
+  public native @Cast("uint8_t") byte launchType(); public native CUpti_ActivityKernel11 launchType(byte setter);
 
   /**
    * This indicates if CU_FUNC_ATTRIBUTE_PREFERRED_SHARED_MEMORY_CARVEOUT was
    * updated for the kernel launch
    */
-  public native @Cast("uint8_t") byte isSharedMemoryCarveoutRequested(); public native CUpti_ActivityKernel10 isSharedMemoryCarveoutRequested(byte setter);
+  public native @Cast("uint8_t") byte isSharedMemoryCarveoutRequested(); public native CUpti_ActivityKernel11 isSharedMemoryCarveoutRequested(byte setter);
 
   /**
    * Shared memory carveout value requested for the function in percentage of
    * the total resource. The value will be updated only if field
    * isSharedMemoryCarveoutRequested is set.
    */
-  public native @Cast("uint8_t") byte sharedMemoryCarveoutRequested(); public native CUpti_ActivityKernel10 sharedMemoryCarveoutRequested(byte setter);
+  public native @Cast("uint8_t") byte sharedMemoryCarveoutRequested(); public native CUpti_ActivityKernel11 sharedMemoryCarveoutRequested(byte setter);
 
   /**
    * Undefined. Reserved for internal use.
    */
-  public native @Cast("uint8_t") byte padding(); public native CUpti_ActivityKernel10 padding(byte setter);
+  public native @Cast("uint8_t") byte padding(); public native CUpti_ActivityKernel11 padding(byte setter);
 
  /**
   * Shared memory size set by the driver.
   */
-  public native @Cast("uint32_t") int sharedMemoryExecuted(); public native CUpti_ActivityKernel10 sharedMemoryExecuted(int setter);
+  public native @Cast("uint32_t") int sharedMemoryExecuted(); public native CUpti_ActivityKernel11 sharedMemoryExecuted(int setter);
 
   /**
    * The unique ID of the graph node that launched this kernel through graph launch APIs.
    * This field will be 0 if the kernel is not launched through graph launch APIs.
    */
-  public native @Cast("uint64_t") long graphNodeId(); public native CUpti_ActivityKernel10 graphNodeId(long setter);
+  public native @Cast("uint64_t") long graphNodeId(); public native CUpti_ActivityKernel11 graphNodeId(long setter);
 
   /**
    * The shared memory limit config for the kernel. This field shows whether user has opted for a
    * higher per block limit of dynamic shared memory.
    */
-  public native @Cast("CUpti_FuncShmemLimitConfig") int shmemLimitConfig(); public native CUpti_ActivityKernel10 shmemLimitConfig(int setter);
+  public native @Cast("CUpti_FuncShmemLimitConfig") int shmemLimitConfig(); public native CUpti_ActivityKernel11 shmemLimitConfig(int setter);
 
   /**
    * The unique ID of the graph that launched this kernel through graph launch APIs.
    * This field will be 0 if the kernel is not launched through graph launch APIs.
    */
-  public native @Cast("uint32_t") int graphId(); public native CUpti_ActivityKernel10 graphId(int setter);
+  public native @Cast("uint32_t") int graphId(); public native CUpti_ActivityKernel11 graphId(int setter);
 
   /**
    * The pointer to the access policy window. The structure CUaccessPolicyWindow is
    * defined in cuda.h.
    */
-  public native @Cast("CUaccessPolicyWindow*") CUaccessPolicyWindow_v1 pAccessPolicyWindow(); public native CUpti_ActivityKernel10 pAccessPolicyWindow(CUaccessPolicyWindow_v1 setter);
+  public native @Cast("CUaccessPolicyWindow*") CUaccessPolicyWindow_v1 pAccessPolicyWindow(); public native CUpti_ActivityKernel11 pAccessPolicyWindow(CUaccessPolicyWindow_v1 setter);
 
   /**
    * The ID of the HW channel on which the kernel is launched.
    */
-  public native @Cast("uint32_t") int channelID(); public native CUpti_ActivityKernel10 channelID(int setter);
+  public native @Cast("uint32_t") int channelID(); public native CUpti_ActivityKernel11 channelID(int setter);
 
   /**
    * The type of the channel
    */
-  public native @Cast("CUpti_ChannelType") int channelType(); public native CUpti_ActivityKernel10 channelType(int setter);
+  public native @Cast("CUpti_ChannelType") int channelType(); public native CUpti_ActivityKernel11 channelType(int setter);
 
   /**
    * The X-dimension cluster size for the kernel.
    * Field is valid for devices with compute capability 9.0 and higher
    */
-  public native @Cast("uint32_t") int clusterX(); public native CUpti_ActivityKernel10 clusterX(int setter);
+  public native @Cast("uint32_t") int clusterX(); public native CUpti_ActivityKernel11 clusterX(int setter);
 
   /**
    * The Y-dimension cluster size for the kernel.
    * Field is valid for devices with compute capability 9.0 and higher
    */
-  public native @Cast("uint32_t") int clusterY(); public native CUpti_ActivityKernel10 clusterY(int setter);
+  public native @Cast("uint32_t") int clusterY(); public native CUpti_ActivityKernel11 clusterY(int setter);
 
   /**
    * The Z-dimension cluster size for the kernel.
    * Field is valid for devices with compute capability 9.0 and higher
    */
-  public native @Cast("uint32_t") int clusterZ(); public native CUpti_ActivityKernel10 clusterZ(int setter);
+  public native @Cast("uint32_t") int clusterZ(); public native CUpti_ActivityKernel11 clusterZ(int setter);
 
   /**
    * The cluster scheduling policy for the kernel. Refer CUclusterSchedulingPolicy
    * Field is valid for devices with compute capability 9.0 and higher
    */
-  public native @Cast("uint32_t") int clusterSchedulingPolicy(); public native CUpti_ActivityKernel10 clusterSchedulingPolicy(int setter);
+  public native @Cast("uint32_t") int clusterSchedulingPolicy(); public native CUpti_ActivityKernel11 clusterSchedulingPolicy(int setter);
 
   /**
    * The total amount of local memory reserved for the kernel, in
    * bytes.
    */
-  public native @Cast("uint64_t") long localMemoryTotal_v2(); public native CUpti_ActivityKernel10 localMemoryTotal_v2(long setter);
+  public native @Cast("uint64_t") long localMemoryTotal_v2(); public native CUpti_ActivityKernel11 localMemoryTotal_v2(long setter);
 
   /**
    * The maximum cluster size for the kernel
    */
-  public native @Cast("uint32_t") int maxPotentialClusterSize(); public native CUpti_ActivityKernel10 maxPotentialClusterSize(int setter);
+  public native @Cast("uint32_t") int maxPotentialClusterSize(); public native CUpti_ActivityKernel11 maxPotentialClusterSize(int setter);
 
   /**
    * The maximum clusters that could co-exist on the target device for the kernel
    */
-  public native @Cast("uint32_t") int maxActiveClusters(); public native CUpti_ActivityKernel10 maxActiveClusters(int setter);
+  public native @Cast("uint32_t") int maxActiveClusters(); public native CUpti_ActivityKernel11 maxActiveClusters(int setter);
 
   /**
    * This field is set to 1 if the kernel is part of a device launched graph.
    */
-  public native @Cast("uint8_t") byte isDeviceLaunched(); public native CUpti_ActivityKernel10 isDeviceLaunched(byte setter);
-  public native @Cast("uint8_t") byte padding3(int i); public native CUpti_ActivityKernel10 padding3(int i, byte setter);
+  public native @Cast("uint8_t") byte isDeviceLaunched(); public native CUpti_ActivityKernel11 isDeviceLaunched(byte setter);
+  public native @Cast("uint8_t") byte padding3(int i); public native CUpti_ActivityKernel11 padding3(int i, byte setter);
   @MemberGetter public native @Cast("uint8_t*") BytePointer padding3();
+
+    /**
+   * The launch priority of the kernel.
+   */
+  public native int priority(); public native CUpti_ActivityKernel11 priority(int setter);
+  public native @Cast("uint32_t") int padding4(); public native CUpti_ActivityKernel11 padding4(int setter);
 }

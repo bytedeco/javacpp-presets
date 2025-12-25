@@ -40,7 +40,7 @@ public class CUfileFSOps_t extends Pointer {
           public    Fs_type_Pointer(Pointer p) { super(p); }
           protected Fs_type_Pointer() { allocate(); }
           private native void allocate();
-          public native @Cast("const char*") BytePointer call(Pointer handle);
+          public native @Cast("const char*") BytePointer call(@Const Pointer handle);
       }
       public native Fs_type_Pointer fs_type(); public native CUfileFSOps_t fs_type(Fs_type_Pointer setter);
 
@@ -51,7 +51,7 @@ public class CUfileFSOps_t extends Pointer {
           public    GetRDMADeviceList_Pointer_PointerPointer(Pointer p) { super(p); }
           protected GetRDMADeviceList_Pointer_PointerPointer() { allocate(); }
           private native void allocate();
-          public native int call(Pointer handle, @Cast("sockaddr_t**") PointerPointer hostaddrs);
+          public native int call(@Const Pointer handle, @Cast("sockaddr_t**") PointerPointer hostaddrs);
       }
       public native GetRDMADeviceList_Pointer_PointerPointer getRDMADeviceList(); public native CUfileFSOps_t getRDMADeviceList(GetRDMADeviceList_Pointer_PointerPointer setter);
 
@@ -62,8 +62,8 @@ public class CUfileFSOps_t extends Pointer {
           public    GetRDMADevicePriority_Pointer_BytePointer_long_Pointer_sockaddr_t(Pointer p) { super(p); }
           protected GetRDMADevicePriority_Pointer_BytePointer_long_Pointer_sockaddr_t() { allocate(); }
           private native void allocate();
-          public native int call(Pointer handle, @Cast("char*") BytePointer arg1, @Cast("size_t") long arg2,
-                                      @ByVal @Cast("loff_t*") Pointer arg3, sockaddr_t hostaddr);
+          public native int call(@Const Pointer handle, @Cast("char*") BytePointer arg1, @Cast("size_t") long arg2,
+                                      @ByVal @Cast("loff_t*") Pointer arg3, @Const sockaddr_t hostaddr);
       }
       public native GetRDMADevicePriority_Pointer_BytePointer_long_Pointer_sockaddr_t getRDMADevicePriority(); public native CUfileFSOps_t getRDMADevicePriority(GetRDMADevicePriority_Pointer_BytePointer_long_Pointer_sockaddr_t setter);
 
@@ -74,7 +74,7 @@ public class CUfileFSOps_t extends Pointer {
           public    Read_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t(Pointer p) { super(p); }
           protected Read_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t() { allocate(); }
           private native void allocate();
-          public native @Cast("ssize_t") long call(Pointer handle, @Cast("char*") BytePointer arg1, @Cast("size_t") long arg2, @ByVal @Cast("loff_t*") Pointer arg3, cufileRDMAInfo_t arg4);
+          public native @Cast("ssize_t") long call(@Const Pointer handle, @Cast("char*") BytePointer arg1, @Cast("size_t") long arg2, @ByVal @Cast("loff_t*") Pointer arg3, @Const cufileRDMAInfo_t arg4);
       }
       public native Read_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t read(); public native CUfileFSOps_t read(Read_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t setter);
       public static class Write_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t extends FunctionPointer {
@@ -83,7 +83,7 @@ public class CUfileFSOps_t extends Pointer {
           public    Write_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t(Pointer p) { super(p); }
           protected Write_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t() { allocate(); }
           private native void allocate();
-          public native @Cast("ssize_t") long call(Pointer handle, @Cast("const char*") BytePointer arg1, @Cast("size_t") long arg2, @ByVal @Cast("loff_t*") Pointer arg3, cufileRDMAInfo_t arg4);
+          public native @Cast("ssize_t") long call(@Const Pointer handle, @Cast("const char*") BytePointer arg1, @Cast("size_t") long arg2, @ByVal @Cast("loff_t*") Pointer arg3, @Const cufileRDMAInfo_t arg4);
       }
       public native Write_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t write(); public native CUfileFSOps_t write(Write_Pointer_BytePointer_long_Pointer_cufileRDMAInfo_t setter);
 }

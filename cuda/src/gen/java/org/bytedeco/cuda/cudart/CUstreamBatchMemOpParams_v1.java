@@ -56,6 +56,19 @@ public class CUstreamBatchMemOpParams_v1 extends Pointer {
         @Name("memoryBarrier.operation") public native @Cast("CUstreamBatchMemOpType") int memoryBarrier_operation(); public native CUstreamBatchMemOpParams_v1 memoryBarrier_operation(int setter);
         /** See ::CUstreamMemoryBarrier_flags */
         @Name("memoryBarrier.flags") public native @Cast("unsigned int") int memoryBarrier_flags(); public native CUstreamBatchMemOpParams_v1 memoryBarrier_flags(int setter);
+        @Name("atomicReduction.operation") public native @Cast("CUstreamBatchMemOpType") int atomicReduction_operation(); public native CUstreamBatchMemOpParams_v1 atomicReduction_operation(int setter);
+        /** Must be 0 */
+        @Name("atomicReduction.flags") public native @Cast("unsigned int") int atomicReduction_flags(); public native CUstreamBatchMemOpParams_v1 atomicReduction_flags(int setter);
+        /** See ::CUstreamAtomicReductionOpType */
+        @Name("atomicReduction.reductionOp") public native @Cast("CUstreamAtomicReductionOpType") int atomicReduction_reductionOp(); public native CUstreamBatchMemOpParams_v1 atomicReduction_reductionOp(int setter);
+        /** See ::CUstreamAtomicReductionDataType */
+        @Name("atomicReduction.dataType") public native @Cast("CUstreamAtomicReductionDataType") int atomicReduction_dataType(); public native CUstreamBatchMemOpParams_v1 atomicReduction_dataType(int setter);
+        /** The address the atomic operation will be operated on */
+        @Name("atomicReduction.address") public native @Cast("CUdeviceptr") long atomicReduction_address(); public native CUstreamBatchMemOpParams_v1 atomicReduction_address(long setter);
+        /** The operand value the atomic operation will operate with */
+        @Name("atomicReduction.value") public native @Cast("cuuint64_t") long atomicReduction_value(); public native CUstreamBatchMemOpParams_v1 atomicReduction_value(long setter);
+        /** For driver internal use. Initial value is unimportant. */
+        @Name("atomicReduction.alias") public native @Cast("CUdeviceptr") long atomicReduction_alias(); public native CUstreamBatchMemOpParams_v1 atomicReduction_alias(long setter);
     public native @Cast("cuuint64_t") long pad(int i); public native CUstreamBatchMemOpParams_v1 pad(int i, long setter);
     @MemberGetter public native @Cast("cuuint64_t*") LongPointer pad();
 }
