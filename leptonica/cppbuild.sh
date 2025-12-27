@@ -11,16 +11,16 @@ NASM_VERSION=2.14
 ZLIB=zlib-1.3.1
 GIFLIB=giflib-5.2.2
 LIBJPEG=libjpeg-turbo-3.0.1
-LIBPNG=libpng-1.6.52 # warning: libpng16 doesn't work on CentOS 6 for some reason
+LIBPNG=libpng-1.6.53 # warning: libpng16 doesn't work on CentOS 6 for some reason
 LIBTIFF=tiff-4.7.1
 LIBWEBP=libwebp-1.6.0
 OPENJPEG_VERSION=2.5.4
-LEPTONICA_VERSION=1.86.0
+LEPTONICA_VERSION=1.87.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download https://sourceforge.net/projects/libpng/files/libpng16/1.6.52/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download https://sourceforge.net/projects/libpng/files/libpng16/1.6.53/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download https://github.com/uclouvain/openjpeg/archive/refs/tags/v$OPENJPEG_VERSION.tar.gz openjpeg-$OPENJPEG_VERSION.tar.gz
@@ -633,6 +633,8 @@ esac
 # fix broken dependencies from files for cmake
 sedinplace 's:.6.0.0::g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
 sedinplace 's:bin/libleptonica:libleptonica:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
+sedinplace 's:".*/lib/:"${CMAKE_CURRENT_LIST_DIR}/../../../lib/:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
+sedinplace 's:${_IMPORT_PREFIX}:${CMAKE_CURRENT_LIST_DIR}/../../..:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
 sedinplace 's:INTERFACE_LINK_LIBRARIES *".*"::g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
 sedinplace 's:INTERFACE_INCLUDE_DIRECTORIES *".*":INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/../../../include":g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
 sedinplace 's:Leptonica_INCLUDE_DIRS *".*":Leptonica_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/../../../include/leptonica":g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake

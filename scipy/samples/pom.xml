@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2025.2-1.5.13-SNAPSHOT</version>
+            <version>2025.3-1.5.13-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

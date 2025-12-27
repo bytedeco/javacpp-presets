@@ -50,7 +50,7 @@ public static final int NPY_NO_SMP = 0;
 
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x02000000;
-public static final int NPY_API_VERSION = 0x00000014;
+public static final int NPY_API_VERSION = 0x00000015;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -111,6 +111,7 @@ public static final int NPY_2_0_API_VERSION = 0x00000012;
 public static final int NPY_2_1_API_VERSION = 0x00000013;
 public static final int NPY_2_2_API_VERSION = 0x00000013;
 public static final int NPY_2_3_API_VERSION = 0x00000014;
+public static final int NPY_2_4_API_VERSION = 0x00000015;
 
 
 /*
@@ -186,6 +187,7 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 // #elif NPY_FEATURE_VERSION == NPY_2_0_API_VERSION
 // #elif NPY_FEATURE_VERSION == NPY_2_1_API_VERSION
 // #elif NPY_FEATURE_VERSION == NPY_2_3_API_VERSION
+// #elif NPY_FEATURE_VERSION == NPY_2_4_API_VERSION
 // #else
 //     #error "Missing version string define for new NumPy version."
 // #endif
@@ -295,11 +297,23 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 // #endif
 
 // #ifdef _MSC_VER
-//     #define NPY_FINLINE static __forceinline
+//     #ifdef __cplusplus
+//         #define NPY_FINLINE __forceinline
+//     #else
+//         #define NPY_FINLINE static __forceinline
+//     #endif
 // #elif defined(__GNUC__)
-//     #define NPY_FINLINE static inline __attribute__((always_inline))
+//     #ifdef __cplusplus
+//         #define NPY_FINLINE inline __attribute__((always_inline))
+//     #else
+//         #define NPY_FINLINE static inline __attribute__((always_inline))
+//     #endif
 // #else
-//     #define NPY_FINLINE static
+//     #ifdef __cplusplus
+//         #define NPY_FINLINE inline
+//     #else
+//         #define NPY_FINLINE static NPY_INLINE
+//     #endif
 // #endif
 
 // #if defined(_MSC_VER)
@@ -977,6 +991,7 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
  *              NPY_CPU_RISCV64
  *              NPY_CPU_RISCV32
  *              NPY_CPU_LOONGARCH
+ *              NPY_CPU_SW_64
  *              NPY_CPU_WASM
  */
 // #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_CPU_H_
@@ -1068,15 +1083,16 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #endif
 // #elif defined(__loongarch_lp64)
 //     #define NPY_CPU_LOONGARCH64
-// #elif defined(__EMSCRIPTEN__)
+// #elif defined(__sw_64__)
+//     #define NPY_CPU_SW_64
+// #elif defined(__EMSCRIPTEN__) || defined(__wasm__)
     /* __EMSCRIPTEN__ is defined by emscripten: an LLVM-to-Web compiler */
+    /* __wasm__ is defined by clang when targeting wasm */
 //     #define NPY_CPU_WASM
 // #else
 //     #error Unknown CPU, please report this to numpy maintainers with
 //     information about your platform (OS, CPU and compiler)
 // #endif
-
-public static final int NPY_ALIGNMENT_REQUIRED = 1;
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_CPU_H_ */
 
@@ -1130,6 +1146,7 @@ public static final int NPY_ALIGNMENT_REQUIRED = 1;
 //             || defined(NPY_CPU_RISCV64)
 //             || defined(NPY_CPU_RISCV32)
 //             || defined(NPY_CPU_LOONGARCH)
+//             || defined(NPY_CPU_SW_64)
 //             || defined(NPY_CPU_WASM)
 
 //     #elif defined(NPY_CPU_PPC)
@@ -1811,9 +1828,11 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #define PyArrayScalar_True ((PyObject *)(&(_PyArrayScalar_BoolValues[1])))
 // #define PyArrayScalar_FromLong(i)
 //         ((PyObject *)(&(_PyArrayScalar_BoolValues[((i)!=0)])))
-// #define PyArrayScalar_RETURN_BOOL_FROM_LONG(i)
-//         return Py_INCREF(PyArrayScalar_FromLong(i)),
-//                 PyArrayScalar_FromLong(i)
+// #define PyArrayScalar_RETURN_BOOL_FROM_LONG(i) do {
+//         PyObject *obj = PyArrayScalar_FromLong(i);
+//         Py_INCREF(obj);
+//         return obj;
+// } while (0)
 // #define PyArrayScalar_RETURN_FALSE
 //         return Py_INCREF(PyArrayScalar_False),
 //                 PyArrayScalar_False
@@ -1997,19 +2016,38 @@ public static final int
         NPY_COMPLEXLTR = 'c';
 
 /*
- * Changing this may break Numpy API compatibility
- * due to changing offsets in PyArray_ArrFuncs, so be
- * careful. Here we have reused the mergesort slot for
- * any kind of stable sort, the actual implementation will
- * depend on the data type.
+ * Changing this may break Numpy API compatibility due to changing offsets in
+ * PyArray_ArrFuncs, so be careful. Here we have reused the mergesort slot for
+ * any kind of stable sort, the actual implementation will depend on the data
+ * type.
+ *
+ * Updated in NumPy 2.4
+ *
+ * Updated with new names denoting requirements rather than specifying a
+ * particular algorithm. All the previous values are reused in a way that
+ * should be downstream compatible, but the actual algorithms used may be
+ * different than before. The new approach should be more flexible and easier
+ * to update.
+ * 
+ * Names with a leading underscore are private, and should only be used
+ * internally by NumPy.
+ *
+ * NPY_NSORTS remains the same for backwards compatibility, it should not be
+ * changed.
  */
+
 /** enum NPY_SORTKIND */
 public static final int
         _NPY_SORT_UNDEFINED = -1,
         NPY_QUICKSORT = 0,
         NPY_HEAPSORT = 1,
         NPY_MERGESORT = 2,
-        NPY_STABLESORT = 2;
+        NPY_STABLESORT = 2,
+        // new style names 
+        _NPY_SORT_HEAPSORT = 1,
+        NPY_SORT_DEFAULT = 0,
+        NPY_SORT_STABLE = 2,
+        NPY_SORT_DESCENDING = 4;
 public static final int NPY_NSORTS = (NPY_STABLESORT + 1);
 
 
@@ -2049,6 +2087,16 @@ public static final int
         /* An order as close to the inputs as possible */
         NPY_KEEPORDER = 2;
 
+// #if NPY_FEATURE_VERSION >= NPY_2_4_API_VERSION
+/*
+ * check that no values overflow/change during casting
+ * Used  explicitly only in the ArrayMethod creation or resolve_dtypes functions to
+ * indicate that a same-value cast is supported. In external APIs, use only
+ * NPY_SAME_VALUE_CASTING
+ */
+public static final int NPY_SAME_VALUE_CASTING_FLAG = 64;
+// #endif
+
 /* For specifying allowed casting in operations which support it */
 /** enum NPY_CASTING */
 public static final int
@@ -2062,7 +2110,10 @@ public static final int
         /* Allow safe casts or casts within the same kind */
         NPY_SAME_KIND_CASTING = 3,
         /* Allow any casts */
-        NPY_UNSAFE_CASTING = 4;
+        NPY_UNSAFE_CASTING = 4,
+// #if NPY_FEATURE_VERSION >= NPY_2_4_API_VERSION
+        NPY_SAME_VALUE_CASTING = NPY_UNSAFE_CASTING | NPY_SAME_VALUE_CASTING_FLAG;
+// #endif
 
 /** enum NPY_CLIPMODE */
 public static final int
@@ -3441,10 +3492,19 @@ public static final int
     NPY_METH_RUNTIME_FLAGS = (
             NPY_METH_REQUIRES_PYAPI |
             NPY_METH_NO_FLOATINGPOINT_ERRORS);
+
+
+/** enum NPY_ARRAYMETHOD_CONTEXT_FLAGS */
+public static final int
+    /* Casting via same_value logic */
+    NPY_SAME_VALUE_CONTEXT_FLAG = 1;
 // Targeting ../PyArrayMethod_Context.java
 
 
 // Targeting ../PyArrayMethod_Spec.java
+
+
+// Targeting ../PyUFunc_LoopSlot.java
 
 
 
@@ -3527,6 +3587,7 @@ public static final int NPY_DT_getitem = 8;
 public static final int NPY_DT_get_clear_loop = 9;
 public static final int NPY_DT_get_fill_zero_loop = 10;
 public static final int NPY_DT_finalize_descr = 11;
+public static final int NPY_DT_get_constant = 12;
 
 // These PyArray_ArrFunc slots will be deprecated and replaced eventually
 // getitem and setitem can be defined as a performance optimization;
@@ -3537,7 +3598,7 @@ public static final int NPY_DT_finalize_descr = 11;
 
 // used to separate dtype slots from arrfuncs slots
 // intended only for internal use but defined here for clarity
-public static final int _NPY_DT_ARRFUNCS_OFFSET = (1 << 10);
+public static final int _NPY_DT_ARRFUNCS_OFFSET = (1 << 11);
 
 // Cast is disabled
 // #define NPY_DT_PyArray_ArrFuncs_cast 0 + _NPY_DT_ARRFUNCS_OFFSET
@@ -3604,10 +3665,39 @@ public static final int NPY_DT_PyArray_ArrFuncs_argmin = 22 + _NPY_DT_ARRFUNCS_O
 // Targeting ../PyArrayDTypeMeta_FinalizeDescriptor.java
 
 
+
+/*
+ * Constants that can be queried and used e.g. by reduce identies defaults.
+ * These are also used to expose .finfo and .iinfo for example.
+ */
+/* Numerical constants */
+public static final int NPY_CONSTANT_zero = 1;
+public static final int NPY_CONSTANT_one = 2;
+public static final int NPY_CONSTANT_all_bits_set = 3;
+public static final int NPY_CONSTANT_maximum_finite = 4;
+public static final int NPY_CONSTANT_minimum_finite = 5;
+public static final int NPY_CONSTANT_inf = 6;
+public static final int NPY_CONSTANT_ninf = 7;
+public static final int NPY_CONSTANT_nan = 8;
+public static final int NPY_CONSTANT_finfo_radix = 9;
+public static final int NPY_CONSTANT_finfo_eps = 10;
+public static final int NPY_CONSTANT_finfo_smallest_normal = 11;
+public static final int NPY_CONSTANT_finfo_smallest_subnormal = 12;
+/* Constants that are always of integer type, value is `npy_intp/Py_ssize_t` */
+public static final int NPY_CONSTANT_finfo_nmant = (1 << 16) + 0;
+public static final int NPY_CONSTANT_finfo_min_exp = (1 << 16) + 1;
+public static final int NPY_CONSTANT_finfo_max_exp = (1 << 16) + 2;
+public static final int NPY_CONSTANT_finfo_decimal_digits = (1 << 16) + 3;
+// Targeting ../PyArrayDTypeMeta_GetConstant.java
+
+
 // Targeting ../PyArrayDTypeMeta_SetItem.java
 
 
 // Targeting ../PyArrayDTypeMeta_GetItem.java
+
+
+// Targeting ../PyArrayMethod_SortParameters.java
 
 
 
@@ -4515,6 +4605,7 @@ public static native @ByRef PyTypeObject PyUFunc_Type(); public static native vo
 @NoException public static native int PyUFunc_AddWrappingLoop(PyObject arg0, @ByPtrPtr PyArray_DTypeMeta new_dtypes, @ByPtrPtr PyArray_DTypeMeta wrapped_dtypes, PyArrayMethod_TranslateGivenDescriptors arg3, PyArrayMethod_TranslateLoopDescriptors arg4);
 @NoException public static native int PyUFunc_GiveFloatingpointErrors(@Cast("const char*") BytePointer arg0, int arg1);
 @NoException public static native int PyUFunc_GiveFloatingpointErrors(String arg0, int arg1);
+@NoException public static native int PyUFunc_AddLoopsFromSpecs(PyUFunc_LoopSlot arg0);
 
 // #else
 

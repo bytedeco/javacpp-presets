@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tesseract-platform</artifactId>
-  <version>5.5.1-${project.parent.version}</version>
+  <version>5.5.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Tesseract</name>
 
   <properties>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>leptonica-platform</artifactId>
-      <version>1.86.0-${project.parent.version}</version>
+      <version>1.87.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

@@ -15,7 +15,6 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
-
 /*
  * The resolve descriptors function, must be able to handle NULL values for
  * all output (but not input) `given_descrs` and fill `loop_descrs`.

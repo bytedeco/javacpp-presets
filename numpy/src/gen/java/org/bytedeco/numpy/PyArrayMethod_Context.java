@@ -15,7 +15,6 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
-
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyArrayMethod_Context extends Pointer {
     static { Loader.load(); }
@@ -42,5 +41,20 @@ public class PyArrayMethod_Context extends Pointer {
     /* Operand descriptors, filled in by resolve_descriptors */
     @MemberGetter public native PyArray_Descr descriptors(int i);
     @MemberGetter public native @Cast("PyArray_Descr*const*") PointerPointer descriptors();
+//  #if NPY_FEATURE_VERSION > NPY_2_3_API_VERSION
+    public native Pointer _reserved(); public native PyArrayMethod_Context _reserved(Pointer setter);
+    /* 
+     * Optional flag to pass information into the inner loop
+     * NPY_ARRAYMETHOD_CONTEXT_FLAGS
+     */
+    public native @Cast("uint64_t") long flags(); public native PyArrayMethod_Context flags(long setter);
+    
+    /*
+     * Optional run-time parameters to pass to the loop (currently used in sorting).
+     * Fixed parameters are expected to be passed via auxdata.
+     */
+    public native Pointer parameters(); public native PyArrayMethod_Context parameters(Pointer setter);
+    
     /* Structure may grow (this is harmless for DType authors) */
+//  #endif
 }
