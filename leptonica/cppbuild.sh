@@ -633,6 +633,8 @@ esac
 # fix broken dependencies from files for cmake
 sedinplace 's:.6.0.0::g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
 sedinplace 's:bin/libleptonica:libleptonica:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
+sedinplace 's:".*/lib/:"${CMAKE_CURRENT_LIST_DIR}/../../../lib/:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
+sedinplace 's:${_IMPORT_PREFIX}:${CMAKE_CURRENT_LIST_DIR}/../../..:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
 sedinplace 's:INTERFACE_LINK_LIBRARIES *".*"::g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
 sedinplace 's:INTERFACE_INCLUDE_DIRECTORIES *".*":INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/../../../include":g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
 sedinplace 's:Leptonica_INCLUDE_DIRS *".*":Leptonica_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/../../../include/leptonica":g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
