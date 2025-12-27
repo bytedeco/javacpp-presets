@@ -205,14 +205,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.14.x  https://www.python.org/downloads/
- * NumPy 2.3.x  https://github.com/numpy/numpy
+ * NumPy 2.4.x  https://github.com/numpy/numpy
  * SciPy 1.16.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
  * LLVM 21.1.x  http://llvm.org/releases/download.html
  * libffi 3.5.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
- * Leptonica 1.86.x  http://www.leptonica.org/download.html
+ * Leptonica 1.87.x  http://www.leptonica.org/download.html
  * Tesseract 5.5.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose

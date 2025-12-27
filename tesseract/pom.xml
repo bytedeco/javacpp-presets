@@ -11,14 +11,14 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tesseract</artifactId>
-  <version>5.5.1-${project.parent.version}</version>
+  <version>5.5.2-${project.parent.version}</version>
   <name>JavaCPP Presets for Tesseract</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>leptonica</artifactId>
-      <version>1.86.0-${project.parent.version}</version>
+      <version>1.87.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -41,12 +41,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>leptonica</artifactId>
-            <version>1.86.0-${project.parent.version}</version>
+            <version>1.87.0-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>leptonica</artifactId>
-            <version>1.86.0-${project.parent.version}</version>
+            <version>1.87.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>

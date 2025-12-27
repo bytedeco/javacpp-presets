@@ -191,12 +191,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        14;
-public static final int PY_MICRO_VERSION =        1;
+public static final int PY_MICRO_VERSION =        2;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.14.1";
+public static final String PY_VERSION =              "3.14.2";
 /*--end constants--*/
 
 

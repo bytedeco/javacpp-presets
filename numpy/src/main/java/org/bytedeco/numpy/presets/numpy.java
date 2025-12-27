@@ -44,7 +44,7 @@ import org.bytedeco.openblas.presets.*;
     inherit = {openblas.class, python.class},
     value = {
         @Platform(
-            define = "NPY_TARGET_VERSION NPY_2_3_API_VERSION",
+            define = "NPY_TARGET_VERSION NPY_2_4_API_VERSION",
             cinclude = {
                 "_numpyconfig.h",
                 "numpyconfig.h",

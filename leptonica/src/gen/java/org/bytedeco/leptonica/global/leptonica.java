@@ -4295,7 +4295,7 @@ public static final int
 
 
 public static final int LIBLEPT_MAJOR_VERSION =   1;
-public static final int LIBLEPT_MINOR_VERSION =   86;
+public static final int LIBLEPT_MINOR_VERSION =   87;
 public static final int LIBLEPT_PATCH_VERSION =   0;
 
 // #include "alltypes.h"
