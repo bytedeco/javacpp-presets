@@ -222,7 +222,7 @@ public class TrainingCApiSample {
         };
 
         // You can download prebuilt artifacts for training from the URL above
-        // https://github.com/bytedeco/binaries/tree/1.5.13/onnxruntime/train_models/onnxruntime/train_models
+        // https://github.com/bytedeco/binaries/releases/download/1.5.13/onnxruntime_training_artifacts.zip
         String checkpointPath = "train_models/checkpoint";
         String trainingModelPath = "train_models/training_model.onnx";
         String evaluationModelPath = "train_models/eval_model.onnx";
