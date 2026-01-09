@@ -17,34 +17,34 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
     static { Loader.load(); }
 
-// Targeting ../ValueInfoVector.java
+// Targeting ..\ValueInfoVector.java
 
 
-// Targeting ../OpAttrVector.java
+// Targeting ..\OpAttrVector.java
 
 
-// Targeting ../StringIntPairVector.java
+// Targeting ..\StringIntPairVector.java
 
 
-// Targeting ../FloatVector.java
+// Targeting ..\FloatVector.java
 
 
-// Targeting ../LongVector.java
+// Targeting ..\LongVector.java
 
 
-// Targeting ../StringVector.java
+// Targeting ..\StringVector.java
 
 
-// Targeting ../ValueVector.java
+// Targeting ..\ValueVector.java
 
 
-// Targeting ../StringIntPair.java
+// Targeting ..\StringIntPair.java
 
 
-// Targeting ../StringSizeTMap.java
+// Targeting ..\StringSizeTMap.java
 
 
-// Targeting ../StringStringMap.java
+// Targeting ..\StringStringMap.java
 
 
 // Parsed from onnxruntime/core/session/onnxruntime_c_api.h
@@ -344,127 +344,127 @@ public static final int
 // #define ORT_RUNTIME_CLASS(X)
 //   struct Ort##X;
 //   typedef struct Ort##X Ort##X
-// Targeting ../OrtEnv.java
+// Targeting ..\OrtEnv.java
 
 
-// Targeting ../OrtStatus.java
+// Targeting ..\OrtStatus.java
 
 
-// Targeting ../OrtMemoryInfo.java
+// Targeting ..\OrtMemoryInfo.java
 
 
-// Targeting ../OrtIoBinding.java
+// Targeting ..\OrtIoBinding.java
 
 
-// Targeting ../OrtSession.java
+// Targeting ..\OrtSession.java
 
 
-// Targeting ../OrtValue.java
+// Targeting ..\OrtValue.java
 
 
-// Targeting ../OrtRunOptions.java
+// Targeting ..\OrtRunOptions.java
 
 
-// Targeting ../OrtTypeInfo.java
+// Targeting ..\OrtTypeInfo.java
 
 
-// Targeting ../OrtTensorTypeAndShapeInfo.java
+// Targeting ..\OrtTensorTypeAndShapeInfo.java
 
 
-// Targeting ../OrtMapTypeInfo.java
+// Targeting ..\OrtMapTypeInfo.java
 
 
-// Targeting ../OrtSequenceTypeInfo.java
+// Targeting ..\OrtSequenceTypeInfo.java
 
 
-// Targeting ../OrtOptionalTypeInfo.java
+// Targeting ..\OrtOptionalTypeInfo.java
 
 
-// Targeting ../OrtSessionOptions.java
+// Targeting ..\OrtSessionOptions.java
 
 
-// Targeting ../OrtCustomOpDomain.java
+// Targeting ..\OrtCustomOpDomain.java
 
 
-// Targeting ../OrtModelMetadata.java
+// Targeting ..\OrtModelMetadata.java
 
 
-// Targeting ../OrtThreadPoolParams.java
+// Targeting ..\OrtThreadPoolParams.java
 
 
-// Targeting ../OrtThreadingOptions.java
+// Targeting ..\OrtThreadingOptions.java
 
 
-// Targeting ../OrtArenaCfg.java
+// Targeting ..\OrtArenaCfg.java
 
 
-// Targeting ../OrtPrepackedWeightsContainer.java
+// Targeting ..\OrtPrepackedWeightsContainer.java
 
 
-// Targeting ../OrtTensorRTProviderOptionsV2.java
+// Targeting ..\OrtTensorRTProviderOptionsV2.java
 
 
-// Targeting ../OrtNvTensorRtRtxProviderOptions.java
+// Targeting ..\OrtNvTensorRtRtxProviderOptions.java
 
 
-// Targeting ../OrtCUDAProviderOptionsV2.java
+// Targeting ..\OrtCUDAProviderOptionsV2.java
 
 
-// Targeting ../OrtCANNProviderOptions.java
+// Targeting ..\OrtCANNProviderOptions.java
 
 
-// Targeting ../OrtOp.java
+// Targeting ..\OrtOp.java
 
 
-// Targeting ../OrtOpAttr.java
+// Targeting ..\OrtOpAttr.java
 
 
-// Targeting ../OrtLogger.java
+// Targeting ..\OrtLogger.java
 
 
-// Targeting ../OrtShapeInferContext.java
+// Targeting ..\OrtShapeInferContext.java
 
 
-// Targeting ../OrtLoraAdapter.java
+// Targeting ..\OrtLoraAdapter.java
 
 
-// Targeting ../OrtValueInfo.java
+// Targeting ..\OrtValueInfo.java
 
 
-// Targeting ../OrtNode.java
+// Targeting ..\OrtNode.java
 
 
-// Targeting ../OrtGraph.java
+// Targeting ..\OrtGraph.java
 
 
-// Targeting ../OrtModel.java
+// Targeting ..\OrtModel.java
 
 
-// Targeting ../OrtModelCompilationOptions.java
+// Targeting ..\OrtModelCompilationOptions.java
 
 
-// Targeting ../OrtHardwareDevice.java
+// Targeting ..\OrtHardwareDevice.java
 
 
-// Targeting ../OrtEpDevice.java
+// Targeting ..\OrtEpDevice.java
 
 
-// Targeting ../OrtKeyValuePairs.java
+// Targeting ..\OrtKeyValuePairs.java
 
 
-// Targeting ../OrtSyncStream.java
+// Targeting ..\OrtSyncStream.java
 
 
-// Targeting ../OrtExternalInitializerInfo.java
+// Targeting ..\OrtExternalInitializerInfo.java
 
 
 
 // #ifdef _MSC_VER
 // #else
-// Targeting ../OrtAllocator.java
+// Targeting ..\OrtAllocator.java
 
 
-// Targeting ../OrtLoggingFunction.java
+// Targeting ..\OrtLoggingFunction.java
 
 
 
@@ -498,10 +498,10 @@ public static final int
   ORT_PROJECTION_JAVA = 4,
   ORT_PROJECTION_WINML = 5,
   ORT_PROJECTION_NODEJS = 6;
-// Targeting ../OrtKernelInfo.java
+// Targeting ..\OrtKernelInfo.java
 
 
-// Targeting ../OrtKernelContext.java
+// Targeting ..\OrtKernelContext.java
 
 
 
@@ -560,13 +560,13 @@ public static final int
   OrtExecutionProviderDevicePolicy_MAX_PERFORMANCE = 4,
   OrtExecutionProviderDevicePolicy_MAX_EFFICIENCY = 5,
   OrtExecutionProviderDevicePolicy_MIN_OVERALL_POWER = 6;
-// Targeting ../EpSelectionDelegate.java
+// Targeting ..\EpSelectionDelegate.java
 
 
-// Targeting ../OrtWriteBufferFunc.java
+// Targeting ..\OrtWriteBufferFunc.java
 
 
-// Targeting ../OrtGetInitializerLocationFunc.java
+// Targeting ..\OrtGetInitializerLocationFunc.java
 
 
 
@@ -577,25 +577,22 @@ public static final int
   OrtCudnnConvAlgoSearchExhaustive = 0,  // expensive exhaustive benchmarking using cudnnFindConvolutionForwardAlgorithmEx
   OrtCudnnConvAlgoSearchHeuristic = 1,   // lightweight heuristic based search using cudnnGetConvolutionForwardAlgorithm_v7
   OrtCudnnConvAlgoSearchDefault = 2;     // default algorithm using CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_PRECOMP_GEMM
-// Targeting ../OrtCUDAProviderOptions.java
+// Targeting ..\OrtCUDAProviderOptions.java
 
 
-// Targeting ../OrtROCMProviderOptions.java
+// Targeting ..\OrtROCMProviderOptions.java
 
 
-// Targeting ../OrtTensorRTProviderOptions.java
+// Targeting ..\OrtTensorRTProviderOptions.java
 
 
-// Targeting ../OrtMIGraphXProviderOptions.java
+// Targeting ..\OrtMIGraphXProviderOptions.java
 
 
-// Targeting ../OrtOpenVINOProviderOptions.java
+// Targeting ..\OrtOpenVINOProviderOptions.java
 
 
-// Targeting ../OrtTrainingApi.java
-
-
-// Targeting ../OrtApiBase.java
+// Targeting ..\OrtApiBase.java
 
 
 
@@ -604,22 +601,22 @@ public static final int
  * Call this to get the a pointer to an ::OrtApiBase
  */
 public static native @Const OrtApiBase OrtGetApiBase();
-// Targeting ../OrtThreadWorkerFn.java
+// Targeting ..\OrtThreadWorkerFn.java
 
 
-// Targeting ../OrtCustomHandleType.java
+// Targeting ..\OrtCustomHandleType.java
 
 
-// Targeting ../OrtCustomCreateThreadFn.java
+// Targeting ..\OrtCustomCreateThreadFn.java
 
 
-// Targeting ../OrtCustomJoinThreadFn.java
+// Targeting ..\OrtCustomJoinThreadFn.java
 
 
-// Targeting ../RegisterCustomOpsFn.java
+// Targeting ..\RegisterCustomOpsFn.java
 
 
-// Targeting ../RunAsyncCallbackFn.java
+// Targeting ..\RunAsyncCallbackFn.java
 
 
 
@@ -639,7 +636,7 @@ public static final int
   OrtCompiledModelCompatibility_EP_SUPPORTED_OPTIMAL = 1,
   OrtCompiledModelCompatibility_EP_SUPPORTED_PREFER_RECOMPILATION = 2,
   OrtCompiledModelCompatibility_EP_UNSUPPORTED = 3;
-// Targeting ../OrtApi.java
+// Targeting ..\OrtApi.java
 
 
 
@@ -663,10 +660,10 @@ public static final int
   INPUT_OUTPUT_REQUIRED = 0,
   INPUT_OUTPUT_OPTIONAL = 1,
   INPUT_OUTPUT_VARIADIC = 2;
-// Targeting ../OrtCustomOp.java
+// Targeting ..\OrtCustomOp.java
 
 
-// Targeting ../OrtModelEditorApi.java
+// Targeting ..\OrtModelEditorApi.java
 
 
 
@@ -688,7 +685,7 @@ public static final int
   // Force compilation to return an error (ORT_FAIL) if a file with the same filename as the output model exists.
   // Otherwise, compilation will automatically overwrite the output file if it exists.
   OrtCompileApiFlags_ERROR_IF_OUTPUT_FILE_EXISTS = 1 << 1;
-// Targeting ../OrtCompileApi.java
+// Targeting ..\OrtCompileApi.java
 
 
 
@@ -753,31 +750,31 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // Do not include this file directly. Please include "onnxruntime_c_api.h" instead.
 
 // #ifdef __cplusplus
-// Targeting ../OrtEpGraphSupportInfo.java
+// Targeting ..\OrtEpGraphSupportInfo.java
 
 
-// Targeting ../OrtMemoryDevice.java
+// Targeting ..\OrtMemoryDevice.java
 
 
-// Targeting ../OrtNodeComputeContext.java
+// Targeting ..\OrtNodeComputeContext.java
 
 
-// Targeting ../OrtDataTransferImpl.java
+// Targeting ..\OrtDataTransferImpl.java
 
 
-// Targeting ../OrtSyncNotificationImpl.java
+// Targeting ..\OrtSyncNotificationImpl.java
 
 
-// Targeting ../OrtSyncStreamImpl.java
+// Targeting ..\OrtSyncStreamImpl.java
 
 
-// Targeting ../OrtNodeFusionOptions.java
+// Targeting ..\OrtNodeFusionOptions.java
 
 
-// Targeting ../OrtNodeComputeInfo.java
+// Targeting ..\OrtNodeComputeInfo.java
 
 
-// Targeting ../OrtEpApi.java
+// Targeting ..\OrtEpApi.java
 
 
 
@@ -795,16 +792,16 @@ public static final int
   OrtEpDataLayout_NHWC = 1,
 
   OrtEpDataLayout_Default = OrtEpDataLayout_NCHW;
-// Targeting ../OrtEp.java
+// Targeting ..\OrtEp.java
 
 
-// Targeting ../CreateEpApiFactoriesFn.java
+// Targeting ..\CreateEpApiFactoriesFn.java
 
 
-// Targeting ../ReleaseEpApiFactoryFn.java
+// Targeting ..\ReleaseEpApiFactoryFn.java
 
 
-// Targeting ../OrtEpFactory.java
+// Targeting ..\OrtEpFactory.java
 
 
 
@@ -861,7 +858,7 @@ public static final int
 /** \brief All C++ Onnxruntime APIs are defined inside this namespace
  *
  */
-// Targeting ../OrtException.java
+// Targeting ..\OrtException.java
 
 
 
@@ -938,22 +935,22 @@ public static final int
  *  </summary>
  *  <returns>ORT C EP API reference</returns> */
 @Namespace("Ort") public static native @Const @ByRef OrtEpApi GetEpApi();
-// Targeting ../Float16_t.java
+// Targeting ..\Float16_t.java
 
 
-// Targeting ../BFloat16_t.java
+// Targeting ..\BFloat16_t.java
 
 
-// Targeting ../Float8E4M3FN_t.java
+// Targeting ..\Float8E4M3FN_t.java
 
 
-// Targeting ../Float8E4M3FNUZ_t.java
+// Targeting ..\Float8E4M3FNUZ_t.java
 
 
-// Targeting ../Float8E5M2_t.java
+// Targeting ..\Float8E5M2_t.java
 
 
-// Targeting ../Float8E5M2FNUZ_t.java
+// Targeting ..\Float8E5M2FNUZ_t.java
 
 
 // This is used internally by the C++ API. This macro is to make it easy to generate overloaded methods for all of the various OrtRelease* functions for every Ort* type
@@ -1004,142 +1001,142 @@ public static final int
 
 // #undef ORT_DEFINE_RELEASE
 // #undef ORT_DEFINE_RELEASE_FROM_API_STRUCT
-// Targeting ../UnownedAllocator.java
+// Targeting ..\UnownedAllocator.java
 
 
-// Targeting ../UnownedMemoryInfo.java
+// Targeting ..\UnownedMemoryInfo.java
 
 
-// Targeting ../UnownedTensorTypeAndShapeInfo.java
+// Targeting ..\UnownedTensorTypeAndShapeInfo.java
 
 
-// Targeting ../UnownedSequenceTypeInfo.java
+// Targeting ..\UnownedSequenceTypeInfo.java
 
 
-// Targeting ../UnownedMapTypeInfo.java
+// Targeting ..\UnownedMapTypeInfo.java
 
 
-// Targeting ../BaseConstGraph.java
+// Targeting ..\BaseConstGraph.java
 
 
-// Targeting ../BaseConstValue.java
+// Targeting ..\BaseConstValue.java
 
 
-// Targeting ../BaseConstSessionOptions.java
+// Targeting ..\BaseConstSessionOptions.java
 
 
-// Targeting ../BaseConstSession.java
+// Targeting ..\BaseConstSession.java
 
 
-// Targeting ../BaseConstMapTypeInfo.java
+// Targeting ..\BaseConstMapTypeInfo.java
 
 
-// Targeting ../BaseConstIoBinding.java
+// Targeting ..\BaseConstIoBinding.java
 
 
-// Targeting ../BaseConstTensorTypeAndShapeInfo.java
+// Targeting ..\BaseConstTensorTypeAndShapeInfo.java
 
 
-// Targeting ../BaseAllocatorWithDefaultOptions.java
+// Targeting ..\BaseAllocatorWithDefaultOptions.java
 
 
-// Targeting ../BaseArenaCfg.java
+// Targeting ..\BaseArenaCfg.java
 
 
-// Targeting ../BaseAllocator.java
+// Targeting ..\BaseAllocator.java
 
 
-// Targeting ../BaseIoBinding.java
+// Targeting ..\BaseIoBinding.java
 
 
-// Targeting ../BaseMemoryInfo.java
+// Targeting ..\BaseMemoryInfo.java
 
 
-// Targeting ../BaseModelMetadata.java
+// Targeting ..\BaseModelMetadata.java
 
 
-// Targeting ../BaseCustomOpDomain.java
+// Targeting ..\BaseCustomOpDomain.java
 
 
-// Targeting ../BaseEnv.java
+// Targeting ..\BaseEnv.java
 
 
-// Targeting ../BaseRunOptions.java
+// Targeting ..\BaseRunOptions.java
 
 
-// Targeting ../BaseSession.java
+// Targeting ..\BaseSession.java
 
 
-// Targeting ../BaseSessionOptions.java
+// Targeting ..\BaseSessionOptions.java
 
 
-// Targeting ../BaseTensorTypeAndShapeInfo.java
+// Targeting ..\BaseTensorTypeAndShapeInfo.java
 
 
-// Targeting ../BaseSequenceTypeInfo.java
+// Targeting ..\BaseSequenceTypeInfo.java
 
 
-// Targeting ../BaseMapTypeInfo.java
+// Targeting ..\BaseMapTypeInfo.java
 
 
-// Targeting ../BaseTypeInfo.java
+// Targeting ..\BaseTypeInfo.java
 
 
-// Targeting ../BaseValue.java
+// Targeting ..\BaseValue.java
 
 
-// Targeting ../BaseOp.java
+// Targeting ..\BaseOp.java
 
 
-// Targeting ../BaseOpAttr.java
+// Targeting ..\BaseOpAttr.java
 
 
-// Targeting ../BaseStatus.java
+// Targeting ..\BaseStatus.java
 
 
-// Targeting ../BaseKernelInfo.java
+// Targeting ..\BaseKernelInfo.java
 
 
-// Targeting ../BaseThreadingOptions.java
+// Targeting ..\BaseThreadingOptions.java
 
 
-// Targeting ../BaseLoraAdapter.java
+// Targeting ..\BaseLoraAdapter.java
 
 
-// Targeting ../BaseModelCompilationOptions.java
+// Targeting ..\BaseModelCompilationOptions.java
 
 
-// Targeting ../BaseGraph.java
+// Targeting ..\BaseGraph.java
 
 
-// Targeting ../BaseKeyValuePairs.java
+// Targeting ..\BaseKeyValuePairs.java
 
 
-// Targeting ../BaseNode.java
+// Targeting ..\BaseNode.java
 
 
-// Targeting ../BaseModel.java
+// Targeting ..\BaseModel.java
 
 
-// Targeting ../BaseValueInfo.java
+// Targeting ..\BaseValueInfo.java
 
 
-// Targeting ../BaseEpDevice.java
+// Targeting ..\BaseEpDevice.java
 
 
-// Targeting ../BaseCUDAProviderOptionsV2.java
+// Targeting ..\BaseCUDAProviderOptionsV2.java
 
 
-// Targeting ../BasePrepackedWeightsContainer.java
+// Targeting ..\BasePrepackedWeightsContainer.java
 
 
-// Targeting ../BaseTensorRTProviderOptionsV2.java
+// Targeting ..\BaseTensorRTProviderOptionsV2.java
 
 
-// Targeting ../BaseSyncStream.java
+// Targeting ..\BaseSyncStream.java
 
 
-// Targeting ../BaseExternalInitializerInfo.java
+// Targeting ..\BaseExternalInitializerInfo.java
 
 
 
@@ -1152,7 +1149,7 @@ public static final int
  *  Also convenient to wrap raw OrtXX pointers .
  *  </summary>
  *  <typeparam name="T"></typeparam> */
-// Targeting ../AllocatedFree.java
+// Targeting ..\AllocatedFree.java
 
 
 
@@ -1162,69 +1159,69 @@ public static final int
  *  and release them at the end of the scope. The lifespan of the given allocator
  *  must eclipse the lifespan of AllocatedStringPtr instance
  */
-// Targeting ../Status.java
+// Targeting ..\Status.java
 
 
-// Targeting ../ThreadingOptions.java
+// Targeting ..\ThreadingOptions.java
 
 
-// Targeting ../TensorRTProviderOptions.java
+// Targeting ..\TensorRTProviderOptions.java
 
 
-// Targeting ../CUDAProviderOptions.java
+// Targeting ..\CUDAProviderOptions.java
 
 
-// Targeting ../PrepackedWeightsContainer.java
+// Targeting ..\PrepackedWeightsContainer.java
 
 
-// Targeting ../ConstExternalInitializerInfoImpl.java
-
-
-  // namespace detail
-
-// Const object holder that does not own the underlying object
-// Targeting ../ExternalInitializerInfo.java
-
-
-// Targeting ../KeyValuePairsImpl.java
+// Targeting ..\ConstExternalInitializerInfoImpl.java
 
 
   // namespace detail
 
 // Const object holder that does not own the underlying object
-// Targeting ../KeyValuePairs.java
+// Targeting ..\ExternalInitializerInfo.java
 
 
-// Targeting ../MemoryInfoImpl.java
+// Targeting ..\KeyValuePairsImpl.java
 
 
   // namespace detail
 
 // Const object holder that does not own the underlying object
-// Targeting ../MemoryInfo.java
+// Targeting ..\KeyValuePairs.java
 
 
-// Targeting ../MemoryAllocation.java
+// Targeting ..\MemoryInfoImpl.java
 
 
-// Targeting ../AllocatorWithDefaultOptionsImpl.java
+  // namespace detail
+
+// Const object holder that does not own the underlying object
+// Targeting ..\MemoryInfo.java
 
 
-// Targeting ../AllocatorImpl.java
+// Targeting ..\MemoryAllocation.java
+
+
+// Targeting ..\AllocatorWithDefaultOptionsImpl.java
+
+
+// Targeting ..\AllocatorImpl.java
 
 
 
-// Targeting ../AllocatorWithDefaultOptions.java
+// Targeting ..\AllocatorWithDefaultOptions.java
 
 
-// Targeting ../Allocator.java
+// Targeting ..\Allocator.java
 
 
-// Targeting ../SyncStreamImpl.java
+// Targeting ..\SyncStreamImpl.java
 
 
 
-// Targeting ../SyncStream.java
+// Targeting ..\SyncStream.java
 
 
   // namespace detail
@@ -1232,7 +1229,7 @@ public static final int
 /** \brief Wrapper around ::OrtHardwareDevice
  * \remarks HardwareDevice is always read-only for API users.
  */
-// Targeting ../EpDeviceImpl.java
+// Targeting ..\EpDeviceImpl.java
 
 
   // namespace detail
@@ -1240,7 +1237,7 @@ public static final int
 /** \brief Wrapper around ::OrtEpDevice
  * \remarks EpDevice is always read-only for ORT API users.
  */
-// Targeting ../EpDevice.java
+// Targeting ..\EpDevice.java
 
 
 
@@ -1256,16 +1253,16 @@ public static final int
 @Namespace("Ort") public static native @Cast("OrtCompiledModelCompatibility") int GetModelCompatibilityForEpDevices(
     @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl ep_devices,
     String compatibility_info);
-// Targeting ../Env.java
+// Targeting ..\Env.java
 
 
-// Targeting ../CustomOpDomain.java
+// Targeting ..\CustomOpDomain.java
 
 
-// Targeting ../LoraAdapter.java
+// Targeting ..\LoraAdapter.java
 
 
-// Targeting ../RunOptions.java
+// Targeting ..\RunOptions.java
 
 
 // Utility function that returns a SessionOption config entry key for a specific custom operator.
@@ -1273,7 +1270,7 @@ public static final int
 @Namespace("Ort::detail") public static native @StdString BytePointer MakeCustomOpConfigEntryKey(@Cast("const char*") BytePointer custom_op_name, @Cast("const char*") BytePointer config);
 @Namespace("Ort::detail") public static native @StdString String MakeCustomOpConfigEntryKey(String custom_op_name, String config);
 
-// Targeting ../CustomOpConfigs.java
+// Targeting ..\CustomOpConfigs.java
 
 
 
@@ -1281,20 +1278,20 @@ public static final int
  *
  * Wraps ::OrtSessionOptions object and methods
  */
-// Targeting ../ConstSessionOptions.java
+// Targeting ..\ConstSessionOptions.java
 
 
-// Targeting ../ConstSessionOptionsImpl.java
+// Targeting ..\ConstSessionOptionsImpl.java
 
 
-// Targeting ../SessionOptionsImpl.java
+// Targeting ..\SessionOptionsImpl.java
 
 
   // namespace detail
-// Targeting ../SessionOptions.java
+// Targeting ..\SessionOptions.java
 
 
-// Targeting ../ModelCompilationOptions.java
+// Targeting ..\ModelCompilationOptions.java
 
 
 
@@ -1305,61 +1302,61 @@ public static final int
  * @return A Status indicating success or failure.
  */
 @Namespace("Ort") public static native @ByVal Status CompileModel(@Const @ByRef Env env, @Const @ByRef ModelCompilationOptions model_compilation_options);
-// Targeting ../ModelMetadata.java
+// Targeting ..\ModelMetadata.java
 
 
-// Targeting ../ConstSession.java
+// Targeting ..\ConstSession.java
 
 
-// Targeting ../ConstSessionImpl.java
+// Targeting ..\ConstSessionImpl.java
 
 
-// Targeting ../SessionImpl.java
-
-
-
-  // namespace detail
-// Targeting ../Session.java
-
-
-// Targeting ../ConstTensorTypeAndShapeInfo.java
-
-
-// Targeting ../TensorTypeAndShapeInfoImpl.java
+// Targeting ..\SessionImpl.java
 
 
 
   // namespace detail
-// Targeting ../TensorTypeAndShapeInfo.java
+// Targeting ..\Session.java
 
 
-// Targeting ../BaseSequenceTypeInfoImpl.java
+// Targeting ..\ConstTensorTypeAndShapeInfo.java
+
+
+// Targeting ..\TensorTypeAndShapeInfoImpl.java
 
 
 
   // namespace detail
-// Targeting ../SequenceTypeInfo.java
+// Targeting ..\TensorTypeAndShapeInfo.java
 
 
-// Targeting ../OptionalTypeInfoImpl.java
+// Targeting ..\BaseSequenceTypeInfoImpl.java
+
+
+
+  // namespace detail
+// Targeting ..\SequenceTypeInfo.java
+
+
+// Targeting ..\OptionalTypeInfoImpl.java
 
 
 
   // namespace detail
 
 // This is always owned by the TypeInfo and can only be obtained from it.
-// Targeting ../ConstMapTypeInfo.java
+// Targeting ..\ConstMapTypeInfo.java
 
 
-// Targeting ../MapTypeInfoImpl.java
+// Targeting ..\MapTypeInfoImpl.java
 
 
 
   // namespace detail
-// Targeting ../MapTypeInfo.java
+// Targeting ..\MapTypeInfo.java
 
 
-// Targeting ../TypeInfoImpl.java
+// Targeting ..\TypeInfoImpl.java
 
 
   // namespace detail
@@ -1368,59 +1365,59 @@ public static final int
  *  Contains a constant, unowned OrtTypeInfo that can be copied and passed around by value.
  *  Provides access to const OrtTypeInfo APIs.
  *  </summary> */
-// Targeting ../TypeInfo.java
+// Targeting ..\TypeInfo.java
 
 
-// Targeting ../OrtSparseValuesParam.java
+// Targeting ..\OrtSparseValuesParam.java
 
 
-// Targeting ../Shape.java
+// Targeting ..\Shape.java
 
 
-// Targeting ../ConstValue.java
+// Targeting ..\ConstValue.java
 
 
-// Targeting ../ConstValueImpl.java
+// Targeting ..\ConstValueImpl.java
 
 
-// Targeting ../ValueImpl.java
+// Targeting ..\ValueImpl.java
 
 
 
   // namespace detail
-// Targeting ../Value.java
+// Targeting ..\Value.java
 
 
 // Bring these out of template
 @Namespace("Ort::detail::binding_utils") public static native @ByVal StringVector GetOutputNamesHelper(@Const OrtIoBinding binding, OrtAllocator arg1);
 @Namespace("Ort::detail::binding_utils") public static native @StdMove ValueVector GetOutputValuesHelper(@Const OrtIoBinding binding, OrtAllocator arg1);
 
-// Targeting ../ConstIoBinding.java
+// Targeting ..\ConstIoBinding.java
 
 
-// Targeting ../ConstIoBindingImpl.java
+// Targeting ..\ConstIoBindingImpl.java
 
 
-// Targeting ../IoBindingImpl.java
+// Targeting ..\IoBindingImpl.java
 
 
 
   // namespace detail
-// Targeting ../IoBinding.java
+// Targeting ..\IoBinding.java
 
 
-// Targeting ../ArenaCfg.java
+// Targeting ..\ArenaCfg.java
 
 
 
 //
 // Custom OPs (only needed to implement custom OPs)
 //
-// Targeting ../ConstOpAttrImpl.java
+// Targeting ..\ConstOpAttrImpl.java
 
 
   // namespace detail
-// Targeting ../OpAttr.java
+// Targeting ..\OpAttr.java
 
 
 
@@ -1496,10 +1493,10 @@ public static final int
 //                                                    static_cast<const char*>(__FUNCTION__), __VA_ARGS__));
 //     }
 //   } while (false)
-// Targeting ../Logger.java
+// Targeting ..\Logger.java
 
 
-// Targeting ../KernelContext.java
+// Targeting ..\KernelContext.java
 
 
 @Namespace("Ort::detail::attr_utils") public static native void GetAttr(@Const OrtKernelInfo p, @Cast("const char*") BytePointer name, @ByRef FloatPointer arg2);
@@ -1521,69 +1518,69 @@ public static final int
 @Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, @Cast("const char*") BytePointer name, @ByRef LongVector arg2);
 @Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, String name, @ByRef LongVector arg2);
 
-// Targeting ../KernelInfoImpl.java
+// Targeting ..\KernelInfoImpl.java
 
 
 
   // namespace detail
-// Targeting ../KernelInfo.java
+// Targeting ..\KernelInfo.java
 
 
-// Targeting ../Op.java
+// Targeting ..\Op.java
 
 
-// Targeting ../ShapeInferContext.java
+// Targeting ..\ShapeInferContext.java
 
 
 
 public static final long MAX_CUSTOM_OP_END_VER = (1L << 31) - 1;
-// Targeting ../ConstValueInfoImpl.java
+// Targeting ..\ConstValueInfoImpl.java
 
 
   // namespace detail
 
 // Const object holder that does not own the underlying object
-// Targeting ../ValueInfo.java
+// Targeting ..\ValueInfo.java
 
 
 
 // Forward declaration
-// Targeting ../ConstNodeImpl.java
+// Targeting ..\ConstNodeImpl.java
 
 
   // namespace detail
-// Targeting ../Node.java
+// Targeting ..\Node.java
 
 
-// Targeting ../ValueInfoConsumerProducerInfo.java
+// Targeting ..\ValueInfoConsumerProducerInfo.java
 
 
-// Targeting ../OperatorSet.java
+// Targeting ..\OperatorSet.java
 
 
-// Targeting ../ConstGraph.java
+// Targeting ..\ConstGraph.java
 
 
-// Targeting ../ConstGraphImpl.java
+// Targeting ..\ConstGraphImpl.java
 
 
-// Targeting ../GraphImpl.java
+// Targeting ..\GraphImpl.java
 
 
   // namespace detail
-// Targeting ../AttrNameSubgraph.java
+// Targeting ..\AttrNameSubgraph.java
 
 
-// Targeting ../Graph.java
+// Targeting ..\Graph.java
 
 
-// Targeting ../ModelImpl.java
+// Targeting ..\ModelImpl.java
 
 
   // namespace detail
 
 // Const object holder that does not own the underlying object
-// Targeting ../Model.java
+// Targeting ..\Model.java
 
 
   // namespace Ort
@@ -1614,8 +1611,39 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( Ort
 // Copyright(C) 2022 Intel Corporation
 // Licensed under the MIT License
 // #pragma once
-// Targeting ../OrtDnnlProviderOptions.java
+// Targeting ..\OrtDnnlProviderOptions.java
 
+
+
+// Parsed from onnxruntime_training_c_api.h
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// This file contains the training c apis.
+
+// #pragma once
+// #include <stdbool.h>
+// #include "onnxruntime_c_api.h"
+// Targeting ..\OrtTrainingSession.java
+
+
+// Targeting ..\OrtCheckpointState.java
+
+  // Type that holds the training states for the training session.
+
+/** \brief Type of property to be added to or returned from the ::OrtCheckpointState.
+ */
+/** enum OrtPropertyType */
+public static final int
+  OrtIntProperty = 0,
+  OrtFloatProperty = 1,
+  OrtStringProperty = 2;
+// Targeting ..\OrtTrainingApi.java
+
+
+
+/** \} */
 
 
 }

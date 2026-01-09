@@ -50,6 +50,7 @@ import org.bytedeco.dnnl.presets.*;
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
                 "onnxruntime/core/providers/cpu/cpu_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_options.h",
+                "onnxruntime_training_c_api.h",
 //                "onnxruntime/core/providers/cuda/cuda_provider_options.h",
 //                "onnxruntime/core/providers/tensorrt/tensorrt_provider_options.h",
 //                "onnxruntime/core/providers/cuda/cuda_provider_factory.h",

@@ -15,10 +15,715 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-@Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+/** \brief The Training C API that holds onnxruntime training function pointers
+ *
+ * All the Training C API functions are defined inside this structure as pointers to functions.
+ * Call OrtApi::GetTrainingApi to get a pointer to this struct.
+ *
+ * \nosubgrouping
+ */
+@Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtTrainingApi extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public OrtTrainingApi() { super((Pointer)null); }
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public OrtTrainingApi() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OrtTrainingApi(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OrtTrainingApi(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public OrtTrainingApi position(long position) {
+        return (OrtTrainingApi)super.position(position);
+    }
+    @Override public OrtTrainingApi getPointer(long i) {
+        return new OrtTrainingApi((Pointer)this).offsetAddress(i);
+    }
+
+  /** \name Accessing The Training Session State
+   *  \{
+  <p>
+  /** \brief Load a checkpoint state from a file on disk into checkpoint_state.
+   *
+   * This function will parse a checkpoint file, pull relevant data and load the training
+   * state into the checkpoint_state. This checkpoint state can then be used to create the
+   * training session by invoking OrtTrainingApi::CreateTrainingSession. By doing so, the training
+   * session will resume training from the given checkpoint state.
+   * \note Note that the training session created with a checkpoint state uses this state to store the entire
+   * training state (including model parameters, its gradients, the optimizer states and the properties).
+   * As a result, it is required that the checkpoint state outlive the lifetime of the training session.
+   * \note Note that the checkpoint file can be either the complete checkpoint or the nominal checkpoint.
+   *
+   * @param checkpoint_path [in] Path to the checkpoint file
+   * @param checkpoint_state [out] Checkpoint state that contains the states of the training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus LoadCheckpoint( @Cast("const ORTCHAR_T*") Pointer checkpoint_path,
+                    @Cast("OrtCheckpointState**") PointerPointer checkpoint_state);
+  public native OrtStatus LoadCheckpoint( @Cast("const ORTCHAR_T*") Pointer checkpoint_path,
+                    @ByPtrPtr OrtCheckpointState checkpoint_state);
+
+  /** \brief Save the given state to a checkpoint file on disk.
+   *
+   * This function serializes the provided checkpoint state to a file on disk.
+   * This checkpoint can later be loaded by invoking OrtTrainingApi::LoadCheckpoint to resume
+   * training from this snapshot of the state.
+   *
+   * @param checkpoint_state [in] The checkpoint state to save.
+   * @param checkpoint_path [in] Path to the checkpoint file.
+   * @param include_optimizer_state [in] Flag to indicate whether to save the optimizer state or not.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus SaveCheckpoint( OrtCheckpointState checkpoint_state, @Cast("const ORTCHAR_T*") Pointer checkpoint_path,
+                    @Cast("const bool") boolean include_optimizer_state);
+
+  /** \}
+   <p>
+   *  \name Implementing The Training Loop
+   *  \{
+  /** \brief Create a training session that can be used to begin or resume training.
+   *
+   * This function creates a training session based on the env and session options provided that can
+   * begin or resume training from a given checkpoint state for the given onnx models.
+   * The checkpoint state represents the parameters of the training session which will be moved
+   * to the device specified by the user through the session options (if necessary).
+   * The training session requires four training artifacts
+   * - The training onnx model
+   * - The evaluation onnx model (optional)
+   * - The optimizer onnx model
+   * - The checkpoint file
+   *
+   * These artifacts can be generated using the {@code onnxruntime-training} python [utility](https://github.com/microsoft/onnxruntime/blob/main/orttraining/orttraining/python/training/onnxblock/README.md).
+   *
+   * @param env [in] Environment to be used for the training session.
+   * @param options [in] Session options that the user can customize for this training session.
+   * @param checkpoint_state [in] Training states that the training session uses as a starting point for training.
+   * @param train_model_path [in] Model to be used to perform training.
+   * @param eval_model_path [in] Model to be used to perform evaluation.
+   * @param optimizer_model_path [in] Model to be used to perform gradient descent.
+   * @param out [out] Created training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus CreateTrainingSession( @Const OrtEnv env, @Const OrtSessionOptions options,
+                    OrtCheckpointState checkpoint_state, @Cast("const ORTCHAR_T*") Pointer train_model_path,
+                    @Cast("const ORTCHAR_T*") Pointer eval_model_path, @Cast("const ORTCHAR_T*") Pointer optimizer_model_path,
+                    @Cast("OrtTrainingSession**") PointerPointer out);
+  public native OrtStatus CreateTrainingSession( @Const OrtEnv env, @Const OrtSessionOptions options,
+                    OrtCheckpointState checkpoint_state, @Cast("const ORTCHAR_T*") Pointer train_model_path,
+                    @Cast("const ORTCHAR_T*") Pointer eval_model_path, @Cast("const ORTCHAR_T*") Pointer optimizer_model_path,
+                    @ByPtrPtr OrtTrainingSession out);
+
+  /** \brief Create a training session that can be used to begin or resume training.
+   * This api provides a way to load all the training artifacts from buffers instead of files.
+   *
+   * @param env [in] Environment to be used for the training session.
+   * @param options [in] Session options that the user can customize for this training session.
+   * @param checkpoint_state [in] Training states that the training session uses as a starting point for training.
+   * @param train_model_data [in] Buffer containing the model data to be used to perform training
+   * @param train_data_length [in] Length of the buffer containing train_model_data
+   * @param eval_model_data [in] Buffer containing the model data to be used to perform evaluation
+   * @param eval_data_length [in] Length of the buffer containing eval_model_data
+   * @param optim_model_data [in] Buffer containing the model data to be used to perform weight update
+   * @param optim_data_length [in] Length of the buffer containing optim_model_data
+   * @param out [out] Created training session.
+   *
+   */
+  public native OrtStatus CreateTrainingSessionFromBuffer( @Const OrtEnv env,
+                    @Const OrtSessionOptions options, OrtCheckpointState checkpoint_state,
+                    @Const Pointer train_model_data, @Cast("size_t") long train_data_length,
+                    @Const Pointer eval_model_data, @Cast("size_t") long eval_data_length,
+                    @Const Pointer optim_model_data, @Cast("size_t") long optim_data_length,
+                    @Cast("OrtTrainingSession**") PointerPointer out);
+  public native OrtStatus CreateTrainingSessionFromBuffer( @Const OrtEnv env,
+                    @Const OrtSessionOptions options, OrtCheckpointState checkpoint_state,
+                    @Const Pointer train_model_data, @Cast("size_t") long train_data_length,
+                    @Const Pointer eval_model_data, @Cast("size_t") long eval_data_length,
+                    @Const Pointer optim_model_data, @Cast("size_t") long optim_data_length,
+                    @ByPtrPtr OrtTrainingSession out);
+
+  /** \}
+   <p>
+   *  \name Model IO Information
+   *  \{
+  <p>
+  /** \brief Retrieves the number of user outputs in the training model.
+   *
+   * This function returns the number of outputs of the training model so that the user can
+   * allocate space for the number of outputs when OrtTrainingApi::TrainStep is invoked.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param out [out] Number of user outputs in the training model.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetTrainingModelOutputCount( @Const OrtTrainingSession sess, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Retrieves the number of user outputs in the eval model.
+   *
+   * This function returns the number of outputs of the eval model so that the user can
+   * allocate space for the number of outputs when OrtTrainingApi::EvalStep is invoked.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param out [out] Number of user outputs in the eval model.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetEvalModelOutputCount( @Const OrtTrainingSession sess, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Retrieves the names of user outputs in the training model.
+   *
+   * This function returns the names of outputs of the training model that can be associated with the OrtValue(s)
+   * returned by the OrtTrainingApi::TrainStep function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param index [in] Index of the output name requested.
+   * @param allocator [in] Allocator to use to allocate the memory for the name.
+   * @param output [out] Name of the training model output at the given index.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetTrainingModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") PointerPointer output);
+  public native OrtStatus TrainingSessionGetTrainingModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer output);
+  public native OrtStatus TrainingSessionGetTrainingModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer output);
+  public native OrtStatus TrainingSessionGetTrainingModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] output);
+
+  /** \brief Retrieves the names of user outputs in the eval model.
+   *
+   * This function returns the names of outputs of the eval model that can be associated with the OrtValue(s) returned
+   * by the OrtTrainingApi::EvalStep function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param index [in] Index of the output name requested.
+   * @param allocator [in] Allocator to use to allocate the memory for the name.
+   * @param output [out] Name of the eval model output at the given index.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetEvalModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") PointerPointer output);
+  public native OrtStatus TrainingSessionGetEvalModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer output);
+  public native OrtStatus TrainingSessionGetEvalModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer output);
+  public native OrtStatus TrainingSessionGetEvalModelOutputName( @Const OrtTrainingSession sess, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] output);
+
+  /** \}
+   <p>
+   *  \name Implementing The Training Loop
+   *  \{
+  <p>
+  /** \brief Reset the gradients of all trainable parameters to zero lazily.
+   *
+   * This function sets the internal state of the training session such that the gradients of the trainable
+   * parameters in the OrtCheckpointState will be scheduled to be reset just before the new gradients are
+   * computed on the next invocation of the next OrtTrainingApi::TrainStep.
+   *
+   * @param session [in] The {@code this} pointer to the training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus LazyResetGrad( OrtTrainingSession session);
+
+  /** \brief Computes the outputs of the training model and the gradients of the trainable parameters for the given inputs
+   *
+   * This function performs a training step that computes the outputs of the training model and the gradients
+   * of the trainable parameters for the given inputs. The train step is performed based on the training model
+   * that was provided to the training session.
+   * The OrtTrainingApi::TrainStep is equivalent of running forward propagation and backward propagation in a single
+   * step.
+   * The gradients computed are stored inside the training session state so they can be later consumed
+   * by the OrtTrainingApi::OptimizerStep function.
+   * The gradients can be lazily reset by invoking the OrtTrainingApi::LazyResetGrad function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param run_options [in] Run options for this training step.
+   * @param inputs_len [in] Number of user inputs to the training model.
+   * @param inputs [in] The user inputs to the training model.
+   * @param outputs_len [in] Number of user outputs expected from this training step.
+   * @param outputs [out] User outputs computed by train step.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainStep( OrtTrainingSession sess, @Const OrtRunOptions run_options,
+                    @Cast("size_t") long inputs_len, @Cast("const OrtValue*const*") PointerPointer inputs,
+                    @Cast("size_t") long outputs_len, @Cast("OrtValue**") PointerPointer outputs);
+  public native OrtStatus TrainStep( OrtTrainingSession sess, @Const OrtRunOptions run_options,
+                    @Cast("size_t") long inputs_len, @Const @ByPtrPtr OrtValue inputs,
+                    @Cast("size_t") long outputs_len, @ByPtrPtr OrtValue outputs);
+
+  /** \brief Computes the outputs for the eval model for the given inputs
+   *
+   * This function performs an eval step that computes the outputs of the eval model for the given inputs.
+   * The eval step is performed based on the eval model that was provided to the training session.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param run_options [in] Run options for this eval step.
+   * @param inputs_len [in] Number of user inputs to the eval model.
+   * @param inputs [in] The user inputs to the eval model.
+   * @param outputs_len [in] Number of user outputs expected from this eval step.
+   * @param outputs [out] User outputs computed by eval step.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus EvalStep( @Const OrtTrainingSession sess, @Const OrtRunOptions run_options,
+                    @Cast("size_t") long inputs_len, @Cast("const OrtValue*const*") PointerPointer inputs,
+                    @Cast("size_t") long outputs_len, @Cast("OrtValue**") PointerPointer outputs);
+  public native OrtStatus EvalStep( @Const OrtTrainingSession sess, @Const OrtRunOptions run_options,
+                    @Cast("size_t") long inputs_len, @Const @ByPtrPtr OrtValue inputs,
+                    @Cast("size_t") long outputs_len, @ByPtrPtr OrtValue outputs);
+
+  /** \brief Sets the learning rate for this training session.
+   *
+   * This function allows users to set the learning rate for the training session. The current
+   * learning rate is maintained by the training session and can be overwritten by invoking
+   * this function with the desired learning rate. This function should not be used when a valid
+   * learning rate scheduler is registered. It should be used either to set the learning rate
+   * derived from a custom learning rate scheduler or to set a constant learning rate to be used
+   * throughout the training session.
+   * \note Please note that this function does not set the initial learning rate that may be needed
+   * by the predefined learning rate schedulers. To set the initial learning rate for learning
+   * rate schedulers, please look at the function OrtTrainingApi::RegisterLinearLRScheduler.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param learning_rate [in] Desired learning rate to be set.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus SetLearningRate( OrtTrainingSession sess, float learning_rate);
+
+  /** \brief Gets the current learning rate for this training session.
+   *
+   * This function allows users to get the learning rate for the training session. The current
+   * learning rate is maintained by the training session, and users can query it for the purpose
+   * of implementing their own learning rate schedulers.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param learning_rate [out] Learning rate currently in use by the training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus GetLearningRate( OrtTrainingSession sess, FloatPointer learning_rate);
+  public native OrtStatus GetLearningRate( OrtTrainingSession sess, FloatBuffer learning_rate);
+  public native OrtStatus GetLearningRate( OrtTrainingSession sess, float[] learning_rate);
+
+  /** \brief Performs the weight updates for the trainable parameters using the optimizer model.
+   *
+   * This function performs the weight update step that updates the trainable parameters such that they
+   * take a step in the direction of their gradients (gradient descent). The optimizer step is performed
+   * based on the optimizer model that was provided to the training session.
+   * The updated parameters are stored inside the training state so that they can be used by the next
+   * OrtTrainingApi::TrainStep function call.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param run_options [in] Run options for this optimizer step.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus OptimizerStep( OrtTrainingSession sess,
+                    @Const OrtRunOptions run_options);
+
+  /** \brief Registers a linear learning rate scheduler for the training session.
+   *
+   * Register a linear learning rate scheduler that decays the learning rate by linearly updated
+   * multiplicative factor from the initial learning rate set on the training session to 0. The decay
+   * is performed after the initial warm up phase where the learning rate is linearly incremented
+   * from 0 to the initial learning rate provided.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param warmup_step_count [in] Warmup steps for LR warmup.
+   * @param total_step_count [in] Total step count.
+   * @param initial_lr [in] The initial learning rate to be used by the training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus RegisterLinearLRScheduler( OrtTrainingSession sess, @Cast("const int64_t") long warmup_step_count,
+                    @Cast("const int64_t") long total_step_count, float initial_lr);
+
+  /** \brief Update the learning rate based on the registered learing rate scheduler.
+   *
+   * Takes a scheduler step that updates the learning rate that is being used by the training session.
+   * This function should typically be called before invoking the optimizer step for each round,
+   * or as determined necessary to update the learning rate being used by the training session.
+   * \note Please note that a valid predefined learning rate scheduler must be first registered to invoke this
+   * function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus SchedulerStep( OrtTrainingSession sess);
+
+  /** \}
+   <p>
+   *  \name Accessing The Training Session State
+   *  \{
+  /** \brief Retrieves the size of all the parameters.
+   *
+   * Calculates the total number of primitive (datatype of the parameters) elements of all the parameters in the
+   * training state.
+   * When trainable_only argument is true, the size is calculated for trainable params only.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param out [out] Size of all parameter elements.
+   * @param trainable_only [in] Whether to skip non-trainable parameters
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus GetParametersSize( OrtTrainingSession sess, @Cast("size_t*") SizeTPointer out, @Cast("bool") boolean trainable_only);
+
+  /** \brief Copy all parameters to a contiguous buffer held by the argument parameters_buffer
+   *
+   * The parameters_buffer has to be of the size given by GetParametersSize api call,
+   * with matching setting for the argument trainable_only. All the target parameters must be of the same
+   * datatype. The OrtValue must be pre-allocated onto
+   * the desired device. This is a complementary function to OrtTrainingApi::CopyBufferToParameters.
+   * Parameter ordering is preserved.
+   * User is responsible for allocating and freeing the resources used by the parameters_buffer.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param trainable_only [in] Whether to skip non-trainable parameters
+   * @param parameters_buffer [out] The pre-allocated OrtValue buffer to copy onto.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus CopyParametersToBuffer( OrtTrainingSession sess,
+                    OrtValue parameters_buffer, @Cast("bool") boolean trainable_only);
+
+  /** \brief Copy parameter values from the given contiguous buffer held by parameters_buffer to the training state
+   *
+   * The parameters_buffer argument has to be of the size given by OrtTrainingApi::GetParametersSize api call,
+   * with matching setting for trainable_only argument. All the target parameters must be of the same
+   * datatype. This is a complementary function to OrtTrainingApi::CopyParametersToBuffer
+   * and can be used to load updated buffer values onto the training state.
+   * Parameter ordering is preserved.
+   * User is responsible for allocating and freeing the resources used by the parameters_buffer.
+   * In case the training session was created with a nominal checkpoint, invoking this function is required
+   * to load the updated parameters onto the checkpoint to complete it.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param trainable_only [in] Whether to skip non-trainable parameters
+   * @param parameters_buffer [out] The pre-allocated OrtValue buffer to copy from.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus CopyBufferToParameters( OrtTrainingSession sess,
+                    OrtValue parameters_buffer, @Cast("bool") boolean trainable_only);
+
+  /** \}
+   <p>
+   *  \name Release Training Resources
+   *  \{
+  <p>
+  /** \brief Frees up the memory used up by the training session.
+   *
+   * This function frees up any memory that was allocated in the training session. The training
+   * session can no longer be used after this call.
+   *
+   */
+  public native void ReleaseTrainingSession(OrtTrainingSession input);
+
+  /** \brief Frees up the memory used up by the checkpoint state.
+   *
+   * This function frees up any memory that was allocated in the checkpoint state. The checkpoint
+   * state can no longer be used after this call.
+   * \note Note that the checkpoint state must be released only after the training session has been released.
+   *
+   */
+  public native void ReleaseCheckpointState(OrtCheckpointState input);
+
+  /** \}
+   <p>
+   *  \name Prepare For Inferencing
+   *  \{
+  /** \brief Export a model that can be used for inferencing.
+   *
+   * If the training session was provided with an eval model, the training session can generate
+   * an inference model if it knows the inference graph outputs. The input inference graph outputs
+   * are used to prune the eval model so that the inference model's outputs align with the provided outputs.
+   * The exported model is saved at the path provided and can be used for inferencing with InferenceSession.
+   * \note Note that the function re-loads the eval model from the path provided to OrtTrainingApi::CreateTrainingSession
+   * and expects that this path still be valid.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param inference_model_path [in] Path where the inference model should be serialized to.
+   * @param graph_outputs_len [in] Size of the graph output names array.
+   * @param graph_output_names [in] Names of the outputs that are needed in the inference model.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus ExportModelForInferencing( OrtTrainingSession sess,
+                    @Cast("const ORTCHAR_T*") Pointer inference_model_path, @Cast("size_t") long graph_outputs_len,
+                    @Cast("const char*const*") PointerPointer graph_output_names);
+  public native OrtStatus ExportModelForInferencing( OrtTrainingSession sess,
+                    @Cast("const ORTCHAR_T*") Pointer inference_model_path, @Cast("size_t") long graph_outputs_len,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer graph_output_names);
+  public native OrtStatus ExportModelForInferencing( OrtTrainingSession sess,
+                    @Cast("const ORTCHAR_T*") Pointer inference_model_path, @Cast("size_t") long graph_outputs_len,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer graph_output_names);
+  public native OrtStatus ExportModelForInferencing( OrtTrainingSession sess,
+                    @Cast("const ORTCHAR_T*") Pointer inference_model_path, @Cast("size_t") long graph_outputs_len,
+                    @Cast("const char*const*") @ByPtrPtr byte[] graph_output_names);
+
+  /** \}
+   <p>
+   *  \name Training Utilities
+   *  \{
+  /** \brief Sets the seed used for random number generation in Onnxruntime.
+   *
+   * Use this function to generate reproducible results. It should be noted that completely reproducible
+   * results are not guaranteed.
+   *
+   * @param seed [in] The seed to be set.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus SetSeed( @Cast("const int64_t") long seed);
+
+  /** \}
+   <p>
+   *  \name Model IO Information
+   *  \{
+  /** \brief Retrieves the number of user inputs in the training model.
+   *
+   * This function returns the number of inputs of the training model so that the user can accordingly
+   * allocate the OrtValue(s) provided to the OrtTrainingApi::TrainStep function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param out [out] Number of user inputs in the training model.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetTrainingModelInputCount( @Const OrtTrainingSession sess, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Retrieves the number of user inputs in the eval model.
+   *
+   * This function returns the number of inputs of the eval model so that the user can accordingly
+   * allocate the OrtValue(s) provided to the OrtTrainingApi::EvalStep function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param out [out] Number of user inputs in the eval model.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetEvalModelInputCount( @Const OrtTrainingSession sess, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Retrieves the name of the user input at given index in the training model.
+   *
+   * This function returns the names of inputs of the training model that can be associated with the
+   * OrtValue(s) provided to the OrtTrainingApi::TrainStep function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param index [in] The index of the training model input name requested.
+   * @param allocator [in] The allocator to use to allocate the memory for the requested name.
+   * @param output [out] Name of the user input for the training model at the given index.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetTrainingModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") PointerPointer output);
+  public native OrtStatus TrainingSessionGetTrainingModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer output);
+  public native OrtStatus TrainingSessionGetTrainingModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer output);
+  public native OrtStatus TrainingSessionGetTrainingModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] output);
+
+  /** \brief Retrieves the name of the user input at given index in the eval model.
+   *
+   * This function returns the names of inputs of the eval model that can be associated with the OrtValue(s) provided
+   * to the OrtTrainingApi::EvalStep function.
+   *
+   * @param sess [in] The {@code this} pointer to the training session.
+   * @param index [in] The index of the eval model input name requested.
+   * @param allocator [in] The allocator to use to allocate the memory for the requested name.
+   * @param output [out] Name of the user input for the eval model at the given index.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus TrainingSessionGetEvalModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") PointerPointer output);
+  public native OrtStatus TrainingSessionGetEvalModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer output);
+  public native OrtStatus TrainingSessionGetEvalModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer output);
+  public native OrtStatus TrainingSessionGetEvalModelInputName( @Const OrtTrainingSession sess, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] output);
+
+  /** \}
+   <p>
+   *  \name Accessing The Training Session State
+   *  \{
+  <p>
+  /** \brief Adds or updates the given property to/in the checkpoint state.
+   *
+   * Runtime properties such as epoch, training step, best score, and others can be added to the checkpoint
+   * state by the user by calling this function with the corresponding property name and value.
+   * The given property name must be unique to be able to successfully add the property.
+   *
+   * @param checkpoint_state [in] The checkpoint state which should hold the property.
+   * @param property_name [in] Name of the property being added or updated.
+   * @param property_type [in] Type of the property associated with the given name.
+   * @param property_value [in] Property value associated with the given name.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus AddProperty( OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer property_name, @Cast("OrtPropertyType") int property_type,
+                    Pointer property_value);
+  public native OrtStatus AddProperty( OrtCheckpointState checkpoint_state,
+                    String property_name, @Cast("OrtPropertyType") int property_type,
+                    Pointer property_value);
+
+  /** \brief Gets the property value associated with the given name from the checkpoint state.
+   *
+   * Gets the property value from an existing entry in the checkpoint state. The property must
+   * exist in the checkpoint state to be able to retrieve it successfully.
+   *
+   * @param checkpoint_state [in] The checkpoint state that is currently holding the property.
+   * @param property_name [in] Name of the property being retrieved.
+   * @param allocator [in] Allocator used to allocate the memory for the property_value.
+   * @param property_type [out] Type of the property associated with the given name.
+   * @param property_value [out] Property value associated with the given name.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") IntPointer property_type, @Cast("void**") PointerPointer property_value);
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") IntPointer property_type, @Cast("void**") @ByPtrPtr Pointer property_value);
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    String property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") IntBuffer property_type, @Cast("void**") @ByPtrPtr Pointer property_value);
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") int[] property_type, @Cast("void**") @ByPtrPtr Pointer property_value);
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    String property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") IntPointer property_type, @Cast("void**") @ByPtrPtr Pointer property_value);
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") IntBuffer property_type, @Cast("void**") @ByPtrPtr Pointer property_value);
+  public native OrtStatus GetProperty( @Const OrtCheckpointState checkpoint_state,
+                    String property_name, OrtAllocator allocator,
+                    @Cast("OrtPropertyType*") int[] property_type, @Cast("void**") @ByPtrPtr Pointer property_value);
+
+  /** \}
+   <p>
+   *  \name Accessing The Training Session State
+   *  \{
+  <p>
+  /** \brief Load a checkpoint state from a buffer into checkpoint_state.
+   *
+   * This function will parse a checkpoint bytes buffer, pull relevant data and load the training
+   * state into the checkpoint_state. This checkpoint state can then be used to create the
+   * training session by invoking OrtTrainingApi::CreateTrainingSession. By doing so, the training
+   * session will resume training from the given checkpoint state.
+   * \note Note that the training session created with a checkpoint state uses this state to store the entire
+   * training state (including model parameters, its gradients, the optimizer states and the properties).
+   * As a result, it is required that the checkpoint state outlive the lifetime of the training session.
+   *
+   * @param checkpoint_buffer [in] Path to the checkpoint bytes buffer.
+   * @param num_bytes [in] Number of bytes in the checkpoint buffer.
+   * @param checkpoint_state [out] Checkpoint state that contains the states of the training session.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus LoadCheckpointFromBuffer( @Const Pointer checkpoint_buffer,
+                    @Cast("const size_t") long num_bytes, @Cast("OrtCheckpointState**") PointerPointer checkpoint_state);
+  public native OrtStatus LoadCheckpointFromBuffer( @Const Pointer checkpoint_buffer,
+                    @Cast("const size_t") long num_bytes, @ByPtrPtr OrtCheckpointState checkpoint_state);
+
+  /** \brief Retrieves the type and shape information of the parameter associated with the given parameter name.
+   *
+   * This function retrieves the type and shape of the parameter associated with the given parameter name.
+   * The parameter must exist in the checkpoint state to be able to retrieve its type and shape information successfully.
+   *
+   * @param checkpoint_state [in] The checkpoint state.
+   * @param parameter_name [in] Name of the parameter being retrieved.
+   * @param parameter_type_and_shape [out] The type and shape of the parameter being retrieved.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus GetParameterTypeAndShape( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer parameter_name, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer parameter_type_and_shape);
+  public native OrtStatus GetParameterTypeAndShape( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer parameter_name, @ByPtrPtr OrtTensorTypeAndShapeInfo parameter_type_and_shape);
+  public native OrtStatus GetParameterTypeAndShape( @Const OrtCheckpointState checkpoint_state,
+                    String parameter_name, @ByPtrPtr OrtTensorTypeAndShapeInfo parameter_type_and_shape);
+
+  /** \brief Updates the data associated with the model parameter in the checkpoint state for the given parameter name.
+   *
+   * This function updates a model parameter in the checkpoint state with the given parameter data.
+   * The training session must be already created with the checkpoint state that contains the parameter
+   * being updated. The given parameter is copied over to the registered device for the training session.
+   * The parameter must exist in the checkpoint state to be able to update it successfully.
+   *
+   * @param checkpoint_state [in] The checkpoint state.
+   * @param parameter_name [in] Name of the parameter being updated.
+   * @param parameter [in] The parameter data that should replace the existing parameter data.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus UpdateParameter( OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer parameter_name, OrtValue parameter);
+  public native OrtStatus UpdateParameter( OrtCheckpointState checkpoint_state,
+                    String parameter_name, OrtValue parameter);
+
+  /** \brief Gets the data associated with the model parameter from the checkpoint state for the given parameter name.
+   *
+   * This function retrieves the model parameter data from the checkpoint state for the given parameter name.
+   * The parameter is copied over and returned as an OrtValue. The training session must be already created
+   * with the checkpoint state that contains the parameter being retrieved.
+   * The parameter must exist in the checkpoint state to be able to retrieve it successfully.
+   *
+   * @param checkpoint_state [in] The checkpoint state.
+   * @param parameter_name [in] Name of the parameter being retrieved.
+   * @param allocator [in] Allocator used to allocate the memory for the parameter.
+   * @param parameter [out] The parameter data that is retrieved from the checkpoint state.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   */
+  public native OrtStatus GetParameter( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer parameter_name, OrtAllocator allocator,
+                    @Cast("OrtValue**") PointerPointer parameter);
+  public native OrtStatus GetParameter( @Const OrtCheckpointState checkpoint_state,
+                    @Cast("const char*") BytePointer parameter_name, OrtAllocator allocator,
+                    @ByPtrPtr OrtValue parameter);
+  public native OrtStatus GetParameter( @Const OrtCheckpointState checkpoint_state,
+                    String parameter_name, OrtAllocator allocator,
+                    @ByPtrPtr OrtValue parameter);
+
+  /** \} */
 }
