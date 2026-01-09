@@ -187,7 +187,7 @@ sedinplace 's/initializers = allocarray/initializers = (const OrtValue**)allocar
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 for i in {1..2}; do
-  "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --enable_training --enable_training_apis --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $GPU_FLAGS || sedinplace 's/5ea4d05e62d7f954a46b3213f9b2535bdd866803/51982be81bbe52572b54180454df11a3ece9a934/g' cmake/deps.txt
+  "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --enable_training_apis --enable_training_ops --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $GPU_FLAGS || sedinplace 's/5ea4d05e62d7f954a46b3213f9b2535bdd866803/51982be81bbe52572b54180454df11a3ece9a934/g' cmake/deps.txt
 done
 
 # install headers and libraries in standard directories
