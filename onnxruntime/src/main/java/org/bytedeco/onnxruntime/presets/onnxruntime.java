@@ -64,6 +64,7 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/coreml/coreml_provider_factory.h",
 //                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
+                "onnxruntime_training_c_api.h",
             },
             exclude = {"CL/opencl.h", "CL/cl_version.h", "CL/cl_platform.h", "CL/cl.h"/*, "CL/cl_gl.h", "CL/cl_gl_ext.h", "CL/cl_ext.h"*/,
                        "onnxruntime/core/session/onnxruntime_ep_c_api.h"},

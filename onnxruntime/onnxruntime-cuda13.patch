@@ -443,3 +443,65 @@ index 62753ef4d5867..72fbbf53bfb21 100644
  #include <algorithm>
  #include "core/providers/cuda/cuda_common.h"
  #include "core/providers/cuda/math/softmax_warpwise_impl.cuh"
+
+diff --git a/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu b/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu
+index 6e8c4e1..f4d2a1b 100644
+--- a/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu
++++ b/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu
+@@ -4,6 +4,7 @@
+ 
+ #include "orttraining/training_ops/cuda/reduction/all_impl.h"
+ 
++#include <cuda/std/functional>
+ #include <thrust/logical.h>
+ #include <thrust/functional.h>
+ #include <thrust/execution_policy.h>
+@@ -26,7 +27,7 @@ namespace onnxruntime {
+ template <>
+ void LaunchAllKernel(cudaStream_t stream, const bool* data, const int size, bool* output) {
+-  if (thrust::all_of(thrust::cuda::par.on(stream), data, data + size, thrust::identity<bool>())) {
++  if (thrust::all_of(thrust::cuda::par.on(stream), data, data + size, ::cuda::std::identity{})) {
+     assign_true<<<1, 1, 0, stream>>>(output);
+   } else {
+     assign_false<<<1, 1, 0, stream>>>(output);
+
+diff --git a/orttraining/orttraining/training_ops/cuda/tensor/gather_grad_impl.cu b/orttraining/orttraining/training_ops/cuda/tensor/gather_grad_impl.cu
+index acbbe0d94d..4465887673 100644
+--- a/orttraining/orttraining/training_ops/cuda/tensor/gather_grad_impl.cu
++++ b/orttraining/orttraining/training_ops/cuda/tensor/gather_grad_impl.cu
+@@ -10,8 +10,8 @@
+ #include <cub/device/device_reduce.cuh>
+ #include <cub/device/device_run_length_encode.cuh>
+ #include <cub/device/device_scan.cuh>
+-#include <cub/iterator/counting_input_iterator.cuh>
+-#include <cub/iterator/discard_output_iterator.cuh>
++#include <cuda/iterator>
++#include <thrust/iterator/counting_iterator.h>
+ 
+ #include "core/providers/cuda/cu_inc/common.cuh"
+ #include "core/providers/cuda/shared_inc/accumulation_type.h"
+@@ -60,7 +60,7 @@ void GetSortedIndices(
+   auto dY_indices = allocator.GetScratchBuffer<TIndex>(num_gathered_indices);
+   CopyKernel<<<CeilDiv(num_gathered_indices, GridDim::maxThreadsPerBlock),
+                GridDim::maxThreadsPerBlock, 0, stream>>>(
+-      dY_indices.get(), cub::CountingInputIterator<TIndex>{0}, num_gathered_indices);
++      dY_indices.get(), thrust::make_counting_iterator<TIndex>(static_cast<TIndex>(0)), num_gathered_indices);
+ 
+   auto dX_indices_sorted = allocator.GetScratchBuffer<TIndex>(num_gathered_indices);
+   auto dY_indices_sorted = allocator.GetScratchBuffer<TIndex>(num_gathered_indices);
+@@ -447,13 +447,13 @@ void Impl(
+     size_t temp_storage_size_bytes = 0;
+     CUDA_CALL_THROW(cub::DeviceRunLengthEncode::Encode(
+         nullptr, temp_storage_size_bytes,
+-        dX_indices_sorted.get(), cub::DiscardOutputIterator<TIndex>{}, segment_counts.get(),
++        dX_indices_sorted.get(), ::cuda::discard_iterator{}, segment_counts.get(),
+         num_segments.get(), num_gathered_indices, stream));
+ 
+     auto temp_storage = allocator.GetScratchBuffer<void>(temp_storage_size_bytes);
+     CUDA_CALL_THROW(cub::DeviceRunLengthEncode::Encode(
+         temp_storage.get(), temp_storage_size_bytes,
+-        dX_indices_sorted.get(), cub::DiscardOutputIterator<TIndex>{}, segment_counts.get(),
++        dX_indices_sorted.get(), ::cuda::discard_iterator{}, segment_counts.get(),
+         num_segments.get(), num_gathered_indices, stream));
+ 
+     // CPU/GPU sync!

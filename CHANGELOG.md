@@ -1,4 +1,5 @@
 
+ * Enable training APIs and include `onnxruntime_training_c_api.h` header file in presets for ONNX Runtime ([pull #1728](https://github.com/bytedeco/javacpp-presets/pull/1728))
  * Fix memory leak in `Tensor` factory methods `create()`, `createBuffer()`, and `createIndexer()` for PyTorch ([pull #1722](https://github.com/bytedeco/javacpp-presets/pull/1722))
  * Rename `gloo` and `nccl` modules of PyTorch to `torch_gloo` and `torch_nccl` to avoid conflicts
  * Upgrade to NDK r29 for Android builds on GitHub Actions ([issue #1670](https://github.com/bytedeco/javacpp-presets/issues/1670))

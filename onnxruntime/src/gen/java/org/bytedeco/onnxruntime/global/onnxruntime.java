@@ -592,9 +592,6 @@ public static final int
 // Targeting ../OrtOpenVINOProviderOptions.java
 
 
-// Targeting ../OrtTrainingApi.java
-
-
 // Targeting ../OrtApiBase.java
 
 
@@ -1616,6 +1613,37 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( Ort
 // #pragma once
 // Targeting ../OrtDnnlProviderOptions.java
 
+
+
+// Parsed from onnxruntime_training_c_api.h
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+// This file contains the training c apis.
+
+// #pragma once
+// #include <stdbool.h>
+// #include "onnxruntime_c_api.h"
+// Targeting ../OrtTrainingSession.java
+
+
+// Targeting ../OrtCheckpointState.java
+
+  // Type that holds the training states for the training session.
+
+/** \brief Type of property to be added to or returned from the ::OrtCheckpointState.
+ */
+/** enum OrtPropertyType */
+public static final int
+  OrtIntProperty = 0,
+  OrtFloatProperty = 1,
+  OrtStringProperty = 2;
+// Targeting ../OrtTrainingApi.java
+
+
+
+/** \} */
 
 
 }
