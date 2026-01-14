@@ -2706,6 +2706,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("torch::dynamo::autograd::AutogradCompilerCall::lifted_ivalue_args").javaText("@MemberGetter public native @ByRef LiftedIValueArgs lifted_ivalue_args();"))
             .put(new Info("torch::jit::ProfileOp::getCallback()", "torch::jit::ProfileIValueOp::getCallback()").javaText(
                 "public native @ByVal @Cast(\"std::function<void(std::vector<c10::IValue>&)>*\") Pointer getCallback();"))
+            .put(new Info("torch::nn::GELUOptions::approximate").javaText(
+                "public native @StdString @ByRef @NoException(true) BytePointer approximate();\n"
+                + "public native @ByRef @NoException(true) GELUOptions approximate(@StdString BytePointer setter);\n"
+                + "public native @ByRef @NoException(true) GELUOptions approximate(@StdString String setter);"))
             .put(new Info("torch::optim::AdamOptions::betas", "torch::optim::AdamWOptions::betas").javaText(
                 "public native @Cast(\"std::tuple<double,double>*\") @ByRef @NoException DoublePointer betas();"))
             .put(new Info("torch::optim::Adagrad::step", "torch::optim::Adam::step", "torch::optim::AdamW::step",
