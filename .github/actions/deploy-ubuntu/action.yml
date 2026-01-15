@@ -122,11 +122,12 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
-        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
+        $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
         ln -sf $JAVA_HOME /usr/lib/jvm/default-java
+        $SUDO ln -sf pkgconf /usr/bin/pkg-config
         find /usr/lib/jvm/default-java/
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.31.8/cmake-3.31.8-linux-x86_64.tar.gz
         curl -LO https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.tar.gz
@@ -141,7 +142,7 @@ runs:
         $SUDO ln -sf /opt/apache-maven-3.9.6/bin/mvn /usr/bin/mvn
         $SUDO ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 
-        $SUDO python3 -m pip install gdown || $SUDO python3 -m pip install --break-system-packages gdown
+        $SUDO python3 -m pip install gdown meson || $SUDO python3 -m pip install --break-system-packages gdown meson
 
         # install vulkan sdk
         echo Installing Vulkan-SDK
@@ -309,11 +310,14 @@ runs:
         git --version
         $PREFIX-gcc --version
         cmake --version
+        meson --version
+        ninja --version
         gradle --version
         mvn -version
         gpg --version
         python3 --version
         ccache -s --version
+        pkg-config -version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)
