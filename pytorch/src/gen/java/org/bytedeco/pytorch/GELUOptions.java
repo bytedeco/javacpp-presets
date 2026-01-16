@@ -46,4 +46,6 @@ public class GELUOptions extends Pointer {
     }
 
   public native @StdString @ByRef @NoException(true) BytePointer approximate();
+  public native @ByRef @NoException(true) GELUOptions approximate(@StdString BytePointer setter);
+  public native @ByRef @NoException(true) GELUOptions approximate(@StdString String setter);
 }
