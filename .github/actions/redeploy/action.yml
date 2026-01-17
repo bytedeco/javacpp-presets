@@ -98,9 +98,6 @@ runs:
             if [[ $POM =~ tensorflow/platform/python ]]; then
                 continue # Skip over builds taking more than 6 hours on GitHub Actions
             fi
-            if [[ $POM =~ platform/redist ]] && [[ "$CI_DEPLOY_MODULE" != "cuda" ]] && [[ "$CI_DEPLOY_MODULE" != "mkl" ]]; then
-                continue # Skip over redist artifacts too big for the Central Portal
-            fi
             for i in {1..5}; do
                 STATUS=0
                 mvn dependency:list $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \

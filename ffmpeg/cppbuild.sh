@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib"
-ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1 --enable-libzimg"
+ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libharfbuzz --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1 --enable-libzimg"
 ENABLE_VULKAN="--enable-vulkan --enable-hwaccel=h264_vulkan --enable-hwaccel=hevc_vulkan --enable-hwaccel=av1_vulkan"
 
 if [[ "$EXTENSION" == *gpl ]]; then
@@ -20,6 +20,7 @@ fi
 # DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
 # ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
+HARFBUZZ_CONFIG="--default-library=static -Dcairo=disabled -Dchafa=disabled -Dcoretext=disabled -Ddirectwrite=disabled -Ddocs=disabled -Dfreetype=enabled -Dglib=disabled -Dgobject=disabled -Dgraphite=disabled -Dicu=disabled -Dtests=disabled -Dintrospection=disabled --libdir=lib --buildtype=release"
 LIBXML_CONFIG="--enable-static --disable-shared --without-iconv --without-python --without-lzma --with-pic"
 SRT_CONFIG="-DENABLE_APPS:BOOL=OFF -DENABLE_ENCRYPTION:BOOL=ON -DENABLE_SHARED:BOOL=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
 WEBP_CONFIG="-DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBP_JS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib"
@@ -40,6 +41,7 @@ X265=3.4
 VPX_VERSION=1.15.2
 ALSA_VERSION=1.2.14
 FREETYPE_VERSION=2.14.1
+HARFBUZZ_VERSION=12.3.0
 MFX_VERSION=1.35.1
 NVCODEC_VERSION=13.0.19.0
 XML2=libxml2-2.9.12
@@ -63,6 +65,7 @@ download https://github.com/videolan/x265/archive/$X265.tar.gz x265-$X265.tar.gz
 download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
 download https://ftp.osuosl.org/pub/blfs/conglomeration/freetype/freetype-$FREETYPE_VERSION.tar.xz freetype-$FREETYPE_VERSION.tar.xz
+download https://github.com/harfbuzz/harfbuzz/archive/refs/tags/$HARFBUZZ_VERSION.tar.gz harfbuzz-$HARFBUZZ_VERSION.tar.gz
 download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx_dispatch-$MFX_VERSION.tar.gz
 download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
@@ -91,6 +94,7 @@ tar --totals -xzf ../$X264.tar.gz
 tar --totals -xzf ../x265-$X265.tar.gz
 tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz
 tar --totals -xJf ../freetype-$FREETYPE_VERSION.tar.xz
+tar --totals -xzf ../harfbuzz-$HARFBUZZ_VERSION.tar.gz
 tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xzf ../$XML2.tar.gz
@@ -106,6 +110,7 @@ fi
 
 cd nasm-$NASM_VERSION
 # fix for build with GCC 8.x
+sedinplace '/^\s*#\s*typedef _Bool bool/d' include/compiler.h
 sedinplace 's/void pure_func/void/g' include/nasmlib.h
 ./configure --prefix=$INSTALL_PATH
 make -j $MAKEJ V=0
@@ -263,6 +268,25 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> android-arm.ini
+        echo "c = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-android24-clang'" >> android-arm.ini
+        echo "cpp = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-android24-clang++'" >> android-arm.ini
+        echo "ar = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'" >> android-arm.ini
+        echo "windres = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-windres'" >> android-arm.ini
+        echo "strip = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'" >> android-arm.ini
+        echo "pkg-config = '/usr/bin/pkg-config'" >> android-arm.ini
+        echo "" >> android-arm.ini
+        echo "[host_machine]" >> android-arm.ini
+        echo "system = 'android'" >> android-arm.ini
+        echo "cpu_family = 'arm'" >> android-arm.ini
+        echo "cpu = 'armv7'" >> android-arm.ini
+        echo "endian = 'little'" >> android-arm.ini
+        meson setup build --prefix=$INSTALL_PATH --cross-file=android-arm.ini $HARFBUZZ_CONFIG --pkg-config-path=/usr/bin/pkg-config
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -279,7 +303,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver  --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -418,6 +442,24 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> android-arm.ini
+        echo "c = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang'" >> android-arm.ini
+        echo "cpp = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang++'" >> android-arm.ini
+        echo "ar = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'" >> android-arm.ini
+        echo "windres = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-windres'" >> android-arm.ini
+        echo "strip = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'" >> android-arm.ini
+        echo "pkg-config = '/usr/bin/pkg-config'" >> android-arm.ini
+        echo "[host_machine]" >> android-arm.ini
+        echo "system = 'android'" >> android-arm.ini
+        echo "cpu_family = 'aarch64'" >> android-arm.ini
+        echo "cpu = 'aarch64'" >> android-arm.ini
+        echo "endian = 'little'" >> android-arm.ini
+        meson setup build --prefix=$INSTALL_PATH --cross-file=android-arm.ini $HARFBUZZ_CONFIG --pkg-config-path=/usr/bin/pkg-config
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -434,7 +476,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -570,6 +612,24 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> android-i386.ini
+        echo "c = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android24-clang'" >> android-i386.ini
+        echo "cpp = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android24-clang++'" >> android-i386.ini
+        echo "ar = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'" >> android-i386.ini
+        echo "windres = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-windres'" >> android-i386.ini
+        echo "strip = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'" >> android-i386.ini
+        echo "pkg-config = '/usr/bin/pkg-config'" >> android-i386.ini
+        echo "[host_machine]" >> android-i386.ini
+        echo "system = 'android'" >> android-i386.ini
+        echo "cpu_family = 'x86'" >> android-i386.ini
+        echo "cpu = 'x86'" >> android-i386.ini
+        echo "endian = 'little'" >> android-i386.ini
+        meson setup build --prefix=$INSTALL_PATH --cross-file=android-i386.ini $HARFBUZZ_CONFIG --pkg-config-path=/usr/bin/pkg-config
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -586,7 +646,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -721,6 +781,24 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> android-amd64.ini
+        echo "c = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android24-clang'" >> android-amd64.ini
+        echo "cpp = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android24-clang++'" >> android-amd64.ini
+        echo "ar = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'" >> android-amd64.ini
+        echo "windres = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-windres'" >> android-amd64.ini
+        echo "strip = '${PLATFORM_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'" >> android-amd64.ini
+        echo "pkg-config = '/usr/bin/pkg-config'" >> android-amd64.ini
+        echo "[host_machine]" >> android-amd64.ini
+        echo "system = 'android'" >> android-amd64.ini
+        echo "cpu_family = 'x86_64'" >> android-amd64.ini
+        echo "cpu = 'x86_64'" >> android-amd64.ini
+        echo "endian = 'little'" >> android-amd64.ini
+        meson setup build --prefix=$INSTALL_PATH --cross-file=android-amd64.ini $HARFBUZZ_CONFIG --pkg-config-path=/usr/bin/pkg-config
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -737,7 +815,7 @@ EOF
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver --pkg-config=/usr/bin/pkg-config || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -859,6 +937,12 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG -Dc_args="-m32" -Dcpp_args="-m32"
+        cd build
+        meson compile
+        meson install
+        cd ..
         LIBS=
         if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
             cd ../mfx_dispatch-$MFX_VERSION
@@ -1008,16 +1092,22 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG
+        cd build
+        meson compile
+        meson install
+        cd ..
         LIBS=
-#        if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
-#            cd ../mfx_dispatch-$MFX_VERSION
-#            autoreconf -fiv
-#            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
-#            make -j $MAKEJ
-#            make install
-#            ENABLE="$ENABLE --enable-libmfx"
-#            LIBS="-lva-drm -lva-x11 -lva"
-#        fi
+        if [[ ! -z $(ldconfig -p | grep libva-drm) ]]; then
+            cd ../mfx_dispatch-$MFX_VERSION
+            autoreconf -fiv
+            PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
+            make -j $MAKEJ
+            make install
+            ENABLE="$ENABLE --enable-libmfx"
+            LIBS="-lva-drm -lva-x11 -lva"
+        fi
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../libaom-$AOMAV1_VERSION
@@ -1218,6 +1308,33 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+            echo "[binaries]" >> linux-arm.ini
+            echo "c = 'arm-linux-gnueabihf-gcc'" >> linux-arm.ini
+            echo "cpp = 'arm-linux-gnueabihf-g++'" >> linux-arm.ini
+            echo "ar = 'arm-linux-gnueabihf-ar'" >> linux-arm.ini
+            echo "windres = 'arm-linux-gnueabihf-windres'" >> linux-arm.ini
+            echo "strip = 'arm-linux-gnueabihf-strip'" >> linux-arm.ini
+            echo "pkg-config='/usr/bin/pkg-config'" >> linux-arm.ini
+            echo "" >> linux-arm.ini
+            echo "[host_machine]" >> linux-arm.ini
+            echo "system = 'linux'" >> linux-arm.ini
+            echo "cpu_family = 'arm'" >> linux-arm.ini
+            echo "cpu = 'armv6'" >> linux-arm.ini
+            echo "endian = 'little'" >> linux-arm.ini
+            PKG_CONFIG=/usr/bin/pkg-config
+            PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig
+            meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-arm.ini --pkg-config-path=/usr/bin/pkg-config
+        else
+            PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig
+            meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG
+        fi
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../libaom-$AOMAV1_VERSION
@@ -1389,6 +1506,26 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> linux-arm.ini
+        echo "c = 'aarch64-linux-gnu-gcc'" >> linux-arm.ini
+        echo "cpp = 'aarch64-linux-gnu-g++'" >> linux-arm.ini
+        echo "ar = 'aarch64-linux-gnu-ar'" >> linux-arm.ini
+        echo "windres = 'aarch64-linux-gnu-windres'" >> linux-arm.ini
+        echo "strip = 'aarch64-linux-gnu-strip'" >> linux-arm.ini
+        echo "pkg-config='/usr/bin/pkg-config'" >> linux-arm.ini
+        echo "[properties]" >> linux-arm.ini
+        echo "needs_exe_wrapper = true" >> linux-arm.ini
+        echo "[host_machine]" >> linux-arm.ini
+        echo "system = 'linux'" >> linux-arm.ini
+        echo "cpu_family = 'aarch64'" >> linux-arm.ini
+        echo "cpu = 'aarch64'" >> linux-arm.ini
+        echo "endian = 'little'" >> linux-arm.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-arm.ini --pkg-config-path=/usr/bin/pkg-config
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../libaom-$AOMAV1_VERSION
@@ -1606,6 +1743,29 @@ EOF
         fi
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+            meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG
+        else
+            echo "[binaries]" >> linux-ppc.ini
+            echo "c = 'powerpc64le-linux-gnu-gcc'" >> linux-ppc.ini
+            echo "cpp = 'powerpc64le-linux-gnu-g++'" >> linux-ppc.ini
+            echo "ar = 'powerpc64le-linux-gnu-ar'" >> linux-ppc.ini
+            echo "windres = 'powerpc64le-linux-gnu-windres'" >> linux-ppc.ini
+            echo "strip = 'powerpc64le-linux-gnu-strip'" >> linux-ppc.ini
+            echo "pkg-config = '/usr/bin/pkg-config'" >> linux-ppc.ini
+            echo "" >> linux-ppc.ini
+            echo "[host_machine]" >> linux-ppc.ini
+            echo "system = 'linux'" >> linux-ppc.ini
+            echo "cpu_family = 'ppc64'" >> linux-ppc.ini
+            echo "cpu = 'ppc64'" >> linux-ppc.ini
+            echo "endian = 'little'" >> linux-ppc.ini
+            meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-ppc.ini --pkg-config-path=/usr/bin/pkg-config
+        fi
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../libaom-$AOMAV1_VERSION
@@ -1757,6 +1917,29 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> macos-arm.ini
+        echo "c = 'clang'" >> macos-arm.ini
+        echo "cpp = 'clang++'" >> macos-arm.ini
+        echo "ar = 'ar'" >> macos-arm.ini
+        echo "windres = 'windres'" >> macos-arm.ini
+        echo "strip = 'strip'" >> macos-arm.ini
+        echo "pkg-config='pkg-config'" >> macos-arm.ini
+        echo "" >> macos-arm.ini
+        echo "[properties]" >> macos-arm.ini
+        echo "c_args = ['-arch', 'arm64']" >> macos-arm.ini
+        echo "cpp_args = ['-arch', 'arm64']" >> macos-arm.ini
+        echo "needs_exe_wrapper = true" >> macos-arm.ini
+        echo "[host_machine]" >> macos-arm.ini
+        echo "system = 'darwin'" >> macos-arm.ini
+        echo "cpu_family = 'aarch64'" >> macos-arm.ini
+        echo "cpu = 'arm64'" >> macos-arm.ini
+        echo "endian = 'little'" >> macos-arm.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=macos-arm.ini
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -1891,6 +2074,12 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -2033,6 +2222,18 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> windows-native.ini
+        echo "c = 'gcc'" >> windows-native.ini
+        echo "cpp = 'g++'" >> windows-native.ini
+        echo "ar = 'ar'" >> windows-native.ini
+        echo "windres = 'windres'" >> windows-native.ini
+        echo "strip = 'strip'" >> windows-native.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --native-file windows-native.ini -Dcpp_args="-m32" -Dc_args="-m32"
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
@@ -2174,6 +2375,18 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../harfbuzz-$HARFBUZZ_VERSION
+        echo "[binaries]" >> windows-native.ini
+        echo "c = 'gcc'" >> windows-native.ini
+        echo "cpp = 'g++'" >> windows-native.ini
+        echo "ar = 'ar'" >> windows-native.ini
+        echo "windres = 'windres'" >> windows-native.ini
+        echo "strip = 'strip'" >> windows-native.ini
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --native-file windows-native.ini -Dcpp_args="-m64" -Dc_args="-m64"
+        cd build
+        meson compile
+        meson install
+        cd ..
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release

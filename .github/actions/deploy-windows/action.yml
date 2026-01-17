@@ -33,7 +33,7 @@ runs:
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
           C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel mingw-w64-x86_64-vulkan-headers mingw-w64-i686-vulkan-headers mingw-w64-x86_64-vulkan-loader mingw-w64-i686-vulkan-loader"
-          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
+          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\hostedtoolcache\windows\Python\3.10.11\x64\Scripts;C:\msys64\usr\bin;%PATH%"
         )
 
         C:\msys64\usr\bin\bash -lc "pacman -Q"
@@ -53,7 +53,7 @@ runs:
         curl -LO https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.9.6/apache-maven-3.9.6-bin.tar.gz
         bash -c "tar -xzf apache-maven-3.9.6-bin.tar.gz -C 'C:/Program Files/'"
 
-        python -m pip install gdown || python -m pip install gdown
+        python -m pip install gdown meson || python -m pip install gdown meson
 
         if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
           echo Installing Bazel
@@ -264,9 +264,9 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
           set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
-          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.9.6\bin;%PATH%"
+          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\Program Files\Python311-arm64\Scripts;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.9.6\bin;%PATH%"
         ) else (
-          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.9.6\bin;%PATH%"
+          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\hostedtoolcache\windows\Python\3.10.11\x64\Scripts;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.9.6\bin;%PATH%"
         )
 
         where bash
@@ -275,6 +275,8 @@ runs:
         where cl
         where gcc
         where cmake
+        where meson
+        where ninja
         where gradle
         where mvn
         where gpg
@@ -288,6 +290,8 @@ runs:
         cl
         gcc --version
         cmake --version
+        meson --version
+        ninja --version
         gradle --version
         call mvn -version
         gpg --version

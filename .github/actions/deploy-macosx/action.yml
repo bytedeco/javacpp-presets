@@ -25,7 +25,7 @@ runs:
         fi
 
         brew uninstall --force --ignore-dependencies cmake gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 gcc@13 gcc@14 little-cms2 maven openblas r
-        brew install --overwrite boost ccache swig autoconf-archive automake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr pcre ssdeep yajl
+        brew install --overwrite boost ccache swig autoconf-archive automake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr pcre ssdeep yajl ninja meson pkgconf
 
         FORMULAE=()
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
@@ -120,6 +120,8 @@ runs:
         /opt/homebrew/bin/gcc-* --version || true
         /usr/local/bin/gcc-* --version || true
         cmake --version
+        meson --version
+        ninja --version
         gradle --version
         mvn -version
         gpg --version
