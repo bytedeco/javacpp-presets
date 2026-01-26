@@ -5,14 +5,14 @@
     <version>1.5.13-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SparseLinalg</exec.mainClass>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.16.3-1.5.13-SNAPSHOT</version>
+            <version>1.17.0-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->

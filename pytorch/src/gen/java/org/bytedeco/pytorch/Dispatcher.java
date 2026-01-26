@@ -114,7 +114,8 @@ public class Dispatcher extends Pointer {
   public native @Cast("bool") boolean hasBackendFallbackForDispatchKey(DispatchKey dk);
   public native @Cast("bool") boolean hasBackendFallbackForDispatchKey(@Cast("c10::DispatchKey") short dk);
 
-  // Used by torchdeploy/multipy for multiple interpreters racing.
+  // Used by torchdeploy/multipy for multiple  // codespell:ignore: multipy
+  // interpreters racing.
   public native void waitForDef(@Const @ByRef FunctionSchema schema);
   public native void waitForImpl(
         @Const @ByRef OperatorName op_name,

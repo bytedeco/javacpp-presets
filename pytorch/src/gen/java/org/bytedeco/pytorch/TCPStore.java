@@ -90,6 +90,8 @@ public class TCPStore extends Store {
   public native @Cast("int64_t") long queueLen(@StdString BytePointer key);
   public native @Cast("int64_t") long queueLen(@StdString String key);
 
+  public native @ByVal StringVector listKeys();
+
   // Waits for all workers to join.
   public native void waitForWorkers();
 

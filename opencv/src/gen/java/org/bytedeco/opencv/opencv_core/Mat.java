@@ -726,8 +726,13 @@ public class Mat extends AbstractMat {
     <p>
     When the operation mask is specified, if the Mat::create call shown above reallocates the matrix,
     the newly allocated matrix is initialized with all zeros before copying the data.
+    <p>
+    If (re)allocation of destination memory is not necessary (e.g. updating ROI), use copyAt() .
+    <p>
     @param m Destination matrix. If it does not have a proper size or type before the operation, it is
     reallocated.
+    <p>
+    @see copyAt
      */
     public native void copyTo( @ByVal Mat m );
     public native void copyTo( @ByVal UMat m );
@@ -742,6 +747,34 @@ public class Mat extends AbstractMat {
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
     public native void copyTo( @ByVal UMat m, @ByVal UMat mask );
     public native void copyTo( @ByVal GpuMat m, @ByVal GpuMat mask );
+
+    /** \brief Overwrites the existing matrix
+    <p>
+    This method writes existing matrix data, just like copyTo().
+    But if it does not have a proper size or type before the operation, an exception is thrown.
+    This function is helpful to update ROI in an existing matrix.
+    <p>
+    If (re)allocation of destination memory is necessary, use copyTo() .
+    <p>
+    @param m Destination matrix.
+    If it does not have a proper size or type before the operation, an exception is thrown.
+    <p>
+    @see copyTo
+     <p>
+     */
+    public native void copyAt( @ByVal Mat m );
+    public native void copyAt( @ByVal UMat m );
+    public native void copyAt( @ByVal GpuMat m );
+
+    /** \overload
+    @param m Destination matrix.
+    If it does not have a proper size or type before the operation, an exception is thrown.
+    @param mask Operation mask of the same size as \*this. Its non-zero elements indicate which matrix
+    elements need to be copied. The mask has to be of type CV_8U and can have 1 or multiple channels.
+    */
+    public native void copyAt( @ByVal Mat m, @ByVal Mat mask );
+    public native void copyAt( @ByVal UMat m, @ByVal UMat mask );
+    public native void copyAt( @ByVal GpuMat m, @ByVal GpuMat mask );
 
     /** \brief Converts an array to another data type with optional scaling.
     <p>
@@ -832,8 +865,8 @@ public class Mat extends AbstractMat {
 
     /** \overload
      * @param cn New number of channels. If the parameter is 0, the number of channels remains the same.
-     * @param newndims New number of dimentions.
-     * @param newsz Array with new matrix size by all dimentions. If some sizes are zero,
+     * @param newndims New number of dimensions.
+     * @param newsz Array with new matrix size by all dimensions. If some sizes are zero,
      * the original sizes in those dimensions are presumed.
      */
     public native @ByVal Mat reshape(int cn, int newndims, @Const IntPointer newsz);
@@ -842,7 +875,7 @@ public class Mat extends AbstractMat {
 
     /** \overload
      * @param cn New number of channels. If the parameter is 0, the number of channels remains the same.
-     * @param newshape Vector with new matrix size by all dimentions. If some sizes are zero,
+     * @param newshape Vector with new matrix size by all dimensions. If some sizes are zero,
      * the original sizes in those dimensions are presumed.
      */
     public native @ByVal Mat reshape(int cn, @StdVector IntPointer newshape);

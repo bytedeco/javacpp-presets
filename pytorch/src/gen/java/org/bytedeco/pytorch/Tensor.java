@@ -94,7 +94,7 @@ public class Tensor extends TensorBase {
   // will only lead to trouble and dangling references.
   
 
-  // The following overloads are very intruiging.  Consider the following
+  // The following overloads are very intriguing.  Consider the following
   // program:
   //
   //    x[1] = 3;
@@ -1350,8 +1350,12 @@ public class Tensor extends TensorBase {
   public native @ByRef Tensor bitwise_right_shift_(@Const @ByRef Scalar other);
   public native @ByRef Tensor tril_(@Cast("int64_t") long diagonal/*=0*/);
   public native @ByRef Tensor tril_();
+  public native @ByRef Tensor tril__symint(@ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+  public native @ByRef Tensor tril__symint();
   public native @ByRef Tensor triu_(@Cast("int64_t") long diagonal/*=0*/);
   public native @ByRef Tensor triu_();
+  public native @ByRef Tensor triu__symint(@ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+  public native @ByRef Tensor triu__symint();
   public native @ByRef Tensor digamma_();
   public native @ByRef Tensor lerp_(@Const @ByRef Tensor end, @Const @ByRef Scalar weight);
   public native @ByRef Tensor lerp_(@Const @ByRef Tensor end, @Const @ByRef Tensor weight);
@@ -1381,8 +1385,12 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor cross(@Const @ByRef Tensor other);
   public native @ByVal Tensor triu(@Cast("int64_t") long diagonal/*=0*/);
   public native @ByVal Tensor triu();
+  public native @ByVal Tensor triu_symint(@ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+  public native @ByVal Tensor triu_symint();
   public native @ByVal Tensor tril(@Cast("int64_t") long diagonal/*=0*/);
   public native @ByVal Tensor tril();
+  public native @ByVal Tensor tril_symint(@ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+  public native @ByVal Tensor tril_symint();
   public native @ByVal Tensor trace();
   public native @ByVal Tensor ne(@Const @ByRef Scalar other);
   public native @ByVal Tensor ne(@Const @ByRef Tensor other);

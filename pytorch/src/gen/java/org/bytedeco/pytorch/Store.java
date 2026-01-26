@@ -118,4 +118,6 @@ public class Store extends CustomClassHolder {
 
   public native @Cast("int64_t") long queueLen(@StdString BytePointer key);
   public native @Cast("int64_t") long queueLen(@StdString String key);
+
+  public native @ByVal StringVector listKeys();
 }

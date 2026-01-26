@@ -67,7 +67,8 @@ public class TraceEntry extends Pointer {
         @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/,
-        @StdString BytePointer compile_context/*=""*/) { super((Pointer)null); allocate(action, device, addr, size, stream, mempool, time, context, compile_context); }
+        @StdString BytePointer compile_context/*=""*/,
+        @StdString BytePointer user_metadata/*=""*/) { super((Pointer)null); allocate(action, device, addr, size, stream, mempool, time, context, compile_context, user_metadata); }
   private native void allocate(
         Action action,
         byte device,
@@ -77,7 +78,8 @@ public class TraceEntry extends Pointer {
         @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/,
-        @StdString BytePointer compile_context/*=""*/);
+        @StdString BytePointer compile_context/*=""*/,
+        @StdString BytePointer user_metadata/*=""*/);
   public TraceEntry(
         Action action,
         byte device,
@@ -103,7 +105,8 @@ public class TraceEntry extends Pointer {
         @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/,
-        @StdString String compile_context/*=""*/) { super((Pointer)null); allocate(action, device, addr, size, stream, mempool, time, context, compile_context); }
+        @StdString String compile_context/*=""*/,
+        @StdString String user_metadata/*=""*/) { super((Pointer)null); allocate(action, device, addr, size, stream, mempool, time, context, compile_context, user_metadata); }
   private native void allocate(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
         byte device,
@@ -113,7 +116,8 @@ public class TraceEntry extends Pointer {
         @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool,
         @Cast("c10::approx_time_t") long time,
         @SharedPtr GatheredContext context/*=nullptr*/,
-        @StdString String compile_context/*=""*/);
+        @StdString String compile_context/*=""*/,
+        @StdString String user_metadata/*=""*/);
   public TraceEntry(
         @Cast("c10::cuda::CUDACachingAllocator::TraceEntry::Action") int action,
         byte device,
@@ -139,4 +143,5 @@ public class TraceEntry extends Pointer {
   public native @ByRef @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_(); public native TraceEntry mempool_(DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair setter);
   public native @ByRef trace_time_ time_(); public native TraceEntry time_(trace_time_ setter);
   public native @StdString BytePointer compile_context_(); public native TraceEntry compile_context_(BytePointer setter);
+  public native @StdString BytePointer user_metadata_(); public native TraceEntry user_metadata_(BytePointer setter);
 }

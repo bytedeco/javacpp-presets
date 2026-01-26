@@ -46,6 +46,7 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
                 "ATen/cudnn/Types.h",
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cuda/CUDAEvent.h",
+                "ATen/cuda/MemPool.h",
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
 
                 // For inclusion in JNI only, not parsed
@@ -94,6 +95,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             ))
 
             .put(new Info(
+                "at::cuda::EventPool",
+                "at::cuda::WorkspaceMapWithMutex",
                 "at::CUDAGeneratorImpl",
                 "torch::inductor::AOTIModelContainerRunnerCuda::run_impl"
             ).skip())

@@ -30,9 +30,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../RecordFunctionHandleIntList.java
 
 
-// Targeting ../T_PointerPointer_TDataPtrMap.java
-
-
 // Targeting ../StringStringMap.java
 
 
@@ -268,6 +265,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../IntPair.java
+
+
+// Targeting ../SizeTPair.java
 
 
 // Targeting ../T_DataPtrSizeT_T.java
@@ -875,7 +875,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 // #ifndef C10_MACROS_MACROS_H_
 // #define C10_MACROS_MACROS_H_
+
+// #ifdef __cplusplus
 // #include <cassert>
+// #else
+// #include <assert.h>
+// #endif
 
 /* Main entry for torch/headeronly/macros (used to be c10/macros).
  *
@@ -1009,6 +1014,8 @@ public static final int C10_UBSAN_ENABLED = 1;
 
 // #define C10_RESTRICT __restrict
 
+// #ifdef __cplusplus
+
 // Simply define the namespace, in case a dependent library want to refer to
 // the c10 namespace but not any nontrivial files.
 
@@ -1034,6 +1041,8 @@ public static final int C10_UBSAN_ENABLED = 1;
 // here to hip and everyone is happy.
  // namespace at::cuda
  // namespace at::xpu
+
+// #endif // __cplusplus
 
 // C10_LIKELY/C10_UNLIKELY
 //
@@ -1090,7 +1099,11 @@ public static final int C10_UBSAN_ENABLED = 1;
 
 // #define C10_ERASE C10_ALWAYS_INLINE C10_ATTR_VISIBILITY_HIDDEN
 
+// #ifdef __cplusplus
 // #include <cstdint>
+// #else
+// #include <stdint.h>
+// #endif
 
 // #ifdef __HIPCC__
 // Unlike CUDA, HIP requires a HIP header to be included for __host__ to work.
@@ -1127,6 +1140,7 @@ public static final int C10_UBSAN_ENABLED = 1;
 // Those platforms do not support assert()
 // #define CUDA_KERNEL_ASSERT(cond)
 // #define CUDA_KERNEL_ASSERT_MSG(cond, msg)
+// #define CUDA_KERNEL_ASSERT_PRINTF(cond, msg, ...)
 // #define SYCL_KERNEL_ASSERT(cond)
 // #elif defined(_MSC_VER)
 // #else // __APPLE__, _MSC_VER
@@ -1137,12 +1151,16 @@ public static final int C10_UBSAN_ENABLED = 1;
 // a non-negligible performance impact even if the assert condition is
 // never triggered. We choose to use abort() instead which will still
 // terminate the application but without a more useful error message.
-// #if !defined(C10_USE_ROCM_KERNEL_ASSERT) and defined(USE_ROCM)
+// #if !defined(C10_USE_ROCM_KERNEL_ASSERT) && defined(USE_ROCM)
 // #define CUDA_KERNEL_ASSERT(cond)
 //   if C10_UNLIKELY (!(cond)) {
 //     abort();
 //   }
 // #define CUDA_KERNEL_ASSERT_MSG(cond, msg)
+//   if C10_UNLIKELY (!(cond)) {
+//     abort();
+//   }
+// #define CUDA_KERNEL_ASSERT_PRINTF(cond, msg, ...)
 //   if C10_UNLIKELY (!(cond)) {
 //     abort();
 //   }
@@ -1161,13 +1179,42 @@ public static final int C10_UBSAN_ENABLED = 1;
 //     __assert_fail(
 //         msg, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
 //   }
+// #define CUDA_KERNEL_ASSERT_PRINTF(cond, msg, ...)
+//   if (C10_UNLIKELY(!(cond))) {
+//     printf(
+//         "[CUDA_KERNEL_ASSERT] " __FILE__ ":" C10_STRINGIZE(
+//             __LINE__) ": %s: block: [%d,%d,%d], thread: [%d,%d,%d]: "
+//             "Assertion failed: `" #cond "`: " msg "\n",
+//         __func__,
+//         blockIdx.x,
+//         blockIdx.y,
+//         blockIdx.z,
+//         threadIdx.x,
+//         threadIdx.y,
+//         threadIdx.z,
+//         ##__VA_ARGS__);
+//     __assert_fail(
+//         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
+//   }
 // #define SYCL_KERNEL_ASSERT(cond)
 //   if (C10_UNLIKELY(!(cond))) {
 //     __assert_fail(
 //         #cond, __FILE__, static_cast<unsigned int>(__LINE__), __func__);
 //   }
-// #endif //  C10_USE_ROCM_KERNEL_ASSERT and USE_ROCM
+// #endif //  C10_USE_ROCM_KERNEL_ASSERT && USE_ROCM
 // #endif // __APPLE__
+
+// Compile-time switch to control how assertions are logged inside CUDA kernels.
+// If C10_CUDA_VERBOSE_ASSERT is defined,  CUDA_KERNEL_ASSERT_VERBOSE will
+// take addition information passed to the macro and forward them to
+// CUDA_KERNEL_ASSERT_PRINTF If C10_CUDA_VERBOSE_ASSERT is not defined,
+// CUDA_KERNEL_ASSERT_VERBOSE will behave the same as CUDA_KERNEL_ASSERT.
+// #ifdef C10_ENABLE_VERBOSE_ASSERT
+// #define CUDA_KERNEL_ASSERT_VERBOSE(cond, ...)
+//   CUDA_KERNEL_ASSERT_PRINTF(cond, __VA_ARGS__)
+// #else
+// #define CUDA_KERNEL_ASSERT_VERBOSE(cond, ...) CUDA_KERNEL_ASSERT(cond)
+// #endif
 
 // #ifdef __APPLE__
 // #include <TargetConditionals.h>
@@ -1255,7 +1302,187 @@ public static final int C10_RETURN_MOVE_IF_OLD_COMPILER = 1;
 // #else
 // #endif
 
+// The HIDDEN_NAMESPACE_BEGIN and HIDDEN_NAMESPACE_END below
+// are needed for maintaining robustness in our header APIs in
+// torch/headeronly and torch/csrc/stable under the namespaces
+// torch::headeronly and torch::stable respectively. We enforce
+// hidden visibility for these APIs because we want to enable
+// loading custom extensions compiled against different libtorch
+// versions where these APIs may have changed.
+
+// Helper macros to handle 1-3 hidden namespace levels when not windows
+// #define _HIDDEN_NS_GET_MACRO(_1, _2, _3, NAME, ...) NAME
+// #define _HIDDEN_NS_1(n1) namespace n1 __attribute__((visibility("hidden"))) {
+// #define _HIDDEN_NS_2(n1, n2)
+//   namespace n1 {
+//   namespace n2 __attribute__((visibility("hidden"))) {
+// #define _HIDDEN_NS_3(n1, n2, n3)
+//   namespace n1::n2 {
+//   namespace n3 __attribute__((visibility("hidden"))) {
+
+// Helper macros to close namespaces when not windows
+// #define _HIDDEN_NS_END_1(n1) }
+// #define _HIDDEN_NS_END_N(n1, ...)
+//   }
+//   }
+
+// Helper macros to join strs with :: (for win, where symbols are hidden by
+// default)
+// #define _EXPAND(...) __VA_ARGS__
+// #define _JOIN_GET_MACRO(_1, _2, _3, NAME, ...) NAME
+// #define _JOIN_NS1(a) a
+// #define _JOIN_NS2(a, b) a::b
+// #define _JOIN_NS3(a, b, c) a::b::c
+
+// #if !defined(HIDDEN_NAMESPACE_BEGIN)
+// #if defined(__GNUG__) && !defined(_WIN32)
+// #define HIDDEN_NAMESPACE_BEGIN(...)
+//   _HIDDEN_NS_GET_MACRO(
+//       __VA_ARGS__, _HIDDEN_NS_3, _HIDDEN_NS_2, _HIDDEN_NS_1)(__VA_ARGS__)
+// #else
+// #define HIDDEN_NAMESPACE_BEGIN(...)
+//   namespace _EXPAND(_JOIN_GET_MACRO(
+//       __VA_ARGS__, _JOIN_NS3, _JOIN_NS2, _JOIN_NS1)(__VA_ARGS__)) {
+// #endif
+// #endif
+
+// #if !defined(HIDDEN_NAMESPACE_END)
+// #if defined(__GNUG__) && !defined(_WIN32)
+// #define HIDDEN_NAMESPACE_END(...)
+//   _HIDDEN_NS_GET_MACRO(
+//       __VA_ARGS__, _HIDDEN_NS_END_N, _HIDDEN_NS_END_N, _HIDDEN_NS_END_1)(
+//       __VA_ARGS__)
+// #else
+// #define HIDDEN_NAMESPACE_END(...) }
+// #endif
+// #endif
+
 // #endif // C10_MACROS_MACROS_H_
+
+
+// Parsed from torch/headeronly/util/HeaderOnlyArrayRef.h
+
+// #pragma once
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Exception.h>
+
+// #include <algorithm>
+// #include <array>
+// #include <cstddef>
+// #include <functional>
+// #include <initializer_list>
+// #include <iterator>
+// #include <type_traits>
+// #include <vector>
+// Targeting ../ArgumentHeaderOnlyArrayRef.java
+
+
+// Targeting ../ArgumentDefHeaderOnlyArrayRef.java
+
+
+// Targeting ../BFloat16HeaderOnlyArrayRef.java
+
+
+// Targeting ../BlockHeaderOnlyArrayRef.java
+
+
+// Targeting ../BoolHeaderOnlyArrayRef.java
+
+
+// Targeting ../ByteHeaderOnlyArrayRef.java
+
+
+// Targeting ../DimnameHeaderOnlyArrayRef.java
+
+
+// Targeting ../DoubleHeaderOnlyArrayRef.java
+
+
+// Targeting ../DoubleComplexHeaderOnlyArrayRef.java
+
+
+// Targeting ../EnumNameValueHeaderOnlyArrayRef.java
+
+
+// Targeting ../FloatHeaderOnlyArrayRef.java
+
+
+// Targeting ../FloatComplexHeaderOnlyArrayRef.java
+
+
+// Targeting ../FutureHeaderOnlyArrayRef.java
+
+
+// Targeting ../HalfHeaderOnlyArrayRef.java
+
+
+// Targeting ../IValueHeaderOnlyArrayRef.java
+
+
+// Targeting ../IntHeaderOnlyArrayRef.java
+
+
+// Targeting ../TagHeaderOnlyArrayRef.java
+
+
+// Targeting ../LongHeaderOnlyArrayRef.java
+
+
+// Targeting ../LongOptionalHeaderOnlyArrayRef.java
+
+
+// Targeting ../NamedValueHeaderOnlyArrayRef.java
+
+
+// Targeting ../ScalarHeaderOnlyArrayRef.java
+
+
+// Targeting ../ScalarTypeHeaderOnlyArrayRef.java
+
+
+// Targeting ../ShortHeaderOnlyArrayRef.java
+
+
+// Targeting ../SizeTHeaderOnlyArrayRef.java
+
+
+// Targeting ../StrideHeaderOnlyArrayRef.java
+
+
+// Targeting ../StringHeaderOnlyArrayRef.java
+
+
+// Targeting ../SymIntHeaderOnlyArrayRef.java
+
+
+// Targeting ../SymNodeHeaderOnlyArrayRef.java
+
+
+// Targeting ../SymbolHeaderOnlyArrayRef.java
+
+
+// Targeting ../TensorHeaderOnlyArrayRef.java
+
+
+// Targeting ../TensorArgHeaderOnlyArrayRef.java
+
+
+// Targeting ../TensorIndexHeaderOnlyArrayRef.java
+
+
+// Targeting ../TensorOptionalHeaderOnlyArrayRef.java
+
+
+// Targeting ../TypeHeaderOnlyArrayRef.java
+
+
+// Targeting ../ValueHeaderOnlyArrayRef.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
 
 
 // Parsed from torch/headeronly/util/bit_cast.h
@@ -1279,7 +1506,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 // #endif // C10_HAVE_STD_BIT_CAST
 // #undef C10_HAVE_STD_BIT_CAST
 
- // namespace torch::headeronly
+
  // namespace c10
 
 
@@ -1295,7 +1522,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
 @Namespace("torch::headeronly::detail") public static native @Cast("uint32_t") int fp32_to_bits(float f);
 
- // namespace torch::headeronly::detail
+
  // namespace c10::detail
 
 
@@ -1451,7 +1678,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
  // namespace c10
  // namespace detail
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -1470,8 +1697,17 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
 
 
 
+/** Comparison operators */
+@Namespace("c10") public static native @Cast("bool") @Name("operator ==") boolean equals(
+    @Const @ByRef Float4_e2m1fn_x2 a,
+    @Const @ByRef Float4_e2m1fn_x2 b);
+
+@Namespace("c10") public static native @Cast("bool") @Name("operator !=") boolean notEquals(
+    @Const @ByRef Float4_e2m1fn_x2 a,
+    @Const @ByRef Float4_e2m1fn_x2 b);
+
  // namespace c10
- // namespace torch::headeronly
+
 
 
 // Parsed from torch/headeronly/util/Float8_e4m3fn.h
@@ -1645,7 +1881,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
  *  conversion from c10::Float8_e4m3fn to float. */
 
  // namespace c10
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -1817,7 +2053,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
  // namespace c10
  // namespace detail
 
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -1842,6 +2078,7 @@ public static final int C10_HAVE_STD_BIT_CAST = 1;
  *  Implementation based on the paper https://arxiv.org/pdf/2209.05433.pdf
  *  and inspired by Half implementation from pytorch/c10/util/Half.h */
 
+// #include <torch/headeronly/macros/Macros.h>
 // #include <torch/headeronly/util/Half.h>
 
 // #include <limits>
@@ -1985,7 +2222,7 @@ public static final int EXP_BIAS_FP8 = 15;
  *  conversion from c10::Float8_e5m2 to float. */
  // namespace c10
  // namespace detail
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -2157,7 +2394,7 @@ public static final int EXP_BIAS_FP8 = 15;
 
  // namespace c10
 
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -2229,7 +2466,7 @@ public static final int EXP_BIAS_FP8 = 15;
  *  conversion from c10::Float8_e8m0fnu to float. */
  // namespace c10
  // namespace detail
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -2458,7 +2695,7 @@ public static final int C10_X86_F16 = 1;
 // #endif
  // namespace detail
 
- // namespace torch::headeronly
+
 
  // namespace std
 
@@ -2487,7 +2724,7 @@ public static final int C10_X86_F16 = 1;
 
  // namespace c10
 
- // namespace torch::headeronly
+
 
 
 // Parsed from torch/headeronly/util/complex.h
@@ -2540,7 +2777,7 @@ public static final int C10_X86_F16 = 1;
  // namespace c10
  // namespace complex_literals
 
- // namespace torch::headeronly
+
 
 
 
@@ -2555,7 +2792,7 @@ public static final int C10_X86_F16 = 1;
 
 
  // namespace c10
- // namespace torch::headeronly
+
 
 
 // Parsed from torch/headeronly/util/qint8.h
@@ -2569,7 +2806,7 @@ public static final int C10_X86_F16 = 1;
 
 
  // namespace c10
- // namespace torch::headeronly
+
 
 
 // Parsed from torch/headeronly/util/quint2x4.h
@@ -2583,7 +2820,7 @@ public static final int C10_X86_F16 = 1;
 
 
  // namespace c10
- // namespace torch::headeronly
+
 
 
 // Parsed from torch/headeronly/util/quint4x2.h
@@ -2597,7 +2834,7 @@ public static final int C10_X86_F16 = 1;
 
 
  // namespace c10
- // namespace torch::headeronly
+
 
 
 // Parsed from torch/headeronly/util/quint8.h
@@ -2611,13 +2848,189 @@ public static final int C10_X86_F16 = 1;
 
 
  // namespace c10
- // namespace torch::headeronly
+
+
+
+// Parsed from torch/headeronly/core/DeviceType.h
+
+// #pragma once
+
+// This is directly synchronized with caffe2/proto/caffe2.proto, but
+// doesn't require me to figure out how to get Protobuf headers into
+// ATen/core (which would require a lot more build system hacking.)
+// If you modify me, keep me synchronized with that file.
+
+// #include <torch/headeronly/macros/Export.h>
+// #include <torch/headeronly/macros/Macros.h>
+
+// #include <cstddef>
+// #include <cstdint>
+// #include <functional>
+
+// These contains all device types that also have a BackendComponent
+// and therefore participate in per-backend functionality dispatch keys.
+// This is most backends except PrivateUse2 and PrivateUse3
+// #define C10_FORALL_BACKEND_DEVICE_TYPES(_, extra)
+//   _(CPU, extra)
+//   _(CUDA, extra)
+//   _(HIP, extra)
+//   _(XLA, extra)
+//   _(MPS, extra)
+//   _(IPU, extra)
+//   _(XPU, extra)
+//   _(HPU, extra)
+//   _(VE, extra)
+//   _(Lazy, extra)
+//   _(Meta, extra)
+//   _(MTIA, extra)
+//   _(PrivateUse1, extra)
+
+@Namespace("c10") public enum DeviceType {
+  CPU((byte)(0)),
+  CUDA((byte)(1)), // CUDA.
+  MKLDNN((byte)(2)), // Reserved for explicit MKLDNN
+  OPENGL((byte)(3)), // OpenGL
+  OPENCL((byte)(4)), // OpenCL
+  IDEEP((byte)(5)), // IDEEP.
+  HIP((byte)(6)), // AMD HIP
+  FPGA((byte)(7)), // FPGA
+  MAIA((byte)(8)), // ONNX Runtime / Microsoft
+  XLA((byte)(9)), // XLA / TPU
+  Vulkan((byte)(10)), // Vulkan
+  Metal((byte)(11)), // Metal
+  XPU((byte)(12)), // XPU
+  MPS((byte)(13)), // MPS
+  Meta((byte)(14)), // Meta (tensors with no data)
+  HPU((byte)(15)), // HPU / HABANA
+  VE((byte)(16)), // SX-Aurora / NEC
+  Lazy((byte)(17)), // Lazy Tensors
+  IPU((byte)(18)), // Graphcore IPU
+  MTIA((byte)(19)), // Meta training and inference devices
+  PrivateUse1((byte)(20)), // PrivateUse1 device
+  // NB: If you add more devices:
+  //  - Change the implementations of DeviceTypeName and isValidDeviceType
+  //    in c10/core/DeviceType.cpp
+  //  - Change the number below
+  COMPILE_TIME_MAX_DEVICE_TYPES((byte)(21));
+
+    public final byte value;
+    private DeviceType(byte v) { this.value = v; }
+    private DeviceType(DeviceType e) { this.value = e.value; }
+    public DeviceType intern() { for (DeviceType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10") @MemberGetter public static native DeviceType kCPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kCUDA();
+@Namespace("c10") @MemberGetter public static native DeviceType kHIP();
+@Namespace("c10") @MemberGetter public static native DeviceType kFPGA();
+@Namespace("c10") @MemberGetter public static native DeviceType kMAIA();
+@Namespace("c10") @MemberGetter public static native DeviceType kXLA();
+@Namespace("c10") @MemberGetter public static native DeviceType kMPS();
+@Namespace("c10") @MemberGetter public static native DeviceType kMeta();
+@Namespace("c10") @MemberGetter public static native DeviceType kVulkan();
+@Namespace("c10") @MemberGetter public static native DeviceType kMetal();
+@Namespace("c10") @MemberGetter public static native DeviceType kXPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kHPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kVE();
+@Namespace("c10") @MemberGetter public static native DeviceType kLazy();
+@Namespace("c10") @MemberGetter public static native DeviceType kIPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kMTIA();
+@Namespace("c10") @MemberGetter public static native DeviceType kPrivateUse1();
+
+// define explicit int constant
+@Namespace("c10") @MemberGetter public static native int COMPILE_TIME_MAX_DEVICE_TYPES();
+
+ // namespace c10
+ // namespace std
+
+
+
+// Parsed from torch/headeronly/core/Layout.h
+
+// #pragma once
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Exception.h>
+
+// #include <cstdint>
+// #include <ostream>
+
+@Namespace("c10") public enum Layout {
+  Strided((byte)(0)),
+  Sparse((byte)(1)),
+  SparseCsr((byte)(2)),
+  Mkldnn((byte)(3)),
+  SparseCsc((byte)(4)),
+  SparseBsr((byte)(5)),
+  SparseBsc((byte)(6)),
+  Jagged((byte)(7)),
+  NumOptions((byte)(8));
+
+    public final byte value;
+    private Layout(byte v) { this.value = v; }
+    private Layout(Layout e) { this.value = e.value; }
+    public Layout intern() { for (Layout e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace c10
+
+
+
+// Parsed from torch/headeronly/core/MemoryFormat.h
+
+// #pragma once
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Exception.h>
+
+// #include <cstdint>
+// #include <ostream>
+
+// Memory format is not the property of a Tensor. It is the way to tell an
+// operator how the result should be organized in memory and nothing more. That
+// means memory format should never be used as return value for any tensor state
+// interrogation functions (internally and externally).
+//
+// Possible options are:
+//  Preserve:
+//    If any of the input tensors is in channels_last format, operator output
+//    should be in channels_last format
+//
+//  Contiguous:
+//    Regardless of input tensors format, the output should be contiguous
+//    Tensor.
+//
+//  ChannelsLast:
+//    Regardless of input tensors format, the output should be in channels_last
+//    format.
+
+@Namespace("c10") public enum MemoryFormat {
+  Contiguous((byte)(0)),
+  Preserve((byte)(1)),
+  ChannelsLast((byte)(2)),
+  ChannelsLast3d((byte)(3)),
+  NumOptions((byte)(4));
+
+    public final byte value;
+    private MemoryFormat(byte v) { this.value = v; }
+    private MemoryFormat(MemoryFormat e) { this.value = e.value; }
+    public MemoryFormat intern() { for (MemoryFormat e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10") public static native MemoryFormat get_contiguous_memory_format();
+
+ // namespace c10
+
 
 
 // Parsed from torch/headeronly/core/ScalarType.h
 
 // #pragma once
 
+// #include <torch/headeronly/macros/Macros.h>
 // #include <torch/headeronly/util/BFloat16.h>
 // #include <torch/headeronly/util/Float4_e2m1fn_x2.h>
 // #include <torch/headeronly/util/Float8_e4m3fn.h>
@@ -2642,7 +3055,70 @@ public static final int C10_X86_F16 = 1;
 // dummy struct for int1 to int7, actual functionality
 // of these dtypes will be implemented in python with Tensor subclass
 
-// See [dtype Macros note] in c10/core/ScalarType.h regarding macros
+// [dtype Macros note] For the macros below:
+//
+// For users: If you want to macro some code for all non-QInt scalar types
+// (i.e. types with complete information, you probably want one of the
+// AT_FORALL_SCALAR_TYPES / AT_FORALL_SCALAR_TYPES_AND macros below, which are
+// designed to behave similarly to the Dispatch macros with the same name.
+//
+// For adding a new dtype: In the beginning, we had an idea that there was a
+// list of all scalar types, and you could use AT_FORALL_SCALAR_TYPES to
+// iterate over them.  But over the years we added weird types which couldn't
+// be handled uniformly everywhere and so in the end we ended up with some
+// mish-mosh of some helper macros, but mostly use sites making a call about
+// what dtypes they can or can't support.  So if you want to add a new dtype,
+// the preferred resolution is to find a dtype similar to what you want,
+// grep for it and edit all the sites you find this way.  If you need to add
+// a completely new kind of dtype, you're going to have to laboriously audit
+// all of the sites everywhere to figure out how it should work.  Consulting
+// some old PRs where we added new dtypes (check history of this file) can
+// help give you an idea where to start.
+
+// If you want to support ComplexHalf for real, add ComplexHalf
+// into this macro (and change the name).  But beware: convert()
+// doesn't work for all the conversions you need...
+//
+// TODO: To add unsigned int types here, we must define accumulate type.
+// But uint8 currently accumulates into int64, so we would have to make
+// an inconsistent choice for the larger types.  Difficult.
+// #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX_EXCEPT_COMPLEX_HALF_F8NZ(_)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(c10::Half, Half)
+//   _(float, Float)
+//   _(double, Double)
+//   _(c10::complex<float>, ComplexFloat)
+//   _(c10::complex<double>, ComplexDouble)
+//   _(bool, Bool)
+//   _(c10::BFloat16, BFloat16)
+//   _(c10::Float8_e5m2, Float8_e5m2)
+//   _(c10::Float8_e4m3fn, Float8_e4m3fn)
+
+// This macro controls many of our C++ APIs, including constructors
+// for Scalar as well as the data() and item() accessors on Tensor
+// #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX(_)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(c10::Half, Half)
+//   _(float, Float)
+//   _(double, Double)
+//   _(c10::complex<c10::Half>, ComplexHalf)
+//   _(c10::complex<float>, ComplexFloat)
+//   _(c10::complex<double>, ComplexDouble)
+//   _(bool, Bool)
+//   _(c10::BFloat16, BFloat16)
+//   _(c10::Float8_e5m2, Float8_e5m2)
+//   _(c10::Float8_e4m3fn, Float8_e4m3fn)
+//   _(c10::Float8_e5m2fnuz, Float8_e5m2fnuz)
+//   _(c10::Float8_e4m3fnuz, Float8_e4m3fnuz)
+//   _(c10::Float8_e8m0fnu, Float8_e8m0fnu)
 
 // NB: Order matters for this macro; it is relied upon in
 // _promoteTypesLookup and the serialization format.
@@ -2652,7 +3128,7 @@ public static final int C10_X86_F16 = 1;
 //   _(int16_t, Short) /* 2 */
 //   _(int, Int) /* 3 */
 //   _(int64_t, Long) /* 4 */
-//   _(at::Half, Half) /* 5 */
+//   _(c10::Half, Half) /* 5 */
 //   _(float, Float) /* 6 */
 //   _(double, Double) /* 7 */
 //   _(c10::complex<c10::Half>, ComplexHalf) /* 8 */
@@ -2662,7 +3138,7 @@ public static final int C10_X86_F16 = 1;
 //   _(c10::qint8, QInt8) /* 12 */
 //   _(c10::quint8, QUInt8) /* 13 */
 //   _(c10::qint32, QInt32) /* 14 */
-//   _(at::BFloat16, BFloat16) /* 15 */
+//   _(c10::BFloat16, BFloat16) /* 15 */
 //   _(c10::quint4x2, QUInt4x2) /* 16 */
 //   _(c10::quint2x4, QUInt2x4) /* 17 */
 //   _(c10::bits1x8, Bits1x8) /* 18 */
@@ -2693,6 +3169,113 @@ public static final int C10_X86_F16 = 1;
 //   _(c10::dummy_int1_7_t<7>, Int7) /* 43 */
 //   _(c10::Float8_e8m0fnu, Float8_e8m0fnu) /* 44 */
 //   _(c10::Float4_e2m1fn_x2, Float4_e2m1fn_x2) /* 45 */
+
+// NB: despite its generic sounding name, the macros that don't take _AND
+// are mostly only used by tensorexpr
+// #define AT_FORALL_INT_TYPES(_)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+
+// #define AT_FORALL_SCALAR_TYPES(_)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(float, Float)
+//   _(double, Double)
+
+// These macros are often controlling how many template instantiations we
+// create for kernels.  It is typically inappropriate to add new dtypes here,
+// instead, new types should be added to use sites on a case-by-case basis.
+// We generally are not accepting new dtypes due to binary size concerns.
+
+// #define AT_FORALL_SCALAR_TYPES_AND(SCALARTYPE, _)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(float, Float)
+//   _(double, Double)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE>, SCALARTYPE)
+
+// #define AT_FORALL_SCALAR_TYPES_AND2(SCALARTYPE1, SCALARTYPE2, _)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(float, Float)
+//   _(double, Double)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE1>,
+//     SCALARTYPE1)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE2>, SCALARTYPE2)
+
+// #define AT_FORALL_SCALAR_TYPES_AND3(SCALARTYPE1, SCALARTYPE2, SCALARTYPE3, _)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(float, Float)
+//   _(double, Double)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE1>,
+//     SCALARTYPE1)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE2>,
+//     SCALARTYPE2)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE3>, SCALARTYPE3)
+
+// #define AT_FORALL_SCALAR_TYPES_AND7(
+//     SCALARTYPE1,
+//     SCALARTYPE2,
+//     SCALARTYPE3,
+//     SCALARTYPE4,
+//     SCALARTYPE5,
+//     SCALARTYPE6,
+//     SCALARTYPE7,
+//     _)
+//   _(uint8_t, Byte)
+//   _(int8_t, Char)
+//   _(int16_t, Short)
+//   _(int, Int)
+//   _(int64_t, Long)
+//   _(float, Float)
+//   _(double, Double)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE1>,
+//     SCALARTYPE1)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE2>,
+//     SCALARTYPE2)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE3>,
+//     SCALARTYPE3)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE4>,
+//     SCALARTYPE4)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE5>,
+//     SCALARTYPE5)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE6>,
+//     SCALARTYPE6)
+//   _(c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::SCALARTYPE7>, SCALARTYPE7)
+
+// #define AT_FORALL_QINT_TYPES(_)
+//   _(c10::qint8, QInt8)
+//   _(c10::quint8, QUInt8)
+//   _(c10::qint32, QInt32)
+//   _(c10::quint4x2, QUInt4x2)
+//   _(c10::quint2x4, QUInt2x4)
+
+// #define AT_FORALL_FLOAT8_TYPES(_)
+//   _(c10::Float8_e5m2, Float8_e5m2)
+//   _(c10::Float8_e4m3fn, Float8_e4m3fn)
+//   _(c10::Float8_e5m2fnuz, Float8_e5m2fnuz)
+//   _(c10::Float8_e4m3fnuz, Float8_e4m3fnuz)
+//   _(c10::Float8_e8m0fnu, Float8_e8m0fnu)
+
+// #define AT_FORALL_COMPLEX_TYPES(_)
+//   _(c10::complex<float>, ComplexFloat)
+//   _(c10::complex<double>, ComplexDouble)
 
 @Namespace("c10") public enum ScalarType {
   Byte((byte)(0)), /* 0 */
@@ -2753,8 +3336,58 @@ public static final int C10_X86_F16 = 1;
 
 @Namespace("c10") @MemberGetter public static native @Cast("const uint16_t") short NumScalarTypes();
 
+// Map from C++ type to ScalarType enum
+
+// #define SPECIALIZE_CppTypeToScalarType(cpp_type, scalar_type)
+//   template <>
+//   struct CppTypeToScalarType<cpp_type>
+//       : std::
+//             integral_constant<c10::ScalarType, c10::ScalarType::scalar_type> {
+//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */ /* 27 */ /* 28 */ /* 29 */ /* 30 */ /* 31 */ /* 32 */ /* 33 */ /* 34 */ /* 35 */ /* 36 */ /* 37 */ /* 38 */ /* 39 */ /* 40 */ /* 41 */ /* 42 */ /* 43 */ /* 44 */ /* 45 */
+
+// #undef SPECIALIZE_CppTypeToScalarType
+
+// These are used to map ScalarTypes to C++ types.
+
+// #define SPECIALIZE_ScalarTypeToCPPType(cpp_type, scalar_type)
+//   template <>
+//   struct ScalarTypeToCPPType<c10::ScalarType::scalar_type> {
+//     using type = cpp_type;
+// 
+//     /* This is a workaround for the CUDA bug which prevents */
+//     /* ::detail::ScalarTypeToCType<T>::type being used directly due to */
+//     /* ambiguous reference which can't to be resolved. For some reason it */
+//     /* can't pick between at::detail and at::cuda::detail. */
+//     /* For repro example, please see: */
+//     /* https://gist.github.com/izdeby/952ae7cf256ddb740a73776d39a7e7ba */
+//     /* UPDATE: while the CUDA bug is fixed, we cannot remove the  */
+//     /* workaround as it is BC breaking. However, it is recommended to  */
+//     /* update any code that contains */
+//     /*   decltype(ScalarTypeToCPPType<T>::t) */
+//     /* with */
+//     /*   ScalarTypeToCPPTypeT<T> */
+//     static type t;
+//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */ /* 27 */ /* 28 */ /* 29 */ /* 30 */ /* 31 */ /* 32 */ /* 33 */ /* 34 */ /* 35 */ /* 36 */ /* 37 */ /* 38 */ /* 39 */ /* 40 */ /* 41 */ /* 42 */ /* 43 */ /* 44 */ /* 45 */
+
+// #undef SPECIALIZE_ScalarTypeToCPPType
+
+ // namespace impl
+
+@Namespace("c10") public static native @Cast("const char*") BytePointer toString(ScalarType t);
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer stream,
+    ScalarType scalar_type);
+
+@Namespace("c10") public static native @Cast("bool") boolean isQIntType(ScalarType t);
+
+@Namespace("c10") public static native ScalarType toUnderlying(ScalarType t);
+
  // namespace c10
- // namespace torch::headeronly
+ // namespace impl
+
+
+
 
 
 // Parsed from c10/macros/cmake_macros.h
@@ -2859,92 +3492,14 @@ public static final int C10_X86_F16 = 1;
 
 // #pragma once
 
-// This is directly synchronized with caffe2/proto/caffe2.proto, but
-// doesn't require me to figure out how to get Protobuf headers into
-// ATen/core (which would require a lot more build system hacking.)
-// If you modify me, keep me synchronized with that file.
-
 // #include <c10/macros/Export.h>
 
-// #include <cstddef>
-// #include <cstdint>
-// #include <functional>
+// If you modified DeviceType in caffe2/proto/caffe2.proto, please also sync
+// your changes into torch/headeronly/core/DeviceType.h.
+// #include <torch/headeronly/core/DeviceType.h>
+
 // #include <ostream>
 // #include <string>
-
-// These contains all device types that also have a BackendComponent
-// and therefore participate in per-backend functionality dispatch keys.
-// This is most backends except PrivateUse2 and PrivateUse3
-// #define C10_FORALL_BACKEND_DEVICE_TYPES(_, extra)
-//   _(CPU, extra)
-//   _(CUDA, extra)
-//   _(HIP, extra)
-//   _(XLA, extra)
-//   _(MPS, extra)
-//   _(IPU, extra)
-//   _(XPU, extra)
-//   _(HPU, extra)
-//   _(VE, extra)
-//   _(Lazy, extra)
-//   _(Meta, extra)
-//   _(MTIA, extra)
-//   _(PrivateUse1, extra)
-
-@Namespace("c10") public enum DeviceType {
-  CPU((byte)(0)),
-  CUDA((byte)(1)), // CUDA.
-  MKLDNN((byte)(2)), // Reserved for explicit MKLDNN
-  OPENGL((byte)(3)), // OpenGL
-  OPENCL((byte)(4)), // OpenCL
-  IDEEP((byte)(5)), // IDEEP.
-  HIP((byte)(6)), // AMD HIP
-  FPGA((byte)(7)), // FPGA
-  MAIA((byte)(8)), // ONNX Runtime / Microsoft
-  XLA((byte)(9)), // XLA / TPU
-  Vulkan((byte)(10)), // Vulkan
-  Metal((byte)(11)), // Metal
-  XPU((byte)(12)), // XPU
-  MPS((byte)(13)), // MPS
-  Meta((byte)(14)), // Meta (tensors with no data)
-  HPU((byte)(15)), // HPU / HABANA
-  VE((byte)(16)), // SX-Aurora / NEC
-  Lazy((byte)(17)), // Lazy Tensors
-  IPU((byte)(18)), // Graphcore IPU
-  MTIA((byte)(19)), // Meta training and inference devices
-  PrivateUse1((byte)(20)), // PrivateUse1 device
-  // NB: If you add more devices:
-  //  - Change the implementations of DeviceTypeName and isValidDeviceType
-  //    in DeviceType.cpp
-  //  - Change the number below
-  COMPILE_TIME_MAX_DEVICE_TYPES((byte)(21));
-
-    public final byte value;
-    private DeviceType(byte v) { this.value = v; }
-    private DeviceType(DeviceType e) { this.value = e.value; }
-    public DeviceType intern() { for (DeviceType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-@Namespace("c10") @MemberGetter public static native DeviceType kCPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kCUDA();
-@Namespace("c10") @MemberGetter public static native DeviceType kHIP();
-@Namespace("c10") @MemberGetter public static native DeviceType kFPGA();
-@Namespace("c10") @MemberGetter public static native DeviceType kMAIA();
-@Namespace("c10") @MemberGetter public static native DeviceType kXLA();
-@Namespace("c10") @MemberGetter public static native DeviceType kMPS();
-@Namespace("c10") @MemberGetter public static native DeviceType kMeta();
-@Namespace("c10") @MemberGetter public static native DeviceType kVulkan();
-@Namespace("c10") @MemberGetter public static native DeviceType kMetal();
-@Namespace("c10") @MemberGetter public static native DeviceType kXPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kHPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kVE();
-@Namespace("c10") @MemberGetter public static native DeviceType kLazy();
-@Namespace("c10") @MemberGetter public static native DeviceType kIPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kMTIA();
-@Namespace("c10") @MemberGetter public static native DeviceType kPrivateUse1();
-
-// define explicit int constant
-@Namespace("c10") @MemberGetter public static native int COMPILE_TIME_MAX_DEVICE_TYPES();
 
 @Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d, @Cast("bool") boolean lower_case/*=false*/);
 @Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d);
@@ -2965,7 +3520,6 @@ public static final int C10_X86_F16 = 1;
 @Namespace("c10") public static native @Cast("bool") boolean is_privateuse1_backend_registered();
 
  // namespace c10
- // namespace std
 // NOLINTNEXTLINE(misc-unused-using-decls)
  // namespace torch
 
@@ -2973,79 +3527,7 @@ public static final int C10_X86_F16 = 1;
 // Parsed from c10/util/Deprecated.h
 
 // #pragma once
-
-/**
- * This file provides portable macros for marking declarations
- * as deprecated.  You should generally use C10_DEPRECATED,
- * except when marking 'using' declarations as deprecated,
- * in which case you should use C10_DEFINE_DEPRECATED_USING
- * (due to portability concerns).
- */
-
-// Sample usage:
-//
-//    C10_DEPRECATED void bad_func();
-//    struct C10_DEPRECATED BadStruct {
-//      ...
-//    };
-
-// NB: __cplusplus doesn't work for MSVC, so for now MSVC always uses
-// the "__declspec(deprecated)" implementation and not the C++14
-// "[[deprecated]]" attribute. We tried enabling "[[deprecated]]" for C++14 on
-// MSVC, but ran into issues with some older MSVC versions.
-// #if (defined(__cplusplus) && __cplusplus >= 201402L)
-// #define C10_DEPRECATED [[deprecated]]
-// #define C10_DEPRECATED_MESSAGE(message) [[deprecated(message)]]
-// #elif defined(__GNUC__)
-// #define C10_DEPRECATED __attribute__((deprecated))
-// TODO Is there some way to implement this?
-// #define C10_DEPRECATED_MESSAGE(message) __attribute__((deprecated))
-
-// #elif defined(_MSC_VER)
-// #else
-// #warning "You need to implement C10_DEPRECATED for this compiler"
-// #define C10_DEPRECATED
-// #endif
-
-// Sample usage:
-//
-//    C10_DEFINE_DEPRECATED_USING(BadType, int)
-//
-//   which is the portable version of
-//
-//    using BadType [[deprecated]] = int;
-
-// technically [[deprecated]] syntax is from c++14 standard, but it works in
-// many compilers.
-// #if defined(__has_cpp_attribute)
-// #if __has_cpp_attribute(deprecated) && !defined(__CUDACC__)
-// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
-//   using TypeName [[deprecated]] = TypeThingy;
-// #endif
-// #endif
-
-// #if defined(_MSC_VER)
-// #endif
-
-// #if !defined(C10_DEFINE_DEPRECATED_USING) && defined(__GNUC__)
-// nvcc has a bug where it doesn't understand __attribute__((deprecated))
-// declarations even when the host compiler supports it. We'll only use this gcc
-// attribute when not cuda, and when using a GCC compiler that doesn't support
-// the c++14 syntax we checked for above (available in __GNUC__ >= 5)
-// #if !defined(__CUDACC__)
-// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
-//   using TypeName __attribute__((deprecated)) = TypeThingy;
-// #else
-// using cuda + gcc < 5, neither deprecated syntax is available so turning off.
-// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
-//   using TypeName = TypeThingy;
-// #endif
-// #endif
-
-// #if !defined(C10_DEFINE_DEPRECATED_USING)
-// #warning "You need to implement C10_DEFINE_DEPRECATED_USING for this compiler"
-// #define C10_DEFINE_DEPRECATED_USING
-// #endif
+// #include <torch/headeronly/util/Deprecated.h>
 
 
 // Parsed from c10/util/StringUtil.h
@@ -3303,7 +3785,11 @@ public static final int C10_X86_F16 = 1;
 // ----------------------------------------------------------------------------
 
 // #ifdef STRIP_ERROR_MESSAGES
-// #define TORCH_RETHROW(e, ...) throw
+// #define TORCH_RETHROW(e, ...)
+//   do {
+//     (void)e; /* Suppress unused variable warning */
+//     throw;
+//   } while (false)
 // #else
 // #define TORCH_RETHROW(e, ...)
 //   do {
@@ -3621,6 +4107,98 @@ public static final int C10_X86_F16 = 1;
 // #define TORCH_CHECK_ARG(cond, argN, ...)
 //   TORCH_CHECK(cond, "invalid argument ", argN, ": ", __VA_ARGS__)
 
+// #ifndef FATAL_IF
+// #ifdef C10_USE_GLOG
+// #define FATAL_IF(condition)
+//   condition ? (void)0
+//             : ::c10::LoggerVoidify() &
+//           ::c10::MessageLogger(__FILE__, __LINE__, ::google::GLOG_FATAL)
+//               .stream()
+// #else
+// #define FATAL_IF(condition)
+//   condition ? (void)0
+//             : ::c10::LoggerVoidify() &
+//           ::c10::MessageLogger(__FILE__, __LINE__, ::c10::GLOG_FATAL).stream()
+// #endif
+// #endif
+
+// #ifndef NON_FATAL_IF
+// #ifdef C10_USE_GLOG
+// #define NON_FATAL_IF(condition)
+//   condition ? (void)0
+//             : ::c10::LoggerVoidify() &
+//           ::c10::MessageLogger(
+//               __FILE__, __LINE__, ::google::GLOG_FATAL, false)
+//               .stream()
+// #else
+// #define NON_FATAL_IF(condition)
+//   condition ? (void)0
+//             : ::c10::LoggerVoidify() &
+//           ::c10::MessageLogger(__FILE__, __LINE__, ::c10::GLOG_FATAL, false)
+//               .stream()
+// #endif
+// #endif
+
+// Binary comparison check macros
+// #define TORCH_CHECK_OP(val1, val2, op)
+//   NON_FATAL_IF(((val1)op(val2)))
+//       << "Check failed: " #val1 " " #op " " #val2 " (" << (val1) << " vs. "
+//       << (val2) << "). "
+
+// #define TORCH_DCHECK_OP(val1, val2, op)
+//   FATAL_IF(((val1)op(val2))) << "Check failed: " #val1 " " #op " " #val2 " ("
+//                              << (val1) << " vs. " << (val2) << "). "
+
+// #define TORCH_CHECK_EQ(val1, val2) TORCH_CHECK_OP(val1, val2, ==)
+// #define TORCH_CHECK_NE(val1, val2) TORCH_CHECK_OP(val1, val2, !=)
+// #define TORCH_CHECK_LE(val1, val2) TORCH_CHECK_OP(val1, val2, <=)
+// #define TORCH_CHECK_LT(val1, val2) TORCH_CHECK_OP(val1, val2, <)
+// #define TORCH_CHECK_GE(val1, val2) TORCH_CHECK_OP(val1, val2, >=)
+// #define TORCH_CHECK_GT(val1, val2) TORCH_CHECK_OP(val1, val2, >)
+
+// Debug versions of TORCH_CHECK_OP macros
+// #ifndef NDEBUG
+// #define TORCH_DCHECK_EQ(val1, val2) TORCH_DCHECK_OP(val1, val2, ==)
+// #define TORCH_DCHECK_NE(val1, val2) TORCH_DCHECK_OP(val1, val2, !=)
+// #define TORCH_DCHECK_LE(val1, val2) TORCH_DCHECK_OP(val1, val2, <=)
+// #define TORCH_DCHECK_LT(val1, val2) TORCH_DCHECK_OP(val1, val2, <)
+// #define TORCH_DCHECK_GE(val1, val2) TORCH_DCHECK_OP(val1, val2, >=)
+// #define TORCH_DCHECK_GT(val1, val2) TORCH_DCHECK_OP(val1, val2, >)
+// #else // !NDEBUG
+// Optimized versions - generate no code
+// #define TORCH_DCHECK_EQ(val1, val2)
+//   while (false)
+//   TORCH_DCHECK_OP(val1, val2, ==)
+// #define TORCH_DCHECK_NE(val1, val2)
+//   while (false)
+//   TORCH_DCHECK_OP(val1, val2, !=)
+// #define TORCH_DCHECK_LE(val1, val2)
+//   while (false)
+//   TORCH_DCHECK_OP(val1, val2, <=)
+// #define TORCH_DCHECK_LT(val1, val2)
+//   while (false)
+//   TORCH_DCHECK_OP(val1, val2, <)
+// #define TORCH_DCHECK_GE(val1, val2)
+//   while (false)
+//   TORCH_DCHECK_OP(val1, val2, >=)
+// #define TORCH_DCHECK_GT(val1, val2)
+//   while (false)
+//   TORCH_DCHECK_OP(val1, val2, >)
+// #endif // NDEBUG
+
+// Null pointer check macro
+// #define TORCH_CHECK_NOTNULL(val)
+//   ::c10::CheckNotNull(__FILE__, __LINE__, #val, (val), false)
+
+// #ifndef NDEBUG
+// #define TORCH_DCHECK_NOTNULL(val)
+//   ::c10::CheckNotNull(__FILE__, __LINE__, #val, (val), true)
+// #else // !NDEBUG
+// #define TORCH_DCHECK_NOTNULL(val)
+//   while (false)
+//   TORCH_CHECK_NOTNULL(val)
+// #endif // NDEBUG
+
 // ----------------------------------------------------------------------------
 // Deprecated macros
 // ----------------------------------------------------------------------------
@@ -3717,6 +4295,85 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
  // namespace std
+
+
+// Parsed from c10/core/DeviceCapability.h
+
+// #pragma once
+
+// #include <c10/core/ScalarType.h>
+// #include <c10/macros/Export.h>
+// #include <cstdint>
+
+@Namespace("c10") @MemberGetter public static native @Cast("const size_t") long NUMBER_OF_DEVICE_CAPABILITIES();
+
+// Generate bitfields for each scalar type
+// #define DEFINE_SCALAR_TYPE(_1, n) unsigned int has_##n : 1;
+
+// Generate enum indices for each scalar type
+// #define DEFINE_SCALAR_ENUM(_1, name) kIndex_##name,
+
+@Namespace("c10") public enum ScalarTypeIndex {
+  kIndex_Byte(0), /* 0 */
+  kIndex_Char(1), /* 1 */
+  kIndex_Short(2), /* 2 */
+  kIndex_Int(3), /* 3 */
+  kIndex_Long(4), /* 4 */
+  kIndex_Half(5), /* 5 */
+  kIndex_Float(6), /* 6 */
+  kIndex_Double(7), /* 7 */
+  kIndex_ComplexHalf(8), /* 8 */
+  kIndex_ComplexFloat(9), /* 9 */
+  kIndex_ComplexDouble(10), /* 10 */
+  kIndex_Bool(11), /* 11 */
+  kIndex_QInt8(12), /* 12 */
+  kIndex_QUInt8(13), /* 13 */
+  kIndex_QInt32(14), /* 14 */
+  kIndex_BFloat16(15), /* 15 */
+  kIndex_QUInt4x2(16), /* 16 */
+  kIndex_QUInt2x4(17), /* 17 */
+  kIndex_Bits1x8(18), /* 18 */
+  kIndex_Bits2x4(19), /* 19 */
+  kIndex_Bits4x2(20), /* 20 */
+  kIndex_Bits8(21), /* 21 */
+  kIndex_Bits16(22), /* 22 */
+  kIndex_Float8_e5m2(23), /* 23 */
+  kIndex_Float8_e4m3fn(24), /* 24 */
+  kIndex_Float8_e5m2fnuz(25), /* 25 */
+  kIndex_Float8_e4m3fnuz(26), /* 26 */
+  kIndex_UInt16(27), /* 27 */
+  kIndex_UInt32(28), /* 28 */
+  kIndex_UInt64(29), /* 29 */
+  kIndex_UInt1(30), /* 30 */
+  kIndex_UInt2(31), /* 31 */
+  kIndex_UInt3(32), /* 32 */
+  kIndex_UInt4(33), /* 33 */
+  kIndex_UInt5(34), /* 34 */
+  kIndex_UInt6(35), /* 35 */
+  kIndex_UInt7(36), /* 36 */
+  kIndex_Int1(37), /* 37 */
+  kIndex_Int2(38), /* 38 */
+  kIndex_Int3(39), /* 39 */
+  kIndex_Int4(40), /* 40 */
+  kIndex_Int5(41), /* 41 */
+  kIndex_Int6(42), /* 42 */
+  kIndex_Int7(43), /* 43 */
+  kIndex_Float8_e8m0fnu(44), /* 44 */
+  kIndex_Float4_e2m1fn_x2(45);/* 45 */
+
+    public final int value;
+    private ScalarTypeIndex(int v) { this.value = v; }
+    private ScalarTypeIndex(ScalarTypeIndex e) { this.value = e.value; }
+    public ScalarTypeIndex intern() { for (ScalarTypeIndex e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../DeviceCapability.java
+
+
+
+// #undef DEFINE_SCALAR_ENUM
+// #undef DEFINE_SCALAR_TYPE
+ // namespace c10
 
 
 // Parsed from c10/core/DispatchKey.h
@@ -4492,7 +5149,9 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 @Namespace("c10") public static native String toString(@Cast("c10::BackendComponent") byte arg0);
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer arg0, DispatchKey arg1);
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer arg0, @Cast("c10::DispatchKey") short arg1);
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer arg0, BackendComponent arg1);
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer arg0,
+    BackendComponent arg1);
 
 @Namespace("c10") public static native DispatchKey getAutogradKeyFromBackend(BackendComponent k);
 @Namespace("c10") public static native @Cast("c10::DispatchKey") short getAutogradKeyFromBackend(@Cast("c10::BackendComponent") byte k);
@@ -4546,245 +5205,12 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // Parsed from c10/util/TypeTraits.h
 
-// #pragma once
-
-// #include <functional>
-// #include <type_traits>
-
-/**
- * is_equality_comparable<T> is true_type iff the equality operator is defined
- * for T.
- */
-
-/**
- * is_hashable<T> is true_type iff std::hash is defined for T
- */
-
-/**
- * is_function_type<T> is true_type iff T is a plain function type (i.e.
- * "Result(Args...)")
- */
-
-/**
- * is_instantiation_of<T, I> is true_type iff I is a template instantiation of T
- * (e.g. vector<int> is an instantiation of vector) Example:
- *    is_instantiation_of_t<vector, vector<int>> // true
- *    is_instantiation_of_t<pair, pair<int, string>> // true
- *    is_instantiation_of_t<vector, pair<int, string>> // false
- */
-/**
- * strip_class: helper to remove the class type from pointers to {@code operator()}.
- */
- // namespace detail
-
-/**
- * Evaluates to true_type, iff the given class is a Functor
- * (i.e. has a call operator with some set of arguments)
- */
-
-/**
- * lambda_is_stateless<T> is true iff the lambda type T is stateless
- * (i.e. does not have a closure).
- * Example:
- *  auto stateless_lambda = [] (int a) {return a;};
- *  lambda_is_stateless<decltype(stateless_lambda)> // true
- *  auto stateful_lambda = [&] (int a) {return a;};
- *  lambda_is_stateless<decltype(stateful_lambda)> // false
- */
-// implementation idea: According to the C++ standard, stateless lambdas are
-// convertible to function pointers
-
-// case where LambdaType is not even a functor
-// case where LambdaType is a functor
- // namespace detail
-
-/**
- * is_type_condition<C> is true_type iff C<...> is a type trait representing a
- * condition (i.e. has a constexpr static bool ::value member) Example:
- *   is_type_condition<std::is_reference>  // true
- */
-
-/**
- * is_fundamental<T> is true_type iff the lambda type T is a fundamental type
- * (that is, arithmetic type, void, or nullptr_t). Example: is_fundamental<int>
- * // true We define it here to resolve a MSVC bug. See
- * https://github.com/pytorch/pytorch/issues/30932 for details.
- */
- // namespace c10::guts
+// #include <torch/headeronly/util/TypeTraits.h>
 
 
 // Parsed from c10/util/TypeList.h
 
-// #pragma once
-
-// #include <c10/util/TypeTraits.h>
-// #include <algorithm>
-// #include <cstddef>
-// #include <tuple>
-// #include <type_traits>
-// #include <utility>
-
-/**
- * Type holding a list of types for compile time type computations
- */
-
-/**
- * Returns the number of types in a typelist
- * Example:
- *   3  ==  size<typelist<int, int, double>>::value
- */
-
-/**
- * Transforms a list of types into a tuple holding these types.
- * Example:
- *   std::tuple<int, string>  ==  to_tuple_t<typelist<int, string>>
- */
-
-/**
- * Creates a typelist containing the types of a given tuple.
- * Example:
- *   typelist<int, string>  ==  from_tuple_t<std::tuple<int, string>>
- */
-
-/**
- * Concatenates multiple type lists.
- * Example:
- *   typelist<int, string, int>  ==  concat_t<typelist<int, string>,
- * typelist<int>>
- */
-
-/**
- * Filters the types in a type list by a type trait.
- * Examples:
- *   typelist<int&, const string&&>  ==  filter_t<std::is_reference,
- * typelist<void, string, int&, bool, const string&&, int>>
- */
-
-/**
- * Counts how many types in the list fulfill a type trait
- * Examples:
- *   2  ==  count_if<std::is_reference, typelist<void, string, int&, bool, const
- * string&&, int>>
- */
-
-/**
- * Checks if a typelist contains a certain type.
- * Examples:
- *  contains<typelist<int, string>, string> == true_type
- *  contains<typelist<int, string>, double> == false_type
- */
- // namespace detail
-
-/**
- * Returns true iff the type trait is true for all types in the type list
- * Examples:
- *   true   ==  all<std::is_reference, typelist<int&, const float&&, const
- * MyClass&>>::value false  ==  all<std::is_reference, typelist<int&, const
- * float&&, MyClass>>::value
- */
-
-/**
- * Returns true iff the type trait is true for any type in the type list
- * Examples:
- *   true   ==  true_for_any_type<std::is_reference, typelist<int, const
- * float&&, const MyClass>>::value false  ==
- * true_for_any_type<std::is_reference, typelist<int, const float,
- * MyClass>>::value
- */
-
-/**
- * Maps types of a type list using a type trait
- * Example:
- *  typelist<int&, double&, string&>  ==  map_t<std::add_lvalue_reference_t,
- * typelist<int, double, string>>
- */
-
-/**
- * Returns the first element of a type list.
- * Example:
- *   int  ==  head_t<typelist<int, string>>
- */
-
-/**
- * Returns the first element of a type list, or the specified default if the
- * type list is empty. Example: int  ==  head_t<bool, typelist<int, string>>
- *   bool  ==  head_t<bool, typelist<>>
- */
-
-/**
- * Returns the N-th element of a type list.
- * Example:
- * int == element_t<1, typelist<float, int, char>>
- */
-
-/** Base template. */
-
-/** Successful case, we have reached the zero index and can "return" the head
- *  type. */
-
-/** Error case, we have an index but ran out of types! It will only be selected
- *  if {@code Ts...} is actually empty! */
-
-/** Shave off types until we hit the <0, Head, Tail...> or <Index> case. */
-
-/** Convenience alias. */
-
-/**
- * Returns the last element of a type list.
- * Example:
- *   int  ==  last_t<typelist<int, string>>
- */
-
-/**
- * Take/drop a number of arguments from a typelist.
- * Example:
- *   typelist<int, string> == take_t<typelist<int, string, bool>, 2>
- *   typelist<bool> == drop_t<typelist<int, string, bool>, 2>
- */
- // namespace detail
-
-/**
- * Like drop, but returns an empty list rather than an assertion error if {@code num}
- * is larger than the size of the TypeList.
- * Example:
- *   typelist<> == drop_if_nonempty_t<typelist<string, bool>, 2>
- *   typelist<> == drop_if_nonempty_t<typelist<int, string, bool>, 3>
- */
-
-/**
- * Reverses a typelist.
- * Example:
- *   typelist<int, string>  == reverse_t<typelist<string, int>>
- */
-
-/**
- * Find the index of the first type in a typelist fulfilling a type trait
- * condition. Example:
- *
- * 2 == find_if<typelist<char, int, char&, int&>, std::is_reference>::value
- */
-
-/**
- * Maps a list of types into a list of values.
- * Examples:
- *   // Example 1
- *   auto sizes =
- *     map_types_to_values<typelist<int64_t, bool, uint32_t>>(
- *       [] (auto t) { return sizeof(decltype(t)::type); }
- *     );
- *   //  sizes  ==  std::tuple<size_t, size_t, size_t>{8, 1, 4}
- *
- *   // Example 2
- *   auto shared_ptrs =
- *     map_types_to_values<typelist<int, double>>(
- *       [] (auto t) { return make_shared<typename decltype(t)::type>(); }
- *     );
- *   // shared_ptrs == std::tuple<shared_ptr<int>, shared_ptr<double>>()
- */
- // namespace detail
-
- // namespace typelist
- // namespace c10::guts
+// #include <torch/headeronly/util/TypeList.h>
 
 
 // Parsed from c10/util/bit_cast.h
@@ -4943,6 +5369,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
  // namespace c10
 
 
+
 // Parsed from c10/core/Backend.h
 
 // #pragma once
@@ -4950,6 +5377,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/core/DeviceType.h>
 // #include <c10/core/DispatchKey.h>
 // #include <c10/core/DispatchKeySet.h>
+// #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 
 // #include <stdexcept>
@@ -5034,6 +5462,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
  // namespace c10
 
 
+
 // Parsed from c10/core/Layout.h
 
 // #pragma once
@@ -5041,25 +5470,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/core/Backend.h>
 // #include <c10/util/Exception.h>
 
-// #include <cstdint>
-// #include <ostream>
-@Namespace("c10") public enum Layout {
-  Strided((byte)(0)),
-  Sparse((byte)(1)),
-  SparseCsr((byte)(2)),
-  Mkldnn((byte)(3)),
-  SparseCsc((byte)(4)),
-  SparseBsr((byte)(5)),
-  SparseBsc((byte)(6)),
-  Jagged((byte)(7)),
-  NumOptions((byte)(8));
-
-    public final byte value;
-    private Layout(byte v) { this.value = v; }
-    private Layout(Layout e) { this.value = e.value; }
-    public Layout intern() { for (Layout e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+// #include <torch/headeronly/core/Layout.h>
 
 @Namespace("c10") public static native Layout layout_from_backend(org.bytedeco.pytorch.global.torch.Backend backend);
 
@@ -5282,6 +5693,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/SmallVector.h>
+// #include <torch/headeronly/util/HeaderOnlyArrayRef.h>
 
 // #include <array>
 // #include <cstddef>
@@ -5397,6 +5809,36 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 
 
+/** Deduction guides for ArrayRef to support CTAD with inherited constructors
+ *  These mirror the constructors inherited from HeaderOnlyArrayRef
+ *  \{ */
+
+// Single element constructor
+
+
+// Pointer and length constructor
+
+
+// Range constructor (begin, end)
+
+
+// Generic container constructor (anything with .data() and .size())
+
+
+// std::vector constructor
+
+
+// std::array constructor
+
+
+// C array constructor
+
+
+// std::initializer_list constructor
+
+
+/** \} */
+
 /** \name ArrayRef Convenience constructors
  *  \{
  <p>
@@ -5435,47 +5877,15 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Exception.h>
 
+// #include <torch/headeronly/core/MemoryFormat.h>
+
 // #include <cstdint>
-// #include <ostream>
 // #include <vector>
-
-// Memory format is not the property of a Tensor. It is the way to tell an
-// operator how the result should be organized in memory and nothing more. That
-// means memory format should never be used as return value for any tensor state
-// interrogation functions (internally and externally).
-//
-// Possible options are:
-//  Preserve:
-//    If any of the input tensors is in channels_last format, operator output
-//    should be in channels_last format
-//
-//  Contiguous:
-//    Regardless of input tensors format, the output should be contiguous
-//    Tensor.
-//
-//  ChannelsLast:
-//    Regardless of input tensors format, the output should be in channels_last
-//    format.
-@Namespace("c10") public enum MemoryFormat {
-  Contiguous((byte)(0)),
-  Preserve((byte)(1)),
-  ChannelsLast((byte)(2)),
-  ChannelsLast3d((byte)(3)),
-  NumOptions((byte)(4));
-
-    public final byte value;
-    private MemoryFormat(byte v) { this.value = v; }
-    private MemoryFormat(MemoryFormat e) { this.value = e.value; }
-    public MemoryFormat intern() { for (MemoryFormat e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 
 // If you are seeing this, it means that this call site was not checked if
 // the memory format could be preserved, and it was switched to old default
 // behaviour of contiguous
 // #define LEGACY_CONTIGUOUS_MEMORY_FORMAT c10::get_contiguous_memory_format()
-
-@Namespace("c10") public static native MemoryFormat get_contiguous_memory_format();
 
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
     @Cast("std::ostream*") @ByRef Pointer stream,
@@ -5573,6 +5983,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // #pragma once
 
+// #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <cstdint>
 // #include <string>
@@ -5602,6 +6013,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 @Namespace("c10") public static native @StdString BytePointer toString(QScheme qscheme);
 
  // namespace c10
+
 
 
 // Parsed from c10/core/Stream.h
@@ -5984,224 +6396,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // #include <torch/headeronly/core/ScalarType.h>
 
-// [dtype Macros note] For the macros below:
-//
-// For users: If you want to macro some code for all non-QInt scalar types
-// (i.e. types with complete information, you probably want one of the
-// AT_FORALL_SCALAR_TYPES / AT_FORALL_SCALAR_TYPES_AND macros below, which are
-// designed to behave similarly to the Dispatch macros with the same name.
-//
-// For adding a new dtype: In the beginning, we had an idea that there was a
-// list of all scalar types, and you could use AT_FORALL_SCALAR_TYPES to
-// iterate over them.  But over the years we added weird types which couldn't
-// be handled uniformly everywhere and so in the end we ended up with some
-// mish-mosh of some helper macros, but mostly use sites making a call about
-// what dtypes they can or can't support.  So if you want to add a new dtype,
-// the preferred resolution is to find a dtype similar to what you want,
-// grep for it and edit all the sites you find this way.  If you need to add
-// a completely new kind of dtype, you're going to have to laboriously audit
-// all of the sites everywhere to figure out how it should work.  Consulting
-// some old PRs where we added new dtypes (check history of this file) can
-// help give you an idea where to start.
-
-// If you want to support ComplexHalf for real, add ComplexHalf
-// into this macro (and change the name).  But beware: convert()
-// doesn't work for all the conversions you need...
-//
-// TODO: To add unsigned int types here, we must define accumulate type.
-// But uint8 currently accumulates into int64, so we would have to make
-// an inconsistent choice for the larger types.  Difficult.
-// #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX_EXCEPT_COMPLEX_HALF_F8NZ(_)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(at::Half, Half)
-//   _(float, Float)
-//   _(double, Double)
-//   _(c10::complex<float>, ComplexFloat)
-//   _(c10::complex<double>, ComplexDouble)
-//   _(bool, Bool)
-//   _(at::BFloat16, BFloat16)
-//   _(at::Float8_e5m2, Float8_e5m2)
-//   _(at::Float8_e4m3fn, Float8_e4m3fn)
-
-// This macro controls many of our C++ APIs, including constructors
-// for Scalar as well as the data() and item() accessors on Tensor
-// #define AT_FORALL_SCALAR_TYPES_WITH_COMPLEX(_)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(at::Half, Half)
-//   _(float, Float)
-//   _(double, Double)
-//   _(c10::complex<c10::Half>, ComplexHalf)
-//   _(c10::complex<float>, ComplexFloat)
-//   _(c10::complex<double>, ComplexDouble)
-//   _(bool, Bool)
-//   _(at::BFloat16, BFloat16)
-//   _(at::Float8_e5m2, Float8_e5m2)
-//   _(at::Float8_e4m3fn, Float8_e4m3fn)
-//   _(at::Float8_e5m2fnuz, Float8_e5m2fnuz)
-//   _(at::Float8_e4m3fnuz, Float8_e4m3fnuz)
-//   _(at::Float8_e8m0fnu, Float8_e8m0fnu)
-
-// These are used to map ScalarTypes to C++ types.
-
-// #define SPECIALIZE_ScalarTypeToCPPType(cpp_type, scalar_type)
-//   template <>
-//   struct ScalarTypeToCPPType<c10::ScalarType::scalar_type> {
-//     using type = cpp_type;
-// 
-//     /* This is a workaround for the CUDA bug which prevents */
-//     /* ::detail::ScalarTypeToCType<T>::type being used directly due to */
-//     /* ambiguous reference which can't to be resolved. For some reason it */
-//     /* can't pick between at::detail and at::cuda::detail. */
-//     /* For repro example, please see: */
-//     /* https://gist.github.com/izdeby/952ae7cf256ddb740a73776d39a7e7ba */
-//     /* TODO: remove once the bug is fixed. */
-//     static type t;
-//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */ /* 27 */ /* 28 */ /* 29 */ /* 30 */ /* 31 */ /* 32 */ /* 33 */ /* 34 */ /* 35 */ /* 36 */ /* 37 */ /* 38 */ /* 39 */ /* 40 */ /* 41 */ /* 42 */ /* 43 */ /* 44 */ /* 45 */
-
-// #undef SPECIALIZE_ScalarTypeToCPPType
-
- // namespace impl
-
-// #define SPECIALIZE_CppTypeToScalarType(cpp_type, scalar_type)
-//   template <>
-//   struct CppTypeToScalarType<cpp_type>
-//       : std::
-//             integral_constant<c10::ScalarType, c10::ScalarType::scalar_type> {
-//   }; /* 0 */ /* 1 */ /* 2 */ /* 3 */ /* 4 */ /* 5 */ /* 6 */ /* 7 */ /* 8 */ /* 9 */ /* 10 */ /* 11 */ /* 12 */ /* 13 */ /* 14 */ /* 15 */ /* 16 */ /* 17 */ /* 18 */ /* 19 */ /* 20 */ /* 21 */ /* 22 */ /* 23 */ /* 24 */ /* 25 */ /* 26 */ /* 27 */ /* 28 */ /* 29 */ /* 30 */ /* 31 */ /* 32 */ /* 33 */ /* 34 */ /* 35 */ /* 36 */ /* 37 */ /* 38 */ /* 39 */ /* 40 */ /* 41 */ /* 42 */ /* 43 */ /* 44 */ /* 45 */
-
-// #undef SPECIALIZE_CppTypeToScalarType
-
-// NB: despite its generic sounding name, the macros that don't take _AND
-// are mostly only used by tensorexpr
-// #define AT_FORALL_INT_TYPES(_)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-
-// #define AT_FORALL_SCALAR_TYPES(_)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(float, Float)
-//   _(double, Double)
-
-// These macros are often controlling how many template instantiations we
-// create for kernels.  It is typically inappropriate to add new dtypes here,
-// instead, new types should be added to use sites on a case-by-case basis.
-// We generally are not accepting new dtypes due to binary size concerns.
-
-// #define AT_FORALL_SCALAR_TYPES_AND(SCALARTYPE, _)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(float, Float)
-//   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE>::t),
-//     SCALARTYPE)
-
-// #define AT_FORALL_SCALAR_TYPES_AND2(SCALARTYPE1, SCALARTYPE2, _)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(float, Float)
-//   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE1>::t),
-//     SCALARTYPE1)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE2>::t),
-//     SCALARTYPE2)
-
-// #define AT_FORALL_SCALAR_TYPES_AND3(SCALARTYPE1, SCALARTYPE2, SCALARTYPE3, _)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(float, Float)
-//   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE1>::t),
-//     SCALARTYPE1)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE2>::t),
-//     SCALARTYPE2)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE3>::t),
-//     SCALARTYPE3)
-
-// #define AT_FORALL_SCALAR_TYPES_AND7(
-//     SCALARTYPE1,
-//     SCALARTYPE2,
-//     SCALARTYPE3,
-//     SCALARTYPE4,
-//     SCALARTYPE5,
-//     SCALARTYPE6,
-//     SCALARTYPE7,
-//     _)
-//   _(uint8_t, Byte)
-//   _(int8_t, Char)
-//   _(int16_t, Short)
-//   _(int, Int)
-//   _(int64_t, Long)
-//   _(float, Float)
-//   _(double, Double)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE1>::t),
-//     SCALARTYPE1)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE2>::t),
-//     SCALARTYPE2)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE3>::t),
-//     SCALARTYPE3)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE4>::t),
-//     SCALARTYPE4)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE5>::t),
-//     SCALARTYPE5)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE6>::t),
-//     SCALARTYPE6)
-//   _(decltype(::c10::impl::ScalarTypeToCPPType<
-//              ::c10::ScalarType::SCALARTYPE7>::t),
-//     SCALARTYPE7)
-
-// #define AT_FORALL_QINT_TYPES(_)
-//   _(c10::qint8, QInt8)
-//   _(c10::quint8, QUInt8)
-//   _(c10::qint32, QInt32)
-//   _(c10::quint4x2, QUInt4x2)
-//   _(c10::quint2x4, QUInt2x4)
-
-// #define AT_FORALL_FLOAT8_TYPES(_)
-//   _(at::Float8_e5m2, Float8_e5m2)
-//   _(at::Float8_e4m3fn, Float8_e4m3fn)
-//   _(at::Float8_e5m2fnuz, Float8_e5m2fnuz)
-//   _(at::Float8_e4m3fnuz, Float8_e4m3fnuz)
-//   _(at::Float8_e8m0fnu, Float8_e8m0fnu)
-
-// #define AT_FORALL_COMPLEX_TYPES(_)
-//   _(c10::complex<float>, ComplexFloat)
-//   _(c10::complex<double>, ComplexDouble)
+// See [dtype Macros note] in torch/headeronly/core/ScalarType.h
+// regarding macros.
 
 // #define DEFINE_CONSTANT(_, name)
 //   constexpr ScalarType k##name = ScalarType::name;
@@ -6255,8 +6451,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   @Namespace("c10") @MemberGetter public static native ScalarType kFloat4_e2m1fn_x2(); /* 45 */
 // #undef DEFINE_CONSTANT
 
-@Namespace("c10") public static native @Cast("const char*") BytePointer toString(ScalarType t);
-
 @Namespace("c10") public static native @Cast("size_t") long elementSize(ScalarType t);
 
 @Namespace("c10") public static native @Cast("bool") boolean isIntegralType(ScalarType t, @Cast("bool") boolean includeBool);
@@ -6271,15 +6465,11 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 @Namespace("c10") public static native @Cast("bool") boolean isComplexType(ScalarType t);
 
-@Namespace("c10") public static native @Cast("bool") boolean isQIntType(ScalarType t);
-
 @Namespace("c10") public static native @Cast("bool") boolean isBitsType(ScalarType t);
 
 @Namespace("c10") public static native @Cast("bool") boolean isBarebonesUnsignedType(ScalarType t);
 
 @Namespace("c10") public static native ScalarType toQIntType(ScalarType t);
-
-@Namespace("c10") public static native ScalarType toUnderlying(ScalarType t);
 
 @Namespace("c10") public static native @Cast("bool") boolean isSignedType(ScalarType t);
 
@@ -6295,10 +6485,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 @Namespace("c10") public static native ScalarType promoteTypes(ScalarType a, ScalarType b);
 
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer stream,
-    ScalarType scalar_type);
-
 // Returns a pair of strings representing the names for each dtype.
 // The returned pair is (name, legacy_name_if_applicable)
 @Namespace("c10") public static native @ByVal StringPair getDtypeNames(
@@ -6308,6 +6494,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 @Namespace("c10") public static native @Const @ByRef StringScalarTypeMap getStringToDtypeMap();
 
  // namespace c10
+
 
 
 // Parsed from c10/util/MaybeOwned.h
@@ -6670,6 +6857,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 @Namespace("c10") public static native @ByVal SymBool sym_ge(@Const @ByRef SymInt a, @Const @ByRef SymInt b);
 
  // namespace c10
+
+// #include <limits>
+
+ // namespace std
 
 
 // Parsed from c10/util/TypeCast.h
@@ -7392,12 +7583,18 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
 // #include <c10/core/Device.h>
 // #include <c10/core/DeviceType.h>
+// #include <c10/core/alignment.h>
 // #include <c10/macros/Export.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/ThreadLocalDebugInfo.h>
 // #include <c10/util/UniqueVoidPtr.h>
 // #include <c10/util/irange.h>
+// first is set if the instance is created by CUDAGraph::capture_begin.
+// second is set if the instance is created by at::cuda::graph_pool_handle.
+// Targeting ../MempoolIdHash.java
+
+
 // Targeting ../DataPtr.java
 
 
@@ -7572,6 +7769,11 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
     @Cast("bool") boolean resizable,
     @ByVal DeviceOptional device_opt);
 
+// #ifndef C10_MOBILE
+// #endif
+
+ // namespace detail
+
  // namespace c10
 
 
@@ -7663,7 +7865,9 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
 // #pragma once
 
+// #include <c10/core/SafePyObject.h>
 // #include <c10/macros/Export.h>
+// #include <optional>
 // Targeting ../AutogradState.java
 
 
@@ -8222,6 +8426,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 @Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefSlow(@ByVal LongArrayRef array_ref);
 @Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefSlow(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
 
+@Namespace("c10") public static native @ByVal SymBool sym_equals(@ByVal SymIntArrayRef LHS, @ByVal SymIntArrayRef RHS);
+
  // namespace c10
 
 
@@ -8440,6 +8646,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
  // namespace c10
 
 
+
 // Parsed from c10/core/impl/HermeticPyObjectTLS.h
 
 // #pragma once
@@ -8470,6 +8677,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 // #include <vector>
 
 // Forward declarations
+ // namespace impl
  // namespace c10
 
 
@@ -8495,6 +8703,10 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 // #include <optional>
 
 // #include <atomic>
+// Targeting ../PyObjectPreservation.java
+
+
+
 
  // namespace c10::impl
 
@@ -8959,6 +9171,7 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #include <cstddef>
 // #include <cstdint>
+// #include <type_traits>
 
 // GCC has __builtin_mul_overflow from before it supported __has_builtin
 // #ifdef _MSC_VER
@@ -9111,6 +9324,11 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 
+// #ifndef C10_MOBILE
+// #endif
+
+ // namespace detail
+
 // Note [TensorImpl size constraints]
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Changed the size of TensorImpl?  If the size went down, good for
@@ -9216,6 +9434,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #undef C10_GCC_VERSION_MINOR
 
  // namespace c10
+
 
 
 // Parsed from c10/core/UndefinedTensorImpl.h
@@ -9539,6 +9758,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 // #pragma once
 
+// #include <torch/headeronly/core/TensorAccessor.h>
 // #include <c10/macros/Macros.h>
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/Deprecated.h>
@@ -9547,35 +9767,9 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <cstddef>
 // #include <cstdint>
 // #include <type_traits>
-
-// The PtrTraits argument to the TensorAccessor/GenericPackedTensorAccessor
-// is used to enable the __restrict__ keyword/modifier for the data
-// passed to cuda.
-
 // #if defined(__CUDACC__) || defined(__HIPCC__)
 // #endif
-
-// TensorAccessorBase and TensorAccessor are used for both CPU and CUDA tensors.
-// For CUDA tensors it is used in device code (only). This means that we restrict ourselves
-// to functions and types available there (e.g. IntArrayRef isn't).
-
-// The PtrTraits argument is only relevant to cuda to support `__restrict__` pointers.
-
-// The `TensorAccessor` is typically instantiated for CPU `Tensor`s using
-// `Tensor.accessor<T, N>()`.
-// For CUDA `Tensor`s, `GenericPackedTensorAccessor` is used on the host and only
-// indexing on the device uses `TensorAccessor`s.
-
-
-// GenericPackedTensorAccessorBase and GenericPackedTensorAccessor are used on for CUDA `Tensor`s on the host
-// and as
-// In contrast to `TensorAccessor`s, they copy the strides and sizes on instantiation (on the host)
-// in order to transfer them on the device when calling kernels.
-// On the device, indexing of multidimensional tensors gives to `TensorAccessor`s.
-// Use RestrictPtrTraits as PtrTraits if you want the tensor's data pointer to be marked as __restrict__.
-// Instantiation from data, sizes, strides is only needed on the host and std::copy isn't available
-// on the device, so those functions are host only.
-
+  // namespace detail
 
 // Can't put this directly into the macro function args because of commas
 // #define AT_X GenericPackedTensorAccessor<T, N, PtrTraits, index_t>
@@ -10205,6 +10399,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <c10/util/OptionalArrayRef.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <c10/macros/Export.h>
+// #include <c10/macros/Macros.h>
 // #include <ATen/core/CheckMemoryFormat.h>
 // #include <ATen/core/DeprecatedTypePropertiesRegistry.h>
 // #include <ATen/core/DeprecatedTypeProperties.h>
@@ -12189,10 +12384,16 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::bitwise_right_shift_.Tensor_Scalar(Tensor(a!) self, Scalar other) -> Tensor(a!)
 
 
-// aten::tril_(Tensor(a!) self, int diagonal=0) -> Tensor(a!)
+// aten::tril_(Tensor(a!) self, SymInt diagonal=0) -> Tensor(a!)
 
 
-// aten::triu_(Tensor(a!) self, int diagonal=0) -> Tensor(a!)
+// aten::tril_(Tensor(a!) self, SymInt diagonal=0) -> Tensor(a!)
+
+
+// aten::triu_(Tensor(a!) self, SymInt diagonal=0) -> Tensor(a!)
+
+
+// aten::triu_(Tensor(a!) self, SymInt diagonal=0) -> Tensor(a!)
 
 
 // aten::digamma_(Tensor(a!) self) -> Tensor(a!)
@@ -12240,10 +12441,16 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::cross(Tensor self, Tensor other, int? dim=None) -> Tensor
 
 
-// aten::triu(Tensor self, int diagonal=0) -> Tensor
+// aten::triu(Tensor self, SymInt diagonal=0) -> Tensor
 
 
-// aten::tril(Tensor self, int diagonal=0) -> Tensor
+// aten::triu(Tensor self, SymInt diagonal=0) -> Tensor
+
+
+// aten::tril(Tensor self, SymInt diagonal=0) -> Tensor
+
+
+// aten::tril(Tensor self, SymInt diagonal=0) -> Tensor
 
 
 // aten::trace(Tensor self) -> Tensor
@@ -13324,7 +13531,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #pragma once
 // #include <c10/util/DimVector.h>
 
-// Re-declaring 'DimVector' type and size inside 'at' namespace.
+// Redeclaring 'DimVector' type and size inside 'at' namespace.
 // This is done to avoid modifying every use into their 'c10'
 // equivalent.
 
@@ -13715,6 +13922,7 @@ public static final byte min_lookups = min_lookups();
 // #include <ATen/core/type_factory.h>
 // #include <ATen/core/qualified_name.h>
 // #include <c10/util/TypeList.h>
+// #include <c10/util/Exception.h>
 // #include <optional>
 // #include <c10/core/SymFloat.h>
 // #include <c10/core/SymBool.h>
@@ -13826,7 +14034,7 @@ public static final byte min_lookups = min_lookups();
 
 
 
-// the common supertype of all Enums, only used in operator registraion.
+// the common supertype of all Enums, only used in operator registration.
 // EnumType <: AnyEnumType for all Enums
 // Targeting ../AnyEnumType.java
 
@@ -14073,11 +14281,13 @@ public static final byte min_lookups = min_lookups();
 // #pragma once
 
 // #include <c10/core/Device.h>
+// #include <c10/core/DeviceCapability.h>
 // #include <c10/core/DeviceType.h>
 // #include <c10/core/Stream.h>
 // #include <c10/util/Exception.h>
 
 // Just for C10_ANONYMOUS_VARIABLE
+// #include <c10/core/impl/TorchDispatchModeTLS.h>
 // #include <c10/util/Registry.h>
 
 // #include <array>
@@ -14144,8 +14354,13 @@ public static final byte min_lookups = min_lookups();
 @Namespace("c10::impl") public static native @Const DeviceGuardImplInterface getDeviceGuardImpl(DeviceType type);
 @Namespace("c10::impl") public static native @Const DeviceGuardImplInterface getDeviceGuardImpl(@Cast("c10::DeviceType") byte type);
 
+@Namespace("c10::impl") public static native void registerDeviceGuard(DeviceType type, @Const DeviceGuardImplInterface impl);
+@Namespace("c10::impl") public static native void registerDeviceGuard(@Cast("c10::DeviceType") byte type, @Const DeviceGuardImplInterface impl);
+
 @Namespace("c10::impl") public static native @Cast("bool") boolean hasDeviceGuardImpl(DeviceType type);
 @Namespace("c10::impl") public static native @Cast("bool") boolean hasDeviceGuardImpl(@Cast("c10::DeviceType") byte type);
+
+@Namespace("c10::impl") public static native void ensureCUDADeviceGuardSet();
 
  // namespace impl
  // namespace c10
@@ -14801,6 +15016,7 @@ public static final byte min_lookups = min_lookups();
  // namespace c10
 
 
+
 // Parsed from ATen/core/ivalue.h
 
 // #pragma once
@@ -15358,7 +15574,7 @@ public static final byte min_lookups = min_lookups();
  *    First, keep in mind that we assume that boxed containers will
  *    have to deal with `IValue` (e.g. `c10::List`). In this context,
  *    what may be happening is that `IValue` doesn't store internally
- *    your type `T`. Instead, it constructs a type new `T` everytime
+ *    your type `T`. Instead, it constructs a type new `T` every time
  *    you try to get `T` for it (see `IListRef<at::OptinalTensorRef>`).
  */
 
@@ -15391,16 +15607,18 @@ public static final byte min_lookups = min_lookups();
  * This macro is useful because it allows us to handle different
  * types (that correspond to different tags) to be implemented
  * only once. We can do it even when the implementation of the
- * different tags aren't syntatically the same, by dispatching
+ * different tags aren't syntactically the same, by dispatching
  * it to a function (e.g. `ImplT::<dispatch-function>(this_)`).
  */
 // #define TORCH_ILISTREF_UNWRAP(TAG, BODY)
+//   C10_DIAGNOSTIC_PUSH_AND_IGNORED_IF_DEFINED("-Wswitch-enum")
 //   switch (TAG) {
 //     TORCH_ILISTREF_FORALL_TAGS(TORCH_ILISTREF_UNWRAP_CASE, BODY)
 //     break;
 //     default:
 //       TORCH_INTERNAL_ASSERT(false, "invalid IListRef tag.");
 //   }
+//   C10_DIAGNOSTIC_POP()
 
 @Namespace("c10") public enum IListRefTag {
   TORCH_ILISTREF_FORALL_TAGS(0),DEFINE_TAG(1),
@@ -17245,7 +17463,7 @@ public static final byte min_lookups = min_lookups();
 // in order.  This is most commonly used in autogenerated code,
 // where it is convenient to have a function that can uniformly
 // take arguments of different types.  If your arguments
-// are homogenous consider using a std::initializer_list instead.
+// are homogeneous consider using a std::initializer_list instead.
 //
 // For examples of this in use, see torch/csrc/utils/variadic.h
 
@@ -17822,7 +18040,8 @@ public static final byte min_lookups = min_lookups();
         nondeterministic_seeded(12),
         pointwise(13),
         pt2_compliant_tag(14),
-        view_copy(15);
+        reduction(15),
+        view_copy(16);
 
         public final int value;
         private Tag(int v) { this.value = v; }
@@ -17866,7 +18085,7 @@ public static final byte min_lookups = min_lookups();
 // #endif
 // #include <ATen/core/ATenOpList.h>
 // The first argument of the schema might be of type DispatchKeySet, in which case we remove it.
-// We do this because every argument in a function schema is expected to be convertable
+// We do this because every argument in a function schema is expected to be convertible
 // to an ivalue, but DispatchKeySet is not a type we want the jit to be aware of.
 // See Note [Plumbing Keys Through The Dispatcher]
 
@@ -18744,6 +18963,32 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 @Namespace("at") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, BlasBackend backend);
 
+@Namespace("at::blas") public enum ScalingType {
+  TensorWise((byte)(0)), // fp32 scales
+  RowWise((byte)(1)), // fp32 scales
+  BlockWise1x16((byte)(2)), // fp8_e4m3fn scales
+  BlockWise1x32((byte)(3)), // fp8_e8m0fnu scales
+  BlockWise1x128((byte)(4)), // fp32 scales
+  BlockWise128x128((byte)(5));// fp32 scales
+
+    public final byte value;
+    private ScalingType(byte v) { this.value = v; }
+    private ScalingType(ScalingType e) { this.value = e.value; }
+    public ScalingType intern() { for (ScalingType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("at::blas") public enum SwizzleType { NO_SWIZZLE((byte)(0)), SWIZZLE_32_4_4((byte)(1));
+
+    public final byte value;
+    private SwizzleType(byte v) { this.value = v; }
+    private SwizzleType(SwizzleType e) { this.value = e.value; }
+    public SwizzleType intern() { for (SwizzleType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace blas
+
  // namespace at
 
 
@@ -18822,6 +19067,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #pragma once
 
+// #include <c10/core/CachingDeviceAllocator.h>
 // #include <c10/core/Device.h>
 // #include <c10/util/Exception.h>
 
@@ -18830,8 +19076,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <c10/core/Allocator.h>
 
-// #include <c10/util/python_stub.h>
 // #include <ATen/detail/AcceleratorHooksInterface.h>
+// #include <c10/util/python_stub.h>
 
 // #include <string>
 
@@ -18839,8 +19085,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../MTIAHooksInterface.java
 
 
-// #define REGISTER_MTIA_HOOKS(clsname)
-//   C10_REGISTER_CLASS(MTIAHooksRegistry, clsname, clsname)
+// #define REGISTER_MTIA_HOOKS(clsname) C10_REGISTER_CLASS(MTIAHooksRegistry, clsname, clsname)
 @Namespace("at::detail") public static native @Const @ByRef MTIAHooksInterface getMTIAHooks();
 @Namespace("at::detail") public static native @Cast("bool") boolean isMTIAHooksBuilt();
  // namespace detail
@@ -18852,6 +19097,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #pragma once
 
 // #include <c10/core/CachingDeviceAllocator.h>
+// #include <c10/core/DeviceCapability.h>
 // #include <c10/core/DeviceType.h>
 // #include <c10/macros/Macros.h>
 
@@ -18910,6 +19156,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // original device index that was active before the change.
 @Namespace("at::accelerator") public static native @Cast("c10::DeviceIndex") byte maybeExchangeDevice(@Cast("c10::DeviceIndex") byte device_index);
 
+// Get the device capability of the given device index.
+@Namespace("at::accelerator") public static native @ByVal DeviceCapability getDeviceCapability(
+    @Cast("c10::DeviceIndex") byte device_index);
+
 @Namespace("at::accelerator") public static native void emptyCache();
 
 @Namespace("at::accelerator") public static native @ByVal org.bytedeco.pytorch.cuda.DeviceStats getDeviceStats(
@@ -18919,6 +19169,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 @Namespace("at::accelerator") public static native void resetPeakStats(@Cast("c10::DeviceIndex") byte device_index);
 
+@Namespace("at::accelerator") public static native @ByVal SizeTPair getMemoryInfo(
+    @Cast("c10::DeviceIndex") byte device_index);
  // namespace at::accelerator
 // Keep BC only
  // namespace at
@@ -19339,17 +19591,20 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/detail/MPSHooksInterface.h>
 // #include <ATen/detail/MTIAHooksInterface.h>
 // #include <ATen/detail/PrivateUse1HooksInterface.h>
+// #include <ATen/detail/XLAHooksInterface.h>
 // #include <ATen/detail/XPUHooksInterface.h>
 // #include <c10/core/QEngine.h>
 // #include <c10/core/impl/DeviceGuardImplInterface.h>
 // #include <c10/util/CallOnce.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/env.h>
+// #include <c10/util/hash.h>
 // #include <c10/util/irange.h>
 
 // #include <cstdint>
 // #include <map>
 // #include <mutex>
+// #include <unordered_map>
 
 @Namespace("at") public enum Float32MatmulPrecision { HIGHEST(0), HIGH(1), MEDIUM(2);
 
@@ -19359,6 +19614,51 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     public Float32MatmulPrecision intern() { for (Float32MatmulPrecision e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
+@Namespace("at") public enum CuBLASReductionOption {
+  AllowReducedPrecisionWithSplitK((byte)(0)),
+  DisallowReducedPrecisionAllowSplitK((byte)(1)),
+  DisallowReducedPrecisionDisallowSplitK((byte)(2));
+
+    public final byte value;
+    private CuBLASReductionOption(byte v) { this.value = v; }
+    private CuBLASReductionOption(CuBLASReductionOption e) { this.value = e.value; }
+    public CuBLASReductionOption intern() { for (CuBLASReductionOption e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+@Namespace("at") public enum Float32Backend { GENERIC(0), CUDA(1), MKLDNN(2);
+
+    public final int value;
+    private Float32Backend(int v) { this.value = v; }
+    private Float32Backend(Float32Backend e) { this.value = e.value; }
+    public Float32Backend intern() { for (Float32Backend e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+@Namespace("at") public enum Float32Op { ALL(0), CONV(1), RNN(2), MATMUL(3);
+
+    public final int value;
+    private Float32Op(int v) { this.value = v; }
+    private Float32Op(Float32Op e) { this.value = e.value; }
+    public Float32Op intern() { for (Float32Op e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+@Namespace("at") public enum Float32Precision { NONE(0), IEEE(1), TF32(2), BF16(3);
+
+    public final int value;
+    private Float32Precision(int v) { this.value = v; }
+    private Float32Precision(Float32Precision e) { this.value = e.value; }
+    public Float32Precision intern() { for (Float32Precision e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("at") public static native Float32Backend str2backend(@StdString BytePointer name);
+@Namespace("at") public static native @Cast("at::Float32Backend") int str2backend(@StdString String name);
+@Namespace("at") public static native Float32Op str2op(@StdString BytePointer name);
+@Namespace("at") public static native @Cast("at::Float32Op") int str2op(@StdString String name);
+@Namespace("at") public static native Float32Precision str2precision(@StdString BytePointer name);
+@Namespace("at") public static native @Cast("at::Float32Precision") int str2precision(@StdString String name);
+@Namespace("at") public static native @StdString BytePointer precision2str(Float32Precision prec);
+@Namespace("at") public static native @StdString String precision2str(@Cast("at::Float32Precision") int prec);
 // Targeting ../Context.java
 
 
@@ -19409,7 +19709,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // Targeting ../ROCmBackwardPassGuard.java
-
 
 
  // namespace at
@@ -46811,11 +47110,23 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::rand_like(Tensor self, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 
+// aten::rand_like.generator(Tensor self, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator);
+// aten::rand_like.generator(Tensor self, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor rand_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
 // aten::rand_like.out(Tensor self, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor rand_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByRef Tensor rand_like_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::rand_like.out(Tensor self, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor rand_like_outf(@Const @ByRef Tensor self, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+// aten::rand_like.generator_out(Tensor self, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor rand_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor rand_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal GeneratorOptional generator);
+// aten::rand_like.generator_out(Tensor self, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor rand_like_outf(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 
 
@@ -47047,11 +47358,35 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt high, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 
 
+// aten::randint_like.generator(Tensor self, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.generator(Tensor self, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
+
+// aten::randint_like.generator(Tensor self, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.generator(Tensor self, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
+
 // aten::randint_like.Tensor(Tensor self, Tensor high, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high);
 // aten::randint_like.Tensor(Tensor self, Tensor high, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
+// aten::randint_like.Tensor_generator(Tensor self, Tensor high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator);
+// aten::randint_like.Tensor_generator(Tensor self, Tensor high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 
 // aten::randint_like.low_dtype(Tensor self, SymInt low, SymInt high, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
@@ -47069,6 +47404,24 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::randint_like.low_dtype(Tensor self, SymInt low, SymInt high, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
+
+// aten::randint_like.low_generator_dtype(Tensor self, SymInt low, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.low_generator_dtype(Tensor self, SymInt low, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
+
+// aten::randint_like.low_generator_dtype(Tensor self, SymInt low, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.low_generator_dtype(Tensor self, SymInt low, SymInt high, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randint_like_symint(@Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 
 
 // aten::randint_like.out(Tensor self, SymInt high, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
@@ -47089,11 +47442,35 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor randint_like_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt high, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 
+// aten::randint_like.generator_out(Tensor self, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.generator_out(Tensor self, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_outf(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+
+// aten::randint_like.generator_out(Tensor self, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor randint_like_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal SymInt high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.generator_out(Tensor self, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+
 // aten::randint_like.Tensor_out(Tensor self, Tensor high, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor high);
 // aten::randint_like.Tensor_out(Tensor self, Tensor high, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randint_like_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+// aten::randint_like.Tensor_generator_out(Tensor self, Tensor high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator);
+// aten::randint_like.Tensor_generator_out(Tensor self, Tensor high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 // aten::randint_like.low_dtype_out(Tensor self, SymInt low, SymInt high, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
@@ -47111,6 +47488,24 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::randint_like.low_dtype_out(Tensor self, SymInt low, SymInt high, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randint_like_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+
+// aten::randint_like.low_generator_dtype_out(Tensor self, SymInt low, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor randint_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.low_generator_dtype_out(Tensor self, SymInt low, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_outf(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+
+// aten::randint_like.low_generator_dtype_out(Tensor self, SymInt low, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor randint_like_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal GeneratorOptional generator);
+
+
+// aten::randint_like.low_generator_dtype_out(Tensor self, SymInt low, SymInt high, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randint_like_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt low, @ByVal SymInt high, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 
 
@@ -47331,11 +47726,23 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::randn_like(Tensor self, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 
+// aten::randn_like.generator(Tensor self, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator);
+// aten::randn_like.generator(Tensor self, *, Generator? generator, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
+@Namespace("at") public static native @ByVal Tensor randn_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
+
 // aten::randn_like.out(Tensor self, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randn_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("at") public static native @ByRef Tensor randn_like_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::randn_like.out(Tensor self, *, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randn_like_outf(@Const @ByRef Tensor self, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
+
+// aten::randn_like.generator_out(Tensor self, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randn_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("at") public static native @ByRef Tensor randn_like_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal GeneratorOptional generator);
+// aten::randn_like.generator_out(Tensor self, *, Generator? generator, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor randn_like_outf(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 
 
@@ -56146,9 +56553,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
   @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleArrayRef values);
   @Namespace("at") public static native @ByVal Tensor tensor(double value); 
   @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BoolArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)") boolean value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>") boolean value, @Const @ByRef TensorOptions options);
   @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BoolArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)") boolean value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>") boolean value); 
   @Namespace("at") public static native @ByVal Tensor tensor(@ByVal HalfArrayRef values, @Const @ByRef TensorOptions options);
   @Namespace("at") public static native @ByVal Tensor tensor(@ByVal Half value, @Const @ByRef TensorOptions options);
   @Namespace("at") public static native @ByVal Tensor tensor(@ByVal HalfArrayRef values);
@@ -57065,15 +57472,34 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/tril_ops.h>
 
 
-// aten::tril.out(Tensor self, int diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+
+// aten::tril.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor tril_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long diagonal/*=0*/);
 @Namespace("at") public static native @ByRef Tensor tril_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-// aten::tril.out(Tensor self, int diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+
+
+// aten::tril.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor tril_outf(@Const @ByRef Tensor self, @Cast("int64_t") long diagonal, @ByRef Tensor out);
 
-// aten::tril(Tensor self, int diagonal=0) -> Tensor
+
+// aten::tril.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor tril_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+@Namespace("at") public static native @ByRef Tensor tril_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+
+
+// aten::tril.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor tril_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt diagonal, @ByRef Tensor out);
+
+
+// aten::tril(Tensor self, SymInt diagonal=0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor tril(@Const @ByRef Tensor self, @Cast("int64_t") long diagonal/*=0*/);
 @Namespace("at") public static native @ByVal Tensor tril(@Const @ByRef Tensor self);
+
+
+// aten::tril(Tensor self, SymInt diagonal=0) -> Tensor
+@Namespace("at") public static native @ByVal Tensor tril_symint(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+@Namespace("at") public static native @ByVal Tensor tril_symint(@Const @ByRef Tensor self);
+
 
 
 
@@ -57175,15 +57601,34 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/triu_ops.h>
 
 
-// aten::triu.out(Tensor self, int diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+
+// aten::triu.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor triu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long diagonal/*=0*/);
 @Namespace("at") public static native @ByRef Tensor triu_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-// aten::triu.out(Tensor self, int diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+
+
+// aten::triu.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor triu_outf(@Const @ByRef Tensor self, @Cast("int64_t") long diagonal, @ByRef Tensor out);
 
-// aten::triu(Tensor self, int diagonal=0) -> Tensor
+
+// aten::triu.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor triu_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+@Namespace("at") public static native @ByRef Tensor triu_symint_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+
+
+// aten::triu.out(Tensor self, SymInt diagonal=0, *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor triu_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt diagonal, @ByRef Tensor out);
+
+
+// aten::triu(Tensor self, SymInt diagonal=0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor triu(@Const @ByRef Tensor self, @Cast("int64_t") long diagonal/*=0*/);
 @Namespace("at") public static native @ByVal Tensor triu(@Const @ByRef Tensor self);
+
+
+// aten::triu(Tensor self, SymInt diagonal=0) -> Tensor
+@Namespace("at") public static native @ByVal Tensor triu_symint(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::SymInt(0)") SymInt diagonal);
+@Namespace("at") public static native @ByVal Tensor triu_symint(@Const @ByRef Tensor self);
+
 
 
 
@@ -60254,7 +60699,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable.h>
 // #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable_backward.h>
 // #include <ATen/ops/_scaled_grouped_mm.h>
+// #include <ATen/ops/_scaled_grouped_mm_v2.h>
 // #include <ATen/ops/_scaled_mm.h>
+// #include <ATen/ops/_scaled_mm_v2.h>
 // #include <ATen/ops/_segment_reduce_backward.h>
 // #include <ATen/ops/_shape_as_tensor.h>
 // #include <ATen/ops/_slow_conv2d_backward.h>
@@ -62110,6 +62557,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/Half.h>
 // #include <c10/util/Metaprogramming.h>
 // #include <c10/util/complex.h>
+// #include <torch/headeronly/core/Dispatch.h>
 
 // #ifdef __CUDACC__
 // #include <cuda.h> // For CUDA_VERSION
@@ -62160,11 +62608,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //   } while (0)
 
 // #define AT_PRIVATE_CASE_TYPE_USING_HINT(enum_type, HINT, ...)
-//   case enum_type: {
-//     AT_PRIVATE_CHECK_SELECTIVE_BUILD(enum_type);
-//     using HINT [[maybe_unused]] = c10::impl::ScalarTypeToCPPTypeT<enum_type>;
-//     return __VA_ARGS__();
-//   }
+//   THO_PRIVATE_CASE_TYPE_USING_HINT_TMPL(
+//       AT_PRIVATE_CHECK_SELECTIVE_BUILD, enum_type, HINT, __VA_ARGS__)
 
 // #define AT_DISPATCH_CASE(enum_type, ...)
 //   AT_PRIVATE_CASE_TYPE_USING_HINT(enum_type, scalar_t, __VA_ARGS__)
@@ -62192,10 +62637,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //     [[maybe_unused]] int64_t quant_max = qmax;
 //     return __VA_ARGS__();
 //   }
-
-@Namespace("detail") public static native ScalarType scalar_type(ScalarType s);
-
- // namespace detail
 
 // The AT_DISPATCH_* family of macros provides the ability to
 // conveniently generate specializations of a kernel over all of the
@@ -62285,24 +62726,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // use it to shut up warnings about unused store.
 
 // #define AT_DISPATCH_SWITCH(TYPE, NAME, ...)
-//   [&] {
-//     const auto& the_type = TYPE;
-//     constexpr const char* at_dispatch_name = NAME;
-//     /* don't use TYPE again in case it is an expensive or side-effect op */
-//     at::ScalarType _st = ::detail::scalar_type(the_type);
-//     RECORD_KERNEL_FUNCTION_DTYPE(at_dispatch_name, _st);
-//     switch (_st) {
-//       __VA_ARGS__
-//       default:
-//         TORCH_CHECK_NOT_IMPLEMENTED(
-//             false,
-//             '"',
-//             at_dispatch_name,
-//             "\" not implemented for '",
-//             toString(_st),
-//             "'");
-//     }
-//   }()
+//   THO_DISPATCH_SWITCH_TMPL(
+//       RECORD_KERNEL_FUNCTION_DTYPE,
+//       TORCH_CHECK_NOT_IMPLEMENTED,
+//       TYPE,
+//       NAME,
+//       __VA_ARGS__)
 
 // #define AT_DISPATCH_CASE_FLOATING_TYPES(...)
 //   AT_DISPATCH_CASE(at::ScalarType::Double, __VA_ARGS__)
@@ -63713,7 +64142,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable_native.h>
 // #include <ATen/ops/_scaled_dot_product_fused_attention_overrideable_backward_native.h>
 // #include <ATen/ops/_scaled_grouped_mm_native.h>
+// #include <ATen/ops/_scaled_grouped_mm_v2_native.h>
 // #include <ATen/ops/_scaled_mm_native.h>
+// #include <ATen/ops/_scaled_mm_v2_native.h>
 // #include <ATen/ops/_segment_reduce_backward_native.h>
 // #include <ATen/ops/_shape_as_tensor_native.h>
 // #include <ATen/ops/_slow_conv2d_backward_native.h>
@@ -66110,6 +66541,7 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #include <ATen/ops/rand.h>
 // #include <ATen/ops/rand.h>
 // #include <ATen/ops/rand_like.h>
+// #include <ATen/ops/rand_like.h>
 // #include <ATen/ops/randint.h>
 // #include <ATen/ops/randint.h>
 // #include <ATen/ops/randint.h>
@@ -66117,10 +66549,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #include <ATen/ops/randint_like.h>
 // #include <ATen/ops/randint_like.h>
 // #include <ATen/ops/randint_like.h>
+// #include <ATen/ops/randint_like.h>
+// #include <ATen/ops/randint_like.h>
+// #include <ATen/ops/randint_like.h>
 // #include <ATen/ops/randn.h>
 // #include <ATen/ops/randn.h>
 // #include <ATen/ops/randn.h>
 // #include <ATen/ops/randn.h>
+// #include <ATen/ops/randn_like.h>
 // #include <ATen/ops/randn_like.h>
 // #include <ATen/ops/randperm.h>
 // #include <ATen/ops/randperm.h>
@@ -66365,6 +66801,8 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("rand_like") Tensor torch_rand_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("rand_like") Tensor torch_rand_like(@Const @ByRef Tensor self);
+@Namespace("torch") public static native @ByVal @Name("rand_like") Tensor torch_rand_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("torch") public static native @ByVal @Name("rand_like") Tensor torch_rand_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randint") Tensor torch_randint(@Cast("int64_t") long high, @ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("randint") Tensor torch_randint(@Cast("int64_t") long high, @ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("randint") Tensor torch_randint(@Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
@@ -66383,10 +66821,16 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("randint") Tensor torch_randint(@Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high);
+@Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long high, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high);
+@Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Const @ByRef Tensor high, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high);
+@Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("torch") public static native @ByVal @Name("randint_like") Tensor torch_randint_like(@Const @ByRef Tensor self, @Cast("int64_t") long low, @Cast("int64_t") long high, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -66405,6 +66849,8 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self);
+@Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
+@Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randperm") Tensor torch_randperm(@Cast("int64_t") long n, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("randperm") Tensor torch_randperm(@Cast("int64_t") long n);
 @Namespace("torch") public static native @ByVal @Name("randperm") Tensor torch_randperm(@Cast("int64_t") long n, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions(at::kLong)") TensorOptions options);
@@ -67600,8 +68046,6 @@ public static final int kPrevDirection = kPrevDirection();
 
 
 
-// #if !defined(USE_ROCM)
-// #endif
  // namespace cuda
 
 // A Graph represents one "function" of computation.
@@ -79527,29 +79971,7 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
 // Parsed from torch/csrc/api/include/torch/version.h
 
-// #pragma once
-
-/** Indicates the major version of LibTorch. */
-public static final int TORCH_VERSION_MAJOR = 2;
-
-/** Indicates the minor version of LibTorch. */
-public static final int TORCH_VERSION_MINOR = 9;
-
-/** Indicates the patch version of LibTorch. */
-public static final int TORCH_VERSION_PATCH = 1;
-
-/** Indicates the ABI version tag of LibTorch. */
-public static final int TORCH_VERSION_ABI_TAG = 0;
-
-/** Indicates the version of LibTorch as a string literal. */
-public static final String TORCH_VERSION = 
-  "2.9.1";
-
-/** Indicates the ABI version of LibTorch as a single uint64.
- *  [ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ][ byte ]
- *  [ MAJ  ][ MIN  ][ PATCH][                              ABI TAG ] */
-public static native @MemberGetter long TORCH_ABI_VERSION();
-public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
+// #include <torch/headeronly/version.h>
 
 
 // Parsed from torch/csrc/api/include/torch/xpu.h
@@ -79936,6 +80358,7 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // #include <unordered_map>
 // #include <vector>
 
+// #include <c10/util/Exception.h>
 // #include <c10/util/SmallVector.h>
 // #include <c10/util/intrusive_ptr.h>
 // #include <torch/csrc/jit/frontend/lexer.h>
@@ -80295,7 +80718,7 @@ public static final long TORCH_ABI_VERSION = TORCH_ABI_VERSION();
 // 2) Writing with 1-pass sequential access
 //      -> We must take care not to require updating values that have already
 //         been written. We place the variable-length index at the end and do
-//         not put any indicies into the header to fulfill this constraint.
+//         not put any index into the header to fulfill this constraint.
 
 // The model.json, which contains all the metadata information,
 // should be written as the last file. One reason is that the size of tensor
@@ -81805,7 +82228,6 @@ public static final int C10D_ENV_NOT_SET = -2;
 // #include <ATen/core/dispatch/Dispatcher.h>
 // #include <c10/macros/Macros.h>
 
-// #include <torch/csrc/distributed/c10d/Work.hpp>
 // *************************************************************************
 // PROCESS GROUP collective communication API IS BEING CHANGED BETWEEN
 // versions 1.7 and 1.8.

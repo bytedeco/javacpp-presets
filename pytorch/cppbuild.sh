@@ -41,7 +41,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.9.1
+PYTORCH_VERSION=2.10.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -83,7 +83,7 @@ git submodule foreach --recursive 'git reset --hard'
 #patch -Np1 < ../../../pytorch.patch
 
 # https://github.com/pytorch/pytorch/pull/164570
-patch -Np1 < ../../../pytorch-cuda.patch
+#patch -Np1 < ../../../pytorch-cuda.patch
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
@@ -109,6 +109,8 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     done
     IFS="$PREVIFS"
 fi
+
+export OpenBLAS_HOME=$OPENBLAS_PATH
 
 CPYTHON_HOST_PATH="${CPYTHON_HOST_PATH//\\//}"
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
@@ -141,7 +143,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.8.0
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.2 typing_extensions==4.8.0 packaging==25.0
 
 case $PLATFORM in
     linux-x86)
@@ -197,7 +199,7 @@ sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
 
-sedinplace '/pycore_opcode.h/d' torch/csrc/dynamo/cpython_defs.c functorch/csrc/dim/dim*
+#sedinplace '/pycore_opcode.h/d' torch/csrc/dynamo/cpython_defs.c functorch/csrc/dim/dim*
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
 
 # allow setting the build directory and passing CUDA options
@@ -205,8 +207,8 @@ sedinplace "s/BUILD_DIR = .build./BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_
 sedinplace 's/var.startswith(("BUILD_", "USE_", "CMAKE_"))/var.startswith(("BUILD_", "USE_", "CMAKE_", "CUDA_"))/g' tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
-sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
-sedinplace 's/TensorIndex(std::nullopt_t)/TensorIndex(std::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
+sedinplace 's/TensorIndex(c10::nullopt_t.*)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
+sedinplace 's/TensorIndex(std::nullopt_t.*)/TensorIndex(std::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 
 # add missing declarations
 sedinplace '/using ExampleType = ExampleType_;/a\
@@ -240,7 +242,7 @@ sedinplace 's/include(${CMAKE_CURRENT_LIST_DIR}\/Modules\/FindOpenMP.cmake)/find
 #rm -f aten/src/ATen/native/cuda/SegmentReduce.cu
 
 #USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
-"$PYTHON_BIN_PATH" setup.py build
+BLAS=OpenBLAS "$PYTHON_BIN_PATH" setup.py build
 
 rm -Rf ../lib
 if [[ ! -e torch/include/gloo ]]; then

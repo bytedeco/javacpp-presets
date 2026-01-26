@@ -91,4 +91,6 @@ public class PrefixStore extends Store {
 
   // Recursively to fetch the store before layers of wrapping with PrefixStore.
   public native @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store getUnderlyingNonPrefixStore();
+
+  public native @ByVal StringVector listKeys();
 }

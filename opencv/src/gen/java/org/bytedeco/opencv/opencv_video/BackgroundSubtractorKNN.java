@@ -56,7 +56,7 @@ public class BackgroundSubtractorKNN extends BackgroundSubtractor {
     public native int getNSamples();
     /** \brief Sets the number of data samples in the background model.
     <p>
-    The model needs to be reinitalized to reserve memory.
+    The model needs to be reinitialized to reserve memory.
     */
     public native void setNSamples(int _nN);//needs reinitialization!
 

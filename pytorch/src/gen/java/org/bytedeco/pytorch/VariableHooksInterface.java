@@ -58,4 +58,6 @@ public class VariableHooksInterface extends Pointer {
         @Const @ByRef OperatorHandle op,
         @ByVal DispatchKeySet dispatch_keys,
         IValueVector stack);
+  public native @ByVal ScalarTypeOptional grad_dtype(@Const @ByRef TensorBase arg0);
+  public native void set_grad_dtype(@Const @ByRef TensorBase arg0, @Const @ByRef ScalarTypeOptional arg1);
 }

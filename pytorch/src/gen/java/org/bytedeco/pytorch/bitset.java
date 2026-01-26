@@ -49,7 +49,7 @@ public class bitset extends Pointer {
   @NoException(true) private native void allocate();
   public bitset(@Const @ByRef bitset arg0) { super((Pointer)null); allocate(arg0); }
   @NoException(true) private native void allocate(@Const @ByRef bitset arg0);
-  // there is an issure for gcc 5.3.0 when define default function as constexpr
+  // there is an issue for gcc 5.3.0 when define default function as constexpr
   // see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68754.
   public native @ByRef @Name("operator =") @NoException(true) bitset put(@Const @ByRef bitset arg0);
 

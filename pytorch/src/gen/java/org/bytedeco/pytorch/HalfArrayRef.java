@@ -18,9 +18,17 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::ArrayRef<decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class HalfArrayRef extends Pointer {
+@Name("c10::ArrayRef<c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Half> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class HalfArrayRef extends HalfHeaderOnlyArrayRef {
     static { Loader.load(); }
+
+
+   public HalfArrayRef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+    public HalfArrayRef(@Const Half data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@Const Half data, @Cast("size_t") long length);
+    public HalfArrayRef(@Const Half begin, @Const Half end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@Const Half begin, @Const Half end);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HalfArrayRef(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -33,85 +41,49 @@ public class HalfArrayRef extends Pointer {
         return new HalfArrayRef((Pointer)this).offsetAddress(i);
     }
 
-  /** \name Constructors
-   *  \{
-   <p>
-   *  Construct an empty ArrayRef. */
-  /* implicit */ public HalfArrayRef() { super((Pointer)null); allocate(); }
-private native void allocate();
-
-  /** Construct an ArrayRef from a single element. */
-  // TODO Make this explicit
-  
-
-  /** Construct an ArrayRef from a pointer and length. */
-  public HalfArrayRef(@Const Half data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-  private native void allocate(@Const Half data, @Cast("size_t") long length);
-
-  /** Construct an ArrayRef from a range. */
-  public HalfArrayRef(@Const Half begin, @Const Half end) { super((Pointer)null); allocate(begin, end); }
-  private native void allocate(@Const Half begin, @Const Half end);
+  /** \name Constructors, all inherited from HeaderOnlyArrayRef except for
+   *  SmallVector. As inherited constructors won't work with class template
+   *  argument deduction (CTAD) until C++23, we add deduction guides after
+   *  the class definition to enable CTAD.
+   *  \{ */
 
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
-   *  copy-construct an ArrayRef. */
-
-  /** Construct an ArrayRef from a std::vector. */
-  // The enable_if stuff here makes sure that this isn't used for
-  // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
-  // bitfield.
-
-  /** Construct an ArrayRef from a std::array */
-
-  /** Construct an ArrayRef from a C array. */
-
-  /** Construct an ArrayRef from a std::initializer_list. */
-  /* implicit */
+   *  copy-construct an ArrayRef.
+   *  NOTE: this is the only constructor that is not inherited from
+   *  HeaderOnlyArrayRef. */
 
   /** \}
-   *  \name Simple Operations
-   *  \{ */
-
-  public native @Const @ByPtr Half begin();
-  public native @Const @ByPtr Half end();
-
-  // These are actually the same as iterator, since ArrayRef only
-  // gives you const iterators.
-  public native @Const @ByPtr Half cbegin();
-  public native @Const @ByPtr Half cend();
-
-  /** Check if all elements in the array satisfy the given expression */
-  
-
-  /** empty - Check if the array is empty. */
-  public native @Cast("const bool") boolean empty();
-
-  public native @Const Half data();
-
-  /** size - Get the array size. */
-  public native @Cast("const size_t") long size();
-
-  /** front - Get the first element. */
+   *  \name Simple Operations, mostly inherited from HeaderOnlyArrayRef
+   *  \{
+   <p>
+   *  front - Get the first element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef Half front();
 
-  /** back - Get the last element. */
+  /** back - Get the last element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef Half back();
 
-  /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal HalfArrayRef RHS);
-
-  /** slice(n, m) - Take M elements of the array starting at element N */
+  /** slice(n, m) - Take M elements of the array starting at element N
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal HalfArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
-  /** slice(n) - Chop off the first N elements of the array. */
+  /** slice(n) - Chop off the first N elements of the array.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal HalfArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads
-   *  \{ */
-  public native @Const @ByRef @Name("operator []") Half get(@Cast("size_t") long Index);
-
-  /** Vector compatibility */
+   *  \{
+   <p>
+   *  Vector compatibility
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   
   ///
   public native @Const @ByRef Half at(@Cast("size_t") long Index);
@@ -127,11 +99,6 @@ private native void allocate();
    *  The declaration here is extra complicated so that "arrayRef = {}"
    *  continues to select the move assignment operator. */
   
-
-  /** \}
-   *  \name Expensive Operations
-   *  \{ */
-  public native @StdVector Half vec();
 
   /** \} */
 }

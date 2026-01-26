@@ -43,10 +43,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "<opencv2/tracking/tracking_internals.hpp>",
 //                "<opencv2/tracking/tracking_legacy.hpp>",
             },
-            link = "opencv_tracking@.412"
+            link = "opencv_tracking@.413"
         ),
         @Platform(value = "ios", preload = "libopencv_tracking"),
-        @Platform(value = "windows", link = "opencv_tracking4120")
+        @Platform(value = "windows", link = "opencv_tracking4130")
     },
     target = "org.bytedeco.opencv.opencv_tracking",
     global = "org.bytedeco.opencv.global.opencv_tracking"

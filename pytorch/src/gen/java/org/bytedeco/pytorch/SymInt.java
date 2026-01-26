@@ -107,15 +107,6 @@ private native void allocate(@Cast("int64_t") long d);
   public native @Cast("int64_t") long guard_int(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("int64_t") long guard_int(String file, @Cast("int64_t") long line);
 
-  // Insert a guard that this SymInt must be size-like, returning true if
-  // the integer actually is >= 0.  Unlike manually performing a >= 0 test,
-  // if the SymInt in question is an unbacked SymInt (or, potentially in the
-  // future, if it contains unbacked SymInts), we will also treat the
-  // unbacked SymInt as statically testing >= 2 (which will prevent us from
-  // choking on, e.g., contiguity checks.)
-  public native @Cast("bool") boolean expect_size(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean expect_size(String file, @Cast("int64_t") long line);
-
   // Distinguish actual symbolic values from constants stored on the heap
   public native @Cast("bool") boolean is_symbolic();
 

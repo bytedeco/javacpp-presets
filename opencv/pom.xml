@@ -11,19 +11,19 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>opencv</artifactId>
-  <version>4.12.0-${project.parent.version}</version>
+  <version>4.13.0-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenCV</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.30-${project.parent.version}</version>
+      <version>0.3.31-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy</artifactId>
-      <version>2.4.0-${project.parent.version}</version>
+      <version>2.4.1-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -62,12 +62,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.30-${project.parent.version}</version>
+            <version>0.3.31-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>2.4.0-${project.parent.version}</version>
+            <version>2.4.1-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>

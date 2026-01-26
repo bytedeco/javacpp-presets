@@ -2849,171 +2849,238 @@ public static final int
 
 /** the color conversion codes
 @see \ref imgproc_color_conversions
+\note The source image (src) must be of an appropriate type for the desired color conversion.
+- {@code [8U]} means to support {@code CV_8U} src type.
+- {@code [16U]} means to support {@code CV_16U} src type.
+- {@code [32F]} means to support {@code CV_32F} src type.
 \ingroup imgproc_color_conversions
  */
 /** enum cv::ColorConversionCodes */
 public static final int
-    /** add alpha channel to RGB or BGR image */
+    /** [8U/16U/32F] add alpha channel to RGB or BGR image */
     COLOR_BGR2BGRA     = 0,
+    /** [8U/16U/32F] */
     COLOR_RGB2RGBA     = COLOR_BGR2BGRA,
 
-    /** remove alpha channel from RGB or BGR image */
+    /** [8U/16U/32F] remove alpha channel from RGB or BGR image */
     COLOR_BGRA2BGR     = 1,
+    /** [8U/16U/32F] */
     COLOR_RGBA2RGB     = COLOR_BGRA2BGR,
 
-    /** convert between RGB and BGR color spaces (with or without alpha channel) */
+    /** [8U/16U/32F] convert between RGB and BGR color spaces (with or without alpha channel) */
     COLOR_BGR2RGBA     = 2,
+    /** [8U/16U/32F] */
     COLOR_RGB2BGRA     = COLOR_BGR2RGBA,
 
+    /** [8U/16U/32F] */
     COLOR_RGBA2BGR     = 3,
+    /** [8U/16U/32F] */
     COLOR_BGRA2RGB     = COLOR_RGBA2BGR,
 
+    /** [8U/16U/32F] */
     COLOR_BGR2RGB      = 4,
+    /** [8U/16U/32F] */
     COLOR_RGB2BGR      = COLOR_BGR2RGB,
 
+    /** [8U/16U/32F] */
     COLOR_BGRA2RGBA    = 5,
+    /** [8U/16U/32F] */
     COLOR_RGBA2BGRA    = COLOR_BGRA2RGBA,
 
-    /** convert between RGB/BGR and grayscale, \ref color_convert_rgb_gray "color conversions" */
+    /** [8U/16U/32F] convert between RGB/BGR and grayscale, \ref color_convert_rgb_gray "color conversions" */
     COLOR_BGR2GRAY     = 6,
+    /** [8U/16U/32F] */
     COLOR_RGB2GRAY     = 7,
+    /** [8U/16U/32F] */
     COLOR_GRAY2BGR     = 8,
+    /** [8U/16U/32F] */
     COLOR_GRAY2RGB     = COLOR_GRAY2BGR,
+    /** [8U/16U/32F] */
     COLOR_GRAY2BGRA    = 9,
+    /** [8U/16U/32F] */
     COLOR_GRAY2RGBA    = COLOR_GRAY2BGRA,
+    /** [8U/16U/32F] */
     COLOR_BGRA2GRAY    = 10,
+    /** [8U/16U/32F] */
     COLOR_RGBA2GRAY    = 11,
 
-    /** convert between RGB/BGR and BGR565 (16-bit images) */
+    /** [8U] convert between RGB/BGR and BGR565 (16-bit images) */
     COLOR_BGR2BGR565   = 12,
+    /** [8U] */
     COLOR_RGB2BGR565   = 13,
+    /** [8U] */
     COLOR_BGR5652BGR   = 14,
+    /** [8U] */
     COLOR_BGR5652RGB   = 15,
+    /** [8U] */
     COLOR_BGRA2BGR565  = 16,
+    /** [8U] */
     COLOR_RGBA2BGR565  = 17,
+    /** [8U] */
     COLOR_BGR5652BGRA  = 18,
+    /** [8U] */
     COLOR_BGR5652RGBA  = 19,
 
-    /** convert between grayscale to BGR565 (16-bit images) */
+    /** [8U] convert between grayscale to BGR565 (16-bit images) */
     COLOR_GRAY2BGR565  = 20,
+    /** [8U] */
     COLOR_BGR5652GRAY  = 21,
 
-    /** convert between RGB/BGR and BGR555 (16-bit images) */
+    /** [8U] convert between RGB/BGR and BGR555 (16-bit images) */
     COLOR_BGR2BGR555   = 22,
+    /** [8U] */
     COLOR_RGB2BGR555   = 23,
+    /** [8U] */
     COLOR_BGR5552BGR   = 24,
+    /** [8U] */
     COLOR_BGR5552RGB   = 25,
+    /** [8U] */
     COLOR_BGRA2BGR555  = 26,
+    /** [8U] */
     COLOR_RGBA2BGR555  = 27,
+    /** [8U] */
     COLOR_BGR5552BGRA  = 28,
+    /** [8U] */
     COLOR_BGR5552RGBA  = 29,
 
-    /** convert between grayscale and BGR555 (16-bit images) */
+    /** [8U] convert between grayscale and BGR555 (16-bit images) */
     COLOR_GRAY2BGR555  = 30,
+    /** [8U] */
     COLOR_BGR5552GRAY  = 31,
 
-    /** convert RGB/BGR to CIE XYZ, \ref color_convert_rgb_xyz "color conversions" */
+    /** [8U/16U/32F] convert RGB/BGR to CIE XYZ, \ref color_convert_rgb_xyz "color conversions" */
     COLOR_BGR2XYZ      = 32,
+    /** [8U/16U/32F] */
     COLOR_RGB2XYZ      = 33,
+    /** [8U/16U/32F] */
     COLOR_XYZ2BGR      = 34,
+    /** [8U/16U/32F] */
     COLOR_XYZ2RGB      = 35,
 
-    /** convert RGB/BGR to luma-chroma (aka YCC), \ref color_convert_rgb_ycrcb "color conversions" */
+    /** [8U/16U/32F] convert RGB/BGR to luma-chroma (aka YCC), \ref color_convert_rgb_ycrcb "color conversions" */
     COLOR_BGR2YCrCb    = 36,
+    /** [8U/16U/32F] */
     COLOR_RGB2YCrCb    = 37,
+    /** [8U/16U/32F] */
     COLOR_YCrCb2BGR    = 38,
+    /** [8U/16U/32F] */
     COLOR_YCrCb2RGB    = 39,
 
-    /** convert RGB/BGR to HSV (hue saturation value) with H range 0..180 if 8 bit image, \ref color_convert_rgb_hsv "color conversions" */
+    /** [8U/32F] convert RGB/BGR to HSV (hue saturation value) with H range 0..180 if 8 bit image, \ref color_convert_rgb_hsv "color conversions" */
     COLOR_BGR2HSV      = 40,
+    /** [8U/32F] */
     COLOR_RGB2HSV      = 41,
 
-    /** convert RGB/BGR to CIE Lab, \ref color_convert_rgb_lab "color conversions" */
+    /** [8U/32F] convert RGB/BGR to CIE Lab, \ref color_convert_rgb_lab "color conversions" */
     COLOR_BGR2Lab      = 44,
+    /** [8U/32F] */
     COLOR_RGB2Lab      = 45,
 
-    /** convert RGB/BGR to CIE Luv, \ref color_convert_rgb_luv "color conversions" */
+    /** [8U/32F] convert RGB/BGR to CIE Luv, \ref color_convert_rgb_luv "color conversions" */
     COLOR_BGR2Luv      = 50,
+    /** [8U/32F] */
     COLOR_RGB2Luv      = 51,
-    /** convert RGB/BGR to HLS (hue lightness saturation) with H range 0..180 if 8 bit image, \ref color_convert_rgb_hls "color conversions" */
+    /** [8U/32F] convert RGB/BGR to HLS (hue lightness saturation) with H range 0..180 if 8 bit image, \ref color_convert_rgb_hls "color conversions" */
     COLOR_BGR2HLS      = 52,
+    /** [8U/32F] */
     COLOR_RGB2HLS      = 53,
 
-    /** backward conversions HSV to RGB/BGR with H range 0..180 if 8 bit image */
+    /** [8U/32F] backward conversions HSV to RGB/BGR with H range 0..180 if 8 bit image */
     COLOR_HSV2BGR      = 54,
+    /** [8U/32F] */
     COLOR_HSV2RGB      = 55,
 
+    /** [8U/32F] */
     COLOR_Lab2BGR      = 56,
+    /** [8U/32F] */
     COLOR_Lab2RGB      = 57,
+    /** [8U/32F] */
     COLOR_Luv2BGR      = 58,
+    /** [8U/32F] */
     COLOR_Luv2RGB      = 59,
-    /** backward conversions HLS to RGB/BGR with H range 0..180 if 8 bit image */
+    /** [8U/32F] backward conversions HLS to RGB/BGR with H range 0..180 if 8 bit image */
     COLOR_HLS2BGR      = 60,
+    /** [8U/32F] */
     COLOR_HLS2RGB      = 61,
 
-    /** convert RGB/BGR to HSV (hue saturation value) with H range 0..255 if 8 bit image, \ref color_convert_rgb_hsv "color conversions" */
+    /** [8U/32F] convert RGB/BGR to HSV (hue saturation value) with H range 0..255 if 8 bit image, \ref color_convert_rgb_hsv "color conversions" */
     COLOR_BGR2HSV_FULL = 66,
+    /** [8U/32F] */
     COLOR_RGB2HSV_FULL = 67,
-    /** convert RGB/BGR to HLS (hue lightness saturation) with H range 0..255 if 8 bit image, \ref color_convert_rgb_hls "color conversions" */
+    /** [8U/32F] convert RGB/BGR to HLS (hue lightness saturation) with H range 0..255 if 8 bit image, \ref color_convert_rgb_hls "color conversions" */
     COLOR_BGR2HLS_FULL = 68,
+    /** [8U/32F] */
     COLOR_RGB2HLS_FULL = 69,
 
-    /** backward conversions HSV to RGB/BGR with H range 0..255 if 8 bit image */
+    /** [8U/32F] backward conversions HSV to RGB/BGR with H range 0..255 if 8 bit image */
     COLOR_HSV2BGR_FULL = 70,
+    /** [8U/32F] */
     COLOR_HSV2RGB_FULL = 71,
-    /** backward conversions HLS to RGB/BGR with H range 0..255 if 8 bit image */
+    /** [8U/32F] backward conversions HLS to RGB/BGR with H range 0..255 if 8 bit image */
     COLOR_HLS2BGR_FULL = 72,
+    /** [8U/32F] */
     COLOR_HLS2RGB_FULL = 73,
 
+    /** [8U/32F] */
     COLOR_LBGR2Lab     = 74,
+    /** [8U/32F] */
     COLOR_LRGB2Lab     = 75,
+    /** [8U/32F] */
     COLOR_LBGR2Luv     = 76,
+    /** [8U/32F] */
     COLOR_LRGB2Luv     = 77,
 
+    /** [8U/32F] */
     COLOR_Lab2LBGR     = 78,
+    /** [8U/32F] */
     COLOR_Lab2LRGB     = 79,
+    /** [8U/32F] */
     COLOR_Luv2LBGR     = 80,
+    /** [8U/32F] */
     COLOR_Luv2LRGB     = 81,
 
-    /** convert between RGB/BGR and YUV */
+    /** [8U/16U/32F] convert between RGB/BGR and YUV */
     COLOR_BGR2YUV      = 82,
+    /** [8U/16U/32F] */
     COLOR_RGB2YUV      = 83,
+    /** [8U/16U/32F] */
     COLOR_YUV2BGR      = 84,
+    /** [8U/16U/32F] */
     COLOR_YUV2RGB      = 85,
 
-    /** convert between 4:2:0-subsampled YUV NV12 and RGB, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV12 and RGB, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_NV12  = 90,
-    /** convert between 4:2:0-subsampled YUV NV12 and BGR, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV12 and BGR, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_NV12  = 91,
-    /** convert between 4:2:0-subsampled YUV NV21 and RGB, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV21 and RGB, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_NV21  = 92,
-    /** convert between 4:2:0-subsampled YUV NV21 and BGR, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV21 and BGR, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_NV21  = 93,
     /** synonym to NV21 */
     COLOR_YUV420sp2RGB  = COLOR_YUV2RGB_NV21,
     /** synonym to NV21 */
     COLOR_YUV420sp2BGR  = COLOR_YUV2BGR_NV21,
 
-    /** convert between 4:2:0-subsampled YUV NV12 and RGBA, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV12 and RGBA, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_NV12 = 94,
-    /** convert between 4:2:0-subsampled YUV NV12 and BGRA, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV12 and BGRA, two planes (in one or separate arrays): Y and U/V interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_NV12 = 95,
-    /** convert between 4:2:0-subsampled YUV NV21 and RGBA, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV21 and RGBA, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_NV21 = 96,
-    /** convert between 4:2:0-subsampled YUV NV21 and BGRA, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV NV21 and BGRA, two planes (in one or separate arrays): Y and V/U interleaved, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_NV21 = 97,
     /** synonym to NV21 */
     COLOR_YUV420sp2RGBA = COLOR_YUV2RGBA_NV21,
     /** synonym to NV21 */
     COLOR_YUV420sp2BGRA = COLOR_YUV2BGRA_NV21,
 
-    /** convert between 4:2:0-subsampled YUV YV12 and RGB, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV YV12 and RGB, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_YV12  = 98,
-    /** convert between 4:2:0-subsampled YUV YV12 and BGR, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV YV12 and BGR, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_YV12  = 99,
-    /** convert between 4:2:0-subsampled YUV IYUV and RGB, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV IYUV and RGB, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_IYUV  = 100,
-    /** convert between 4:2:0-subsampled YUV IYUV and BGR, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV IYUV and BGR, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_IYUV  = 101,
     /** synonym to IYUV */
     COLOR_YUV2RGB_I420  = COLOR_YUV2RGB_IYUV,
@@ -3024,13 +3091,13 @@ public static final int
     /** synonym to YV12 */
     COLOR_YUV420p2BGR   = COLOR_YUV2BGR_YV12,
 
-    /** convert between 4:2:0-subsampled YUV YV12 and RGBA, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV YV12 and RGBA, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_YV12 = 102,
-    /** convert between 4:2:0-subsampled YUV YV12 and BGRA, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV YV12 and BGRA, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_YV12 = 103,
-    /** convert between 4:2:0-subsampled YUV YV12 and RGBA, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV YV12 and RGBA, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_IYUV = 104,
-    /** convert between 4:2:0-subsampled YUV YV12 and BGRA, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between 4:2:0-subsampled YUV YV12 and BGRA, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_IYUV = 105,
     /** synonym to IYUV */
     COLOR_YUV2RGBA_I420 = COLOR_YUV2RGBA_IYUV,
@@ -3041,7 +3108,7 @@ public static final int
     /** synonym to YV12 */
     COLOR_YUV420p2BGRA  = COLOR_YUV2BGRA_YV12,
 
-    /** extract Y channel from YUV 4:2:0 image */
+    /** [8U] extract Y channel from YUV 4:2:0 image */
     COLOR_YUV2GRAY_420  = 106,
     /** synonym to COLOR_YUV2GRAY_420 */
     COLOR_YUV2GRAY_NV21 = COLOR_YUV2GRAY_420,
@@ -3058,9 +3125,9 @@ public static final int
     /** synonym to COLOR_YUV2GRAY_420 */
     COLOR_YUV420p2GRAY  = COLOR_YUV2GRAY_420,
 
-    /** convert between YUV UYVY and RGB, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV UYVY and RGB, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_UYVY = 107,
-    /** convert between YUV UYVY and BGR, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV UYVY and BGR, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_UYVY = 108,
     //COLOR_YUV2RGB_VYUY = 109, //!< convert between YUV VYUY and RGB, YUV is 4:2:2-subsampled and interleaved as V/Y1/U/Y2, see @ref color_convert_rgb_yuv_42x
     //COLOR_YUV2BGR_VYUY = 110, //!< convert between YUV VYUY and BGR, YUV is 4:2:2-subsampled and interleaved as V/Y1/U/Y2, see @ref color_convert_rgb_yuv_42x
@@ -3073,12 +3140,12 @@ public static final int
     /** synonym to UYVY */
     COLOR_YUV2BGR_UYNV = COLOR_YUV2BGR_UYVY,
 
-    /** convert between YUV UYVY and RGBA, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV UYVY and RGBA, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_UYVY = 111,
-    /** convert between YUV UYVY and BGRA, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV UYVY and BGRA, YUV is 4:2:2-subsampled and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_UYVY = 112,
-    //COLOR_YUV2RGBA_VYUY = 113, //!< convert between YUV VYUY and RGBA, YUV is 4:2:2-subsampled and interleaved as V/Y1/U/Y2, see @ref color_convert_rgb_yuv_42x
-    //COLOR_YUV2BGRA_VYUY = 114, //!< convert between YUV VYUY and BGRA, YUV is 4:2:2-subsampled and interleaved as V/Y1/U/Y2, see @ref color_convert_rgb_yuv_42x
+    //COLOR_YUV2RGBA_VYUY = 113, //!< [8U] convert between YUV VYUY and RGBA, YUV is 4:2:2-subsampled and interleaved as V/Y1/U/Y2, see @ref color_convert_rgb_yuv_42x
+    //COLOR_YUV2BGRA_VYUY = 114, //!< [8U] convert between YUV VYUY and BGRA, YUV is 4:2:2-subsampled and interleaved as V/Y1/U/Y2, see @ref color_convert_rgb_yuv_42x
     /** synonym to UYVY */
     COLOR_YUV2RGBA_Y422 = COLOR_YUV2RGBA_UYVY,
     /** synonym to UYVY */
@@ -3088,13 +3155,13 @@ public static final int
     /** synonym to UYVY */
     COLOR_YUV2BGRA_UYNV = COLOR_YUV2BGRA_UYVY,
 
-    /** convert between YUV YUY2 and RGB, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YUY2 and RGB, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_YUY2 = 115,
-    /** convert between YUV YUY2 and BGR, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YUY2 and BGR, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_YUY2 = 116,
-    /** convert between YUV YVYU and RGB, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YVYU and RGB, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGB_YVYU = 117,
-    /** convert between YUV YVYU and BGR, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YVYU and BGR, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGR_YVYU = 118,
     /** synonym to YUY2 */
     COLOR_YUV2RGB_YUYV = COLOR_YUV2RGB_YUY2,
@@ -3105,13 +3172,13 @@ public static final int
     /** synonym to YUY2 */
     COLOR_YUV2BGR_YUNV = COLOR_YUV2BGR_YUY2,
 
-    /** convert between YUV YUY2 and RGBA, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YUY2 and RGBA, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_YUY2 = 119,
-    /** convert between YUV YUY2 and BGRA, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YUY2 and BGRA, YUV is 4:2:2-subsampled and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_YUY2 = 120,
-    /** convert between YUV YVYU and RGBA, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YVYU and RGBA, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2RGBA_YVYU = 121,
-    /** convert between YUV YVYU and BGRA, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between YUV YVYU and BGRA, YUV is 4:2:2-subsampled and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_YUV2BGRA_YVYU = 122,
     /** synonym to YUY2 */
     COLOR_YUV2RGBA_YUYV = COLOR_YUV2RGBA_YUY2,
@@ -3122,9 +3189,9 @@ public static final int
     /** synonym to YUY2 */
     COLOR_YUV2BGRA_YUNV = COLOR_YUV2BGRA_YUY2,
 
-    /** extract Y channel from YUV 4:2:2 image */
+    /** [8U] extract Y channel from YUV 4:2:2 image */
     COLOR_YUV2GRAY_UYVY = 123,
-    /** extract Y channel from YUV 4:2:2 image */
+    /** [8U] extract Y channel from YUV 4:2:2 image */
     COLOR_YUV2GRAY_YUY2 = 124,
     //CV_YUV2GRAY_VYUY  = CV_YUV2GRAY_UYVY, //!< synonym to COLOR_YUV2GRAY_UYVY
     /** synonym to COLOR_YUV2GRAY_UYVY */
@@ -3139,168 +3206,206 @@ public static final int
     COLOR_YUV2GRAY_YUNV = COLOR_YUV2GRAY_YUY2,
 
     /** alpha premultiplication */
+    /** [8U] */
     COLOR_RGBA2mRGBA    = 125,
+    /** [8U] */
     COLOR_mRGBA2RGBA    = 126,
 
-    /** convert between RGB and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGB and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGB2YUV_I420  = 127,
-    /** convert between BGR and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGR and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGR2YUV_I420  = 128,
     /** synonym to I420 */
     COLOR_RGB2YUV_IYUV  = COLOR_RGB2YUV_I420,
     /** synonym to I420 */
     COLOR_BGR2YUV_IYUV  = COLOR_BGR2YUV_I420,
 
-    /** convert between RGBA and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGBA and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGBA2YUV_I420 = 129,
-    /** convert between BGRA and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGRA and 4:2:0-subsampled YUV I420, three planes in one array: Y, U and V, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGRA2YUV_I420 = 130,
     /** synonym to I420 */
     COLOR_RGBA2YUV_IYUV = COLOR_RGBA2YUV_I420,
     /** synonym to I420 */
     COLOR_BGRA2YUV_IYUV = COLOR_BGRA2YUV_I420,
-    /** convert between RGB and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGB and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGB2YUV_YV12  = 131,
-    /** convert between BGR and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGR and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGR2YUV_YV12  = 132,
-    /** convert between RGBA and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGBA and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGBA2YUV_YV12 = 133,
-    /** convert between BGRA and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGRA and 4:2:0-subsampled YUV YV12, three planes in one array: Y, V and U, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGRA2YUV_YV12 = 134,
 
     /** Demosaicing, see \ref color_convert_bayer "color conversions" for additional information */
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGR = 46,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGR = 47,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGR = 48,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGR = 49,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2BGR = COLOR_BayerBG2BGR,
+    /** [8U/16U] */
     COLOR_BayerGRBG2BGR = COLOR_BayerGB2BGR,
+    /** [8U/16U] */
     COLOR_BayerBGGR2BGR = COLOR_BayerRG2BGR,
+    /** [8U/16U] */
     COLOR_BayerGBRG2BGR = COLOR_BayerGR2BGR,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2RGB = COLOR_BayerBGGR2BGR,
+    /** [8U/16U] */
     COLOR_BayerGRBG2RGB = COLOR_BayerGBRG2BGR,
+    /** [8U/16U] */
     COLOR_BayerBGGR2RGB = COLOR_BayerRGGB2BGR,
+    /** [8U/16U] */
     COLOR_BayerGBRG2RGB = COLOR_BayerGRBG2BGR,
 
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGB = COLOR_BayerRG2BGR,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGB = COLOR_BayerGR2BGR,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGB = COLOR_BayerBG2BGR,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGB = COLOR_BayerGB2BGR,
 
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2GRAY = 86,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2GRAY = 87,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2GRAY = 88,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2GRAY = 89,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2GRAY = COLOR_BayerBG2GRAY,
+    /** [8U/16U] */
     COLOR_BayerGRBG2GRAY = COLOR_BayerGB2GRAY,
+    /** [8U/16U] */
     COLOR_BayerBGGR2GRAY = COLOR_BayerRG2GRAY,
+    /** [8U/16U] */
     COLOR_BayerGBRG2GRAY = COLOR_BayerGR2GRAY,
 
     /** Demosaicing using Variable Number of Gradients */
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGR_VNG = 62,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGR_VNG = 63,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGR_VNG = 64,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGR_VNG = 65,
 
+    /** [8U] */
     COLOR_BayerRGGB2BGR_VNG = COLOR_BayerBG2BGR_VNG,
+    /** [8U] */
     COLOR_BayerGRBG2BGR_VNG = COLOR_BayerGB2BGR_VNG,
+    /** [8U] */
     COLOR_BayerBGGR2BGR_VNG = COLOR_BayerRG2BGR_VNG,
+    /** [8U] */
     COLOR_BayerGBRG2BGR_VNG = COLOR_BayerGR2BGR_VNG,
 
+    /** [8U] */
     COLOR_BayerRGGB2RGB_VNG = COLOR_BayerBGGR2BGR_VNG,
+    /** [8U] */
     COLOR_BayerGRBG2RGB_VNG = COLOR_BayerGBRG2BGR_VNG,
+    /** [8U] */
     COLOR_BayerBGGR2RGB_VNG = COLOR_BayerRGGB2BGR_VNG,
+    /** [8U] */
     COLOR_BayerGBRG2RGB_VNG = COLOR_BayerGRBG2BGR_VNG,
 
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGB_VNG = COLOR_BayerRG2BGR_VNG,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGB_VNG = COLOR_BayerGR2BGR_VNG,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGB_VNG = COLOR_BayerBG2BGR_VNG,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGB_VNG = COLOR_BayerGB2BGR_VNG,
 
     /** Edge-Aware Demosaicing */
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGR_EA  = 135,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGR_EA  = 136,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGR_EA  = 137,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGR_EA  = 138,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2BGR_EA  = COLOR_BayerBG2BGR_EA,
+    /** [8U/16U] */
     COLOR_BayerGRBG2BGR_EA  = COLOR_BayerGB2BGR_EA,
+    /** [8U/16U] */
     COLOR_BayerBGGR2BGR_EA  = COLOR_BayerRG2BGR_EA,
+    /** [8U/16U] */
     COLOR_BayerGBRG2BGR_EA  = COLOR_BayerGR2BGR_EA,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2RGB_EA  = COLOR_BayerBGGR2BGR_EA,
+    /** [8U/16U] */
     COLOR_BayerGRBG2RGB_EA  = COLOR_BayerGBRG2BGR_EA,
+    /** [8U/16U] */
     COLOR_BayerBGGR2RGB_EA  = COLOR_BayerRGGB2BGR_EA,
+    /** [8U/16U] */
     COLOR_BayerGBRG2RGB_EA  = COLOR_BayerGRBG2BGR_EA,
 
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGB_EA  = COLOR_BayerRG2BGR_EA,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGB_EA  = COLOR_BayerGR2BGR_EA,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGB_EA  = COLOR_BayerBG2BGR_EA,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGB_EA  = COLOR_BayerGB2BGR_EA,
 
     /** Demosaicing with alpha channel */
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGRA = 139,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGRA = 140,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGRA = 141,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGRA = 142,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2BGRA = COLOR_BayerBG2BGRA,
+    /** [8U/16U] */
     COLOR_BayerGRBG2BGRA = COLOR_BayerGB2BGRA,
+    /** [8U/16U] */
     COLOR_BayerBGGR2BGRA = COLOR_BayerRG2BGRA,
+    /** [8U/16U] */
     COLOR_BayerGBRG2BGRA = COLOR_BayerGR2BGRA,
 
+    /** [8U/16U] */
     COLOR_BayerRGGB2RGBA = COLOR_BayerBGGR2BGRA,
+    /** [8U/16U] */
     COLOR_BayerGRBG2RGBA = COLOR_BayerGBRG2BGRA,
+    /** [8U/16U] */
     COLOR_BayerBGGR2RGBA = COLOR_BayerRGGB2BGRA,
+    /** [8U/16U] */
     COLOR_BayerGBRG2RGBA = COLOR_BayerGRBG2BGRA,
 
-    /** equivalent to RGGB Bayer pattern */
+    /** [8U/16U] equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGBA = COLOR_BayerRG2BGRA,
-    /** equivalent to GRBG Bayer pattern */
+    /** [8U/16U] equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGBA = COLOR_BayerGR2BGRA,
-    /** equivalent to BGGR Bayer pattern */
+    /** [8U/16U] equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGBA = COLOR_BayerBG2BGRA,
-    /** equivalent to GBRG Bayer pattern */
+    /** [8U/16U] equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGBA = COLOR_BayerGB2BGRA,
 
-    /** convert between RGB and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGB and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGB2YUV_UYVY = 143,
-    /** convert between BGR and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGR and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGR2YUV_UYVY = 144,
     /** synonym to UYVY */
     COLOR_RGB2YUV_Y422 = COLOR_RGB2YUV_UYVY,
@@ -3311,9 +3416,9 @@ public static final int
     /** synonym to UYVY */
     COLOR_BGR2YUV_UYNV = COLOR_BGR2YUV_UYVY,
 
-    /** convert between RGBA and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGBA and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGBA2YUV_UYVY = 145,
-    /** convert between BGRA and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGRA and YUV UYVU, YUV is 4:2:2 and interleaved as U/Y1/V/Y2, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGRA2YUV_UYVY = 146,
     /** synonym to UYVY */
     COLOR_RGBA2YUV_Y422 = COLOR_RGBA2YUV_UYVY,
@@ -3324,13 +3429,13 @@ public static final int
     /** synonym to UYVY */
     COLOR_BGRA2YUV_UYNV = COLOR_BGRA2YUV_UYVY,
 
-    /** convert between RGB and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGB and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGB2YUV_YUY2 = 147,
-    /** convert between BGR and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGR and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGR2YUV_YUY2 = 148,
-    /** convert between RGB and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGB and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGB2YUV_YVYU = 149,
-    /** convert between BGR and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGR and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGR2YUV_YVYU = 150,
     /** synonym to YUY2 */
     COLOR_RGB2YUV_YUYV = COLOR_RGB2YUV_YUY2,
@@ -3341,13 +3446,13 @@ public static final int
     /** synonym to YUY2 */
     COLOR_BGR2YUV_YUNV = COLOR_BGR2YUV_YUY2,
 
-    /** convert between RGBA and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGBA and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGBA2YUV_YUY2 = 151,
-    /** convert between BGRA and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGRA and YUV YUY2, YUV is 4:2:2 and interleaved as Y1/U/Y2/V, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGRA2YUV_YUY2 = 152,
-    /** convert between RGBA and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between RGBA and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_RGBA2YUV_YVYU = 153,
-    /** convert between BGRA and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
+    /** [8U] convert between BGRA and YUV YVYU, YUV is 4:2:2 and interleaved as Y1/V/Y2/U, see \ref color_convert_rgb_yuv_42x */
     COLOR_BGRA2YUV_YVYU = 154,
     /** synonym to YUY2 */
     COLOR_RGBA2YUV_YUYV = COLOR_RGBA2YUV_YUY2,
@@ -5599,6 +5704,27 @@ peak) and will be smaller when there are multiple peaks.
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal GpuMat src1, @ByVal GpuMat src2,
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat window, double[] response/*=0*/);
 
+/** \brief Detects translational shifts between two images.
+<p>
+This function extends the standard \ref phaseCorrelate method by improving sub-pixel accuracy
+through iterative shift refinement in the phase-correlation space, as described in
+\cite hrazdira2020iterative.
+<p>
+@param src1 Source floating point array (CV_32FC1 or CV_64FC1)
+@param src2 Source floating point array (CV_32FC1 or CV_64FC1)
+@param L2size The size of the correlation neighborhood used by the iterative shift refinement algorithm.
+@param maxIters The maximum number of iterations the iterative refinement algorithm will run.
+@return detected sub-pixel shift between the two arrays.
+<p>
+@see phaseCorrelate, dft, idft, createHanningWindow
+ */
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateIterative(@ByVal Mat src1, @ByVal Mat src2, int L2size/*=7*/, int maxIters/*=10*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateIterative(@ByVal Mat src1, @ByVal Mat src2);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateIterative(@ByVal UMat src1, @ByVal UMat src2, int L2size/*=7*/, int maxIters/*=10*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateIterative(@ByVal UMat src1, @ByVal UMat src2);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateIterative(@ByVal GpuMat src1, @ByVal GpuMat src2, int L2size/*=7*/, int maxIters/*=10*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateIterative(@ByVal GpuMat src1, @ByVal GpuMat src2);
+
 /** \brief This function computes a Hanning window coefficients in two dimensions.
 <p>
 See (https://en.wikipedia.org/wiki/Hann_function) and (https://en.wikipedia.org/wiki/Window_function)
@@ -6920,6 +7046,7 @@ floating-point.
 channels is derived automatically from src and code.
 @param hint Implementation modfication flags. See #AlgorithmHint
 <p>
+\note The source image (src) must be of an appropriate type for the desired color conversion. see ColorConversionCodes
 @see \ref imgproc_color_conversions
  */
 @Namespace("cv") public static native void cvtColor( @ByVal Mat src, @ByVal Mat dst, int code, int dstCn/*=0*/, @Cast("cv::AlgorithmHint") int hint/*=cv::ALGO_HINT_DEFAULT*/ );
@@ -6983,6 +7110,7 @@ The function can do the following transformations:
     <p>
     #COLOR_BayerBG2BGRA , #COLOR_BayerGB2BGRA , #COLOR_BayerRG2BGRA , #COLOR_BayerGR2BGRA
 <p>
+\note The source image (src) must be of an appropriate type for the desired color conversion. see ColorConversionCodes
 @see cvtColor
 */
 @Namespace("cv") public static native void demosaicing(@ByVal Mat src, @ByVal Mat dst, int code, int dstCn/*=0*/);
@@ -7010,6 +7138,18 @@ used for images only.
 <p>
 \note Only applicable to contour moments calculations from Python bindings: Note that the numpy
 type for the input array should be either np.int32 or np.float32.
+<p>
+\note For contour-based moments, the zeroth-order moment \c m00 represents
+the contour area.
+<p>
+If the input contour is degenerate (for example, a single point or all points
+are collinear), the area is zero and therefore \c m00 == 0.
+<p>
+In this case, the centroid coordinates (\c m10/m00, \c m01/m00) are undefined
+and must be handled explicitly by the caller.
+<p>
+A common workaround is to compute the center using cv::boundingRect() or by
+averaging the input points.
 <p>
 @see  contourArea, arcLength
  */
@@ -7446,7 +7586,7 @@ The algorithm based on the paper \cite LowIlie2003 .
 @param approxCurve Result of the approximation. The type is vector of a 2D point (Point2f or Point) in std::vector or Mat.
 @param nsides The parameter defines the number of sides of the result polygon.
 @param epsilon_percentage defines the percentage of the maximum of additional area.
-If it equals -1, it is not used. Otherwise algorighm stops if additional area is greater than contourArea(_curve) * percentage.
+If it equals -1, it is not used. Otherwise algorithm stops if additional area is greater than contourArea(_curve) * percentage.
 If additional area exceeds the limit, algorithm returns as many vertices as there were at the moment the limit was exceeded.
 @param ensure_convex If it is true, algorithm creates a convex hull of input contour. Otherwise input vector should be convex.
  */
@@ -7547,7 +7687,8 @@ The function finds the four vertices of a rotated rectangle. The four vertices a
 in clockwise order starting from the point with greatest {@code y}. If two points have the
 same {@code y} coordinate the rightmost is the starting point. This function is useful to draw the
 rectangle. In C++, instead of using this function, you can directly use RotatedRect::points method. Please
-visit the \ref tutorial_bounding_rotated_ellipses "tutorial on Creating Bounding rotated boxes and ellipses for contours" for more information.
+visit the \ref tutorial_bounding_rotated_ellipses "tutorial on Creating Bounding rotated boxes and ellipses
+for contours" for more information.
 <p>
 @param box The input rotated rectangle. It may be the output of \ref minAreaRect.
 @param points The output array of four vertices of rectangles.
@@ -7608,6 +7749,32 @@ of the OutputArray must be CV_32F.
 @Namespace("cv") public static native double minEnclosingTriangle( @ByVal Mat points, @ByVal Mat triangle );
 @Namespace("cv") public static native double minEnclosingTriangle( @ByVal UMat points, @ByVal UMat triangle );
 @Namespace("cv") public static native double minEnclosingTriangle( @ByVal GpuMat points, @ByVal GpuMat triangle );
+
+
+/**
+\brief Finds a convex polygon of minimum area enclosing a 2D point set and returns its area.
+<p>
+This function takes a given set of 2D points and finds the enclosing polygon with k vertices and minimal
+area. It takes the set of points and the parameter k as input and returns the area of the minimal
+enclosing polygon.
+<p>
+The Implementation is based on a paper by Aggarwal, Chang and Yap \cite Aggarwal1985. They
+provide a {@code \theta(n²log(n)log(k))} algorithm for finding the minimal convex polygon with k
+vertices enclosing a 2D convex polygon with n vertices (k < n). Since the #minEnclosingConvexPolygon
+function takes a 2D point set as input, an additional preprocessing step of computing the convex hull
+of the 2D point set is required. The complexity of the #convexHull function is {@code O(n log(n))} which
+is lower than {@code \theta(n²log(n)log(k))}. Thus the overall complexity of the function is
+{@code O(n²log(n)log(k))}.
+<p>
+@param points   Input vector of 2D points, stored in std::vector\<\> or Mat
+@param polygon  Output vector of 2D points defining the vertices of the enclosing polygon
+@param k        Number of vertices of the output polygon
+ */
+
+@Namespace("cv") public static native double minEnclosingConvexPolygon( @ByVal Mat points, @ByVal Mat polygon, int k );
+@Namespace("cv") public static native double minEnclosingConvexPolygon( @ByVal UMat points, @ByVal UMat polygon, int k );
+@Namespace("cv") public static native double minEnclosingConvexPolygon( @ByVal GpuMat points, @ByVal GpuMat polygon, int k );
+
 
 /** \brief Compares two shapes.
 <p>

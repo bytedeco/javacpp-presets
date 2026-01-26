@@ -119,9 +119,12 @@ public class PyInterpreterVTable extends Pointer {
 
   // Run Py_INCREF on a PyObject.
   public native void incref(@Cast("PyObject*") Pointer pyobj);
-  // Run Py_DECREF on a PyObject.  We DO NOT assume the GIL is held on call
-  // See NOTE [PyInterpreter::decref takes a `has_pyobj_slot` arg]
-  public native void decref(@Cast("PyObject*") Pointer pyobj, @Cast("bool") boolean has_pyobj_slot);
+  // Run Py_DECREF on a PyObject.  We DO NOT assume the GIL is held on call.
+  public native void decref(@Cast("PyObject*") Pointer pyobj);
+  // Run PyUnstable_TryIncRef on a PyObject if it's not NULL.
+  public native @Cast("bool") boolean try_incref(@Cast("const c10::impl::PyObjectSlot*") @ByRef Pointer pyobj_slot);
+  // Run Py_REFCNT on a PyObject.
+  public native @Cast("size_t") long refcnt(@Cast("PyObject*") Pointer pyobj);
 
   // Perform a detach by deferring to the __torch_dispatch__ implementation of
   // detach, which will also arrange for the PyObject to get copied in this

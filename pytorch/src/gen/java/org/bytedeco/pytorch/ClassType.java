@@ -90,7 +90,7 @@ public class ClassType extends NamedType {
   public native void checkNotExist(@StdString BytePointer name, @StdString BytePointer what);
   public native void checkNotExist(@StdString String name, @StdString String what);
 
-  // Attributes are stored in a specific slot at runtime for effiency.
+  // Attributes are stored in a specific slot at runtime for efficiency.
   // When emitting instructions we specify the slot so that attribute access is
   // a constant lookup
   public native @ByVal SizeTOptional findAttributeSlot(@StdString BytePointer name);

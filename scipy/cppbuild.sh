@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.16.3
+SCIPY_VERSION=1.17.0
 download https://github.com/boostorg/math/archive/529f3a7.tar.gz math-529f3a7.tar.gz
 download https://github.com/data-apis/array-api-compat/archive/8005d6d.tar.gz array-api-compat-8005d6d.tar.gz
 download https://github.com/data-apis/array-api-extra/archive/28a364d.tar.gz array-api-extra-28a364d.tar.gz
@@ -127,7 +127,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.14"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.14" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.14/" crossenv==1.4 numpy==2.4.0 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.14" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.14/" crossenv==1.4 numpy==2.4.1 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.14" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.14/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.14/include" "$PYTHON_LIB_PATH"

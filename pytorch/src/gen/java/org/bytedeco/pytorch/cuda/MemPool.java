@@ -36,7 +36,7 @@ import static org.bytedeco.pytorch.global.torch_cuda.*;
 // An allocator pointer can be passed to the MemPool to define how the
 // allocations should be done in the pool. For example: using a different
 // system allocator such as ncclMemAlloc.
-@Namespace("c10::cuda") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
+@Namespace("at::cuda") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
 public class MemPool extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -54,11 +54,13 @@ public class MemPool extends Pointer {
   public MemPool(
         CUDAAllocator allocator/*=nullptr*/,
         @Cast("bool") boolean is_user_created/*=true*/,
-        @Cast("bool") boolean use_on_oom/*=false*/) { super((Pointer)null); allocate(allocator, is_user_created, use_on_oom); }
+        @Cast("bool") boolean use_on_oom/*=false*/,
+        @Cast("bool") boolean no_split/*=false*/) { super((Pointer)null); allocate(allocator, is_user_created, use_on_oom, no_split); }
   private native void allocate(
         CUDAAllocator allocator/*=nullptr*/,
         @Cast("bool") boolean is_user_created/*=true*/,
-        @Cast("bool") boolean use_on_oom/*=false*/);
+        @Cast("bool") boolean use_on_oom/*=false*/,
+        @Cast("bool") boolean no_split/*=false*/);
   public MemPool() { super((Pointer)null); allocate(); }
   private native void allocate();
   

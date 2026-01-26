@@ -78,6 +78,19 @@ public class Backend extends CustomClassHolder {
 
   public native @Cast("bool") boolean supportsTimeEstimation();
 
+  public native @Cast("bool") boolean supportsShrinking();
+
+  // Shrink the backend by excluding specified ranks. Backends that support
+  // communicator shrinking should override this and return a new backend
+  // instance representing the shrunken group. Backends may use opts_override
+  // to supply backend-specific options for the new group.
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend shrink(
+        @Cast("const std::vector<int64_t>*") @ByRef LongVector arg0,
+        int arg1/*=0*/,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options arg2/*=nullptr*/);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend shrink(
+        @Cast("const std::vector<int64_t>*") @ByRef LongVector arg0);
+
   public native void setTimeout(@ByVal Milliseconds timeout);
 
   public native void startCoalescing();

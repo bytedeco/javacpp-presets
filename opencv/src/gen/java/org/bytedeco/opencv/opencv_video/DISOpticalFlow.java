@@ -64,6 +64,16 @@ public class DISOpticalFlow extends DenseOpticalFlow {
     /** \copybrief getFinestScale @see getFinestScale */
     public native void setFinestScale(int val);
 
+    /** \brief Sets the coarsest scale
+    @param val Coarsest level of the Gaussian pyramid on which the flow is computed.
+    If set to -1, the auto-computed coarsest scale will be used.
+    */
+    public native void setCoarsestScale(int val);
+
+    /** \brief Gets the coarsest scale
+    */
+    public native int getCoarsestScale();
+
     /** \brief Size of an image patch for matching (in pixels). Normally, default 8x8 patches work well
         enough in most cases.
         @see setPatchSize */

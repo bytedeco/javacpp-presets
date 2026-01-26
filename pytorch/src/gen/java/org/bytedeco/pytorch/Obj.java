@@ -31,7 +31,7 @@ public class Obj extends Pointer {
   // However, the CompilationUnit holds ownership of the type's graphs, so
   // inserting a constant object into a Graph would create a reference cycle if
   // that constant object held a shared_ptr to its CU. For these objects we
-  // instatiate them with non-owning references to its CU
+  // instantiate them with non-owning references to its CU
   public Obj(@ByVal WeakOrStrongTypePtr type, @Cast("size_t") long numSlots) { super((Pointer)null); allocate(type, numSlots); }
   @IntrusivePtr @Name("c10::make_intrusive<c10::ivalue::Object>") private native void allocate(@ByVal WeakOrStrongTypePtr type, @Cast("size_t") long numSlots);
 

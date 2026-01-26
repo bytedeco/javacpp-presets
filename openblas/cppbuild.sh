@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.30
+OPENBLAS_VERSION=0.3.31
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -257,5 +257,7 @@ if [[ -f ../lib/libopenblas.dll.a ]]; then
     cp ../lib/libopenblas.dll.a ../lib/openblas.lib
     cp ../lib/libopenblas_nolapack.dll.a ../lib/openblas_nolapack.lib
 fi
+sedinplace 's:openblas_nolapack:openblas:g' ../lib/cmake/openblas/*
+sedinplace 's:bin/libopenblas.dll:lib/openblas.lib:g' ../lib/cmake/openblas/*
 
 cd ../..

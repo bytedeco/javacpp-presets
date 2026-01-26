@@ -45,8 +45,9 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean profile_all_threads/*=false*/,
         @Cast("bool") boolean capture_overload_names/*=false*/,
         @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString BytePointer custom_profiler_config/*=""*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, custom_profiler_config, adjust_timestamps); }
+        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
@@ -58,6 +59,7 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean profile_all_threads/*=false*/,
         @Cast("bool") boolean capture_overload_names/*=false*/,
         @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString BytePointer custom_profiler_config/*=""*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/);
   public ExperimentalConfig() { super((Pointer)null); allocate(); }
@@ -73,8 +75,9 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean profile_all_threads/*=false*/,
         @Cast("bool") boolean capture_overload_names/*=false*/,
         @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString String custom_profiler_config/*=""*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, custom_profiler_config, adjust_timestamps); }
+        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
@@ -86,6 +89,7 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean profile_all_threads/*=false*/,
         @Cast("bool") boolean capture_overload_names/*=false*/,
         @Cast("bool") boolean record_python_gc_info/*=false*/,
+        @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString String custom_profiler_config/*=""*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/);
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
@@ -131,6 +135,10 @@ public class ExperimentalConfig extends Pointer {
    * determine if gc collect is slowing down your profile.
    */
   public native @Cast("bool") boolean record_python_gc_info(); public native ExperimentalConfig record_python_gc_info(boolean setter);
+
+  /* controls whether KinetoEvent metadata is exposed to FunctionEvent
+   * in the PyTorch Profiler as a JSON string */
+  public native @Cast("bool") boolean expose_kineto_event_metadata(); public native ExperimentalConfig expose_kineto_event_metadata(boolean setter);
 
   /*
    * A custom_profiler_config option is introduced to allow custom backends

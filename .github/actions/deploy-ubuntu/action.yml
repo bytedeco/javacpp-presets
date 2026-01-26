@@ -17,8 +17,9 @@ runs:
         cd $HOME
 
         # Free disk space by removing some unused system components
-        $SUDO rm -rf /usr/local/lib/android
-        $SUDO rm -rf /usr/share/dotnet
+        $SUDO rm -rf /opt/az /opt/google /opt/hostedtoolcache /opt/microsoft /opt/pipx
+        $SUDO rm -rf /usr/local/lib/android /usr/local/julia*
+        $SUDO rm -rf /usr/share/dotnet /usr/share/miniconda /usr/share/swift
 
         # Make sure no busy /swapfile is hanging around
         # First disable any existing swapfile with swapoff
@@ -28,7 +29,7 @@ runs:
         $SUDO rm -f /swapfile
 
         # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
-        $SUDO fallocate -l 4GB /swapfile
+        $SUDO fallocate -l 8GB /swapfile
         $SUDO chmod 600 /swapfile
         $SUDO mkswap /swapfile
         if ! $SUDO swapon /swapfile; then

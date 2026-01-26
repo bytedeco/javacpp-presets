@@ -50,6 +50,29 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // Targeting ../cuda/PointerSet.java
 
 
+// Parsed from torch/headeronly/util/HeaderOnlyArrayRef.h
+
+// #pragma once
+
+// #include <torch/headeronly/macros/Macros.h>
+// #include <torch/headeronly/util/Exception.h>
+
+// #include <algorithm>
+// #include <array>
+// #include <cstddef>
+// #include <functional>
+// #include <initializer_list>
+// #include <iterator>
+// #include <type_traits>
+// #include <vector>
+// Targeting ../cuda/CUDAStreamHeaderOnlyArrayRef.java
+
+
+
+ // namespace c10
+ // namespace torch::headeronly
+
+
 // Parsed from c10/util/ArrayRef.h
 
 //===--- ArrayRef.h - Array Reference Wrapper -------------------*- C++ -*-===//
@@ -72,6 +95,7 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/SmallVector.h>
+// #include <torch/headeronly/util/HeaderOnlyArrayRef.h>
 
 // #include <array>
 // #include <cstddef>
@@ -84,6 +108,36 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // Targeting ../cuda/CUDAStreamArrayRef.java
 
 
+
+/** Deduction guides for ArrayRef to support CTAD with inherited constructors
+ *  These mirror the constructors inherited from HeaderOnlyArrayRef
+ *  \{ */
+
+// Single element constructor
+
+
+// Pointer and length constructor
+
+
+// Range constructor (begin, end)
+
+
+// Generic container constructor (anything with .data() and .size())
+
+
+// std::vector constructor
+
+
+// std::array constructor
+
+
+// C array constructor
+
+
+// std::initializer_list constructor
+
+
+/** \} */
 
 /** \name ArrayRef Convenience constructors
  *  \{
@@ -347,13 +401,13 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
     int err,
     @Cast("const char*") BytePointer filename,
     @Cast("const char*") BytePointer function_name,
-    int line_number,
+    @Cast("const uint32_t") int line_number,
     @Cast("const bool") boolean include_device_assertions);
 @Namespace("c10::cuda") public static native void c10_cuda_check_implementation(
     int err,
     String filename,
     String function_name,
-    int line_number,
+    @Cast("const uint32_t") int line_number,
     @Cast("const bool") boolean include_device_assertions);
 
  // namespace c10::cuda
@@ -453,6 +507,7 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 
 // #include <cstdint>
 // #include <map>
+// #include <shared_mutex>
 
 // #include <cuda_runtime_api.h>
 // #include <cusparse.h>
@@ -527,8 +582,6 @@ manage their own state. There is only a single CUDA context/state.
 
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
-@Namespace("at::cuda") public static native @ByRef T_PointerPointer_TDataPtrMap cublas_handle_stream_to_workspace();
-@Namespace("at::cuda") public static native @ByRef T_PointerPointer_TDataPtrMap cublaslt_handle_stream_to_workspace();
 @Namespace("at::cuda") public static native @Cast("size_t") long getChosenWorkspaceSize();
 @Namespace("at::cuda") public static native @Cast("size_t") long getCUDABlasLtWorkspaceSize();
 @Namespace("at::cuda") public static native Pointer getCUDABlasLtWorkspace();
@@ -932,7 +985,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #pragma once
 
+// #include <c10/core/AllocatorConfig.h>
 // #include <c10/core/CachingDeviceAllocator.h>
+// #include <c10/cuda/CUDAAllocatorConfig.h>
 // #include <c10/cuda/CUDAGraphsC10Utils.h>
 // #include <c10/cuda/CUDAMacros.h>
 // #include <c10/cuda/CUDAStream.h>
@@ -972,8 +1027,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // Preserved only for BC reasons
 // NOLINTNEXTLINE(misc-unused-using-decls)
-
-
 // Targeting ../cuda/BlockInfo.java
 
 
@@ -1017,6 +1070,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Targeting ../cuda/ShareableHandle.java
 
 
+// Targeting ../cuda/StreamSegmentSize.java
+
+
 // Targeting ../cuda/CUDAAllocator.java
 
 
@@ -1042,6 +1098,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 @Namespace("c10::cuda::CUDACachingAllocator") public static native double getMemoryFraction(byte device);
 
 
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @StdVector StreamSegmentSize getExpandableSegmentSizes(
+    byte device);
 
 
 
@@ -1101,7 +1160,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
     byte device,
     @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void setUseOnOOM(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
-
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setNoSplit(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 @Namespace("c10::cuda::CUDACachingAllocator") public static native int getPoolUseCount(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
 // Not part of CUDA_ALLOCATOR_BACKEND_INTERFACE
@@ -1115,13 +1174,13 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setUserMetadata(@StdString BytePointer metadata);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setUserMetadata(@StdString String metadata);
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @StdString BytePointer getUserMetadata();
+
  // namespace c10::cuda::CUDACachingAllocator
-
 // Keep BC only
-// Targeting ../cuda/MemPool.java
-
-
-
  // namespace c10::cuda
 
 
@@ -1280,10 +1339,10 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #include <ATen/cuda/ATenCUDAGeneral.h>
 // #include <ATen/cuda/CUDAContext.h>
-// #include <c10/core/impl/GPUTrace.h>
-// #include <c10/cuda/CUDAStream.h>
-// #include <c10/cuda/CUDAGuard.h>
 // #include <ATen/cuda/Exceptions.h>
+// #include <c10/core/impl/GPUTrace.h>
+// #include <c10/cuda/CUDAGuard.h>
+// #include <c10/cuda/CUDAStream.h>
 // #include <c10/util/Exception.h>
 
 // #include <cuda_runtime_api.h>
@@ -1302,6 +1361,25 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 */
 public static final int cudaEventExternal = 0x08;
 // Targeting ../cuda/CUDAEvent.java
+
+
+
+// EventPool - Thread-safe pool of CUDA events to avoid expensive cudaEventCreate
+// calls. cudaEventCreate when concurrently invoked from multiple threads can be
+// very expensive (especially on certain device/driver combinations).
+
+ // namespace at::cuda
+
+
+// Parsed from ATen/cuda/MemPool.h
+
+// #pragma once
+
+// #include <c10/core/Allocator.h>
+// #include <c10/cuda/CUDACachingAllocator.h>
+
+// Keep BC only
+// Targeting ../cuda/MemPool.java
 
 
 

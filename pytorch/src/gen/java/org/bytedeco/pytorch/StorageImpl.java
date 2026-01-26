@@ -91,6 +91,12 @@ public class StorageImpl extends Pointer {
   // unnecessary; don't forget to change that if needed!
   public native void release_resources();
 
+  public native @NoException(true) void incref_pyobject();
+
+  public native @NoException(true) void decref_pyobject();
+
+  public native @Cast("bool") @NoException(true) boolean try_incref_pyobject();
+
   public native @Cast("size_t") long nbytes();
 
   public native @ByVal SymInt sym_nbytes();

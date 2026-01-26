@@ -83,5 +83,9 @@ private native void allocate(@Cast("bool") boolean b);
 
   public native @ByVal BoolOptional maybe_as_bool();
 
+  // Convert SymBool to SymInt (0 or 1)
+  // This is the C++ equivalent of Python's cast_symbool_to_symint_guardless
+  public native @ByVal SymInt toSymInt();
+
   public native @Cast("bool") boolean is_heap_allocated();
 }

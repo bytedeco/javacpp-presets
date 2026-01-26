@@ -40,7 +40,7 @@ public class SymbolicShape extends Pointer {
   public SymbolicShape() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  // Known rank but unknown dimentions.
+  // Known rank but unknown dimensions.
   public SymbolicShape(@ByVal SizeTOptional rank) { super((Pointer)null); allocate(rank); }
   private native void allocate(@ByVal SizeTOptional rank);
 

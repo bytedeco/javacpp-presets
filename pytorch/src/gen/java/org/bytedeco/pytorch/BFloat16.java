@@ -43,8 +43,12 @@ public class BFloat16 extends Pointer {
   }
   public static native @Const @ByVal from_bits_t from_bits();
 
-  public BFloat16(@Cast("unsigned short") short bits, @ByVal from_bits_t arg1) { super((Pointer)null); allocate(bits, arg1); }
-  private native void allocate(@Cast("unsigned short") short bits, @ByVal from_bits_t arg1);
+  public BFloat16(
+        @Cast("unsigned short") short bits,
+        @ByVal from_bits_t arg1) { super((Pointer)null); allocate(bits, arg1); }
+  private native void allocate(
+        @Cast("unsigned short") short bits,
+        @ByVal from_bits_t arg1);
   /* implicit */ public BFloat16(float value) { super((Pointer)null); allocate(value); }
 private native void allocate(float value);
   public native @Name("operator float") float asFloat();

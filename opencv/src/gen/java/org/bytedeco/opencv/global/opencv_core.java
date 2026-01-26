@@ -549,6 +549,7 @@ public static final int CV_CPU_NEON =             100;
 public static final int CV_CPU_NEON_DOTPROD =     101;
 public static final int CV_CPU_NEON_FP16 =        102;
 public static final int CV_CPU_NEON_BF16 =        103;
+public static final int CV_CPU_SVE =              104;
 
 public static final int CV_CPU_MSA =              150;
 
@@ -612,6 +613,7 @@ public static final int
     CPU_NEON_DOTPROD    = 101,
     CPU_NEON_FP16       = 102,
     CPU_NEON_BF16       = 103,
+    CPU_SVE             = 104,
 
     CPU_MSA             = 150,
 
@@ -2018,7 +2020,7 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    4;
-public static final int CV_VERSION_MINOR =    12;
+public static final int CV_VERSION_MINOR =    13;
 public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
@@ -8107,9 +8109,9 @@ The function LUT fills the output array with values from the look-up table. Indi
 are taken from the input array. That is, the function processes each element of src as follows:
 <pre>{@code \[\texttt{dst} (I)  \leftarrow \texttt{lut(src(I) + d)}\]}</pre>
 where
-<pre>{@code \[d =  \fork{0}{if \(\texttt{src}\) has depth \(\texttt{CV_8U}\)}{128}{if \(\texttt{src}\) has depth \(\texttt{CV_8S}\)}\]}</pre>
-@param src input array of 8-bit elements.
-@param lut look-up table of 256 elements; in case of multi-channel input array, the table should
+<pre>{@code \[d =  \forkthree{0}{if \(\texttt{src}\) has depth \(\texttt{CV_8U}\) or \(\texttt{CV_16U}\)}{128}{if \(\texttt{src}\) has depth \(\texttt{CV_8S}\)}{32768}{if \(\texttt{src}\) has depth \(\texttt{CV_16S}\)}\]}</pre>
+@param src input array of 8-bit or 16-bit integer elements.
+@param lut look-up table of 256 elements (if src has depth CV_8U or CV_8S) or 65536 elements(if src has depth CV_16U or CV_16S); in case of multi-channel input array, the table should
 either have a single channel (in this case the same table is used for all channels) or the same
 number of channels as in the input array.
 @param dst output array of the same size and number of channels as src, and the same depth as lut.
@@ -9587,10 +9589,13 @@ elements.
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal GpuMat a, @Cast("bool") boolean quiet/*=true*/, Point pos/*=0*/,
                             double minVal/*=-DBL_MAX*/, double maxVal/*=DBL_MAX*/);
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal GpuMat a);
-
-/** \brief Replaces NaNs by given number
-@param a input/output matrix (CV_32F type).
-@param val value to convert the NaNs
+/** \brief Replaces NaNs (Not-a-Number values) in a matrix with the specified value.
+<p>
+This function modifies the input matrix in-place.
+The input matrix must be of type {@code CV_32F} or {@code CV_64F}; other types are not supported.
+<p>
+@param a Input/output matrix (CV_32F or CV_64F type).
+@param val Value used to replace NaNs (defaults to 0).
 */
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a, double val/*=0*/);
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a);

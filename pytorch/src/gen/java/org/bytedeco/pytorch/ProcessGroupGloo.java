@@ -222,6 +222,10 @@ public class ProcessGroupGloo extends Backend {
             @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout);
     public static native @IntrusivePtr("c10d::ProcessGroupGloo::Options") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroupGloo::Options>&"}) Options create();
 
+    public static native @IntrusivePtr("c10d::ProcessGroupGloo::Options") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroupGloo::Options>&"}) Options create_default(
+            @ByVal(nullValue = "std::chrono::milliseconds(kBackendDefaultTimeout)") Milliseconds timeout);
+    public static native @IntrusivePtr("c10d::ProcessGroupGloo::Options") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroupGloo::Options>&"}) Options create_default();
+
     public native @ByRef GlooDeviceVector devices(); public native Options devices(GlooDeviceVector setter);
     public native int threads(); public native Options threads(int setter);
   }

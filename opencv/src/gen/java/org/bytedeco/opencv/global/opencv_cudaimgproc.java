@@ -204,6 +204,19 @@ The methods support arbitrary permutations of the original channels, including r
 @param dst Destination image.
 @param forward true for forward gamma correction or false for inverse gamma correction.
 @param stream Stream for the asynchronous version.
+<p>
+Gamma correction is conformant to BT.709 \cite BT.709 with &gamma;=0.45.
+<p>
+For the forward transform, RGB values are normalised to fit in the range L=[0..1], then:
+- For L < 0.018
+  + V = 4.5*L
+- For L >= 0.018
+  + V = 1.099 * L^0.45 - 0.099
+<p>
+With V then being scaled back to [0..255].
+<p>
+![image](pics/gammacorrection.png)
+ <p>
  */
 @Namespace("cv::cuda") public static native void gammaCorrection(@ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean forward/*=true*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void gammaCorrection(@ByVal Mat src, @ByVal Mat dst);

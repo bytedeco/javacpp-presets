@@ -105,6 +105,11 @@ public class SimpleBlobDetector extends Feature2D {
       public native float minConvexity(); public native Params minConvexity(float setter);
       public native float maxConvexity(); public native Params maxConvexity(float setter);
 
+      /** \brief Flag to enable contour collection.
+      If set to true, the detector will store the contours of the detected blobs in memory,
+      which can be retrieved after the detect() call using getBlobContours().
+      \note Default value is false.
+      */
       public native @Cast("bool") boolean collectContours(); public native Params collectContours(boolean setter);
 
       public native void read( @Const @ByRef FileNode fn );
@@ -118,5 +123,10 @@ public class SimpleBlobDetector extends Feature2D {
   public native @ByVal Params getParams();
 
   public native @Str @Override BytePointer getDefaultName();
+
+  /** \brief Returns the contours of the blobs detected during the last call to detect().
+  \note The \ref Params::collectContours parameter must be set to true before calling
+  detect() for this method to return any data.
+  */
   public native @Const @ByRef PointVectorVector getBlobContours();
 }

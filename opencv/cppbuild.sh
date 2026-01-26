@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.12.0
+OPENCV_VERSION=4.13.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -72,11 +72,12 @@ tar --totals -xzf ../opencv_contrib-$OPENCV_VERSION.tar.gz
 
 cd opencv_contrib-$OPENCV_VERSION
 patch -Np1 < ../../../opencv_contrib.patch
-patch -Np1 < ../../../opencv_contrib-cuda13.patch
+patch -Np1 < ../../../opencv_contrib-cudacodec.patch
+#patch -Np1 < ../../../opencv_contrib-cuda13.patch
 
 cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
-patch -Np1 < ../../../opencv-cuda13.patch
+#patch -Np1 < ../../../opencv-cuda13.patch
 #patch -Np1 < ../../../opencv-cudnn8.patch
 patch -Np1 < ../../../opencv-linux-ppc64le.patch
 

@@ -1,3 +1,4 @@
+#include <torch/headeronly/util/HeaderOnlyArrayRef.h>
 #include "c10/util/ArrayRef.h"
 
 // Included by
@@ -29,4 +30,5 @@
 #include "ATen/cudnn/Types.h"
 #include "ATen/cudnn/Descriptors.h"
 #include "ATen/cuda/CUDAEvent.h"
+#include "ATen/cuda/MemPool.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h"

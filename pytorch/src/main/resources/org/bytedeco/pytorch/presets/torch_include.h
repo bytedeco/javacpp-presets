@@ -16,6 +16,7 @@
 #include "torch/headeronly/macros/cmake_macros.h"
 #include "torch/headeronly/macros/Export.h"
 #include "torch/headeronly/macros/Macros.h"
+#include <torch/headeronly/util/HeaderOnlyArrayRef.h>
 #include "torch/headeronly/util/bit_cast.h"
 #include <torch/headeronly/util/floating_point_utils.h>
 #include <torch/headeronly/util/BFloat16.h>
@@ -33,7 +34,10 @@
 #include <torch/headeronly/util/quint2x4.h>
 #include <torch/headeronly/util/quint4x2.h>
 #include <torch/headeronly/util/quint8.h>
-#include "torch/headeronly/core/ScalarType.h"
+#include <torch/headeronly/core/DeviceType.h>
+#include <torch/headeronly/core/Layout.h>
+#include <torch/headeronly/core/MemoryFormat.h>
+#include <torch/headeronly/core/ScalarType.h>
 
 #include "c10/macros/cmake_macros.h"
 #include "c10/macros/Export.h"
@@ -48,6 +52,7 @@
 #include "c10/util/StringUtil.h"
 #include "c10/util/Exception.h"
 #include "c10/core/Device.h"
+#include "c10/core/DeviceCapability.h"
 #include "c10/core/DispatchKey.h"
 // #include "c10/util/C++17.h"
 #include "c10/util/TypeTraits.h"

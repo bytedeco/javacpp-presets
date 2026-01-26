@@ -39,8 +39,7 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
 
 // this fails the implementation if MTIAHooks functions are called, but
 // MTIA backend is not present.
-// #define FAIL_MTIAHOOKS_FUNC(func)
-//   TORCH_CHECK(false, "Cannot execute ", func, "() without MTIA backend.");
+// #define FAIL_MTIAHOOKS_FUNC(func) TORCH_CHECK(false, "Cannot execute ", func, "() without MTIA backend.");
 
   public native void init();
 
@@ -68,7 +67,7 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
 
   public native @ByVal Stream getDefaultStream(@Cast("c10::DeviceIndex") byte arg0);
 
-  public native void setCurrentStream(@Const @ByRef Stream arg0 );
+  public native void setCurrentStream(@Const @ByRef Stream arg0);
 
   public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 
@@ -82,15 +81,12 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
 
   public native void emptyCache();
 
-
-  public native void recordMemoryHistory(
-      @Const @ByRef StringOptional arg0,
-      @StdString BytePointer arg1,
-      @Cast("size_t") long arg2);
-  public native void recordMemoryHistory(
-      @Const @ByRef StringOptional arg0,
-      @StdString String arg1,
-      @Cast("size_t") long arg2);
+  public native void recordMemoryHistory(@Const @ByRef StringOptional arg0,
+                                     @StdString BytePointer arg1,
+                                     @Cast("size_t") long arg2);
+  public native void recordMemoryHistory(@Const @ByRef StringOptional arg0,
+                                     @StdString String arg1,
+                                     @Cast("size_t") long arg2);
 
   public native @Cast("PyObject*") Pointer memorySnapshot(@Const @ByRef StringOptional local_path);
 
@@ -101,4 +97,28 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
   public native void attachOutOfMemoryObserver(@Cast("PyObject*") Pointer observer);
 
   public native @Cast("bool") boolean isAvailable();
+
+  /* MTIAGraph related APIs */
+  public native @Cast("int64_t") long mtiagraphCreate(@Cast("bool") boolean keep_graph/*=false*/);
+  public native @Cast("int64_t") long mtiagraphCreate();
+
+  public native void mtiagraphDestroy(@Cast("int64_t") long handle);
+
+  public native void mtiagraphCaptureBegin(@Cast("int64_t") long handle, @ByVal @Cast("c10::MempoolId_t*") T_TypePtrLong_T pool);
+
+  public native void mtiagraphCaptureEnd(@Cast("int64_t") long handle);
+
+  public native void mtiagraphInstantiate(@Cast("int64_t") long handle);
+
+  public native void mtiagraphReplay(@Cast("int64_t") long handle);
+
+  public native void mtiagraphReset(@Cast("int64_t") long handle);
+
+  public native @ByVal @Cast("c10::MempoolId_t*") T_TypePtrLong_T mtiagraphPool(@Cast("int64_t") long handle);
+
+  public native @ByVal @Cast("c10::MempoolId_t*") T_TypePtrLong_T graphPoolHandle();
+
+  public native @Const @ByRef Generator getDefaultGenerator(@Cast("c10::DeviceIndex") byte arg0);
+
+  public native @ByVal Generator getNewGenerator(@Cast("c10::DeviceIndex") byte arg0);
 }

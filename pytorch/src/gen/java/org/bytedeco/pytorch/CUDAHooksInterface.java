@@ -110,6 +110,8 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
 
   public native @Cast("bool") boolean supportsBFloat16ConvolutionWithCuDNNv8();
 
+  public native @Cast("bool") boolean supportsBFloat16RNNWithCuDNN();
+
   public native long versionCuDNN();
 
   public native long versionRuntimeCuDNN();

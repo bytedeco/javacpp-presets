@@ -49,7 +49,7 @@ public class DictType extends SharedType {
   // this function will return the global singleton type pointer
   // the type List<T>.
   // The extra "identifier" argument is needed because we have multiple container types
-  // that all re-use this function (Dict<K, V> and unordered_map<K, V>)
+  // that all reuse this function (Dict<K, V> and unordered_map<K, V>)
   public static native @ByVal Type.TypePtr get(@StdString BytePointer identifier, @ByVal Type.TypePtr key, @ByVal Type.TypePtr val);
   public static native @ByVal Type.TypePtr get(@StdString String identifier, @ByVal Type.TypePtr key, @ByVal Type.TypePtr val);
 }

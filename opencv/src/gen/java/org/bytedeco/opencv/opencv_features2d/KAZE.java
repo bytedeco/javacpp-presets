@@ -24,7 +24,6 @@ import static org.bytedeco.opencv.global.opencv_flann.*;
 import static org.bytedeco.opencv.global.opencv_features2d.*;
 
 
-
 /** \brief Class implementing the KAZE keypoint detector and descriptor extractor, described in \cite ABD12 .
 <p>
 \note AKAZE descriptor can only be used with KAZE or AKAZE keypoints .. [ABD12] KAZE Features. Pablo

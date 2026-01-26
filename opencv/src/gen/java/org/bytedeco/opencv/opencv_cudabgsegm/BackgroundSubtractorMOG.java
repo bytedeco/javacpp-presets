@@ -62,6 +62,10 @@ public class BackgroundSubtractorMOG extends BackgroundSubtractor {
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate, @ByRef Stream stream);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate, @ByRef Stream stream);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate, @ByRef Stream stream);
+
+    public native void apply(@ByVal Mat image, @ByVal Mat knownForegroundMask, @ByVal Mat fgmask, double learningRate, @ByRef Stream stream);
+    public native void apply(@ByVal UMat image, @ByVal UMat knownForegroundMask, @ByVal UMat fgmask, double learningRate, @ByRef Stream stream);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat knownForegroundMask, @ByVal GpuMat fgmask, double learningRate, @ByRef Stream stream);
     public native void getBackgroundImage(@ByVal Mat backgroundImage, @ByRef Stream stream);
     public native void getBackgroundImage(@ByVal UMat backgroundImage, @ByRef Stream stream);
 

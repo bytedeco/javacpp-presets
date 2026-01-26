@@ -27,7 +27,7 @@ public class Type extends Pointer {
 
   private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Type lhs, @Const @ByRef Type rhs);
   public boolean equals(Type rhs) { return equals(this, rhs); }
-  @Name("SingletonOrSharedTypePtr<c10::Type>") public static class TypePtr extends Pointer {
+  @Name("SingletonOrSharedTypePtr<c10::Type>") @NoOffset public static class TypePtr extends Pointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public TypePtr(Pointer p) { super(p); }
@@ -65,8 +65,8 @@ private native void allocate(@ByVal SingletonTypePtr p);
     // Case 2: if T is exactly Type, we need to do a dynamic_cast to
     // check if it's a SharedType and do the right thing.
     //
-    // Case 3: Otherwise, T is not a SharedType. (debug-check this
-    // assumption!) Use a singleton pointer.
+    // Case 3: Otherwise, T is not a SharedType. Use a singleton
+    // pointer.
 
     public TypePtr(@Const @ByRef TypePtr arg0) { super((Pointer)null); allocate(arg0); }
     private native void allocate(@Const @ByRef TypePtr arg0);

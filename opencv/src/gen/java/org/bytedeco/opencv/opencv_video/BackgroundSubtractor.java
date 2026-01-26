@@ -65,6 +65,26 @@ public class BackgroundSubtractor extends Algorithm {
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
 
+    /** \brief Computes a foreground mask with known foreground mask input.
+    <p>
+    @param image Next video frame. Floating point frame will be used without scaling and should be in range {@code [0,255]}.
+    @param fgmask The output foreground mask as an 8-bit binary image.
+    @param knownForegroundMask The mask for inputting already known foreground, allows model to ignore pixels.
+    @param learningRate The value between 0 and 1 that indicates how fast the background model is
+    learnt. Negative parameter value makes the algorithm to use some automatically chosen learning
+    rate. 0 means that the background model is not updated at all, 1 means that the background model
+    is completely reinitialized from the last frame.
+    <p>
+    \note This method has a default virtual implementation that throws a "not impemented" error.
+    Foreground masking may not be supported by all background subtractors.
+    */
+    public native void apply(@ByVal Mat image, @ByVal Mat knownForegroundMask, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal Mat image, @ByVal Mat knownForegroundMask, @ByVal Mat fgmask);
+    public native void apply(@ByVal UMat image, @ByVal UMat knownForegroundMask, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal UMat image, @ByVal UMat knownForegroundMask, @ByVal UMat fgmask);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat knownForegroundMask, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat knownForegroundMask, @ByVal GpuMat fgmask);
+
     /** \brief Computes a background image.
     <p>
     @param backgroundImage The output background image.

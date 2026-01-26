@@ -18,9 +18,17 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::ArrayRef<torch::TensorArg>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TensorArgArrayRef extends Pointer {
+@Name("c10::ArrayRef<torch::TensorArg>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class TensorArgArrayRef extends TensorArgHeaderOnlyArrayRef {
     static { Loader.load(); }
+
+
+   public TensorArgArrayRef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+    public TensorArgArrayRef(@Const TensorArg data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@Const TensorArg data, @Cast("size_t") long length);
+    public TensorArgArrayRef(@Const TensorArg begin, @Const TensorArg end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@Const TensorArg begin, @Const TensorArg end);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorArgArrayRef(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -33,85 +41,49 @@ public class TensorArgArrayRef extends Pointer {
         return new TensorArgArrayRef((Pointer)this).offsetAddress(i);
     }
 
-  /** \name Constructors
-   *  \{
-   <p>
-   *  Construct an empty ArrayRef. */
-  /* implicit */ public TensorArgArrayRef() { super((Pointer)null); allocate(); }
-private native void allocate();
-
-  /** Construct an ArrayRef from a single element. */
-  // TODO Make this explicit
-  
-
-  /** Construct an ArrayRef from a pointer and length. */
-  public TensorArgArrayRef(@Const TensorArg data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-  private native void allocate(@Const TensorArg data, @Cast("size_t") long length);
-
-  /** Construct an ArrayRef from a range. */
-  public TensorArgArrayRef(@Const TensorArg begin, @Const TensorArg end) { super((Pointer)null); allocate(begin, end); }
-  private native void allocate(@Const TensorArg begin, @Const TensorArg end);
+  /** \name Constructors, all inherited from HeaderOnlyArrayRef except for
+   *  SmallVector. As inherited constructors won't work with class template
+   *  argument deduction (CTAD) until C++23, we add deduction guides after
+   *  the class definition to enable CTAD.
+   *  \{ */
 
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
-   *  copy-construct an ArrayRef. */
-
-  /** Construct an ArrayRef from a std::vector. */
-  // The enable_if stuff here makes sure that this isn't used for
-  // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
-  // bitfield.
-
-  /** Construct an ArrayRef from a std::array */
-
-  /** Construct an ArrayRef from a C array. */
-
-  /** Construct an ArrayRef from a std::initializer_list. */
-  /* implicit */
+   *  copy-construct an ArrayRef.
+   *  NOTE: this is the only constructor that is not inherited from
+   *  HeaderOnlyArrayRef. */
 
   /** \}
-   *  \name Simple Operations
-   *  \{ */
-
-  public native @Const @ByPtr TensorArg begin();
-  public native @Const @ByPtr TensorArg end();
-
-  // These are actually the same as iterator, since ArrayRef only
-  // gives you const iterators.
-  public native @Const @ByPtr TensorArg cbegin();
-  public native @Const @ByPtr TensorArg cend();
-
-  /** Check if all elements in the array satisfy the given expression */
-  
-
-  /** empty - Check if the array is empty. */
-  public native @Cast("const bool") boolean empty();
-
-  public native @Const TensorArg data();
-
-  /** size - Get the array size. */
-  public native @Cast("const size_t") long size();
-
-  /** front - Get the first element. */
+   *  \name Simple Operations, mostly inherited from HeaderOnlyArrayRef
+   *  \{
+   <p>
+   *  front - Get the first element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef TensorArg front();
 
-  /** back - Get the last element. */
+  /** back - Get the last element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef TensorArg back();
 
-  /** equals - Check for element-wise equality. */
-  
-
-  /** slice(n, m) - Take M elements of the array starting at element N */
+  /** slice(n, m) - Take M elements of the array starting at element N
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal TensorArgArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
-  /** slice(n) - Chop off the first N elements of the array. */
+  /** slice(n) - Chop off the first N elements of the array.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal TensorArgArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads
-   *  \{ */
-  public native @Const @ByRef @Name("operator []") TensorArg get(@Cast("size_t") long Index);
-
-  /** Vector compatibility */
+   *  \{
+   <p>
+   *  Vector compatibility
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   
   ///
   public native @Const @ByRef TensorArg at(@Cast("size_t") long Index);
@@ -127,11 +99,6 @@ private native void allocate();
    *  The declaration here is extra complicated so that "arrayRef = {}"
    *  continues to select the move assignment operator. */
   
-
-  /** \}
-   *  \name Expensive Operations
-   *  \{ */
-  public native @StdVector TensorArg vec();
 
   /** \} */
 }

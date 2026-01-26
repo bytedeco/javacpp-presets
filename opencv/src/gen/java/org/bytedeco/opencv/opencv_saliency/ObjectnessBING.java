@@ -66,9 +66,6 @@ public class ObjectnessBING extends Objectness {
   public native @Cast("bool") boolean computeSaliency( @ByVal UMat image, @ByVal UMat saliencyMap );
   public native @Cast("bool") boolean computeSaliency( @ByVal GpuMat image, @ByVal GpuMat saliencyMap );
 
-  public native void read();
-  public native void write();
-
   /** \brief Return the list of the rectangles' objectness value,
     <p>
     in the same order as the *vector\<Vec4i\> objectnessBoundingBox* returned by the algorithm (in

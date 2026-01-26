@@ -39,9 +39,9 @@ public class GFTTDetector extends Feature2D {
                                                  int blockSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
     public static native @Ptr GFTTDetector create( );
     public static native @Ptr GFTTDetector create( int maxCorners, double qualityLevel, double minDistance,
-                                                 int blockSize, int gradiantSize, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
+                                                 int blockSize, int gradientSize, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
     public static native @Ptr GFTTDetector create( int maxCorners, double qualityLevel, double minDistance,
-                                                 int blockSize, int gradiantSize );
+                                                 int blockSize, int gradientSize );
     public native void setMaxFeatures(int maxFeatures);
     public native int getMaxFeatures();
 

@@ -65,4 +65,6 @@ public class FileStore extends Store {
 
   // Returns the path used by the FileStore.
   public native @StdString @NoException(true) BytePointer getPath();
+
+  public native @ByVal StringVector listKeys();
 }

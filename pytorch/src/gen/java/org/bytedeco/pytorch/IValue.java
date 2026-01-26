@@ -552,7 +552,7 @@ public class IValue extends Pointer {
     public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef IValue lhs, @Const @ByRef IValue rhs);
   }
 
-  // Chechs if this and rhs has a subvalues in common.
+  // Checks if this and rhs has a subvalues in common.
   // [t1,t2] and [t2, t3] returns true.
   public native @Cast("bool") boolean overlaps(@Const @ByRef IValue rhs);
 

@@ -95,8 +95,11 @@ public class DeviceGuardImplInterface extends Pointer {
   /**
    * Get a stream from the global pool for a given device.
    */
-  public native @ByVal Stream getStreamFromGlobalPool(@ByVal Device arg0, @Cast("bool") boolean isHighPriority/*=false*/);
-  public native @ByVal Stream getStreamFromGlobalPool(@ByVal Device arg0);
+  public native @ByVal Stream getStreamFromGlobalPool(
+        @ByVal Device arg0,
+        @Cast("bool") boolean isHighPriority/*=false*/);
+  public native @ByVal Stream getStreamFromGlobalPool(
+        @ByVal Device arg0);
 
   /**
    * Return a new stream for a given device and priority. The stream will be
@@ -166,6 +169,13 @@ public class DeviceGuardImplInterface extends Pointer {
   public native @Cast("c10::DeviceIndex") @NoException(true) byte deviceCount();
 
   /**
+   * Get the following capabilities of the current device:
+   * (1) Data type support
+   * Returns DeviceCapability object.
+   */
+  public native @ByVal DeviceCapability getDeviceCapability(@ByVal Device arg0);
+
+  /**
    * Return true if all the work previously enqueued on the stream for
    * asynchronous execution has completed running on the device.
    */
@@ -194,7 +204,9 @@ public class DeviceGuardImplInterface extends Pointer {
    * being used on the given stream, and that it should thus avoid recycling the
    * DataPtr until all work on that stream is done.
    */
-  public native void recordDataPtrOnStream(@StdMove DataPtr arg0, @Const @ByRef Stream arg1);
+  public native void recordDataPtrOnStream(
+        @StdMove DataPtr arg0,
+        @Const @ByRef Stream arg1);
 
   /**
    * Fetch the elapsed time between two recorded events.

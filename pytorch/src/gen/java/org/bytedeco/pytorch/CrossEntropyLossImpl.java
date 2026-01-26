@@ -56,6 +56,6 @@ public class CrossEntropyLossImpl extends CrossEntropyLossImplCloneable {
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef CrossEntropyLossOptions options(); public native CrossEntropyLossImpl options(CrossEntropyLossOptions setter);
 
-  /** A manual rescaling weight given to to each class. */
+  /** A manual rescaling weight given to each class. */
   public native @ByRef Tensor weight(); public native CrossEntropyLossImpl weight(Tensor setter);
 }

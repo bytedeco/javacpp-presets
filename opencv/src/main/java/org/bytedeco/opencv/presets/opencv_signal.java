@@ -36,9 +36,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_core.class,
     value = {
         @Platform(include = {
-            "<opencv2/signal.hpp>", "<opencv2/signal/signal_resample.hpp>"}, link = "opencv_signal@.412"),
+            "<opencv2/signal.hpp>", "<opencv2/signal/signal_resample.hpp>"}, link = "opencv_signal@.413"),
         @Platform(value = "ios", preload = "libopencv_signal"),
-        @Platform(value = "windows", link = "opencv_signal4120")},
+        @Platform(value = "windows", link = "opencv_signal4130")},
     global = "org.bytedeco.opencv.global.opencv_signal"
 )
 public class opencv_signal implements InfoMapper {

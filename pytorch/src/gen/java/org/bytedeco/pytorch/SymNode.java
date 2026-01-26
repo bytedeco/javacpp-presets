@@ -108,8 +108,6 @@ public class SymNode extends Pointer {
   public native @Cast("bool") boolean guard_or_true(String file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean expect_true(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean expect_true(String file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean expect_size(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
-  public native @Cast("bool") boolean expect_size(String file, @Cast("int64_t") long line);
   public native @Cast("int64_t") long int_();
   public native @Cast("bool") boolean bool_();
   public native @Cast("bool") boolean has_hint();

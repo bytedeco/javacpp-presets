@@ -52,6 +52,12 @@ public class BackgroundSubtractorGSOC extends BackgroundSubtractor {
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
     public native @Override void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
+    public native @Override void apply(@ByVal Mat image, @ByVal Mat knownForegroundMask, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal Mat image, @ByVal Mat knownForegroundMask, @ByVal Mat fgmask);
+    public native @Override void apply(@ByVal UMat image, @ByVal UMat knownForegroundMask, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal UMat image, @ByVal UMat knownForegroundMask, @ByVal UMat fgmask);
+    public native @Override void apply(@ByVal GpuMat image, @ByVal GpuMat knownForegroundMask, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native void apply(@ByVal GpuMat image, @ByVal GpuMat knownForegroundMask, @ByVal GpuMat fgmask);
 
     public native @Override void getBackgroundImage(@ByVal Mat backgroundImage);
     public native @Override void getBackgroundImage(@ByVal UMat backgroundImage);

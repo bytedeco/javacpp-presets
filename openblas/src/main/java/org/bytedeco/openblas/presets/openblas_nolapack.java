@@ -131,7 +131,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
                              "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "FORTRAN_STRLEN", "lapack_int", "lapack_logical").cppTypes().annotations())
-               .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT",
+               .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT", "defined(__GNUC__) && (__GNUC__ >= 12)",
                              "defined(LAPACK_COMPLEX_STRUCTURE)", "defined(LAPACK_COMPLEX_C99)", "OPENBLAS_OS_LINUX").define(false).translate(true))
                .put(new Info("((defined(__STDC_IEC_559_COMPLEX__) || __STDC_VERSION__ >= 199901L ||"
                        + "      (__GNUC__ >= 3 && !defined(__cplusplus))) && !(defined(FORCE_OPENBLAS_COMPLEX_STRUCT))) && !defined(_MSC_VER)",
@@ -186,7 +186,8 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_cgemmt", "cblas_zgemmt",
             "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod",
             "cblas_sbdot",  "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
-            "cblas_cgemm3m", "cblas_zgemm3m",
+            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_bgemm", "cblas_bgemv", "cblas_shgemm",
+            "cblas_cgemm_batch_strided", "cblas_dgemm_batch_strided", "cblas_sgemm_batch_strided", "cblas_zgemm_batch_strided", "cblas_sbgemm_batch_strided",
             // broken on Windows
             "openblas_set_num_threads_local", "openblas_set_threads_callback_function"};
         for (String f : brokenFunctions) {

@@ -104,6 +104,30 @@ public class Storage extends Pointer {
         @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
         @StdMove DataPtr data_ptr);
+
+  // Creates storage with pre-allocated memory buffer. Allocator is given for
+  // potential future reallocations, however it can be nullptr if the storage
+  // is non-resizable
+  public Storage(
+        @ByVal use_byte_size_t arg0,
+        @ByVal SymInt size_bytes,
+        @StdMove DataPtr data_ptr,
+        Allocator allocator/*=nullptr*/,
+        @Cast("bool") boolean resizable/*=false*/) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr, allocator, resizable); }
+  private native void allocate(
+        @ByVal use_byte_size_t arg0,
+        @ByVal SymInt size_bytes,
+        @StdMove DataPtr data_ptr,
+        Allocator allocator/*=nullptr*/,
+        @Cast("bool") boolean resizable/*=false*/);
+  public Storage(
+        @ByVal use_byte_size_t arg0,
+        @ByVal SymInt size_bytes,
+        @StdMove DataPtr data_ptr) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr); }
+  private native void allocate(
+        @ByVal use_byte_size_t arg0,
+        @ByVal SymInt size_bytes,
+        @StdMove DataPtr data_ptr);
   // Legacy constructor for partially initialized (dtype or memory) storages
   // that can be temporarily created with Caffe2 APIs. See the note on top of
   // TensorImpl.h for details.

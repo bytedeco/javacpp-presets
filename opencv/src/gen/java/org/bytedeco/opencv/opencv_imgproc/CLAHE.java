@@ -61,5 +61,17 @@ public class CLAHE extends Algorithm {
     /**\brief Returns Size defines the number of tiles in row and column. */
     public native @ByVal Size getTilesGridSize();
 
+    /** \brief Sets bit shift parameter for histogram bins.
+    <p>
+    @param bitShift bit shift value (default is 0).
+    */
+    public native void setBitShift(int bitShift);
+
+    /** \brief Returns the bit shift parameter for histogram bins.
+    <p>
+    @return current bit shift value.
+    */
+    public native int getBitShift();
+
     public native void collectGarbage();
 }

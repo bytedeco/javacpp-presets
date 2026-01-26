@@ -65,6 +65,9 @@ public class NCCLComm extends Pointer {
 // #ifdef NCCL_HAS_COMM_SPLIT
 // #endif // NCCL_HAS_COMM_SPLIT
 
+// #ifdef NCCL_HAS_COMM_SHRINK
+// #endif // NCCL_HAS_COMM_SHRINK
+
 // #if (defined(IS_NCCLX) || defined(USE_ROCM)) && defined(NCCL_COMM_DUMP)
 // #endif
 
@@ -115,6 +118,12 @@ public class NCCLComm extends Pointer {
   public native @Cast("uint64_t") long getCommSplitCounter();
 
   public native @Cast("ncclResult_t") int checkForNcclError();
+
+  // Thread-safe wrapper for ncclCommGetAsyncError that acquires the mutex
+  // before calling the NCCL API. This is needed because NCCL does not provide
+  // thread-safety guarantees for ncclCommGetAsyncError, and both the main
+  // thread and watchdog thread may call it concurrently.
+  public native @Cast("ncclResult_t") int getAsyncError(@Cast("ncclResult_t*") int asyncError);
 
   public native @Cast("ncclResult_t") int registerSegment(
         Pointer ptr,

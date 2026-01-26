@@ -72,6 +72,8 @@ public class AOTIModelContainerRunner extends Pointer {
         @Cast("bool") boolean use_inactive);
   public native void swap_constant_buffer();
   public native void free_inactive_constant_buffer();
+  public native void update_constant_buffer_from_blob(@StdString BytePointer weights_path);
+  public native void update_constant_buffer_from_blob(@StdString String weights_path);
 
   public native @ByVal StringVector get_call_spec();
 }

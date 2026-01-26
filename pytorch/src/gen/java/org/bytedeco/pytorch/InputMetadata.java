@@ -48,12 +48,14 @@ public class InputMetadata extends Pointer {
         @Const @ByRef TensorOptions options,
         @ByVal @Cast("torch::autograd::MetadataShape*") Nonlinearity input_shape,
         @Cast("bool") boolean is_tensor_subclass,
-        @Cast("bool") boolean is_nested) { super((Pointer)null); allocate(options, input_shape, is_tensor_subclass, is_nested); }
+        @Cast("bool") boolean is_nested,
+        @ByVal ScalarTypeOptional grad_dtype) { super((Pointer)null); allocate(options, input_shape, is_tensor_subclass, is_nested, grad_dtype); }
   private native void allocate(
         @Const @ByRef TensorOptions options,
         @ByVal @Cast("torch::autograd::MetadataShape*") Nonlinearity input_shape,
         @Cast("bool") boolean is_tensor_subclass,
-        @Cast("bool") boolean is_nested);
+        @Cast("bool") boolean is_nested,
+        @ByVal ScalarTypeOptional grad_dtype);
   public InputMetadata(@Const @ByRef Tensor t) { super((Pointer)null); allocate(t); }
   private native void allocate(@Const @ByRef Tensor t);
 
@@ -96,4 +98,8 @@ public class InputMetadata extends Pointer {
 
   // Danger: not thread safe, caller must protect with lock
   public native @Cast("torch::autograd::SymIntSmallVec*") @ByRef SymDimVector mutable_shape_as_dim_vector();
+
+  public native @ByVal ScalarTypeOptional grad_dtype();
+
+  public native void set_grad_dtype(@Const @ByRef ScalarTypeOptional grad_dtype);
 }

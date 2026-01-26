@@ -135,8 +135,8 @@ Either dsize or both fx and fy must be non-zero.
 <pre>{@code \[\texttt{(double)dsize.width/src.cols}\]}</pre>
 @param fy Scale factor along the vertical axis. If it is zero, it is computed as:
 <pre>{@code \[\texttt{(double)dsize.height/src.rows}\]}</pre>
-@param interpolation Interpolation method. INTER_NEAREST , INTER_LINEAR and INTER_CUBIC are
-supported for now.
+@param interpolation Interpolation method. INTER_NEAREST , INTER_LINEAR , INTER_CUBIC , and INTER_AREA are
+supported.
 @param stream Stream for the asynchronous version.
 <p>
 @see resize
@@ -153,6 +153,7 @@ supported for now.
 @param src Source image. CV_8U , CV_16U , CV_32S , or CV_32F depth and 1, 3, or 4 channels are
 supported.
 @param dst Destination image with the same type as src . The size is dsize .
+    **In-place operation (src == dst) is not supported and will result in an error.**
 @param M *2x3* Mat or UMat transformation matrix.
 @param dsize Size of the destination image.
 @param flags Combination of interpolation methods (see resize) and the optional flag
@@ -162,6 +163,7 @@ INTER_NEAREST , INTER_LINEAR , and INTER_CUBIC interpolation methods are support
 @param borderValue
 @param stream Stream for the asynchronous version.
 <p>
+\note In-place operation is not supported. If src and dst refer to the same data, the behavior is undefined.
 @see warpAffine
  */
 @Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,

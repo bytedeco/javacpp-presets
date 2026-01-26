@@ -38,8 +38,12 @@ public class Float8_e5m2fnuz extends Pointer {
   public Float8_e5m2fnuz() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public Float8_e5m2fnuz(@Cast("uint8_t") byte bits, @ByVal from_bits_t arg1) { super((Pointer)null); allocate(bits, arg1); }
-  private native void allocate(@Cast("uint8_t") byte bits, @ByVal from_bits_t arg1);
+  public Float8_e5m2fnuz(
+        @Cast("uint8_t") byte bits,
+        @ByVal from_bits_t arg1) { super((Pointer)null); allocate(bits, arg1); }
+  private native void allocate(
+        @Cast("uint8_t") byte bits,
+        @ByVal from_bits_t arg1);
   public Float8_e5m2fnuz(float value) { super((Pointer)null); allocate(value); }
   private native void allocate(float value);
   public native @Name("operator float") float asFloat();

@@ -120,7 +120,6 @@ public class Dictionary extends Pointer {
     public native int getDistanceToId(@ByVal GpuMat bits, int id, @Cast("bool") boolean allRotations/*=true*/);
     public native int getDistanceToId(@ByVal GpuMat bits, int id);
 
-
     /** \brief Generate a canonical marker image
      */
     public native void generateImageMarker(int id, int sidePixels, @ByVal Mat _img, int borderBits/*=1*/);
@@ -138,5 +137,6 @@ public class Dictionary extends Pointer {
 
     /** \brief Transform list of bytes to matrix of bits
       */
+    public static native @ByVal Mat getBitsFromByteList(@Const @ByRef Mat byteList, int markerSize, int rotationId/*=0*/);
     public static native @ByVal Mat getBitsFromByteList(@Const @ByRef Mat byteList, int markerSize);
 }

@@ -76,12 +76,27 @@ public class Subdiv2D extends Pointer {
     public Subdiv2D(@ByVal Rect rect) { super((Pointer)null); allocate(rect); }
     private native void allocate(@ByVal Rect rect);
 
-    /** \brief Creates a new empty Delaunay subdivision
+    /** \overload */
+    public Subdiv2D(@ByVal Rect2f rect2f) { super((Pointer)null); allocate(rect2f); }
+    private native void allocate(@ByVal Rect2f rect2f);
+
+    /** \overload
+    <p>
+    \brief Creates a new empty Delaunay subdivision
     <p>
     @param rect Rectangle that includes all of the 2D points that are to be added to the subdivision.
      <p>
      */
     public native void initDelaunay(@ByVal Rect rect);
+
+    /** \overload
+    <p>
+    \brief Creates a new empty Delaunay subdivision
+    <p>
+    @param rect Rectangle that includes all of the 2d points that are to be added to the subdivision.
+     <p>
+     */
+    public native @Name("initDelaunay") void initDelaunay2f(@ByVal Rect2f rect);
 
     /** \brief Insert a single point into a Delaunay triangulation.
     <p>

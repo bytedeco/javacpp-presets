@@ -61,4 +61,8 @@ public class DeviceAllocator extends Allocator {
 
   // Resets peak memory usage statistics for the specified device
   public native void resetPeakStats(byte device);
+
+  // Return the free memory size and total memory size in bytes for the
+  // specified device.
+  public native @ByVal SizeTPair getMemoryInfo(byte device);
 }

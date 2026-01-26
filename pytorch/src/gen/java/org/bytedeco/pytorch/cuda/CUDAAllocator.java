@@ -42,6 +42,8 @@ public class CUDAAllocator extends DeviceAllocator {
   public native void init(int device_count);
   public native double getMemoryFraction(byte device);
   public native void setMemoryFraction(double fraction, byte device);
+  public native @StdVector StreamSegmentSize getExpandableSegmentSizes(
+        byte device);
   public native void enable(@Cast("bool") boolean value);
   public native @Cast("bool") boolean isEnabled();
   public native void cacheInfo(byte device, @Cast("size_t*") SizeTPointer largestBlock);
@@ -70,6 +72,7 @@ public class CUDAAllocator extends DeviceAllocator {
         byte arg0,
         @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair arg1);
   public native void setUseOnOOM(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
+  public native void setNoSplit(byte device, @ByVal @Cast("c10::MempoolId_t*") DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair mempool_id);
 
   // returns true if the allocated blocks are equal to expected live allocations
   public native @Cast("bool") boolean checkPoolLiveAllocations(
@@ -96,6 +99,9 @@ public class CUDAAllocator extends DeviceAllocator {
         @StdVector StringPair arg0);
   public native void pushCompileContext(@StdString @ByRef BytePointer md);
   public native void popCompileContext();
+  public native void setUserMetadata(@StdString BytePointer metadata);
+  public native void setUserMetadata(@StdString String metadata);
+  public native @StdString BytePointer getUserMetadata();
   public native void attachOutOfMemoryObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OutOfMemoryObserver*") AllocatorTraceTracker observer);
 
   // Attached AllocatorTraceTracker callbacks will be called while the
@@ -136,4 +142,5 @@ public class CUDAAllocator extends DeviceAllocator {
         byte device,
         @SharedPtr("c10::cuda::CUDACachingAllocator::AllocatorState") @ByVal AllocatorState pps);
   public native @StdString BytePointer name();
+  public native @ByVal SizeTPair getMemoryInfo(byte device);
 }

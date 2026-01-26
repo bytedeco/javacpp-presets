@@ -848,6 +848,12 @@ public class TensorImpl extends Pointer {
   public native void bump_version();
 
   public native @Cast("c10::impl::PyObjectSlot*") Pointer pyobj_slot();
+
+  public native @NoException(true) void incref_pyobject();
+
+  public native @NoException(true) void decref_pyobject();
+
+  public native @Cast("bool") @NoException(true) boolean try_incref_pyobject();
   /**
    * The device type of a Tensor, e.g., DeviceType::CPU or DeviceType::CUDA.
    */

@@ -741,6 +741,16 @@ public class ProcessGroupNCCL extends Backend {
 
   public native @ByVal ErrorType getError();
 
+  public native @Cast("bool") boolean supportsShrinking();
+
+  // Backend-style shrink override that returns a Backend instance.
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend shrink(
+        @Cast("const std::vector<int64_t>*") @ByRef LongVector ranks_to_exclude,
+        int shrink_flags/*=0*/,
+        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts_override/*=nullptr*/);
+  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend shrink(
+        @Cast("const std::vector<int64_t>*") @ByRef LongVector ranks_to_exclude);
+
   public native @SharedPtr Allocator getMemAllocator();
 
   // Allocate tensor from communication-optimized memory pool

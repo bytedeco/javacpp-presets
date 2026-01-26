@@ -54,6 +54,6 @@ public class NLLLossImpl extends NLLLossImplCloneable {
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef NLLLossOptions options(); public native NLLLossImpl options(NLLLossOptions setter);
 
-  /** A manual rescaling weight given to to each class. */
+  /** A manual rescaling weight given to each class. */
   public native @ByRef Tensor weight(); public native NLLLossImpl weight(Tensor setter);
 }

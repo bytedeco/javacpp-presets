@@ -35,10 +35,10 @@ public class ListType extends ListSingleElementType {
 
   // global singleton
   // Given an inner type T and an identifier,
-  // this function wil return the global singleton type pointer
+  // this function will return the global singleton type pointer
   // the type List<T>.
-  // The extra "identifier" argument is needed beccause we have multiple container types
-  // that all re-use this function (List<T>, array<T, N>, etc.)
+  // The extra "identifier" argument is needed because we have multiple container types
+  // that all reuse this function (List<T>, array<T, N>, etc.)
   public static native @ByVal Type.TypePtr get(@StdString BytePointer identifier, @ByVal Type.TypePtr inner);
   public static native @ByVal Type.TypePtr get(@StdString String identifier, @ByVal Type.TypePtr inner);
 

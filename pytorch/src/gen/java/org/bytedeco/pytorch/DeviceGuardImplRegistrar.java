@@ -33,8 +33,16 @@ public class DeviceGuardImplRegistrar extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeviceGuardImplRegistrar(Pointer p) { super(p); }
 
-  public DeviceGuardImplRegistrar(DeviceType arg0, @Const DeviceGuardImplInterface arg1) { super((Pointer)null); allocate(arg0, arg1); }
-  private native void allocate(DeviceType arg0, @Const DeviceGuardImplInterface arg1);
-  public DeviceGuardImplRegistrar(@Cast("c10::DeviceType") byte arg0, @Const DeviceGuardImplInterface arg1) { super((Pointer)null); allocate(arg0, arg1); }
-  private native void allocate(@Cast("c10::DeviceType") byte arg0, @Const DeviceGuardImplInterface arg1);
+  public DeviceGuardImplRegistrar(
+        DeviceType arg0,
+        @Const DeviceGuardImplInterface arg1) { super((Pointer)null); allocate(arg0, arg1); }
+  private native void allocate(
+        DeviceType arg0,
+        @Const DeviceGuardImplInterface arg1);
+  public DeviceGuardImplRegistrar(
+        @Cast("c10::DeviceType") byte arg0,
+        @Const DeviceGuardImplInterface arg1) { super((Pointer)null); allocate(arg0, arg1); }
+  private native void allocate(
+        @Cast("c10::DeviceType") byte arg0,
+        @Const DeviceGuardImplInterface arg1);
 }

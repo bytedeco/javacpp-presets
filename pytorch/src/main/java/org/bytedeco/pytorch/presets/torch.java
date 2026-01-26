@@ -306,7 +306,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "alignas", "COMPLEX_INTEGER_OP_TEMPLATE_CONDITION", "C10_DEVICE_HOST_FUNCTION", "FORCE_INLINE_APPLE",
                 "ERROR_UNSUPPORTED_CAST", "LEGACY_CONTIGUOUS_MEMORY_FORMAT", "GFLAGS_DLL_DEFINE_FLAG", "GFLAGS_DLL_DECLARE_FLAG",
                 "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__", "__inline__",
-                "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
+                "HIDDEN_NAMESPACE_BEGIN", "HIDDEN_NAMESPACE_END", "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
                 "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT",
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__",
                 "__ubsan_ignore_signed_int_overflow__", "__ubsan_ignore_pointer_overflow__",
@@ -380,13 +380,20 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             ))
             .put(new Info("strong::type<int64_t,_VulkanID,strong::regular,strong::convertible_to<int64_t>,strong::hashable>").pointerTypes("Pointer"))
             .put(new Info("fbgemm::bfloat16", "__nv_bfloat16", "sycl::ext::oneapi::bfloat16").pointerTypes("BFloat16").valueTypes("short", "short", "short"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").cast().valueTypes("boolean").pointerTypes("BoolPointer"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)").pointerTypes("Half"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)").pointerTypes("BFloat16"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e5m2>::t)").pointerTypes("Float8_e5m2"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e4m3fn>::t)").pointerTypes("Float8_e4m3fn"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e5m2fnuz>::t)").pointerTypes("Float8_e5m2fnuz"))
-            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e4m3fnuz>::t)").pointerTypes("Float8_e4m3fnuz"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").cast().valueTypes("boolean").pointerTypes("BoolPointer"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Half>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)").pointerTypes("Half"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::BFloat16>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)").pointerTypes("BFloat16"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Float8_e5m2>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e5m2>::t)").pointerTypes("Float8_e5m2"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Float8_e4m3fn>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e4m3fn>::t)").pointerTypes("Float8_e4m3fn"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Float8_e5m2fnuz>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e5m2fnuz>::t)").pointerTypes("Float8_e5m2fnuz"))
+            .put(new Info("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Float8_e4m3fnuz>",
+                          "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e4m3fnuz>::t)").pointerTypes("Float8_e4m3fnuz"))
             .put(new Info("c10::ClassType").purify().pointerTypes("ClassType")) // Issue #669
             .put(new Info("c10::EnumType").purify().pointerTypes("EnumType")) // Issue #669
             .put(new Info("c10::NamedType").purify().pointerTypes("NamedType")) // Issue #669
@@ -753,9 +760,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         for (ArrayInfo t : new ArrayInfo[]{
             new ArrayInfo("Argument").elementTypes("c10::Argument"),
             new ArrayInfo("ArgumentDef").elementTypes("c10::detail::infer_schema::ArgumentDef"),
-            new ArrayInfo("BFloat16") /*.itPointerType("ShortPointer") */.elementTypes("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)"),
+            new ArrayInfo("BFloat16") /*.itPointerType("ShortPointer") */.elementTypes("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::BFloat16>",
+                                                                                       "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)"),
             new ArrayInfo("Block").elementTypes("torch::jit::Block*").itPointerType("PointerPointer<Block>"),
-            new ArrayInfo("Bool").itPointerType("BoolPointer").elementTypes("bool", "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").elementValueType("boolean"),
+            new ArrayInfo("Bool").itPointerType("BoolPointer").elementTypes("bool", "c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>",
+                                                                                    "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").elementValueType("boolean"),
             new ArrayInfo("Byte").itPointerType("BytePointer").elementTypes("jbyte", "int8_t", "uint8_t").elementValueType("byte"),
             new ArrayInfo("Dimname").otherCppNames("at::DimnameList").elementTypes("at::Dimname").otherPointerTypes("DimnameVector"),
             new ArrayInfo("Double").itPointerType("DoublePointer").elementTypes("double"),
@@ -764,7 +773,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("Float").itPointerType("FloatPointer").elementTypes("float").elementValueType("float"),
             new ArrayInfo("FloatComplex") /*.itPointerType("FloatPointer") */.elementTypes("c10::complex<float>"),
             new ArrayInfo("Future").elementTypes("c10::intrusive_ptr<c10::ivalue::Future>"),
-            new ArrayInfo("Half") /*.itPointerType("ShortPointer") */.elementTypes("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)"),
+            new ArrayInfo("Half") /*.itPointerType("ShortPointer") */.elementTypes("c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Half>",
+                                                                                   "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)"),
             new ArrayInfo("IValue").elementTypes("c10::IValue", "const c10::IValue", "const at::IValue").otherPointerTypes("IValueVector"),
             new ArrayInfo("Int")
                 .itPointerType("IntPointer")
@@ -817,6 +827,14 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         )).put(new Info("c10::ArrayRef<std::string>(const std::string*, const std::string*)").javaText(
             "public StringArrayRef(PointerPointer<BytePointer> begin, PointerPointer<BytePointer> end) { super((Pointer)null); allocate(begin, end); }\n" +
             "private native void allocate(@Cast(\"const std::string*\") PointerPointer<BytePointer> begin, @Cast(\"const std::string*\") PointerPointer<BytePointer> end);"
+        )).put(new Info("c10::HeaderOnlyArrayRef<std::string>::data()").javaText(
+            "public native @Const PointerPointer<BytePointer> data();"
+        )).put(new Info("c10::HeaderOnlyArrayRef<std::string>(const std::string*, size_t)").javaText(
+            "public StringHeaderOnlyArrayRef(PointerPointer<BytePointer> data, long length) { super((Pointer)null); allocate(data, length); }\n" +
+            "private native void allocate(@Cast(\"const std::string*\") PointerPointer<BytePointer> data, @Cast(\"size_t\") long length);"
+        )).put(new Info("c10::HeaderOnlyArrayRef<std::string>(const std::string*, const std::string*)").javaText(
+            "public StringHeaderOnlyArrayRef(PointerPointer<BytePointer> begin, PointerPointer<BytePointer> end) { super((Pointer)null); allocate(begin, end); }\n" +
+            "private native void allocate(@Cast(\"const std::string*\") PointerPointer<BytePointer> begin, @Cast(\"const std::string*\") PointerPointer<BytePointer> end);"
         ));
 
         // Special case for TagArrayRef: Tag is an enum and not a Pointer. arrays returned as IntPointer.
@@ -836,7 +854,16 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         )).put(new Info("c10::ArrayRef<at::Tag>(const at::Tag*, const at::Tag*)").javaText(
             "public TagArrayRef(IntPointer begin, IntPointer end) { super((Pointer)null); allocate(begin, end); }\n" +
             "private native void allocate(@Cast(\"const at::Tag*\") IntPointer begin, @Cast(\"const at::Tag*\") IntPointer end);"
-        )).put(new Info("c10::ArrayRef<at::Tag>::vec()").skip() // Is there any way to make this work ?
+        )).put(new Info("c10::HeaderOnlyArrayRef<at::Tag>::data()").javaText(
+            "public native @Const IntPointer data();"
+        )).put(new Info("c10::HeaderOnlyArrayRef<at::Tag>(const at::Tag*, size_t)").javaText(
+            "public TagHeaderOnlyArrayRef(IntPointer data, long length) { super((Pointer)null); allocate(data, length); }\n" +
+            "private native void allocate(@Cast(\"const at::Tag*\") IntPointer data, @Cast(\"size_t\") long length);"
+        )).put(new Info("c10::HeaderOnlyArrayRef<at::Tag>(const at::Tag*, const at::Tag*)").javaText(
+            "public TagHeaderOnlyArrayRef(IntPointer begin, IntPointer end) { super((Pointer)null); allocate(begin, end); }\n" +
+            "private native void allocate(@Cast(\"const at::Tag*\") IntPointer begin, @Cast(\"const at::Tag*\") IntPointer end);"
+        )).put(new Info("c10::HeaderOnlyArrayRef<at::Tag>::vec()",
+                        "c10::ArrayRef<at::Tag>::vec()").skip() // Is there any way to make this work ?
         );
 
 
@@ -911,8 +938,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
             .put(new Info("std::map<std::string,int64_t>").pointerTypes("StringLongMap").define())
             .put(new Info("std::map<std::string,at::Tensor>").pointerTypes("StringTensorMap").define()) // Used by distributed only
-            .put(new Info("const std::map<std::tuple<void*,void*>,at::DataPtr>",
-                                "std::map<std::tuple<void*,void*>,at::DataPtr>").pointerTypes("T_PointerPointer_TDataPtrMap").define())
+//            .put(new Info("const std::map<std::tuple<void*,void*>,at::DataPtr>",
+//                                "std::map<std::tuple<void*,void*>,at::DataPtr>").pointerTypes("T_PointerPointer_TDataPtrMap").define())
         ;
 
 
@@ -1103,6 +1130,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::pair<std::string,c10::IValue>").pointerTypes("EnumNameValue").define())
             .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringPair").define())
             .put(new Info("std::pair<int,int>").pointerTypes("IntPair").define())
+            .put(new Info("std::pair<size_t,size_t>").pointerTypes("SizeTPair").define())
         ;
 
 
@@ -1161,6 +1189,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "c10::detail::MultiDispatchKeySet", "c10::ExclusivelyOwnedTraits", "c10::FunctionSchema::dump",
                 "c10::domain_prefix", "c10::C10FlagsRegistry", "c10::enforce_detail::EnforceFailMessage", "c10::impl::build_feature_required_feature_not_available",
                 "c10::detail::getMaybeFakeTypePtr_", "c10::complex_literals::operator \"\"_if", "c10::complex_literals::operator \"\"_id",
+                "c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::ComplexHalf>",
                 "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::ComplexHalf>::t)", "c10::BoxedKernel", "c10::ExtraMeta", "c10::remove_symint",
                 "c10::InefficientStdFunctionContext", "c10::DataPtr::move_context", "c10::detail::UniqueVoidPtr::move_context", "QuantizerPtr", "c10::IValue::toModule", "c10::toBackendComponent",
                 "std::optional<THPObjectPtr>", "c10::asIntArrayRefSlow", "c10::standardizeVectorForUnion",
@@ -1214,6 +1243,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "basic_string_view<CharT>::npos",
                 "c10::impl::boxed_size_one<c10::TensorOptions>",
                 "torch::detail::check_not_lvalue_references",
+                "at::Context::rocmAllowGroupGemmCk",
                 "c10::guts::false_higher_t"
             ).skip());
 
@@ -2917,6 +2947,15 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         }
 
         void mapArrayRef(InfoMap infoMap) {
+            String cppHeaderOnlyName = template("c10::HeaderOnlyArrayRef", elementTypes[0]);
+            infoMap.put(new Info(cppHeaderOnlyName).pointerTypes(baseJavaName + "HeaderOnlyArrayRef"));
+            infoMap.put(new Info(cppHeaderOnlyName + "::begin", cppHeaderOnlyName + "::end",
+                                 cppHeaderOnlyName + "::cbegin", cppHeaderOnlyName + "::cend",
+                                 cppHeaderOnlyName + "(const " + elementTypes[0] + "&)",
+                                 cppHeaderOnlyName + "(" + elementTypes[0] + "&)",
+                                 cppHeaderOnlyName + "::allMatch",
+                                 cppHeaderOnlyName + "::equals").skip());
+
             String[] cppNames = new String[elementTypes.length * 3 + otherCppNames.length];
             String[] cppNamesIterator = new String[cppNames.length * 2];
             String[] cppNamesRIterator = new String[cppNames.length * 2];
@@ -2979,7 +3018,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             // Relies on the fact that std::vector info are created before.
             Info vectorInfo = infoMap.getFirst(template("std::vector", elementTypes[0]), false);
             if (vectorInfo != null && !elementTypes[0].equals("bool"))
-                infoMap.put(new Info(template(cppNames[0] + "::ArrayRef", template("std::allocator", elementTypes[0])) + "(" + elementTypes[0] + "*)").javaNames("XXX")
+                infoMap.put(new Info(cppNames[0] + "::ArrayRef", template(cppNames[0] + "::ArrayRef", template("std::allocator", elementTypes[0])) + "(" + elementTypes[0] + "*)").javaNames("XXX")
                     .javaText(
                         "public " + baseJavaName + "ArrayRef(@ByRef " + baseJavaName + "Vector vec) { super((Pointer)null); allocate(vec); }\n"
                         + "private native void allocate(@ByRef " + baseJavaName + "Vector vec);"));

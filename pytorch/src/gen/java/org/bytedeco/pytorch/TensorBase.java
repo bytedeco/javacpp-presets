@@ -132,6 +132,7 @@ public class TensorBase extends AbstractTensor {
   public native @Cast("bool") @NoException(true) boolean is_same(@Const @ByRef TensorBase other);
   public native @Cast("size_t") @NoException(true) long use_count();
   public native @Cast("size_t") @NoException(true) long weak_use_count();
+  public native @Cast("bool") @NoException(true) boolean is_uniquely_owned();
 
   public native @StdString String toString();
 
@@ -579,6 +580,10 @@ public class TensorBase extends AbstractTensor {
 
   public native @Const @ByRef TensorBase requires_grad_(@Cast("bool") boolean _requires_grad/*=true*/);
   public native @Const @ByRef TensorBase requires_grad_();
+
+  public native @ByVal ScalarTypeOptional grad_dtype();
+
+  public native void set_grad_dtype(@Const @ByRef ScalarTypeOptional grad_dtype);
 
   // View Variables
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

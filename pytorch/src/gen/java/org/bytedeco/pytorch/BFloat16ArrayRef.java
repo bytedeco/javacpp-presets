@@ -18,9 +18,17 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::ArrayRef<decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class BFloat16ArrayRef extends Pointer {
+@Name("c10::ArrayRef<c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::BFloat16> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class BFloat16ArrayRef extends BFloat16HeaderOnlyArrayRef {
     static { Loader.load(); }
+
+
+   public BFloat16ArrayRef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+    public BFloat16ArrayRef(@Const BFloat16 data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@Const BFloat16 data, @Cast("size_t") long length);
+    public BFloat16ArrayRef(@Const BFloat16 begin, @Const BFloat16 end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@Const BFloat16 begin, @Const BFloat16 end);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BFloat16ArrayRef(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -33,85 +41,49 @@ public class BFloat16ArrayRef extends Pointer {
         return new BFloat16ArrayRef((Pointer)this).offsetAddress(i);
     }
 
-  /** \name Constructors
-   *  \{
-   <p>
-   *  Construct an empty ArrayRef. */
-  /* implicit */ public BFloat16ArrayRef() { super((Pointer)null); allocate(); }
-private native void allocate();
-
-  /** Construct an ArrayRef from a single element. */
-  // TODO Make this explicit
-  
-
-  /** Construct an ArrayRef from a pointer and length. */
-  public BFloat16ArrayRef(@Const BFloat16 data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-  private native void allocate(@Const BFloat16 data, @Cast("size_t") long length);
-
-  /** Construct an ArrayRef from a range. */
-  public BFloat16ArrayRef(@Const BFloat16 begin, @Const BFloat16 end) { super((Pointer)null); allocate(begin, end); }
-  private native void allocate(@Const BFloat16 begin, @Const BFloat16 end);
+  /** \name Constructors, all inherited from HeaderOnlyArrayRef except for
+   *  SmallVector. As inherited constructors won't work with class template
+   *  argument deduction (CTAD) until C++23, we add deduction guides after
+   *  the class definition to enable CTAD.
+   *  \{ */
 
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
-   *  copy-construct an ArrayRef. */
-
-  /** Construct an ArrayRef from a std::vector. */
-  // The enable_if stuff here makes sure that this isn't used for
-  // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
-  // bitfield.
-
-  /** Construct an ArrayRef from a std::array */
-
-  /** Construct an ArrayRef from a C array. */
-
-  /** Construct an ArrayRef from a std::initializer_list. */
-  /* implicit */
+   *  copy-construct an ArrayRef.
+   *  NOTE: this is the only constructor that is not inherited from
+   *  HeaderOnlyArrayRef. */
 
   /** \}
-   *  \name Simple Operations
-   *  \{ */
-
-  public native @Const @ByPtr BFloat16 begin();
-  public native @Const @ByPtr BFloat16 end();
-
-  // These are actually the same as iterator, since ArrayRef only
-  // gives you const iterators.
-  public native @Const @ByPtr BFloat16 cbegin();
-  public native @Const @ByPtr BFloat16 cend();
-
-  /** Check if all elements in the array satisfy the given expression */
-  
-
-  /** empty - Check if the array is empty. */
-  public native @Cast("const bool") boolean empty();
-
-  public native @Const BFloat16 data();
-
-  /** size - Get the array size. */
-  public native @Cast("const size_t") long size();
-
-  /** front - Get the first element. */
+   *  \name Simple Operations, mostly inherited from HeaderOnlyArrayRef
+   *  \{
+   <p>
+   *  front - Get the first element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef BFloat16 front();
 
-  /** back - Get the last element. */
+  /** back - Get the last element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef BFloat16 back();
 
-  /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal BFloat16ArrayRef RHS);
-
-  /** slice(n, m) - Take M elements of the array starting at element N */
+  /** slice(n, m) - Take M elements of the array starting at element N
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal BFloat16ArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
-  /** slice(n) - Chop off the first N elements of the array. */
+  /** slice(n) - Chop off the first N elements of the array.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal BFloat16ArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads
-   *  \{ */
-  public native @Const @ByRef @Name("operator []") BFloat16 get(@Cast("size_t") long Index);
-
-  /** Vector compatibility */
+   *  \{
+   <p>
+   *  Vector compatibility
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   
   ///
   public native @Const @ByRef BFloat16 at(@Cast("size_t") long Index);
@@ -127,11 +99,6 @@ private native void allocate();
    *  The declaration here is extra complicated so that "arrayRef = {}"
    *  continues to select the move assignment operator. */
   
-
-  /** \}
-   *  \name Expensive Operations
-   *  \{ */
-  public native @StdVector BFloat16 vec();
 
   /** \} */
 }

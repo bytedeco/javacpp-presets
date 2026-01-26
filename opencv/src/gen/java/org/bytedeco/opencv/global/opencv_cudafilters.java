@@ -105,6 +105,9 @@ center.
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
 <p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
+<p>
 @see boxFilter
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createBoxFilter(int srcType, int dstType, @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
@@ -123,6 +126,9 @@ center.
 center.
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
 <p>
 @see filter2D
  */
@@ -150,6 +156,9 @@ applied (see getDerivKernels ).
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
 <p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
+<p>
 @see Laplacian
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createLaplacianFilter(int srcType, int dstType, int ksize/*=1*/, double scale/*=1*/,
@@ -172,6 +181,9 @@ the aperture center.
 @param rowBorderMode Pixel extrapolation method in the vertical direction For details, see
 borderInterpolate.
 @param columnBorderMode Pixel extrapolation method in the horizontal direction.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
 <p>
 @see sepFilter2D
  */
@@ -202,6 +214,9 @@ applied. For details, see getDerivKernels .
 @param rowBorderMode Pixel extrapolation method in the vertical direction. For details, see
 borderInterpolate.
 @param columnBorderMode Pixel extrapolation method in the horizontal direction.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createDerivFilter(int srcType, int dstType, int dx, int dy,
                                          int ksize, @Cast("bool") boolean normalize/*=false*/, double scale/*=1*/,
@@ -222,6 +237,9 @@ applied. For details, see getDerivKernels .
 borderInterpolate.
 @param columnBorderMode Pixel extrapolation method in the horizontal direction.
 <p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
+<p>
 @see Sobel
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createSobelFilter(int srcType, int dstType, int dx, int dy, int ksize/*=3*/,
@@ -239,6 +257,9 @@ applied. See getDerivKernels for details.
 @param rowBorderMode Pixel extrapolation method in the vertical direction. For details, see
 borderInterpolate.
 @param columnBorderMode Pixel extrapolation method in the horizontal direction.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
 <p>
 @see Scharr
  */
@@ -260,6 +281,9 @@ borderInterpolate.
 @param rowBorderMode Pixel extrapolation method in the vertical direction. For details, see
 borderInterpolate.
 @param columnBorderMode Pixel extrapolation method in the horizontal direction.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
 <p>
 @see GaussianBlur
  */
@@ -288,6 +312,9 @@ borderInterpolate.
 is at the center.
 @param iterations Number of times erosion and dilation to be applied.
 <p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
+<p>
 @see morphologyEx
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createMorphologyFilter(int op, int srcType, @ByVal Mat kernel, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor, int iterations/*=1*/);
@@ -307,6 +334,9 @@ is at the center.
 @param anchor Anchor point. The default value (-1) means that the anchor is at the kernel center.
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createBoxMaxFilter(int srcType, @ByVal Size ksize,
                                           @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
@@ -320,6 +350,9 @@ is at the center.
 @param anchor Anchor point. The default value (-1) means that the anchor is at the kernel center.
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createBoxMinFilter(int srcType, @ByVal Size ksize,
                                           @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
@@ -337,6 +370,9 @@ is at the center.
 @param anchor Anchor point. The default value (-1) means that the anchor is at the kernel center.
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createRowSumFilter(int srcType, int dstType, int ksize, int anchor/*=-1*/, int borderMode/*=cv::BORDER_DEFAULT*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar borderVal);
 @Namespace("cv::cuda") public static native @Ptr Filter createRowSumFilter(int srcType, int dstType, int ksize);
@@ -349,6 +385,9 @@ is at the center.
 @param anchor Anchor point. The default value (-1) means that the anchor is at the kernel center.
 @param borderMode Pixel extrapolation method. For details, see borderInterpolate .
 @param borderVal Default border value.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createColumnSumFilter(int srcType, int dstType, int ksize, int anchor/*=-1*/, int borderMode/*=cv::BORDER_DEFAULT*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar borderVal);
 @Namespace("cv::cuda") public static native @Ptr Filter createColumnSumFilter(int srcType, int dstType, int ksize);
@@ -359,15 +398,23 @@ is at the center.
 <p>
 /** \brief Performs median filtering for each point of the source image.
 <p>
-@param srcType type of of source image. Only CV_8UC1 images are supported for now.
+@param srcType type of of source image. Only CV_8UC1 if CUDA_VERSION < 11. CV_8UC1, CV_8UC3, CV_8UC4, CV_16UC1, CV_16UC3, CV_16UC4, CV_32FC1, CV_32FC3 or CV_32FC4 if CUDA_VERSION >= 11.
 @param windowSize Size of the kernerl used for the filtering. Uses a (windowSize x windowSize) filter.
-@param partition Specifies the parallel granularity of the workload. This parameter should be used GPU experts when optimizing performance.
+@param partition Specifies the parallel granularity of the workload. Only used if CUDA_VERSION < 11.
 <p>
 Outputs an image that has been filtered using a median-filtering formulation.
 <p>
-Details on this algorithm can be found in:
+If compiled with CUDA 11 or greater, a wavelet based algorithm is used as described at:
+https://cgenglab.github.io/en/publication/sigga22_wmatrix_median/
+Yuji Moroto, Nobuyuki Umetani, 2022, "Constant Time Median Filter Using 2D Wavelet Matrix",
+                                     ACM Transactions on Graphics, Volume 41, Issue 6.
+<p>
+For earlier versions of CUDA, details on the algorithm used can be found in:
 Green, O., 2017. "Efficient scalable median filtering using histogram-based operations",
                   IEEE Transactions on Image Processing, 27(5), pp.2217-2228.
+<p>
+\note
+If applied in a CUDA Stream, a distinct filter instance must be created for each Stream. Sharing a single instance across multiple streams is unsupported and may lead to undefined behavior due to stream-specific internal state.
  */
 @Namespace("cv::cuda") public static native @Ptr Filter createMedianFilter(int srcType, int windowSize, int partition/*=128*/);
 @Namespace("cv::cuda") public static native @Ptr Filter createMedianFilter(int srcType, int windowSize);

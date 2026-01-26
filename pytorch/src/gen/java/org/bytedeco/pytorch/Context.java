@@ -205,13 +205,7 @@ public class Context extends Pointer {
   //
   // * Throw an error when `Context::deterministicAlgorithms()` is true. Most
   //   of the time, this should be accomplished by calling
-  //   `at::globalContext().alertNotDeterminstic()`.  However, if the
-  //   nondeterministic behavior is caused by the CuBLAS workspace
-  //   configuration in CUDA >= 10.2,
-  //   `at::globalContext().alertCuBLASConfigNotDeterministic()` should be
-  //   called instead (in this case, a comment explaining why the operation is
-  //   nondeterministic is not necessary). See below for details on these
-  //   methods.
+  //   `at::globalContext().alertNotDeterminstic().
   //
   // * Have an entry in the list of nondeterministic PyTorch operations in the
   //   docstring of `use_deterministic_algorithms()` in torch/__init__.py
@@ -236,43 +230,43 @@ public class Context extends Pointer {
   public static native void alertNotDeterministic(@StringView @Cast("const char*") BytePointer caller);
   public static native void alertNotDeterministic(@StringView String caller);
 
-  // Throws an error if `Context::deterministicAlgorithms()` is true, CUDA
-  // >= 10.2, and CUBLAS_WORKSPACE_CONFIG is not set to either ":16:8" or
-  // ":4096:8". For more details:
-  // https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility
-  public native void alertCuBLASConfigNotDeterministic();
-
   public native void setFloat32MatmulPrecision(@StdString BytePointer s);
   public native void setFloat32MatmulPrecision(@StdString String s);
   public native void setFloat32Precision(
-        @StdString BytePointer backend,
-        @StdString BytePointer op,
-        @StdString BytePointer s);
+        Float32Backend backend,
+        Float32Op op,
+        Float32Precision p);
   public native void setFloat32Precision(
-        @StdString String backend,
-        @StdString String op,
-        @StdString String s);
-  public native @Cast("bool") boolean allowTF32CuDNN(@StdString BytePointer op/*=std::string()*/);
+        @Cast("at::Float32Backend") int backend,
+        @Cast("at::Float32Op") int op,
+        @Cast("at::Float32Precision") int p);
+  public native @Cast("bool") boolean allowTF32CuDNN(@Optional @Cast("at::Float32Op*") IntPointer op/*=std::nullopt*/);
   public native @Cast("bool") boolean allowTF32CuDNN();
-  public native @Cast("bool") boolean allowTF32CuDNN(@StdString String op/*=std::string()*/);
+  public native @Cast("bool") boolean allowTF32CuDNN(@Optional @Cast("at::Float32Op*") IntBuffer op/*=std::nullopt*/);
+  public native @Cast("bool") boolean allowTF32CuDNN(@Optional @Cast("at::Float32Op*") int[] op/*=std::nullopt*/);
   public native void setAllowTF32CuDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowTF32OneDNN();
   public native void setAllowTF32OneDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowTF32CuBLAS();
   public native void setAllowTF32CuBLAS(@Cast("bool") boolean arg0);
   public native Float32MatmulPrecision float32MatmulPrecision();
-  public native @StdString BytePointer float32Precision(
-        @StdString BytePointer backend,
-        @StdString BytePointer op);
-  public native @StdString String float32Precision(
-        @StdString String backend,
-        @StdString String op);
-  public native @Cast("bool") boolean allowFP16ReductionCuBLAS();
-  public native void setAllowFP16ReductionCuBLAS(@Cast("bool") boolean arg0);
-  public native @Cast("bool") boolean allowBF16ReductionCuBLAS();
-  public native void setAllowBF16ReductionCuBLAS(@Cast("bool") boolean arg0);
+  public native Float32Precision float32Precision(Float32Backend backend, Float32Op op);
+  public native @Cast("at::Float32Precision") int float32Precision(@Cast("at::Float32Backend") int backend, @Cast("at::Float32Op") int op);
+  public native CuBLASReductionOption allowFP16ReductionCuBLAS();
+  public native void setAllowFP16ReductionCuBLAS(
+        @Cast("bool") boolean allow_reduced_precision,
+        @Cast("bool") boolean allow_splitk/*=true*/);
+  public native void setAllowFP16ReductionCuBLAS(
+        @Cast("bool") boolean allow_reduced_precision);
+  public native CuBLASReductionOption allowBF16ReductionCuBLAS();
+  public native void setAllowBF16ReductionCuBLAS(
+        @Cast("bool") boolean allow_reduced_precision,
+        @Cast("bool") boolean allow_splitk/*=true*/);
+  public native void setAllowBF16ReductionCuBLAS(
+        @Cast("bool") boolean allow_reduced_precision);
   public native @Cast("bool") boolean allowFP16AccumulationCuBLAS();
   public native void setAllowFP16AccumulationCuBLAS(@Cast("bool") boolean arg0);
+  
 
   // Matmuls can use a so-called "persistent" kernel which launches one CUDA
   // block for each SM on the GPU, and each block then iterates over multiple
@@ -300,6 +294,9 @@ public class Context extends Pointer {
 
   public native void setDisplayVmapFallbackWarnings(@Cast("bool") boolean enabled);
   public native @Cast("bool") boolean areVmapFallbackWarningsEnabled();
+
+  public native void setWarnOnAccumulateGradStreamMismatch(@Cast("bool") boolean enabled);
+  public native @Cast("bool") boolean warnOnAccumulateGradStreamMismatch();
 
   public native @Cast("bool") boolean isDefaultMobileCPUAllocatorSet();
   public native void setDefaultMobileCPUAllocator();

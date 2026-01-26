@@ -179,7 +179,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.12.x  https://opencv.org/releases/
+ * OpenCV 4.13.x  https://opencv.org/releases/
  * FFmpeg 8.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 4.0.x https://www.flir.com/products/spinnaker-sdk
@@ -199,14 +199,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2025.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 3.10.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.30  http://www.openblas.net/
+ * OpenBLAS 0.3.31  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.11  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.14.x  https://www.python.org/downloads/
  * NumPy 2.4.x  https://github.com/numpy/numpy
- * SciPy 1.16.x  https://github.com/scipy/scipy
+ * SciPy 1.17.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
  * LLVM 21.1.x  http://llvm.org/releases/download.html
  * libffi 3.5.x  https://github.com/libffi/libffi
@@ -223,7 +223,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
- * PyTorch 2.9.x  https://github.com/pytorch/pytorch
+ * PyTorch 2.10.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.2.x  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.20.x  https://github.com/tensorflow/tensorflow

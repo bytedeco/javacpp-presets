@@ -28,31 +28,31 @@ public class WorkInfo extends Pointer {
   public WorkInfo(
         OpType opType,
         @Cast("const uint64_t") long seq,
-        @Const @ByRef SystemTime timeStarted,
-        @Const @ByRef SystemTime timeFinished,
+        @Const @ByRef SteadyTime timeStarted,
+        @Const @ByRef SteadyTime timeFinished,
         @Const @ByRef SecondsFloat activeDuration) { super((Pointer)null); allocate(opType, seq, timeStarted, timeFinished, activeDuration); }
   @SharedPtr @Name("std::make_shared<c10d::WorkInfo>") private native void allocate(
         OpType opType,
         @Cast("const uint64_t") long seq,
-        @Const @ByRef SystemTime timeStarted,
-        @Const @ByRef SystemTime timeFinished,
+        @Const @ByRef SteadyTime timeStarted,
+        @Const @ByRef SteadyTime timeFinished,
         @Const @ByRef SecondsFloat activeDuration);
   public WorkInfo(
         @Cast("c10d::OpType") byte opType,
         @Cast("const uint64_t") long seq,
-        @Const @ByRef SystemTime timeStarted,
-        @Const @ByRef SystemTime timeFinished,
+        @Const @ByRef SteadyTime timeStarted,
+        @Const @ByRef SteadyTime timeFinished,
         @Const @ByRef SecondsFloat activeDuration) { super((Pointer)null); allocate(opType, seq, timeStarted, timeFinished, activeDuration); }
   @SharedPtr @Name("std::make_shared<c10d::WorkInfo>") private native void allocate(
         @Cast("c10d::OpType") byte opType,
         @Cast("const uint64_t") long seq,
-        @Const @ByRef SystemTime timeStarted,
-        @Const @ByRef SystemTime timeFinished,
+        @Const @ByRef SteadyTime timeStarted,
+        @Const @ByRef SteadyTime timeFinished,
         @Const @ByRef SecondsFloat activeDuration);
 
   public native OpType opType(); public native WorkInfo opType(OpType setter);
   public native @Cast("uint64_t") long seq(); public native WorkInfo seq(long setter);
-  public native @ByRef SystemTime timeStarted(); public native WorkInfo timeStarted(SystemTime setter);
-  public native @ByRef SystemTime timeFinished(); public native WorkInfo timeFinished(SystemTime setter);
+  public native @ByRef SteadyTime timeStarted(); public native WorkInfo timeStarted(SteadyTime setter);
+  public native @ByRef SteadyTime timeFinished(); public native WorkInfo timeFinished(SteadyTime setter);
   public native @ByRef SecondsFloat activeDuration(); public native WorkInfo activeDuration(SecondsFloat setter);
 }

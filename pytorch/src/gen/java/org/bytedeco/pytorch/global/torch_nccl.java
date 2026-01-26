@@ -133,6 +133,10 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // #define NCCL_HAS_NVLS_CTAS
 // #endif
 
+// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 27, 0)
+// #define NCCL_HAS_COMM_SHRINK
+// #endif
+
 // Macro to throw on a non-successful NCCL return value.
 // #define C10D_NCCL_CHECK(cmd, failureReason)
 //   do {
@@ -172,7 +176,11 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 //   } while (0)
 
 // Macro to throw on a non-successful NCCL return value, non-blocking.
-// #define C10D_NCCL_CHECK_TIMEOUT_BASE(cmd, comm, failureReason, yield_fn)
+// Thread-safe: uses NCCLComm wrapper's getAsyncError() which acquires mutex
+// before calling ncclCommGetAsyncError to prevent race conditions between
+// watchdog and main threads.
+// #define C10D_NCCL_CHECK_TIMEOUT_BASE(
+//     cmd, commWrapper, failureReason, yield_fn)
 //   do {
 //     ncclResult_t result = cmd;
 //     auto startTimepoint = std::chrono::steady_clock::now();
@@ -180,7 +188,7 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 //     while (result == ncclInProgress) {
 //       C10D_CHECK_TIMEOUT(startTimepoint, timeout);
 //       yield_fn;
-//       ncclCommGetAsyncError(comm, &result);
+//       commWrapper->getAsyncError(&result);
 //     }
 //     if (result != ncclSuccess) {
 //       std::string err = "NCCL error in: " + std::string(__FILE__) + ":" +
@@ -199,15 +207,16 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // This macro uses sched_yield() to yield the CPU.
 // Thus suitable for NCCL calls that would quickly turn ncclSuccess, e.g.
 // collectives.
-// #define C10D_NCCL_CHECK_TIMEOUT(cmd, comm, failureReason)
-//   C10D_NCCL_CHECK_TIMEOUT_BASE(cmd, comm, failureReason, sched_yield())
+// #define C10D_NCCL_CHECK_TIMEOUT(cmd, commWrapper, failureReason)
+//   C10D_NCCL_CHECK_TIMEOUT_BASE(cmd, commWrapper, failureReason, sched_yield())
 
 // Macro to throw exception on a non-successful NCCL return value or timeout.
 // This macro uses sleep to yield the CPU.
 // Thus suitable for NCCL calls that would take longer to turn ncclSuccess, e.g.
 // ncclCommInitRankConfig, ncclCommFinalize, etc.
-// #define C10D_NCCL_CHECK_TIMEOUT_SLEEP(cmd, comm, failureReason)
-//   C10D_NCCL_CHECK_TIMEOUT_BASE(cmd, comm, failureReason, C10D_SCHED_SLEEP())
+// #define C10D_NCCL_CHECK_TIMEOUT_SLEEP(cmd, commWrapper, failureReason)
+//   C10D_NCCL_CHECK_TIMEOUT_BASE(
+//       cmd, commWrapper, failureReason, C10D_SCHED_SLEEP())
 
 // #define C10D_NCCL_CHECK_TIMEOUT_GROUPEND(cmd, comm, failureReason)
 //   do {
@@ -218,7 +227,7 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 //       do {
 //         C10D_CHECK_TIMEOUT(startTimepoint, timeout);
 //         sched_yield();
-//         ncclCommGetAsyncError(comm->getNcclComm(), &state);
+//         comm->getAsyncError(&state);
 //       } while (state == ncclInProgress);
 //     }
 //     if (state != ncclSuccess) {
@@ -316,6 +325,7 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // #include <ATen/DynamicLibrary.h>
 // #include <ATen/cuda/CUDAContext.h>
 // #include <ATen/cuda/CUDAEvent.h>
+// #include <ATen/cuda/MemPool.h>
 // #include <c10/core/Stream.h>
 // #include <c10/core/StreamGuard.h>
 // #include <c10/cuda/CUDACachingAllocator.h>
@@ -389,6 +399,10 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // Whether to log C++ stack traces on unclean shutdown (default true)
 @Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN(); public static native void TORCH_NCCL_LOG_CPP_STACK_ON_UNCLEAN_SHUTDOWN(StringVector setter);
 
+// Whether to include only active collectives in the Flight Recorder trace
+// (default false)
+@Namespace("c10d") public static native @ByRef StringVector TORCH_NCCL_EXTRA_DUMP_ON_EXEC(); public static native void TORCH_NCCL_EXTRA_DUMP_ON_EXEC(StringVector setter);
+
 // Control whether to use CudaEventCache for the collective in watchdog thread.
 // We noticed in the past when cuda global lock is held, destroying CudaEvent
 // can cause a hang.
@@ -450,6 +464,9 @@ public static final int
 // Targeting ../nccl/ProcessGroupNCCL.java
 
 
+
+// Reset the flighrecorder recordings for the current rank.
+@Namespace("c10d") public static native void reset_nccl_trace();
 
 // Dumps the NCCL comm traces and additional information about the Process
 // Group.

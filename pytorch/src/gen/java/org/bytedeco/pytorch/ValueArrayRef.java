@@ -18,9 +18,21 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::ArrayRef<torch::jit::Value*>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ValueArrayRef extends Pointer {
+@Name("c10::ArrayRef<torch::jit::Value*>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class ValueArrayRef extends ValueHeaderOnlyArrayRef {
     static { Loader.load(); }
+
+
+   public ValueArrayRef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+    public ValueArrayRef(@Cast("torch::jit::Value**") PointerPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@Cast("torch::jit::Value**") PointerPointer data, @Cast("size_t") long length);
+    public ValueArrayRef(@ByPtrPtr Value data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@ByPtrPtr Value data, @Cast("size_t") long length);
+    public ValueArrayRef(@Cast("torch::jit::Value**") PointerPointer begin, @Cast("torch::jit::Value**") PointerPointer end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@Cast("torch::jit::Value**") PointerPointer begin, @Cast("torch::jit::Value**") PointerPointer end);
+    public ValueArrayRef(@ByPtrPtr Value begin, @ByPtrPtr Value end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@ByPtrPtr Value begin, @ByPtrPtr Value end);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ValueArrayRef(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -33,92 +45,51 @@ public class ValueArrayRef extends Pointer {
         return new ValueArrayRef((Pointer)this).offsetAddress(i);
     }
 
-  /** \name Constructors
-   *  \{
-   <p>
-   *  Construct an empty ArrayRef. */
-  /* implicit */ public ValueArrayRef() { super((Pointer)null); allocate(); }
-private native void allocate();
-
-  /** Construct an ArrayRef from a single element. */
-  // TODO Make this explicit
-  
-
-  /** Construct an ArrayRef from a pointer and length. */
-  public ValueArrayRef(@Cast("torch::jit::Value**") PointerPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-  private native void allocate(@Cast("torch::jit::Value**") PointerPointer data, @Cast("size_t") long length);
-  public ValueArrayRef(@ByPtrPtr Value data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-  private native void allocate(@ByPtrPtr Value data, @Cast("size_t") long length);
-
-  /** Construct an ArrayRef from a range. */
-  public ValueArrayRef(@Cast("torch::jit::Value**") PointerPointer begin, @Cast("torch::jit::Value**") PointerPointer end) { super((Pointer)null); allocate(begin, end); }
-  private native void allocate(@Cast("torch::jit::Value**") PointerPointer begin, @Cast("torch::jit::Value**") PointerPointer end);
-  public ValueArrayRef(@ByPtrPtr Value begin, @ByPtrPtr Value end) { super((Pointer)null); allocate(begin, end); }
-  private native void allocate(@ByPtrPtr Value begin, @ByPtrPtr Value end);
+  /** \name Constructors, all inherited from HeaderOnlyArrayRef except for
+   *  SmallVector. As inherited constructors won't work with class template
+   *  argument deduction (CTAD) until C++23, we add deduction guides after
+   *  the class definition to enable CTAD.
+   *  \{ */
 
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
-   *  copy-construct an ArrayRef. */
-
-  /** Construct an ArrayRef from a std::vector. */
-  // The enable_if stuff here makes sure that this isn't used for
-  // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
-  // bitfield.
+   *  copy-construct an ArrayRef.
+   *  NOTE: this is the only constructor that is not inherited from
+   *  HeaderOnlyArrayRef. */
   public ValueArrayRef(@ByRef ValueVector vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@ByRef ValueVector vec);
 
-  /** Construct an ArrayRef from a std::array */
-
-  /** Construct an ArrayRef from a C array. */
-
-  /** Construct an ArrayRef from a std::initializer_list. */
-  /* implicit */
-
   /** \}
-   *  \name Simple Operations
-   *  \{ */
-
-  public native @Const @ByPtr Value begin();
-  public native @Const @ByPtr Value end();
-
-  // These are actually the same as iterator, since ArrayRef only
-  // gives you const iterators.
-  public native @Const @ByPtr Value cbegin();
-  public native @Const @ByPtr Value cend();
-
-  /** Check if all elements in the array satisfy the given expression */
-  
-
-  /** empty - Check if the array is empty. */
-  public native @Cast("const bool") boolean empty();
-
-  public native @Cast("torch::jit::Value**") PointerPointer data();
-
-  /** size - Get the array size. */
-  public native @Cast("const size_t") long size();
-
-  /** front - Get the first element. */
+   *  \name Simple Operations, mostly inherited from HeaderOnlyArrayRef
+   *  \{
+   <p>
+   *  front - Get the first element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @ByPtrRef Value front();
 
-  /** back - Get the last element. */
+  /** back - Get the last element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @ByPtrRef Value back();
 
-  /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal ValueArrayRef RHS);
-  public native @Cast("const bool") boolean equals(@ByVal ValueVector RHS);
-
-  /** slice(n, m) - Take M elements of the array starting at element N */
+  /** slice(n, m) - Take M elements of the array starting at element N
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal ValueArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
-  /** slice(n) - Chop off the first N elements of the array. */
+  /** slice(n) - Chop off the first N elements of the array.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal ValueArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads
-   *  \{ */
-  public native @ByPtrRef @Name("operator []") Value get(@Cast("size_t") long Index);
-
-  /** Vector compatibility */
+   *  \{
+   <p>
+   *  Vector compatibility
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   
   ///
   public native @ByPtrRef Value at(@Cast("size_t") long Index);
@@ -134,11 +105,6 @@ private native void allocate();
    *  The declaration here is extra complicated so that "arrayRef = {}"
    *  continues to select the move assignment operator. */
   
-
-  /** \}
-   *  \name Expensive Operations
-   *  \{ */
-  public native @ByVal ValueVector vec();
 
   /** \} */
 }

@@ -108,7 +108,8 @@ public class Node extends Pointer {
         @Const @ByRef TensorOptions options,
         @ByVal SymIntArrayRef shape,
         @Cast("bool") boolean is_tensor_subclass,
-        @Cast("bool") boolean is_nested);
+        @Cast("bool") boolean is_nested,
+        @ByVal ScalarTypeOptional grad_dtype);
 
   public native @Cast("uint32_t") @NoException(true) int add_input_metadata(@Const @ByRef Tensor t);
 

@@ -39,10 +39,26 @@ import static org.bytedeco.pytorch.global.torch_cuda.*;
  *  safe to store an ArrayRef.
  * 
  *  This is intended to be trivially copyable, so it should be passed by
- *  value. */
-@Name("c10::ArrayRef<c10::cuda::CUDAStream>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
-public class CUDAStreamArrayRef extends Pointer {
+ *  value.
+ * 
+ *  NOTE: We have refactored out the headeronly parts of the ArrayRef struct
+ *  into HeaderOnlyArrayRef. As adding {@code virtual} would change the performance of
+ *  the underlying constexpr calls, we rely on apparent-type dispatch for
+ *  inheritance. This should be fine because their memory format is the same,
+ *  and it is never incorrect for ArrayRef to call HeaderOnlyArrayRef methods.
+ *  However, you should prefer to use ArrayRef when possible, because its use
+ *  of TORCH_CHECK will lead to better user-facing error messages. */
+@Name("c10::ArrayRef<c10::cuda::CUDAStream>") @Properties(inherit = org.bytedeco.pytorch.presets.torch_cuda.class)
+public class CUDAStreamArrayRef extends CUDAStreamHeaderOnlyArrayRef {
     static { Loader.load(); }
+
+
+   public CUDAStreamArrayRef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+    public CUDAStreamArrayRef(@Const CUDAStream data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@Const CUDAStream data, @Cast("size_t") long length);
+    public CUDAStreamArrayRef(@Const CUDAStream begin, @Const CUDAStream end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@Const CUDAStream begin, @Const CUDAStream end);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDAStreamArrayRef(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -55,85 +71,49 @@ public class CUDAStreamArrayRef extends Pointer {
         return new CUDAStreamArrayRef((Pointer)this).offsetAddress(i);
     }
 
-  /** \name Constructors
-   *  \{
-   <p>
-   *  Construct an empty ArrayRef. */
-  /* implicit */ public CUDAStreamArrayRef() { super((Pointer)null); allocate(); }
-private native void allocate();
-
-  /** Construct an ArrayRef from a single element. */
-  // TODO Make this explicit
-  
-
-  /** Construct an ArrayRef from a pointer and length. */
-  public CUDAStreamArrayRef(@Const CUDAStream data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-  private native void allocate(@Const CUDAStream data, @Cast("size_t") long length);
-
-  /** Construct an ArrayRef from a range. */
-  public CUDAStreamArrayRef(@Const CUDAStream begin, @Const CUDAStream end) { super((Pointer)null); allocate(begin, end); }
-  private native void allocate(@Const CUDAStream begin, @Const CUDAStream end);
+  /** \name Constructors, all inherited from HeaderOnlyArrayRef except for
+   *  SmallVector. As inherited constructors won't work with class template
+   *  argument deduction (CTAD) until C++23, we add deduction guides after
+   *  the class definition to enable CTAD.
+   *  \{ */
 
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
-   *  copy-construct an ArrayRef. */
-
-  /** Construct an ArrayRef from a std::vector. */
-  // The enable_if stuff here makes sure that this isn't used for
-  // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
-  // bitfield.
-
-  /** Construct an ArrayRef from a std::array */
-
-  /** Construct an ArrayRef from a C array. */
-
-  /** Construct an ArrayRef from a std::initializer_list. */
-  /* implicit */
+   *  copy-construct an ArrayRef.
+   *  NOTE: this is the only constructor that is not inherited from
+   *  HeaderOnlyArrayRef. */
 
   /** \}
-   *  \name Simple Operations
-   *  \{ */
-
-  public native @Const @ByPtr CUDAStream begin();
-  public native @Const @ByPtr CUDAStream end();
-
-  // These are actually the same as iterator, since ArrayRef only
-  // gives you const iterators.
-  public native @Const @ByPtr CUDAStream cbegin();
-  public native @Const @ByPtr CUDAStream cend();
-
-  /** Check if all elements in the array satisfy the given expression */
-  
-
-  /** empty - Check if the array is empty. */
-  public native @Cast("const bool") boolean empty();
-
-  public native @Const CUDAStream data();
-
-  /** size - Get the array size. */
-  public native @Cast("const size_t") long size();
-
-  /** front - Get the first element. */
+   *  \name Simple Operations, mostly inherited from HeaderOnlyArrayRef
+   *  \{
+   <p>
+   *  front - Get the first element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef CUDAStream front();
 
-  /** back - Get the last element. */
+  /** back - Get the last element.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByRef CUDAStream back();
 
-  /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal CUDAStreamArrayRef RHS);
-
-  /** slice(n, m) - Take M elements of the array starting at element N */
+  /** slice(n, m) - Take M elements of the array starting at element N
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal CUDAStreamArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
-  /** slice(n) - Chop off the first N elements of the array. */
+  /** slice(n) - Chop off the first N elements of the array.
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   public native @Const @ByVal CUDAStreamArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads
-   *  \{ */
-  public native @Const @ByRef @Name("operator []") CUDAStream get(@Cast("size_t") long Index);
-
-  /** Vector compatibility */
+   *  \{
+   <p>
+   *  Vector compatibility
+   *  We deviate from HeaderOnlyArrayRef by using TORCH_CHECK instead of
+   *  STD_TORCH_CHECK */
   
   ///
   public native @Const @ByRef CUDAStream at(@Cast("size_t") long Index);
@@ -149,11 +129,6 @@ private native void allocate();
    *  The declaration here is extra complicated so that "arrayRef = {}"
    *  continues to select the move assignment operator. */
   
-
-  /** \}
-   *  \name Expensive Operations
-   *  \{ */
-  public native @StdVector CUDAStream vec();
 
   /** \} */
 }

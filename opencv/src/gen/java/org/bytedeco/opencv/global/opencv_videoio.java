@@ -212,7 +212,7 @@ public static final int
        CAP_PROP_GAIN          = 14,
        /** Exposure (only for those cameras that support). */
        CAP_PROP_EXPOSURE      = 15,
-       /** Boolean flags indicating whether images should be converted to RGB. <br/>
+       /** Boolean flags indicating whether images should be converted to BGR. <br/>
  *  *GStreamer note*: The flag is ignored in case if custom pipeline is used. It's user responsibility to interpret pipeline output. */
        CAP_PROP_CONVERT_RGB   = 16,
        /** Currently unsupported. */
@@ -379,7 +379,9 @@ public static final int
     /** VAAPI */
     VIDEO_ACCELERATION_VAAPI    = 3,
     /** libmfx (Intel MediaSDK/oneVPL) */
-    VIDEO_ACCELERATION_MFX      = 4;
+    VIDEO_ACCELERATION_MFX      = 4,
+    /** Raspberry Pi V4 */
+    VIDEO_ACCELERATION_DRM       = 5;
 
 /** \} Hardware acceleration support
 <p>
@@ -1030,7 +1032,20 @@ public static final int
     CAP_PROP_OBSENSOR_INTRINSIC_FX = 26001,
     CAP_PROP_OBSENSOR_INTRINSIC_FY = 26002,
     CAP_PROP_OBSENSOR_INTRINSIC_CX = 26003,
-    CAP_PROP_OBSENSOR_INTRINSIC_CY = 26004;
+    CAP_PROP_OBSENSOR_INTRINSIC_CY = 26004,
+    CAP_PROP_OBSENSOR_RGB_POS_MSEC = 26005,
+    CAP_PROP_OBSENSOR_DEPTH_POS_MSEC = 26006,
+    CAP_PROP_OBSENSOR_DEPTH_WIDTH = 26007,
+    CAP_PROP_OBSENSOR_DEPTH_HEIGHT = 26008,
+    CAP_PROP_OBSENSOR_DEPTH_FPS = 26009,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_K1 = 26010,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_K2 = 26011,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_K3 = 26012,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_K4 = 26013,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_K5 = 26014,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_K6 = 26015,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_P1 = 26016,
+    CAP_PROP_OBSENSOR_COLOR_DISTORTION_P2 = 26017;
 // Targeting ../opencv_videoio/IStreamReader.java
 
 
