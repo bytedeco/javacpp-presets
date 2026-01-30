@@ -101,7 +101,7 @@ public class nppig extends org.bytedeco.cuda.presets.nppig {
  * of the destination ROI and the transformed source ROI are being
  * processed.
  *
- * The typical processing proceedes as follows:
+ * The typical processing proceeds as follows:
  * -# Transform the rectangular source ROI (given in source image coordinates)
  *      into the destination image space. This yields a quadrilateral.
  * -# Write only pixels in the intersection of the transformed source ROI and
@@ -122,7 +122,6 @@ public class nppig extends org.bytedeco.cuda.presets.nppig {
  * - interpolation using Lanczos window function
  *
  * \section resize_error_codes Resize Error Codes
- * \subsection resize_error_codes Resize Error Codes
  * The resize primitives return the following error codes:
  *
  *         - NPP_WRONG_INTERSECTION_ROI_ERROR indicates an error condition if
@@ -1423,7 +1422,7 @@ public static native @Cast("NppStatus") int nppiResizeBatch_32f_AC4R_Advanced_Ct
  *   NPPI_INTER_CUBIC2P_B05C03
  *   NPPI_INTER_LANCZOS
  *
- * Remap chooses source pixels using pixel coordinates explicitely supplied in two 2D device memory image arrays pointed to by the pXMap and pYMap pointers.
+ * Remap chooses source pixels using pixel coordinates explicitly supplied in two 2D device memory image arrays pointed to by the pXMap and pYMap pointers.
  * The pXMap array contains the X coordinated and the pYMap array contains the Y coordinate of the corresponding source image pixel to
  * use as input. These coordinates are in floating point format so fraction pixel positions can be used. The coordinates of the source
  * pixel to sample are determined as follows:
@@ -2765,7 +2764,7 @@ public static native @Cast("NppStatus") int nppiMirrorBatch_32f_AC4IR_Ctx(@ByVal
  *
  * An affine transform in 2D is fully determined by the mapping of just three vertices.
  * This function's API allows for passing a complete quadrilateral effectively making the 
- * prolem overdetermined. What this means in practice is, that for certain quadrilaterals it is
+ * problem overdetermined. What this means in practice is, that for certain quadrilaterals it is
  * not possible to find an affine transform that would map all four corners of the source
  * ROI to the four vertices of that quadrilateral.
  *
@@ -2776,7 +2775,7 @@ public static native @Cast("NppStatus") int nppiMirrorBatch_32f_AC4IR_Ctx(@ByVal
  * NPP_AFFINE_QUAD_INCORRECT_WARNING.
  *
  * @param oSrcROI The source ROI. This rectangle needs to be at least one pixel wide and
- *          high. If either width or hight are less than one an NPP_RECTANGLE_ERROR is returned.
+ *          high. If either width or height are less than one an NPP_RECTANGLE_ERROR is returned.
  * @param aQuad The destination quadrilateral.
  * @param aCoeffs The resulting affine transform coefficients.
  * @return Error codes:
@@ -2843,30 +2842,41 @@ public static native @Cast("NppStatus") int nppiMirrorBatch_32f_AC4IR_Ctx(@ByVal
  * \defgroup affine_transform Affine Transform
  * Transforms (warps) an image based on an affine transform. 
  *
- * The affine transform is given as a {@code 2\times 3} matrix C. A pixel location {@code (x, y)} in the
- * source image is mapped to the location {@code (x', y')} in the destination image.
- * The destination image coorodinates are computed as follows:
+  * The affine transform is given as a {@code 2\times 3} matrix \( C \).
+ * A pixel location {@code (x, y)} in the source image is mapped to
+ * {@code (x', y')} in the destination image. The destination coordinates are:
+ *
  * <pre>{@code \[
- * x' = c_{00} * x + c_{01} * y + c_{02} \qquad
- * y' = c_{10} * x + c_{11} * y + c_{12} \qquad
- * C = \left[ \matrix{c_{00} & c_{01} & c_{02} \cr 
-                      c_{10} & c_{11} & c_{12} } \right]
+ * \begin{aligned}
+ * x' &= c_{00}\,x + c_{01}\,y + c_{02} \\
+ * y' &= c_{10}\,x + c_{11}\,y + c_{12}
+ * \end{aligned}
  * \]}</pre>
- * Affine transforms can be understood as a linear transformation (traditional
- * matrix multiplication) and a shift operation. The {@code 2\times 2} matrix 
+ *
+ * The transform matrix is
  * <pre>{@code \[
- *    L = \left[ \matrix{c_{00} & c_{01} \cr 
- *                       c_{10} & c_{11} } \right]
+ * C = \begin{bmatrix}
+ * c_{00} & c_{01} & c_{02} \\
+ * c_{10} & c_{11} & c_{12}
+ * \end{bmatrix}
  * \]}</pre>
- * represents the linear transform portion of the affine transformation. The
- * vector
+ *
+ * Affine transforms decompose into a linear part and a shift. The {@code 2\times 2} matrix
  * <pre>{@code \[
- *      v = \left( \matrix{c_{02} \cr
-                           c_{12} } \right)
+ * L = \begin{bmatrix}
+ * c_{00} & c_{01} \\
+ * c_{10} & c_{11}
+ * \end{bmatrix}
  * \]}</pre>
- * represents the post-transform shift, i.e. after the pixel location is transformed
- * by {@code L} it is translated by {@code v}.
- * 
+ * represents the linear transform, and the vector
+ * <pre>{@code \[
+ * v = \begin{bmatrix}
+ * c_{02} \\
+ * c_{12}
+ * \end{bmatrix}
+ * \]}</pre>
+ * is the post-transform translation; i.e., after applying {@code L}, translate by {@code v}.
+ *  
  * \subsection CommonWarpAffinePackedPixelParameters Common parameters for nppiWarpAffine packed pixel functions:
  *
  * @param pSrc \ref source_image_pointer.
@@ -3588,24 +3598,44 @@ public static native @Cast("NppStatus") int nppiWarpAffineBatch_32f_AC4R_Ctx(@By
  * \defgroup backwards_affine_transform Backwards Affine Transform
  * Transforms (warps) an image based on an affine transform. 
  *
- * The affine transform is given as a {@code 2\times 3} matrix C. A pixel location {@code (x, y)} in the
- * source image is mapped to the location {@code (x', y')} in the destination image.
- * The destination image coorodinates fullfil the following properties:
+ * The affine transform is given as a {@code 2\times 3} matrix \( C \).
+ * A pixel location {@code (x, y)} in the source image is mapped to
+ * {@code (x', y')} in the destination image. The destination coordinates satisfy:
+ *
  * <pre>{@code \[
- * x = c_{00} * x' + c_{01} * y' + c_{02} \qquad
- * y = c_{10} * x' + c_{11} * y' + c_{12} \qquad
- * C = \left[ \matrix{c_{00} & c_{01} & c_{02} \cr 
-                      c_{10} & c_{11} & c_{12} } \right]
- * \]}</pre>
- * In other words, given matrix {@code C} the source image's shape is transfored to the destination image
- * using the inverse matrix {@code C^{-1}}:
- * <pre>{@code \[
- * M = C^{-1} = \left[ \matrix{m_{00} & m_{01} & m_{02} \cr 
-                               m_{10} & m_{11} & m_{12} } \right]
- * x' = m_{00} * x + m_{01} * y + m_{02} \qquad
- * y' = m_{10} * x + m_{11} * y + m_{12} \qquad
+ * \begin{aligned}
+ * x &= c_{00}\,x' + c_{01}\,y' + c_{02} \\
+ * y &= c_{10}\,x' + c_{11}\,y' + c_{12}
+ * \end{aligned}
  * \]}</pre>
  *
+ * with
+ * <pre>{@code \[
+ * C = \begin{bmatrix}
+ * c_{00} & c_{01} & c_{02} \\
+ * c_{10} & c_{11} & c_{12}
+ * \end{bmatrix}.
+ * \]}</pre>
+ *
+ * In other words, given {@code C}, the source coordinates are transformed
+ * to the destination using the inverse matrix {@code C^{-1}}:
+ *
+ * <pre>{@code \[
+ * M = C^{-1} =
+ * \begin{bmatrix}
+ * m_{00} & m_{01} & m_{02} \\
+ * m_{10} & m_{11} & m_{12}
+ * \end{bmatrix}
+ * \]}</pre>
+ *
+ * and the forward mapping is
+ * <pre>{@code \[
+ * \begin{aligned}
+ * x' &= m_{00}\,x + m_{01}\,y + m_{02} \\
+ * y' &= m_{10}\,x + m_{11}\,y + m_{12}
+ * \end{aligned}
+ * \]}</pre>
+ * 
  * \subsection CommonWarpAffineBackPackedPixelParameters Common parameters for nppiWarpAffineBack packed pixel functions:
  *
  * @param pSrc \ref source_image_pointer.
@@ -4559,19 +4589,29 @@ public static native @Cast("NppStatus") int nppiWarpAffineQuad_32f_P4R_Ctx(@Cast
  * \defgroup perspective_transform Perspective Transform
  * Transforms (warps) an image based on a perspective transform. 
  *
- * The perspective transform is given as a {@code 3\times 3} matrix C. A pixel location {@code (x, y)} in the
- * source image is mapped to the location {@code (x', y')} in the destination image.
- * The destination image coorodinates are computed as follows:
+ * The perspective (projective) transform is given as a {@code 3\times 3} matrix \( C \).
+ * A pixel location {@code (x, y)} in the source image is mapped to {@code (x', y')}
+ * in the destination image as:
+ *
  * <pre>{@code \[
- * x' = \frac{c_{00} * x + c_{01} * y + c_{02}}{c_{20} * x + c_{21} * y + c_{22}} \qquad
- * y' = \frac{c_{10} * x + c_{11} * y + c_{12}}{c_{20} * x + c_{21} * y + c_{22}}
- * \]}</pre>
- * <pre>{@code \[
- * C = \left[ \matrix{c_{00} & c_{01} & c_{02}   \cr 
-                      c_{10} & c_{11} & c_{12}   \cr 
-                      c_{20} & c_{21} & c_{22} } \right]
+ * \begin{aligned}
+ * x' &= \frac{c_{00}\,x + c_{01}\,y + c_{02}}{c_{20}\,x + c_{21}\,y + c_{22}}, \\
+ * y' &= \frac{c_{10}\,x + c_{11}\,y + c_{12}}{c_{20}\,x + c_{21}\,y + c_{22}}.
+ * \end{aligned}
  * \]}</pre>
  *
+ * where
+ * <pre>{@code \[
+ * C =
+ * \begin{bmatrix}
+ * c_{00} & c_{01} & c_{02} \\
+ * c_{10} & c_{11} & c_{12} \\
+ * c_{20} & c_{21} & c_{22}
+ * \end{bmatrix}.
+ * \]}</pre>
+ *
+ * \note The denominator {@code c_{20}\,x + c_{21}\,y + c_{22}\neq 0} for valid image points.
+ **
  * \subsection CommonWarpPerspectivePackedPixelParameters Common parameters for nppiWarpPerspective packed pixel functions:
  *
  * @param pSrc \ref source_image_pointer.
@@ -5191,27 +5231,38 @@ public static native @Cast("NppStatus") int nppiWarpPerspectiveBatch_32f_AC4R_Ct
  * \defgroup backwards_perspective_transform Backwards Perspective Transform
  * Transforms (warps) an image based on a perspective transform. 
  *
- * The perspective transform is given as a {@code 3\times 3} matrix C. A pixel location {@code (x, y)} in the
- * source image is mapped to the location {@code (x', y')} in the destination image.
- * The destination image coorodinates fullfil the following properties:
+  * The perspective (projective) transform is given by a {@code 3\times 3} matrix \( C \).
+ * A pixel location {@code (x, y)} in the source image maps to {@code (x', y')} in the destination as:
+ *
  * <pre>{@code \[
- * x = \frac{c_{00} * x' + c_{01} * y' + c_{02}}{c_{20} * x' + c_{21} * y' + c_{22}} \qquad
- * y = \frac{c_{10} * x' + c_{11} * y' + c_{12}}{c_{20} * x' + c_{21} * y' + c_{22}}
+ * \begin{aligned}
+ * x' &= \frac{c_{00}\,x + c_{01}\,y + c_{02}}{c_{20}\,x + c_{21}\,y + c_{22}}, \\
+ * y' &= \frac{c_{10}\,x + c_{11}\,y + c_{12}}{c_{20}\,x + c_{21}\,y + c_{22}}.
+ * \end{aligned}
  * \]}</pre>
+ *
+ * where
  * <pre>{@code \[
- * C = \left[ \matrix{c_{00} & c_{01} & c_{02}   \cr 
-                      c_{10} & c_{11} & c_{12}   \cr 
-                      c_{20} & c_{21} & c_{22} } \right]
+ * C =
+ * \begin{bmatrix}
+ * c_{00} & c_{01} & c_{02} \\
+ * c_{10} & c_{11} & c_{12} \\
+ * c_{20} & c_{21} & c_{22}
+ * \end{bmatrix}.
  * \]}</pre>
- * In other words, given matrix {@code C} the source image's shape is transfored to the destination image
- * using the inverse matrix {@code C^{-1}}:
+ *
+ * Conversely, if {@code M = C^{-1}}, the destination coordinates {@code (x', y')} map back to source:
+ *
  * <pre>{@code \[
- * M = C^{-1} = \left[ \matrix{m_{00} & m_{01} & m_{02} \cr 
-                               m_{10} & m_{11} & m_{12} \cr 
-                               m_{20} & m_{21} & m_{22} } \right]
- * x' = \frac{c_{00} * x + c_{01} * y + c_{02}}{c_{20} * x + c_{21} * y + c_{22}} \qquad
- * y' = \frac{c_{10} * x + c_{11} * y + c_{12}}{c_{20} * x + c_{21} * y + c_{22}}
+ * \begin{aligned}
+ * x &= \frac{m_{00}\,x' + m_{01}\,y' + m_{02}}{m_{20}\,x' + m_{21}\,y' + m_{22}}, \\
+ * y &= \frac{m_{10}\,x' + m_{11}\,y' + m_{12}}{m_{20}\,x' + m_{21}\,y' + m_{22}}.
+ * \end{aligned}
  * \]}</pre>
+ *
+ * \note The denominators must be nonzero (valid homogeneous coordinate):
+ *       {@code c_{20}\,x + c_{21}\,y + c_{22} \neq 0} and
+ *       {@code m_{20}\,x' + m_{21}\,y' + m_{22} \neq 0}; also {@code \det(C)\neq 0}.
  *
  * \subsection CommonWarpPerspectiveBackPackedPixelParameters Common parameters for nppiWarpPerspectiveBack packed pixel functions:
  *

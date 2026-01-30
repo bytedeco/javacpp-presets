@@ -53,7 +53,7 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
             link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource_ptx@.10.14.1"
+            preload = "nvinfer_builder_resource_ptx@.10.15.1"
         ),
         @Platform(
             value = "linux-arm64",
@@ -73,9 +73,10 @@ import org.bytedeco.cuda.presets.nvrtc;
         @Platform(
             value = "windows-x86_64",
             link = "nvinfer_10",
-            preload = "nvinfer_builder_resource_10",
+            preload = "nvinfer_builder_resource_ptx_10",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/"
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/",
+            preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/bin/"
         )
     },
     target = "org.bytedeco.tensorrt.nvinfer",
@@ -150,7 +151,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer",
                              "nvinfer1::ICumulativeLayer", "nvinfer1::IDynamicQuantizeLayer", "nvinfer1::ISqueezeLayer", "nvinfer1::IUnsqueezeLayer", "nvinfer1::IPluginV3Layer",
                              "nvinfer1::IAttention", "nvinfer1::IAttentionBoundaryLayer", "nvinfer1::IAttentionInputLayer", "nvinfer1::IAttentionOutputLayer",
-                             "nvinfer1::IOneHotLayer").purify())
+                             "nvinfer1::IOneHotLayer", "nvinfer1::IKVCacheUpdateLayer", "nvinfer1::IRotaryEmbeddingLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
                              "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator", "nvinfer1::IVersionedInterface").virtualize())

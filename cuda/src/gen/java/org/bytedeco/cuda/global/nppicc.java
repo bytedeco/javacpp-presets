@@ -17,11 +17,15 @@ public class nppicc extends org.bytedeco.cuda.presets.nppicc {
 
 // Parsed from <nppi_color_conversion.h>
 
- /* Copyright 2009-2023 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
+ /* Copyright 2009-2025 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
-  * The source code and/or documentation ("Licensed Deliverables") are 
+  * The source code and/or documentation ("Licensed Deliverables") are #include "nppi_color_conversion.h"
+#include "nppi_color_conversion.h"
+#include "nppi_color_conversion.h"
+#include "nppi_color_conversion.h"
+
   * subject to NVIDIA intellectual property rights under U.S. and 
   * international Copyright laws. 
   * 
@@ -138,18 +142,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned packed YUV color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed YUV color conversion with alpha, not affecting alpha.
  * images.
  *
@@ -164,19 +156,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed YUV color conversion with alpha, not affecting alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YUV color conversion.
@@ -195,18 +174,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YUV color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YUV color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -221,18 +188,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YUV color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned planar YUV color conversion with alpha.
@@ -250,18 +205,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4P4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4P4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4P4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV_8u_AC4P4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned planar YUV color conversion with alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
 
 
 /** \} rgbtoyuv */
@@ -302,18 +245,6 @@ public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned packed YUV color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned packed YUV color conversion with alpha, not affecting alpha.
  * images.
  *
@@ -328,19 +259,6 @@ public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned packed YUV color conversion with alpha, not affecting alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YUV color conversion.
@@ -359,18 +277,6 @@ public static native @Cast("NppStatus") int nppiBGRToYUV_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YUV color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YUV color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -385,18 +291,6 @@ public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YUV color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned planar YUV color conversion with alpha.
@@ -414,19 +308,6 @@ public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4P4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4P4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4P4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV_8u_AC4P4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned planar YUV color conversion with alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoyuv */
 
@@ -476,18 +357,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YUV to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit packed YUV with alpha to 4 channel 8-bit unsigned packed RGB color conversion with alpha, not affecting alpha.
  * images.
  *
@@ -502,19 +371,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit packed YUV with alpha to 4 channel 8-bit unsigned packed RGB color conversion with alpha, not affecting alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned planar RGB color conversion.
@@ -533,18 +389,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed RGB color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -559,18 +403,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuvtorgb */
 
@@ -597,19 +429,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGB_8u_P3C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YUV to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input and output images passed in pSrcBatchList and pSrcBatchList
- * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
  * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
  * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
@@ -627,23 +446,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_C3R_Ctx(@Const 
  */
 public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuvtorgbbatch */
 
@@ -670,19 +472,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_P3C3R_Ctx(@Cons
 public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YUV to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair of input/output images has own ROI.
- * Provided oMaxSizeROI must contain the maximum width and the maximum height of all ROIs defined in pDstBatchList. API user must ensure that
- * ROI from pDstBatchList for each pair of input and output images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
  * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
  * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
@@ -700,23 +489,6 @@ public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_C3R_Advanced_Ct
  */
 public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToRGBBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuvtorgbbatchadvanced */
 
@@ -766,18 +538,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGR_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YUV to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit packed YUV with alpha to 4 channel 8-bit unsigned packed BGR color conversion with alpha, not affecting alpha.
  * images.
  *
@@ -792,19 +552,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGR_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit packed YUV with alpha to 4 channel 8-bit unsigned packed BGR color conversion with alpha, not affecting alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned planar BGR color conversion.
@@ -823,18 +570,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed BGR color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -849,18 +584,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuvtobgr */
 
@@ -887,19 +610,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGR_8u_P3C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YUV to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input and output images passed in pSrcBatchList and pSrcBatchList
- * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
  * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
  * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
@@ -917,23 +627,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_C3R_Ctx(@Const 
  */
 public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuvtobgrbatch */
 
@@ -960,19 +653,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_P3C3R_Ctx(@Cons
 public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YUV to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair of input/output images has own ROI.
- * Provided oMaxSizeROI must contain the maximum width and the maximum height of all ROIs defined in pDstBatchList. API user must ensure that
- * ROI from pDstBatchList for each pair of input and output images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
  * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
  * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
@@ -990,23 +670,6 @@ public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_C3R_Advanced_Ct
  */
 public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUVToBGRBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuvtobgrbatchadvanced */
 
@@ -1034,18 +697,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_C3C2R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 2 channel 8-bit unsigned packed YUV422 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YUV422 color conversion.
  * images.
  *                         
@@ -1063,19 +714,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_P3R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YUV422 color conversion.
- * images.
- *                         
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YUV422 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -1090,18 +728,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_C3P3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV422_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YUV422 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoyuv422 */
 
@@ -1128,18 +754,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_C2C3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_C2C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed YUV422 to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned planar RGB color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -1154,18 +768,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned packed RGB color conversion.
@@ -1184,18 +786,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3C3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV422 to 4 channel 8-bit unsigned packed RGB color conversion with alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -1210,18 +800,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3AC4R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3AC4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3AC4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3AC4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV422 to 4 channel 8-bit unsigned packed RGB color conversion with alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuv422torgb */
 
@@ -1251,23 +829,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGB_8u_P3AC4R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiYUV422ToRGBBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToRGBBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} yuv422torgbbatch */
 
 /** \defgroup yuv422torgbbatchadvanced YUV422ToRGBBatchAdvanced
@@ -1295,23 +856,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGBBatch_8u_P3C3R_Ctx(@C
  */
 public static native @Cast("NppStatus") int nppiYUV422ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuv422torgbbatchadvanced */
 
@@ -1341,23 +885,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToRGBBatch_8u_P3C3R_Advanc
 public static native @Cast("NppStatus") int nppiYUV422ToBGRBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToBGRBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} yuv422tobgrbatch */
 
 /** \defgroup yuv422tobgrbatchadvanced YUV422ToBGRBatchAdvanced
@@ -1386,23 +913,6 @@ public static native @Cast("NppStatus") int nppiYUV422ToBGRBatch_8u_P3C3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYUV422ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV422ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YUV422 to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} yuv422tobgrbatchadvanced */
 
 /** \defgroup rgbtoyuv420 RGBToYUV420 
@@ -1430,19 +940,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV420_8u_P3R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiRGBToYUV420_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YUV420 color conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YUV420 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -1457,18 +954,6 @@ public static native @Cast("NppStatus") int nppiRGBToYUV420_8u_C3P3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiRGBToYUV420_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV420_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYUV420_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YUV420 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoyuv420 */
 
@@ -1496,18 +981,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed RGB color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -1522,18 +995,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3C3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YUV420 to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha (0xFF).
@@ -1552,18 +1013,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3C4R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YUV420 to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha (0xFF).
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV420 to 4 channel 8-bit unsigned packed RGB color conversion with alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -1578,18 +1027,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3AC4R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3AC4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3AC4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3AC4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 4 channel 8-bit unsigned packed RGB color conversion with alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuv420torgb */
 
@@ -1619,23 +1056,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGB_8u_P3AC4R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiYUV420ToRGBBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToRGBBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents Y planes.
- *        The second element of array (pSrcBatchList[1]) represents U planes. The third element of array (pSrcBatchList[2])
- *        represents V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} yuv420torgbbatch */
 
 /** \defgroup yuv420torgbbatchadvanced YUV420ToRGBBatchAdvanced
@@ -1663,23 +1083,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToRGBBatch_8u_P3C3R_Ctx(@C
  */
 public static native @Cast("NppStatus") int nppiYUV420ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuv420torgbbatchadvanced */
 
@@ -1710,20 +1113,6 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_8u_P2C3R_Ctx(@Cast("co
 
 /**
  *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
- *  unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y
- *        plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each source plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
  *  unsigned packed RGB 709 HDTV full color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
@@ -1742,20 +1131,6 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_709HDTV_8u_P2C3R_Ctx(@
 
 /**
  *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
- *  unsigned packed RGB 709 HDTV full color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y
- *        plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
  *  unsigned packed RGB 709 CSC color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
@@ -1771,20 +1146,6 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_709CSC_8u_P2C3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiNV12ToRGB_709CSC_8u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV12ToRGB_709CSC_8u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV12ToRGB_709CSC_8u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
- *  unsigned packed RGB 709 CSC color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y
- *        plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} nv12torgb */
 
@@ -1810,18 +1171,6 @@ public static native @Cast("NppStatus") int nppiNV21ToRGB_8u_P2C4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiNV21ToRGB_8u_P2C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV21ToRGB_8u_P2C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV21ToRGB_8u_P2C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- *  2 channel 8-bit unsigned planar NV21 to 4 channel 8-bit unsigned packed RGBA color conversion with constant alpha (0xFF).
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y plane, one for VU plane).
- * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} nv21torgb */
 
@@ -1849,19 +1198,6 @@ public static native @Cast("NppStatus") int nppiBGRToYUV420_8u_AC4P3R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiBGRToYUV420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYUV420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
  
-/**
- * 4 channel 8-bit unsigned pacmed BGR with alpha to 3 channel 8-bit unsigned planar YUV420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
- 
 /** \} bgrtoyuv420 */
 
 /** \defgroup yuv420tobgr YUV420ToBGR 
@@ -1888,18 +1224,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YUV420 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha (0xFF).
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -1914,18 +1238,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C4R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha (0xFF).
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuv420tobgr */
 
@@ -1955,23 +1267,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToBGR_8u_P3C4R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiYUV420ToBGRBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToBGRBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents Y planes.
- *        The second element of array (pSrcBatchList[1]) represents U planes. The third element of array (pSrcBatchList[2])
- *        represents V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} yuv420tobgrbatch */
 
 /** \defgroup yuv420tobgrbatchadvanced YUV420ToBGRBatchAdvanced
@@ -1999,23 +1294,6 @@ public static native @Cast("NppStatus") int nppiYUV420ToBGRBatch_8u_P3C3R_Ctx(@C
  */
 public static native @Cast("NppStatus") int nppiYUV420ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYUV420ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YUV420 to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of U planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of V planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} yuv420tobgrbatchadvanced */
 
@@ -2046,20 +1324,6 @@ public static native @Cast("NppStatus") int nppiNV12ToBGR_8u_P2C3R_Ctx(@Cast("co
 
 /**
  *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
- *  unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y
- *        plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step.  Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
  *  unsigned packed RGB 709 HDTV full color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
@@ -2078,20 +1342,6 @@ public static native @Cast("NppStatus") int nppiNV12ToBGR_709HDTV_8u_P2C3R_Ctx(@
 
 /**
  *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
- *  unsigned packed RGB 709 HDTV full color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y
- *        plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
  *  unsigned packed RGB 709 CSC color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
  *
  * @param pSrc \ref source_planar_image_pointer_array (one for Y
@@ -2107,20 +1357,6 @@ public static native @Cast("NppStatus") int nppiNV12ToBGR_709CSC_8u_P2C3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiNV12ToBGR_709CSC_8u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV12ToBGR_709CSC_8u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV12ToBGR_709CSC_8u_P2C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit
- *  unsigned packed RGB 709 CSC color conversion. Note that HDTV conversion assumes full color range of 0 - 255, use CSC version for limited range color.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y
- *        plane, one for UV plane).
- * @param rSrcStep \ref source_planar_image_line_step. Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} nv12tobgr */
 
@@ -2146,18 +1382,6 @@ public static native @Cast("NppStatus") int nppiNV21ToBGR_8u_P2C4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiNV21ToBGR_8u_P2C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV21ToBGR_8u_P2C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV21ToBGR_8u_P2C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- *  2 channel 8-bit unsigned planar NV21 to 4 channel 8-bit unsigned packed BGRA color conversion with constant alpha (0xFF).
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y plane, one for VU plane).
- * @param rSrcStep \ref source_planar_image_line_step.  Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} nv21tobgr */
 
@@ -2194,18 +1418,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel unsigned 8-bit packed YCbCr color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel unsigned 8-bit packed YCbCr with alpha color conversion, not affecting alpha.
  *
  * @param pSrc \ref source_image_pointer.
@@ -2219,18 +1431,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel unsigned 8-bit packed YCbCr with alpha color conversion, not affecting alpha.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel planar 8-bit unsigned RGB to 3 channel planar 8-bit YCbCr color conversion.
@@ -2247,18 +1447,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel planar 8-bit unsigned RGB to 3 channel planar 8-bit YCbCr color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed RGB to 3 channel unsigned 8-bit planar YCbCr color conversion.
@@ -2278,19 +1466,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_C3P3R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel unsigned 8-bit planar YCbCr color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 3 channel 8-bit unsigned planar YCbCr color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -2305,18 +1480,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4P3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 3 channel 8-bit unsigned planar YCbCr color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoycbcr */
 
@@ -2359,18 +1522,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed YCbCr with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion, not affecting alpha.
  * Alpha channel is the last channel and is not processed.
  *
@@ -2385,19 +1536,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed YCbCr with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion, not affecting alpha.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned planar RGB color conversion.
@@ -2416,18 +1554,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed RGB color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -2442,18 +1568,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C3R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha.
@@ -2471,19 +1585,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.                                         
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcrtorgb */
 
@@ -2510,19 +1611,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGB_8u_P3C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input and output images passed in pSrcBatchList and pSrcBatchList
- * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
  * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
  * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
@@ -2540,23 +1628,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_C3R_Ctx(@Cons
  */
 public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcrtorgbbatch */
 
@@ -2583,19 +1654,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_P3C3R_Ctx(@Co
 public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair of input/output images has own ROI.
- * Provided oMaxSizeROI must contain the maximum width and the maximum height of all ROIs defined in pDstBatchList. API user must ensure that
- * ROI from pDstBatchList for each pair of input and output images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
  * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
  * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
@@ -2613,23 +1671,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_C3R_Advanced_
  */
 public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToRGBBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcrtorgbbatchadvanced */
 
@@ -2657,18 +1698,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C3R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -2684,19 +1713,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcrtobgr */
 
@@ -2723,19 +1739,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGR_8u_P3C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_C3R_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input and output images passed in pSrcBatchList and pSrcBatchList
- * arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the borders of any of provided images.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
  * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
  * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
@@ -2754,23 +1757,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_C3R_Ctx(@Cons
 public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
  
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this  call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcrtobgrbatch */
 
 /** \defgroup ycbcrtobgrbatchadvanced YCbCrToBGRBatchAdvanced
@@ -2796,19 +1782,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_P3C3R_Ctx(@Co
 public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_C3R_Advanced_Ctx(@Const NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair of input/output images has own ROI.
- * Provided oMaxSizeROI must contain the maximum width and the maximum height of all ROIs defined in pDstBatchList. API user must ensure that
- * ROI from pDstBatchList for each pair of input and output images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList \ref source_batch_images_pointer.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
  * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
  * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
@@ -2826,23 +1799,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_C3R_Advanced_
  */
 public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToBGRBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcrtobgrbatchadvanced */
 
@@ -2870,18 +1826,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGR_709CSC_8u_P3C3R_Ctx(@
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_709CSC_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr to 3 channel 8-bit unsigned packed BGR_709CSC color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr to 4 channel 8-bit unsigned packed BGR_709CSC color conversion with constant alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -2897,19 +1841,6 @@ public static native @Cast("NppStatus") int nppiYCbCrToBGR_709CSC_8u_P3C4R_Ctx(@
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_709CSC_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_709CSC_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCrToBGR_709CSC_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr to 4 channel 8-bit unsigned packed BGR_709CSC color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcrtobgr709 */
 
@@ -2940,19 +1871,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_C3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 2 channel 8-bit unsigned packed YCbCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
  * images.
  *
@@ -2970,19 +1888,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar RGB to 2 channel 8-bit unsigned packed YCbCr422 color conversion.
  * images.
  *
@@ -2998,19 +1903,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_P3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar RGB to 2 channel 8-bit unsigned packed YCbCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoycbcr422 */
 
@@ -3038,19 +1930,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_C2C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_C2C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx); 
 
 /**
- * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned packed RGB color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
- 
-
-/**
  * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar RGB color conversion.
  * images.
  *
@@ -3068,19 +1947,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_C2P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar RGB color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed RGB color conversion.
  * images.
  *
@@ -3096,19 +1962,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed RGB color conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr422torgb */
 
@@ -3138,23 +1991,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGBBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGBBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr422torgbbatch */
 
 /** \defgroup ycbcr422torgbbatchadvanced YCbCr422ToRGBBatchAdvanced
@@ -3183,23 +2019,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGBBatch_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr422torgbbatchadvanced */
 
 /** \defgroup rgbtoycrcb422 RGBToYCrCb422 
@@ -3226,19 +2045,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCrCb422_8u_C3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCrCb422_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 2 channel 8-bit unsigned packed YCrCb422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar RGB to 2 channel 8-bit unsigned packed YCrCb422 color conversion.
  * images.
  *
@@ -3254,19 +2060,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCrCb422_8u_P3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar RGB to 2 channel 8-bit unsigned packed YCrCb422 color conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoycrcb422 */
 
@@ -3294,19 +2087,6 @@ public static native @Cast("NppStatus") int nppiYCrCb422ToRGB_8u_C2C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCrCb422ToRGB_8u_C2C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx); 
 
 /**
- * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned packed RGB color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
- 
-
-/**
  * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned planar RGB color conversion.
  * images.
  *
@@ -3322,19 +2102,6 @@ public static native @Cast("NppStatus") int nppiYCrCb422ToRGB_8u_C2P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCrCb422ToRGB_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb422ToRGB_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb422ToRGB_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned planar RGB color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycrcb422torgb */
 
@@ -3362,19 +2129,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_C3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 2 channel 8-bit unsigned packed YCrCb422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 2 channel 8-bit unsigned packed YCrCb422 color conversion.
  * images.
  *
@@ -3389,19 +2143,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_C3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 2 channel 8-bit unsigned packed YCrCb422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
@@ -3421,19 +2162,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
  * images.
  *
@@ -3449,19 +2177,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4P3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycbcr422 */
 
@@ -3489,19 +2204,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_C2C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_C2C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned packed BGR color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned packed YCrCb422 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
  * images.
  *
@@ -3519,20 +2221,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_C2C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_C2C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed YCrCb422 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed BGR color conversion.
  * images.
  *
@@ -3548,19 +2236,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed BGR color conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr422tobgr */
 
@@ -3590,23 +2265,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGRBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGRBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
  
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this  call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr422tobgrbatch */
 
 /** \defgroup ycbcr422tobgrbatchadvanced YCbCr422ToBGRBatchAdvanced
@@ -3635,23 +2293,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGRBatch_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr422tobgrbatchadvanced */
 
 /** \defgroup rgbtocbycr422 RGBToCbYCr422 
@@ -3678,19 +2319,6 @@ public static native @Cast("NppStatus") int nppiRGBToCbYCr422_8u_C3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToCbYCr422_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 2 channel 8-bit unsigned packed CbYCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB first gets forward gamma corrected then converted to 2 channel 8-bit unsigned packed CbYCr422 color conversion.
  * images.
  *
@@ -3705,19 +2333,6 @@ public static native @Cast("NppStatus") int nppiRGBToCbYCr422_8u_C3C2R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToCbYCr422Gamma_8u_C3C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToCbYCr422Gamma_8u_C3C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToCbYCr422Gamma_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed RGB first gets forward gamma corrected then converted to 2 channel 8-bit unsigned packed CbYCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtocbycr422 */
 
@@ -3744,19 +2359,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToRGB_8u_C2C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiCbYCr422ToRGB_8u_C2C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToRGB_8u_C2C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned packed CbYCrC22 to 3 channel 8-bit unsigned packed RGB color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} cbcr422torgb */
 
 /** \defgroup bgrtocbycr422 BGRToCbYCr422 
@@ -3781,19 +2383,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToRGB_8u_C2C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_8u_AC4C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_8u_AC4C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_8u_AC4C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 2 channel 8-bit unsigned packed CbYCr422 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtocbycr422 */
 
@@ -3821,19 +2410,6 @@ public static native @Cast("NppStatus") int nppiBGRToCbYCr422_709HDTV_8u_C3C2R_C
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_709HDTV_8u_C3C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 2 channel 8-bit unsigned packed CbYCr422_709HDTV color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 2 channel 8-bit unsigned packed CbYCr422_709HDTV color conversion.
  * images.
  *
@@ -3848,19 +2424,6 @@ public static native @Cast("NppStatus") int nppiBGRToCbYCr422_709HDTV_8u_C3C2R_C
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_709HDTV_8u_AC4C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_709HDTV_8u_AC4C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToCbYCr422_709HDTV_8u_AC4C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 2 channel 8-bit unsigned packed CbYCr422_709HDTV color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtocbycr422709HDTV */
 
@@ -3888,20 +2451,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_8u_C2C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_8u_C2C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_8u_C2C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned packed CbYCr422 to 4 channel 8-bit unsigned packed BGR color conversion with alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} cbycr422tobgr */
 
 /** \defgroup cbycr422tobgr709hdtv CbYCr422ToBGR_709HDTV 
@@ -3928,19 +2477,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_709HDTV_8u_C2C3R_C
 public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_709HDTV_8u_C2C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed CbYCr422 to 3 channel 8-bit unsigned packed BGR_709HDTV color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned packed CbYCr422 to 4 channel 8-bit unsigned packed BGR_709HDTV color conversion with constant alpha.
  * images.
  *
@@ -3956,20 +2492,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_709HDTV_8u_C2C3R_C
 public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_709HDTV_8u_C2C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_709HDTV_8u_C2C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToBGR_709HDTV_8u_C2C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed CbYCr422 to 4 channel 8-bit unsigned packed BGR_709HDTV color conversion with constant alpha.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} cbycr422tobgr709hdtv */
 
@@ -3997,19 +2519,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr420_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCbCr420_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr420_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} rgbtoycbcr420 */
 
 /** \defgroup ycbcr420torgb YCbCr420ToRGB 
@@ -4034,18 +2543,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr420torgb */
 
@@ -4075,23 +2572,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGBBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGBBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed RGB batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr420torgbbatch */
 
 /** \defgroup ycbcr420torgbbatchadvanced YCbCr420ToRGBBatchAdvanced
@@ -4120,23 +2600,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToRGBBatch_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGBBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed RGB batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr420torgbbatchadvanced */
 
 /** \defgroup rgbtoycrcb420 RGBToYCrCb420 
@@ -4163,19 +2626,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCrCb420_8u_AC4P3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiRGBToYCrCb420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCrCb420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 3 channel 8-bit unsigned planar YCrCb420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} rgbtoycrcb420 */
 
 /** \defgroup ycrcb420torgb YCrCb420ToRGB 
@@ -4201,19 +2651,6 @@ public static native @Cast("NppStatus") int nppiYCrCb420ToRGB_8u_P3C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCrCb420ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc,IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc,IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc,int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCrCb420 to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycrcb420torgb */
 
@@ -4242,19 +2679,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
  * images.
  *
@@ -4270,19 +2694,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_8u_AC4P3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycbcr420 */
 
@@ -4311,19 +2722,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709CSC_8u_C3P3R_Ct
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709CSC_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr420_709CSC color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr420_709CSC color conversion.
  * images.
  *
@@ -4339,19 +2737,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709CSC_8u_AC4P3R_C
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709CSC_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709CSC_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709CSC_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr420_709CSC color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycbcr420709csc */
 
@@ -4379,19 +2764,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709HDTV_8u_AC4P3R_
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709HDTV_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_709HDTV_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr420_709HDTV color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} bgrtoycbcr420709hdtv */
 
 /** \defgroup bgrtoycrdb420709csc BGRToYCrCb420_709CSC 
@@ -4417,19 +2789,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCrCb420_709CSC_8u_C3P3R_Ct
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_709CSC_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCrCb420_709CSC color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCrCb420_709CSC color conversion.
  * images.
  *
@@ -4445,19 +2804,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCrCb420_709CSC_8u_AC4P3R_C
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_709CSC_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_709CSC_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_709CSC_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCrCb420_709CSC color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycrdb420709csc */
 
@@ -4482,18 +2828,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr420 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -4509,19 +2843,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep,@Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep,@Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep,@Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr420tobgr */
 
@@ -4551,23 +2872,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_8u_P3C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGRBatch_8u_P3C3R_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGRBatch_8u_P3C3R_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
  
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed BGR batch color conversion for a single ROI.
- * Provided oSizeROI will be used for all pairs of input planes making input images and output packed images passed in
- * pSrcBatchList and pSrcBatchList arguments. API user must ensure that provided ROI (oSizeROI) does not go beyond the
- * borders of any of provided images.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize A number of \ref NppiImageDescriptor structures processed in this  call (must be > 1).
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr420tobgrbatch */
 
 /** \defgroup ycbcr420tobgrbatchadvanced YCbCr420ToBGRBatchAdvanced
@@ -4596,23 +2900,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGRBatch_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Cast("const NppiImageDescriptor*const*") PointerPointer pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGRBatch_8u_P3C3R_Advanced_Ctx(@Const @ByPtrPtr NppiImageDescriptor pSrcBatchList, NppiImageDescriptor pDstBatchList, int nBatchSize, @ByVal NppiSize oMaxSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed BGR batch color conversion where each pair
- * of input/output images has own ROI. Provided oMaxSizeROI must contain the maximum width and the maximum height of all
- * ROIs defined in pDstBatchList. API user must ensure that ROI from pDstBatchList for each pair of input and output
- * images does not go beyond the borders of images in each pair.
- *
- * @param pSrcBatchList An array where each element is a batch of images representing one of planes in planar images,
- *        \ref source_batch_images_pointer. The first element of array (pSrcBatchList[0]) represents a batch of Y planes.
- *        The second element of array (pSrcBatchList[1]) represents a batch of Cb planes. The third element of array
- *        (pSrcBatchList[2]) represents a batch of Cr planes.
- * @param pDstBatchList \ref destination_batch_images_pointer.
- * @param nBatchSize Number of \ref NppiImageDescriptor structures processed in this call (must be > 1).
- * @param oMaxSizeROI \ref roi_specification, must contain the maximum width and the maximum height from all destination ROIs used for processing data.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} ycbcr420tobgrbatchadvanced */
 
 /** \defgroup ycbcr420tobgr709csc YCbCr420ToBGR_709CSC 
@@ -4634,18 +2921,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709CSC_8u_P3C3R_Ct
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709CSC_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709CSC_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709CSC_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed BGR_709CSC color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr420tobgr709csc */
 
@@ -4669,19 +2944,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709HDTV_8u_P3C4R_C
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709HDTV_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709HDTV_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_709HDTV_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr420 to 4 channel 8-bit unsigned packed BGR_709HDTV color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr420tobgr709hdtv */
 
@@ -4707,19 +2969,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCrCb420_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCrCb420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCrCb420 color conversion.
  * images.
  *
@@ -4735,19 +2984,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCrCb420_8u_AC4P3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCrCb420_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCrCb420 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycrcb420 */
 
@@ -4773,19 +3009,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr411_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiBGRToYCbCr411_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
  * images.
  *
@@ -4801,19 +3024,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr411_8u_AC4P3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiBGRToYCbCr411_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr411_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr411_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycbcr411 */
 
@@ -4839,19 +3049,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr411_8u_C3P3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiRGBToYCbCr411_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
  * images.
  *
@@ -4867,19 +3064,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr411_8u_AC4P3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiRGBToYCbCr411_8u_AC4P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr411_8u_AC4P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr411_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoycbcr411 */
 
@@ -4905,19 +3089,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_C3P3R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr color conversion.
  * images.
  *
@@ -4935,19 +3106,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_AC4P3R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_AC4P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned packed BGR with alpha to 3 channel 8-bit unsigned planar YCbCr color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned planar YCbCr color conversion.
  * images.
  *
@@ -4963,19 +3121,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_AC4P4R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_AC4P4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_AC4P4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr_8u_AC4P4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned planar YCbCr color conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtoycbcr */
 
@@ -5000,18 +3145,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr411 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -5027,19 +3160,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_8u_P3C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr411 to 4 channel 8-bit unsigned packed BGR color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr411tobgr */
 
@@ -5064,18 +3184,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_8u_P3C3R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr411 to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -5091,19 +3199,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_8u_P3C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_8u_P3C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nAval, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr411 to 4 channel 8-bit unsigned packed RGB color conversion with constant alpha.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nAval 8-bit unsigned alpha constant.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycbcr411torgb */
 
@@ -5148,18 +3243,6 @@ public static native @Cast("NppStatus") int nppiRGBToXYZ_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToXYZ_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned packed XYZ color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed XYZ with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -5173,18 +3256,6 @@ public static native @Cast("NppStatus") int nppiRGBToXYZ_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToXYZ_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToXYZ_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToXYZ_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed XYZ with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoxyz */
 
@@ -5229,18 +3300,6 @@ public static native @Cast("NppStatus") int nppiXYZToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiXYZToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed XYZ to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed XYZ with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -5254,18 +3313,6 @@ public static native @Cast("NppStatus") int nppiXYZToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiXYZToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiXYZToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiXYZToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed XYZ with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} xyztorgb */
 
@@ -5334,18 +3381,6 @@ public static native @Cast("NppStatus") int nppiRGBToLUV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToLUV_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned packed LUV color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed LUV with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -5359,18 +3394,6 @@ public static native @Cast("NppStatus") int nppiRGBToLUV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToLUV_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToLUV_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToLUV_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed LUV with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoluv */
 
@@ -5446,18 +3469,6 @@ public static native @Cast("NppStatus") int nppiLUVToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiLUVToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed LUV to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed LUV with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -5471,18 +3482,6 @@ public static native @Cast("NppStatus") int nppiLUVToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiLUVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed LUV with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} luvtorgb */
 
@@ -5528,18 +3527,6 @@ public static native @Cast("NppStatus") int nppiLUVToRGB_8u_AC4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiBGRToLab_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToLab_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToLab_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned packed Lab color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtolab */
 
@@ -5593,18 +3580,6 @@ public static native @Cast("NppStatus") int nppiLabToBGR_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiLabToBGR_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLabToBGR_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned packed Lab to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} labtobgr */
 
 /** \defgroup rgbtoycc RGBToYCC 
@@ -5646,18 +3621,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCC_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToYCC_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned packed YCC color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed YCC with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -5671,18 +3634,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCC_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToYCC_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCC_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCC_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed YCC with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtoycc */
 
@@ -5727,18 +3678,6 @@ public static native @Cast("NppStatus") int nppiYCCToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYCCToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCC to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed YCC with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -5752,18 +3691,6 @@ public static native @Cast("NppStatus") int nppiYCCToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiYCCToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCCToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCCToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed YCC with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycctorgb */
 
@@ -5807,18 +3734,6 @@ public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@
 public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCCKToCMYK_JPEG_601_8u_P4R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 4 channel 8-bit unsigned planar JPEG YCCK color format to 4 channel 8-bit unsigned planar CMYK color conversion using 601 RGB color coefficients and CMY inversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} yccktocmyk601 */
 
 /** \defgroup ycckorcmyktorgb CMYK_OR_YCCK_JPEG_TO_RGB 
@@ -5845,18 +3760,6 @@ public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R_Ct
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned planar RGB color model image without color profile conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned packed RGB color model image without color profile conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -5872,18 +3775,6 @@ public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ct
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToRGB_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned packed RGB color model image without color profile conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycckorcmyktorgb */
 
@@ -5911,18 +3802,6 @@ public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R_Ct
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4P3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned planar BGR color model image without color profile conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned packed BGR color model image without color profile conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -5938,18 +3817,6 @@ public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ct
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCMYKOrYCCKToBGR_JPEG_8u_P4C3R_Ctx(@Cast("const Npp8u**") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned planar JPEG CMYK or YCCK color model image to 3 channel 8-bit unsigned packed BGR color model image without color profile conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} ycckorcmyktobgr */
 
@@ -6021,18 +3888,6 @@ public static native @Cast("NppStatus") int nppiRGBToHLS_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToHLS_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned packed HLS color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed HLS with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6046,18 +3901,6 @@ public static native @Cast("NppStatus") int nppiRGBToHLS_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToHLS_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToHLS_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToHLS_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed HLS with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtohls */
 
@@ -6156,18 +3999,6 @@ public static native @Cast("NppStatus") int nppiHLSToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiHLSToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed HLS to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed HLS with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6181,18 +4012,6 @@ public static native @Cast("NppStatus") int nppiHLSToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiHLSToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed HLS with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} hlstorgb */
 
@@ -6216,18 +4035,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AC4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned packed HLS with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar HLS color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6242,18 +4049,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_C3P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar HLS color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned planar HLS with alpha color conversion.
@@ -6272,18 +4067,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AC4P4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AC4P4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned packed BGR with alpha to 4 channel 8-bit unsigned planar HLS with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned packed HLS color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -6298,18 +4081,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_P3C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned packed HLS color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned planar BGR with alpha to 4 channel 8-bit unsigned packed HLS with alpha color conversion.
@@ -6328,18 +4099,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AP4C4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AP4C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned planar BGR with alpha to 4 channel 8-bit unsigned packed HLS with alpha color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar HLS color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -6356,18 +4115,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar HLS color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned planar BGR with alpha to 4 channel 8-bit unsigned planar HLS with alpha color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -6382,18 +4129,6 @@ public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AP4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AP4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AP4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToHLS_8u_AP4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned planar BGR with alpha to 4 channel 8-bit unsigned planar HLS with alpha color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} bgrtohls */
 
@@ -6418,18 +4153,6 @@ public static native @Cast("NppStatus") int nppiHLSToBGR_8u_C3P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed HLS to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed HLS with alpha to 4 channel 8-bit unsigned planar BGR with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6444,18 +4167,6 @@ public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AC4P4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AC4P4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AC4P4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AC4P4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed HLS with alpha to 4 channel 8-bit unsigned planar BGR with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar HLS to 3 channel 8-bit unsigned planar BGR color conversion.
@@ -6474,18 +4185,6 @@ public static native @Cast("NppStatus") int nppiHLSToBGR_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar HLS to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned planar HLS with alpha to 4 channel 8-bit unsigned planar BGR with alpha color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -6500,18 +4199,6 @@ public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned planar HLS with alpha to 4 channel 8-bit unsigned planar BGR with alpha color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar HLS to 3 channel 8-bit unsigned packed BGR color conversion.
@@ -6530,18 +4217,6 @@ public static native @Cast("NppStatus") int nppiHLSToBGR_8u_P3C3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar HLS to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned planar HLS with alpha to 4 channel 8-bit unsigned packed BGR with alpha color conversion.
  *
  * @param pSrc \ref source_planar_image_pointer_array.
@@ -6556,18 +4231,6 @@ public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4C4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHLSToBGR_8u_AP4C4R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned planar HLS with alpha to 4 channel 8-bit unsigned packed BGR with alpha color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} hlstobgr */
 
@@ -6633,18 +4296,6 @@ public static native @Cast("NppStatus") int nppiRGBToHSV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToHSV_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned packed HSV color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed HSV with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6658,18 +4309,6 @@ public static native @Cast("NppStatus") int nppiRGBToHSV_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiRGBToHSV_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToHSV_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToHSV_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 4 channel 8-bit unsigned packed HSV with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} rgbtohsv */
 
@@ -6737,18 +4376,6 @@ public static native @Cast("NppStatus") int nppiHSVToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiHSVToRGB_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed HSV to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed HSV with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6762,18 +4389,6 @@ public static native @Cast("NppStatus") int nppiHSVToRGB_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiHSVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHSVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiHSVToRGB_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed HSV with alpha to 4 channel 8-bit unsigned packed RGB with alpha color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} hsvtorgb */
 
@@ -6808,18 +4423,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr420_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiRGBToYCbCr420_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6834,18 +4437,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
@@ -6864,18 +4455,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr411_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiRGBToYCbCr411_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6890,18 +4469,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar RGB to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
@@ -6920,18 +4487,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -6946,18 +4501,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
@@ -6976,18 +4519,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr411_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiBGRToYCbCr411_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7002,19 +4533,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar BGR to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar RGB color conversion.
@@ -7033,18 +4551,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned planar RGB color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7059,18 +4565,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer aSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer aSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar RGB color conversion.
@@ -7089,18 +4583,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned planar RGB color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7115,18 +4597,6 @@ public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar BGR color conversion.
@@ -7145,18 +4615,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned planar BGR color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7171,18 +4629,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer aSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer aSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar BGR color conversion.
@@ -7201,18 +4647,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned planar BGR color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7227,18 +4661,6 @@ public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned planar BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -7267,18 +4689,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr420_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiRGBToYCbCr420_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7293,18 +4703,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr422_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
@@ -7323,18 +4721,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr411_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiRGBToYCbCr411_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7349,18 +4735,6 @@ public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToYCbCr444_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed RGB to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
@@ -7379,18 +4753,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr420_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiBGRToYCbCr420_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr420 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7405,18 +4767,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr422_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr422 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
@@ -7435,18 +4785,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr411_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiBGRToYCbCr411_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr411 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7461,18 +4799,6 @@ public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_C3P3R_Ctx(
 public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiBGRToYCbCr444_JPEG_8u_C3P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed BGR to 3 channel 8-bit unsigned planar YCbCr444 color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed YCbCr420 to 3 channel 8-bit unsigned planar RGB color conversion.
@@ -7491,18 +4817,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr420 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar RGB color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7517,18 +4831,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer aSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer aSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned packed YCbCr411 to 3 channel 8-bit unsigned planar RGB color conversion.
@@ -7547,18 +4849,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed YCbCr411 to 3 channel 8-bit unsigned planar RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned packed RGB color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7573,18 +4863,6 @@ public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToRGB_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned packed RGB color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed BGR color conversion.
@@ -7603,18 +4881,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed BGR color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7629,18 +4895,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer aSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer aSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned packed BGR color conversion.
@@ -7659,18 +4913,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] aSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param aSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned packed BGR color conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7685,18 +4927,6 @@ public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3C3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr444ToBGR_JPEG_8u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr444 to 3 channel 8-bit unsigned packed BGR color conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -7741,18 +4971,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_8u_C3C1R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiRGBToGray_8u_C3C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 1 channel 8-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 1 channel 8-bit unsigned packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7766,17 +4984,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_8u_C3C1R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiRGBToGray_8u_AC4C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_8u_AC4C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_8u_AC4C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 1 channel 8-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
 
 /**
  * 3 channel 16-bit unsigned packed RGB to 1 channel 16-bit unsigned packed Gray conversion.
@@ -7794,18 +5001,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_16u_C3C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit unsigned packed RGB to 1 channel 16-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit unsigned packed RGB with alpha to 1 channel 16-bit unsigned packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7819,18 +5014,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_16u_C3C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToGray_16u_AC4C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_16u_AC4C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_16u_AC4C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned packed RGB with alpha to 1 channel 16-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit signed packed RGB to 1 channel 16-bit signed packed Gray conversion.
@@ -7848,18 +5031,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_16s_C3C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToGray_16s_C3C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed packed RGB to 1 channel 16-bit signed packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit signed packed RGB with alpha to 1 channel 16-bit signed packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7873,18 +5044,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_16s_C3C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToGray_16s_AC4C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_16s_AC4C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_16s_AC4C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed packed RGB with alpha to 1 channel 16-bit signed packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 32-bit floating point packed RGB to 1 channel 32-bit floating point packed Gray conversion.
@@ -7902,18 +5061,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_32f_C3C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point packed RGB to 1 channel 32-bit floating point packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point packed RGB with alpha to 1 channel 32-bit floating point packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -7927,18 +5074,6 @@ public static native @Cast("NppStatus") int nppiRGBToGray_32f_C3C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiRGBToGray_32f_AC4C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_32f_AC4C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiRGBToGray_32f_AC4C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point packed RGB with alpha to 1 channel 32-bit floating point packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -7980,19 +5115,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_8u_C3C1R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiColorToGray_8u_C3C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 1 channel 8-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed RGB with alpha to 1 channel 8-bit unsigned packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8007,19 +5129,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_8u_C3C1R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiColorToGray_8u_AC4C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatPointer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_8u_AC4C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatBuffer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_8u_AC4C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed RGB with alpha to 1 channel 8-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed RGBA to 1 channel 8-bit unsigned packed Gray conversion.
@@ -8038,19 +5147,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_8u_C4C1R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiColorToGray_8u_C4C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned packed RGBA to 1 channel 8-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit unsigned packed RGB to 1 channel 16-bit unsigned packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8065,19 +5161,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_8u_C4C1R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiColorToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatPointer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatBuffer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned packed RGB to 1 channel 16-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit unsigned packed RGB with alpha to 1 channel 16-bit unsigned packed Gray conversion.
@@ -8096,19 +5179,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_16u_AC4C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiColorToGray_16u_AC4C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned packed RGB with alpha to 1 channel 16-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit unsigned packed RGBA to 1 channel 16-bit unsigned packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8123,19 +5193,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_16u_AC4C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiColorToGray_16u_C4C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatPointer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_16u_C4C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatBuffer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_16u_C4C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned packed RGBA to 1 channel 16-bit unsigned packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit signed packed RGB to 1 channel 16-bit signed packed Gray conversion.
@@ -8154,19 +5211,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_16s_C3C1R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiColorToGray_16s_C3C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed packed RGB to 1 channel 16-bit signed packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit signed packed RGB with alpha to 1 channel 16-bit signed packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8181,19 +5225,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_16s_C3C1R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiColorToGray_16s_AC4C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatPointer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_16s_AC4C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatBuffer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_16s_AC4C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed packed RGB with alpha to 1 channel 16-bit signed packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit signed packed RGBA to 1 channel 16-bit signed packed Gray conversion.
@@ -8212,19 +5243,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_16s_C4C1R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiColorToGray_16s_C4C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed packed RGBA to 1 channel 16-bit signed packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 32-bit floating point packed RGB to 1 channel 32-bit floating point packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8239,19 +5257,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_16s_C4C1R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiColorToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatPointer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatBuffer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point packed RGB to 1 channel 32-bit floating point packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 32-bit floating point packed RGB with alpha to 1 channel 32-bit floating point packed Gray conversion.
@@ -8270,19 +5275,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_32f_AC4C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiColorToGray_32f_AC4C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point packed RGB with alpha to 1 channel 32-bit floating point packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point packed RGBA to 1 channel 32-bit floating point packed Gray conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8297,19 +5289,6 @@ public static native @Cast("NppStatus") int nppiColorToGray_32f_AC4C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiColorToGray_32f_C4C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatPointer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_32f_C4C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") FloatBuffer aCoeffs, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorToGray_32f_C4C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("const Npp32f*") float[] aCoeffs, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point packed RGBA to 1 channel 32-bit floating point packed Gray conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aCoeffs fixed size array of constant floating point conversion coefficient values, one per color channel.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -8337,19 +5316,6 @@ public static native @Cast("NppStatus") int nppiGradientColorToGray_8u_C3C1R_Ctx
 public static native @Cast("NppStatus") int nppiGradientColorToGray_8u_C3C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed RGB to 1 channel 8-bit unsigned packed Gray Gradient conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param eNorm Gradient distance method to use.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit unsigned packed RGB to 1 channel 16-bit unsigned packed Gray Gradient conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8364,19 +5330,6 @@ public static native @Cast("NppStatus") int nppiGradientColorToGray_8u_C3C1R_Ctx
 public static native @Cast("NppStatus") int nppiGradientColorToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGradientColorToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGradientColorToGray_16u_C3C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned packed RGB to 1 channel 16-bit unsigned packed Gray Gradient conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param eNorm Gradient distance method to use.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit signed packed RGB to 1 channel 16-bit signed packed Gray Gradient conversion.
@@ -8395,19 +5348,6 @@ public static native @Cast("NppStatus") int nppiGradientColorToGray_16s_C3C1R_Ct
 public static native @Cast("NppStatus") int nppiGradientColorToGray_16s_C3C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed packed RGB to 1 channel 16-bit signed packed Gray Gradient conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param eNorm Gradient distance method to use.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 32-bit floating point packed RGB to 1 channel 32-bit floating point packed Gray Gradient conversion.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8422,19 +5362,6 @@ public static native @Cast("NppStatus") int nppiGradientColorToGray_16s_C3C1R_Ct
 public static native @Cast("NppStatus") int nppiGradientColorToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGradientColorToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGradientColorToGray_32f_C3C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiNorm") int eNorm, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point packed RGB to 1 channel 32-bit floating point packed Gray Gradient conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param eNorm Gradient distance method to use.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -8497,21 +5424,6 @@ public static native @Cast("NppStatus") int nppiCFAToRGB_8u_C1C3R_Ctx(@Cast("con
                                 @Cast("Npp8u*") byte[] pDst, int nDstStep, @Cast("NppiBayerGridPosition") int eGrid, @Cast("NppiInterpolationMode") int eInterpolation, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 8-bit unsigned packed CFA grayscale Bayer pattern to 3 channel 8-bit unsigned packed RGB conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param oSrcSize full source image width and height relative to pSrc.
- * @param oSrcROI rectangle specifying starting source image pixel x and y location relative to pSrc and ROI width and height. 
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param eGrid enumeration value specifying bayer grid registration position at location oSrcROI.x, oSrcROI.y relative to pSrc.
- * @param eInterpolation MUST be NPPI_INTER_UNDEFINED
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 8-bit unsigned packed CFA grayscale Bayer pattern to 4 channel 8-bit unsigned packed RGB conversion with alpha.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8532,22 +5444,6 @@ public static native @Cast("NppStatus") int nppiCFAToRGBA_8u_C1AC4R_Ctx(@Cast("c
                                   @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @Cast("NppiBayerGridPosition") int eGrid, @Cast("NppiInterpolationMode") int eInterpolation, @Cast("Npp8u") byte nAlpha, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCFAToRGBA_8u_C1AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiRect oSrcROI, 
                                   @Cast("Npp8u*") byte[] pDst, int nDstStep, @Cast("NppiBayerGridPosition") int eGrid, @Cast("NppiInterpolationMode") int eInterpolation, @Cast("Npp8u") byte nAlpha, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 8-bit unsigned packed CFA grayscale Bayer pattern to 4 channel 8-bit unsigned packed RGB conversion with alpha.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param oSrcSize full source image width and height relative to pSrc.
- * @param oSrcROI rectangle specifying starting source image pixel x and y location relative to pSrc and ROI width and height. 
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param eGrid enumeration value specifying bayer grid registration position at location oSrcROI.x, oSrcROI.y relative to pSrc.
- * @param eInterpolation MUST be NPPI_INTER_UNDEFINED
- * @param nAlpha constant alpha value to be written to each destination pixel
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 1 channel 16-bit unsigned packed CFA grayscale Bayer pattern to 3 channel 16-bit unsigned packed RGB conversion.
@@ -8571,21 +5467,6 @@ public static native @Cast("NppStatus") int nppiCFAToRGB_16u_C1C3R_Ctx(@Cast("co
                                  @Cast("Npp16u*") short[] pDst, int nDstStep, @Cast("NppiBayerGridPosition") int eGrid, @Cast("NppiInterpolationMode") int eInterpolation, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 16-bit unsigned packed CFA grayscale Bayer pattern to 3 channel 16-bit unsigned packed RGB conversion.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param oSrcSize full source image width and height relative to pSrc.
- * @param oSrcROI rectangle specifying starting source image pixel x and y location relative to pSrc and ROI width and height. 
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param eGrid enumeration value specifying bayer grid registration position at location oSrcROI.x, oSrcROI.y relative to pSrc.
- * @param eInterpolation MUST be NPPI_INTER_UNDEFINED
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 16-bit unsigned packed CFA grayscale Bayer pattern to 4 channel 16-bit unsigned packed RGB conversion with alpha.
  *
  * @param pSrc \ref source_image_pointer.
@@ -8606,22 +5487,6 @@ public static native @Cast("NppStatus") int nppiCFAToRGBA_16u_C1AC4R_Ctx(@Cast("
                                    @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @Cast("NppiBayerGridPosition") int eGrid, @Cast("NppiInterpolationMode") int eInterpolation, @Cast("Npp16u") short nAlpha, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCFAToRGBA_16u_C1AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiRect oSrcROI, 
                                    @Cast("Npp16u*") short[] pDst, int nDstStep, @Cast("NppiBayerGridPosition") int eGrid, @Cast("NppiInterpolationMode") int eInterpolation, @Cast("Npp16u") short nAlpha, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 16-bit unsigned packed CFA grayscale Bayer pattern to 4 channel 16-bit unsigned packed RGB conversion with alpha.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param oSrcSize full source image width and height relative to pSrc.
- * @param oSrcROI rectangle specifying starting source image pixel x and y location relative to pSrc and ROI width and height. 
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param eGrid enumeration value specifying bayer grid registration position at location oSrcROI.x, oSrcROI.y relative to pSrc.
- * @param eInterpolation MUST be NPPI_INTER_UNDEFINED
- * @param nAlpha constant alpha value to be written to each destination pixel
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 //32u
 
@@ -8710,20 +5575,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr411_8u_P3P2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr411_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -8740,20 +5591,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr411_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr411_8u_P2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr411_8u_P2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr411_8u_P2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -8779,19 +5616,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422_8u_C2P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCr422_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
  * images.
  *
@@ -8807,19 +5631,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422_8u_P3C2R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -8844,19 +5655,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb422_8u_C2R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb422_8u_C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed YCbCr422 to 2 channel 8-bit unsigned packed YCrCb422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned packed YCrCb422 sampling format conversion.
  * images.
  *
@@ -8872,19 +5670,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb422_8u_P3C2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned packed YCrCb422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -8908,19 +5693,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToCbYCr422_8u_C2R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr422ToCbYCr422_8u_C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToCbYCr422_8u_C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned packed YCbCr422 to 2 channel 8-bit unsigned packed CbYCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} */
 
 /** \defgroup cbycr422toycbcr411 CbYCr422 To YCbCr411 
@@ -8943,19 +5715,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr411_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed CbYCr422 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -8981,19 +5740,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
  * images.
  *
@@ -9013,21 +5759,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_P3P2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
  * images.
  *
@@ -9043,19 +5774,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 8-bit unsigned packed YCbCr422 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
@@ -9074,21 +5792,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDstY, int nDstYStep, @Cast("Npp8u*") BytePointer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDstY, int nDstYStep, @Cast("Npp8u*") ByteBuffer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr420_8u_C2P2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCbCr422 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9114,19 +5817,6 @@ public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr422_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr422_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCrCb420 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCrCb420 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
  * images.
  *
@@ -9142,19 +5832,6 @@ public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr422_8u_P3C2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCrCb420 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9178,19 +5855,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb420_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb420_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCrCb420_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar YCrCb420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9216,19 +5880,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr422 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
  * images.
  *
@@ -9248,21 +5899,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_P3P2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr422 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
  * images.
  *
@@ -9278,19 +5914,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCbCr422 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 8-bit unsigned packed YCbCr422 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
@@ -9309,21 +5932,6 @@ public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDstY, int nDstYStep, @Cast("Npp8u*") BytePointer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDstY, int nDstYStep, @Cast("Npp8u*") ByteBuffer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr422ToYCbCr411_8u_C2P2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCbCr422 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9348,19 +5956,6 @@ public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr422_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr422_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr422_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} */
 
 /** \defgroup ycrcb422toycbcr420 YCrCb422 To YCbCr420 
@@ -9383,19 +5978,6 @@ public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9420,19 +6002,6 @@ public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr411_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb422ToYCbCr411_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned packed YCrCb422 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} */
 
 /** \defgroup cbycr422toycbcr422 CbYCr422 To YCbCr422 
@@ -9456,19 +6025,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr422_8u_C2R_Ctx(@C
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr422_8u_C2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed CbYCr422 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned packed CbYCr422 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
  * images.
  *
@@ -9484,19 +6040,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr422_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr422_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr422_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr422_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed CbYCr422 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9522,19 +6065,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr420_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned packed CbYCr422 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned packed CbYCr422 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
  * images.
  *
@@ -9551,21 +6081,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr420_8u_C2P2R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDstY, int nDstYStep, @Cast("Npp8u*") BytePointer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr420_8u_C2P2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDstY, int nDstYStep, @Cast("Npp8u*") ByteBuffer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCbCr420_8u_C2P2R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed CbYCr422 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9589,19 +6104,6 @@ public static native @Cast("NppStatus") int nppiCbYCr422ToYCrCb420_8u_C2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCrCb420_8u_C2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCrCb420_8u_C2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCbYCr422ToYCrCb420_8u_C2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned packed CbYCr422 to 3 channel 8-bit unsigned planar YCrCb420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9629,21 +6131,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420_8u_P3P2R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCr420_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -9660,20 +6147,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420_8u_P2P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCr420_8u_P2P3R_Ctx(@Cast("const Npp8u*const") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420_8u_P2P3R_Ctx(@Cast("const Npp8u*const") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420_8u_P2P3R_Ctx(@Cast("const Npp8u*const") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
- 
-/**
- * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
  
 /** \} */
 
@@ -9699,19 +6172,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -9730,20 +6190,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr420 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -9759,20 +6205,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned planar YCbCr420 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9796,20 +6228,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCbCr422_8u_P2C2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToCbYCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToCbYCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToCbYCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned planar YCbCr420 to 2 channel 8-bit unsigned packed CbYCr422 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9835,20 +6253,6 @@ public static native @Cast("NppStatus") int nppiYCbCr420ToYCrCb420_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCrCb420_8u_P2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr420ToYCrCb420_8u_P2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned planar YCbCr420 to 3 channel 8-bit unsigned planar YCrCb420 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} */
 
 /** \defgroup ycrcb420tocbycr422 YCrCb420 To CbYCr422 
@@ -9871,19 +6275,6 @@ public static native @Cast("NppStatus") int nppiYCrCb420ToCbYCr422_8u_P3C2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb420ToCbYCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToCbYCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToCbYCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCrCb420 to 2 channel 8-bit unsigned packed CbYCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9910,21 +6301,6 @@ public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr420_8u_P3P2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr420_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDstY, int nDstYStep, @Cast("Npp8u*") ByteBuffer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr420_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 3 channel 8-bit unsigned planar YCrCb420 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} */
 
 /** \defgroup ycrcb420toycbcr411 YCrCb420 To YCbCr411 
@@ -9949,21 +6325,6 @@ public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr411_8u_P3P2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr411_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDstY, int nDstYStep, @Cast("Npp8u*") BytePointer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr411_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDstY, int nDstYStep, @Cast("Npp8u*") ByteBuffer pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCrCb420ToYCbCr411_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCrCb420 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -9991,21 +6352,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411_8u_P3P2R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCr411_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -10022,20 +6368,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411_8u_P2P3R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiYCbCr411_8u_P2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411_8u_P2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411_8u_P2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr411 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -10061,19 +6393,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
  * images.
  *
@@ -10089,19 +6408,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P3C2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
@@ -10122,20 +6428,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P2P3R_Ctx(@Cast("const Npp8u*const") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr422 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -10151,20 +6443,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr422_8u_P2C2R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned packed YCbCr422 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -10190,19 +6468,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb422_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb422_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCrCb422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned packed YCrCb422 sampling format conversion.
  * images.
  *
@@ -10218,19 +6483,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb422_8u_P3C2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, IntPointer rSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, IntBuffer rSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb422_8u_P3C2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned packed YCrCb422 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -10256,19 +6508,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param nDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
  * images.
  *
@@ -10288,21 +6527,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P3P2R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P3P2R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int[] rSrcStep, @Cast("Npp8u*") byte[] pDstY, int nDstYStep, @Cast("Npp8u*") byte[] pDstCbCr, int nDstCbCrStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar YCbCr411 to 2 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- * images.
- *
- * @param pSrc \ref source_planar_image_pointer_array.
- * @param rSrcStep \ref source_planar_image_line_step_array.
- * @param pDstY \ref destination_planar_image_pointer.
- * @param nDstYStep \ref destination_planar_image_line_step.
- * @param pDstCbCr \ref destination_planar_image_pointer.
- * @param nDstCbCrStep \ref destination_planar_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
  *
  * @param pSrcY \ref source_planar_image_pointer.
@@ -10319,20 +6543,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P2P3R_Ctx(@Cast("const Npp8u*") BytePointer pSrcY, int nSrcYStep, @Cast("const Npp8u*") BytePointer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCbCr420_8u_P2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCbCr420 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -10358,20 +6568,6 @@ public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb420_8u_P2P3R_Ctx(
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb420_8u_P2P3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrcY, int nSrcYStep, @Cast("const Npp8u*") ByteBuffer pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiYCbCr411ToYCrCb420_8u_P2P3R_Ctx(@Cast("const Npp8u*") byte[] pSrcY, int nSrcYStep, @Cast("const Npp8u*") byte[] pSrcCbCr, int nSrcCbCrStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] rDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 2 channel 8-bit unsigned planar YCbCr411 to 3 channel 8-bit unsigned planar YCrCb420 sampling format conversion.
- *
- * @param pSrcY \ref source_planar_image_pointer.
- * @param nSrcYStep \ref source_planar_image_line_step.
- * @param pSrcCbCr \ref source_planar_image_pointer.
- * @param nSrcCbCrStep \ref source_planar_image_line_step.
- * @param pDst \ref destination_planar_image_pointer_array.
- * @param rDstStep \ref destination_planar_image_line_step_array.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 /** \} */
 
 /** \defgroup nv12toyuv420 NV12 To YUV420
@@ -10396,18 +6592,6 @@ public static native @Cast("NppStatus") int nppiNV12ToYUV420_8u_P2P3R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiNV12ToYUV420_8u_P2P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr BytePointer pDst, IntPointer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV12ToYUV420_8u_P2P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pDst, IntBuffer aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiNV12ToYUV420_8u_P2P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int[] aDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- *  2 channel 8-bit unsigned planar NV12 to 3 channel 8-bit unsigned planar YUV420 color conversion.
- *
- * @param pSrc \ref source_planar_image_pointer_array (one for Y plane, one for UV plane).
- * @param nSrcStep \ref source_planar_image_line_step.  Same value is used for each plane.
- * @param pDst \ref destination_image_pointer.
- * @param aDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -10453,18 +6637,6 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed color not in place forward gamma correction.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed color in place forward gamma correction.
  *
  * @param pSrcDst in place packed pixel image pointer.
@@ -10476,16 +6648,6 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed color in place forward gamma correction.
- *
- * @param pSrcDst in place packed pixel image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed color with alpha not in place forward gamma correction.
@@ -10503,18 +6665,6 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_AC4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned packed color with alpha not in place forward gamma correction.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed color with alpha in place forward gamma correction.
  *
  * @param pSrcDst in place packed pixel format image pointer.
@@ -10526,16 +6676,6 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_AC4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed color with alpha in place forward gamma correction.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar color not in place forward gamma correction.
@@ -10554,18 +6694,6 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar color not in place forward gamma correction.
- *
- * @param pSrc source planar pixel format image pointer array.
- * @param nSrcStep source planar pixel format image line step.
- * @param pDst destination planar pixel format image pointer array.
- * @param nDstStep destination planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar color in place forward gamma correction.
  *
  * @param pSrcDst in place planar pixel format image pointer array.
@@ -10578,16 +6706,6 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R_Ctx(@Cast("Npp8
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar color in place forward gamma correction.
- *
- * @param pSrcDst in place planar pixel format image pointer array.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 // #endif
 
@@ -10616,18 +6734,6 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiGammaInv_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed color not in place inverse gamma correction.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed color in place inverse gamma correction.
  *
  * @param pSrcDst in place packed pixel format image pointer.
@@ -10639,16 +6745,6 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_C3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiGammaInv_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned packed color in place inverse gamma correction.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed color with alpha not in place inverse gamma correction.
@@ -10666,18 +6762,6 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_AC4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiGammaInv_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned packed color with alpha not in place inverse gamma correction.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed color with alpha in place inverse gamma correction.
  *
  * @param pSrcDst in place packed pixel format image pointer.
@@ -10689,16 +6773,6 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_AC4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiGammaInv_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed color with alpha in place inverse gamma correction.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned planar color not in place inverse gamma correction.
@@ -10717,18 +6791,6 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_P3R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiGammaInv_8u_P3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep, @Cast("Npp8u**") @ByPtrPtr byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar color not in place inverse gamma correction.
- *
- * @param pSrc source planar pixel format image pointer array.
- * @param nSrcStep source planar pixel format image line step.
- * @param pDst destination planar pixel format image pointer array.
- * @param nDstStep destination planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar color in place inverse gamma correction.
  *
  * @param pSrcDst in place planar pixel format image pointer array.
@@ -10741,16 +6803,6 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R_Ctx(@Cast("Npp8
 public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar color in place inverse gamma correction.
- *
- * @param pSrcDst in place planar pixel format image pointer array.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 // #endif
 
@@ -10790,21 +6842,6 @@ public static native @Cast("NppStatus") int nppiCompColorKey_8u_C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiCompColorKey_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nColorKeyConst, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2.
- *
- * @param pSrc1 source1 packed pixel format image pointer.
- * @param nSrc1Step source1 packed pixel format image line step.
- * @param pSrc2 source2 packed pixel format image pointer.
- * @param nSrc2Step source2 packed pixel format image line step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nColorKeyConst color key constant
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2.
  *
  * @param pSrc1 source1 packed pixel format image pointer.
@@ -10823,21 +6860,6 @@ public static native @Cast("NppStatus") int nppiCompColorKey_8u_C3R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiCompColorKey_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u*") byte[] nColorKeyConst, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2.
- *
- * @param pSrc1 source1 packed pixel format image pointer.
- * @param nSrc1Step source1 packed pixel format image line step.
- * @param pSrc2 source2 packed pixel format image pointer.
- * @param nSrc2Step source2 packed pixel format image line step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nColorKeyConst color key constant array
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2.
  *
  * @param pSrc1 source1 packed pixel format image pointer.
@@ -10854,21 +6876,6 @@ public static native @Cast("NppStatus") int nppiCompColorKey_8u_C3R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiCompColorKey_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u*") BytePointer nColorKeyConst, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCompColorKey_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u*") ByteBuffer nColorKeyConst, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiCompColorKey_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp8u*") byte[] nColorKeyConst, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2.
- *
- * @param pSrc1 source1 packed pixel format image pointer.
- * @param nSrc1Step source1 packed pixel format image line step.
- * @param pSrc2 source2 packed pixel format image pointer.
- * @param nSrc2Step source2 packed pixel format image line step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nColorKeyConst color key constant array
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2 with alpha blending.
@@ -10893,24 +6900,6 @@ public static native @Cast("NppStatus") int nppiAlphaCompColorKey_8u_AC4R_Ctx(@C
                                             @ByVal NppiSize oSizeROI, @Cast("Npp8u*") ByteBuffer nColorKeyConst, @Cast("NppiAlphaOp") int nppAlphaOp, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiAlphaCompColorKey_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("Npp8u") byte nAlpha1, @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step, @Cast("Npp8u") byte nAlpha2, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                             @ByVal NppiSize oSizeROI, @Cast("Npp8u*") byte[] nColorKeyConst, @Cast("NppiAlphaOp") int nppAlphaOp, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned packed color complement color key replacement of source image 1 by source image 2 with alpha blending.
- *
- * @param pSrc1 source1 packed pixel format image pointer.
- * @param nSrc1Step source1 packed pixel format image line step.
- * @param nAlpha1 source1 image alpha opacity (0 - max channel pixel value).
- * @param pSrc2 source2 packed pixel format image pointer.
- * @param nSrc2Step source2 packed pixel format image line step.
- * @param nAlpha2 source2 image alpha opacity (0 - max channel pixel value).
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param nColorKeyConst color key constant array
- * @param nppAlphaOp NppiAlphaOp alpha compositing operation selector  (excluding premul ops).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} */
 
@@ -10965,22 +6954,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C1R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 8-bit unsigned color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 8-bit unsigned in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -10999,20 +6972,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C1IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 8-bit unsigned in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 8-bit unsigned color twist.
@@ -11037,22 +6996,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C2R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit unsigned color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit unsigned in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11071,20 +7014,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C2IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C2IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit unsigned in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned color twist.
@@ -11109,22 +7038,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C3R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11143,20 +7056,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C3IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned color twist, with alpha copy.
@@ -11182,23 +7081,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C4R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned color twist, with alpha copy.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is copied unmodified from the source pixel to the destination pixel.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -11218,21 +7100,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C4IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8u_C4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is unmodified.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned color twist, not affecting Alpha.
@@ -11258,23 +7125,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_AC4R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -11294,21 +7144,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_AC4IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned color twist with 4x4 matrix and constant vector addition.
@@ -11341,30 +7176,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32fC_8u_C4R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") float[] aTwist, @Cast("const Npp32f*") float[] aConstants, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned color twist with 4x4 matrix and constant vector addition.
- *
- * An input 4x4 color twist matrix with floating-point coefficient values with an additional constant vector addition
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aConstants[0]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aConstants[1]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aConstants[2]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aConstants[3]
- *  }</pre>
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @param aConstants fixed size array of constant values, one per channel..
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned in place color twist with 4x4 matrix and an additional constant vector addition.
  *
  * An input 4x4 color twist matrix with floating-point coefficient values with an additional constant vector addition
@@ -11393,28 +7204,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32fC_8u_C4IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") float[] aTwist, @Cast("const Npp32f*") float[] aConstants, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned in place color twist with 4x4 matrix and an additional constant vector addition.
- *
- * An input 4x4 color twist matrix with floating-point coefficient values with an additional constant vector addition
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aConstants[0]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aConstants[1]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aConstants[2]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aConstants[3]
- *  }</pre>
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @param aConstants fixed size array of constant values, one per channel..
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar color twist.
  *
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11439,22 +7228,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_P3R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned planar color twist.
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned planar in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11475,20 +7248,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8u_IP3R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8u_IP3R_Ctx(@Cast("Npp8u*const*") @ByPtrPtr byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned planar in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place planar pixel format image pointer array, one pointer per plane.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 1 channel 8-bit signed color twist.
@@ -11513,22 +7272,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C1R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 8-bit signed color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 8-bit signed in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11547,20 +7290,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C1IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C1IR_Ctx(@Cast("Npp8s*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 8-bit signed in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 8-bit signed color twist.
@@ -11585,22 +7314,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C2R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 8-bit signed color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 8-bit signed in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11619,20 +7332,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C2IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C2IR_Ctx(@Cast("Npp8s*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 8-bit signed in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit signed color twist.
@@ -11657,22 +7356,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C3R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit signed color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit signed in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11691,20 +7374,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C3IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C3IR_Ctx(@Cast("Npp8s*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit signed in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit signed color twist, with alpha copy.
@@ -11730,23 +7399,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C4R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit signed color twist, with alpha copy.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is copied unmodified from the source pixel to the destination pixel.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit signed in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -11766,21 +7418,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C4IR_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8s_C4IR_Ctx(@Cast("Npp8s*") byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit signed in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is unmodified.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit signed color twist, not affecting Alpha.
@@ -11806,23 +7443,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_AC4R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit signed color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit signed in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -11842,21 +7462,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_AC4IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8s_AC4IR_Ctx(@Cast("Npp8s*") byte[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit signed in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit signed planar color twist.
@@ -11883,22 +7488,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_P3R_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit signed planar color twist.
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit signed planar in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11919,21 +7508,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_8s_IP3R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_8s_IP3R_Ctx(@Cast("Npp8s*const*") @ByPtrPtr byte[] pSrcDst, int nSrcDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit signed planar in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place planar pixel format image pointer array, one pointer per plane.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
 
 /**
  * 1 channel 16-bit unsigned color twist.
@@ -11958,22 +7532,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C1R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 16-bit unsigned color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 16-bit unsigned in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -11992,20 +7550,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C1IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 16-bit unsigned in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 16-bit unsigned color twist.
@@ -12030,22 +7574,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C2R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 16-bit unsigned color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 16-bit unsigned in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12064,20 +7592,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C2IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C2IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 16-bit unsigned in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit unsigned color twist.
@@ -12102,22 +7616,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C3R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit unsigned color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit unsigned in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12136,20 +7634,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C3IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit unsigned color twist, not affecting Alpha.
@@ -12175,23 +7659,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_AC4R_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit unsigned in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -12211,21 +7678,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_AC4IR_Ctx(@Cas
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit unsigned planar color twist.
@@ -12252,22 +7704,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_P3R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit unsigned planar color twist.
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit unsigned planar in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12288,20 +7724,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16u_IP3R_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16u_IP3R_Ctx(@Cast("Npp16u*const*") @ByPtrPtr short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned planar in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place planar pixel format image pointer array, one pointer per plane.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 1 channel 16-bit signed color twist.
@@ -12326,22 +7748,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C1R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 16-bit signed color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 16-bit signed in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12360,20 +7766,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C1IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 16-bit signed in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 16-bit signed color twist.
@@ -12398,22 +7790,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C2R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 16-bit signed color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 16-bit signed in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12432,20 +7808,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C2IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C2IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 16-bit signed in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit signed color twist.
@@ -12470,22 +7832,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C3R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit signed in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12504,20 +7850,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C3IR_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit signed in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit signed color twist, not affecting Alpha.
@@ -12543,23 +7875,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_AC4R_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit signed in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -12579,21 +7894,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_AC4IR_Ctx(@Cas
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit signed planar color twist.
@@ -12620,22 +7920,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_P3R_Ctx(@Cast(
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed planar color twist.
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit signed planar in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -12658,20 +7942,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16s_IP3R_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed planar in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place planar pixel format image pointer array, one pointer per plane.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 16-bit floating point color twist.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -12694,22 +7964,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C1R_Ctx(@Const
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 16-bit floating point color twist.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 16-bit floating point in place color twist.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -12728,20 +7982,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C1IR_Ctx(Npp16
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C1IR_Ctx(Npp16f pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 16-bit floating point in place color twist.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 16-bit floating point color twist.
@@ -12766,22 +8006,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C2R_Ctx(@Const
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 16-bit floating point color twist.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 16-bit floating point in place color twist.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -12800,20 +8024,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C2IR_Ctx(Npp16
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C2IR_Ctx(Npp16f pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 16-bit floating point in place color twist.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit floating point color twist.
@@ -12838,22 +8048,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C3R_Ctx(@Const
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit floating point color twist.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit floating point in place color twist.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -12872,20 +8066,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C3IR_Ctx(Npp16
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C3IR_Ctx(Npp16f pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit floating point in place color twist.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit floating point color twist, with alpha copy.
@@ -12911,23 +8091,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C4R_Ctx(@Const
                               @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit floating point color twist, with alpha copy.
- *
- * An input color twist matrix with 32-bit floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is copied unmodified from the source pixel to the destination pixel.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit floating point in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with 32-bit floating-point coefficient values is applied with
@@ -12947,21 +8110,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C4IR_Ctx(Npp16
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32f_16f_C4IR_Ctx(Npp16f pSrcDst, int nSrcDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit floating point in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with 32-bit floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not modified.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit floating point color twist with 4x4 matrix and constant vector addition.
@@ -12992,30 +8140,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32fC_16f_C4R_Ctx(@Cons
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") FloatBuffer aTwist, @Cast("const Npp32f*") FloatBuffer aConstants, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist32fC_16f_C4R_Ctx(@Const Npp16f pSrc, int nSrcStep, Npp16f pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") float[] aTwist, @Cast("const Npp32f*") float[] aConstants, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit floating point color twist with 4x4 matrix and constant vector addition.
- *
- * An input 4x4 color twist matrix with 32-bit floating-point coefficient values with an additional 32-bit floating point constant vector addition
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aConstants[0]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aConstants[1]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aConstants[2]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aConstants[3]
- *  }</pre>
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @param aConstants fixed size array of constant values, one per channel..
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit floating point in place color twist with 4x4 matrix and an additional constant vector addition.
@@ -13046,28 +8170,6 @@ public static native @Cast("NppStatus") int nppiColorTwist32fC_16f_C4IR_Ctx(Npp1
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") float[] aTwist, @Cast("const Npp32f*") float[] aConstants, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit floating point in place color twist with 4x4 matrix and an additional constant vector addition.
- *
- * An input 4x4 color twist matrix with 32-bit floating-point coefficient values with an additional 32-bit floating point constant vector addition
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aConstants[0]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aConstants[1]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aConstants[2]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aConstants[3]
- *  }</pre>
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @param aConstants fixed size array of constant values, one per channel..
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 32-bit floating point color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13090,22 +8192,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C1R_Ctx(@Cast("co
                            @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 32-bit floating point color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 32-bit floating point in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13124,20 +8210,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C1IR_Ctx(@Cast("N
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 32-bit floating point in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 2 channel 32-bit floating point color twist.
@@ -13162,22 +8234,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C2R_Ctx(@Cast("co
                            @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 2 channel 32-bit floating point color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 2 channel 32-bit floating point in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13196,20 +8252,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C2IR_Ctx(@Cast("N
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_C2IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 2 channel 32-bit floating point in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 32-bit floating point color twist.
@@ -13234,22 +8276,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C3R_Ctx(@Cast("co
                            @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 32-bit floating point in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13268,20 +8294,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C3IR_Ctx(@Cast("N
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 32-bit floating point color twist, with alpha copy.
@@ -13307,23 +8319,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C4R_Ctx(@Cast("co
                            @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point color twist, with alpha copy.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is copied unmodified from the source pixel to the destination pixel.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -13343,21 +8338,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_C4IR_Ctx(@Cast("N
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_C4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not modified.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 32-bit floating point color twist, not affecting Alpha.
@@ -13383,23 +8363,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_AC4R_Ctx(@Cast("c
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point in place color twist, not affecting Alpha.
  *
  * An input color twist matrix with floating-point coefficient values is applied with
@@ -13419,21 +8382,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_AC4IR_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point in place color twist, not affecting Alpha.
- *
- * An input color twist matrix with floating-point coefficient values is applied with
- * in ROI.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 32-bit floating point color twist with 4x4 matrix and constant vector addition.
@@ -13466,30 +8414,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32fC_C4R_Ctx(@Cast("c
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") float[] aTwist, @Cast("const Npp32f*") float[] aConstants, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point color twist with 4x4 matrix and constant vector addition.
- *
- * An input 4x4 color twist matrix with floating-point coefficient values with an additional constant vector addition
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aConstants[0]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aConstants[1]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aConstants[2]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aConstants[3]
- *  }</pre>
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @param aConstants fixed size array of constant values, one per channel..
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point in place color twist with 4x4 matrix and an additional constant vector addition.
  *
  * An input 4x4 color twist matrix with floating-point coefficient values with an additional constant vector addition
@@ -13518,28 +8442,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32fC_C4IR_Ctx(@Cast("
                              @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[4]*/ )[4]") float[] aTwist, @Cast("const Npp32f*") float[] aConstants, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point in place color twist with 4x4 matrix and an additional constant vector addition.
- *
- * An input 4x4 color twist matrix with floating-point coefficient values with an additional constant vector addition
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aConstants[0]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aConstants[1]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aConstants[2]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aConstants[3]
- *  }</pre>
- *
- * @param pSrcDst in place packed pixel format image pointer.
- * @param nSrcDstStep in place packed pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @param aConstants fixed size array of constant values, one per channel..
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 32-bit floating point planar color twist.
  *
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13564,22 +8466,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_P3R_Ctx(@Cast("co
                            @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point planar color twist.
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 32-bit floating point planar in place color twist.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13600,20 +8486,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_IP3R_Ctx(@Cast("N
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_IP3R_Ctx(@Cast("Npp32f*const*") @ByPtrPtr float[] pSrcDst, int nSrcDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 3 channel 32-bit floating point planar in place color twist.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI.
- *
- * @param pSrcDst in place planar pixel format image pointer array, one pointer per plane.
- * @param nSrcDstStep in place planar pixel format image line step.
- * @param oSizeROI \ref roi_specification.
- * @param aTwist The color twist matrix with floating-point coefficient values.
- 
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} color_twist */
 
@@ -13669,21 +8541,6 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_IP3R_Ctx(@Cast("N
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C1R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 8-bit unsigned integer color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 8-bit unsigned integer in place color twist batch.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13698,21 +8555,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C1R_Ctx(@C
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C1IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 8-bit unsigned integer in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 8-bit unsigned integer color twist batch.
@@ -13731,21 +8573,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C1IR_Ctx(@
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C3R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned integer color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 8-bit unsigned integer in place color twist batch.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13760,21 +8587,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C3R_Ctx(@C
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C3IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned integer in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned integer color twist batch.
@@ -13793,21 +8605,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C3IR_Ctx(@
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned integer color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned integer in place color twist batch.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13822,21 +8619,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C4R_Ctx(@C
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned integer in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned integer color twist batch, not affecting Alpha.
@@ -13855,21 +8637,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_C4IR_Ctx(@
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_AC4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned integer color twist batch, not affecting Alpha.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned integer in place color twist batch, not affecting Alpha.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -13884,21 +8651,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_AC4R_Ctx(@
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_AC4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned integer in place color twist batch, not affecting Alpha.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 8-bit unsigned integer color twist with 4x5 matrix including a constant vector (20 coefficients total).
@@ -13927,31 +8679,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_8u_AC4IR_Ctx(
 public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_8u_C4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned integer color twist with 4x5 matrix including a constant vector (20 coefficients total).
- *
- * An input 4x5 color twist matrix with floating-point coefficient values including a constant (in the fourth column) vector
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aTwist[0][4]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aTwist[1][4]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aTwist[2][4]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aTwist[3][4]
- *  }</pre>
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 8-bit unsigned integer in place color twist with 4x5 matrix including a constant vector (20 coefficients total).
  *
  * An input 4x5 color twist matrix with floating-point coefficient values including a constant (in the fourth column) vector
@@ -13978,31 +8705,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_8u_C4R_Ctx(@
 public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_8u_C4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned integer in place color twist with 4x5 matrix including a constant vector (20 coefficients total).
- *
- * An input 4x5 color twist matrix with floating-point coefficient values including a constant (in the fourth column) vector
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aTwist[0][4]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aTwist[1][4]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aTwist[2][4]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aTwist[3][4]
- *  }</pre>
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 32-bit floating point color twist batch.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -14017,21 +8719,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_8u_C4IR_Ctx(
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C1R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 32-bit floating point color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 1 channel 32-bit floating point in place color twist batch.
@@ -14050,21 +8737,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C1IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 32-bit floating point in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 32-bit floating point color twist batch.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -14079,21 +8751,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C1IR_Ctx(@Ca
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C3R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 32-bit floating point in place color twist batch.
@@ -14112,21 +8769,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C3IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point color twist batch.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -14141,21 +8783,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C3IR_Ctx(@Ca
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 32-bit floating point in place color twist batch.
@@ -14174,21 +8801,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C4R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point color twist batch, not affecting Alpha.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -14205,21 +8817,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_C4IR_Ctx(@Ca
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_AC4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point color twist batch, not affecting Alpha.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 32-bit floating point in place color twist batch, not affecting Alpha.
  * 
  * An input color twist matrix with floating-point coefficient values is applied
@@ -14234,21 +8831,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_AC4R_Ctx(@Ca
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_AC4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point in place color twist batch, not affecting Alpha.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 32-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
@@ -14277,31 +8859,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32f_AC4IR_Ctx(@C
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32fC_C4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
- *
- * An input 4x5 color twist matrix with floating-point coefficient values including a constant (in the fourth column) vector
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aTwist[0][4]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aTwist[1][4]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aTwist[2][4]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aTwist[3][4]
- *  }</pre>
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel in place 32-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
  *
  * An input 4x5 color twist matrix with floating-point coefficient values including a constant (in the fourth column) vector
@@ -14328,31 +8885,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32fC_C4R_Ctx(@Ca
 public static native @Cast("NppStatus") int nppiColorTwistBatch_32fC_C4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel in place 32-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
- *
- * An input 4x5 color twist matrix with floating-point coefficient values including a constant (in the fourth column) vector
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aTwist[0][4]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aTwist[1][4]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aTwist[2][4]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aTwist[3][4]
- *  }</pre>
- *
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 1 channel 16-bit floating point color twist batch.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -14367,21 +8899,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch_32fC_C4IR_Ctx(@C
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C1R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 1 channel 16-bit floating point color twist batch.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 1 channel 16-bit floating point in place color twist batch.
@@ -14400,21 +8917,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C1R_Ctx(@
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C1IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 1 channel 16-bit floating point in place color twist batch.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 3 channel 16-bit floating point color twist batch.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -14429,21 +8931,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C1IR_Ctx(
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C3R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit floating point color twist batch.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 3 channel 16-bit floating point in place color twist batch.
@@ -14462,21 +8949,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C3R_Ctx(@
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C3IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit floating point in place color twist batch.
- * 
- * An input color twist matrix with floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit floating point color twist batch.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -14493,21 +8965,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C3IR_Ctx(
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit floating point color twist batch.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within the ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel 16-bit floating point in place color twist batch.
  * 
  * An input color twist matrix with 32-bit floating-point coefficient values is applied
@@ -14522,21 +8979,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C4R_Ctx(@
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit floating point in place color twist batch.
- * 
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /**
  * 4 channel 16-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
@@ -14565,31 +9007,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32f_16f_C4IR_Ctx(
 public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_16f_C4R_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
- *
- * An input 4x5 color twist matrix with 32-bit floating-point coefficient values including a constant (in the fourth column) vector
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aTwist[0][4]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aTwist[1][4]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aTwist[2][4]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aTwist[3][4]
- *  }</pre>
- *
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
-
-/**
  * 4 channel in place 16-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
  *
  * An input 4x5 color twist matrix with 32-bitfloating-point coefficient values including a constant (in the fourth column) vector
@@ -14614,31 +9031,6 @@ public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_16f_C4R_Ctx(
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
 public static native @Cast("NppStatus") int nppiColorTwistBatch32fC_16f_C4IR_Ctx(@Cast("Npp32f") float nMin, @Cast("Npp32f") float nMax, @ByVal NppiSize oSizeROI, NppiColorTwistBatchCXR pBatchList, int nBatchSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel in place 16-bit floating point color twist with 4x5 matrix including a constant vector (20 coefficients total).
- *
- * An input 4x5 color twist matrix with 32-bitfloating-point coefficient values including a constant (in the fourth column) vector
- * is applied within ROI.  For this particular version of the function the result is generated as shown below.
- *
- *  <pre>{@code
- *      dst[0] = aTwist[0][0] * src[0] + aTwist[0][1] * src[1] + aTwist[0][2] * src[2] + aTwist[0][3] * src[3] + aTwist[0][4]
- *      dst[1] = aTwist[1][0] * src[0] + aTwist[1][1] * src[1] + aTwist[1][2] * src[2] + aTwist[1][3] * src[3] + aTwist[1][4]
- *      dst[2] = aTwist[2][0] * src[0] + aTwist[2][1] * src[1] + aTwist[2][2] * src[2] + aTwist[2][3] * src[3] + aTwist[2][4]
- *      dst[3] = aTwist[3][0] * src[0] + aTwist[3][1] * src[1] + aTwist[3][2] * src[2] + aTwist[3][3] * src[3] + aTwist[3][4]
- *  }</pre>
- *
- * An input color twist matrix with 32-bit floating-point coefficient values is applied
- * within ROI for each image in batch.  Color twist matrix can vary per image. The same ROI is applied to each image.
- *
- * @param nMin Minimum clamp value.
- * @param nMax Maximum saturation and clamp value.
- * @param oSizeROI \ref roi_specification.
- * @param pBatchList Device memory pointer to nBatchSize list of NppiColorTwistBatchCXR structures.
- * @param nBatchSize Number of NppiColorTwistBatchCXR structures in this call (must be > 1).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- */
-
 
 /** \} color_twist_batch */
 
@@ -14676,24 +9068,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_C1R_Ctx(@Cast("const Npp8
                    @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 8-bit unsigned look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 8-bit unsigned look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -14714,22 +9088,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_C1IR_Ctx(      @Cast("Npp
                     @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_8u_C1IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                     @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 8-bit unsigned look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 3 channel 8-bit unsigned look-up-table color conversion.
@@ -14758,24 +9116,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_C3R_Ctx(@Cast("const Npp8
                    @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 3 channel 8-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -14798,22 +9138,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_C3IR_Ctx(      @Cast("Npp
                     @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_8u_C3IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 4 channel 8-bit unsigned look-up-table color conversion.
@@ -14842,24 +9166,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_C4R_Ctx(@Cast("const Npp8
                    @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 4 channel 8-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -14882,22 +9188,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_C4IR_Ctx(      @Cast("Npp
                     @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_8u_C4IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 4 channel 8-bit unsigned look-up-table color conversion, not affecting Alpha.
@@ -14927,25 +9217,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_AC4R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 4 channel 8-bit unsigned look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -14969,23 +9240,6 @@ public static native @Cast("NppStatus") int nppiLUT_8u_AC4IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_8u_AC4IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 16-bit unsigned look-up-table color conversion.
@@ -15012,24 +9266,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_C1R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 16-bit unsigned look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 16-bit unsigned look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -15050,22 +9286,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_C1IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16u_C1IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 16-bit unsigned look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 16-bit unsigned look-up-table color conversion.
@@ -15094,24 +9314,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_C3R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 16-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -15134,22 +9336,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_C3IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16u_C3IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit unsigned look-up-table color conversion.
@@ -15178,24 +9364,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_C4R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -15218,22 +9386,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_C4IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16u_C4IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit unsigned look-up-table color conversion, not affecting Alpha.
@@ -15263,25 +9415,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_AC4R_Ctx(@Cast("const Np
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit unsigned look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -15305,23 +9438,6 @@ public static native @Cast("NppStatus") int nppiLUT_16u_AC4IR_Ctx(      @Cast("N
                       @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16u_AC4IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 16-bit signed look-up-table color conversion.
@@ -15348,24 +9464,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_C1R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 16-bit signed look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 16-bit signed look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -15386,22 +9484,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_C1IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16s_C1IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 16-bit signed look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 16-bit signed look-up-table color conversion.
@@ -15430,24 +9512,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_C3R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 16-bit signed look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -15470,22 +9534,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_C3IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16s_C3IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit signed look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit signed look-up-table color conversion.
@@ -15514,24 +9562,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_C4R_Ctx(@Cast("const Npp
                     @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit signed look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -15554,22 +9584,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_C4IR_Ctx(      @Cast("Np
                      @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16s_C4IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit signed look-up-table color conversion, not affecting Alpha.
@@ -15599,25 +9613,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_AC4R_Ctx(@Cast("const Np
                      @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit signed look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -15641,23 +9636,6 @@ public static native @Cast("NppStatus") int nppiLUT_16s_AC4IR_Ctx(      @Cast("N
                       @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_16s_AC4IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 32-bit floating point look-up-table color conversion.
@@ -15684,24 +9662,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_C1R_Ctx(@Cast("const Npp
                     @Cast("const Npp32f*") float[] pValues, @Cast("const Npp32f*") float[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 32-bit floating point look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 32-bit floating point look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -15722,22 +9682,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_C1IR_Ctx(      @Cast("Np
                      @Cast("const Npp32f*") FloatBuffer pValues, @Cast("const Npp32f*") FloatBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_32f_C1IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32f*") float[] pValues, @Cast("const Npp32f*") float[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 32-bit floating point look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 32-bit floating point look-up-table color conversion.
@@ -15766,24 +9710,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_C3R_Ctx(@Cast("const Npp
                     @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 32-bit floating point look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points with no interpolation. 
@@ -15806,22 +9732,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_C3IR_Ctx(      @Cast("Np
                      @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_32f_C3IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 32-bit floating point look-up-table color conversion.
@@ -15850,24 +9760,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_C4R_Ctx(@Cast("const Npp
                     @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points with no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 32-bit floating point look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -15890,22 +9782,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_C4IR_Ctx(      @Cast("Np
                      @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_32f_C4IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 32-bit floating point look-up-table color conversion, not affecting Alpha.
@@ -15935,25 +9811,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_AC4R_Ctx(@Cast("const Np
                      @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 32-bit floating point look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -15978,23 +9835,6 @@ public static native @Cast("NppStatus") int nppiLUT_32f_AC4IR_Ctx(      @Cast("N
 public static native @Cast("NppStatus") int nppiLUT_32f_AC4IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
-/**
- * 4 channel 32-bit floating point look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
 /** \} image_color_LUT */
 
 /** \defgroup image_color_LUT_Linear ColorLUTLinear
@@ -16008,12 +9848,16 @@ public static native @Cast("NppStatus") int nppiLUT_32f_AC4IR_Ctx(      @Cast("N
  *
  * The LUT is derived from a set of user defined mapping points through linear interpolation. 
  *
+ * <pre>{@literal
  * >>>>>>> ATTENTION ATTENTION <<<<<<<
+ * }</pre>
  *
  * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be device memory pointers.
  *
+* <pre>{@literal
  * >>>>>>>                     <<<<<<<
- *
+ * }</pre>
+ * 
  * @param pSrc \ref source_image_pointer.
  * @param nSrcStep \ref source_image_line_step.
  * @param pDst \ref destination_image_pointer.
@@ -16032,30 +9876,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C1R_Ctx(@Cast("con
                           @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 8-bit unsigned linear interpolated look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- *
- * >>>>>>> ATTENTION ATTENTION <<<<<<<
- *
- * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be device memory pointers.
- *
- * >>>>>>>                     <<<<<<<
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is now a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is now a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 8-bit unsigned linear interpolated look-up-table in place color conversion.
@@ -16080,32 +9900,20 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C1IR_Ctx(      @Ca
                            @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 8-bit unsigned linear interpolated look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 3 channel 8-bit unsigned linear interpolated look-up-table color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through linear interpolation. 
  *
+ * <pre>{@literal
  * >>>>>>> ATTENTION ATTENTION <<<<<<<
+ * }</pre>
  *
  * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be host memory pointers to arrays of device memory pointers.
  *
+* <pre>{@literal
  * >>>>>>>                     <<<<<<<
- *
+ * }</pre>
+ * 
  * @param pSrc \ref source_image_pointer.
  * @param nSrcStep \ref source_image_line_step.
  * @param pDst \ref destination_image_pointer.
@@ -16126,30 +9934,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C3R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned linear interpolated look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- *
- * >>>>>>> ATTENTION ATTENTION <<<<<<<
- *
- * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be host memory pointers to arrays of device memory pointers.
- *
- * >>>>>>>                     <<<<<<<
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 3 channel 8-bit unsigned linear interpolated look-up-table in place color conversion.
@@ -16176,32 +9960,20 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C3IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned linear interpolated look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 4 channel 8-bit unsigned linear interpolated look-up-table color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through linear interpolation. 
  *
+ * <pre>{@literal
  * >>>>>>> ATTENTION ATTENTION <<<<<<<
+ * }</pre>
  *
  * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be host memory pointers to arrays of device memory pointers.
  *
+ * <pre>{@literal
  * >>>>>>>                     <<<<<<<
- *
+ * }</pre>
+ * 
  * @param pSrc \ref source_image_pointer.
  * @param nSrcStep \ref source_image_line_step.
  * @param pDst \ref destination_image_pointer.
@@ -16222,30 +9994,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C4R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned linear interpolated look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- *
- * >>>>>>> ATTENTION ATTENTION <<<<<<<
- *
- * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be host memory pointers to arrays of device memory pointers.
- *
- * >>>>>>>                     <<<<<<<
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 4 channel 8-bit unsigned linear interpolated look-up-table in place color conversion.
@@ -16272,33 +10020,21 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_C4IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned linear interpolated look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 4 channel 8-bit unsigned linear interpolated look-up-table color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points through linear interpolation. 
  * Alpha channel is the last channel and is not processed.
  *
+ * <pre>{@literal
  * >>>>>>> ATTENTION ATTENTION <<<<<<<
+ * }</pre>
  *
  * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be host memory pointers to arrays of device memory pointers.
  *
+ * <pre>{@literal
  * >>>>>>>                     <<<<<<<
- *
+ * }</pre>
+ * 
  * @param pSrc \ref source_image_pointer.
  * @param nSrcStep \ref source_image_line_step.
  * @param pDst \ref destination_image_pointer.
@@ -16319,31 +10055,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_AC4R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned linear interpolated look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * >>>>>>> ATTENTION ATTENTION <<<<<<<
- *
- * NOTE: As of the 5.0 release of NPP, the pValues and pLevels pointers need to be host memory pointers to arrays of device memory pointers.
- *
- * >>>>>>>                     <<<<<<<
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 4 channel 8-bit unsigned linear interpolated look-up-table in place color conversion, not affecting Alpha.
@@ -16371,23 +10082,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_8u_AC4IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
        
 /**
- * 4 channel 8-bit unsigned linear interpolated look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points through linear interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-       
-/**
  * 16-bit unsigned look-up-table color conversion.
  *
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -16412,24 +10106,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C1R_Ctx(@Cast("co
                            @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 16-bit unsigned look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 16-bit unsigned look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -16450,22 +10126,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C1IR_Ctx(      @C
                             @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C1IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 16-bit unsigned look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 16-bit unsigned look-up-table color conversion.
@@ -16494,24 +10154,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C3R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 16-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -16534,22 +10176,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C3IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C3IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit unsigned look-up-table color conversion.
@@ -16578,24 +10204,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C4R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -16618,22 +10226,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C4IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16u_C4IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit unsigned look-up-table color conversion, not affecting Alpha.
@@ -16663,25 +10255,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_AC4R_Ctx(@Cast("c
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit unsigned look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -16705,23 +10278,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16u_AC4IR_Ctx(      @
                              @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16u_AC4IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 16-bit signed look-up-table color conversion.
@@ -16748,24 +10304,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C1R_Ctx(@Cast("co
                            @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 16-bit signed look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 16-bit signed look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -16786,22 +10324,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C1IR_Ctx(      @C
                             @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C1IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 16-bit signed look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 16-bit signed look-up-table color conversion.
@@ -16830,24 +10352,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C3R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 16-bit signed look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -16870,22 +10374,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C3IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C3IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit signed look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit signed look-up-table color conversion.
@@ -16914,24 +10402,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C4R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit signed look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -16954,22 +10424,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C4IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16s_C4IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit signed look-up-table color conversion, not affecting Alpha.
@@ -16999,25 +10453,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_AC4R_Ctx(@Cast("c
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit signed look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -17041,23 +10476,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_16s_AC4IR_Ctx(      @
                              @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_16s_AC4IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 32-bit floating point look-up-table color conversion.
@@ -17084,24 +10502,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C1R_Ctx(@Cast("co
                            @Cast("const Npp32f*") float[] pValues, @Cast("const Npp32f*") float[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 32-bit floating point look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 32-bit floating point look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -17122,22 +10522,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C1IR_Ctx(      @C
                             @Cast("const Npp32f*") FloatBuffer pValues, @Cast("const Npp32f*") FloatBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C1IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32f*") float[] pValues, @Cast("const Npp32f*") float[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 32-bit floating point look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 32-bit floating point look-up-table color conversion.
@@ -17166,24 +10550,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C3R_Ctx(@Cast("co
                            @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 32-bit floating point look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using linear interpolation. 
@@ -17206,22 +10572,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C3IR_Ctx(      @C
                             @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C3IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 32-bit floating point look-up-table color conversion.
@@ -17250,24 +10600,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C4R_Ctx(@Cast("co
                            @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using linear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 32-bit floating point look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -17290,22 +10622,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C4IR_Ctx(      @C
                             @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_32f_C4IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 32-bit floating point look-up-table color conversion, not affecting Alpha.
@@ -17334,26 +10650,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_AC4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiLUT_Linear_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 4 channel 32-bit floating point look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-
-/**
  * 4 channel 32-bit floating point look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -17377,23 +10673,6 @@ public static native @Cast("NppStatus") int nppiLUT_Linear_32f_AC4IR_Ctx(      @
                              @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Linear_32f_AC4IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /** \} image_color_LUT_linear */
 
@@ -17427,24 +10706,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C1R_Ctx(@Cast("cons
                          @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 8-bit unsigned cubic interpolated look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 8-bit unsigned cubic interpolated look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -17465,22 +10726,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C1IR_Ctx(      @Cas
                           @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C1IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 8-bit unsigned cubic interpolated look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 3 channel 8-bit unsigned cubic interpolated look-up-table color conversion.
@@ -17509,24 +10754,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C3R_Ctx(@Cast("cons
                          @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 8-bit unsigned cubic interpolated look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 3 channel 8-bit unsigned cubic interpolated look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -17549,22 +10776,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C3IR_Ctx(      @Cas
                           @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C3IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 8-bit unsigned cubic interpolated look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 4 channel 8-bit unsigned cubic interpolated look-up-table color conversion.
@@ -17593,24 +10804,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C4R_Ctx(@Cast("cons
                          @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned cubic interpolated look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 4 channel 8-bit unsigned cubic interpolated look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -17633,22 +10826,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C4IR_Ctx(      @Cas
                           @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_C4IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned cubic interpolated look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 4 channel 8-bit unsigned cubic interpolated look-up-table color conversion, not affecting Alpha.
@@ -17678,25 +10855,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_AC4R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 8-bit unsigned cubic interpolated look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * 4 channel 8-bit unsigned cubic interpolated look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -17720,23 +10878,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_AC4IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_8u_AC4IR_Ctx(      @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 8-bit unsigned cubic interpolated look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /**
  * 16-bit unsigned look-up-table color conversion.
@@ -17763,24 +10904,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C1R_Ctx(@Cast("con
                           @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 16-bit unsigned look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 16-bit unsigned look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -17801,22 +10924,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C1IR_Ctx(      @Ca
                            @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C1IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 16-bit unsigned look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 16-bit unsigned look-up-table color conversion.
@@ -17845,24 +10952,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C3R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 16-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -17885,22 +10974,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C3IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C3IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit unsigned look-up-table color conversion.
@@ -17929,24 +11002,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C4R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit unsigned look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -17969,22 +11024,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C4IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_C4IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit unsigned look-up-table color conversion, not affecting Alpha.
@@ -18014,25 +11053,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_AC4R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit unsigned look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit unsigned look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -18056,23 +11076,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_AC4IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16u_AC4IR_Ctx(      @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit unsigned look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 16-bit signed look-up-table color conversion.
@@ -18099,24 +11102,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C1R_Ctx(@Cast("con
                           @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 16-bit signed look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 16-bit signed look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -18137,22 +11122,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C1IR_Ctx(      @Ca
                            @Cast("const Npp32s*") IntBuffer pValues, @Cast("const Npp32s*") IntBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C1IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s*") int[] pValues, @Cast("const Npp32s*") int[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 16-bit signed look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 16-bit signed look-up-table color conversion.
@@ -18181,24 +11150,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C3R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 16-bit signed look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 16-bit signed look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -18221,22 +11172,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C3IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C3IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 16-bit signed look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit signed look-up-table color conversion.
@@ -18265,24 +11200,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C4R_Ctx(@Cast("con
                           @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit signed look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -18305,22 +11222,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C4IR_Ctx(      @Ca
                            @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_C4IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 16-bit signed look-up-table color conversion, not affecting Alpha.
@@ -18350,25 +11251,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_AC4R_Ctx(@Cast("co
                            @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 16-bit signed look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 16-bit signed look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -18392,23 +11274,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_AC4IR_Ctx(      @C
                             @Cast("const Npp32s**") @ByPtrPtr IntBuffer pValues, @Cast("const Npp32s**") @ByPtrPtr IntBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_16s_AC4IR_Ctx(      @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s**") @ByPtrPtr int[] pValues, @Cast("const Npp32s**") @ByPtrPtr int[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 16-bit signed look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 32-bit floating point look-up-table color conversion.
@@ -18435,24 +11300,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C1R_Ctx(@Cast("con
                           @Cast("const Npp32f*") float[] pValues, @Cast("const Npp32f*") float[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 32-bit floating point look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 32-bit floating point look-up-table in place color conversion.
  *
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -18473,22 +11320,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C1IR_Ctx(      @Ca
                            @Cast("const Npp32f*") FloatBuffer pValues, @Cast("const Npp32f*") FloatBuffer pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C1IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32f*") float[] pValues, @Cast("const Npp32f*") float[] pLevels, int nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 32-bit floating point look-up-table in place color conversion.
- *
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Pointer to an array of user defined OUTPUT values (this is a device memory pointer)
- * @param pLevels Pointer to an array of user defined INPUT values  (this is a device memory pointer)
- * @param nLevels Number of user defined number of input/output mapping points (levels)
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 3 channel 32-bit floating point look-up-table color conversion.
@@ -18517,24 +11348,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C3R_Ctx(@Cast("con
                           @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 3 channel 32-bit floating point look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 3 channel 32-bit floating point look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
@@ -18557,22 +11370,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C3IR_Ctx(      @Ca
                            @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C3IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 3 channel 32-bit floating point look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 32-bit floating point look-up-table color conversion.
@@ -18601,24 +11398,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C4R_Ctx(@Cast("con
                           @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points through cubic interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 32-bit floating point look-up-table in place color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -18641,22 +11420,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C4IR_Ctx(      @Ca
                            @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_C4IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point look-up-table in place color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 4 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /**
  * 4 channel 32-bit floating point look-up-table color conversion, not affecting Alpha.
@@ -18686,25 +11449,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_AC4R_Ctx(@Cast("co
                            @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * 4 channel 32-bit floating point look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
-
-/**
  * 4 channel 32-bit floating point look-up-table in place color conversion, not affecting Alpha.
  *
  * The LUT is derived from a set of user defined mapping points using no interpolation. 
@@ -18728,23 +11472,6 @@ public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_AC4IR_Ctx(      @C
                             @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pValues, @Cast("const Npp32f**") @ByPtrPtr FloatBuffer pLevels, IntBuffer nLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Cubic_32f_AC4IR_Ctx(      @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32f**") @ByPtrPtr float[] pValues, @Cast("const Npp32f**") @ByPtrPtr float[] pLevels, int[] nLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * 4 channel 32-bit floating point look-up-table in place color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points using no interpolation. 
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT values.
- * @param pLevels Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined INPUT values.
- * @param nLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per color CHANNEL.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 1024 (the current size limit).
- */
-
 
 /** \} image_color_LUT_cubic */
 
@@ -18786,29 +11513,6 @@ public static native @Cast("NppStatus") int nppiLUT_Trilinear_8u_C4R_Ctx(@Cast("
                                    @Cast("Npp32u*") int[] pValues, @Cast("Npp8u**") @ByPtrPtr byte[] pLevels, int[] aLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * Four channel 8-bit unsigned 3D trilinear interpolated look-up-table color conversion, with alpha copy.
- * Alpha channel is the last channel and is copied to the destination unmodified.
- *
- * The LUT is derived from a set of user defined mapping points through trilinear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Device pointer to aLevels[2] number of contiguous 2D x,y planes of 4-byte packed RGBX values
- *        containing the user defined base OUTPUT values at that x,y, and z (R,G,B) level location. Each level must contain x * y 4-byte
- *        packed pixel values (4th byte is used for alignement only and is ignored) in row (x) order.
- * @param pLevels Host pointer to an array of 3 host pointers, one per cube edge, pointing to user defined INPUT level values.
- * @param aLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per 3D cube edge.
- *        aLevels[0] represents the number of x axis levels (Red), aLevels[1] represents the number of y axis levels (Green), 
- *        and aLevels[2] represets the number of z axis levels (Blue).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * Four channel 8-bit unsigned 3D trilinear interpolated look-up-table color conversion, not affecting alpha.
  * Alpha channel is the last channel and is not processed.
  *
@@ -18840,29 +11544,6 @@ public static native @Cast("NppStatus") int nppiLUT_Trilinear_8u_AC4R_Ctx(@Cast(
                                     @Cast("Npp32u*") int[] pValues, @Cast("Npp8u**") @ByPtrPtr byte[] pLevels, int[] aLevels, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * Four channel 8-bit unsigned 3D trilinear interpolated look-up-table color conversion, not affecting alpha.
- * Alpha channel is the last channel and is not processed.
- *
- * The LUT is derived from a set of user defined mapping points through trilinear interpolation. 
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Device pointer to aLevels[2] number of contiguous 2D x,y planes of 4-byte packed RGBX values
- *        containing the user defined base OUTPUT values at that x,y, and z (R,G,B) level location. Each level must contain x * y 4-byte
- *        packed pixel values (4th byte is used for alignement only and is ignored) in row (x) order.
- * @param pLevels Host pointer to an array of 3 host pointers, one per cube edge, pointing to user defined INPUT level values.
- * @param aLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per 3D cube edge.
- *        aLevels[0] represents the number of x axis levels (Red), aLevels[1] represents the number of y axis levels (Green), 
- *        and aLevels[2] represets the number of z axis levels (Blue).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
-
-/**
  * Four channel 8-bit unsigned 3D trilinear interpolated look-up-table in place color conversion, not affecting alpha.
  * Alpha channel is the last channel and is not processed.
  *
@@ -18890,27 +11571,6 @@ public static native @Cast("NppStatus") int nppiLUT_Trilinear_8u_AC4IR_Ctx(@Cast
                                @Cast("Npp32u*") IntBuffer pValues, @Cast("Npp8u**") @ByPtrPtr ByteBuffer pLevels, IntBuffer aLevels, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUT_Trilinear_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, 
                                @Cast("Npp32u*") int[] pValues, @Cast("Npp8u**") @ByPtrPtr byte[] pLevels, int[] aLevels, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * Four channel 8-bit unsigned 3D trilinear interpolated look-up-table in place color conversion, not affecting alpha.
- * Alpha channel is the last channel and is not processed.
- *
- * The LUT is derived from a set of user defined mapping points through trilinear interpolation. 
- *
- * @param pSrcDst \ref in_place_image_pointer.
- * @param nSrcDstStep \ref in_place_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pValues Device pointer aLevels[2] number of contiguous 2D x,y planes of 4-byte packed RGBX values
- *        containing the user defined base OUTPUT values at that x,y, and z (R,G,B) level location. Each level must contain x * y 4-byte
- *        packed pixel values (4th byte is used for alignement only and is ignored) in row (x) order.
- * @param pLevels Host pointer to an array of 3 host pointers, one per cube edge, pointing to user defined INPUT level values.
- * @param aLevels Host pointer to an array of 3 user defined number of input/output mapping points, one per 3D cube edge.
- *        aLevels[0] represents the number of x axis levels (Red), aLevels[1] represents the number of y axis levels (Green), 
- *        and aLevels[2] represets the number of z axis levels (Blue).
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_NUMBER_OF_LEVELS_ERROR if the number of levels is less than 2 or greater than 256.
- */
-
 
 /** \} image_color_LUT_Trilinear */
 
@@ -18946,24 +11606,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_8u_C1R_Ctx(@Cast("con
                           @Cast("const Npp8u*") byte[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * One channel 8-bit unsigned bit range restricted palette look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
-
-/**
  * One channel 8-bit unsigned bit range restricted 24-bit palette look-up-table color conversion with 24-bit destination output per pixel.
  *
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -18988,24 +11630,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_8u24u_C1R_Ctx(@Cast("
                              @Cast("const Npp8u*") byte[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * One channel 8-bit unsigned bit range restricted 24-bit palette look-up-table color conversion with 24-bit destination output per pixel.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (3 bytes per pixel).
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
-
-/**
  * One channel 8-bit unsigned bit range restricted 32-bit palette look-up-table color conversion with 32-bit destination output per pixel.
  *
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19028,24 +11652,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_8u32u_C1R_Ctx(@Cast("
                              @Cast("const Npp32u*") IntBuffer pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPalette_8u32u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp32u*") int[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp32u*") int[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * One channel 8-bit unsigned bit range restricted 32-bit palette look-up-table color conversion with 32-bit destination output per pixel.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (4 bytes per pixel).
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
 
 /**
  * Three channel 8-bit unsigned bit range restricted palette look-up-table color conversion.
@@ -19074,24 +11680,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_8u_C3R_Ctx(@Cast("con
                           @Cast("const Npp8u**") @ByPtrPtr byte[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * Three channel 8-bit unsigned bit range restricted palette look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
-
-/**
  * Four channel 8-bit unsigned bit range restricted palette look-up-table color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19116,24 +11704,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_8u_C4R_Ctx(@Cast("con
                           @Cast("const Npp8u**") @ByPtrPtr ByteBuffer pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPalette_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                           @Cast("const Npp8u**") @ByPtrPtr byte[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * Four channel 8-bit unsigned bit range restricted palette look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
 
 /**
  * Four channel 8-bit unsigned bit range restricted palette look-up-table color conversion, not affecting Alpha.
@@ -19163,25 +11733,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_8u_AC4R_Ctx(@Cast("co
                            @Cast("const Npp8u**") @ByPtrPtr byte[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * Four channel 8-bit unsigned bit range restricted palette look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
-
-/**
  * One channel 16-bit unsigned bit range restricted palette look-up-table color conversion.
  *
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19204,24 +11755,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u_C1R_Ctx(@Cast("co
                            @Cast("const Npp16u*") ShortBuffer pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPalette_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp16u*") short[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * One channel 16-bit unsigned bit range restricted palette look-up-table color conversion.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
 
 /**
  * One channel 16-bit unsigned bit range restricted 8-bit unsigned palette look-up-table color conversion with 8-bit unsigned destination output per pixel.
@@ -19248,24 +11781,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u8u_C1R_Ctx(@Cast("
                              @Cast("const Npp8u*") byte[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * One channel 16-bit unsigned bit range restricted 8-bit unsigned palette look-up-table color conversion with 8-bit unsigned destination output per pixel.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (1 unsigned byte per pixel).
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
-
-/**
  * One channel 16-bit unsigned bit range restricted 24-bit unsigned palette look-up-table color conversion with 24-bit unsigned destination output per pixel.
  *
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19290,24 +11805,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u24u_C1R_Ctx(@Cast(
                               @Cast("const Npp8u*") byte[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * One channel 16-bit unsigned bit range restricted 24-bit unsigned palette look-up-table color conversion with 24-bit unsigned destination output per pixel.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (3 unsigned bytes per pixel).
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
-
-/**
  * One channel 16-bit unsigned bit range restricted 32-bit palette look-up-table color conversion with 32-bit unsigned destination output per pixel.
  *
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19330,24 +11827,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u32u_C1R_Ctx(@Cast(
                               @Cast("const Npp32u*") IntBuffer pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPalette_16u32u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp32u*") int[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                               @Cast("const Npp32u*") int[] pTable, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * One channel 16-bit unsigned bit range restricted 32-bit palette look-up-table color conversion with 32-bit unsigned destination output per pixel.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (4 bytes per pixel).
- * @param oSizeROI \ref roi_specification.
- * @param pTable Pointer to an array of user defined OUTPUT palette values (this is a device memory pointer)
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
 
 /**
  * Three channel 16-bit unsigned bit range restricted palette look-up-table color conversion.
@@ -19376,24 +11855,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u_C3R_Ctx(@Cast("co
                            @Cast("const Npp16u**") @ByPtrPtr short[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * Three channel 16-bit unsigned bit range restricted palette look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
-
-/**
  * Four channel 16-bit unsigned bit range restricted palette look-up-table color conversion.
  * 
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19418,24 +11879,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u_C4R_Ctx(@Cast("co
                            @Cast("const Npp16u**") @ByPtrPtr ShortBuffer pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPalette_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp16u**") @ByPtrPtr short[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * Four channel 16-bit unsigned bit range restricted palette look-up-table color conversion.
- * 
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 4 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
 
 /**
  * Four channel 16-bit unsigned bit range restricted palette look-up-table color conversion, not affecting Alpha.
@@ -19463,25 +11906,6 @@ public static native @Cast("NppStatus") int nppiLUTPalette_16u_AC4R_Ctx(@Cast("c
                             @Cast("const Npp16u**") @ByPtrPtr ShortBuffer pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPalette_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp16u**") @ByPtrPtr short[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * Four channel 16-bit unsigned bit range restricted palette look-up-table color conversion, not affecting Alpha.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- * Alpha channel is the last channel and is not processed.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step.
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
 
 /**
  * Three channel 8-bit unsigned source bit range restricted palette look-up-table color conversion to four channel 8-bit unsigned destination output with alpha.
@@ -19513,27 +11937,6 @@ public static native @Cast("NppStatus") int nppiLUTPaletteSwap_8u_C3A0C4R_Ctx(@C
                                   @Cast("const Npp8u**") @ByPtrPtr byte[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 
 /**
- * Three channel 8-bit unsigned source bit range restricted palette look-up-table color conversion to four channel 8-bit unsigned destination output with alpha.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- * This function also reverses the source pixel channel order in the destination so the Alpha channel is the first channel.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step (3 bytes per pixel).
- * @param nAlphaValue Signed alpha value that will be used to initialize the pixel alpha channel position in all modified destination pixels.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (4 bytes per pixel with alpha).
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * Alpha values < 0 or > 255 will cause destination pixel alpha channel values to be unmodified.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 8) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 8.
- */
-
-
-/**
  * Three channel 16-bit unsigned source bit range restricted palette look-up-table color conversion to four channel 16-bit unsigned destination output with alpha.
  *
  * The LUT is derived from a set of user defined mapping points in a palette and 
@@ -19561,27 +11964,6 @@ public static native @Cast("NppStatus") int nppiLUTPaletteSwap_16u_C3A0C4R_Ctx(@
                                    @Cast("const Npp16u**") @ByPtrPtr ShortBuffer pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiLUTPaletteSwap_16u_C3A0C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, int nAlphaValue, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, 
                                    @Cast("const Npp16u**") @ByPtrPtr short[] pTables, int nBitSize, @ByVal NppStreamContext nppStreamCtx);
-
-/**
- * Three channel 16-bit unsigned source bit range restricted palette look-up-table color conversion to four channel 16-bit unsigned destination output with alpha.
- *
- * The LUT is derived from a set of user defined mapping points in a palette and 
- * source pixels are then processed using a restricted bit range when looking up palette values.
- * This function also reverses the source pixel channel order in the destination so the Alpha channel is the first channel.
- *
- * @param pSrc \ref source_image_pointer.
- * @param nSrcStep \ref source_image_line_step (3 unsigned short integers per pixel).
- * @param nAlphaValue Signed alpha value that will be used to initialize the pixel alpha channel position in all modified destination pixels.
- * @param pDst \ref destination_image_pointer.
- * @param nDstStep \ref destination_image_line_step (4 unsigned short integers per pixel with alpha).
- * @param oSizeROI \ref roi_specification.
- * @param pTables Host pointer to an array of 3 device memory pointers, one per color CHANNEL, pointing to user defined OUTPUT palette values.
- * Alpha values < 0 or > 65535 will cause destination pixel alpha channel values to be unmodified.
- * @param nBitSize Number of least significant bits (must be > 0 and <= 16) of each source pixel value to use as index into palette table during conversion.
- * @return \ref image_data_error_codes, \ref roi_error_codes
- *        - NPP_LUT_PALETTE_BITSIZE_ERROR if nBitSize is < 1 or > 16.
- */
-
 
 /** \} image_color_LUT_palette */
 
@@ -20473,6 +12855,378 @@ public static native @Cast("NppStatus") int nppiNV12ToRGB_16u_ColorTwist32f_P2C3
     @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist, @ByVal NppStreamContext nppStreamCtx);
 
 /** \} YUVToRGBColorTwist*/
+
+/** \name RGBToUYVP Conversion
+ *
+ * Three unsigned 8-bit packed RGB channels color space conversion to three channel unsigned packed 10-bit UYVP pixel.
+ *  
+ * @param pSrc \ref source_image_pointer.
+ * @param aSrcStep \ref source_image_line_step.
+ * @param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * @param pDst \ref destination_image_pointer.
+ * @param aDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param eColorSpace The input color space.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+
+/* 
+ * Three unsigned 8-bit planar RGB channels color space conversion to three channel unsigned packed 10-bit UYVP pixel.
+ *  
+ * \param pSrc \ref source_image_pointer_array.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The input color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") PointerPointer pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr BytePointer pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr ByteBuffer pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_8u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp8u*const*") @ByPtrPtr byte[] pSrc, int nSrcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+
+/* 
+ * Three unsigned 8-bit packed RGB channels color space conversion to three channel unsigned planar 10-bit UYVP pixel.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer_array.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The input color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+
+
+
+/* 
+ * Four unsigned 8-bit packed RGBA channels color space conversion to three channel unsigned packed 10-bit UYVP pixel.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The input color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiRGBA_8u_ToUYVP_10u_AC4C3R_Ctx(@Cast("const Npp8u*const") BytePointer pSrc, int nSrcStep,
+                                         @ByVal NppiPoint oSrcOffset,
+                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                         @ByVal NppiSize oSizeROI,
+                                         @Cast("NppiColorSpace") int eColorSpace,
+                                         @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGBA_8u_ToUYVP_10u_AC4C3R_Ctx(@Cast("const Npp8u*const") ByteBuffer pSrc, int nSrcStep,
+                                         @ByVal NppiPoint oSrcOffset,
+                                         @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                         @ByVal NppiSize oSizeROI,
+                                         @Cast("NppiColorSpace") int eColorSpace,
+                                         @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGBA_8u_ToUYVP_10u_AC4C3R_Ctx(@Cast("const Npp8u*const") byte[] pSrc, int nSrcStep,
+                                         @ByVal NppiPoint oSrcOffset,
+                                         @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                         @ByVal NppiSize oSizeROI,
+                                         @Cast("NppiColorSpace") int eColorSpace,
+                                         @ByVal NppStreamContext nppStreamCtx);
+
+/* 
+ * Three unsigned 16-bit packed RGB channels color space conversion to three channel unsigned packed 10-bit UYVP pixel.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The input color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_C3C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+
+/*
+ * Three unsigned 16-bit planar RGB channels color space conversion to three channel unsigned packed 10-bit UYVP pixel.
+ *  
+ * \param pSrc \ref source_planar_image_pointer_array.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The input color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") PointerPointer pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr ShortPointer pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr ShortBuffer pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGB_16u_ToUYVP_10u_P3C3R_Ctx(@Cast("const Npp16u*const*") @ByPtrPtr short[] pSrc, int nSrcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+
+/* 
+ * Four unsigned 16-bit packed RGBA channels color space conversion to three channel unsigned packed 10-bit UYVP pixel.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The input color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiRGBA_16u_ToUYVP_10u_AC4C3R_Ctx(@Cast("const Npp16u*const") ShortPointer pSrc, int nSrcStep,
+                                          @ByVal NppiPoint oSrcOffset,
+                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                          @ByVal NppiSize oSizeROI,
+                                          @Cast("NppiColorSpace") int eColorSpace,
+                                          @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGBA_16u_ToUYVP_10u_AC4C3R_Ctx(@Cast("const Npp16u*const") ShortBuffer pSrc, int nSrcStep,
+                                          @ByVal NppiPoint oSrcOffset,
+                                          @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                          @ByVal NppiSize oSizeROI,
+                                          @Cast("NppiColorSpace") int eColorSpace,
+                                          @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiRGBA_16u_ToUYVP_10u_AC4C3R_Ctx(@Cast("const Npp16u*const") short[] pSrc, int nSrcStep,
+                                          @ByVal NppiPoint oSrcOffset,
+                                          @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                          @ByVal NppiSize oSizeROI,
+                                          @Cast("NppiColorSpace") int eColorSpace,
+                                          @ByVal NppStreamContext nppStreamCtx);
+
+/** \} RGBToUYVP Conversion */
+
+/** \name UYVPToRGB Conversion
+ *
+ * Three channel unsigned packed 10-bit UYVP pixel color space conversion to three unsigned packed 8-bit channels RGB.
+ *  
+ * @param pSrc \ref source_image_pointer.
+ * @param aSrcStep \ref source_image_line_step.
+ * @param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * @param pDst \ref destination_image_pointer.
+ * @param aDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param eColorSpace The output color space.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_8u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int srcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") BytePointer pDst, int dstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_8u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int srcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") ByteBuffer pDst, int dstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_8u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int srcStep,
+                                       @ByVal NppiPoint oSrcOffset,
+                                       @Cast("Npp8u*") byte[] pDst, int dstStep,
+                                       @ByVal NppiSize oSizeROI,
+                                       @Cast("NppiColorSpace") int eColorSpace,
+                                       @ByVal NppStreamContext nppStreamCtx);
+
+/*
+ * Three channel unsigned packed 10-bit UYVP pixel color space conversion to four unsigned packed 8-bit channels RGBA.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The output color space.
+ * \param nAlpha The output color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+
+
+/*
+ * Three channel unsigned packed 10-bit UYVP pixel color space conversion to three unsigned planar 8-bit channels RGB.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_planar_image_pointer_array.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The output color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+
+
+/*
+ * Three channel unsigned packed 10-bit UYVP pixel color space conversion to three unsigned packed 16-bit channels RGB.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The output color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16u_C3C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int srcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp16u*") ShortPointer pDst, int dstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16u_C3C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int srcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp16u*") ShortBuffer pDst, int dstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16u_C3C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int srcStep,
+                                        @ByVal NppiPoint oSrcOffset,
+                                        @Cast("Npp16u*") short[] pDst, int dstStep,
+                                        @ByVal NppiSize oSizeROI,
+                                        @Cast("NppiColorSpace") int eColorSpace,
+                                        @ByVal NppStreamContext nppStreamCtx);
+
+/*
+ * Three channel unsigned packed 10-bit UYVP pixel color space conversion to four unsigned packed 16-bit channels RGBA.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_image_pointer.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The output color space.
+ * \param nAlpha The output color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16u_C3AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
+                                         @ByVal NppiPoint oSrcOffset,
+                                         @Cast("Npp16u*") ShortPointer pDst, int nDstStep,
+                                         @ByVal NppiSize oSizeROI, 
+                                         @Cast("NppiColorSpace") int eColorSpace, @Cast("Npp16u") short alpha,
+                                         @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16u_C3AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
+                                         @ByVal NppiPoint oSrcOffset,
+                                         @Cast("Npp16u*") ShortBuffer pDst, int nDstStep,
+                                         @ByVal NppiSize oSizeROI, 
+                                         @Cast("NppiColorSpace") int eColorSpace, @Cast("Npp16u") short alpha,
+                                         @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiUYVP_10u_ToRGB_16u_C3AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
+                                         @ByVal NppiPoint oSrcOffset,
+                                         @Cast("Npp16u*") short[] pDst, int nDstStep,
+                                         @ByVal NppiSize oSizeROI, 
+                                         @Cast("NppiColorSpace") int eColorSpace, @Cast("Npp16u") short alpha,
+                                         @ByVal NppStreamContext nppStreamCtx);
+
+/*
+ * Three channel unsigned packed 10-bit UYVP pixel color space conversion to three unsigned planar 16-bit channels RGB.
+ *  
+ * \param pSrc \ref source_image_pointer.
+ * \param aSrcStep \ref source_image_line_step.
+ * \param oSrcOffset pSrc pixel offset relative to image origin, currently must be 0,0.
+ * \param pDst \ref destination_planar_image_pointer_array.
+ * \param aDstStep \ref destination_image_line_step.
+ * \param oSizeROI \ref roi_specification.
+ * \param eColorSpace The output color space.
+ * \param nppStreamCtx \ref application_managed_stream_context.
+ * \return \ref image_data_error_codes, \ref roi_error_codes.
+ */
+
+
+
+
+
+/** \} UYVPToRGB Conversion */
 
 /** \} image_color_processing */ 
 

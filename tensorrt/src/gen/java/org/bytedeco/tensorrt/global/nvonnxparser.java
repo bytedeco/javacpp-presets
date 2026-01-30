@@ -34,25 +34,20 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 // Parsed from NvOnnxParser.h
 
 /*
- * Copyright (c) 1993-2024, NVIDIA CORPORATION. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
  *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 // #ifndef NV_ONNX_PARSER_H
@@ -170,7 +165,17 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
     /** Enable UINT8 as a quantization data type and asymmetric quantization with non-zero zero-point values
      *  in Quantize and Dequantize nodes. This flag is set to be OFF by default.
      *  The resulting engine must be built targeting DLA version >= 3.16. */
-    kENABLE_UINT8_AND_ASYMMETRIC_QUANTIZATION_DLA(1);
+    kENABLE_UINT8_AND_ASYMMETRIC_QUANTIZATION_DLA(1),
+    /** Parse the ONNX model with per-node validation for DLA. If the model is not fully supported by DLA, then
+     *  parsing will fail. If this flag is set, isSubGraphSupported() will also return capability in the context of DLA
+     *  support. When this flag is set, a valid IBuilderConfig must be provided to the parser via setBuilderConfig(). */
+    // This flag is set to be OFF by default.
+    kREPORT_CAPABILITY_DLA(2),
+    /** Allow a loaded plugin with the same name as an ONNX operator type to override the default ONNX implementation,
+     *  even if the plugin namespace attribute is not set.
+     *  Useful for custom plugins that replace standard ONNX operators, such as alternative implementations for better
+     *  performance. This flag is set to be OFF by default. */
+    kENABLE_PLUGIN_OVERRIDE(3);
 
     public final int value;
     private OnnxParserFlag(int v) { this.value = v; }

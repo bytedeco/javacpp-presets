@@ -208,8 +208,33 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) TensorIOMode getTensorIOMode(String tensorName);
     public native @NoException(true) @Cast("nvinfer1::TensorIOMode") int getTensorIOMode(@Cast("const char*") BytePointer tensorName);
+
+    /**
+     *  \brief Get the input tensor name that an output tensor should alias with.
+     * 
+     *  Some operations (e.g., KVCacheUpdate) require that certain output tensors share memory with input tensors.
+     *  This method returns the name of the input tensor that a given output tensor should alias with.
+     * 
+     *  @param tensorName The name of an output tensor.
+     * 
+     *  @return The name of the input tensor to alias with, or nullptr if tensorName is not an output tensor or
+     *  the output does not alias with any input.
+     * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the
+     *  terminator.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) String getAliasedInputTensor(String tensorName);
+    public native @NoException(true) @Cast("const char*") BytePointer getAliasedInputTensor(@Cast("const char*") BytePointer tensorName);
 
     /**
      *  \brief create an execution context without any device memory allocated

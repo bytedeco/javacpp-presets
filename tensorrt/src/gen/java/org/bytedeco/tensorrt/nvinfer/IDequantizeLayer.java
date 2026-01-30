@@ -123,13 +123,47 @@ public class IDequantizeLayer extends ILayer {
     public native @NoException(true) void setAxis(int axis);
 
     /**
+     *  \brief Set the shape of the quantization block.
+     * 
+     *  @param blockShape The shape of the quantization block.
+     * 
+     *  Set the shape of the quantization block.
+     *  Allowed values are positive values and -1 which denotes a fully blocked dimension.
+     *  Returns true if the block shape was set successfully, false if the block shape is invalid.
+     *  The default value is empty Dims.
+     * 
+     *  @see getBlockShape()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setBlockShape(@Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape);
+
+    /**
+     *  \brief Get the shape of the quantization block.
+     * 
+     *  The default value is empty Dims.
+     *  @see setBlockShape()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getBlockShape();
+
+    /**
      *  \brief Set the Dequantize layer output type.
      * 
      *  @param toType The DataType of the output tensor.
      * 
-     *  Set the output type of the dequantize layer. Valid values are DataType::kFLOAT, DataType::kHALF and DataType::kBF16.
-     *  If the network is strongly typed, setToType must be used to set the output type, and use of setOutputType
-     *  is an error. Otherwise, types passed to setOutputType and setToType must be the same.
+     *  Set the output type of the dequantize layer. Valid values are DataType::kFLOAT, DataType::kHALF and
+     *  DataType::kBF16. If the network is strongly typed, setToType must be used to set the output type, and use of
+     *  setOutputType is an error. Otherwise, types passed to setOutputType and setToType must be the same.
      * 
      *  @see NetworkDefinitionCreationFlag::kSTRONGLY_TYPED
      *  */

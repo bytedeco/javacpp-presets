@@ -62,6 +62,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  * NormalizationQuantizeScale (optional) contains the quantization scale for the attention normalization output.
  *    It is a tensor of type kFLOAT, kHALF or kBF16 with dimension 0 or 1.
  * 
+ *  @see
+ *  https://docs.nvidia.com/deeplearning/tensorrt/latest/inference-library/work-with-transformers.html#multi-head-attention-fusion
+ *  for the complete matrix of fused kernel support.
+ * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
@@ -105,10 +109,10 @@ public class IAttention extends INoCopy {
     /**
      *  \brief Set whether a mask will be used for the normalization operation.
      * 
-     *  @param mask the mask tensor of type kBOOL or the same data type of
-     *  BMM1 output with shape [batchSize, sequenceLengthQuery, sequenceLengthKeyValue]. For a kBOOL mask, a True value
-     *  indicates that the corresponding position is allowed to attend. For other data types, the mask values will
-     *  be added to the BMM1 output, known as an add mask.
+     *  @param mask the mask tensor of type kBOOL or the same data type of BMM1 output with 4d shape broadcastable to
+     *  [batchSize, numHeadsQuery, sequenceLengthQuery, sequenceLengthKeyValue]. For a kBOOL mask, a True value
+     *  indicates that the corresponding position is allowed to attend. For other data types, the mask values will be
+     *  added to the BMM1 output, known as an add mask.
      * 
      *  @see getMask
      * 
@@ -366,5 +370,48 @@ public class IAttention extends INoCopy {
      *  The default value is DataType::kFLOAT.
      * 
      *  \warning Must be used after normalization quantization to type is set by setNormalizationQuantizeToType. */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) DataType getNormalizationQuantizeToType();
+
+    /**
+     *  \brief Set the metadata for IAttention.
+     * 
+     *  The metadata is emitted in the JSON returned by IEngineInspector with
+     *  ProfilingVerbosity set to kDETAILED.
+     * 
+     *  @param metadata The per-layer metadata.
+     * 
+     *  \warning The string name must be null-terminated and be at most 4096 bytes including the terminator.
+     * 
+     *  @see getMetadata()
+     *  @see getLayerInformation()
+     * 
+     *  @return True if the metadata is set successfully, false otherwise.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setMetadata(String metadata);
+    public native @Cast("bool") @NoException(true) boolean setMetadata(@Cast("const char*") BytePointer metadata);
+
+    /**
+     *  \brief Get the metadata of IAttention.
+     * 
+     *  @return The metadata as a null-terminated C-style string. If setMetadata() has not been called,
+     *          an empty string "" will be returned as a default value.
+     * 
+     *  @see setMetadata()
+     *  */
+    public native @NoException(true) String getMetadata();
 }

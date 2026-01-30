@@ -21,19 +21,17 @@ runs:
         $SUDO rm -rf /usr/local/lib/android /usr/local/julia*
         $SUDO rm -rf /usr/share/dotnet /usr/share/miniconda /usr/share/swift
 
-        # Make sure no busy /swapfile is hanging around
-        # First disable any existing swapfile with swapoff
-        if $SUDO swapon --summary | grep -q '^/swapfile'; then
+        if [[ -n "$SUDO" ]]; then
+          # Make sure no busy /swapfile is hanging around
+          # First disable any existing swapfile with swapoff
           $SUDO swapoff /swapfile
-        fi
-        $SUDO rm -f /swapfile
+          $SUDO rm -f /swapfile
 
-        # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
-        $SUDO fallocate -l 8GB /swapfile
-        $SUDO chmod 600 /swapfile
-        $SUDO mkswap /swapfile
-        if ! $SUDO swapon /swapfile; then
-          $SUDO rm /swapfile
+          # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
+          $SUDO fallocate -l 16GB /swapfile
+          $SUDO chmod 600 /swapfile
+          $SUDO mkswap /swapfile
+          $SUDO swapon /swapfile
         fi
 
         mkdir -p .ccache
@@ -51,9 +49,9 @@ runs:
           export ARCH=arm64
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-13-1-local-13.1.0_590.44.01-1.aarch64.rpm
-          export CUDNN=cuda-13-9.17.1.4-1.aarch64
-          export NCCL=2.28.9-1+cuda13.0.aarch64
+          export CUDA=cuda-repo-rhel8-13-1-local-13.1.1_590.48.01-1.aarch64.rpm
+          export CUDNN=cuda-13-9.18.1.3-1.aarch64
+          export NCCL=2.29.2-1+cuda13.1.aarch64
           export NVCOMP=nvcomp-linux-sbsa-5.1.0.21_cuda13-archive
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
@@ -73,9 +71,9 @@ runs:
           export ARCH=amd64
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-13-1-local-13.1.0_590.44.01-1.x86_64.rpm
-          export CUDNN=cuda-13-9.17.1.4-1.x86_64
-          export NCCL=2.28.9-1+cuda13.0.x86_64
+          export CUDA=cuda-repo-rhel8-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+          export CUDNN=cuda-13-9.18.1.3-1.x86_64
+          export NCCL=2.29.2-1+cuda13.1.x86_64
           export NVCOMP=nvcomp-linux-x86_64-5.1.0.21_cuda13-archive
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
@@ -123,7 +121,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
-        $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
+        $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -178,7 +176,7 @@ runs:
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/13.1.0/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-devel-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-headers-$CUDNN.rpm
@@ -222,17 +220,18 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown 1-vFYF2u1M8xjk9LXn-fLkPcPm-dfNxoh
-          $SUDO unzip Video_Codec_SDK_13.0.19.zip -d /usr/local
+          python3 -m gdown 1qnRE4nF8XP8ifWH49BwIaYnoYuqH0Zrk
+          $SUDO unzip Video_Codec_SDK_13.0.37.zip -d /usr/local
           $SUDO ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.14.1/tars/TensorRT-10.14.1.48.Linux.aarch64-gnu.cuda-13.0.tar.gz
-          $SUDO tar -hxvf TensorRT-10.14.1.48.Linux.aarch64-gnu.cuda-13.0.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.15.1/tars/TensorRT-10.15.1.29.Linux.aarch64-gnu.cuda-13.1.tar.gz
+          $SUDO tar -hxvf TensorRT-10.15.1.29.Linux.aarch64-gnu.cuda-13.1.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+          $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space
           $SUDO rm -f *.tar.gz $(find /usr/local/tensorrt/ -name '*.a')
         fi
@@ -240,17 +239,18 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.download.nvidia.com/compute/machine-learning/tensorrt/10.14.1/tars/TensorRT-10.14.1.48.Linux.x86_64-gnu.cuda-13.0.tar.gz
-          $SUDO tar -hxvf TensorRT-10.14.1.48.Linux.x86_64-gnu.cuda-13.0.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.15.1/tars/TensorRT-10.15.1.29.Linux.x86_64-gnu.cuda-13.1.tar.gz
+          $SUDO tar -hxvf TensorRT-10.15.1.29.Linux.x86_64-gnu.cuda-13.1.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+          $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space
           $SUDO rm -f *.tar.gz $(find /usr/local/tensorrt/ -name '*.a')
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/2ad98b49-1fb2-4294-ab3d-6889b434ebd3/intel-onemkl-2025.3.0.462_offline.sh
-          $SUDO bash intel-onemkl-2025.3.0.462_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6a17080f-f0de-41b9-b587-52f92512c59a/intel-onemkl-2025.3.1.11_offline.sh
+          $SUDO bash intel-onemkl-2025.3.1.11_offline.sh -s -a -s --eula accept
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
         fi
 

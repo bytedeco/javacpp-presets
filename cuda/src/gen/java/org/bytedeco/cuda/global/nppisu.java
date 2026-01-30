@@ -87,7 +87,7 @@ public class nppisu extends org.bytedeco.cuda.presets.nppisu {
  * Routines for allocating and deallocating pitched image storage. These methods
  * are provided for convenience. They allocate memory that may contain additional
  * padding bytes at the end of each line of pixels. Though padding is not necessary
- * for any of the NPP image-processing primitives to work correctly, its absense may
+ * for any of the NPP image-processing primitives to work correctly, its absence may
  * cause sever performance degradation compared to properly padded images.
  *
  * \{

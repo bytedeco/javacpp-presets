@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Jeonghwan Park
+ * Copyright (C) 2021-2026 Jeonghwan Park, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -65,7 +65,8 @@ import org.bytedeco.cuda.presets.cudart;
         @Platform(
             value = "windows-x86_64",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Interface/",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/"
+            linkpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/",
+                        "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/win/x64/"}
         )
     },
     target = "org.bytedeco.nvcodec.nvcuvid",

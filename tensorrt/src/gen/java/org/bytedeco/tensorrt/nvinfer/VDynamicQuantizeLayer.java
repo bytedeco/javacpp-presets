@@ -25,14 +25,16 @@ public class VDynamicQuantizeLayer extends VRoot {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VDynamicQuantizeLayer(Pointer p) { super(p); }
 
-    public native @NoException(true) int getAxis();
-    public native @NoException(true) void setAxis(int axis);
-    public native @NoException(true) int getBlockSize();
-    public native @NoException(true) void setBlockSize(int axis);
+    public native @Deprecated @NoException(true) int getAxis();
+    public native @Deprecated @NoException(true) void setAxis(int axis);
+    public native @Deprecated @NoException(true) int getBlockSize();
+    public native @Deprecated @NoException(true) void setBlockSize(int axis);
     public native @NoException(true) DataType getScaleType();
     public native @NoException(true) void setScaleType(DataType axis);
     public native @NoException(true) void setScaleType(@Cast("nvinfer1::DataType") int axis);
     public native @NoException(true) DataType getToType();
     public native @NoException(true) void setToType(DataType toType);
     public native @NoException(true) void setToType(@Cast("nvinfer1::DataType") int toType);
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getBlockShape();
+    public native @NoException(true) void setBlockShape(@Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape);
 }

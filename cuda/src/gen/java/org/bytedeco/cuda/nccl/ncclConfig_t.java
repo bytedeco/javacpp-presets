@@ -11,7 +11,7 @@ import org.bytedeco.cuda.cudart.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 import static org.bytedeco.cuda.global.nccl.*;
-   /* First, terminate ongoing parent operations, and then shrink the parent communicator */
+ /* reserved for future use; must be 0 */
 
 /* Communicator configuration. Users can assign value to attributes to specify the
  * behavior of a communicator. */
@@ -52,4 +52,6 @@ public class ncclConfig_t extends Pointer {
   public native int nvlsCTAs(); public native ncclConfig_t nvlsCTAs(int setter);
   public native int nChannelsPerNetPeer(); public native ncclConfig_t nChannelsPerNetPeer(int setter);
   public native int nvlinkCentricSched(); public native ncclConfig_t nvlinkCentricSched(int setter);
+  public native int graphUsageMode(); public native ncclConfig_t graphUsageMode(int setter);
+  public native int numRmaCtx(); public native ncclConfig_t numRmaCtx(int setter);
 }

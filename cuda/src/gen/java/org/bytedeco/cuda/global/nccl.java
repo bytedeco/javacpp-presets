@@ -36,11 +36,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 28;
-public static final int NCCL_PATCH = 3;
+public static final int NCCL_MINOR = 29;
+public static final int NCCL_PATCH = 2;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 22803;
+public static final int NCCL_VERSION_CODE = 22902;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -77,6 +77,9 @@ public static final int ncclSuccess                 = 0,
 public static final int NCCL_SPLIT_NOCOLOR = -1;
 public static final double NCCL_UNDEF_FLOAT = -1.0f;
 
+/* Internal use only */
+public static final int NCCL_API_MAGIC = 0xcafebeef;
+
 /* Window Registration flags */
 public static final int NCCL_WIN_DEFAULT = 0x00;
 public static final int NCCL_WIN_COLL_SYMMETRIC = 0x01;
@@ -90,7 +93,10 @@ public static final int NCCL_CTA_POLICY_ZERO = 0x02;
 
 /* ncclCommShrink flags*/
 public static final int NCCL_SHRINK_DEFAULT = 0x00; /* shrink the parent communicator */
-public static final int NCCL_SHRINK_ABORT = 0x01;
+public static final int NCCL_SHRINK_ABORT = 0x01;   /* First, terminate ongoing parent operations, and then shrink the parent communicator */
+
+/* ncclCommRevoke flags */
+public static final int NCCL_REVOKE_DEFAULT = 0x00;
 // Targeting ../nccl/ncclConfig_t.java
 
 
@@ -98,9 +104,9 @@ public static final int NCCL_SHRINK_ABORT = 0x01;
 /* Config initializer must be assigned to initialize config structure when it is created.
  * Not initialized config will result in NCCL error. */
 // #define NCCL_CONFIG_INITIALIZER {
-//   sizeof(ncclConfig_t), /* size */
-//   0xcafebeef,           /* magic */
-//   NCCL_VERSION(NCCL_MAJOR, NCCL_MINOR, NCCL_PATCH), /* version */
+//   sizeof(ncclConfig_t),                              /* size */
+//   NCCL_API_MAGIC,                                    /* magic */
+//   NCCL_VERSION(NCCL_MAJOR, NCCL_MINOR, NCCL_PATCH),  /* version */
 //   NCCL_CONFIG_UNDEF_INT,                    /* blocking */
 //   NCCL_CONFIG_UNDEF_INT,                    /* cgaClusterSize */
 //   NCCL_CONFIG_UNDEF_INT,                    /* minCTAs */
@@ -115,6 +121,8 @@ public static final int NCCL_SHRINK_ABORT = 0x01;
 //   NCCL_CONFIG_UNDEF_INT,                    /* nvlsCTAs */
 //   NCCL_CONFIG_UNDEF_INT,                    /* nChannelsPerNetPeer */
 //   NCCL_CONFIG_UNDEF_INT,                    /* nvlinkCentricSched */
+//   NCCL_CONFIG_UNDEF_INT,                    /* graphUsageMode */
+//   NCCL_CONFIG_UNDEF_INT,                    /* numRmaCtx */
 // }
 // Targeting ../nccl/ncclSimInfo_t.java
 
@@ -211,6 +219,15 @@ public static native @Cast("ncclResult_t") int pncclCommDestroy(ncclComm comm);
 public static native @Cast("ncclResult_t") int ncclCommAbort(ncclComm comm);
 public static native @Cast("ncclResult_t") int pncclCommAbort(ncclComm comm);
 
+/* Revoke a communicator. ncclCommRevoke stops all in-flight operations
+ * and marks communicator state as ncclInProgress. The state will change to ncclSuccess
+ * when the communicator is quiescent; then, management operations (destroy, split,
+ * shrink) can proceed safely. Calling ncclCommFinalize after revoke is invalid.
+ * Additionally, resource sharing via splitShare/shrinkShare is disabled while revoked.
+ * revokeFlags must be NCCL_REVOKE_DEFAULT (0). */
+public static native @Cast("ncclResult_t") int ncclCommRevoke(ncclComm comm, int revokeFlags);
+public static native @Cast("ncclResult_t") int pncclCommRevoke(ncclComm comm, int revokeFlags);
+
 /* Creates one or more communicators from an existing one.
  * Ranks with the same color will end up in the same communicator.
  * Within the new communicator, key will be used to order ranks.
@@ -240,6 +257,25 @@ public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, in
 public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, IntPointer excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
 public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, IntBuffer excludeRanksList, int excludeRanksCount, @ByPtrPtr ncclComm newcomm, ncclConfig_t config, int shrinkFlags);
 public static native @Cast("ncclResult_t") int pncclCommShrink(ncclComm comm, int[] excludeRanksList, int excludeRanksCount, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config, int shrinkFlags);
+
+/* Generate per-communicator unique ID for grow.
+ * Constraints:
+ * - Cannot generate a new UID while a previous UID is unconsumed
+ * - Each UID can only be used once (no reuse after consumption)
+ * - Must wait for grow operation to complete before calling again */
+public static native @Cast("ncclResult_t") int ncclCommGetUniqueId(ncclComm comm, ncclUniqueId uniqueId);
+public static native @Cast("ncclResult_t") int pncclCommGetUniqueId(ncclComm comm, ncclUniqueId uniqueId);
+
+/* Grow communicator by adding new ranks.
+ * Parameter usage:
+ * - Existing non-root: comm, uniqueId=NULL, rank=-1
+ * - Existing root: comm, uniqueId=&id, rank=-1
+ * - New ranks: comm=NULL, uniqueId=&id, rank=assigned
+ * The UID is consumed upon successful grow and cannot be reused. */
+public static native @Cast("ncclResult_t") int ncclCommGrow(ncclComm comm, int nRanks, @Const ncclUniqueId uniqueId, int rank, @ByPtrPtr ncclComm newcomm, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int ncclCommGrow(ncclComm comm, int nRanks, @Const ncclUniqueId uniqueId, int rank, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommGrow(ncclComm comm, int nRanks, @Const ncclUniqueId uniqueId, int rank, @ByPtrPtr ncclComm newcomm, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommGrow(ncclComm comm, int nRanks, @Const ncclUniqueId uniqueId, int rank, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
 
 /* Creates a new communicator (multi thread/process version), similar to ncclCommInitRankConfig.
  * Allows to use more than one ncclUniqueId (up to one per rank), indicated by nId, to accelerate the init operation.
@@ -313,6 +349,12 @@ public static native @Cast("ncclResult_t") int pncclCommWindowRegister(ncclComm 
 /* Deregister symmetric memory */
 public static native @Cast("ncclResult_t") int ncclCommWindowDeregister(ncclComm comm, ncclWindow_vidmem win);
 public static native @Cast("ncclResult_t") int pncclCommWindowDeregister(ncclComm comm, ncclWindow_vidmem win);
+
+/* Get the user pointer from the window */
+public static native @Cast("ncclResult_t") int ncclWinGetUserPtr(ncclComm comm, ncclWindow_vidmem win, @Cast("void**") PointerPointer outUserPtr);
+public static native @Cast("ncclResult_t") int ncclWinGetUserPtr(ncclComm comm, ncclWindow_vidmem win, @Cast("void**") @ByPtrPtr Pointer outUserPtr);
+public static native @Cast("ncclResult_t") int pncclWinGetUserPtr(ncclComm comm, ncclWindow_vidmem win, @Cast("void**") PointerPointer outUserPtr);
+public static native @Cast("ncclResult_t") int pncclWinGetUserPtr(ncclComm comm, ncclWindow_vidmem win, @Cast("void**") @ByPtrPtr Pointer outUserPtr);
 
 /* Reduction operation selector */
 /** enum ncclRedOp_dummy_t */
@@ -569,6 +611,79 @@ public static native @Cast("ncclResult_t") int pncclRecv(Pointer recvbuff, @Cast
     ncclComm comm, CUstream_st stream);
 public static native @Cast("ncclResult_t") int ncclRecv(Pointer recvbuff, @Cast("size_t") long count, @Cast("ncclDataType_t") int datatype, int peer,
     ncclComm comm, CUstream_st stream);
+
+
+/*
+ * Put
+ *
+ * One-sided communication operation that writes data from the local buffer to a
+ * remote peer's registered memory window without explicit participation from the
+ * target process.
+ *
+ * Parameters:
+ *   localbuff    - Local source buffer containing data to be transferred
+ *   count        - Number of elements to transfer
+ *   datatype     - NCCL data type of each element
+ *   peer         - Target rank to write data to
+ *   peerWin      - Memory window object registered by the target peer
+ *   peerWinOffset- Offset in bytes from the start of peer's registered window
+ *   sigIdx       - Signal index identifier for the operation
+ *   ctx          - Context identifier for the operation
+ *   flags        - Reserved for future use
+ *   comm         - NCCL communicator
+ *   stream       - CUDA stream to enqueue the operation on
+ *
+ * Returns:
+ *   ncclSuccess on successful enqueue, error code otherwise
+ */
+public static native @Cast("ncclResult_t") int ncclPutSignal(@Const Pointer localbuff, @Cast("size_t") long count, @Cast("ncclDataType_t") int datatype,
+    int peer, ncclWindow_vidmem peerWin, @Cast("size_t") long peerWinOffset,
+    int sigIdx, int ctx, @Cast("unsigned int") int flags, ncclComm comm, CUstream_st stream);
+
+public static native @Cast("ncclResult_t") int pncclPutSignal(@Const Pointer localbuff, @Cast("size_t") long count, @Cast("ncclDataType_t") int datatype,
+    int peer, ncclWindow_vidmem peerWin, @Cast("size_t") long peerWinOffset,
+    int sigIdx, int ctx, @Cast("unsigned int") int flags, ncclComm comm, CUstream_st stream);
+
+/*
+ * Signal
+ *
+ * Sends a signal to the specified peer without transferring data.
+ *
+ * Parameters:
+ *   peer         - Target rank to send signal to
+ *   sigIdx       - Signal index identifier for the operation
+ *   ctx          - Context identifier for the operation
+ *   flags        - Reserved for future use
+ *   comm         - NCCL communicator
+ *   stream       - CUDA stream to enqueue the operation on
+ *
+ * Returns:
+ *   ncclSuccess on successful signal enqueue, error code otherwise
+ */
+public static native @Cast("ncclResult_t") int ncclSignal(int peer, int sigIdx, int ctx, @Cast("unsigned int") int flags, ncclComm comm, CUstream_st stream);
+public static native @Cast("ncclResult_t") int pncclSignal(int peer, int sigIdx, int ctx, @Cast("unsigned int") int flags, ncclComm comm, CUstream_st stream);
+// Targeting ../nccl/ncclWaitSignalDesc_t.java
+
+
+
+/*
+ * Wait Signal
+ *
+ * Waits for signals as described in the signal descriptor array.
+ *
+ * Parameters:
+ *   nDesc        - Number of signal descriptors in the array
+ *   signalDescs  - Array of descriptors specifying the signals to wait for.
+ *                  Each descriptor indicates how many signals to expect from
+ *                  a specific peer on a particular signal index and context.
+ *   comm         - NCCL communicator
+ *   stream       - CUDA stream to enqueue the operation on
+ *
+ * Returns:
+ *   ncclSuccess when all required signals received, error code otherwise
+ */
+public static native @Cast("ncclResult_t") int ncclWaitSignal(int nDesc, ncclWaitSignalDesc_t signalDescs, ncclComm comm, CUstream_st stream);
+public static native @Cast("ncclResult_t") int pncclWaitSignal(int nDesc, ncclWaitSignalDesc_t signalDescs, ncclComm comm, CUstream_st stream);
 
 /*
  * Group semantics

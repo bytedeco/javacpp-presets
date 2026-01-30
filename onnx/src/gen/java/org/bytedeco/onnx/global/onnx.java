@@ -185,7 +185,7 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // #define ONNX_OPERATOR_SET_SCHEMA_EX(name, domain, domain_str, ver, dbg_included_in_static_opset, impl)
 //   class ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name);
 //   template <>
-//   OpSchema GetOpSchema<ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)>() {
+//   ONNX_API OpSchema GetOpSchema<ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)>() {
 //     return impl.SetName(#name).SetDomain(domain_str).SinceVersion(ver).SetLocation(__FILE__, __LINE__);
 //   }
 //   ONNX_OPERATOR_SET_SCHEMA_DEBUG_VARIABLE(domain, ver, name, dbg_included_in_static_opset)
@@ -7599,10 +7599,7 @@ public static final int
     @Const @ByRef StringIntMap model_opset_imports);
 
 // Checks all model local functions present in ModelProto
-@Namespace("onnx::checker") public static native void check_model_local_functions(
-    @Const @ByRef ModelProto model,
-    @Const @ByRef CheckerContext ctx,
-    @Const @ByRef LexicalScopeContext parent_lex);
+@Namespace("onnx::checker") public static native void check_model_local_functions(@Const @ByRef ModelProto model, @Const @ByRef CheckerContext ctx, @Const @ByRef LexicalScopeContext parent_lex);
 
 @Namespace("onnx::checker") public static native void check_model(
     @Const @ByRef ModelProto model,

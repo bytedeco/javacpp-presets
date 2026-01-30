@@ -47,4 +47,7 @@ public class VAttention extends VRoot {
     public native @Cast("bool") @NoException(true) boolean setNormalizationQuantizeToType(DataType type);
     public native @Cast("bool") @NoException(true) boolean setNormalizationQuantizeToType(@Cast("nvinfer1::DataType") int type);
     public native @NoException(true) DataType getNormalizationQuantizeToType();
+    public native @Cast("bool") @NoException(true) boolean setMetadata(String docString);
+    public native @Cast("bool") @NoException(true) boolean setMetadata(@Cast("const char*") BytePointer docString);
+    public native @NoException(true) String getMetadata();
 }

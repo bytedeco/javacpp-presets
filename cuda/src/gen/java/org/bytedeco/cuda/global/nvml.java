@@ -835,20 +835,6 @@ public static final int
     NVML_MEMORY_ERROR_TYPE_COUNT = 2;
 
 /**
- * Represents Nvlink Version
- */
-/** enum nvmlNvlinkVersion_t */
-public static final int
-    NVML_NVLINK_VERSION_INVALID = 0,
-    NVML_NVLINK_VERSION_1_0     = 1,
-    NVML_NVLINK_VERSION_2_0     = 2,
-    NVML_NVLINK_VERSION_2_2     = 3,
-    NVML_NVLINK_VERSION_3_0     = 4,
-    NVML_NVLINK_VERSION_3_1     = 5,
-    NVML_NVLINK_VERSION_4_0     = 6,
-    NVML_NVLINK_VERSION_5_0     = 7;
-
-/**
  * ECC counter types.
  *
  * Note: Volatile counts are reset each time the driver loads. On Windows this is once per boot. On Linux this can be more frequent.
@@ -1700,10 +1686,10 @@ public static final int NVML_VGPU_SCHEDULER_ARR_ENABLE =    2;
 
 /**
  * vGPU scheduler engine types
+ * A GPU or GI may support a subset of engines
  */
 /** Graphics engine. */
 public static final int NVML_VGPU_SCHEDULER_ENGINE_TYPE_GRAPHICS =  1;
-public static final int NVML_VGPU_SCHEDULER_ENGINE_TYPE_NVENC1 =    2;
 // Targeting ../nvml/nvmlVgpuSchedulerParams_t.java
 
 
@@ -3469,9 +3455,11 @@ public static final int nvmlGpuFabricInfo_v3 = nvmlGpuFabricInfo_v3();
 /***************************************************************************************************/
 
 /** Don't fail nvmlInit() when no GPUs are found */
-public static final int NVML_INIT_FLAG_NO_GPUS =      1;
+public static final int NVML_INIT_FLAG_NO_GPUS =      (1 << 0);
 /** Don't attach GPUs */
-public static final int NVML_INIT_FLAG_NO_ATTACH =    2;
+public static final int NVML_INIT_FLAG_NO_ATTACH =    (1 << 1);
+/** Force GPU initialization when a previous nvmlInit was called with NO_GPUS and NO_ATTACH flags */
+public static final int NVML_INIT_FLAG_FORCE_INIT =   (1 << 2);
 
 /**
  * Initialize NVML, but don't initialize any GPUs yet.
@@ -5417,13 +5405,12 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTargetFanSpeed(nvmlD
  * @param minSpeed                      The minimum speed allowed to set
  * @param maxSpeed                      The maximum speed allowed to set
  *
- * return
- *         NVML_SUCCESS                 if speed has been adjusted
- *         NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
- *         NVML_ERROR_INVALID_ARGUMENT  if device is invalid
- *         NVML_ERROR_NOT_SUPPORTED     if the device does not support this
- *                                      (doesn't have fans)
- *         NVML_ERROR_UNKNOWN           on any unexpected error
+ * @return
+ *        - \ref NVML_SUCCESS                 if speed has been adjusted
+ *        - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *        - \ref NVML_ERROR_INVALID_ARGUMENT  if device is invalid
+ *        - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this (doesn't have fans)
+ *        - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxFanSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntPointer minSpeed,
                                                  @Cast("unsigned int*") IntPointer maxSpeed);
@@ -5439,16 +5426,17 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxFanSpeed(nvmlD
  *
  * For all cuda-capable discrete products with fans
  *
- * device                               The identifier of the target \a device
- * policy                               Reference in which to return the fan control \a policy
+ * @param device                        The identifier of the target \a device
+ * @param fan                           The index of the target fan, zero indexed.
+ * @param policy                        Reference in which to return the fan control \a policy
  *
- * return
- *         NVML_SUCCESS                 if \a policy has been populated
- *         NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
- *         NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a policy is null or the \a fan given doesn't reference
- *                                            a fan that exists.
- *         NVML_ERROR_NOT_SUPPORTED     if the \a device is older than Maxwell
- *         NVML_ERROR_UNKNOWN           on any unexpected error
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a policy has been populated
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a policy is null or the \a fan given doesn't reference
+ *                                                   a fan that exists.
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the \a device is older than Maxwell
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanControlPolicy_v2(nvmlDevice_st device, @Cast("unsigned int") int fan,
                                                       @Cast("nvmlFanControlPolicy_t*") IntPointer policy);
@@ -6128,15 +6116,6 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerUsage(nvmlDevic
  *
  * @param device                               The identifier of the target device
  * @param powerMizerMode                       Reference in which to return the power mizer mode
- * @param supportedPowerMizerModes             Reference in which to return the bitmask of supported power mizer modes on this device.
- *                                             The supported modes can be combined using the bitwise OR operator '|'.
- *                                             For example, if a device supports all PowerMizer modes, the bitmask would be:
- *                                             supportedPowerMizerModes = ((1 << NVML_POWER_MIZER_MODE_ADAPTIVE) |
- *                                                                         (1 << NVML_POWER_MIZER_MODE_PREFER_MAXIMUM_PERFORMANCE) |
- *                                                                         (1 << NVML_POWER_MIZER_MODE_AUTO) |
- *                                                                         (1 << NVML_POWER_MIZER_MODE_PREFER_CONSISTENT_PERFORMANCE));
- *                                             This bitmask can be used to check which power mizer modes are available on the device by performing
- *                                             a bitwise AND operation with the specific mode you want to check.
  *
  * @return
  *         - \ref NVML_SUCCESS                 if \a powerMizerMode has been populated
@@ -6285,7 +6264,44 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuOperationMode(nvm
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryInfo(nvmlDevice_st device, nvmlMemory_t memory);
 
 /**
+ * Retrieves the amount of used, free, reserved and total memory available on the device, in bytes.
  * nvmlDeviceGetMemoryInfo_v2 accounts separately for reserved memory and includes it in the used memory amount.
+ *
+ * For all products.
+ *
+ * Enabling ECC reduces the amount of total available memory, due to the extra required parity bits.
+ * Under WDDM most device memory is allocated and managed on startup by Windows.
+ *
+ * Under Linux and Windows TCC, the reported amount of used memory is equal to the sum of memory allocated
+ * by all active channels on the device.
+ *
+ * \note In MIG mode, if device handle is provided, the API returns aggregate
+ *       information, only if the caller has appropriate privileges. Per-instance
+ *       information can be queried by using specific MIG device handles.
+ *
+ * \note On systems where GPUs are NUMA nodes, the accuracy of FB memory utilization
+ *       provided by this API depends on the memory accounting of the operating system.
+ *       This is because FB memory is managed by the operating system instead of the NVIDIA GPU driver.
+ *       Typically, pages allocated from FB memory are not released even after
+ *       the process terminates to enhance performance. In scenarios where
+ *       the operating system is under memory pressure, it may resort to utilizing FB memory.
+ *       Such actions can result in discrepancies in the accuracy of memory reporting.
+ *
+ * \note On certain SOC platforms, the integrated GPU (iGPU) does not use a dedicated framebuffer
+ *       but instead shares memory with the system. As a result, \ref NVML_ERROR_NOT_SUPPORTED
+ *       will be returned in this case.
+ *
+ * @param device                               The identifier of the target device
+ * @param memory                               Reference in which to return the memory information
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a memory has been populated
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_NO_PERMISSION     if the user doesn't have permission to perform this operation
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a memory is NULL
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if video memory is unsupported on the device
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryInfo_v2(nvmlDevice_st device, nvmlMemory_v2_t memory);
 
@@ -8705,13 +8721,12 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceSetDefaultAutoBoostedCl
  * @param device                        The identifier of the target device
  * @param fan                           The index of the fan, starting at zero
  *
- * return
- *         NVML_SUCCESS                 if speed has been adjusted
- *         NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
- *         NVML_ERROR_INVALID_ARGUMENT  if device is invalid
- *         NVML_ERROR_NOT_SUPPORTED     if the device does not support this
- *                                      (doesn't have fans)
- *         NVML_ERROR_UNKNOWN           on any unexpected error
+ * @return
+ *         - \ref NVML_SUCCESS                 if speed has been adjusted
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if device is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this (doesn't have fans)
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetDefaultFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan);
 
@@ -8724,16 +8739,16 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceSetDefaultFanSpeed_v2(n
  *
  * For all cuda-capable discrete products with fans
  *
- * device                               The identifier of the target \a device
- * policy                               The fan control \a policy to set
+ * @param device                        The identifier of the target \a device
+ * @param fan                           The index of the fan, starting at zero
+ * @param policy                        The fan control \a policy to set
  *
- * return
- *         NVML_SUCCESS                 if \a policy has been set
- *         NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
- *         NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a policy is null or the \a fan given doesn't reference
- *                                            a fan that exists.
- *         NVML_ERROR_NOT_SUPPORTED     if the \a device is older than Maxwell
- *         NVML_ERROR_UNKNOWN           on any unexpected error
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a policy has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a policy is null or the \a fan given doesn't reference a fan that exists.
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the \a device is older than Maxwell
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetFanControlPolicy(nvmlDevice_st device, @Cast("unsigned int") int fan,
                                                    @Cast("nvmlFanControlPolicy_t") int policy);
@@ -8856,17 +8871,17 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceSetAPIRestriction(nvmlD
  *
  * For all cuda-capable discrete products with fans that are Maxwell or Newer.
  *
- * device                                The identifier of the target device
- * fan                                   The index of the fan, starting at zero
- * speed                                 The target speed of the fan [0-100] in % of max speed
+ * @param device                                The identifier of the target device
+ * @param fan                                   The index of the fan, starting at zero
+ * @param speed                                 The target speed of the fan [0-100] in % of max speed
  *
  * return
- *        NVML_SUCCESS                   if the fan speed has been set
- *        NVML_ERROR_UNINITIALIZED       if the library has not been successfully initialized
- *        NVML_ERROR_INVALID_ARGUMENT    if the device is not valid, or the speed is outside acceptable ranges,
- *                                              or if the fan index doesn't reference an actual fan.
- *        NVML_ERROR_NOT_SUPPORTED       if the device is older than Maxwell.
- *        NVML_ERROR_UNKNOWN             if there was an unexpected error.
+ *        - \ref NVML_SUCCESS                   if the fan speed has been set
+ *        - \ref NVML_ERROR_UNINITIALIZED       if the library has not been successfully initialized
+ *        - \ref NVML_ERROR_INVALID_ARGUMENT    if the device is not valid, or the speed is outside acceptable ranges,
+ *                                                     or if the fan index doesn't reference an actual fan.
+ *        - \ref NVML_ERROR_NOT_SUPPORTED       if the device is older than Maxwell.
+ *        - \ref NVML_ERROR_UNKNOWN             if there was an unexpected error.
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int") int speed);
 
@@ -9005,6 +9020,28 @@ public static final int NVML_NVLINK_STATE_ACTIVE =   0x1;
 /** NVLink is in sleep state. */
 public static final int NVML_NVLINK_STATE_SLEEP =    0x2;
 
+/**
+ * Represents Nvlink Version
+ */
+/** enum nvmlNvlinkVersion_t */
+public static final int
+    /** NVLink version is invalid */
+    NVML_NVLINK_VERSION_INVALID = 0,
+    /** NVLink Version 1.0 */
+    NVML_NVLINK_VERSION_1_0     = 1,
+    /** NVLink Version 2.0 */
+    NVML_NVLINK_VERSION_2_0     = 2,
+    /** NVLink Version 2.2 */
+    NVML_NVLINK_VERSION_2_2     = 3,
+    /** NVLink Version 3.0 */
+    NVML_NVLINK_VERSION_3_0     = 4,
+    /** NVLink Version 3.1 */
+    NVML_NVLINK_VERSION_3_1     = 5,
+    /** NVLink Version 4.0 */
+    NVML_NVLINK_VERSION_4_0     = 6,
+    /** NVLink Version 5.0 */
+    NVML_NVLINK_VERSION_5_0     = 7;
+
 /** Total supported NVLink bandwidth modes. */
 public static final int NVML_NVLINK_TOTAL_SUPPORTED_BW_MODES = 23;
 // Targeting ../nvml/nvmlNvlinkSupportedBwModes_v1_t.java
@@ -9086,7 +9123,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNvLinkState(nvmlDevi
  *
  * @param device                               The identifier of the target device
  * @param link                                 Specifies the NvLink link to be queried
- * @param version                              Requested NvLink version from nvmlNvlinkVersion_t
+ * @param version                              Requested NvLink version from \ref nvmlNvlinkVersion_t
  *
  * @return
  *         - \ref NVML_SUCCESS                 if \a version has been set
@@ -13751,7 +13788,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSramUniqueUncorrecte
  * Requires root/admin permissions.
  *
  * @param device                    The identifier of the target device
- * @param settings                  Reference to \ref nvmlRusdSettings_t struct
+ * @param settings                  Reference to \ref nvmlRusdSettings_v1_t struct
  *
  * @return
  *        - \ref NVML_SUCCESS                         if the RUSD setting  was successfully set

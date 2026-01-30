@@ -41,6 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nppicc implements InfoMapper {
     public void map(InfoMap infoMap) {
         nppc.initSkips(infoMap, "nppi_color_conversion.h");
-        infoMap.put(new Info("nppiHLSToBGR_8u_AC4R").skip());
+        infoMap.put(new Info("nppiUYVP_10u_ToRGB_16u_C3P3R_Ctx", "nppiUYVP_10u_ToRGB_8u_C3AC4R_Ctx", "nppiRGB_8u_ToUYVP_10u_C3P3R_Ctx", "nppiUYVP_10u_ToRGB_8u_C3P3R_Ctx",
+                             "nppiHLSToBGR_8u_AC4R").skip());
     }
 }

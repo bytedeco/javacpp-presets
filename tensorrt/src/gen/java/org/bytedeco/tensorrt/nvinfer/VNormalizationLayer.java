@@ -34,4 +34,5 @@ public class VNormalizationLayer extends VRoot {
     public native @NoException(true) void setComputePrecision(DataType type);
     public native @NoException(true) void setComputePrecision(@Cast("nvinfer1::DataType") int type);
     public native @NoException(true) DataType getComputePrecision();
+    public native @Cast("bool") @NoException(true) boolean isV2();
 }

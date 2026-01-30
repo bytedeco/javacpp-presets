@@ -90,8 +90,8 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 
   public static final int CUSOLVER_VER_MAJOR = 12;
   public static final int CUSOLVER_VER_MINOR = 0;
-  public static final int CUSOLVER_VER_PATCH = 7;
-  public static final int CUSOLVER_VER_BUILD = 41;
+  public static final int CUSOLVER_VER_PATCH = 9;
+  public static final int CUSOLVER_VER_BUILD = 81;
   public static final int CUSOLVER_VERSION =                                                     
       (CUSOLVER_VER_MAJOR * 1000 + CUSOLVER_VER_MINOR * 100 + CUSOLVER_VER_PATCH);
 
@@ -386,7 +386,7 @@ public static final int
 
 //   #include "cuComplex.h" /* import complex data type */
 //   #include "library_types.h"
-//   #include "cublas_v2.h"
+//   #include "cublas_api.h"
 //   #include "cusolver_common.h"
 
   /*******************************************************************************/
@@ -13963,7 +13963,7 @@ public static final int
 //   #define CUSOLVERSP_H_
 
 //   #include "cusparse.h"
-//   #include "cublas_v2.h"
+//   #include "cublas_api.h"
 //   #include "cusolver_common.h"
 
 //   #if defined(__cplusplus)

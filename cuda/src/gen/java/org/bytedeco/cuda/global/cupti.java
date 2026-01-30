@@ -514,12 +514,13 @@ public static native @Cast("CUptiResult") int cuptiGetErrorMessage(@Cast("CUptiR
  *
  * Important:
  *   - The CUPTI API version (CUPTI_API_VERSION) is distinct from CUDA_VERSION and CUDA_RUNTIME_VERSION.
- * 
+ *
  * v130000 : CUDA Toolkit 13.0
- * v130001 : CUDA Toolkit 13.0 with CUPTI update 1
+ * v130001 : CUDA Toolkit 13.0 Update 1
  * v130100 : CUDA Toolkit 13.1
+ * v130101 : CUDA Toolkit 13.1 Update 1
  */
-public static final int CUPTI_API_VERSION = 130100;
+public static final int CUPTI_API_VERSION = 130101;
 
 /**
  * \brief Get the CUPTI API version.
@@ -8200,7 +8201,30 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuMulticastBindMem_v2                                          = 820,
     CUPTI_DRIVER_TRACE_CBID_cuMulticastBindAddr_v2                                         = 821,
     CUPTI_DRIVER_TRACE_CBID_cuDevSmResourceSplit                                           = 822,
-    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 823,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleCreate                                        = 823,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridWorkerGridCreate                                      = 824,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridWorksetCreate                                         = 825,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridCreate                                                = 826,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleFinalize                                      = 827,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleLaunch                                        = 828,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleLaunch_ptsz                                   = 829,
+    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleDestroy                                       = 830,
+    CUPTI_DRIVER_TRACE_CBID_cuLaunchHostFunc_v2                                            = 831,
+    CUPTI_DRIVER_TRACE_CBID_cuLaunchHostFunc_v2_ptsz                                       = 832,
+    CUPTI_DRIVER_TRACE_CBID_cuFuncGetDeviceCodeInfo                                        = 833,
+    CUPTI_DRIVER_TRACE_CBID_cuKernelGetDeviceCodeInfo                                      = 834,
+    CUPTI_DRIVER_TRACE_CBID_cuFuncGetParamCount                                            = 835,
+    CUPTI_DRIVER_TRACE_CBID_cuKernelGetParamCount                                          = 836,
+    CUPTI_DRIVER_TRACE_CBID_cuMemcpyWithAttributesAsync                                    = 837,
+    CUPTI_DRIVER_TRACE_CBID_cuMemcpyWithAttributesAsync_ptsz                               = 838,
+    CUPTI_DRIVER_TRACE_CBID_cuMemcpy3DWithAttributesAsync                                  = 839,
+    CUPTI_DRIVER_TRACE_CBID_cuMemcpy3DWithAttributesAsync_ptsz                             = 840,
+    CUPTI_DRIVER_TRACE_CBID_cuGraphNodeGetParams                                           = 841,
+    CUPTI_DRIVER_TRACE_CBID_cuCoredumpRegisterStartCallback                                = 842,
+    CUPTI_DRIVER_TRACE_CBID_cuCoredumpRegisterCompleteCallback                             = 843,
+    CUPTI_DRIVER_TRACE_CBID_cuCoredumpDeregisterStartCallback                              = 844,
+    CUPTI_DRIVER_TRACE_CBID_cuCoredumpDeregisterCompleteCallback                           = 845,
+    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 846,
     CUPTI_DRIVER_TRACE_CBID_FORCE_INT                                                      = 0x7fffffff;
 
 // #endif

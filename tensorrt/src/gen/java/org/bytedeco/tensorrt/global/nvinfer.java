@@ -49,9 +49,9 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #define NV_INFER_VERSION_H
 
 public static final int TRT_MAJOR_ENTERPRISE = 10;
-public static final int TRT_MINOR_ENTERPRISE = 14;
+public static final int TRT_MINOR_ENTERPRISE = 15;
 public static final int TRT_PATCH_ENTERPRISE = 1;
-public static final int TRT_BUILD_ENTERPRISE = 48;
+public static final int TRT_BUILD_ENTERPRISE = 29;
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
@@ -1943,7 +1943,11 @@ public static native @NoException(true) int getInferLibBuildVersion();
     /** Attention Input. */
     kATTENTION_INPUT(51),
     /** Attention Output. */
-    kATTENTION_OUTPUT(52);
+    kATTENTION_OUTPUT(52),
+    /** Rotary Embedding layer. */
+    kROTARY_EMBEDDING(53),
+    /** KV Cache Update layer. */
+    kKVCACHE_UPDATE(54);
 
     public final int value;
     private LayerType(int v) { this.value = v; }
@@ -3091,6 +3095,35 @@ public static native @NoException(true) int getInferLibBuildVersion();
 // Targeting ../nvinfer/IAttention.java
 
 
+// Targeting ../nvinfer/IRotaryEmbeddingLayer.java
+
+
+
+/**
+ *  \enum KVCacheMode
+ * 
+ *  \brief Enumerates the KVCache modes that may be performed by a KVCacheUpdate layer.
+ *  */
+@Namespace("nvinfer1") public enum KVCacheMode {
+    /** Linear mode. */
+    kLINEAR(0);
+
+    public final int value;
+    private KVCacheMode(int v) { this.value = v; }
+    private KVCacheMode(KVCacheMode e) { this.value = e.value; }
+    public KVCacheMode intern() { for (KVCacheMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+/**
+ *  Maximum number of elements in KVCacheMode enum.
+ * 
+ *  @see KVCacheMode
+ *  */
+
+
+// Targeting ../nvinfer/IKVCacheUpdateLayer.java
+
+
 // Targeting ../nvinfer/INetworkDefinition.java
 
 
@@ -4028,6 +4061,8 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 ;
 /** enum class nvinfer1::GatherMode */
 ;
+/** enum class nvinfer1::KVCacheMode */
+;
 /** enum class nvinfer1::LayerInformationFormat */
 ;
 /** enum class nvinfer1::LayerType */
@@ -4308,6 +4343,12 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 
 
 // Targeting ../nvinfer/VCumulativeLayer.java
+
+
+// Targeting ../nvinfer/VRotaryEmbeddingLayer.java
+
+
+// Targeting ../nvinfer/VKVCacheUpdateLayer.java
 
 
 // Targeting ../nvinfer/VNetworkDefinition.java

@@ -23,8 +23,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 /**
  *  \class ISqueezeLayer
  * 
- *  \brief Layer that represents a squeeze operation, removing unit dimensions of the input tensor
- *  on a set of axes.
+ *  \brief Layer that represents a squeeze operation, removing unit dimensions of the first input tensor
+ *  on a set of axes specified by the second input tensor.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
@@ -35,7 +35,7 @@ public class ISqueezeLayer extends ILayer {
     public ISqueezeLayer(Pointer p) { super(p); }
 
     /**
-     *  \brief Append or replace an input of this layer with a specific tensor
+     *  \brief Append or replace an input of this layer with a specific tensor.
      * 
      *  @param index The index of the input to modify.
      *  @param tensor The new input tensor.
@@ -44,6 +44,6 @@ public class ISqueezeLayer extends ILayer {
      *  The indices are as follows:
      * 
      *  - 0: Input data tensor.
-     *  - 1: The axes to remove. Must resolvable to a constant Int32 or Int64 1D shape tensor.
+     *  - 1: The axes to remove. Must resolve to a constant Int32 or Int64 1D shape tensor.
      *  */
 }

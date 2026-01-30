@@ -124,9 +124,37 @@ public class IQuantizeLayer extends ILayer {
     //!
     //!
     //!
-    //!
-    //!
     public native @NoException(true) void setAxis(int axis);
+
+    /**
+     *  \brief Set the shape of the quantization block.
+     * 
+     *  @see getBlockShape()
+     *  Allowed values are positive values and -1 which denotes a fully blocked dimension.
+     *  Returns true if the block shape was set successfully, false if the block shape is invalid.
+     *  The default value is empty Dims.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setBlockShape(@Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape);
+
+    /**
+     *  \brief Get the shape of the quantization block.
+     * 
+     *  The default value is empty Dims.
+     *  @see setBlockShape()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getBlockShape();
 
     /**
      *  \brief Set the Quantize layer output type.

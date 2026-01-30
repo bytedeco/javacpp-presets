@@ -68,7 +68,17 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
         timeout-minutes: 350
       - name: Sleep 60 seconds to avoid cache errors
-        run: sleep 60
+        continue-on-error: true
+        run: |
+          taskkill /IM python.exe /F /T
+          taskkill /IM cmake.exe /F /T
+          taskkill /IM ninja.exe /F /T
+          taskkill /IM ccache.exe /F /T
+          taskkill /IM nvcc.exe /F /T
+          taskkill /IM ptxas.exe /F /T
+          taskkill /IM cicc.exe /F /T
+          taskkill /IM cl.exe /F /T
+          sleep 60
         if: always()
   platform:
     needs: [linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86_64]

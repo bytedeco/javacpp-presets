@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"cupti_result.h", "cupti_version.h", "cupti_activity.h", "cupti_callbacks.h", "cupti_events.h", "cupti_metrics.h", "cupti_driver_cbid.h", "cupti_runtime_cbid.h", "cupti_nvtx_cbid.h"},
               link = "cupti@.13"),
     @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/extras/CUPTI/include/", linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/extras/CUPTI/lib64/",
-              preload = "cupti64_2025.4.0", preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/lib64/"),
+              preload = "cupti64_2025.4.1", preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/lib64/"),
     @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, includepath = {"/usr/local/cuda-13.1/extras/CUPTI/include/", "/usr/local/cuda/extras/CUPTI/include/"}, linkpath = {"/usr/local/cuda-13.1/extras/CUPTI/lib64/", "/usr/local/cuda/extras/CUPTI/lib64/"}),
     @Platform(value = "macosx-x86_64", includepath = "/Developer/NVIDIA/CUDA-13.1/extras/CUPTI/include/", linkpath = "/Developer/NVIDIA/CUDA-13.1/extras/CUPTI/lib64/"),
 },

@@ -84,11 +84,11 @@ public static final int NPP_VER_MINOR = 0;
 /**
  * Patch version
  */
-public static final int NPP_VER_PATCH = 2;
+public static final int NPP_VER_PATCH = 3;
 /**
  * Build version
  */
-public static final int NPP_VER_BUILD = 21;
+public static final int NPP_VER_BUILD = 3;
 
 /**
  * Full version
@@ -124,9 +124,10 @@ public static final int NPP_VERSION_BUILD =  NPP_VER_BUILD;
 
 // Parsed from <nppdefs.h>
 
- /* Copyright 2009-2023 NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+ /* Copyright 2009-2025 NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
   * 
   * NOTICE TO LICENSEE: 
+  * 
   * 
   * The source code and/or documentation ("Licensed Deliverables") are 
   * subject to NVIDIA intellectual property rights under U.S. and 
@@ -329,6 +330,8 @@ public static final int
     /* negative return-codes indicate errors */
     /** Not supported mode error.*/
     NPP_NOT_SUPPORTED_MODE_ERROR            = -9999,
+    /** Application and NPP library version mismatch.*/
+    NPP_LIBRARY_VERSION_MISMATCH_ERROR      = -9998,
     
     /** Invalid host memory pointer error.*/
     NPP_INVALID_HOST_POINTER_ERROR          = -1032,
@@ -446,7 +449,7 @@ public static final int
     NPP_DIVIDE_BY_ZERO_WARNING              = 6,
     /**  Indicates that the quadrangle passed to one of affine warping functions doesn't have necessary properties. First 3 vertices are used, the fourth vertex discarded. */
     NPP_AFFINE_QUAD_INCORRECT_WARNING       = 28,
-    /**  The given ROI has no interestion with either the source or destination ROI. Thus no operation was performed. */
+    /**  The given ROI has no intersection with either the source or destination ROI. Thus no operation was performed. */
     NPP_WRONG_INTERSECTION_ROI_WARNING      = 29,
     /**  The given quadrangle has no intersection with either the source or destination ROI. Thus no operation was performed. */
     NPP_WRONG_INTERSECTION_QUAD_WARNING     = 30,
@@ -940,7 +943,7 @@ public static final int
     NPP_WATERSHED_SEGMENT_BOUNDARIES_BLACK = 1,
     /** Image watershed segment boundary type white. */
     NPP_WATERSHED_SEGMENT_BOUNDARIES_WHITE = 2,
-    /** Image watershed segment boundary type contrasting intensiity. */
+    /** Image watershed segment boundary type contrasting intensity. */
     NPP_WATERSHED_SEGMENT_BOUNDARIES_CONTRAST = 3,
     /** Image watershed segment boundary type render boundaries only. */
     NPP_WATERSHED_SEGMENT_BOUNDARIES_ONLY = 4;
@@ -965,6 +968,20 @@ public static final int
 // Targeting ../nppc/NppiColorTwistBatchCXR.java
 
 
+
+/** 
+ *  Color space enumeration
+ */
+/** enum NppiColorSpace */
+public static final int
+    /** no color space defined. used for simple transcoding. */
+    NPP_TRANSCODE_ONLY = 0,
+    /** BT601 colorspace used within JPEG images covering 0..255. */
+    NPP_BT601JPEG = 1,
+    /** BT709 High Definition TV colorspace. */
+    NPP_BT709HDTV = 2,
+    /** BT2020 High Definition TV colorspace. */
+    NPP_BT2020HDTV = 3;
 // Targeting ../nppc/NppiProfileData.java
 
 

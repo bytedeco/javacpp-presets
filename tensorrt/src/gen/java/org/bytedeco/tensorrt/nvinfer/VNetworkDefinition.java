@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // class VCumulativeLayer
+ // class VKVCacheUpdateLayer
 
 
 @Namespace("nvinfer1::apiv") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
@@ -167,4 +167,16 @@ public class VNetworkDefinition extends VRoot {
             @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean isCausal);
     public native @NoException(true) IAttention addAttention(
             @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean isCausal);
+    public native @NoException(true) IRotaryEmbeddingLayer addRotaryEmbedding(@ByRef ITensor input, @ByRef ITensor cosCache, @ByRef ITensor sinCache,
+            @Cast("bool") boolean interleaved, int rotaryEmbeddingDim);
+    public native @NoException(true) IDynamicQuantizeLayer addDynamicQuantizeV2(
+            @ByRef ITensor input, @Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape, DataType toType, DataType scaleType);
+    public native @NoException(true) IDynamicQuantizeLayer addDynamicQuantizeV2(
+            @ByRef ITensor input, @Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape, @Cast("nvinfer1::DataType") int toType, @Cast("nvinfer1::DataType") int scaleType);
+    public native @NoException(true) IKVCacheUpdateLayer addKVCacheUpdate(
+            @ByRef ITensor cache, @ByRef ITensor update, @ByRef ITensor writeIndices, KVCacheMode cacheMode);
+    public native @NoException(true) IKVCacheUpdateLayer addKVCacheUpdate(
+            @ByRef ITensor cache, @ByRef ITensor update, @ByRef ITensor writeIndices, @Cast("nvinfer1::KVCacheMode") int cacheMode);
+    public native @NoException(true) INormalizationLayer addNormalizationV2(
+                @ByRef ITensor input, @ByRef ITensor scale, @ByRef ITensor bias, @Cast("uint32_t") int axesMask);
 }

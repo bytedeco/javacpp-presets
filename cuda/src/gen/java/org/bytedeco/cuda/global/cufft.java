@@ -92,7 +92,7 @@ public class cufft extends org.bytedeco.cuda.presets.cufft {
 public static final int CUFFT_VER_MAJOR = 12;
 public static final int CUFFT_VER_MINOR = 1;
 public static final int CUFFT_VER_PATCH = 0;
-public static final int CUFFT_VER_BUILD = 31;
+public static final int CUFFT_VER_BUILD = 78;
 
 public static final int CUFFT_VERSION = 12100;
 

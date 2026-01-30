@@ -30,4 +30,6 @@ public class VQuantizeLayer extends VRoot {
     public native @NoException(true) DataType getToType();
     public native @NoException(true) void setToType(DataType toType);
     public native @NoException(true) void setToType(@Cast("nvinfer1::DataType") int toType);
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getBlockShape();
+    public native @Cast("bool") @NoException(true) boolean setBlockShape(@Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape);
 }

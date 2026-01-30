@@ -27,8 +27,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  The timing cache is created or initialized by IBuilderConfig. It can be shared across builder instances
  *  to reduce the builder wallclock time.
  * 
- *  \warning It is a known issue that the same timing cache may not guarantee stable engine build reproducibility
- *           in all cases.
+ *  \warning Rebuilding the same engine multiple times using the same timing cache will always yield a correct
+ *           engine but the selected tactics and formats may vary between generated engine instances, if weak typing is used.
  * 
  *  @see IBuilderConfig
  *  */

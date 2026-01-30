@@ -196,7 +196,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.14.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
- * MKL 2025.x  https://software.intel.com/mkl
+ * MKL 2025.3.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 3.10.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.31  http://www.openblas.net/
@@ -217,8 +217,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 13.1.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 9.17.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.28.x  https://developer.nvidia.com/nccl
+   * cuDNN 9.18.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.29.x  https://developer.nvidia.com/nccl
    * nvCOMP 5.1.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
@@ -227,7 +227,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * SentencePiece 0.2.x  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.20.x  https://github.com/tensorflow/tensorflow
- * TensorRT 10.14.x  https://developer.nvidia.com/tensorrt
+ * TensorRT 10.15.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.64.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core

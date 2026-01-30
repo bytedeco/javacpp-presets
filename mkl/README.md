@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL 2025.3.0  https://software.intel.com/mkl
+ * MKL 2025.3.1  https://software.intel.com/mkl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

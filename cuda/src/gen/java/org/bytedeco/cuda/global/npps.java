@@ -203,7 +203,7 @@ public class npps extends org.bytedeco.cuda.presets.npps {
  * being allocated.
  *
  * The allocator methods return a pointer to the newly allocated memory of appropriate
- * type. If device-memory allocation is not possible due to resource constaints
+ * type. If device-memory allocation is not possible due to resource constraints
  * the allocators return 0 (i.e. NULL pointer). 
  *
  * All signal allocators allocate memory aligned such that it is  beneficial to the 
@@ -272,7 +272,7 @@ public static native @Cast("Npp32s*") IntPointer nppsMalloc_32s(@Cast("size_t") 
 
 /**
  * 32-bit complex integer signal allocator.
- * @param nSize Number of complex integner values in the new signal.
+ * @param nSize Number of complex integer values in the new signal.
  * @return A pointer to the new signal. 0 (NULL-pointer) indicates
  *         that an error occurred during allocation.
  */
@@ -320,7 +320,7 @@ public static native @Cast("Npp64f*") DoublePointer nppsMalloc_64f(@Cast("size_t
 
 /**
  * 64-bit complex complex signal allocator.
- * @param nSize Number of complex double valuess in the new signal.
+ * @param nSize Number of complex double values in the new signal.
  * @return A pointer to the new signal. 0 (NULL-pointer) indicates
  *         that an error occurred during allocation.
  */

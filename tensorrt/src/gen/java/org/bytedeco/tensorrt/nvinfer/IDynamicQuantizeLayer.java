@@ -104,7 +104,7 @@ public class IDynamicQuantizeLayer extends ILayer {
      *  @param scaleType The scale factors data type.
      * 
      *  Set the scale-factors type.
-     *  Valid values are DataType::kFP8 (NVFP4 quantization) and DataType::kE8M0 (MXFP8 quantization).
+     *  Valid values are DataType::kFP8, DataType::kE8M0 or DataType::kFLOAT.
      *  */
     
     
@@ -144,7 +144,7 @@ public class IDynamicQuantizeLayer extends ILayer {
     //!
     //!
     //!
-    public native @NoException(true) void setAxis(int axis);
+    public native @Deprecated @NoException(true) void setAxis(int axis);
 
     /**
      *  \brief Get the axis along which blocking occurs.
@@ -157,7 +157,7 @@ public class IDynamicQuantizeLayer extends ILayer {
     //!
     //!
     //!
-    public native @NoException(true) int getAxis();
+    public native @Deprecated @NoException(true) int getAxis();
 
     /**
      *  \brief Set the size of the quantization block.
@@ -172,12 +172,43 @@ public class IDynamicQuantizeLayer extends ILayer {
     //!
     //!
     //!
-    public native @NoException(true) void setBlockSize(int size);
+    public native @Deprecated @NoException(true) void setBlockSize(int size);
 
     /**
      *  \brief Get the size of the quantization block.
      * 
      *  @see setBlockSize()
      *  */
-    public native @NoException(true) int getBlockSize();
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) int getBlockSize();
+
+    /**
+     *  \brief Set the shape of the quantization block.
+     * 
+     *  Note: The block shape rank must match the input rank.
+     *  The default value is empty Dims.
+     * 
+     *  @see getBlockShape()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setBlockShape(@Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape);
+
+    /**
+     *  \brief Get the shape of the quantization block.
+     * 
+     *  The default value is empty Dims.
+     * 
+     *  @see setBlockShape()
+     *  */
+    public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getBlockShape();
 }

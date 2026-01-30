@@ -456,5 +456,17 @@ public class IParser extends Pointer {
      *  @return true if conversion was successful
      *  @see getNbErrors() getError() loadModelProto() loadModelProtoFromFile()
      *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean parseModelProto();
+
+    /**
+     *  \brief Set the BuilderConfig for the parser.
+     * 
+     *  @return true if the IBuilderConfig was set successfully, false otherwise.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean setBuilderConfig(@Const IBuilderConfig builderConfig);
 }

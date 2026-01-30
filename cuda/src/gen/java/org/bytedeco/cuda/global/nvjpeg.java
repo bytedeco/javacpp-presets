@@ -87,8 +87,8 @@ public static final int NVJPEG_MAX_COMPONENT = 4;
 // nvjpeg version information
 public static final int NVJPEG_VER_MAJOR = 13;
 public static final int NVJPEG_VER_MINOR = 0;
-public static final int NVJPEG_VER_PATCH = 2;
-public static final int NVJPEG_VER_BUILD = 28;
+public static final int NVJPEG_VER_PATCH = 3;
+public static final int NVJPEG_VER_BUILD = 75;
 
 /* nvJPEG status enums, returned by nvJPEG API */
 /** enum nvjpegStatus_t */

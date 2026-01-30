@@ -117,4 +117,7 @@ public class VCudaEngine extends VRoot {
     public native @NoException(true) IRuntimeConfig createRuntimeConfig();
     public native @Cast("int64_t") @NoException(true) long getEngineStat(EngineStat stat);
     public native @Cast("int64_t") @NoException(true) long getEngineStat(@Cast("nvinfer1::EngineStat") int stat);
+    // Added in TensorRT 10.15
+    public native @NoException(true) String getAliasedInputTensor(String tensorName);
+    public native @NoException(true) @Cast("const char*") BytePointer getAliasedInputTensor(@Cast("const char*") BytePointer tensorName);
 }

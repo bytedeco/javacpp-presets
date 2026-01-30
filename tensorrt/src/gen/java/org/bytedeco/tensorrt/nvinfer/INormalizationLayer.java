@@ -172,5 +172,17 @@ public class INormalizationLayer extends ILayer {
      * 
      *  @return The datatype used for the compute precision of this layer.
      *  */
+    
+    
+    //!
+    //!
+    //!
     public native @NoException(true) DataType getComputePrecision();
+
+    /**
+     *  \brief Returns true if this layer was created through addNormalizationV2().
+     * 
+     *  @return Whether the layer was created through addNormalizationV2().
+     *  */
+    public native @Cast("bool") @NoException(true) boolean isV2();
 }

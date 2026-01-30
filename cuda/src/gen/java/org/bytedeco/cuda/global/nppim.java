@@ -17,7 +17,7 @@ public class nppim extends org.bytedeco.cuda.presets.nppim {
 
 // Parsed from <nppi_morphological_operations.h>
 
- /* Copyright 2009-2023 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
+ /* Copyright 2009-2025 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -135,14 +135,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_C1R_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiDilate_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilateParameters.
@@ -154,14 +146,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_C3R_Ctx(@Cast("const N
                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer dilation.
  * 
@@ -175,14 +159,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_C4R_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiDilate_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Three-channel 8-bit unsigned integer dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer dilation, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilateParameters.
@@ -194,14 +170,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_AC4R_Ctx(@Cast("const 
                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer dilation, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer dilation.
  * 
@@ -215,14 +183,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_C1R_Ctx(@Cast("const 
 public static native @Cast("NppStatus") int nppiDilate_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilateParameters.
@@ -234,14 +194,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_C3R_Ctx(@Cast("const 
                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer dilation.
  * 
@@ -255,14 +207,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_C4R_Ctx(@Cast("const 
 public static native @Cast("NppStatus") int nppiDilate_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer dilation, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilateParameters.
@@ -274,14 +218,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_AC4R_Ctx(@Cast("const
                         @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer dilation, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point dilation.
  * 
@@ -295,14 +231,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_C1R_Ctx(@Cast("const 
 public static native @Cast("NppStatus") int nppiDilate_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilateParameters.
@@ -314,14 +242,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_C3R_Ctx(@Cast("const 
                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point dilation.
  * 
@@ -335,14 +255,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_C4R_Ctx(@Cast("const 
 public static native @Cast("NppStatus") int nppiDilate_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point dilation, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilateParameters.
@@ -354,13 +266,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_AC4R_Ctx(@Cast("const
                         @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 32-bit floating-point dilation, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilateParameters.
- *
- */
-
 
 /** \} image_dilate */
 
@@ -371,7 +276,7 @@ public static native @Cast("NppStatus") int nppiDilate_32f_AC4R_Ctx(@Cast("const
  * Dilation computes the output pixel as the maximum pixel value of the pixels
  * under the mask. Pixels who's corresponding mask values are zero do not 
  * participate in the maximum search. For gray scale dilation the mask contains signed mask values
- * which are added to the corresponding source image sample value before determining the maximun value after clamping.
+ * which are added to the corresponding source image sample value before determining the maximum value after clamping.
  *
  * If any portion of the mask overlaps the source image boundary the requested border type 
  * operation is applied to all mask pixels which fall outside of the source image.
@@ -412,14 +317,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer dilation with border control.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -431,14 +328,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R_Ctx(@Cast("c
                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer dilation with border control.
  * 
@@ -452,14 +341,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer dilation with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -471,14 +352,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R_Ctx(@Cast("
                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer dilation with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer dilation with border control.
  * 
@@ -492,14 +365,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer dilation with border control.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -511,14 +376,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R_Ctx(@Cast("
                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer dilation with border control.
  * 
@@ -532,14 +389,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer dilation with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -551,14 +400,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R_Ctx(@Cast(
                               @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                               @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer dilation with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point dilation with border control.
  * 
@@ -572,14 +413,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point dilation with border control.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -591,14 +424,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R_Ctx(@Cast("
                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point dilation with border control.
  * 
@@ -612,14 +437,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R_Ctx(@Cast("
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point dilation with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -631,14 +448,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R_Ctx(@Cast(
                               @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                               @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 32-bit floating-point dilation with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
 /**
  * Single-channel 8-bit unsigned integer gray scale dilation with border control.
  * 
@@ -652,14 +461,6 @@ public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                                 @Cast("const Npp32s*") int[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer gray scale dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
-
-/**
  * Single-channel 32-bit floating point gray scale dilation with border control.
  * 
  * For common parameter descriptions, see \ref CommonDilateBorderParameters.
@@ -671,13 +472,6 @@ public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R_Ctx(@Ca
                                  @Cast("const Npp32f*") FloatBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp32f*") float[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Single-channel 32-bit floating point gray scale dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilateBorderParameters.
- *
- */
-
 
 /** \} image_dilate_border */
 
@@ -713,14 +507,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer 3x3 dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -729,14 +515,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer 3x3 dilation.
  * 
@@ -747,14 +525,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer 3x3 dilation, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -763,14 +533,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer 3x3 dilation, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer 3x3 dilation.
  * 
@@ -781,14 +543,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer 3x3 dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -797,14 +551,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer 3x3 dilation.
  * 
@@ -815,14 +561,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer 3x3 dilation, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -831,14 +569,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer 3x3 dilation, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point 3x3 dilation.
  * 
@@ -849,14 +579,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point 3x3 dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -865,14 +587,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point 3x3 dilation.
  * 
@@ -883,14 +597,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point 3x3 dilation, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -900,14 +606,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point 3x3 dilation, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
-
-/**
  * Single-channel 64-bit floating-point 3x3 dilation.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
@@ -916,13 +614,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoublePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoublePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoubleBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoubleBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R_Ctx(@Cast("const Npp64f*") double[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") double[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Single-channel 64-bit floating-point 3x3 dilation.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3Parameters.
- *
- */
-
 
 /** \} image_dilate_3x3 */
 
@@ -964,14 +655,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer 3x3 dilation with border control.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
@@ -980,14 +663,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer 3x3 dilation with border control.
  * 
@@ -998,14 +673,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer 3x3 dilation with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
@@ -1014,14 +681,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer 3x3 dilation with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer 3x3 dilation with border control.
  * 
@@ -1032,26 +691,12 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer 3x3 dilation with border control.
  * 
  */
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer 3x3 dilation with border control.
- * 
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer 3x3 dilation with border control.
  * 
@@ -1060,24 +705,12 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer 3x3 dilation with border control.
- * 
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer 3x3 dilation with border control, ignoring alpha-channel.
  * 
  */
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer 3x3 dilation with border control, ignoring alpha-channel.
- * 
- */
-
-
 /**
  * Single-channel 32-bit floating-point 3x3 dilation with border control.
  * 
@@ -1088,14 +721,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point 3x3 dilation with border control.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
@@ -1104,14 +729,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point 3x3 dilation with border control.
  * 
@@ -1122,14 +739,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point 3x3 dilation with border control.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point 3x3 dilation with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
@@ -1138,13 +747,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 32-bit floating-point 3x3 dilation with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonDilate3x3BorderParameters.
- *
- */
-
 
 /** \} image_dilate_3x3_border */
 
@@ -1190,14 +792,6 @@ public static native @Cast("NppStatus") int nppiErode_8u_C1R_Ctx(@Cast("const Np
 public static native @Cast("NppStatus") int nppiErode_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer erosion.
  * 
  * For common parameter descriptions, see \ref CommonErodeParameters.
@@ -1209,14 +803,6 @@ public static native @Cast("NppStatus") int nppiErode_8u_C3R_Ctx(@Cast("const Np
                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer erosion.
  * 
@@ -1230,14 +816,6 @@ public static native @Cast("NppStatus") int nppiErode_8u_C4R_Ctx(@Cast("const Np
 public static native @Cast("NppStatus") int nppiErode_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer erosion, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErodeParameters.
@@ -1249,14 +827,6 @@ public static native @Cast("NppStatus") int nppiErode_8u_AC4R_Ctx(@Cast("const N
                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer erosion, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer erosion.
  * 
@@ -1270,14 +840,6 @@ public static native @Cast("NppStatus") int nppiErode_16u_C1R_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiErode_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer erosion.
  * 
  */
@@ -1287,12 +849,6 @@ public static native @Cast("NppStatus") int nppiErode_16u_C3R_Ctx(@Cast("const N
                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer erosion.
- * 
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer erosion.
  * 
@@ -1306,14 +862,6 @@ public static native @Cast("NppStatus") int nppiErode_16u_C4R_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiErode_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer erosion, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErodeParameters.
@@ -1325,14 +873,6 @@ public static native @Cast("NppStatus") int nppiErode_16u_AC4R_Ctx(@Cast("const 
                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer erosion, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point erosion.
  * 
@@ -1346,14 +886,6 @@ public static native @Cast("NppStatus") int nppiErode_32f_C1R_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiErode_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point erosion.
  * 
  * For common parameter descriptions, see \ref CommonErodeParameters.
@@ -1365,14 +897,6 @@ public static native @Cast("NppStatus") int nppiErode_32f_C3R_Ctx(@Cast("const N
                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point erosion.
  * 
@@ -1386,14 +910,6 @@ public static native @Cast("NppStatus") int nppiErode_32f_C4R_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiErode_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point erosion.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point erosion, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErodeParameters.
@@ -1405,13 +921,6 @@ public static native @Cast("NppStatus") int nppiErode_32f_AC4R_Ctx(@Cast("const 
                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 32-bit floating-point erosion, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErodeParameters.
- *
- */
-
 
 /** \} image_erode */
 
@@ -1463,14 +972,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1482,14 +983,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R_Ctx(@Cast("co
                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer erosion with border control.
  * 
@@ -1503,14 +996,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R_Ctx(@Cast("co
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer erosion with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1522,14 +1007,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R_Ctx(@Cast("c
                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer erosion with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer erosion with border control.
  * 
@@ -1543,14 +1020,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1562,14 +1031,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R_Ctx(@Cast("c
                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer erosion with border control.
  * 
@@ -1583,14 +1044,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer erosion with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1602,14 +1055,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R_Ctx(@Cast("
                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer erosion with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point erosion with border control.
  * 
@@ -1623,14 +1068,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1642,14 +1079,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R_Ctx(@Cast("c
                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point erosion with border control.
  * 
@@ -1663,14 +1092,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R_Ctx(@Cast("c
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point erosion with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1682,14 +1103,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R_Ctx(@Cast("
                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 32-bit floating-point erosion with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
 /**
  * Single-channel 8-bit unsigned integer gray scale erosion with border control.
  * 
@@ -1703,14 +1116,6 @@ public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                                @Cast("const Npp32s*") int[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer gray scale erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
-
-/**
  * Single-channel 32-bit floating point gray scale erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErodeBorderParameters.
@@ -1722,13 +1127,6 @@ public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R_Ctx(@Cas
                                 @Cast("const Npp32f*") FloatBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                                 @Cast("const Npp32f*") float[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Single-channel 32-bit floating point gray scale erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErodeBorderParameters.
- *
- */
-
 
 /** \} image_erode_border */
 
@@ -1765,14 +1163,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer 3x3 erosion.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1781,14 +1171,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer 3x3 erosion.
  * 
@@ -1799,14 +1181,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer 3x3 erosion, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1815,14 +1189,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer 3x3 erosion, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer 3x3 erosion.
  * 
@@ -1833,14 +1199,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer 3x3 erosion.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1849,14 +1207,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer 3x3 erosion.
  * 
@@ -1867,14 +1217,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer 3x3 erosion, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1883,14 +1225,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer 3x3 erosion, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point 3x3 erosion.
  * 
@@ -1901,14 +1235,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point 3x3 erosion.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1917,14 +1243,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point 3x3 erosion.
  * 
@@ -1935,14 +1253,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R_Ctx(@Cast("cons
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point 3x3 erosion, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1952,14 +1262,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point 3x3 erosion, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
-
-/**
  * Single-channel 64-bit floating-point 3x3 erosion.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3Parameters.
@@ -1968,13 +1270,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("con
 public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoublePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoublePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoubleBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoubleBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R_Ctx(@Cast("const Npp64f*") double[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") double[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Single-channel 64-bit floating-point 3x3 erosion.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3Parameters.
- *
- */
-
 
 /** \} image_erode */
 
@@ -2019,14 +1314,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                     @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 8-bit unsigned integer 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
-/**
  * Three-channel 8-bit unsigned integer 3x3 erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
@@ -2038,14 +1325,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R_Ctx(@Cast(
                                     @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                     @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 8-bit unsigned integer 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
 /**
  * Four-channel 8-bit unsigned integer 3x3 erosion with border control.
  * 
@@ -2059,14 +1338,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R_Ctx(@Cast(
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                     @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 8-bit unsigned integer 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
-/**
  * Four-channel 8-bit unsigned integer 3x3 erosion with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
@@ -2078,14 +1349,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R_Ctx(@Cast
                                      @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 8-bit unsigned integer 3x3 erosion with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
 /**
  * Single-channel 16-bit unsigned integer 3x3 erosion with border control.
  * 
@@ -2099,14 +1362,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 16-bit unsigned integer 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
-/**
  * Three-channel 16-bit unsigned integer 3x3 erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
@@ -2118,14 +1373,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R_Ctx(@Cast
                                      @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 16-bit unsigned integer 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
 /**
  * Four-channel 16-bit unsigned integer 3x3 erosion with border control.
  * 
@@ -2139,14 +1386,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 16-bit unsigned integer 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
-/**
  * Four-channel 16-bit unsigned integer 3x3 erosion with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
@@ -2158,14 +1397,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R_Ctx(@Cas
                                       @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                       @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 16-bit unsigned integer 3x3 erosion with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
 /**
  * Single-channel 32-bit floating-point 3x3 erosion with border control.
  * 
@@ -2179,14 +1410,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Single-channel 32-bit floating-point 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
-/**
  * Three-channel 32-bit floating-point 3x3 erosion with border control.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
@@ -2198,14 +1421,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R_Ctx(@Cast
                                      @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Three-channel 32-bit floating-point 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
 /**
  * Four-channel 32-bit floating-point 3x3 erosion with border control.
  * 
@@ -2219,14 +1434,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                      @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * Four-channel 32-bit floating-point 3x3 erosion with border control.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
-
-/**
  * Four-channel 32-bit floating-point 3x3 erosion with border control, ignoring alpha-channel.
  * 
  * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
@@ -2238,13 +1445,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R_Ctx(@Cas
                                       @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                       @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * Four-channel 32-bit floating-point 3x3 erosion with border control, ignoring alpha-channel.
- * 
- * For common parameter descriptions, see \ref CommonErode3x3BorderParameters.
- *
- */
-
 
 /** \} image_erode_3x3_border */
 
@@ -2406,14 +1606,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 8-bit unsigned integer morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
-/**
  * 3 channel 8-bit unsigned integer morphological close with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
@@ -2425,14 +1617,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R_Ctx(@Cas
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 3 channel 8-bit unsigned integer morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
 /**
  * 4 channel 8-bit unsigned integer morphological close with border control.
  * 
@@ -2446,14 +1630,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 4 channel 8-bit unsigned integer morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 16-bit unsigned integer morphological close with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
@@ -2465,14 +1641,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R_Ctx(@Ca
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 16-bit unsigned integer morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
 /**
  * 1 channel 16-bit signed integer morphological close with border control.
  * 
@@ -2486,14 +1654,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R_Ctx(@Ca
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 16-bit signed integer morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 32-bit floating point morphological close with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
@@ -2505,14 +1665,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R_Ctx(@Ca
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 32-bit floating point morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
 /**
  * 3 channel 32-bit floating point morphological close with border control.
  * 
@@ -2526,14 +1678,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R_Ctx(@Ca
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 3 channel 32-bit floating point morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
-
-/**
  * 4 channel 32-bit floating point morphological close with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
@@ -2545,13 +1689,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R_Ctx(@Ca
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 4 channel 32-bit floating point morphological close with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphCloseBorderParameters.
- *
- */
-
 
 /** \} image_morph_close_border */
 
@@ -2612,14 +1749,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 8-bit unsigned integer morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
-/**
  * 3 channel 8-bit unsigned integer morphological open with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
@@ -2631,14 +1760,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R_Ctx(@Cast
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 3 channel 8-bit unsigned integer morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
 /**
  * 4 channel 8-bit unsigned integer morphological open with border control.
  * 
@@ -2652,14 +1773,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R_Ctx(@Cast
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 4 channel 8-bit unsigned integer morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 16-bit unsigned integer morphological open with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
@@ -2671,14 +1784,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R_Ctx(@Cas
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 16-bit unsigned integer morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
 /**
  * 1 channel 16-bit signed integer morphological open with border control.
  * 
@@ -2692,14 +1797,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 16-bit signed integer morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 32-bit floating point morphological open with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
@@ -2711,14 +1808,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R_Ctx(@Cas
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 32-bit floating point morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
 /**
  * 3 channel 32-bit floating point morphological open with border control.
  * 
@@ -2732,14 +1821,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R_Ctx(@Cas
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 3 channel 32-bit floating point morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
-
-/**
  * 4 channel 32-bit floating point morphological open with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
@@ -2751,13 +1832,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R_Ctx(@Cas
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 4 channel 32-bit floating point morphological open with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphOpenBorderParameters.
- *
- */
-
 
 /** \} image_morph_open_border */
 
@@ -2817,14 +1891,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R_Ctx(@Ca
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 8-bit unsigned integer morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
-/**
  * 3 channel 8-bit unsigned integer morphological top hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
@@ -2836,14 +1902,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R_Ctx(@Ca
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 3 channel 8-bit unsigned integer morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
 /**
  * 4 channel 8-bit unsigned integer morphological top hat with border control.
  * 
@@ -2857,14 +1915,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R_Ctx(@Ca
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 4 channel 8-bit unsigned integer morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 16-bit unsigned integer morphological top hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
@@ -2876,14 +1926,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R_Ctx(@C
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 16-bit unsigned integer morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
 /**
  * 1 channel 16-bit signed integer morphological top hat with border control.
  * 
@@ -2897,14 +1939,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R_Ctx(@C
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 16-bit signed integer morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 32-bit floating point morphological top hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
@@ -2916,14 +1950,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R_Ctx(@C
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 32-bit floating point morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
 /**
  * 3 channel 32-bit floating point morphological top hat with border control.
  * 
@@ -2937,14 +1963,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R_Ctx(@C
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 3 channel 32-bit floating point morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
-
-/**
  * 4 channel 32-bit floating point morphological top hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
@@ -2956,13 +1974,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R_Ctx(@C
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 4 channel 32-bit floating point morphological top hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphTopHatBorderParameters.
- *
- */
-
 
 /** \} image_morph_top_hat_border */
 
@@ -3022,14 +2033,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R_Ctx(@
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 8-bit unsigned integer morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
-/**
  * 3 channel 8-bit unsigned integer morphological black hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
@@ -3041,14 +2044,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R_Ctx(@
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 3 channel 8-bit unsigned integer morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
 /**
  * 4 channel 8-bit unsigned integer morphological black hat with border control.
  * 
@@ -3062,14 +2057,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R_Ctx(@
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 4 channel 8-bit unsigned integer morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 16-bit unsigned integer morphological black hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
@@ -3081,14 +2068,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R_Ctx(
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 16-bit unsigned integer morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
 /**
  * 1 channel 16-bit signed integer morphological black hat with border control.
  * 
@@ -3102,14 +2081,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R_Ctx(
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 16-bit signed integer morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 32-bit floating point morphological black hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
@@ -3121,14 +2092,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R_Ctx(
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 32-bit floating point morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
 /**
  * 3 channel 32-bit floating point morphological black hat with border control.
  * 
@@ -3142,14 +2105,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R_Ctx(
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 3 channel 32-bit floating point morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
-
-/**
  * 4 channel 32-bit floating point morphological black hat with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
@@ -3161,13 +2116,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R_Ctx(
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 4 channel 32-bit floating point morphological black hat with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphBlackHatBorderParameters.
- *
- */
-
 
 /** \} image_morph_black_hat_border */
 
@@ -3227,14 +2175,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R_Ctx(@
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 8-bit unsigned integer morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
-/**
  * 3 channel 8-bit unsigned integer morphological gradient with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
@@ -3246,14 +2186,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R_Ctx(@
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 3 channel 8-bit unsigned integer morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
 /**
  * 4 channel 8-bit unsigned integer morphological gradient with border control.
  * 
@@ -3267,14 +2199,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R_Ctx(@
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 4 channel 8-bit unsigned integer morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 16-bit unsigned integer morphological gradient with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
@@ -3286,14 +2210,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R_Ctx(
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 16-bit unsigned integer morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
 /**
  * 1 channel 16-bit signed integer morphological gradient with border control.
  * 
@@ -3307,14 +2223,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R_Ctx(
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 1 channel 16-bit signed integer morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
-/**
  * 1 channel 32-bit floating point morphological gradient with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
@@ -3326,14 +2234,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R_Ctx(
                                      @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 1 channel 32-bit floating point morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
 /**
  * 3 channel 32-bit floating point morphological gradient with border control.
  * 
@@ -3347,14 +2247,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R_Ctx(
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 /**
- * 3 channel 32-bit floating point morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
-
-/**
  * 4 channel 32-bit floating point morphological gradient with border control.
  * 
  * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
@@ -3366,13 +2258,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R_Ctx(
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-/**
- * 4 channel 32-bit floating point morphological gradient with border control.
- * 
- * For common parameter descriptions, see \ref CommonMorphGradientBorderParameters.
- *
- */
-
 
 /** \} image_morph_gradient_border */
 

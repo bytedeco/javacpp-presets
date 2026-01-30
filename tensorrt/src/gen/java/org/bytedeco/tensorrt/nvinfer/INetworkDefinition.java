@@ -587,7 +587,6 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) IReduceLayer addReduce(
             @ByRef ITensor input, ReduceOperation operation, @Cast("uint32_t") int reduceAxes, @Cast("bool") boolean keepDimensions);
     public native @NoException(true) IReduceLayer addReduce(
@@ -614,9 +613,8 @@ public class INetworkDefinition extends INoCopy {
      *  @param reduceAxes The reduction dimensions.
      *         The bit in position i of bitmask reduceAxes corresponds to explicit dimension i of the result.
      *         E.g., the least significant bit corresponds to the first explicit dimension and the next to least
-     *         significant bit corresponds to the second explicit dimension.
-     * 
-     *         Currently reduceAxes must specify exactly one dimension, and it must be one of the last four dimensions.
+     *         significant bit corresponds to the second explicit dimension. Currently reduceAxes must specify
+     *         exactly one dimension, and it must be one of the last four dimensions.
      * 
      *  @see ITopKLayer
      * 
@@ -626,7 +624,6 @@ public class INetworkDefinition extends INoCopy {
      *  */
     
     
-    //!
     //!
     //!
     //!
@@ -660,9 +657,8 @@ public class INetworkDefinition extends INoCopy {
      *  @param reduceAxes The reduction dimensions.
      *         The bit in position i of bitmask reduceAxes corresponds to explicit dimension i of the result.
      *         E.g., the least significant bit corresponds to the first explicit dimension and the next to least
-     *         significant bit corresponds to the second explicit dimension.
-     * 
-     *         Currently reduceAxes must specify exactly one dimension, and it must be one of the last four dimensions.
+     *         significant bit corresponds to the second explicit dimension. Currently reduceAxes must specify
+     *         exactly one dimension, and it must be one of the last four dimensions.
      * 
      *  @param indicesType Indices tensor (the second output) data type, must be DataType::kINT32 or DataType::kINT64.
      * 
@@ -1761,10 +1757,41 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) IDynamicQuantizeLayer addDynamicQuantize(
+    //!
+    //!
+    public native @Deprecated @NoException(true) IDynamicQuantizeLayer addDynamicQuantize(
             @ByRef ITensor input, int axis, int blockSize, DataType outputType, DataType scaleType);
-    public native @NoException(true) IDynamicQuantizeLayer addDynamicQuantize(
+    public native @Deprecated @NoException(true) IDynamicQuantizeLayer addDynamicQuantize(
             @ByRef ITensor input, int axis, int blockSize, @Cast("nvinfer1::DataType") int outputType, @Cast("nvinfer1::DataType") int scaleType);
+
+    /**
+     *  \brief Add a dynamic quantization layer to the network.
+     * 
+     *  This layer performs dynamic block quantization of its input tensor and outputs the
+     *  quantized data and the computed block scale factors.
+     * 
+     *  @param input The input tensor to be quantized. Its data type must be one of DataType::kFLOAT,
+     *  DataType::kHALF, or DataType::kBF16.
+     *  @param blockShape Defines the block shape for the quantization. Must match the input tensor rank.
+     *  @param outputType The data type of the quantized output tensor, must be DataType::kFP4, DataType::kFP8 or
+     *  DataType::kINT8. Future calls to set output type using setToType or setOutputType must be consistent.
+     *  @param scaleType The data type of the scale factor used for quantizing the input data, must be DataType::kFP8,
+     *  DataType::kE8M0 or DataType::kFLOAT.
+     * 
+     *  @return The new dynamic quantization layer, or nullptr if it could not be created.
+     * 
+     *  @see IDynamicQuantizeLayer
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IDynamicQuantizeLayer addDynamicQuantizeV2(
+            @ByRef ITensor input, @Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape, DataType outputType, DataType scaleType);
+    public native @NoException(true) IDynamicQuantizeLayer addDynamicQuantizeV2(
+            @ByRef ITensor input, @Cast("const nvinfer1::Dims*") @ByRef Dims64 blockShape, @Cast("nvinfer1::DataType") int outputType, @Cast("nvinfer1::DataType") int scaleType);
 
     /**
      *  \brief Add an Einsum layer to the network.
@@ -1890,6 +1917,7 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) IReverseSequenceLayer addReverseSequence(@ByRef ITensor input, @ByRef ITensor sequenceLens);
 
     /**
@@ -1906,12 +1934,18 @@ public class INetworkDefinition extends INoCopy {
      *  The normalization layer works by performing normalization of the tensor \p input on the specified \p axesMask.
      *  The result is then scaled by multiplying with \p scale and adding \p bias.
      * 
-     *  The shape of \p scale and \p bias are expected the be the same, and must have the same rank and be
-     *  unidirectionally broadcastable to the shape of \p input.
+     *  The shapes of \p scale and \p bias must be the same, and must have the same rank and be
+     *  unidirectionally broadcastable to the shape of \p input. Given a 4D NCHW input tensor, the expected shapes
+     *  for \p scale and \p bias are:
+     *  * [1, C, 1, 1] for InstanceNormalization
+     *  * [1, G, 1, 1] for GroupNormalization. Use addNormalizationV2() instead if [1, C, 1, 1] shapes for \p scale
+     *  and \p bias are required.
      * 
      *  @see INormalizationLayer
      * 
      *  @return The new normalization layer, or nullptr if it could not be created.
+     * 
+     *  @deprecated Deprecated in TensorRT 10.15. Superseded by addNormalizationV2().
      *  */
     
     
@@ -1921,7 +1955,7 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) INormalizationLayer addNormalization(@ByRef ITensor input, @ByRef ITensor scale, @ByRef ITensor bias, @Cast("uint32_t") int axesMask);
+    public native @Deprecated @NoException(true) INormalizationLayer addNormalization(@ByRef ITensor input, @ByRef ITensor scale, @ByRef ITensor bias, @Cast("uint32_t") int axesMask);
 
     /**
      *  \brief Add a cumulative layer to the network.
@@ -1975,7 +2009,9 @@ public class INetworkDefinition extends INoCopy {
      *  @return The new attention, or nullptr if it could not be created.
      *  */
     
-    
+    //!
+    //!
+    //!
     //!
     //!
     //!
@@ -1983,6 +2019,77 @@ public class INetworkDefinition extends INoCopy {
             @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean causal);
     public native @NoException(true) IAttention addAttention(
             @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean causal);
+
+    /** \brief Add a Rotary Position Embedding (RoPE) layer to the network.
+     * 
+     *  @param input The input activation tensor to the layer. The shape must be (batchSize, numHeads, sequenceLength, headSize).
+     *  @param cosCache The cosine cache tensor for use in RoPE computation. See the following explanation for the shape requirement.
+     *  @param sinCache The sine cache tensor for use in RoPE computation. See the following explanation for the shape requirement.
+     *  @param interleaved Whether the \p input is in interleaved format, i.e., whether the 2-d vectors rotated are taken from adjacent 2 elements in the hidden dimension.
+     *  @param rotaryEmbeddingDim The hidden dimension that participates in RoPE.
+     * 
+     *  The RotaryEmbedding layer applies RoPE to the \p input, using \p cosCache and \p sinCache.
+     *  An optional input, positionIds, can be provided using setInput with index 3. If provided, it is used to index into \p cosCache and \p sinCache.
+     * 
+     *  If \p positionIds is not provided, \p cosCache and \p sinCache must have shape (batchSize, sequenceLength, headSize / 2) if \p rotaryEmbeddingDim is 0, or (batchSize, sequenceLength, rotaryEmbeddingDim / 2) otherwise.
+     *  If \p positionIds is provided, \p cosCache and \p sinCache must have shape (maxPositionId+1, headSize / 2) if \p rotaryEmbeddingDim is 0, or (maxPositionId+1, rotaryEmbeddingDim / 2) otherwise.
+     *  \p positionIds, if provided, must have shape (batchSize, sequenceLength).
+     * 
+     *  @see IRotaryEmbeddingLayer
+     * 
+     *  @return The new RotaryEmbedding layer, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) IRotaryEmbeddingLayer addRotaryEmbedding(@ByRef ITensor input, @ByRef ITensor cosCache, @ByRef ITensor sinCache, @Cast("bool") boolean interleaved, int rotaryEmbeddingDim);
+
+    /**
+     *  \brief Add a KVCacheUpdate layer to the network.
+     * 
+     *  @param cache The key/value cache tensor for the layer. The user is responsible for properly allocating
+     *  and binding the tensor memory.
+     *  @param update The newly updated key/value tensor for the layer.
+     *  @param writeIndices The write indices tensor for key/value cache updates.
+     *  @param cacheMode The mode of the KVCacheUpdate layer. For TensorRT 10.15, only {@code kLINEAR} mode is supported.
+     * 
+     *  The expected tensor shapes are as follows:
+     *  - {@code cache}: [batchSize, numHeads, maxSequenceLength, headSize]
+     *  - {@code update}: [batchSize, numHeads, sequenceLength, headSize]
+     *  - {@code writeIndices}: [batchSize]
+     * 
+     *  The {@code cache} and {@code update} tensors must have the same data type, which can be DataType::kFLOAT,
+     *  DataType::kHALF, or DataType::kBF16. Quantized data types are not supported.
+     *  The {@code writeIndices} tensor must be DataType::kINT32 or DataType::kINT64.
+     * 
+     *  The layer performs in-place updates on the cache tensor. Therefore, the user must ensure that
+     *  the {@code cache} tensor and the corresponding output tensor share the same device memory address
+     *  before execution.
+     * 
+     *  \warning In {@code kLINEAR} mode, each update must satisfy the condition
+     *  {@code writeIndices[i] + sequenceLength <= maxSequenceLength}. Out-of-bound updates will be ignored silently.
+     * 
+     *  @see IKVCacheUpdateLayer
+     * 
+     *  @return The new KVCacheUpdate layer, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) IKVCacheUpdateLayer addKVCacheUpdate(
+            @ByRef ITensor cache, @ByRef ITensor update, @ByRef ITensor writeIndices, KVCacheMode cacheMode);
+    public native @NoException(true) IKVCacheUpdateLayer addKVCacheUpdate(
+            @ByRef ITensor cache, @ByRef ITensor update, @ByRef ITensor writeIndices, @Cast("nvinfer1::KVCacheMode") int cacheMode);
 
     /**
      *  \brief Return the builder from which this INetworkDefinition was created.
@@ -2091,5 +2198,35 @@ public class INetworkDefinition extends INoCopy {
      * 
      *  @return The new Unsqueeze layer, or nullptr if it could not be created
      *  */
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) IUnsqueezeLayer addUnsqueeze(@ByRef ITensor input, @ByRef ITensor axes);
+
+    /** \brief Add a normalization layer to the network.
+     * 
+     *  @param input The input tensor to the layer.
+     *  @param scale The scale tensor used to scale the normalized output.
+     *  @param bias The bias tensor used to scale the normalized output.
+     *  @param axesMask The axes on which to perform mean calculations.
+     *         The bit in position i of bitmask axesMask corresponds to explicit dimension i of the result.
+     *         E.g., the least significant bit corresponds to the first explicit dimension and the next to least
+     *         significant bit corresponds to the second explicit dimension.
+     * 
+     *  The normalization layer works by performing normalization of the tensor \p input on the specified \p axesMask.
+     *  The result is then scaled by multiplying with \p scale and adding \p bias.
+     * 
+     *  The shapes of \p scale and \p bias are expected the be the same, and must have the same rank and be
+     *  unidirectionally broadcastable to the shape of \p input. In the case of InstanceNorm or GroupNorm,
+     *  the shapes of \p scale and \p bias are expected to be [1, C, 1, 1] in the case of a 4D NCHW input tensor.
+     * 
+     *  @see INormalizationLayer
+     * 
+     *  @return The new normalization layer, or nullptr if it could not be created.
+     *  */
+    public native @NoException(true) INormalizationLayer addNormalizationV2(@ByRef ITensor input, @ByRef ITensor scale, @ByRef ITensor bias, @Cast("uint32_t") int axesMask);
 }

@@ -35,6 +35,19 @@ public class nvmlDevicePowerMizerModes_v1_t extends Pointer {
     public native @Cast("unsigned int") int currentMode(); public native nvmlDevicePowerMizerModes_v1_t currentMode(int setter);
     /** IN: the powermizer mode to set */
     public native @Cast("unsigned int") int mode(); public native nvmlDevicePowerMizerModes_v1_t mode(int setter);
+
+    /**
+     * The bitmask of supported power mizer modes on this device.
+     * The supported modes can be combined using the bitwise OR operator '|'.
+     * For example, if a device supports all PowerMizer modes, the bitmask would be:
+     * supportedPowerMizerModes = ((1 << NVML_POWER_MIZER_MODE_ADAPTIVE) |
+     *   (1 << NVML_POWER_MIZER_MODE_PREFER_MAXIMUM_PERFORMANCE) |
+     *   (1 << NVML_POWER_MIZER_MODE_AUTO) |
+     *   (1 << NVML_POWER_MIZER_MODE_PREFER_CONSISTENT_PERFORMANCE));
+     *
+     * This bitmask can be used to check which power mizer modes are available on the device by performing
+     * a bitwise AND operation with the specific mode you want to check.
+     */
     /** OUT: Bitmask of supported powermizer modes */
     public native @Cast("unsigned int") int supportedPowerMizerModes(); public native nvmlDevicePowerMizerModes_v1_t supportedPowerMizerModes(int setter);
 }

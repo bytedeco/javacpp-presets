@@ -84,8 +84,8 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 
 public static final int CUSPARSE_VER_MAJOR = 12;
 public static final int CUSPARSE_VER_MINOR = 7;
-public static final int CUSPARSE_VER_PATCH = 2;
-public static final int CUSPARSE_VER_BUILD = 19;
+public static final int CUSPARSE_VER_PATCH = 3;
+public static final int CUSPARSE_VER_BUILD = 1;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -10645,6 +10645,15 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMV_preprocess(cuspa
 
 
 
+public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_bufferSize(cusparseContext handle,
+                          @Cast("cusparseOperation_t") int opA,
+                          @Cast("cusparseConstSpMatDescr_t") cusparseSpMatDescr matA,
+                          @Cast("cusparseConstDnVecDescr_t") cusparseDnVecDescr vecX,
+                          @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecY,
+                          @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecZ,
+                          @Cast("cudaDataType") int computeType,
+                          @Cast("size_t*") SizeTPointer bufferSize);
+
 public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_createDescr(cusparseContext handle,
                            @ByPtrPtr cusparseSpMVOpDescr desc,
                            @Cast("cusparseOperation_t") int opA,
@@ -10652,7 +10661,8 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_createDescr(cu
                            @Cast("cusparseConstDnVecDescr_t") cusparseDnVecDescr vecX,
                            @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecY,
                            @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecZ,
-                           @Cast("cudaDataType") int computeType);
+                           @Cast("cudaDataType") int computeType,
+                           Pointer buffer);
 
 public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_destroyDescr(cusparseSpMVOpDescr desc);
 

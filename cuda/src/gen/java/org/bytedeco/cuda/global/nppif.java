@@ -4699,7 +4699,7 @@ public static native @Cast("NppStatus") int nppiFilterBoxBorderAdvanced_64f_C1R_
  * Computes the average pixel values of the pixels under a square mask with border control.
  * If any portion of the mask overlaps the source image boundary the requested 
  * border type operation is applied to all mask pixels which fall outside of the source image.
- * Once the neighborhood average around a source pixel is determined the souce pixel is compared to the average - nDelta
+ * Once the neighborhood average around a source pixel is determined the source pixel is compared to the average - nDelta
  * and if the source pixel is greater than that average the corresponding destination pixel is set to nValGT, otherwise nValLE.
  *
  * Currently only the NPP_BORDER_REPLICATE border type operation is supported.
@@ -15129,7 +15129,7 @@ public static native @Cast("NppStatus") int nppiFilterHoughLineRegion_8u32f_C1R_
  * It supports overlapped contrast normalized block histogram output with L2 normalization only, no threshold clipping, and no pre or post gaussian smoothing of input images or 
  * histogram output values. It supports both single channel grayscale source images and three channel color images.  For color images, the color channel with the
  * highest magnitude value is used as that pixel's magnitude. Output is row order only. 
- * Descriptors are output consecutively with no separation padding if multiple descriptor output is requested (one desriptor per source image location).
+ * Descriptors are output consecutively with no separation padding if multiple descriptor output is requested (one descriptor per source image location).
  * For example, common HOG parameters are 9 histogram bins per 8 by 8 pixel cell, 2 by 2 cells per block, 
  * with a descriptor window size of 64 horizontal by 128 vertical pixels yielding 7 by 15 overlapping blocks 
  * (1 cell overlap in both horizontal and vertical directions).  This results in 9 bins * 4 cells * 7 horizontal overlapping blocks * 15 vertical overlapping blocks or 3780 
@@ -17476,7 +17476,7 @@ public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInte
  *  Optionally output the corresponding marker labels image.
  * 
  *  Before calling any of the SegmentWatershed functions the application first needs to call the corresponding
- *  SegmentWatershedGetBufferSize to determine the amount of device memory to allocate as working buffers.  The allocatd memory
+ *  SegmentWatershedGetBufferSize to determine the amount of device memory to allocate as working buffers.  The allocated memory
  *  is then passed as the pDeviceMemoryBuffer parameter to the corresponding SegmentWatershed function.
  * 
  *  \{
