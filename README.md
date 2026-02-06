@@ -217,7 +217,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 13.1.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 9.18.x  https://developer.nvidia.com/cudnn
+   * cuDNN 9.19.x  https://developer.nvidia.com/cudnn
    * NCCL 2.29.x  https://developer.nvidia.com/nccl
    * nvCOMP 5.1.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk

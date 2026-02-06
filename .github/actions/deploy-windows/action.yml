@@ -129,16 +129,16 @@ runs:
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, nvCOMP, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/cuda_13.1.1_windows.exe
-          curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-x86_64/cudnn-windows-x86_64-9.18.1.3_cuda13-archive.zip
+          curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-x86_64/cudnn-windows-x86_64-9.19.0.56_cuda13-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
           curl -LO https://developer.download.nvidia.com/compute/nvcomp/redist/nvcomp/windows-x86_64/nvcomp-windows-x86_64-5.1.0.21_cuda13-archive.zip
           cuda_13.1.1_windows.exe -s
-          unzip cudnn-windows-x86_64-9.18.1.3_cuda13-archive.zip
+          unzip cudnn-windows-x86_64-9.19.0.56_cuda13-archive.zip
           unzip zlib123dllx64.zip
           unzip nvcomp-windows-x86_64-5.1.0.21_cuda13-archive.zip
-          move cudnn-windows-x86_64-9.18.1.3_cuda13-archive\bin\x64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin\x64"
-          move cudnn-windows-x86_64-9.18.1.3_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\include"
-          move cudnn-windows-x86_64-9.18.1.3_cuda13-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\lib\x64"
+          move cudnn-windows-x86_64-9.19.0.56_cuda13-archive\bin\x64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin\x64"
+          move cudnn-windows-x86_64-9.19.0.56_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\include"
+          move cudnn-windows-x86_64-9.19.0.56_cuda13-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin\x64"
           move nvcomp-windows-x86_64-5.1.0.21_cuda13-archive\include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\include"
           move nvcomp-windows-x86_64-5.1.0.21_cuda13-archive\include\nvcomp "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.1\include"

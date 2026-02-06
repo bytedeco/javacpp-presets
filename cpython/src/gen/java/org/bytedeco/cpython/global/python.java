@@ -191,12 +191,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        14;
-public static final int PY_MICRO_VERSION =        2;
+public static final int PY_MICRO_VERSION =        3;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.14.2";
+public static final String PY_VERSION =              "3.14.3";
 /*--end constants--*/
 
 
@@ -3058,6 +3058,12 @@ public static final int Py_CAN_START_THREADS = 1;
 
 /* Absolute value of the number x */
 // #define Py_ABS(x) ((x) < 0 ? -(x) : (x))
+/* Safer implementation that avoids an undefined behavior for the minimal
+   value of the signed integer type if its absolute value is larger than
+   the maximal value of the signed integer type (in the two's complement
+   representations, which is common).
+ */
+// #define _Py_ABS_CAST(T, x) ((x) >= 0 ? ((T) (x)) : ((T) (((T) -((x) + 1)) + 1)))
 
 // #define _Py_XSTRINGIFY(x) #x
 

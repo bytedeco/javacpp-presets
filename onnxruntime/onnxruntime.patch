@@ -25,7 +25,7 @@ index 010696a610..6c8ccd37cd 100644
 +      target_link_options(onnxruntime PRIVATE "LINKER:-L/usr/local/lib")
      elseif(NOT CMAKE_SYSTEM_NAME MATCHES "AIX")
 -      target_link_options(onnxruntime PRIVATE  "LINKER:--version-script=${SYMBOL_FILE}" "LINKER:--no-undefined" "LINKER:--gc-sections" "LINKER:-z,noexecstack")
-+      target_link_options(onnxruntime PRIVATE "LINKER:--no-undefined" "LINKER:--gc-sections" "LINKER:-z,noexecstack")
++      target_link_options(onnxruntime PRIVATE "LINKER:--no-undefined" "LINKER:-z,noexecstack")
      endif()
    else()
      target_link_options(onnxruntime PRIVATE  "-DEF:${SYMBOL_FILE}")

@@ -93,15 +93,15 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
-            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/include/"},
+            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/include/"},
             preloadpath = {
-                "/usr/local/cuda-13.0/lib64/",
-                "/usr/local/cuda-13.0/extras/CUPTI/lib64/",
+                "/usr/local/cuda-13.1/lib64/",
+                "/usr/local/cuda-13.1/extras/CUPTI/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/local/cuda/extras/CUPTI/lib64/",
                 "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.1/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
             extension = "-gpu"
@@ -215,7 +215,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("nvrtc") ? "64_130_0"
                     : lib.equals("nvrtc-builtins") ? "64_131"
                     : lib.equals("nvJitLink") ? "_130_0"
-                    : lib.equals("cupti") ? "64_2025.4.0"
+                    : lib.equals("cupti") ? "64_2025.4.1"
                     : "64_13";
             } else {
                 continue; // no CUDA

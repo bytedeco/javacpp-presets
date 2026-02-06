@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>

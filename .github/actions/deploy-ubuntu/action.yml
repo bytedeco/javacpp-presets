@@ -50,8 +50,8 @@ runs:
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-13-1-local-13.1.1_590.48.01-1.aarch64.rpm
-          export CUDNN=cuda-13-9.18.1.3-1.aarch64
-          export NCCL=2.29.2-1+cuda13.1.aarch64
+          export CUDNN=cuda-13-9.19.0.56-1.aarch64
+          export NCCL=2.29.3-1+cuda13.1.aarch64
           export NVCOMP=nvcomp-linux-sbsa-5.1.0.21_cuda13-archive
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
@@ -72,8 +72,8 @@ runs:
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
           export CUDA=cuda-repo-rhel8-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
-          export CUDNN=cuda-13-9.18.1.3-1.x86_64
-          export NCCL=2.29.2-1+cuda13.1.x86_64
+          export CUDNN=cuda-13-9.19.0.56-1.x86_64
+          export NCCL=2.29.3-1+cuda13.1.x86_64
           export NVCOMP=nvcomp-linux-x86_64-5.1.0.21_cuda13-archive
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV

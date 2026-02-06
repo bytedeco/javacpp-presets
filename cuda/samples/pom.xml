@@ -12,49 +12,49 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cublas</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cudnn</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cusolver</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cusparse</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-npp</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-nccl</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-nvcomp</artifactId>
-            <version>13.1-9.18-1.5.13-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

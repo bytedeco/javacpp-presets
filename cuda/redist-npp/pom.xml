@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cuda-redist-npp</artifactId>
-  <version>13.1-9.18-${project.parent.version}</version>
+  <version>13.1-9.19-${project.parent.version}</version>
   <name>JavaCPP Presets Redist for CUDA</name>
 
   <properties>
