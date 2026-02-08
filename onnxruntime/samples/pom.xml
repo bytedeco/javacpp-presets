@@ -12,14 +12,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>1.23.2-1.5.13-SNAPSHOT</version>
+            <version>1.24.1-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform-gpu</artifactId>
-            <version>1.23.2-1.5.13-SNAPSHOT</version>
+            <version>1.24.1-1.5.13-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->

@@ -56,15 +56,52 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
 
     /** Returns the parameters of a dropout attribute.
      * 
-     *  @param mask_desc Output memory descriptor of a dropout mask. */
+     *  @param mask_desc Output memory descriptor for dropout masks. If a
+     *      default memory descriptor is returned, the mask values will not be
+     *      written to the output memory buffer during the primitive execution. */
     
     ///
     public native void get_dropout(@ByRef org.bytedeco.dnnl.memory.desc mask_desc);
 
+    /** Returns the parameters of a dropout attribute.
+     * 
+     *  @param mask_desc Output memory descriptor for dropout masks. If a
+     *      default memory descriptor is returned, the mask values will not be
+     *      written to the output memory buffer during the primitive execution.
+     *  @param seed_dt Output datatype for seed argument.
+     *  @param use_offset Output boolean. If true, an offset argument must be
+     *      passed at the execution and will be used in random number
+     *      generation.
+     *  @param use_host_scalars Output boolean. If true, probability, seed and
+     *      offset arguments are passed as host_scalar memory objects. */
+    
+    ///
+    public native void get_dropout(@ByRef org.bytedeco.dnnl.memory.desc mask_desc, memory.data_type seed_dt,
+                @Cast("bool*") @ByRef BoolPointer use_offset, @Cast("bool*") @ByRef BoolPointer use_host_scalars);
+    public native void get_dropout(@ByRef org.bytedeco.dnnl.memory.desc mask_desc, memory.data_type seed_dt,
+                @Cast("bool*") @ByRef boolean[] use_offset, @Cast("bool*") @ByRef boolean[] use_host_scalars);
+
     /** Sets dropout probability.
      * 
-     *  @param mask_desc Output memory descriptor of a dropout mask. */
+     *  @param mask_desc Memory descriptor for dropout masks. If a default
+     *      memory descriptor is passed, the mask values will not be written to
+     *      the output memory buffer during the primitive execution. */
+    
+    ///
     public native void set_dropout(@Const @ByRef org.bytedeco.dnnl.memory.desc mask_desc);
+
+    /** Sets dropout probability.
+     * 
+     *  @param mask_desc Memory descriptor for dropout masks. If a default
+     *      memory descriptor is passed, the mask values will not be written to
+     *      the output memory buffer during the primitive execution.
+     *  @param seed_dt Datatype for seed argument.
+     *  @param use_offset If true, an offset argument must be passed at the
+     *      execution and will be used in random number generation.
+     *  @param use_host_scalars If true, probability, seed and offset arguments
+     *      are passed as host_scalar memory objects. */
+    public native void set_dropout(@Const @ByRef org.bytedeco.dnnl.memory.desc mask_desc, memory.data_type seed_dt,
+                @Cast("bool") boolean use_offset, @Cast("bool") boolean use_host_scalars);
 
     /** Returns the fpmath mode */
     
@@ -161,49 +198,60 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
     
     ///
     ///
-    ///
     public native void set_scales_mask(int arg, int mask);
 
-    /** Sets scaling factors for primitive operations for a given memory
-     *  argument. The scaling factors must be passed at execution time
-     *  as an argument with index #DNNL_ARG_ATTR_SCALES | arg.
+    /** Sets primitive attributes scaling factors for a given memory
+     *  argument. The scaling factors must be passed at execution time as
+     *  an argument with index #DNNL_ARG_ATTR_SCALES | arg.
      * 
-     *  \note If {@code is_on_host} is true, sets a single host-side scalar scaling
-     *  factor for the specified memory argument. The scaling factor should be
-     *  passed as a host scalar memory object at execution time with index
-     *  #DNNL_ARG_ATTR_SCALES | arg.
-     * 
-     *  @see dnnl_primitive_attr_set_scales_v2
+     *  @see dnnl_primitive_attr_set_scales_v3
      * 
      *  @param arg Parameter argument index as passed to the
-     *      primitive::execute() call.
-     *  @param mask Scales correspondence mask that defines the
-     *      correspondence between the tensor dimensions and the \p
-     *      scales vector. The set i-th bit indicates that a dedicated
-     *      scale is used for each index along that dimension. Set the
-     *      mask to 0 to use a common scale for the whole output tensor.
+     *      primitive execute() call.
+     *  @param mask Scaling factors correspondence mask that defines the
+     *      correspondence between the tensor dimensions and the \p scales array.
+     *      The set i-th bit indicates that a dedicated scaling factor is used for
+     *      each index along that dimension. Set the mask to 0 to use a common
+     *      scaling factor for the whole tensor.
      *  @param groups Scaling factors correspondence groups that define the
      *      correspondence between the tensor dimensions and the scales array.
-     *      The set i-th dimension indicates a number of groups of scaling
-     *      factors used for that logical dimension in a memory indicated by \p arg.
+     *      The group dimensions should only be provided for each logical dimension
+     *      that has correspondence mask \p mask set.
      *  @param data_type Scaling factors data_type.
-     *  @param is_on_host Indicates whether the scaling factor is a host-side scalar. */
+     *  @param is_on_host Indicates whether the scaling factor is a host-side scalar.
+     *  @param qmode Quantization mode, can be #quantization_mode::static_sazp
+     *      or #quantization_mode::dynamic_mx */
     
     ///
     ///
     ///
     public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,
                 memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
-                @Cast("bool") boolean is_on_host/*=false*/);
+                @Cast("bool") boolean is_on_host/*=false*/,
+                quantization_mode qmode/*=dnnl::quantization_mode::static_sazp*/);
     public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups);
     public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups,
                 memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
-                @Cast("bool") boolean is_on_host/*=false*/);
+                @Cast("bool") boolean is_on_host/*=false*/,
+                @Cast("dnnl::quantization_mode") int qmode/*=dnnl::quantization_mode::static_sazp*/);
     public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups);
     public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups,
                 memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
-                @Cast("bool") boolean is_on_host/*=false*/);
+                @Cast("bool") boolean is_on_host/*=false*/,
+                quantization_mode qmode/*=dnnl::quantization_mode::static_sazp*/);
     public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
+                @Cast("bool") boolean is_on_host/*=false*/,
+                @Cast("dnnl::quantization_mode") int qmode/*=dnnl::quantization_mode::static_sazp*/);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
+                @Cast("bool") boolean is_on_host/*=false*/,
+                quantization_mode qmode/*=dnnl::quantization_mode::static_sazp*/);
+    public native void set_scales(int arg, int mask, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] groups,
+                memory.data_type data_type/*=dnnl::memory::data_type::f32*/,
+                @Cast("bool") boolean is_on_host/*=false*/,
+                @Cast("dnnl::quantization_mode") int qmode/*=dnnl::quantization_mode::static_sazp*/);
 
     /** Sets a single host-side scalar scaling
      *  factor for the specified memory argument. The scaling factor should be

@@ -79,4 +79,13 @@ public class RunOptions extends BaseRunOptions {
    * @param adapter The LoraAdapter to be used as the active adapter
    */
   public native @ByRef RunOptions AddActiveLoraAdapter(@Const @ByRef LoraAdapter adapter);
+
+  /** \brief Associate a sync stream with the run options.
+   *
+   * When set, the EP uses this stream for execution, enabling proper
+   * synchronization with imported external semaphores. Wraps OrtApi::RunOptionsSetSyncStream.
+   *
+   * @param stream The OrtSyncStream to associate with these run options. May be nullptr to clear.
+   */
+  public native @ByRef RunOptions SetSyncStream(OrtSyncStream stream);
 }

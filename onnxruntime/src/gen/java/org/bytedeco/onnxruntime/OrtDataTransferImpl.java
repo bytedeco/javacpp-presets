@@ -15,7 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-// struct that an EP implements for IDataTransfer to copy between devices it uses and CPU
+/** \brief Struct that an EP implements for IDataTransfer to copy between devices it uses and CPU.
+ *
+ * @since Version 1.23.
+ */
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtDataTransferImpl extends Pointer {
     static { Loader.load(); }

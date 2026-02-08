@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>dnnl-platform</artifactId>
-  <version>3.10.2-${project.parent.version}</version>
+  <version>3.11-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for DNNL</name>
 
   <properties>

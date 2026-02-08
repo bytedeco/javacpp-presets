@@ -33,7 +33,7 @@ public class dnnl extends org.bytedeco.dnnl.presets.dnnl {
 // Parsed from oneapi/dnnl/dnnl_common_types.h
 
 /*******************************************************************************
-* Copyright 2022-2025 Intel Corporation
+* Copyright 2022 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -142,6 +142,8 @@ public static final int
     dnnl_f4_e2m1 = 14,
     /** 4-bit float data type with 3-bit exponent and 0 bit mantissa. */
     dnnl_f4_e3m0 = 15,
+    /** 64-bit signed integer */
+    dnnl_s64 = 16,
 
     // Max value to prevent UB for internal-use-only values.
     dnnl_data_type_max = 0x7fff;
@@ -258,7 +260,7 @@ public static final int
 
 /** Special pointer value that indicates that the library needs to allocate an
  *  underlying buffer for a memory object. */
-// #define DNNL_MEMORY_ALLOCATE ((void *)(size_t)-1)
+// #define DNNL_MEMORY_ALLOCATE ((void *)(size_t) - 1)
 
 /** \} dnnl_api_memory
  <p>
@@ -275,7 +277,7 @@ public static final int
 // Parsed from oneapi/dnnl/dnnl_types.h
 
 /*******************************************************************************
-* Copyright 2016-2025 Intel Corporation
+* Copyright 2016 Intel Corporation
 * Copyright 2024-2025 FUJITSU LIMITED
 * Copyright 2025 Arm Ltd. and affiliates
 *
@@ -2748,6 +2750,25 @@ public static final int
     /** stochastic rounding mode where a random bias is added to the
      *  trailing mantissa bits before conversion. */
     dnnl_rounding_mode_stochastic = 1;
+
+/** Quantization kind */
+/** enum dnnl_quantization_mode_t */
+public static final int
+    /** used for unspecified quantization kind */
+    dnnl_quantization_mode_undef = 0,
+    /** static quantization mode: quantization parameter is computed
+     *  ahead of time with scale applied after zero-point ({@code x_{f32}
+     *  = scale * (x_{quant} - zp)}) and passed to oneDNN as an
+     *  input. */
+    dnnl_quantization_mode_static_sazp = 1,
+    /** dynamic quantization mode following OCP MX spec: quantization
+     *  parameter is computed by oneDNN following the OCP MX spec
+     *  formula and written as an output. */
+    dnnl_quantization_mode_dynamic_mx = 2,
+    /** dynamic quantization mode where quantization parameter is computed by
+     *  oneDNN as {@code scale\_dt(amax(X) / max(dst\_dt))} in {@code f32} then
+     *  converted to a scale type and written as an output. */
+    dnnl_quantization_mode_dynamic_fp = 3;
 // Targeting ../dnnl_primitive_attr.java
 
 
@@ -2958,6 +2979,9 @@ public static final int DNNL_ARG_DIFF_BIAS = 169;
 public static final int DNNL_ARG_DIFF_SCALE = 255;
 /** A special mnemonic for shift argument of normalization primitives. */
 public static final int DNNL_ARG_DIFF_SHIFT = 256;
+
+/** Dropout offset value passed via a buffer */
+public static final int DNNL_ARG_ATTR_DROPOUT_OFFSET = 507;
 
 /** Rounding mode seed for stochastic rounding
  *  Single seed needed independently of how many arguments need stochastic rounding */
@@ -3311,7 +3335,7 @@ public static final int
 // Parsed from oneapi/dnnl/dnnl_common.h
 
 /*******************************************************************************
-* Copyright 2022-2023 Intel Corporation
+* Copyright 2022 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3521,7 +3545,7 @@ public static native @Const dnnl_version_t dnnl_version();
 // Parsed from oneapi/dnnl/dnnl_config.h
 
 /*******************************************************************************
-* Copyright 2019-2025 Intel Corporation
+* Copyright 2019 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3697,6 +3721,10 @@ public static final int DNNL_GPU_VENDOR = DNNL_VENDOR_INTEL;
 // When defined, experimental logging capabilities are enabled.
 /* #undef DNNL_EXPERIMENTAL_LOGGING */
 
+// When defined, RBP register is untouchable in JIT kernels
+// to allow stack unwind
+/* #undef DNNL_SAFE_RBP */
+
 // When defined, experimental SYCL capabilities are enabled.
 /* #undef DNNL_EXPERIMENTAL_SYCL_KERNEL_COMPILER */
 
@@ -3756,7 +3784,7 @@ public static final int BUILD_GEMM_AVX512 = 0;
 // Parsed from oneapi/dnnl/dnnl_version.h
 
 /*******************************************************************************
-* Copyright 2019-2024 Intel Corporation
+* Copyright 2019 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3780,10 +3808,10 @@ public static final int BUILD_GEMM_AVX512 = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 10;
+public static final int DNNL_VERSION_MINOR = 11;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 2;
+public static final int DNNL_VERSION_PATCH = 0;
 
 // clang-format on
 
@@ -3793,7 +3821,7 @@ public static final int DNNL_VERSION_PATCH = 2;
 // Parsed from oneapi/dnnl/dnnl.h
 
 /*******************************************************************************
-* Copyright 2016-2025 Intel Corporation
+* Copyright 2016 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -4142,31 +4170,86 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_clone(
 ///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_destroy(dnnl_primitive_attr attr);
 
-/** Returns probability for output dropout primitive attribute.
+/** Gets dropout primitive attribute.
  * 
  *  @param attr Primitive attributes.
- *  @param dropout_desc Output dropout memory descriptor
+ *  @param mask_desc Output memory descriptor for dropout masks. If a default
+ *      memory descriptor is returned, the mask values will not be written to
+ *      the output memory buffer during the primitive execution.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
 ///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout(
-        @Const dnnl_primitive_attr attr,
-        @Cast("const_dnnl_memory_desc_t*") @ByPtrPtr dnnl_memory_desc dropout_desc);
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") @ByPtrPtr dnnl_memory_desc mask_desc);
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout(
-        @Const dnnl_primitive_attr attr,
-        @Cast("const_dnnl_memory_desc_t*") PointerPointer dropout_desc);
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") PointerPointer mask_desc);
 
-/** Sets probability for output dropout primitive attribute.
+/** Sets dropout primitive attribute.
  * 
  *  @param attr Primitive attributes.
- *  @param dropout_desc Output dropout memory descriptor
+ *  @param mask_desc Memory descriptor for dropout masks. If a default memory
+ *      descriptor is passed, the mask values will not be written to the output
+ *      memory buffer during the primitive execution.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
 
 ///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_dropout(
-        dnnl_primitive_attr attr, @Const dnnl_memory_desc dropout_desc);
+        dnnl_primitive_attr attr, @Const dnnl_memory_desc mask_desc);
+
+/** Gets dropout primitive attribute parameters.
+ * 
+ *  @param attr Primitive attributes.
+ *  @param mask_desc Output memory descriptor for dropout masks. If a default
+ *      memory descriptor is returned, the mask values will not be written to
+ *      the output memory buffer during the primitive execution.
+ *  @param seed_dt Output datatype for seed argument.
+ *  @param use_offset Output boolean. If true, an offset argument must be passed
+ *      at the execution and will be used in random number generation.
+ *  @param use_host_scalars Output boolean. If true, probability, seed and
+ *      offset arguments are passed as host_scalar memory objects.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout_v2(
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") @ByPtrPtr dnnl_memory_desc mask_desc,
+        @Cast("dnnl_data_type_t*") IntPointer seed_dt, IntPointer use_offset, IntPointer use_host_scalars);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout_v2(
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") PointerPointer mask_desc,
+        @Cast("dnnl_data_type_t*") IntBuffer seed_dt, IntBuffer use_offset, IntBuffer use_host_scalars);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout_v2(
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") @ByPtrPtr dnnl_memory_desc mask_desc,
+        @Cast("dnnl_data_type_t*") int[] seed_dt, int[] use_offset, int[] use_host_scalars);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout_v2(
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") PointerPointer mask_desc,
+        @Cast("dnnl_data_type_t*") IntPointer seed_dt, IntPointer use_offset, IntPointer use_host_scalars);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout_v2(
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") @ByPtrPtr dnnl_memory_desc mask_desc,
+        @Cast("dnnl_data_type_t*") IntBuffer seed_dt, IntBuffer use_offset, IntBuffer use_host_scalars);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_dropout_v2(
+        @Const dnnl_primitive_attr attr, @Cast("const_dnnl_memory_desc_t*") PointerPointer mask_desc,
+        @Cast("dnnl_data_type_t*") int[] seed_dt, int[] use_offset, int[] use_host_scalars);
+
+/** Sets dropout primitive attribute parameters.
+ * 
+ *  @param attr Primitive attributes.
+ *  @param mask_desc Memory descriptor for dropout masks. If a default memory
+ *      descriptor is passed, the mask values will not be written to the output
+ *      memory buffer during the primitive execution.
+ *  @param seed_dt Datatype for seed argument.
+ *  @param use_offset If true, an offset argument must be passed at the
+ *      execution and will be used in random number generation.
+ *  @param use_host_scalars If true, probability, seed and offset arguments are
+ *      passed as host_scalar memory objects.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_dropout_v2(
+        dnnl_primitive_attr attr, @Const dnnl_memory_desc mask_desc,
+        @Cast("dnnl_data_type_t") int seed_dt, int use_offset, int use_host_scalars);
 
 /** Returns the floating-point math mode primitive attribute.
  * 
@@ -4426,6 +4509,45 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v
         dnnl_primitive_attr attr, int arg, int mask, int ndims,
         @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type,
         int is_on_host);
+
+/** Sets primitive attributes scaling factors for primitive operations for a
+ *  given memory argument. The scaling factors must be passed at execution time
+ *  as an argument with index #DNNL_ARG_ATTR_SCALES | arg.
+ *  @see dnnl_primitive_attr_set_scales
+ * 
+ *  @param attr Primitive attributes.
+ *  @param arg Parameter argument index as passed to the
+ *      dnnl_primitive_execute() call.
+ *  @param mask Scaling factors correspondence mask that defines the
+ *      correspondence between the tensor dimensions and the \p scales array.
+ *      The set i-th bit indicates that a dedicated scaling factor is used for
+ *      each index along that dimension. Set the mask to 0 to use a common
+ *      scaling factor for the whole tensor.
+ *  @param ndims Number of group dimensions.
+ *  @param group_dims Scaling factors correspondence groups that define the
+ *      correspondence between the tensor dimensions and the scales array.
+ *      The group dimensions should only be provided for each logical dimension
+ *      that has correspondence mask \p mask set.
+ *  @param data_type Scaling factors data_type.
+ *  @param is_on_host Indicates whether the scale is a host-side scalar.
+ *  @param qmode Quantization mode, can be #dnnl_quantization_mode_static_sazp
+ *      or #dnnl_quantization_mode_dynamic_mx
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v3(
+        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        @Cast("const int64_t*") LongPointer group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host, @Cast("dnnl_quantization_mode_t") int qmode);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v3(
+        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        @Cast("const int64_t*") LongBuffer group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host, @Cast("dnnl_quantization_mode_t") int qmode);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_scales_v3(
+        dnnl_primitive_attr attr, int arg, int mask, int ndims,
+        @Cast("const int64_t*") long[] group_dims, @Cast("dnnl_data_type_t") int data_type,
+        int is_on_host, @Cast("dnnl_quantization_mode_t") int qmode);
 
 /** Sets primitive attributes zero points for primitive operations for a given
  *  memory argument. The zero points must be passed at execution time
@@ -9151,7 +9273,8 @@ public static native @Cast("dnnl_status_t") int dnnl_resampling_backward_primiti
  *      #dnnl_reduction_mul, #dnnl_reduction_mean, #dnnl_reduction_norm_lp_max,
  *      #dnnl_reduction_norm_lp_sum, #dnnl_reduction_norm_lp_power_p_max,
  *      #dnnl_reduction_norm_lp_power_p_sum.
- *  @param p Algorithm specific parameter.
+ *  @param p Algorithm specific parameter. For Lp-norm algorithms, must be a
+ *      finite value >= 1.0.
  *  @param eps Algorithm specific parameter.
  *  @param src_desc Source memory descriptor.
  *  @param dst_desc Destination memory descriptor.
@@ -9634,7 +9757,7 @@ public static native @Cast("dnnl_status_t") int dnnl_gemm_s8s8s32(@Cast("char") 
 // Parsed from oneapi/dnnl/dnnl_common.hpp
 
 /*******************************************************************************
-* Copyright 2022-2025 Intel Corporation
+* Copyright 2022 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -9891,7 +10014,7 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 // Parsed from oneapi/dnnl/dnnl.hpp
 
 /*******************************************************************************
-* Copyright 2016-2025 Intel Corporation
+* Copyright 2016 Intel Corporation
 * Copyright 2024-2025 FUJITSU LIMITED
 * Copyright 2025 Arm Ltd. and affiliates
 *
@@ -10036,6 +10159,35 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
  *  @param mode C++ API rounding mode enum value.
  *  @return Corresponding C API rounding mode enum value. */
 @Namespace("dnnl") public static native @Cast("dnnl_rounding_mode_t") int convert_to_c(rounding_mode mode);
+
+/** Quantization kind */
+@Namespace("dnnl") public enum quantization_mode {
+    /** used for unspecified quantization kind */
+    undef(dnnl_quantization_mode_undef),
+    /** static quantization mode: quantization parameter is computed
+     *  ahead of time and passed to oneDNN as an input. */
+    static_sazp(dnnl_quantization_mode_static_sazp),
+    /** dynamic quantization mode following OCP MX spec: quantization
+     *  parameter is computed by oneDNN following the OCP MX spec
+     *  formula and written as an output. */
+    dynamic_mx(dnnl_quantization_mode_dynamic_mx),
+    /** dynamic quantization mode where quantization parameter is computed by
+     *  oneDNN as {@code scale\_dt(amax(X) / max(dst\_dt))} in {@code f32} then
+     *  converted to a scale type and written as an output. */
+    dynamic_fp(dnnl_quantization_mode_dynamic_fp);
+
+    public final int value;
+    private quantization_mode(int v) { this.value = v; }
+    private quantization_mode(quantization_mode e) { this.value = e.value; }
+    public quantization_mode intern() { for (quantization_mode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/** Converts a quantization kind enum value from C++ API to C API type.
+ * 
+ *  @param qmode C++ API quantization kind enum value.
+ *  @return Corresponding C API quantization kind enum value. */
+@Namespace("dnnl") public static native @Cast("dnnl_quantization_mode_t") int convert_to_c(quantization_mode qmode);
 
 /** Propagation kind. */
 @Namespace("dnnl") public enum prop_kind {
@@ -10968,8 +11120,6 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 
 /** \endcond */
-
-// #undef DNNL_DEFINE_BITMASK_OPS
 
  // namespace dnnl
 

@@ -57,6 +57,8 @@ public class ConstTensorTypeAndShapeInfo extends BaseConstTensorTypeAndShapeInfo
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr byte[] values, @Cast("size_t") long values_count);
   public native @Cast("const char**") @StdVector PointerPointer GetSymbolicDimensions();
 
+  /** Wraps OrtApi::TensorTypeAndShape_HasShape */
+  public native @Cast("bool") boolean HasShape();
   /** Uses GetDimensionsCount & GetDimensions to return a std::vector of the shape */
   public native @ByVal LongVector GetShape();
 }

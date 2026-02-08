@@ -1,5 +1,5 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index 6d517003fa..fdc4b73e0f 100644
+index c20c504564..7eefca5800 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
 @@ -11,8 +11,8 @@ endif()
@@ -14,10 +14,10 @@ index 6d517003fa..fdc4b73e0f 100644
  
  if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 010696a610..6c8ccd37cd 100644
+index f2cf1ac9fa..136fd7f2b7 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -147,9 +147,9 @@ if(onnxruntime_BUILD_SHARED_LIB)
+@@ -148,9 +148,9 @@ if(onnxruntime_BUILD_SHARED_LIB)
  
    if(UNIX)
      if (APPLE)
@@ -29,8 +29,20 @@ index 010696a610..6c8ccd37cd 100644
      endif()
    else()
      target_link_options(onnxruntime PRIVATE  "-DEF:${SYMBOL_FILE}")
+diff --git a/onnxruntime/core/platform/posix/env.cc b/onnxruntime/core/platform/posix/env.cc
+index aeddef0c51..aba3f824a2 100644
+--- a/onnxruntime/core/platform/posix/env.cc
++++ b/onnxruntime/core/platform/posix/env.cc
+@@ -563,7 +563,6 @@ class PosixEnv : public Env {
+ 
+     if (Dl_info dl_info{};
+         dladdr(address_from_this_binary, &dl_info) != 0 && dl_info.dli_fname != nullptr) {
+-      LOGS_DEFAULT(VERBOSE) << "Getting runtime path as parent directory of binary: " << dl_info.dli_fname;
+ 
+       auto runtime_path = std::filesystem::path{dl_info.dli_fname};
+       runtime_path = std::filesystem::absolute(runtime_path);
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index d690cf3107..d1db98ceb6 100644
+index ee00a06751..92f0102c46 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 @@ -115,10 +115,11 @@ struct OnUnload {
@@ -47,7 +59,7 @@ index d690cf3107..d1db98ceb6 100644
    return g_host->CreateAllocator(info);
  }
  
-@@ -262,19 +263,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
+@@ -280,19 +281,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -71,7 +83,7 @@ index d690cf3107..d1db98ceb6 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -282,16 +286,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -300,16 +304,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -91,7 +103,7 @@ index d690cf3107..d1db98ceb6 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -302,6 +309,7 @@ int64_t TensorShape::Size() const {
+@@ -320,6 +327,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -99,7 +111,7 @@ index d690cf3107..d1db98ceb6 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -311,28 +319,33 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -329,28 +337,33 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -136,7 +148,7 @@ index d690cf3107..d1db98ceb6 100644
    return g_host->IExecutionProviderFactory__CreateProvider(this, session_options, session_logger);
  }
  
-@@ -344,32 +357,39 @@ std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapabilit
+@@ -362,32 +375,39 @@ std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapabilit
  }
  common::Status IExecutionProvider::Compile(const std::vector<FusedNodeAndGraph>& fused_nodes_and_graphs,
                                             std::vector<NodeComputeInfo>& node_compute_funcs) {
@@ -176,7 +188,7 @@ index d690cf3107..d1db98ceb6 100644
    return g_host->GetEnvironmentVar(var_name);
  }
  
-@@ -377,20 +397,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
+@@ -395,20 +415,21 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
                                                     const IExecutionProvider::IKernelLookup& kernel_lookup,
                                                     gsl::span<const NodeIndex> tentative_nodes,
                                                     const logging::Logger& logger) {
@@ -202,7 +214,7 @@ index d690cf3107..d1db98ceb6 100644
  
  const char* Category::onnxruntime = "onnxruntime";
  
-@@ -427,7 +448,7 @@ const std::string& Status::ErrorMessage() const noexcept {
+@@ -445,7 +466,7 @@ const std::string& Status::ErrorMessage() const noexcept {
    return IsOK() ? EmptyString() : state_->msg;
  }
  
@@ -211,7 +223,7 @@ index d690cf3107..d1db98ceb6 100644
  
  const std::string& Status::EmptyString() noexcept {
    static std::string s_empty;
-@@ -437,8 +458,8 @@ const std::string& Status::EmptyString() noexcept {
+@@ -455,8 +476,8 @@ const std::string& Status::EmptyString() noexcept {
  }  // namespace common
  
  namespace math {
@@ -222,7 +234,7 @@ index d690cf3107..d1db98ceb6 100644
  
  }  // namespace math
  
-@@ -447,22 +468,26 @@ namespace sparse_utils {
+@@ -465,22 +486,26 @@ namespace sparse_utils {
  #if !defined(ORT_MINIMAL_BUILD)
  Status DenseTensorToSparseCsr(const DataTransferManager& data_manager, const Tensor& src, const AllocatorPtr& cpu_allocator,
                                const AllocatorPtr& dst_allocator, SparseTensor& dst) {
@@ -249,7 +261,7 @@ index d690cf3107..d1db98ceb6 100644
    return g_host->sparse_utils__DenseTensorToSparseCoo(data_manager, src, cpu_allocator, dst_allocator, linear_indexs, dst);
  }
  #endif  // !defined(DISABLE_SPARSE_TENSORS)
-@@ -473,10 +498,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -491,10 +516,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -263,10 +275,10 @@ index d690cf3107..d1db98ceb6 100644
  }
  
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 41cf8be1d1..684961c2ed 100644
+index 5700a32cf5..cabadacbc4 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1750,13 +1750,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1860,7 +1860,15 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -279,9 +291,10 @@ index 41cf8be1d1..684961c2ed 100644
 +
 +  std::string libpath;
 +
-   void Ensure() {
-     if (handle_)
-       return;
+   Status Initialize() {
+     if (handle_) {
+       return Status::OK();
+@@ -1868,6 +1876,18 @@ struct ProviderSharedLibrary {
  
      auto full_path = Env::Default().GetRuntimePath() +
                       PathString(LIBRARY_PREFIX ORT_TSTR("onnxruntime_providers_shared") LIBRARY_EXTENSION);
@@ -297,19 +310,19 @@ index 41cf8be1d1..684961c2ed 100644
 +    }
 +}
 +#endif
-     ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
+     ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1775,7 +1795,7 @@ struct ProviderSharedLibrary {
+@@ -1888,7 +1908,7 @@ struct ProviderSharedLibrary {
      }
    }
  
 -  ProviderSharedLibrary() = default;
-+  ProviderSharedLibrary() { Ensure(); };
++  ProviderSharedLibrary() { Initialize(); };
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1821,6 +1841,18 @@ Status ProviderLibrary::Load() {
+@@ -1934,6 +1954,18 @@ Status ProviderLibrary::Load() {
          ORT_RETURN_IF_ERROR(Env::Default().LoadDynamicLibrary(filename_, false, &handle_));
        } else {
          auto full_path = Env::Default().GetRuntimePath() + filename_;
@@ -329,10 +342,10 @@ index 41cf8be1d1..684961c2ed 100644
        }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 1d2f889ff1..6552ba39f5 100644
+index a0712af35e..9b31ea8588 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -429,6 +429,9 @@ def generate_build_tree(
+@@ -424,6 +424,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -342,21 +355,21 @@ index 1d2f889ff1..6552ba39f5 100644
          "-DPython_EXECUTABLE=" + sys.executable,
          "-Donnxruntime_USE_VCPKG=" + ("ON" if args.use_vcpkg else "OFF"),
          "-Donnxruntime_USE_MIMALLOC=" + ("ON" if args.use_mimalloc else "OFF"),
-@@ -2523,6 +2526,9 @@ def main():
+@@ -2543,6 +2546,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
 +        if is_linux() and args.arm64:
 +            cmake_extra_args = ["-DCMAKE_SYSTEM_NAME=Linux", "-DCMAKE_SYSTEM_PROCESSOR=aarch64"]
 +
-         if args.enable_pybind and is_windows():
+         if not args.skip_pip_install and args.enable_pybind and is_windows():
              run_subprocess(
                  [sys.executable, "-m", "pip", "install", "-r", "requirements/pybind/requirements.txt"],
 diff --git a/tools/ci_build/build_args.py b/tools/ci_build/build_args.py
-index c42f8e3219..e4a34d381b 100644
+index f32666f65c..7ce357d864 100644
 --- a/tools/ci_build/build_args.py
 +++ b/tools/ci_build/build_args.py
-@@ -241,6 +241,11 @@ def add_documentation_args(parser: argparse.ArgumentParser) -> None:
+@@ -271,6 +271,11 @@ def add_documentation_args(parser: argparse.ArgumentParser) -> None:
  
  def add_cross_compile_args(parser: argparse.ArgumentParser) -> None:
      """Adds arguments for cross-compiling to non-Windows target CPU architectures."""
@@ -368,7 +381,7 @@ index c42f8e3219..e4a34d381b 100644
      parser.add_argument(
          "--rv64",
          action="store_true",
-@@ -409,11 +414,6 @@ def add_windows_specific_args(parser: argparse.ArgumentParser) -> None:
+@@ -443,11 +448,6 @@ def add_windows_specific_args(parser: argparse.ArgumentParser) -> None:
          action="store_true",
          help="[Windows cross-compiling] Target Windows ARM.",
      )

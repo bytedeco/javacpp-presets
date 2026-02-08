@@ -54,4 +54,15 @@ public class KernelInfoImpl extends BaseKernelInfo {
 
   public native @StdString BytePointer GetNodeName();
   public native @ByVal Logger GetLogger();
+
+  public native @ByVal KeyValuePairs GetConfigEntries();
+
+  /** Wraps OrtApi::KernelInfo_GetOperatorDomain */
+  public native @StdString BytePointer GetOperatorDomain();
+  /** Wraps OrtApi::KernelInfo_GetOperatorType */
+  public native @StdString BytePointer GetOperatorType();
+  /** Wraps OrtApi::KernelInfo_GetOperatorSinceVersion */
+  public native int GetOperatorSinceVersion();
+  /** Wraps OrtEpApi::KernelInfo_GetEp */
+  public native @Const OrtEp GetEp();
 }

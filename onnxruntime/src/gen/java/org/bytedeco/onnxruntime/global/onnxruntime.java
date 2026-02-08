@@ -38,6 +38,9 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // Targeting ../ValueVector.java
 
 
+// Targeting ../IntPair.java
+
+
 // Targeting ../StringIntPair.java
 
 
@@ -89,7 +92,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 23;
+public static final int ORT_API_VERSION = 24;
 
 // #ifdef __cplusplus
 // #endif
@@ -137,7 +140,7 @@ public static final int ORT_API_VERSION = 23;
 // #else
 // #define ORT_EXPORT
 // #endif
-// #define ORT_API_CALL _stdcall
+// #define ORT_API_CALL __stdcall
 // #define ORT_MUST_USE_RESULT
 // #define ORTCHAR_T wchar_t
 // #else
@@ -257,7 +260,12 @@ public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E5M2FNUZ = 20,  // Non-IEEE floating-point format based on IEEE754 single-precision
   // Int4 types were introduced in ONNX 1.16. See https://onnx.ai/onnx/technical/int4.html
   ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT4 = 21,  // maps to a pair of packed uint4 values (size == 1 byte)
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT4 = 22;    // maps to a pair of packed int4 values (size == 1 byte)
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT4 = 22,   // maps to a pair of packed int4 values (size == 1 byte)
+  // Float4 types were introduced in ONNX 1.18. See https://onnx.ai/onnx/technical/float4.html
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT4E2M1 = 23,  // maps to a pair of packed float4 values (size == 1 byte)
+  // Int2 types were introduced in ONNX 1.20. See https://onnx.ai/onnx/technical/int2.html
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT2 = 24,  // maps to 4 packed uint2 values (size == 1 byte)
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT2 = 25;   // maps to 4 packed int2 values (size == 1 byte)
 
 // Synced with onnx TypeProto oneof
 /** enum ONNXType */
@@ -458,6 +466,18 @@ public static final int
 // Targeting ../OrtExternalInitializerInfo.java
 
 
+// Targeting ../OrtExternalResourceImporter.java
+
+  // Capability object for external resource import      // EP-imported view of shared external allocation
+// Targeting ../OrtDeviceEpIncompatibilityDetails.java
+
+
+// Targeting ../OrtEpAssignedSubgraph.java
+
+
+// Targeting ../OrtEpAssignedNode.java
+
+
 
 // #ifdef _MSC_VER
 // #else
@@ -560,6 +580,16 @@ public static final int
   OrtExecutionProviderDevicePolicy_MAX_PERFORMANCE = 4,
   OrtExecutionProviderDevicePolicy_MAX_EFFICIENCY = 5,
   OrtExecutionProviderDevicePolicy_MIN_OVERALL_POWER = 6;
+
+/** \brief Reasons why an execution provider might not be compatible with a device
+ */
+/** enum OrtDeviceEpIncompatibilityReason */
+public static final int
+  OrtDeviceEpIncompatibility_NONE = 0,
+  OrtDeviceEpIncompatibility_DRIVER_INCOMPATIBLE = 1 << 0,
+  OrtDeviceEpIncompatibility_DEVICE_INCOMPATIBLE = 1 << 1,
+  OrtDeviceEpIncompatibility_MISSING_DEPENDENCY = 1 << 2,
+  OrtDeviceEpIncompatibility_UNKNOWN = 1 << 31;
 // Targeting ../EpSelectionDelegate.java
 
 
@@ -620,13 +650,39 @@ public static native @Const OrtApiBase OrtGetApiBase();
 
 
 
-/** \brief The C API
+/** \brief External memory handle type for importing GPU resources.
  *
- * All C API functions are defined inside this structure as pointers to functions.
- * Call OrtApiBase::GetApi to get a pointer to it
+ * \todo Add OPAQUE_WIN32 for Windows Vulkan-specific memory handles
+ * \todo Add POSIX file descriptor (OPAQUE_FD) for Linux Vulkan/CUDA/OpenCL interop
+ * \todo Add Linux DMA-BUF file descriptor for embedded GPU memory sharing
  *
- * \nosubgrouping
+ * @since Version 1.24.
  */
+/** enum OrtExternalMemoryHandleType */
+public static final int
+  /** Shared HANDLE from ID3D12Device::CreateSharedHandle(resource) */
+  ORT_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE = 0,
+  /** Shared HANDLE from ID3D12Device::CreateSharedHandle(heap) */
+  ORT_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP = 1;
+// Targeting ../OrtExternalMemoryDescriptor.java
+
+
+
+/** \brief External semaphore type for GPU synchronization.
+ *
+ * @since Version 1.24.
+ */
+/** enum OrtExternalSemaphoreType */
+public static final int
+  /** Shared HANDLE from ID3D12Device::CreateSharedHandle(fence) */
+  ORT_EXTERNAL_SEMAPHORE_D3D12_FENCE = 0;
+// Targeting ../OrtExternalSemaphoreDescriptor.java
+
+
+// Targeting ../OrtExternalTensorDescriptor.java
+
+
+
 /*
  * Public enum for compiled model compatibility across EPs.
  */
@@ -636,6 +692,9 @@ public static final int
   OrtCompiledModelCompatibility_EP_SUPPORTED_OPTIMAL = 1,
   OrtCompiledModelCompatibility_EP_SUPPORTED_PREFER_RECOMPILATION = 2,
   OrtCompiledModelCompatibility_EP_UNSUPPORTED = 3;
+// Targeting ../OrtEnvCreationOptions.java
+
+
 // Targeting ../OrtApi.java
 
 
@@ -686,6 +745,9 @@ public static final int
   // Otherwise, compilation will automatically overwrite the output file if it exists.
   OrtCompileApiFlags_ERROR_IF_OUTPUT_FILE_EXISTS = 1 << 1;
 // Targeting ../OrtCompileApi.java
+
+
+// Targeting ../OrtInteropApi.java
 
 
 
@@ -749,6 +811,13 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 
 // Do not include this file directly. Please include "onnxruntime_c_api.h" instead.
 
+// #if defined(__DOXYGEN__)
+// When running a Doxygen build, include onnxruntime_c_api.h. Doxygen expects header files to be self-contained.
+// #include "onnxruntime_c_api.h"
+// #else
+// In normal usage, do not include onnxruntime_c_api.h. This file is explicitly included in onnxruntime_c_api.h.
+// #endif
+
 // #ifdef __cplusplus
 // Targeting ../OrtEpGraphSupportInfo.java
 
@@ -757,6 +826,27 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 
 
 // Targeting ../OrtNodeComputeContext.java
+
+
+// Targeting ../OrtExternalMemoryHandle.java
+
+
+// Targeting ../OrtExternalSemaphoreHandle.java
+
+
+// Targeting ../OrtKernelRegistry.java
+
+
+// Targeting ../OrtKernelDefBuilder.java
+
+
+// Targeting ../OrtKernelDef.java
+
+
+// Targeting ../OrtDataType.java
+
+
+// Targeting ../OrtSharedPrePackedWeightCache.java
 
 
 // Targeting ../OrtDataTransferImpl.java
@@ -768,10 +858,25 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // Targeting ../OrtSyncStreamImpl.java
 
 
+// Targeting ../OrtExternalResourceImporterImpl.java
+
+
 // Targeting ../OrtNodeFusionOptions.java
 
 
 // Targeting ../OrtNodeComputeInfo.java
+
+
+// Targeting ../OrtKernelImpl.java
+
+
+// Targeting ../OrtKernelCreateFunc.java
+
+
+// Targeting ../OrtLoopKernelHelper.java
+
+
+// Targeting ../OrtScanKernelHelper.java
 
 
 // Targeting ../OrtEpApi.java
@@ -879,21 +984,27 @@ public static final int
 //   throw Ort::Exception(string, code)
 // #endif
 
-// This is used internally by the C++ API. This class holds the global variable that points to the OrtApi,
-//  it's in a template so that we can define a global variable in a header and make
-// it transparent to the users of the API.
+// #ifdef ORT_API_MANUAL_INIT
+// #endif
+// Targeting ../Global.java
 
-// If macro ORT_API_MANUAL_INIT is defined, no static initialization will be performed. Instead, user must call InitApi() before using it.
-// #pragma warning(push)
-// "Global initializer calls a non-constexpr function." Therefore you can't use ORT APIs in the other global initializers.
-// Please define ORT_API_MANUAL_INIT if it conerns you.
-// #pragma warning(disable : 26426)
+
+  // namespace detail
+
+// #ifdef ORT_API_MANUAL_INIT
+
+// #else  // ORT_API_MANUAL_INIT
+
+// #ifdef _MSC_VER
+// If you get a linker error about a mismatch here, you are trying to link
+// two compilation units that have different definitions for
+// ORT_API_MANUAL_INIT together. All compilation units must agree on the
+// definition of ORT_API_MANUAL_INIT.
+// #pragma detect_mismatch("ORT_API_MANUAL_INIT", "disabled")
 // #endif
 
-// #if defined(_MSC_VER) && !defined(__clang__)
-// #pragma warning(pop)
-// #endif
-// #endif
+
+// #endif  // ORT_API_MANUAL_INIT
 
 /** This returns a reference to the ORT C API. */
 @Namespace("Ort") public static native @Const @ByRef @NoException(true) OrtApi GetApi();
@@ -929,6 +1040,12 @@ public static final int
  *  </summary>
  *  <returns>ORT C Compile API reference</returns> */
 @Namespace("Ort") public static native @Const @ByRef OrtCompileApi GetCompileApi();
+
+/** <summary>
+ *  This returns a reference to the ORT C Interop API. Used for external resource import with EPs.
+ *  </summary>
+ *  <returns>ORT C Interop API reference</returns> */
+@Namespace("Ort") public static native @Const @ByRef OrtInteropApi GetInteropApi();
 
 /** <summary>
  *  This returns a reference to the ORT C EP API. Used if authoring a plugin execution provider.
@@ -993,6 +1110,9 @@ public static final int
 
 @Namespace("Ort::detail") public static native void OrtRelease(OrtModelCompilationOptions ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtEpDevice ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtKernelDef ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtKernelDefBuilder ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtKernelRegistry ptr);
 
 // This is defined explicitly since OrtTensorRTProviderOptionsV2 is not a C API type,
 // but the struct has V2 in its name to indicate that it is the second version of the options.
@@ -1002,6 +1122,12 @@ public static final int
 // #undef ORT_DEFINE_RELEASE
 // #undef ORT_DEFINE_RELEASE_FROM_API_STRUCT
 // Targeting ../UnownedAllocator.java
+
+
+// Targeting ../ConstEpAssignedNode.java
+
+
+// Targeting ../ConstEpAssignedSubgraph.java
 
 
 // Targeting ../UnownedMemoryInfo.java
@@ -1038,6 +1164,12 @@ public static final int
 
 
 // Targeting ../BaseAllocatorWithDefaultOptions.java
+
+
+// Targeting ../BaseEpAssignedNodeWithDefaultOptions.java
+
+
+// Targeting ../BaseEpAssignedSubgraphWithDefaultOptions.java
 
 
 // Targeting ../BaseArenaCfg.java
@@ -1092,6 +1224,15 @@ public static final int
 
 
 // Targeting ../BaseStatus.java
+
+
+// Targeting ../BaseKernelDef.java
+
+
+// Targeting ../BaseKernelDefBuilder.java
+
+
+// Targeting ../BaseKernelRegistry.java
 
 
 // Targeting ../BaseKernelInfo.java
@@ -1253,6 +1394,59 @@ public static final int
 @Namespace("Ort") public static native @Cast("OrtCompiledModelCompatibility") int GetModelCompatibilityForEpDevices(
     @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl ep_devices,
     String compatibility_info);
+
+/** \brief Extract EP compatibility info from a precompiled model file.
+ *
+ * Parses the model file to extract the compatibility info string for a specific execution provider
+ * from the model's metadata properties. This is only applicable to models that have been precompiled
+ * for an EP. Standard ONNX models do not contain this information.
+ *
+ * \note This operation parses the full ONNX ModelProto from disk.
+ *
+ * @param model_path Path to the ONNX model file.
+ * @param ep_type The execution provider type string. Must be non-empty.
+ *                 Use ConstEpDevice::EpName() to get this value.
+ * @param allocator Allocator to use for the output string.
+ * @return The compatibility info string, or nullptr if not found for this EP. Caller must free via allocator.
+ * @throws Ort::Exception on error.
+ */
+@Namespace("Ort") public static native @UniquePtr("char, Ort::detail::AllocatedFree") @Cast("char*") BytePointer GetCompatibilityInfoFromModelAllocated(@Cast("const ORTCHAR_T*") Pointer model_path, @Cast("const char*") BytePointer ep_type,
+                                                          OrtAllocator allocator);
+@Namespace("Ort") public static native @UniquePtr("char, Ort::detail::AllocatedFree") @Cast("char*") BytePointer GetCompatibilityInfoFromModelAllocated(@Cast("const ORTCHAR_T*") Pointer model_path, String ep_type,
+                                                          OrtAllocator allocator);
+
+/** \brief Extract EP compatibility info from precompiled model bytes in memory.
+ *
+ * Same as GetCompatibilityInfoFromModelAllocated but reads from a memory buffer.
+ * Useful when precompiled models are loaded from encrypted storage, network, or other non-file sources.
+ *
+ * @param model_data Pointer to the model data in memory.
+ * @param model_data_length Size of the model data in bytes.
+ * @param ep_type The execution provider type string. Must be non-empty.
+ * @param allocator Allocator to use for the output string.
+ * @return The compatibility info string, or nullptr if not found for this EP. Caller must free via allocator.
+ * @throws Ort::Exception on error.
+ */
+@Namespace("Ort") public static native @UniquePtr("char, Ort::detail::AllocatedFree") @Cast("char*") BytePointer GetCompatibilityInfoFromModelBytesAllocated(@Const Pointer model_data, @Cast("size_t") long model_data_length,
+                                                               @Cast("const char*") BytePointer ep_type, OrtAllocator allocator);
+@Namespace("Ort") public static native @UniquePtr("char, Ort::detail::AllocatedFree") @Cast("char*") BytePointer GetCompatibilityInfoFromModelBytesAllocated(@Const Pointer model_data, @Cast("size_t") long model_data_length,
+                                                               String ep_type, OrtAllocator allocator);
+// Targeting ../EpAssignedNodeWithDefaultOptionsImpl.java
+
+
+  // namespace detail
+
+/** \brief Constant wrapper around ::OrtEpAssignedNode
+ * \remarks EpAssignedNode is always read-only for ORT API users.
+ */
+// Targeting ../EpAssignedSubgraphWithDefaultOptionsImpl.java
+
+
+  // namespace detail
+
+/** \brief Constant wrapper around ::OrtEpAssignedSubgraph
+ * \remarks EpAssignedSubgraph is always read-only for ORT API users.
+ */
 // Targeting ../Env.java
 
 
@@ -1583,6 +1777,40 @@ public static final long MAX_CUSTOM_OP_END_VER = (1L << 31) - 1;
 // Targeting ../Model.java
 
 
+// Targeting ../ConstKernelDefImpl.java
+
+
+  // namespace detail
+// Targeting ../KernelDef.java
+
+
+// Targeting ../KernelDefBuilder.java
+
+
+// Targeting ../KernelRegistry.java
+
+
+  // namespace detail
+
+/** \brief Convenience C++ wrapper class around a ::OrtSharedPrePackedWeightCache instance owned by ORT.
+ *
+ * An {@code OrtSharedPrePackedWeightCache*} instance is passed as an argument to OrtKernelImpl::PrePackWeight.
+ * Example use:
+ *   OrtStatus* MyKernel::PrePackWeightImpl(OrtKernelImpl*, ..., OrtSharedPrePackedWeightCache* c_cache, ...) {
+ *     ...
+ *     if (c_cache != nullptr) {
+ *       Ort::UnownedSharedPrePackedWeightCache cpp_cache(c_cache);
+ *       Ort::Status status = cpp_cache.StoreWeightData(...);
+ *     }
+ *     ...
+ *   }
+ *
+ * \remarks OrtSharedPrePackedWeightCache is always unowned, but mutable, for EpApi users.
+ */
+
+
+/** Wraps OrtEpApi::GetEnvConfigEntries() */
+@Namespace("Ort") public static native @ByVal KeyValuePairs GetEnvConfigEntries();
   // namespace Ort
 // #include "onnxruntime_cxx_inline.h"
 

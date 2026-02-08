@@ -24,8 +24,8 @@ runs:
         if [[ -n "$SUDO" ]]; then
           # Make sure no busy /swapfile is hanging around
           # First disable any existing swapfile with swapoff
-          $SUDO swapoff /swapfile
-          $SUDO rm -f /swapfile
+          $SUDO swapoff /swapfile || true
+          $SUDO rm -f /swapfile || true
 
           # Allocate a swapfile on Linux as it's not enabled by default. Needed for pytorch and mkl.
           $SUDO fallocate -l 16GB /swapfile

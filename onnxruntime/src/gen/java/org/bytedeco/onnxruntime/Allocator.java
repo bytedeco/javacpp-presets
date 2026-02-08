@@ -25,6 +25,11 @@ public class Allocator extends AllocatorImpl {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Allocator(Pointer p) { super(p); }
 
+  
+  
+  /** Take ownership of a pointer created by C API */
   public Allocator(@Const @ByRef Session session, @Const OrtMemoryInfo arg1) { super((Pointer)null); allocate(session, arg1); }
   private native void allocate(@Const @ByRef Session session, @Const OrtMemoryInfo arg1);
+  public Allocator(OrtAllocator p) { super((Pointer)null); allocate(p); }
+  private native void allocate(OrtAllocator p);
 }

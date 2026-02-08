@@ -15,6 +15,13 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief The C API
+ *
+ * All C API functions are defined inside this structure as pointers to functions.
+ * Call OrtApiBase::GetApi to get a pointer to it
+ *
+ * \nosubgrouping
+ */
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtApi extends Pointer {
     static { Loader.load(); }
@@ -3580,6 +3587,7 @@ public class OrtApi extends Pointer {
    *      -# "69"
    *      -# "73"
    *      -# "75"
+   *      -# "81"
    *   "device_id": The ID of the device to use when setting 'htp_arch'. Defaults to "0" (for single device).
    *   "enable_htp_fp16_precision": Used for float32 model for HTP backend.
    *      Enable the float32 model to be inferenced with fp16 precision. Otherwise, it will be fp32 precision.
@@ -3606,6 +3614,9 @@ public class OrtApi extends Pointer {
    *     where op_type is the name of the operation, op_package_path is the path to the op package shared library,
    *     interface is the symbol name to register the op life cycle functions, and target is the backend type. For more
    *     details, refer to: https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-50/op_packages.html
+   *     [Advanced] "skip_qnn_version_check": Set to "1" to allow a different version of QNN to be used than what was compiled
+   *     into ONNX Runtime. Differences in operator support, accuracy, performance, and QNN's ABI may lead to crashes, inaccurate
+   *     results, and poor performance. Use with caution and test thoroughly.
    *
    * XNNPACK supported keys:
    *   "intra_op_num_threads": number of thread-pool size to use for XNNPACK execution provider.
@@ -3922,7 +3933,7 @@ public class OrtApi extends Pointer {
    * If {@code out} is nullptr, the value of {@code size} is set to the size of the name
    * string (including null-terminator), and a success status is returned.
    *
-   * If the {@code size} parameter is greater than or equal to the name string's size,
+   * If the {@code size} parameter is greater than or equal to the name string's size and {@code out} is not nullptr,
    * the value of {@code size} is set to the true size of the string (including null-terminator),
    * the provided memory is filled with the string's contents, and a success status is returned.
    *
@@ -3953,7 +3964,7 @@ public class OrtApi extends Pointer {
    * If {@code out} is nullptr, the value of {@code size} is set to the size of the name
    * string (including null-terminator), and a success status is returned.
    *
-   * If the {@code size} parameter is greater than or equal to the name string's size,
+   * If the {@code size} parameter is greater than or equal to the name string's size and {@code out} is not nullptr,
    * the value of {@code size} is set to the true size of the string (including null-terminator),
    * the provided memory is filled with the string's contents, and a success status is returned.
    *
@@ -4206,7 +4217,7 @@ public class OrtApi extends Pointer {
    * If {@code out} is nullptr, the value of {@code size} is set to the size of the name
    * string (including null-terminator), and a success status is returned.
    *
-   * If the {@code size} parameter is greater than or equal to the name string's size,
+   * If the {@code size} parameter is greater than or equal to the name string's size and {@code out} is not nullptr,
    * the value of {@code size} is set to the true size of the string (including null-terminator),
    * the provided memory is filled with the string's contents, and a success status is returned.
    *
@@ -4390,7 +4401,7 @@ public class OrtApi extends Pointer {
    *
    * @param context [in] OrtKernelContext instance
    * @param mem_info [in] OrtMemoryInfo instance
-   * @param out [out] A pointer to OrtAllocator.
+   * @param out [out] A pointer to OrtAllocator. Must be released with OrtApi::ReleaseAllocator.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    *
@@ -6123,7 +6134,8 @@ public class OrtApi extends Pointer {
   /** \brief Returns an OrtGraph that contains a subset of nodes in the source OrtGraph.
    *
    * \note The lifetime of "dst_graph" is tied to that of "src_graph", as they both internally reference
-   * the same underlying graph.
+   * the same underlying graph. "dst_graph" preserves the input order of "src_graph", and
+   * its output order corresponds to the outputs produced by the nodes in "nodes" with the given order.
    *
    * @param src_graph [in] The source OrtGraph instance.
    * @param nodes [in] A subset of the nodes/OrtNodes in 'graph'.
@@ -6454,6 +6466,9 @@ public class OrtApi extends Pointer {
   /** \brief Get the node's parent OrtGraph instance.
    *
    * Can return NULL if the OrtNode was created without an owning graph.
+   * In another case, this API may also return NULL if {@code node} is obtained by calling Graph_GetParentNode()
+   * on an OrtGraph that is a subgraph of a control-flow op, and the parent graph has not been created yet,
+   * for example during ORT's GetCapability() when processing the innermost subgraph.
    *
    * @param node [in] The OrtNode instance.
    * @param graph [out] Output parameter set to the node's OrtGraph. Can be set to NULL
@@ -6941,5 +6956,626 @@ public class OrtApi extends Pointer {
   public native OrtStatus CreateExternalInitializerInfo( @Cast("const ORTCHAR_T*") Pointer filepath, @Cast("int64_t") long file_offset,
                     @Cast("size_t") long byte_size, @ByPtrPtr OrtExternalInitializerInfo out);
 
-  /** \} */
+  /** \}
+  /** \brief Fetch whether the tensor has shape information.
+   * @param info [in] The OrtTensorTypeAndShapeInfo instance.
+   * @return true if the tensor has shape information, false otherwise.
+   *
+   * @since Version 1.24
+   */
+  public static class TensorTypeAndShape_HasShape_OrtTensorTypeAndShapeInfo extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    TensorTypeAndShape_HasShape_OrtTensorTypeAndShapeInfo(Pointer p) { super(p); }
+      protected TensorTypeAndShape_HasShape_OrtTensorTypeAndShapeInfo() { allocate(); }
+      private native void allocate();
+      public native @Cast("bool") boolean call( @Const OrtTensorTypeAndShapeInfo info);
+  }
+  public native TensorTypeAndShape_HasShape_OrtTensorTypeAndShapeInfo TensorTypeAndShape_HasShape(); public native OrtApi TensorTypeAndShape_HasShape(TensorTypeAndShape_HasShape_OrtTensorTypeAndShapeInfo setter);
+
+  /** \brief Get all config entries from ::OrtKernelInfo.
+   *
+   * Gets all configuration entries from the ::OrtKernelInfo object as key-value pairs.
+   * Config entries are set on the ::OrtSessionOptions and are accessible in custom operator kernels.
+   *
+   * Used in the CreateKernel callback of an OrtCustomOp to access all session configuration entries
+   * during kernel construction.
+   *
+   * @param info [in] An instance of ::OrtKernelInfo.
+   * @param out [out] A pointer to a newly created OrtKeyValuePairs instance containing all config entries.
+   *                 Note: the user should call OrtApi::ReleaseKeyValuePairs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus KernelInfo_GetConfigEntries( @Const OrtKernelInfo info, @Cast("OrtKeyValuePairs**") PointerPointer out);
+  public native OrtStatus KernelInfo_GetConfigEntries( @Const OrtKernelInfo info, @ByPtrPtr OrtKeyValuePairs out);
+
+  /** \brief Get the graph node's operator domain from ::OrtKernelInfo.
+   *
+   * If {@code out} is nullptr, the value of {@code size} is set to the size of the operator domain
+   * string (including null-terminator), and a success status is returned.
+   *
+   * If the {@code size} parameter is greater than or equal to the string's size and {@code out} is not nullptr,
+   * the value of {@code size} is set to the true size of the string (including null-terminator),
+   * the provided memory is filled with the string's contents, and a success status is returned.
+   *
+   * If the {@code size} parameter is less than the actual string's size and {@code out}
+   * is not nullptr, the value of {@code size} is set to the true size of the string
+   * and a failure status with error code ORT_INVALID_ARGUMENT is returned.
+   *
+   * @param info [in] An instance of ::OrtKernelInfo.
+   * @param out [out] Memory location into which to write the UTF-8 null-terminated string representing the
+   *                 operator domain.
+   * @param size [in,out] Pointer to the size of the {@code out} buffer. See above comments for details.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus KernelInfo_GetOperatorDomain( @Const OrtKernelInfo info, @Cast("char*") BytePointer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfo_GetOperatorDomain( @Const OrtKernelInfo info, @Cast("char*") ByteBuffer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfo_GetOperatorDomain( @Const OrtKernelInfo info, @Cast("char*") byte[] out,
+                    @Cast("size_t*") SizeTPointer size);
+
+  /** \brief Get the graph node's operator type from ::OrtKernelInfo.
+   *
+   * If {@code out} is nullptr, the value of {@code size} is set to the size of the operator type
+   * string (including null-terminator), and a success status is returned.
+   *
+   * If the {@code size} parameter is greater than or equal to the string's size and {@code out} is not nullptr,
+   * the value of {@code size} is set to the true size of the string (including null-terminator),
+   * the provided memory is filled with the string's contents, and a success status is returned.
+   *
+   * If the {@code size} parameter is less than the actual string's size and {@code out}
+   * is not nullptr, the value of {@code size} is set to the true size of the string
+   * and a failure status with error code ORT_INVALID_ARGUMENT is returned.
+   *
+   * @param info [in] An instance of ::OrtKernelInfo.
+   * @param out [out] Memory location into which to write the UTF-8 null-terminated string representing the
+   *                 operator type.
+   * @param size [in,out] Pointer to the size of the {@code out} buffer. See above comments for details.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus KernelInfo_GetOperatorType( @Const OrtKernelInfo info, @Cast("char*") BytePointer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfo_GetOperatorType( @Const OrtKernelInfo info, @Cast("char*") ByteBuffer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfo_GetOperatorType( @Const OrtKernelInfo info, @Cast("char*") byte[] out,
+                    @Cast("size_t*") SizeTPointer size);
+
+  /** \brief Get the opset version in which the given node's operator type was first defined from ::OrtKernelInfo.
+   *
+   * @param info [in] An instance of ::OrtKernelInfo.
+   * @param since_version [out] The opset version in which the node's operator type was first defined.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus KernelInfo_GetOperatorSinceVersion( @Const OrtKernelInfo info,
+                    IntPointer since_version);
+  public native OrtStatus KernelInfo_GetOperatorSinceVersion( @Const OrtKernelInfo info,
+                    IntBuffer since_version);
+  public native OrtStatus KernelInfo_GetOperatorSinceVersion( @Const OrtKernelInfo info,
+                    int[] since_version);
+
+  /** \brief Get the EP Interop API instance.
+   *
+   * Get the Interop API instance to work with external resources. This API provides functions
+   * for importing external GPU memory and semaphores for zero-copy sharing between ORT inference
+   * and other GPU workloads.
+   *
+   * @return Interop API struct instance.
+   *
+   * @since Version 1.24.
+   */
+  public static class OrtInteropApi_GetInteropApi extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    OrtInteropApi_GetInteropApi(Pointer p) { super(p); }
+      protected OrtInteropApi_GetInteropApi() { allocate(); }
+      private native void allocate();
+      public native @Const OrtInteropApi call();
+  }
+  public native OrtInteropApi_GetInteropApi GetInteropApi(); public native OrtApi GetInteropApi(OrtInteropApi_GetInteropApi setter);
+
+  /** \brief Get the EP device assigned to each session output.
+   *
+   * Returns the OrtEpDevice assigned to each output of the session after graph partitioning.
+   * This allows validation that outputs are placed on the expected device for external resource sharing.
+   *
+   * The EP device for each output is determined by which execution provider will produce that output
+   * during inferencing. This information is useful for:
+   * - Validating that outputs will be placed on the expected device for external resource sharing
+   * - Deciding whether to use external memory handles for outputs
+   *
+   * @param session [in] The OrtSession instance to query.
+   * @param outputs_ep_devices [out] An array to be filled with the EP device for each output.
+   *                                The array must be allocated by the caller with space for
+   *                                OrtEpDevice* values for each output.
+   *                                The order is the same as returned by SessionGetOutputName.
+   * @param num_outputs [in] The number of outputs in the session. Must match SessionGetOutputCount.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24
+   */
+  public native OrtStatus SessionGetEpDeviceForOutputs( @Const OrtSession session,
+                    @Cast("const OrtEpDevice**") PointerPointer outputs_ep_devices,
+                    @Cast("size_t") long num_outputs);
+  public native OrtStatus SessionGetEpDeviceForOutputs( @Const OrtSession session,
+                    @Const @ByPtrPtr OrtEpDevice outputs_ep_devices,
+                    @Cast("size_t") long num_outputs);
+  /** \brief Get the number of available hardware devices.
+   *
+   * Returns the count of hardware devices discovered on the system.
+   * Use this to allocate an array before calling GetHardwareDevices().
+   *
+   * @param env [in] The OrtEnv instance where device discovery results are stored.
+   * @param num_devices [out] The number of OrtHardwareDevice instances available.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetNumHardwareDevices( @Const OrtEnv env, @Cast("size_t*") SizeTPointer num_devices);
+
+  /** \brief Get the list of available hardware devices.
+   *
+   * Enumerates hardware devices available on the system.
+   * Populates a user-provided array with pointers to OrtHardwareDevice instances. The caller is responsible
+   * for allocating the array with sufficient space (use GetNumHardwareDevices() to get the count).
+   *
+   * The returned pointers reference internal ORT data structures that are discovered once at process
+   * startup and remain valid for the lifetime of the OrtEnv. The caller does not need to release these
+   * pointers, but should not use them after calling ReleaseEnv().
+   *
+   * @param env [in] The OrtEnv instance where device discovery results are stored.
+   * @param devices [out] User-allocated array to receive pointers to OrtHardwareDevice instances.
+   *                     The array must have space for at least num_devices elements.
+   * @param num_devices [in] The size of the user-allocated devices array.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetHardwareDevices( @Const OrtEnv env,
+                    @Cast("const OrtHardwareDevice**") PointerPointer devices,
+                    @Cast("size_t") long num_devices);
+  public native OrtStatus GetHardwareDevices( @Const OrtEnv env,
+                    @Const @ByPtrPtr OrtHardwareDevice devices,
+                    @Cast("size_t") long num_devices);
+
+  /** \brief Check for known incompatibility issues between hardware device and a specific execution provider.
+   *
+   * This function checks for known incompatibility issues between the specified hardware device
+   * and a specific execution provider.
+   * If returned incompatibility details have non-zero reasons, it indicates the device is not compatible.
+   * However, if returned detail have reason == 0, it doesn't guarantee 100% compatibility for all models,
+   * as models may have specific requirements.
+   *
+   * Note: This method should only be called when the OrtEnv has been initialized with execution
+   * providers (after RegisterExecutionProviderLibrary is called).
+   *
+   * @param env [in] The OrtEnv instance with registered execution providers.
+   * @param ep_name [in] The name of the execution provider to check. Required and cannot be null or empty.
+   * @param hw [in] The hardware device to check for incompatibility.
+   * @param details [out] Compatibility details including reasons for incompatibility if any.
+   *                     Must be freed with OrtApi::ReleaseDeviceEpIncompatibilityDetails.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetHardwareDeviceEpIncompatibilityDetails( @Const OrtEnv env,
+                    @Cast("const char*") BytePointer ep_name,
+                    @Const OrtHardwareDevice hw,
+                    @Cast("OrtDeviceEpIncompatibilityDetails**") PointerPointer details);
+  public native OrtStatus GetHardwareDeviceEpIncompatibilityDetails( @Const OrtEnv env,
+                    @Cast("const char*") BytePointer ep_name,
+                    @Const OrtHardwareDevice hw,
+                    @ByPtrPtr OrtDeviceEpIncompatibilityDetails details);
+  public native OrtStatus GetHardwareDeviceEpIncompatibilityDetails( @Const OrtEnv env,
+                    String ep_name,
+                    @Const OrtHardwareDevice hw,
+                    @ByPtrPtr OrtDeviceEpIncompatibilityDetails details);
+
+  /** \name OrtDeviceEpIncompatibilityDetails
+   *  Accessor functions for device incompatibility details
+   *  \{
+  <p>
+  /** \brief Get the incompatibility reasons bitmask from OrtDeviceEpIncompatibilityDetails.
+   *
+   * @param details [in] The OrtDeviceEpIncompatibilityDetails instance to query.
+   * @param reasons_bitmask [out] Pointer to store the bitmask of incompatibility reasons.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetReasonsBitmask(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("uint32_t*") IntPointer reasons_bitmask);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetReasonsBitmask(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("uint32_t*") IntBuffer reasons_bitmask);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetReasonsBitmask(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("uint32_t*") int[] reasons_bitmask);
+
+  /** \brief Get the notes from OrtDeviceEpIncompatibilityDetails.
+   *
+   * @param details [in] The OrtDeviceEpIncompatibilityDetails instance to query.
+   * @param notes [out] Pointer to the notes string. May be nullptr if no notes are available.
+   *                   The returned string is owned by the details object and should not be freed.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetNotes(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("const char**") PointerPointer notes);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetNotes(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("const char**") @ByPtrPtr BytePointer notes);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetNotes(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer notes);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetNotes(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("const char**") @ByPtrPtr byte[] notes);
+
+  /** \brief Get the execution provider error code from OrtDeviceEpIncompatibilityDetails.
+   *
+   * This allows Independent Hardware Vendors (IHVs) to define their own error codes
+   * to provide additional details about device incompatibility.
+   *
+   * @param details [in] The OrtDeviceEpIncompatibilityDetails instance to query.
+   * @param error_code [out] Pointer to store the EP-specific error code. A value of 0 indicates no error code was set.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetErrorCode(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    IntPointer error_code);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetErrorCode(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    IntBuffer error_code);
+  public native OrtStatus DeviceEpIncompatibilityDetails_GetErrorCode(
+                    @Const OrtDeviceEpIncompatibilityDetails details,
+                    int[] error_code);
+
+  /** \brief Release an OrtDeviceEpIncompatibilityDetails instance.
+   *
+   * @since Version 1.24.
+   */
+  public native void ReleaseDeviceEpIncompatibilityDetails(OrtDeviceEpIncompatibilityDetails input);
+
+  /** \}
+   <p>
+   *  \name Model Compatibility APIs
+   *  \{
+  <p>
+  /** \brief Extract EP compatibility info from a precompiled model file.
+   *
+   * Parses the model file to extract the compatibility info string for a specific execution provider
+   * from the model's metadata properties. This is only applicable to models that have been precompiled
+   * for an EP (e.g., via OrtCompileApi). Standard ONNX models do not contain this information.
+   *
+   * The compatibility info string must be valid UTF-8 without embedded NUL characters.
+   *
+   * \note This API performs standalone model parsing, separate from session creation. This means
+   * the protobuf parsing cost is incurred here and again during session creation. It is intended
+   * for scenarios where applications need to check compatibility before deciding whether to proceed
+   * with session creation, such as providing early user feedback.
+   *
+   * \note This operation parses the full ONNX ModelProto from disk. For very large models, consider
+   * using GetCompatibilityInfoFromModelBytes with a pre-loaded buffer if the model is already in memory.
+   *
+   * The compatibility info can then be passed to GetModelCompatibilityForEpDevices to check if a
+   * precompiled model is compatible with the current system.
+   *
+   * @param model_path [in] Path to the ONNX model file.
+   * @param ep_type [in] The execution provider type string. Must be non-empty.
+   *                    Use OrtApi::EpDevice_EpName to get this value from an OrtEpDevice.
+   * @param allocator [in] Allocator to use for the output string. Use OrtApi::GetAllocatorWithDefaultOptions.
+   * @param compatibility_info [out] Output pointer to the compatibility info string.
+   *                                Returns nullptr if no compatibility info exists for the specified EP.
+   *                                Caller must free with OrtApi::AllocatorFree when non-null.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") PointerPointer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr BytePointer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    String ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr ByteBuffer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr byte[] compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    String ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr BytePointer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr ByteBuffer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModel(
+                    @Cast("const ORTCHAR_T*") Pointer model_path,
+                    String ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr byte[] compatibility_info);
+
+  /** \brief Extract EP compatibility info from precompiled model bytes in memory.
+   *
+   * Same as GetCompatibilityInfoFromModel but reads from a memory buffer instead of a file.
+   * Useful when precompiled models are loaded from encrypted storage, network, or other non-file sources.
+   *
+   * \note This API performs standalone model parsing, separate from session creation. This means
+   * the protobuf parsing cost is incurred here and again during session creation. It is intended
+   * for scenarios where applications need to check compatibility before deciding whether to proceed
+   * with session creation, such as providing early user feedback.
+   *
+   * @param model_data [in] Pointer to the model data in memory.
+   * @param model_data_length [in] Size of the model data in bytes.
+   * @param ep_type [in] The execution provider type string. Must be non-empty.
+   * @param allocator [in] Allocator to use for the output string. Use OrtApi::GetAllocatorWithDefaultOptions.
+   * @param compatibility_info [out] Output pointer to the compatibility info string.
+   *                                Returns nullptr if no compatibility info exists for the specified EP.
+   *                                Caller must free with OrtApi::AllocatorFree when non-null.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") PointerPointer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr BytePointer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    String ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr ByteBuffer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr byte[] compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    String ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr BytePointer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    @Cast("const char*") BytePointer ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr ByteBuffer compatibility_info);
+  public native OrtStatus GetCompatibilityInfoFromModelBytes(
+                    @Const Pointer model_data,
+                    @Cast("size_t") long model_data_length,
+                    String ep_type,
+                    OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr byte[] compatibility_info);
+
+  /** \}
+  <p>
+  /** \brief Create an OrtEnv instance with the given options.
+   *
+   * \note Invoking this function will return the same instance of the environment as that returned by a previous call
+   *       to another env creation function; all arguments to this function will be ignored.
+   *
+   * @param options [in] The OrtEnvCreationOptions instance that contains creation options.
+   * @param out [out] Output parameter set to the new OrtEnv instance. Must be freed with OrtApi::ReleaseEnv.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24
+   */
+  public native OrtStatus CreateEnvWithOptions( @Const OrtEnvCreationOptions options, @Cast("OrtEnv**") PointerPointer out);
+  public native OrtStatus CreateEnvWithOptions( @Const OrtEnvCreationOptions options, @ByPtrPtr OrtEnv out);
+
+  /** \brief Get information about the subgraphs assigned to each execution provider (EP) and the nodes within.
+   *
+   * Each returned OrtEpAssignedSubgraph instance contains details of the subgraph/nodes assigned to an execution
+   * provider, including the execution provider's name, and the name, domain, and operator type for every node.
+   *
+   * For compiling execution providers, a single OrtEpAssignedSubgraph instance contains information about the
+   * nodes that are fused and compiled within a single subgraph assigned to the execution provider.
+   *
+   * For execution providers that use kernel registration (e.g., CPU EP), each node with a registered kernel is
+   * contained in its own OrtEpAssignedSubgraph instance.
+   *
+   * \note The caller must enable the collection of this information by enabling the session
+   *       configuration entry "session.record_ep_graph_assignment_info" during session creation.
+   *       Refer to onnxruntime_session_options_config_keys.h. Otherwise, if not enabled, this function returns a
+   *       status with error code ORT_FAIL.
+   *
+   * \note The information reported by this function is obtained immediately after running basic optimizations on the
+   *       original graph if the session optimization level is set to ORT_ENABLE_BASIC or higher. If the session
+   *       optimization level is set to ORT_DISABLE_ALL, only minimal/required optimizations are run before
+   *       the information is collected.
+   *
+   * @param session [in] The OrtSession instance.
+   * @param ep_subgraphs [out] Output parameter set to the array of OrtEpAssignedSubgraph instances.
+   * @param num_ep_subgraphs [out] Output parameter set to the number of elements in the {@code ep_subgraphs} array.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus Session_GetEpGraphAssignmentInfo( @Const OrtSession session,
+                    @Cast("const OrtEpAssignedSubgraph*const**") @ByPtrPtr PointerPointer ep_subgraphs,
+                    @Cast("size_t*") SizeTPointer num_ep_subgraphs);
+
+  /** \brief Get the name of the execution provider to which the subgraph was assigned.
+   *
+   * @param ep_subgraph [in] The OrtEpAssignedSubgraph instance.
+   * @param out [out] Output parameter set to the execution provider's name as a UTF-8 null-terminated string.
+   *                 Owned by the OrtEpAssignedSubgraph instance (do not free).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus EpAssignedSubgraph_GetEpName( @Const OrtEpAssignedSubgraph ep_subgraph,
+                    @Cast("const char**") PointerPointer out);
+  public native OrtStatus EpAssignedSubgraph_GetEpName( @Const OrtEpAssignedSubgraph ep_subgraph,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus EpAssignedSubgraph_GetEpName( @Const OrtEpAssignedSubgraph ep_subgraph,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus EpAssignedSubgraph_GetEpName( @Const OrtEpAssignedSubgraph ep_subgraph,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the nodes in a subgraph assigned to a specific execution provider.
+   *
+   * @param ep_subgraph [in] The OrtEpAssignedSubgraph instance.
+   * @param ep_nodes [out] Output parameter set to the array of OrtEpAssignedNode instances.
+   * @param num_ep_nodes [out] Output parameter set to the number of OrtEpAssignedNode instance returned.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus EpAssignedSubgraph_GetNodes( @Const OrtEpAssignedSubgraph ep_subgraph,
+                    @Cast("const OrtEpAssignedNode*const**") @ByPtrPtr PointerPointer ep_nodes, @Cast("size_t*") SizeTPointer num_ep_nodes);
+
+  /** \brief Get the name of the node assigned to an execution provider.
+   *
+   * @param ep_node [in] The OrtEpAssignedNode instance.
+   * @param out [out] Output parameter set to the node's name as a UTF-8 null-terminated string.
+   *                 Owned by the OrtEpAssignedNode instance (do not free).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus EpAssignedNode_GetName( @Const OrtEpAssignedNode ep_node, @Cast("const char**") PointerPointer out);
+  public native OrtStatus EpAssignedNode_GetName( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus EpAssignedNode_GetName( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus EpAssignedNode_GetName( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the domain of the node assigned to an execution provider.
+   *
+   * @param ep_node [in] The OrtEpAssignedNode instance.
+   * @param out [out] Output parameter set to the node's domain as a UTF-8 null-terminated string.
+   *                 Owned by the OrtEpAssignedNode instance (do not free).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus EpAssignedNode_GetDomain( @Const OrtEpAssignedNode ep_node, @Cast("const char**") PointerPointer out);
+  public native OrtStatus EpAssignedNode_GetDomain( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus EpAssignedNode_GetDomain( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus EpAssignedNode_GetDomain( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the operator type of the node assigned to an execution provider.
+   *
+   * @param ep_node [in] The OrtEpAssignedNode instance.
+   * @param out [out] Output parameter set to the node's operator type as a UTF-8 null-terminated string.
+   *                 Owned by the OrtEpAssignedNode instance (do not free).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus EpAssignedNode_GetOperatorType( @Const OrtEpAssignedNode ep_node, @Cast("const char**") PointerPointer out);
+  public native OrtStatus EpAssignedNode_GetOperatorType( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus EpAssignedNode_GetOperatorType( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus EpAssignedNode_GetOperatorType( @Const OrtEpAssignedNode ep_node, @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Sets OrtSyncStream for the run options
+   *
+   * OrtSyncStream is used to synchronize the execution of the model run for the device
+   * of the stream. It overrides the existing stream for the duration of the Run().
+   * The stream instance must be alive for the duration of the Run() call.
+   *
+   * @param options [in]
+   * @param sync_stream [in] The synchronization stream. Pass nullptr to clear previous setting.
+   *
+   * @since 1.24
+   */
+  public static class RunOptionsSetSyncStream_OrtRunOptions_OrtSyncStream extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    RunOptionsSetSyncStream_OrtRunOptions_OrtSyncStream(Pointer p) { super(p); }
+      protected RunOptionsSetSyncStream_OrtRunOptions_OrtSyncStream() { allocate(); }
+      private native void allocate();
+      public native void call( OrtRunOptions options, OrtSyncStream sync_stream);
+  }
+  public native RunOptionsSetSyncStream_OrtRunOptions_OrtSyncStream RunOptionsSetSyncStream(); public native OrtApi RunOptionsSetSyncStream(RunOptionsSetSyncStream_OrtRunOptions_OrtSyncStream setter);
+
+  /** \brief Get the element data type and shape for an OrtValue that represents a Tensor (scalar, dense, or sparse).
+   *
+   * \note This function is an alternative to ::GetTensorTypeAndShape() that does not allocate a new array for
+   *       the shape data. The OrtValue instance's internal shape data is returned directly.
+   *
+   * \note Returns an error if the underlying OrtValue is not a Tensor.
+   *
+   * @param value [in] The OrtValue instance.
+   * @param elem_type [out] Output parameter set to the tensor element data type.
+   * @param shape_data [out] Output parameter set to the OrtValue instance's internal shape data array.
+   *                        For a scalar, {@code shape_data} is NULL and {@code shape_data_count} is 0.
+   *                        Must not be released as it is owned by the OrtValue instance. This pointer becomes invalid
+   *                        when the OrtValue is released or if the underlying shape data is updated or reallocated.
+   * @param shape_data_count [out] Output parameter set to the number of elements in {@code shape_data}.
+   *                              {@code shape_data_count} is 0 for a scalar.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetTensorElementTypeAndShapeDataReference( @Const OrtValue value,
+                    @Cast("ONNXTensorElementDataType*") IntPointer elem_type,
+                    @Cast("const int64_t**") PointerPointer shape_data,
+                    @Cast("size_t*") SizeTPointer shape_data_count);
+  public native OrtStatus GetTensorElementTypeAndShapeDataReference( @Const OrtValue value,
+                    @Cast("ONNXTensorElementDataType*") IntPointer elem_type,
+                    @Cast("const int64_t**") @ByPtrPtr LongPointer shape_data,
+                    @Cast("size_t*") SizeTPointer shape_data_count);
+  public native OrtStatus GetTensorElementTypeAndShapeDataReference( @Const OrtValue value,
+                    @Cast("ONNXTensorElementDataType*") IntBuffer elem_type,
+                    @Cast("const int64_t**") @ByPtrPtr LongBuffer shape_data,
+                    @Cast("size_t*") SizeTPointer shape_data_count);
+  public native OrtStatus GetTensorElementTypeAndShapeDataReference( @Const OrtValue value,
+                    @Cast("ONNXTensorElementDataType*") int[] elem_type,
+                    @Cast("const int64_t**") @ByPtrPtr long[] shape_data,
+                    @Cast("size_t*") SizeTPointer shape_data_count);
 }

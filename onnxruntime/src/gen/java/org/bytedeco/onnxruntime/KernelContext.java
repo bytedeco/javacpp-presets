@@ -42,7 +42,7 @@ public class KernelContext extends Pointer {
   public native @ByVal @Cast("Ort::UnownedValue*") ValueImpl GetOutput(@Cast("size_t") long index, @Const @ByRef LongVector dims);
   public native Pointer GetGPUComputeStream();
   public native @ByVal Logger GetLogger();
-  public native OrtAllocator GetAllocator(@Const @ByRef OrtMemoryInfo memory_info);
+  public native @ByVal Allocator GetAllocator(@Const @ByRef OrtMemoryInfo memory_info);
   public native OrtKernelContext GetOrtKernelContext();
   public static class Fn_Pointer_long extends FunctionPointer {
       static { Loader.load(); }

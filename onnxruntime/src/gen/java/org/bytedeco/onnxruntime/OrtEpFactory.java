@@ -357,4 +357,118 @@ public class OrtEpFactory extends Pointer {
                     @Const OrtMemoryDevice memory_device,
                     @Const OrtKeyValuePairs stream_options,
                     @ByPtrPtr OrtSyncStreamImpl stream);
+
+  /** \brief Check for known incompatibility reasons between a hardware device and this execution provider.
+   *
+   * This function allows an execution provider to check if a specific hardware device is compatible
+   * with the execution provider. The EP can set specific incompatibility reasons via the
+   * OrtDeviceEpIncompatibilityDetails parameter using OrtEpApi::DeviceEpIncompatibilityDetails_SetDetails.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param hw [in] The hardware device to check for incompatibility.
+   * @param details [in,out] Pre-allocated incompatibility details object created and initialized by ORT.
+   *                        The EP can use OrtEpApi::DeviceEpIncompatibilityDetails_SetDetails to set
+   *                        incompatibility information. If the device is compatible, the EP can
+   *                        leave the object unchanged (it defaults to no incompatibility).
+   *
+   * \note Implementation of this function is optional.
+   *       If not implemented, ORT will assume the device is compatible with this EP.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetHardwareDeviceIncompatibilityDetails( OrtEpFactory this_ptr,
+                    @Const OrtHardwareDevice hw,
+                    OrtDeviceEpIncompatibilityDetails details);
+
+  /** \brief Create an OrtExternalResourceImporterImpl for external resource import.
+   *
+   * This is used to create an external resource importer that enables zero-copy import of
+   * external GPU memory (e.g., D3D12 shared resources) and synchronization primitives
+   * (e.g., D3D12 timeline fences).
+   *
+   * EPs that support external resource import (via CUDA, HIP, Vulkan, or D3D12 APIs) can
+   * implement this to allow applications to share GPU resources without copies.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param ep_device [in] The OrtEpDevice to create the external resource importer for.
+   * @param out_importer [out] The created OrtExternalResourceImporterImpl instance.
+   *                          Set to nullptr if external resource import is not supported.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional.
+   *       An EP factory should only implement this if it supports external resource import.
+   *       If not implemented or not supported, return ORT_NOT_IMPLEMENTED or set out_importer to nullptr.
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus CreateExternalResourceImporterForDevice( OrtEpFactory this_ptr,
+                    @Const OrtEpDevice ep_device,
+                    @Cast("OrtExternalResourceImporterImpl**") PointerPointer out_importer);
+  public native OrtStatus CreateExternalResourceImporterForDevice( OrtEpFactory this_ptr,
+                    @Const OrtEpDevice ep_device,
+                    @ByPtrPtr OrtExternalResourceImporterImpl out_importer);
+
+  /** \brief Returns the number of OrtCustomOpDomains that this factory provides.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param num_domains [out] Output parameter set to the number of provided OrtCustomOpDomain instances.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetNumCustomOpDomains( OrtEpFactory this_ptr, @Cast("size_t*") SizeTPointer num_domains);
+
+  /** \brief Gets the EP-specific OrtCustomOpDomains.
+   *
+   * This function is used when running inference on a model that contains EP-specific custom operations.
+   *
+   * Workflow:
+   * 1. The EP factory implements this function to supply a list of OrtCustomOpDomain instances.
+   * 2. The application either 1) calls SessionOptionsAppendExecutionProvider_V2() with an OrtEpDevice containing
+   *    the plugin EP's factory or 2) enables auto ep selection.
+   * 3. 1) SessionOptionsAppendExecutionProvider_V2() appends the provided OrtCustomOpDomains to the
+   *    session options or 2) ORT registers the OrtCustomOpDomains provided by the EP devices
+   *    that could be potentially selected.
+   *
+   * As a result, any session created from these session options will have these custom op domains registered
+   * in ORT, ensuring that the custom ops are properly recognized and validated when the model is loaded.
+   *
+   * Plugin EPs can provide two types of custom ops:
+   *  1. A full OrtCustomOp with a concrete kernel implementation
+   *    - A Plugin EP can supply an OrtCustomOp and a corresponding CustomKernel::Compute() implementation.
+   *    - In GetCapability(), it calls EpGraphSupportInfo_AddSingleNode() to inform ORT
+   *      that the custom node should NOT be fused or compiled. Instead, ORT should invoke
+   *      the custom node's Compute() function at runtime.
+   *
+   *  2. A "placeholder" OrtCustomOp with an empty kernel implementation
+   *    - A compile-based Plugin EP can supply an OrtCustomOp whose CustomKernel::Compute()
+   *      does nothing. The purpose is to satisfy model validation during model loading by
+   *      registering the custom op as a valid operator in the session.
+   *    - In GetCapability(), the EP should call EpGraphSupportInfo_AddNodesToFuse() to
+   *      notify ORT that this custom node should be fused and compiled by the EP.
+   *    - In Compile(), the EP executes its compiled bits to perform inference for
+   *      the fused custom node.
+   *
+   * Note: The OrtCustomOpDomain instances must be valid while any session is using them.
+           EP factory has the responsibility to release OrtCustomOpDomain instances it creates. It happens
+   *       automatically if using the C++ Ort::CustomOpDomain class.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param domains [out] Array of {@code num_domains} elements pre-allocated by ORT that should be filled with
+                         OrtCustomOpDomain instances created by the EP. The {@code num_domains} is the value returned by
+                         GetNumCustomOpDomains().
+   * @param num_domains [in] The size of the {@code domains} array pre-allocated by ORT.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetCustomOpDomains( OrtEpFactory this_ptr,
+                    @Cast("OrtCustomOpDomain**") PointerPointer domains, @Cast("size_t") long num_domains);
+  public native OrtStatus GetCustomOpDomains( OrtEpFactory this_ptr,
+                    @ByPtrPtr OrtCustomOpDomain domains, @Cast("size_t") long num_domains);
 }

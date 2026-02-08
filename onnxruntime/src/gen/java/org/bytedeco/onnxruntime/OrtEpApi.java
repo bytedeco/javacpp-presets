@@ -15,6 +15,11 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/**
+ * \brief The OrtEpApi struct provides functions that are relevant to the implementation of an execution provider.
+ *
+ * @since Version 1.22.
+ */
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtEpApi extends Pointer {
     static { Loader.load(); }
@@ -329,4 +334,597 @@ public class OrtEpApi extends Pointer {
               @Const OrtSyncStream producer_stream, @Const OrtSyncStream consumer_stream);
   }
   public native GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream GetSyncIdForLastWaitOnSyncStream(); public native OrtEpApi GetSyncIdForLastWaitOnSyncStream(GetSyncIdForLastWaitOnSyncStream_OrtSyncStream_OrtSyncStream setter);
+
+  /** \brief Create an OrtHardwareDevice.
+   *
+   * \note Called within OrtEpFactory::GetSupportedDevices to create a new hardware device (e.g., virtual).
+   *
+   * @param type [in] The hardware device type.
+   * @param vendor_id [in] The hardware device's vendor identifier.
+   * @param device_id [in] The hardware device's identifier.
+   * @param vendor_name [in] The hardware device's vendor name as a null-terminated string. Copied by ORT.
+   * @param metadata [in] Optional OrtKeyValuePairs instance for hardware device metadata that may be queried by
+   *                     applications via OrtApi::GetEpDevices().
+   *                     Refer to onnxruntime_ep_device_ep_metadata_keys.h for common OrtHardwareDevice metadata keys.
+   * @param hardware_device [out] Output parameter set to the new OrtHardwareDevice instance that is created.
+   *                             Must be release with ReleaseHardwareDevice().
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus CreateHardwareDevice( @Cast("OrtHardwareDeviceType") int type,
+                    @Cast("uint32_t") int vendor_id,
+                    @Cast("uint32_t") int device_id,
+                    @Cast("const char*") BytePointer vendor_name,
+                    @Const OrtKeyValuePairs metadata,
+                    @Cast("OrtHardwareDevice**") PointerPointer hardware_device);
+  public native OrtStatus CreateHardwareDevice( @Cast("OrtHardwareDeviceType") int type,
+                    @Cast("uint32_t") int vendor_id,
+                    @Cast("uint32_t") int device_id,
+                    @Cast("const char*") BytePointer vendor_name,
+                    @Const OrtKeyValuePairs metadata,
+                    @ByPtrPtr OrtHardwareDevice hardware_device);
+  public native OrtStatus CreateHardwareDevice( @Cast("OrtHardwareDeviceType") int type,
+                    @Cast("uint32_t") int vendor_id,
+                    @Cast("uint32_t") int device_id,
+                    String vendor_name,
+                    @Const OrtKeyValuePairs metadata,
+                    @ByPtrPtr OrtHardwareDevice hardware_device);
+
+  public native void ReleaseHardwareDevice(OrtHardwareDevice input);
+
+  /** \brief Creates an empty kernel registry. A kernel registry contains kernel creation information for
+   * every operator kernel supported by an EP.
+   *
+   * \remarks Refer to OrtEp::GetKernelRegistry, which returns an EP's kernel registry to ORT.
+   *
+   * @param kernel_registry [out] Output parameter set to the new OrtKernelRegistry instance.
+   *                             Must be released with OrtEpApi::ReleaseKernelRegistry.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus CreateKernelRegistry( @Cast("OrtKernelRegistry**") PointerPointer kernel_registry);
+  public native OrtStatus CreateKernelRegistry( @ByPtrPtr OrtKernelRegistry kernel_registry);
+
+  public native void ReleaseKernelRegistry(OrtKernelRegistry input);
+
+  /** \brief Adds kernel creation information for a supported operator kernel to the given kernel registry.
+   *
+   * \remarks Refer to OrtEp::GetKernelRegistry, which returns an EP's kernel registry to ORT.
+   *
+   * @param kernel_registry [in] The OrtKernelRegistry instance.
+   * @param kernel_def [in] The kernel definition, which includes operator type, version, EP name, type constraints, etc.
+   * @param kernel_create_func [in] Function that creates an instance of the operator kernel as a OrtKernelImpl instance.
+   * @param kernel_create_func_state [in] Custom state passed to the kernel creation function. Can be null.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelRegistry_AddKernel( OrtKernelRegistry kernel_registry,
+                    @Const OrtKernelDef kernel_def, OrtKernelCreateFunc kernel_create_func,
+                    Pointer kernel_create_func_state);
+
+  /** \brief Creates a kernel definition builder used to create instances of OrtKernelDef.
+   *
+   * @param kernel_def_builder_out [out] Output parameter set to the new OrtKernelDefBuilder instance.
+   *                                    Must be released with OrtEpApi::ReleaseKernelDefBuilder().
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus CreateKernelDefBuilder( @Cast("OrtKernelDefBuilder**") PointerPointer kernel_def_builder_out);
+  public native OrtStatus CreateKernelDefBuilder( @ByPtrPtr OrtKernelDefBuilder kernel_def_builder_out);
+
+  public native void ReleaseKernelDefBuilder(OrtKernelDefBuilder input);
+
+  /** \brief Sets the kernel's operator type.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param op_type [in] A null-terminated string representing the operator type.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_SetOperatorType( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("const char*") BytePointer op_type);
+  public native OrtStatus KernelDefBuilder_SetOperatorType( OrtKernelDefBuilder kernel_def_builder,
+                    String op_type);
+
+  /** \brief Sets the kernel's domain.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param domain [in] A null-terminated string representing the operator's domain.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_SetDomain( OrtKernelDefBuilder kernel_def_builder, @Cast("const char*") BytePointer domain);
+  public native OrtStatus KernelDefBuilder_SetDomain( OrtKernelDefBuilder kernel_def_builder, String domain);
+
+  /** \brief Sets the kernel's opset version range that is supported.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param since_version_start [in] The starting opset version that is supported.
+   * @param since_version_end [in] The ending opset version (inclusive) that is supported.
+   *                              Can be set equal to the starting version to indicate that only one
+   *                              version is supported.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_SetSinceVersion( OrtKernelDefBuilder kernel_def_builder,
+                    int since_version_start, int since_version_end);
+
+  /** \brief Sets the name of the kernel's intended execution provider.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param ep_name [in] A null-terminated string representing the execution provider's name.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_SetExecutionProvider( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("const char*") BytePointer ep_name);
+  public native OrtStatus KernelDefBuilder_SetExecutionProvider( OrtKernelDefBuilder kernel_def_builder,
+                    String ep_name);
+
+  /** \brief Sets the memory type for a kernel input.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param input_index [in] The index of the input.
+   * @param mem_type [in] The input's memory type.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_SetInputMemType( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("size_t") long input_index, @Cast("OrtMemType") int mem_type);
+
+  /** \brief Sets the memory type for a kernel output.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param output_index [in] The index of the output.
+   * @param mem_type [in] The output's memory type.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_SetOutputMemType( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("size_t") long output_index, @Cast("OrtMemType") int mem_type);
+
+  /** \brief Adds type constraints for a kernel argument represented as a string (e.g., "T").
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param arg_name [in] A null-terminated string representing the argument to constrain (e.g., "T").
+   * @param types [in] Array of OrtDataType instances representing allowed types for the argument.
+   *                  Must contain {@code num_types} elements.
+   * @param num_types [in] The number of OrtDataType elements in the {@code types} array.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_AddTypeConstraint( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("const char*") BytePointer arg_name, @Cast("const OrtDataType*const*") PointerPointer types,
+                    @Cast("size_t") long num_types);
+  public native OrtStatus KernelDefBuilder_AddTypeConstraint( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("const char*") BytePointer arg_name, @Const @ByPtrPtr OrtDataType types,
+                    @Cast("size_t") long num_types);
+  public native OrtStatus KernelDefBuilder_AddTypeConstraint( OrtKernelDefBuilder kernel_def_builder,
+                    String arg_name, @Const @ByPtrPtr OrtDataType types,
+                    @Cast("size_t") long num_types);
+
+  /** \brief Adds aliases for the given input and output pairs.
+   *
+   * \note Used for operators like Identity and Reshape to allow ORT to reuse the input buffer for the output
+   *       without modification.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param input_indices [in] Array of input indices. Array must contain {@code num_io_indices} elements.
+   * @param output_indices [in] Array of output indices. Each output index is aliased with a corresponding
+   *                           input index in {@code input_indices}. Array must contain {@code num_io_indices} elements.
+   * @param num_io_indices [in] The number of input/output index pairs to alias.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_AddInputOutputAliases( OrtKernelDefBuilder kernel_def_builder,
+                    @Const IntPointer input_indices,
+                    @Const IntPointer output_indices,
+                    @Cast("size_t") long num_io_indices);
+  public native OrtStatus KernelDefBuilder_AddInputOutputAliases( OrtKernelDefBuilder kernel_def_builder,
+                    @Const IntBuffer input_indices,
+                    @Const IntBuffer output_indices,
+                    @Cast("size_t") long num_io_indices);
+  public native OrtStatus KernelDefBuilder_AddInputOutputAliases( OrtKernelDefBuilder kernel_def_builder,
+                    @Const int[] input_indices,
+                    @Const int[] output_indices,
+                    @Cast("size_t") long num_io_indices);
+
+  /** \brief Adds mutable aliases for the given input and output pairs.
+   *
+   * \note Allows ORT to reuse and *modify* an input buffer (in-place) for the output buffer.
+   *       This is also known as "MayInplace" within the ORT codebase.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param input_indices [in] Array of input indices. Array must contain {@code num_io_indices} elements.
+   * @param output_indices [in] Array of output indices. Each output index is aliased with a corresponding
+   *                           input index in {@code input_indices}. Array must contain {@code num_io_indices} elements.
+   * @param num_io_indices [in] The number of input/output index pairs to alias.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_AddInputOutputMutableAliases( OrtKernelDefBuilder kernel_def_builder,
+                    @Const IntPointer input_indices,
+                    @Const IntPointer output_indices,
+                    @Cast("size_t") long num_io_indices);
+  public native OrtStatus KernelDefBuilder_AddInputOutputMutableAliases( OrtKernelDefBuilder kernel_def_builder,
+                    @Const IntBuffer input_indices,
+                    @Const IntBuffer output_indices,
+                    @Cast("size_t") long num_io_indices);
+  public native OrtStatus KernelDefBuilder_AddInputOutputMutableAliases( OrtKernelDefBuilder kernel_def_builder,
+                    @Const int[] input_indices,
+                    @Const int[] output_indices,
+                    @Cast("size_t") long num_io_indices);
+
+  /** \brief Creates a OrtKernelDef instance from the given kernel definition builder.
+   *
+   * @param kernel_def_builder [in] The OrtKernelDefBuilder instance.
+   * @param kernel_def_out [out] The new OrtKernelDef instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDefBuilder_Build( OrtKernelDefBuilder kernel_def_builder,
+                    @Cast("OrtKernelDef**") PointerPointer kernel_def_out);
+  public native OrtStatus KernelDefBuilder_Build( OrtKernelDefBuilder kernel_def_builder,
+                    @ByPtrPtr OrtKernelDef kernel_def_out);
+
+  public native void ReleaseKernelDef(OrtKernelDef input);
+
+  /** \brief Returns the operator type from the kernel definition.
+   *
+   * @param kernel_def [in] The OrtKernelDef instance.
+   * @return A null-terminated string representing the operator type.
+   *
+   * @since Version 1.24.
+   */
+  public static class KernelDef_GetOperatorType_OrtKernelDef extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    KernelDef_GetOperatorType_OrtKernelDef(Pointer p) { super(p); }
+      protected KernelDef_GetOperatorType_OrtKernelDef() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( @Const OrtKernelDef kernel_def);
+  }
+  public native KernelDef_GetOperatorType_OrtKernelDef KernelDef_GetOperatorType(); public native OrtEpApi KernelDef_GetOperatorType(KernelDef_GetOperatorType_OrtKernelDef setter);
+
+  /** \brief Returns the operator's domain from the kernel definition.
+   *
+   * @param kernel_def [in] The OrtKernelDef instance.
+   * @return A null-terminated string representing the operator's domain.
+   *
+   * @since Version 1.24.
+   */
+  public static class KernelDef_GetDomain_OrtKernelDef extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    KernelDef_GetDomain_OrtKernelDef(Pointer p) { super(p); }
+      protected KernelDef_GetDomain_OrtKernelDef() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( @Const OrtKernelDef kernel_def);
+  }
+  public native KernelDef_GetDomain_OrtKernelDef KernelDef_GetDomain(); public native OrtEpApi KernelDef_GetDomain(KernelDef_GetDomain_OrtKernelDef setter);
+
+  /** \brief Gets the kernel's opset version range that is supported.
+   *
+   * @param kernel_def [in] The OrtKernelDef instance.
+   * @param start_version [out] Output parameter set to the starting opset version that is supported.
+   * @param end_version [out] Output parameter set to the ending opset version (inclusive) that is supported.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDef_GetSinceVersion( @Const OrtKernelDef kernel_def,
+                    IntPointer start_version, IntPointer end_version);
+  public native OrtStatus KernelDef_GetSinceVersion( @Const OrtKernelDef kernel_def,
+                    IntBuffer start_version, IntBuffer end_version);
+  public native OrtStatus KernelDef_GetSinceVersion( @Const OrtKernelDef kernel_def,
+                    int[] start_version, int[] end_version);
+
+  /** \brief Returns the name of the kernel's intended execution provider.
+   *
+   * @param kernel_def [in] The OrtKernelDef instance.
+   * @return A null-terminated string representing the name of the execution provider.
+   *
+   * @since Version 1.24.
+   */
+  public static class KernelDef_GetExecutionProvider_OrtKernelDef extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    KernelDef_GetExecutionProvider_OrtKernelDef(Pointer p) { super(p); }
+      protected KernelDef_GetExecutionProvider_OrtKernelDef() { allocate(); }
+      private native void allocate();
+      public native @Cast("const char*") BytePointer call( @Const OrtKernelDef kernel_def);
+  }
+  public native KernelDef_GetExecutionProvider_OrtKernelDef KernelDef_GetExecutionProvider(); public native OrtEpApi KernelDef_GetExecutionProvider(KernelDef_GetExecutionProvider_OrtKernelDef setter);
+
+  /** \brief Gets the memory type for a kernel input.
+   *
+   * @param kernel_def [in] The OrtKernelDef instance.
+   * @param input_index [in] The index of the input.
+   * @param mem_type [out] Output parameter set to the input's memory type.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDef_GetInputMemType( @Const OrtKernelDef kernel_def,
+                    @Cast("size_t") long input_index, @Cast("OrtMemType*") IntPointer mem_type);
+  public native OrtStatus KernelDef_GetInputMemType( @Const OrtKernelDef kernel_def,
+                    @Cast("size_t") long input_index, @Cast("OrtMemType*") IntBuffer mem_type);
+  public native OrtStatus KernelDef_GetInputMemType( @Const OrtKernelDef kernel_def,
+                    @Cast("size_t") long input_index, @Cast("OrtMemType*") int[] mem_type);
+
+  /** \brief Gets the memory type for a kernel output.
+   *
+   * @param kernel_def [in] The OrtKernelDef instance.
+   * @param output_index [in] The index of the output.
+   * @param mem_type [out] Output parameter set to the output's memory type.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus KernelDef_GetOutputMemType( @Const OrtKernelDef kernel_def,
+                    @Cast("size_t") long output_index, @Cast("OrtMemType*") IntPointer mem_type);
+  public native OrtStatus KernelDef_GetOutputMemType( @Const OrtKernelDef kernel_def,
+                    @Cast("size_t") long output_index, @Cast("OrtMemType*") IntBuffer mem_type);
+  public native OrtStatus KernelDef_GetOutputMemType( @Const OrtKernelDef kernel_def,
+                    @Cast("size_t") long output_index, @Cast("OrtMemType*") int[] mem_type);
+
+  /** \brief Gets the OrtDataType that represents the data type for a tensor of the given element type.
+   *
+   * @param elem_type [in] The tensor's element type.
+   * @param out [out] Output parameter set to the OrtDataType. Owned by ORT and must not be released.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetTensorDataType( @Cast("ONNXTensorElementDataType") int elem_type,
+                    @Cast("const OrtDataType**") PointerPointer out);
+  public native OrtStatus GetTensorDataType( @Cast("ONNXTensorElementDataType") int elem_type,
+                    @Const @ByPtrPtr OrtDataType out);
+
+  /** \brief Gets the kernel definition for a given node, if any exists for the calling execution provider.
+   *
+   * Used within OrtEp::GetCapability() to get the registered kernel definition for the given node.
+   * The kernel definition is set to NULL if there is no registered kernel definition for the node
+   * and execution provider.
+   *
+   * @param graph_support_info [in] The OrtEpGraphSupportInfo instance to query.
+   * @param node [in] The node for which to look up a kernel definition.
+   * @param out_kernel_def [out] Output parameter set to the OrtKernelDef or NULL.
+   *                            Owned by ORT and must not be released.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus EpGraphSupportInfo_LookUpKernel( OrtEpGraphSupportInfo graph_support_info,
+                    @Const OrtNode node, @Cast("const OrtKernelDef**") PointerPointer out_kernel_def);
+  public native OrtStatus EpGraphSupportInfo_LookUpKernel( OrtEpGraphSupportInfo graph_support_info,
+                    @Const OrtNode node, @Const @ByPtrPtr OrtKernelDef out_kernel_def);
+
+  /** \brief Sets one or more data buffers that collectively hold the pre-packed data for a single shared weight.
+   *
+   * \note Used within the implementation of OrtKernelImpl::PrePackWeight() when the kernel wants to share pre-packed
+   *       weight data with other kernels. The buffer data MUST be allocated with the OrtAllocator provided to
+   *       OrtKernelImpl::PrePack.
+   *
+   * \note Ownership of weight data transfers to the OrtSharedPrePackedWeightCache instance on success.
+   *       If this function returns an error status, the caller retains ownership of the weight data.
+   *
+   * \note Subsequent calls with the same OrtSharedPrePackedWeightCache instance release and replace the old data.
+   *
+   * @param prepacked_weight_cache [in] The OrtSharedPrePackedWeightCache instance.
+   * @param buffer_data_ptrs [in] An array of buffer data pointers that collectively hold the pre-packed data for a
+   *                             single shared weight. Note that sometimes a single weight may have multiple pre-packed
+   *                             buffers and it is up to the kernel implementation to determine how to split the data
+   *                             into multiple buffers (if desired).
+   * @param buffer_data_sizes [in] An array of buffer byte sizes, one per element in {@code buffer_data_ptrs}.
+   * @param num_buffers [in] The number of buffers used to store the data for the shared pre-packed weight.
+   *                        Specifies the number of elements in the {@code buffer_data_ptrs} and {@code buffer_data_sizes} arrays.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus SharedPrePackedWeightCache_StoreWeightData(
+                    OrtSharedPrePackedWeightCache prepacked_weight_cache,
+                    @Cast("void**") PointerPointer buffer_data_ptrs, @Cast("size_t*") SizeTPointer buffer_data_sizes,
+                    @Cast("size_t") long num_buffers);
+  public native OrtStatus SharedPrePackedWeightCache_StoreWeightData(
+                    OrtSharedPrePackedWeightCache prepacked_weight_cache,
+                    @Cast("void**") @ByPtrPtr Pointer buffer_data_ptrs, @Cast("size_t*") SizeTPointer buffer_data_sizes,
+                    @Cast("size_t") long num_buffers);
+
+  /** \brief Get the OrtEp instance to which the node is assigned from the OrtKernelInfo.
+   *
+   * \note Used within OrtKernelImpl implementations to obtain a reference to the OrtEp.
+   *
+   * @param info [in] The ::OrtKernelInfo instance.
+   * @param ep [out] Output parameter set to the OrtEp instance associated with the OrtKernelInfo.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus KernelInfo_GetEp( @Const OrtKernelInfo info, @Cast("const OrtEp**") PointerPointer ep);
+  public native OrtStatus KernelInfo_GetEp( @Const OrtKernelInfo info, @Const @ByPtrPtr OrtEp ep);
+
+  /** \brief Set the details of an OrtDeviceEpIncompatibilityDetails instance.
+   *
+   * Used by execution provider factories to set incompatibility details in their
+   * GetHardwareDeviceIncompatibilityDetails implementation. ORT creates and initializes the object
+   * before passing it to the EP, so calling this function is optional. The EP uses this function
+   * to set incompatibility information when the device is not compatible.
+   *
+   * @param details [in,out] The OrtDeviceEpIncompatibilityDetails instance to update.
+   * @param reasons_bitmask [in] Bitmask of OrtDeviceEpIncompatibilityReason values. (0 = no incompatibility).
+   * @param error_code [in] Optional EP-specific error code (0 = no error).
+   * @param notes [in] Optional human-readable notes. Can be null.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus DeviceEpIncompatibilityDetails_SetDetails( OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("uint32_t") int reasons_bitmask,
+                    int error_code,
+                    @Cast("const char*") BytePointer notes);
+  public native OrtStatus DeviceEpIncompatibilityDetails_SetDetails( OrtDeviceEpIncompatibilityDetails details,
+                    @Cast("uint32_t") int reasons_bitmask,
+                    int error_code,
+                    String notes);
+
+  /** \brief Creates an OrtKernelImpl instance for an If operator.
+   *
+   * Control flow operators require access to ORT session internals to orchestrate subgraph operations.
+   * This function allows an EP to create a properly configured OrtKernelImpl with access to ORT internals that
+   * the EP can add to its kernel registry.
+   *
+   * An EP is required to create an OrtKernelDef that keeps input[0] ('cond') on the CPU (i.e., OrtMemTypeCPUInput)
+   * as this input is used by CPU logic. The output should remain on the device (i.e., OrtMemTypeDefault), which is
+   * the default setting, to avoid copying to/from CPU.
+   *
+   * Example kernel definition (CXX API):
+   *     Ort::KernelDef kernel_def = Ort::KernelDefBuilder()
+   *                                     .SetDomain("").SetOperatorType("If").SetSinceVersion(21, 22)
+   *                                     .SetExecutionProvider("MyEp")
+   *                                     .SetInputMemType(0, OrtMemTypeCPUInput) // 'cond' on CPU
+   *                                     .SetOutputMemType(0, OrtMemTypeDefault) // output on EP device
+   *                                     .AddTypeConstraint("B", ...)
+   *                                     .AddTypeConstraint("V", ...).Build();
+   *
+   * @param kernel_info [in] The ::OrtKernelInfo instance for an If node. This function returns error ORT_FAIL
+   *                        if the opset version specified by {@code kernel_info} is unsupported.
+   * @param kernel_out [out] Output parameter set to the OrtKernelImpl instance for the If node.
+   *                        Must be released via ::ReleaseKernelImpl, unless ownership is transferred
+   *                        to ORT (see OrtKernelCreateFunc and ::KernelRegistry_AddKernel()).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus CreateIfKernel( @Const OrtKernelInfo kernel_info, @Cast("OrtKernelImpl**") PointerPointer kernel_out);
+  public native OrtStatus CreateIfKernel( @Const OrtKernelInfo kernel_info, @ByPtrPtr OrtKernelImpl kernel_out);
+
+  /** \brief Creates an OrtKernelImpl instance for a Loop operator.
+   *
+   * Control flow operators require access to ORT session internals to orchestrate subgraph operations.
+   * This function allows an EP to create a properly configured OrtKernelImpl with access to ORT internals that
+   * the EP can add to its kernel registry.
+   *
+   * An EP is required to create an OrtKernelDef that keeps input[0] ('M') and input[1] ('cond') on the CPU
+   * (i.e., OrtMemTypeCPUInput) as these inputs are used by CPU logic. Input[2] ('v_initial') and the output should
+   * remain on the device (i.e., OrtMemTypeDefault), which is the default setting, to avoid copying to/from CPU.
+   *
+   * Example kernel definition (CXX API):
+   *     Ort::KernelDef kernel_def = Ort::KernelDefBuilder()
+   *                                     .SetDomain("").SetOperatorType("Loop").SetSinceVersion(21, 22)
+   *                                     .SetExecutionProvider("MyEp")
+   *                                     .SetInputMemType(0, OrtMemTypeCPUInput) // 'M' on CPU
+   *                                     .SetInputMemType(1, OrtMemTypeCPUInput) // 'cond' on CPU
+   *                                     .SetInputMemType(2, OrtMemTypeDefault) // 'v_initial' on EP device
+   *                                     .SetOutputMemType(0, OrtMemTypeDefault) // output on EP device
+   *                                     .AddTypeConstraint("I", ...)
+   *                                     .AddTypeConstraint("B", ...)
+   *                                     .AddTypeConstraint("V", ...).Build();
+   *
+   * @param kernel_info [in] The ::OrtKernelInfo instance for a Loop node. This function returns error ORT_FAIL
+   *                        if the opset version specified by {@code kernel_info} is unsupported.
+   * @param helper [in] A OrtLoopKernelHelper instance that contains helper functions that ORT calls during kernel
+   *                   execution to operate on tensors allocated with the EP's device memory.
+   *                   ORT will call OrtLoopKernelHelper::Release() to release the helper and its resources.
+   * @param kernel_out [out] Output parameter set to the OrtKernelImpl instance for the Loop node.
+   *                        Must be released via ::ReleaseKernelImpl, unless ownership is transferred
+   *                        to ORT (see OrtKernelCreateFunc and ::KernelRegistry_AddKernel()).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus CreateLoopKernel( @Const OrtKernelInfo kernel_info, OrtLoopKernelHelper helper,
+                    @Cast("OrtKernelImpl**") PointerPointer kernel_out);
+  public native OrtStatus CreateLoopKernel( @Const OrtKernelInfo kernel_info, OrtLoopKernelHelper helper,
+                    @ByPtrPtr OrtKernelImpl kernel_out);
+
+  /** \brief Creates an OrtKernelImpl instance for a Scan operator. Does not support opset versions older than 9.
+   *
+   * Control flow operators require access to ORT session internals to orchestrate subgraph operations.
+   * This function allows an EP to create a properly configured OrtKernelImpl with access to ORT internals that
+   * the EP can add to its kernel registry.
+   *
+   * It is recommended that an EP create an OrtKernelDef that keeps the inputs and outputs on the EP's
+   * device (i.e., OrtMemTypeDefault), which is the default setting, to avoid copying to/from CPU.
+   *
+   * Example kernel definition (CXX API):
+   *     Ort::KernelDef kernel_def = Ort::KernelDefBuilder()
+   *                                     .SetDomain("").SetOperatorType("Scan").SetSinceVersion(21, 22)
+   *                                     .SetExecutionProvider("MyEp")
+   *                                     .SetInputMemType(0, OrtMemTypeDefault) // input[0] on EP device
+   *                                     .SetOutputMemType(0, OrtMemTypeDefault) // output[0] on EP device
+   *                                     .AddTypeConstraint("V", ...).Build();
+   *
+   * @param kernel_info [in] The ::OrtKernelInfo instance for a Scan node. This function returns error ORT_FAIL
+   *                        if the opset version specified by {@code kernel_info} is unsupported.
+   * @param helper [in] A OrtScanKernelHelper instance that contains helper functions that ORT calls during kernel
+   *                   execution to operate on tensors allocated with the EP's device memory.
+   *                   ORT will call OrtScanKernelHelper::Release() to release the helper and its resources.
+   * @param kernel_out [out] Output parameter set to the OrtKernelImpl instance for the Scan node.
+   *                        Must be released via ::ReleaseKernelImpl, unless ownership is transferred
+   *                        to ORT (see OrtKernelCreateFunc and ::KernelRegistry_AddKernel()).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus CreateScanKernel( @Const OrtKernelInfo kernel_info, OrtScanKernelHelper helper,
+                    @Cast("OrtKernelImpl**") PointerPointer kernel_out);
+  public native OrtStatus CreateScanKernel( @Const OrtKernelInfo kernel_info, OrtScanKernelHelper helper,
+                    @ByPtrPtr OrtKernelImpl kernel_out);
+
+  public native void ReleaseKernelImpl(OrtKernelImpl input);
+
+  /** \brief Gets a new OrtKeyValuePairs instance containing a copy of all configuration entries set on the environment.
+   *
+   * \note An application provides environment-level configuration options for execution provider libraries by
+   *       using keys with the prefix 'ep_factory.\<ep_name\>.'. Ex: the key 'ep_factory.my_ep.some_ep_key' represents
+   *       a key named 'some_ep_key' that is meant to be consumed by an execution provider named 'my_ep'. Refer to
+   *       the specific execution provider's documentation for valid keys and values.
+   *
+   * \note Refer to onnxruntime_env_config_keys.h for common configuration entry keys and their supported values.
+   *
+   * @param config_entries [out] Output parameter set to the OrtKeyValuePairs instance containing all configuration entries.
+   *                 Must be released via OrtApi::ReleaseKeyValuePairs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.24
+   */
+  public native OrtStatus GetEnvConfigEntries( @Cast("OrtKeyValuePairs**") PointerPointer config_entries);
+  public native OrtStatus GetEnvConfigEntries( @ByPtrPtr OrtKeyValuePairs config_entries);
 }

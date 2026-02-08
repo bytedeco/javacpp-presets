@@ -129,6 +129,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
 //               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("const std::vector<Ort::ValueInfo>", "std::vector<Ort::ValueInfo>").pointerTypes("ValueInfoVector").define())
                .put(new Info("const std::vector<Ort::OpAttr>", "std::vector<Ort::OpAttr>").pointerTypes("OpAttrVector").define())
+               .put(new Info("std::pair<int,int>").pointerTypes("IntPair").define())
                .put(new Info("std::pair<std::string,int>").pointerTypes("StringIntPair").define())
                .put(new Info("std::vector<std::pair<std::string,int> >").pointerTypes("StringIntPairVector").define())
                .put(new Info("std::vector<float>", "Ort::ShapeInferContext::Floats").pointerTypes("FloatVector").define())
@@ -161,6 +162,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::detail::Unowned<OrtAllocator>").pointerTypes("UnownedAllocator").purify())
+               .put(new Info("Ort::detail::Unowned<const OrtEpAssignedNode>").pointerTypes("ConstEpAssignedNode").purify())
+               .put(new Info("Ort::detail::Unowned<const OrtEpAssignedSubgraph>").pointerTypes("ConstEpAssignedSubgraph").purify())
                .put(new Info("Ort::detail::Unowned<const Ort::MemoryInfo>").pointerTypes("UnownedMemoryInfo").purify())
                .put(new Info("Ort::detail::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
                .put(new Info("Ort::detail::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
@@ -185,6 +188,10 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtTensorTypeAndShapeInfo> >").pointerTypes("BaseConstTensorTypeAndShapeInfo"))
                .put(new Info("Ort::detail::AllocatorImpl<Ort::detail::Unowned<OrtAllocator> >").pointerTypes("AllocatorWithDefaultOptionsImpl"))
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >").pointerTypes("BaseAllocatorWithDefaultOptions"))
+               .put(new Info("Ort::detail::EpAssignedNodeImpl<Ort::detail::Unowned<const OrtEpAssignedNode> >").pointerTypes("EpAssignedNodeWithDefaultOptionsImpl"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedNode> >").pointerTypes("BaseEpAssignedNodeWithDefaultOptions"))
+               .put(new Info("Ort::detail::EpAssignedSubgraphImpl<Ort::detail::Unowned<const OrtEpAssignedSubgraph> >").pointerTypes("EpAssignedSubgraphWithDefaultOptionsImpl"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedSubgraph> >").pointerTypes("BaseEpAssignedSubgraphWithDefaultOptions"))
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtGraph> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtSessionOptions> >::release",
@@ -192,6 +199,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtMapTypeInfo> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtIoBinding> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtTensorTypeAndShapeInfo> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedNode> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedSubgraph> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >::release").skip())
 
                .put(new Info("Ort::detail::Base<OrtArenaCfg>", "Ort::detail::Base<OrtArenaCfg>").pointerTypes("BaseArenaCfg"))
@@ -230,6 +239,10 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::Base<OrtOpAttr>").pointerTypes("BaseOpAttr"))
                .put(new Info("Ort::detail::ConstOpAttrImpl<OrtOpAttr>").pointerTypes("ConstOpAttrImpl"))
                .put(new Info("Ort::detail::Base<OrtStatus>").pointerTypes("BaseStatus"))
+               .put(new Info("Ort::detail::ConstKernelDefImpl<OrtKernelDef>").pointerTypes("ConstKernelDefImpl"))
+               .put(new Info("Ort::detail::Base<OrtKernelDef>").pointerTypes("BaseKernelDef"))
+               .put(new Info("Ort::detail::Base<OrtKernelDefBuilder>").pointerTypes("BaseKernelDefBuilder"))
+               .put(new Info("Ort::detail::Base<OrtKernelRegistry>").pointerTypes("BaseKernelRegistry"))
                .put(new Info("Ort::detail::KernelInfoImpl<OrtKernelInfo>").pointerTypes("KernelInfoImpl"))
                .put(new Info("Ort::detail::Base<OrtKernelInfo>").pointerTypes("BaseKernelInfo"))
                .put(new Info("Ort::detail::Base<OrtThreadingOptions>").pointerTypes("BaseThreadingOptions"))

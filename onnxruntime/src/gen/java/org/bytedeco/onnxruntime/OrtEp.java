@@ -119,6 +119,9 @@ public class OrtEp extends Pointer {
    *       graphs are only valid for the duration of the call to Compile. Any graph/node/input/output
    *       names that are needed by the OrtNodeComputeInfo functions must be copied and stored by the OrtEp.
    *
+   * \note As of version 1.24, implementation of this function is optional if the EP does not compile nodes and
+   *       uses a kernel registry instead.
+   *
    * @since Version 1.23.
    */
   public native OrtStatus Compile( OrtEp this_ptr, @Cast("const OrtGraph**") PointerPointer graphs,
@@ -135,6 +138,9 @@ public class OrtEp extends Pointer {
    * @param this_ptr [in] The OrtEp instance.
    * @param node_compute_infos [inout] The OrtNodeComputeInfo instances to release.
    * @param num_node_compute_infos [in] The number of OrtNodeComputeInfo instances.
+   *
+   * \note As of version 1.24, implementation of this function is optional if the EP does not compile nodes and
+   *       uses a kernel registry instead.
    *
    * @since Version 1.23.
    */
@@ -344,4 +350,37 @@ public class OrtEp extends Pointer {
               @Const OrtGraph graph);
   }
   public native GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph GetCompiledModelCompatibilityInfo(); public native OrtEp GetCompiledModelCompatibilityInfo(GetCompiledModelCompatibilityInfo_OrtEp_OrtGraph setter);
+
+  /** \brief Gets the execution provider's kernel registry, if any.
+   *
+   * A kernel registry contains kernel creation information for operator kernels supported by an EP.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param kernel_registry [out] Output parameter set to the EP's kernel registry, which must remain valid throughout
+   *                             the lifetime of the EP. Can be NULL if the EP doesn't use a kernel registry.
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional. If set to NULL, ORT assumes the EP compiles nodes.
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus GetKernelRegistry( OrtEp this_ptr,
+                    @Cast("const OrtKernelRegistry**") PointerPointer kernel_registry);
+  public native OrtStatus GetKernelRegistry( OrtEp this_ptr,
+                    @Const @ByPtrPtr OrtKernelRegistry kernel_registry);
+
+  /** \brief Gets whether the execution provider supports concurrent run calls made on the session.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param is_supported [out] Whether concurrent runs are supported.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional and it may be set to NULL.
+   *       If not implemented, ORT assumes that concurrent runs are supported.
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus IsConcurrentRunSupported( OrtEp this_ptr, @Cast("bool*") BoolPointer is_supported);
+  public native OrtStatus IsConcurrentRunSupported( OrtEp this_ptr, @Cast("bool*") boolean[] is_supported);
 }

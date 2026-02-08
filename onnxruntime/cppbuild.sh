@@ -25,7 +25,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.23.2
+ONNXRUNTIME=1.24.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -69,7 +69,7 @@ case $PLATFORM in
         ;;
 esac
 
-patch -p1 < ../../../onnxruntime-cuda13.patch
+patch -Np1 < ../../../onnxruntime-cuda13.patch
 
 #if [[ -n "$ARCH_FLAGS" ]]; then
 #    # build host version of protoc
@@ -108,7 +108,7 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.10.2)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.11)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace "s/ CMAKE_ARGS/ CMAKE_ARGS $CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=SEQ/g" cmake/external/dnnl.cmake
@@ -116,6 +116,7 @@ sedinplace 's#GIT_REPOSITORY ${DNNL_URL}#URL https://github.com/oneapi-src/oneDN
 sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/core/providers/cuda/rnn/cudnn_rnn_base.h
 sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/providers/cuda/cuda_call.cc
 sedinplace 's/#define NO_EXCEPTION noexcept/#define NO_EXCEPTION/g' include/onnxruntime/core/session/onnxruntime_c_api.h
+sedinplace 's/noexcept/NO_EXCEPTION/g' onnxruntime/core/session/onnxruntime_c_api.cc
 sedinplace 's/Provider_/_Provider_/g' onnxruntime/core/providers/shared/exported_symbols.lst
 sedinplace 's/ceil(/ceilf(/g' onnxruntime/core/providers/cuda/object_detection/roialign_impl.cu
 sedinplace 's/ceil(/ceilf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
@@ -182,6 +183,7 @@ sedinplace 's/return metadataJava/return (jstring)metadataJava/g' java/src/main/
 sedinplace 's/return NULL/return/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 sedinplace 's/names = allocarray/names = (const char**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 sedinplace 's/Strings = allocarray/Strings = (jobject*)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
+sedinplace 's/devicePtrs = allocarray/devicePtrs = (const OrtEpDevice**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp java/src/main/native/ai_onnxruntime_OrtEnvironment.cpp
 sedinplace 's/UTFChars(javaNameStrings/UTFChars((jstring)javaNameStrings/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 sedinplace 's/initializers = allocarray/initializers = (const OrtValue**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 

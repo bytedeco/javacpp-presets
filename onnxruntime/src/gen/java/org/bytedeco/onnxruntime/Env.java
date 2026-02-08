@@ -70,6 +70,10 @@ public class Env extends BaseEnv {
   private native void allocate(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
         @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
 
+  /** \brief Wraps OrtApi::CreateEnvWithOptions */
+  public Env(@Const OrtEnvCreationOptions options) { super((Pointer)null); allocate(options); }
+  private native void allocate(@Const OrtEnvCreationOptions options);
+
   /** \brief C Interop Helper */
   public Env(OrtEnv p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtEnv p);

@@ -50,6 +50,8 @@ public class ConstSessionImpl extends BaseSession {
   public native @Cast("Ort::ConstMemoryInfo*") @StdVector MemoryInfoImpl GetMemoryInfoForOutputs();
   /** Wrapper for OrtApi::SessionGetEpDeviceForInputs */
   public native @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl GetEpDeviceForInputs();
+  /** Wrapper for OrtApi::SessionGetEpDeviceForOutputs */
+  public native @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl GetEpDeviceForOutputs();
 
   /** \brief Returns a copy of input name at the specified index.
    *
@@ -95,7 +97,12 @@ public class ConstSessionImpl extends BaseSession {
   public native int GetOpset(@StdString BytePointer domain);
   public native int GetOpset(@StdString String domain);
 
-  // Will move before checkin if that's the case.
   public native @ByVal ValueInfoVector GetInputs();
   public native @ByVal ValueInfoVector GetOutputs();
+
+  /** \brief Returns information on the subgraph/nodes assigned to execution providers in the session.
+   *
+   * @return A list of ConstEpAssignedSubgraph instances.
+   */
+  public native @Cast("Ort::ConstEpAssignedSubgraph*") @StdVector EpAssignedSubgraphWithDefaultOptionsImpl GetEpGraphAssignmentInfo();
 }

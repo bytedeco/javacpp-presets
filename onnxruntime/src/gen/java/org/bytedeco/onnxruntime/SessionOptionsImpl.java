@@ -170,6 +170,16 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
    *  Wraps OrtApi::SessionOptionsAppendExecutionProvider_VitisAI */
   public native @ByRef SessionOptionsImpl RegisterCustomOpsUsingFunction(@Cast("const char*") BytePointer function_name);
   public native @ByRef SessionOptionsImpl RegisterCustomOpsUsingFunction(String function_name);
+  
+  
+  /** Wraps OrtApi::AddFreeDimensionOverride */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_VitisAI(@Const @ByRef(nullValue = "std::unordered_map<std::string,std::string>{}") StringStringMap provider_options);
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_VitisAI();
+  
+  
+  /** Wraps OrtApi::AddFreeDimensionOverrideByName */
+  public native @ByRef SessionOptionsImpl AddFreeDimensionOverride(@Cast("const char*") BytePointer dim_denotation, @Cast("int64_t") long dim_value);
+  public native @ByRef SessionOptionsImpl AddFreeDimensionOverride(String dim_denotation, @Cast("int64_t") long dim_value);
+  public native @ByRef SessionOptionsImpl AddFreeDimensionOverrideByName(@Cast("const char*") BytePointer dim_name, @Cast("int64_t") long dim_value);
+  public native @ByRef SessionOptionsImpl AddFreeDimensionOverrideByName(String dim_name, @Cast("int64_t") long dim_value);
 }

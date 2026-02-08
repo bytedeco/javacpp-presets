@@ -70,7 +70,7 @@ public class OrtSyncNotificationImpl extends Pointer {
   /** \brief Wait for a device to device operation to complete.
    *
    * @param this_ptr [in] Pointer to the OrtSyncNotificationImpl instance.
-   * @param stream [in] The OrtSyncStream instance that will wait on this notification to be activated.
+   * @param consumer_stream [in] The OrtSyncStream instance that will wait on this notification to be activated.
    *
    * @since Version 1.23.
    */

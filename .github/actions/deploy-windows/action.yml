@@ -86,13 +86,13 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-readline-8.2.013-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tcl-8.6.13-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tk-8.6.13-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-headers-1.3.296.0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-loader-1.3.296.0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-SDL2-2.30.12-1-any.pkg.tar.zst
@@ -106,13 +106,13 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-readline-8.2.013-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tcl-8.6.13-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tk-8.6.13-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-11.0.0.r750.g05598db99-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-12.0.0.r1.gdc42231f0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-headers-1.3.296.0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-loader-1.3.296.0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-SDL2-2.30.12-1-any.pkg.tar.zst
