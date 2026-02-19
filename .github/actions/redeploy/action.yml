@@ -149,8 +149,8 @@ runs:
         done
         if [[ -n $UPLOAD_URL ]]; then
             rm -f $(find redeploy -name *.asc.*)
-            pushd redeploy; zip -r ../redeploy.zip *; popd
-            curl --request POST --header "Authorization: Bearer $(echo $CI_DEPLOY_USERNAME:$CI_DEPLOY_PASSWORD | base64)" --form bundle=@redeploy.zip $UPLOAD_URL
+            pushd redeploy; zip -r ../$ARTIFACT-platform.zip *; popd
+            curl --request POST --header "Authorization: Bearer $(echo $CI_DEPLOY_USERNAME:$CI_DEPLOY_PASSWORD | base64)" --form bundle=@$ARTIFACT-platform.zip $UPLOAD_URL
         fi
         df -h
 

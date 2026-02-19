@@ -2,17 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tesseract</groupId>
     <artifactId>BasicExample</artifactId>
-    <version>1.5.13-SNAPSHOT</version>
+    <version>1.5.13</version>
     <properties>
         <exec.mainClass>BasicExample</exec.mainClass>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>5.5.2-1.5.13-SNAPSHOT</version>
+            <version>5.5.2-1.5.13</version>
         </dependency>
     </dependencies>
     <build>
