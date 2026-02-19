@@ -1,4 +1,5 @@
 
+### February 22, 2026 version 1.5.13
  * Ensure ONNX Runtime libraries get linked with `-z noexecstack` on Linux ([issue #1715](https://github.com/bytedeco/javacpp-presets/issues/1715))
  * Add setter methods for `GELUOptions.approximate()` in presets for PyTorch ([pull #1733](https://github.com/bytedeco/javacpp-presets/pull/1733))
  * Build FFmpeg with HarfBuzz to reenable the `drawtext` filter ([pull #1731](https://github.com/bytedeco/javacpp-presets/pull/1731))

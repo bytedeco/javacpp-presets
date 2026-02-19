@@ -28,13 +28,13 @@ LIBAOM_CONFIG="-DENABLE_TESTS:BOOL=OFF -DENABLE_TESTDATA:BOOL=OFF -DENABLE_TOOLS
 LIBSVTAV1_CONFIG="-DBUILD_APPS:BOOL=OFF -DBUILD_TESTING:BOOL=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
 
 NASM_VERSION=2.14
-ZLIB=zlib-1.3.1
+ZLIB=zlib-1.3.2
 LAME=lame-3.100
 SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.5.4
+OPENSSL=openssl-3.5.5
 OPENH264_VERSION=2.6.0
 X264=x264-stable
 X265=3.4
@@ -122,6 +122,7 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
 # patch -Np1 -d $OPENSSL < ../../openssl-android.patch
+patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch

@@ -92,27 +92,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.12</version>
+    <version>${moduleVersion}-1.5.13</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle.kts` or `build.gradle` file)
 ```groovy
   dependencies {
-    implementation("org.bytedeco:$moduleName-platform:$moduleVersion-1.5.12")
+    implementation("org.bytedeco:$moduleName-platform:$moduleVersion-1.5.13")
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.12")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.13")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.12"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.13"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -122,10 +122,11 @@ Required Software
 -----------------
 To use the JavaCPP Presets, you will need to download and install the following software:
 
- * An implementation of Java SE 7 or newer:
+ * An implementation of Java SE 8 or newer:
    * OpenJDK  http://openjdk.java.net/install/  or
    * Oracle JDK  http://www.oracle.com/technetwork/java/javase/downloads/  or
-   * IBM JDK  http://www.ibm.com/developerworks/java/jdk/
+   * IBM JDK  http://www.ibm.com/developerworks/java/jdk/  or
+   * Microsoft JDK  https://www.microsoft.com/openjdk  etc
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
 
@@ -136,17 +137,17 @@ Manual Installation
 -------------------
 Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux are built with Ubuntu, so they should work on most distributions currently in use. Here are some more specific instructions for common cases:
 
-NetBeans (Java SE 7 or newer):
+NetBeans (Java SE 8 or newer):
 
  1. In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
  2. Locate the JAR files, select them, and click OK.
 
-Eclipse (Java SE 7 or newer):
+Eclipse (Java SE 8 or newer):
 
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
  
-Visual Studio Code (Java SE 7 or newer):
+Visual Studio Code (Java SE 8 or newer):
 
  1. Navigate to Java Projects > Referenced Libraries, and click `+`.
  2. Locate the JAR files, select them, and click OK.
@@ -175,7 +176,7 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.12  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.13  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
