@@ -2,4 +2,5 @@ org.bytedeco.pytorch
 org.bytedeco.pytorch.cuda
 org.bytedeco.pytorch.global
 org.bytedeco.pytorch.gloo
+org.bytedeco.pytorch.nccl
 org.bytedeco.pytorch.presets

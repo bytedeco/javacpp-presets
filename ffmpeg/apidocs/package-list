@@ -5,7 +5,6 @@ org.bytedeco.ffmpeg.avfilter
 org.bytedeco.ffmpeg.avformat
 org.bytedeco.ffmpeg.avutil
 org.bytedeco.ffmpeg.global
-org.bytedeco.ffmpeg.postproc
 org.bytedeco.ffmpeg.presets
 org.bytedeco.ffmpeg.swresample
 org.bytedeco.ffmpeg.swscale

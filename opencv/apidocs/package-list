@@ -67,6 +67,7 @@ org.opencv.osgi
 org.opencv.phase_unwrapping
 org.opencv.photo
 org.opencv.plot
+org.opencv.saliency
 org.opencv.structured_light
 org.opencv.text
 org.opencv.tracking
