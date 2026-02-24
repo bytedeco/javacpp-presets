@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnx</groupId>
     <artifactId>loadmodel</artifactId>
-    <version>1.5.13</version>
+    <version>1.5.14-SNAPSHOT</version>
     <properties>
         <exec.mainClass>LoadModel</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.20.1-1.5.13</version>
+            <version>1.20.1-1.5.14-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
