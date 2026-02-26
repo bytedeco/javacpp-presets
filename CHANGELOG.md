@@ -1,4 +1,6 @@
 
+ * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
+
 ### February 22, 2026 version 1.5.13
  * Ensure ONNX Runtime libraries get linked with `-z noexecstack` on Linux ([issue #1715](https://github.com/bytedeco/javacpp-presets/issues/1715))
  * Add setter methods for `GELUOptions.approximate()` in presets for PyTorch ([pull #1733](https://github.com/bytedeco/javacpp-presets/pull/1733))
