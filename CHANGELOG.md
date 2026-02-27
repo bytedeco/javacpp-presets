@@ -1,4 +1,5 @@
 
+ * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
 
 ### February 22, 2026 version 1.5.13
