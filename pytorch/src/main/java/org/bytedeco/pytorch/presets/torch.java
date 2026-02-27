@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2025 Hervé Guillemet, Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2020-2026 Eduardo Gonzalez, Hervé Guillemet, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/script.h",
                 "ATen/autocast_mode.h",
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
+                "torch/csrc/inductor/aoti_package/model_package_loader.h",
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
                 "torch/csrc/distributed/c10d/FileStore.hpp",
