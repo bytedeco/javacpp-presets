@@ -113,7 +113,7 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = "macosx",
-            preload = { "iomp5" }
+            preload = { "iomp5", "omp" }
         ),
         @Platform(
             value = "windows",
