@@ -1,81 +1,3 @@
-JavaCPP Presets for TensorRT
-============================
-
-[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/tensorrt/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/tensorrt) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/tensorrt.svg)](http://bytedeco.org/builds/)  
-<sup>Build status for all platforms:</sup> [![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)  <sup>Commercial support:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
-
-
-License Agreements
-------------------
-By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
-
-### TensorRT
-To view the license for TensorRT included in these archives, click [here](https://docs.nvidia.com/deeplearning/tensorrt/sla/)
-
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * TensorRT 10.15.1.29  https://developer.nvidia.com/tensorrt
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/tensorrt/apidocs/
-
-
-Sample Usage
-------------
-Here is a simple example for TensorRT inference using an MNIST ONNX model.
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleOnnxMNIST.java` source files below, simply execute on the command line:
-```bash
- $ mvn compile exec:java
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.tensorrt</groupId>
-    <artifactId>sampleonnxmnist</artifactId>
-    <version>1.5.13</version>
-    <properties>
-        <exec.mainClass>SampleOnnxMNIST</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorrt-platform</artifactId>
-            <version>10.15-1.5.13</version>
-        </dependency>
-
-        <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda-platform-redist</artifactId>
-            <version>13.1-9.19-1.5.13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.15-1.5.13</version>
-        </dependency>
-
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `SampleOnnxMNIST.java` source file
-```java
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.Pointer;
@@ -120,7 +42,7 @@ public class SampleOnnxMNIST {
         }
     }
 
-    private static float[] loadPgmImageValues(String imageFilePath) throws IOException {
+    private static float[] loadPgmImage(String imageFilePath) throws IOException {
         try (InputStream inputStream = Files.newInputStream(Path.of(imageFilePath))) {
             DataInputStream dataInputStream = new DataInputStream(inputStream);
 
@@ -338,7 +260,7 @@ public class SampleOnnxMNIST {
             int inputElementCountPerBatch = inputValues.length / batchSize;
 
             for (int imageIndex = 0; imageIndex < batchSize; imageIndex++) {
-                float[] imageValues = loadPgmImageValues(inputImagePaths[imageIndex]);
+                float[] imageValues = loadPgmImage(inputImagePaths[imageIndex]);
 
                 if (imageValues.length != inputElementCountPerBatch) {
                     throw new IllegalStateException("Image " + imageIndex + " has " + imageValues.length + " values, expected " + inputElementCountPerBatch);
@@ -443,4 +365,3 @@ public class SampleOnnxMNIST {
         }
     }
 }
-```
