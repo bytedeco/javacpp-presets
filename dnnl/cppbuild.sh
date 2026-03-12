@@ -114,6 +114,7 @@ case $PLATFORM in
             cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
             chmod +w ../lib/libiomp5.dylib
             install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
+            codesign --force -s - ../lib/libiomp5.dylib
         fi
         sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOpenMP_C_FLAG="-Xclang -fopenmp -I/usr/local/include -I$OPENCL_PATH/include -L$INSTALL_PATH/lib -liomp5" -DOpenMP_CXX_FLAG="-Xclang -fopenmp -I/usr/local/include -I$OPENCL_PATH/include -L$INSTALL_PATH/lib -liomp5" -DARCH_OPT_FLAGS='' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DONEDNN_BUILD_GRAPH=OFF .
