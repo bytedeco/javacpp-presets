@@ -31,7 +31,9 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example for TensorRT inference using an MNIST ONNX model.
+Here is a simple example for TensorRT inference ported to Java from the `sampleOnnxMNIST.cpp` sample file available at:
+
+ * https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleOnnxMNIST
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleOnnxMNIST.java` source files below, simply execute on the command line:
 ```bash
@@ -120,7 +122,7 @@ public class SampleOnnxMNIST {
         }
     }
 
-    private static float[] loadPgmImageValues(String imageFilePath) throws IOException {
+    private static float[] loadPgmImage(String imageFilePath) throws IOException {
         try (InputStream inputStream = Files.newInputStream(Path.of(imageFilePath))) {
             DataInputStream dataInputStream = new DataInputStream(inputStream);
 
@@ -338,7 +340,7 @@ public class SampleOnnxMNIST {
             int inputElementCountPerBatch = inputValues.length / batchSize;
 
             for (int imageIndex = 0; imageIndex < batchSize; imageIndex++) {
-                float[] imageValues = loadPgmImageValues(inputImagePaths[imageIndex]);
+                float[] imageValues = loadPgmImage(inputImagePaths[imageIndex]);
 
                 if (imageValues.length != inputElementCountPerBatch) {
                     throw new IllegalStateException("Image " + imageIndex + " has " + imageValues.length + " values, expected " + inputElementCountPerBatch);
