@@ -1,10 +1,10 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
-    <artifactId>samplegooglenet</artifactId>
+    <artifactId>sampleonnxmnist</artifactId>
     <version>1.5.14-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>SampleGoogleNet</exec.mainClass>
+        <exec.mainClass>SampleOnnxMNIST</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
