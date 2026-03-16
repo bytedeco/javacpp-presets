@@ -209,7 +209,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 2.4.x  https://github.com/numpy/numpy
  * SciPy 1.17.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
- * LLVM 21.1.x  http://llvm.org/releases/download.html
+ * LLVM 22.1.x  http://llvm.org/releases/download.html
  * libffi 3.5.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
@@ -227,7 +227,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * PyTorch 2.10.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.2.x  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.20.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.21.x  https://github.com/tensorflow/tensorflow
  * TensorRT 10.15.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.64.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment

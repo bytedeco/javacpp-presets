@@ -232,7 +232,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>21.1.8-${project.version}</version>
+      <version>22.1.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -307,7 +307,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-lite-platform</artifactId>
-      <version>2.20.0-${project.version}</version>
+      <version>2.21.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
