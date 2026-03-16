@@ -62,7 +62,7 @@ public class OrcJit {
         LLVMInitializeNativeAsmPrinter();
 
         // Stage 2: Generate LLVM IR
-        LLVMContextRef context = LLVMGetGlobalContext();
+        LLVMContextRef context = LLVMContextCreate();
         LLVMOrcThreadSafeContextRef threadContext = LLVMOrcCreateNewThreadSafeContextFromLLVMContext(context);
         LLVMModuleRef module = LLVMModuleCreateWithNameInContext("sum", context);
         LLVMBuilderRef builder = LLVMCreateBuilderInContext(context);

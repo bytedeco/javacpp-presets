@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/Orc.h>", "<llvm-c/Remarks.h>", "<llvm-c/Visibility.h>",
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", /*"<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",*/
-               "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp17", link = {"LLVM@.21.1", "LTO@.21.1", "Remarks@.21.1"}, resource = {"include", "lib", "libexec", "share"}),
+               "<llvm-c/Transforms/PassBuilder.h>", /*"<polly/LinkAllPasses.h>",*/ "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
+    compiler = "cpp17", link = {"LLVM@.22.1", "LTO@.22.1", "Remarks@.22.1"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"ntdll", "Ws2_32", "LLVM", "LTO", "Remarks"})})
 @NoException
@@ -194,7 +194,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVM_C_EXTERN_C_BEGIN").cppText("#define LLVM_C_EXTERN_C_BEGIN").cppTypes())
                .put(new Info("LLVM_C_EXTERN_C_END").cppText("#define LLVM_C_EXTERN_C_END").cppTypes())
                .put(new Info("LLVM_C_ABI").cppText("#define LLVM_C_ABI").cppTypes())
-               .put(new Info("LLVM_ATTRIBUTE_C_DEPRECATED").cppText("#define LLVM_ATTRIBUTE_C_DEPRECATED deprecated").cppTypes())
+               .put(new Info("LLVM_ATTRIBUTE_C_DEPRECATED").cppText("#define LLVM_ATTRIBUTE_C_DEPRECATED(decl, message) deprecated decl").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("INT64_MIN").cppTypes("long").translate())
                .put(new Info("HUGE_VALF").cppTypes("float").translate(false))

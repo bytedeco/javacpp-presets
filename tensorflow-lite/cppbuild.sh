@@ -12,12 +12,16 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON $CMAKE_FLAGS"
 fi
 
-TENSORFLOW_VERSION=2.20.0
+TENSORFLOW_VERSION=2.21.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
+TENSORFLOW_SOURCE_DIR="$INSTALL_PATH/tensorflow-$TENSORFLOW_VERSION"
+if which cygpath; then
+    TENSORFLOW_SOURCE_DIR=$(cygpath -m $TENSORFLOW_SOURCE_DIR)
+fi
 
 echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || true
@@ -35,6 +39,8 @@ sedinplace '/#include <math.h>/a\
 sedinplace "s/TFLITE_VERSION_STRING/\"$TENSORFLOW_VERSION\"/g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/c/c_api.cc
 sedinplace "s/TFLITE_EXTENSION_APIS_VERSION_STRING/\"$TENSORFLOW_VERSION\"/g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/c/c_api.cc
 sedinplace '/private:/d' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/model_building.h
+sedinplace '/core\/example/d' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
+sedinplace "s;TENSORFLOW_SOURCE_DIR \"\";TENSORFLOW_SOURCE_DIR \"$TENSORFLOW_SOURCE_DIR\";g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
 
 if [[ ! "$PLATFORM" == windows* ]]; then
     mkdir -p build_flatc
@@ -122,6 +128,7 @@ sedinplace '/CMakeCCompilerId.o/d' objs
 sedinplace '/CMakeCXXCompilerId.o/d' objs
 sedinplace '/tensorflowlite_c.dir/d' objs
 sedinplace '/tensorflow_profiler_logger/d' objs
+sedinplace '/xnnpack-operator-delete.dir/d' objs
 # convert to DOS paths with short names to prevent exceeding MAX_PATH on Windows
 if which cygpath; then
     cygpath -d -f objs > objs.dos
