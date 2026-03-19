@@ -355,3 +355,17 @@ runs:
         ccache --version -sv
         df -h
         powershell "Get-CimInstance Win32_PageFileUsage | Select-Object * | Format-List"
+
+    - name: Clean up
+      shell: cmd
+      run: |
+        cd /d %USERPROFILE%
+
+        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
+          set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
+          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\msys64\usr\bin;%PATH%"
+        ) else (
+          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
+        )
+
+        bash -c "rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')"
