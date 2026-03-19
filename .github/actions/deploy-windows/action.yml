@@ -41,7 +41,7 @@ runs:
         echo Uninstalling Windows SDK 10.0.26100.XXXX
         powershell "Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall' | Get-ItemProperty | Where-Object { $_.DisplayName -like 'Windows Software Development Kit - Windows 10.0.26100.*' } | ForEach-Object { Start-Process -FilePath 'cmd.exe' -ArgumentList '/c', $_.QuietUninstallString -Wait -NoNewWindow }"
 
-        echo Verifying uninstall Windows SDK 10.0.26100.XXXX
+        echo Verifying Windows SDK 10.0.26100.XXXX has been uninstalled
         powershell "$matches = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall' | Get-ItemProperty | Where-Object { $_.DisplayName -like 'Windows Software Development Kit - Windows 10.0.26100.*' }; $matches | Select-Object DisplayName, DisplayVersion, InstallLocation, QuietUninstallString | Format-List; if ($matches) { exit 1 }"
         if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
 
@@ -49,7 +49,7 @@ runs:
         curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
         start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
 
-        echo After Installing Windows SDK 10.0.26100.4654
+        echo Verifying Windows SDK 10.0.26100.4654 is installed
         powershell "$matches = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall' | Get-ItemProperty | Where-Object { $_.DisplayName -like 'Windows Software Development Kit - Windows 10.0.26100.4654' }; $matches | Select-Object DisplayName, DisplayVersion, InstallLocation, QuietUninstallString | Format-List; if (-not $matches) { exit 20 }"
         if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
 
