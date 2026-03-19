@@ -38,9 +38,20 @@ runs:
 
         C:\msys64\usr\bin\bash -lc "pacman -Q"
 
+        echo Uninstalling Windows SDK 10.0.26100.XXXX
+        powershell "Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall' | Get-ItemProperty | Where-Object { $_.DisplayName -like 'Windows Software Development Kit - Windows 10.0.26100.*' } | ForEach-Object { Start-Process -FilePath 'cmd.exe' -ArgumentList '/c', $_.QuietUninstallString -Wait -NoNewWindow }"
+
+        echo Verifying uninstall Windows SDK 10.0.26100.XXXX
+        powershell "$matches = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall' | Get-ItemProperty | Where-Object { $_.DisplayName -like 'Windows Software Development Kit - Windows 10.0.26100.*' }; $matches | Select-Object DisplayName, DisplayVersion, InstallLocation, QuietUninstallString | Format-List; if ($matches) { exit 1 }"
+        if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
+
         echo Installing Windows SDK 10.0.26100.4654
         curl -Lo winsdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=2327008
         start /wait winsdksetup.exe /features OptionId.DesktopCPParm64 OptionId.NetFxSoftwareDevelopmentKit /quiet
+
+        echo After Installing Windows SDK 10.0.26100.4654
+        powershell "$matches = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall','HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall' | Get-ItemProperty | Where-Object { $_.DisplayName -like 'Windows Software Development Kit - Windows 10.0.26100.4654' }; $matches | Select-Object DisplayName, DisplayVersion, InstallLocation, QuietUninstallString | Format-List; if (-not $matches) { exit 20 }"
+        if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
 
         echo Removing broken stuff from WSL, MSYS2, etc
         rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
@@ -344,17 +355,3 @@ runs:
         ccache --version -sv
         df -h
         powershell "Get-CimInstance Win32_PageFileUsage | Select-Object * | Format-List"
-
-    - name: Clean up
-      shell: cmd
-      run: |
-        cd /d %USERPROFILE%
-
-        if "%CI_DEPLOY_PLATFORM%"=="windows-arm64" (
-          set "JAVA_HOME=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot"
-          set "PATH=C:\Program Files\Microsoft\jdk-11.0.28.6-hotspot\bin;C:\Program Files\Python311-arm64;C:\msys64\usr\bin;%PATH%"
-        ) else (
-          set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
-        )
-
-        bash -c "rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')"
