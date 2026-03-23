@@ -6282,9 +6282,6 @@ public static final int RU_PROC_RUNS_RESLIDE =    0x00000001;
 // Targeting ../macosx/rusage_info_v5.java
 
 
-// Targeting ../macosx/rusage_info_v6.java
-
-
 // Targeting ../macosx/rusage_info_current.java
 
 

@@ -177,6 +177,6 @@ public class macosx implements LoadEnabled, BuildEnabled, InfoMapper {
                .put(new Info("memchr").javaText("public static native Pointer memchr(Pointer __s, int __c, @Cast(\"size_t\") long __n);"))
 
                .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np",
-                             "__ipc_perm_new", "__shmid_ds_new", "shmid_ds").skip());
+                             "__ipc_perm_new", "__shmid_ds_new", "shmid_ds", "rusage_info_v6").skip());
     }
 }
