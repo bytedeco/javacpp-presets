@@ -74,10 +74,22 @@ public class hailort implements InfoMapper {
         infoMap.put(new Info("HAILO_DEFAULT_VDEVICE_GROUP_ID").javaText("public static final String HAILO_DEFAULT_VDEVICE_GROUP_ID = HAILO_UNIQUE_VDEVICE_GROUP_ID;"));
         infoMap.put(new Info("HAILO_DEFAULT_INIT_SAMPLING_PERIOD_US").javaText("public static final int HAILO_DEFAULT_INIT_SAMPLING_PERIOD_US = 1100;"));
         infoMap.put(new Info("HAILO_DEFAULT_INIT_AVERAGING_FACTOR").javaText("public static final int HAILO_DEFAULT_INIT_AVERAGING_FACTOR = 256;"));
-        infoMap.put(new Info("hailo_release_input_vstreams").skip());
-        infoMap.put(new Info("hailo_release_output_vstreams").skip());
-        infoMap.put(new Info("hailo_clear_input_vstreams").skip());
-        infoMap.put(new Info("hailo_clear_output_vstreams").skip());
+        infoMap.put(new Info("hailo_release_input_vstreams").javaText(
+                "public static native @Cast(\"hailo_status\") int hailo_release_input_vstreams(" +
+                        "@Cast(\"const hailo_input_vstream*\") _hailo_input_vstream input_vstreams, " +
+                        "@Cast(\"size_t\") long inputs_count);"));
+        infoMap.put(new Info("hailo_release_output_vstreams").javaText(
+                "public static native @Cast(\"hailo_status\") int hailo_release_output_vstreams(" +
+                        "@Cast(\"const hailo_output_vstream*\") _hailo_output_vstream output_vstreams, " +
+                        "@Cast(\"size_t\") long outputs_count);"));
+        infoMap.put(new Info("hailo_clear_input_vstreams").javaText(
+                "public static native @Cast(\"hailo_status\") int hailo_clear_input_vstreams(" +
+                        "@Cast(\"const hailo_input_vstream*\") _hailo_input_vstream input_vstreams, " +
+                        "@Cast(\"size_t\") long inputs_count);"));
+        infoMap.put(new Info("hailo_clear_output_vstreams").javaText(
+                "public static native @Cast(\"hailo_status\") int hailo_clear_output_vstreams(" +
+                        "@Cast(\"const hailo_output_vstream*\") _hailo_output_vstream output_vstreams, " +
+                        "@Cast(\"size_t\") long outputs_count);"));
         infoMap.put(new Info("hailo_detections_t").skip());
 
         // mapping e.g. typedef struct _hailo_configured_network_group *hailo_configured_network_group;

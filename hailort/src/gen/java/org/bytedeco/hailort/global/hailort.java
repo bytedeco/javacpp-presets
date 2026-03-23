@@ -3279,7 +3279,7 @@ public static native @Cast("hailo_status") int hailo_vstream_set_nms_max_proposa
  * @param inputs_count [in]     The amount of elements in \a input_params.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
  */
-
+public static native @Cast("hailo_status") int hailo_release_input_vstreams(@Cast("const hailo_input_vstream*") _hailo_input_vstream input_vstreams, @Cast("size_t") long inputs_count);
 
 /**
  * Release output virtual streams.
@@ -3288,7 +3288,7 @@ public static native @Cast("hailo_status") int hailo_vstream_set_nms_max_proposa
  * @param outputs_count [in]    The amount of elements in \a output_vstreams.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
  */
-
+public static native @Cast("hailo_status") int hailo_release_output_vstreams(@Cast("const hailo_output_vstream*") _hailo_output_vstream output_vstreams, @Cast("size_t") long outputs_count);
 
 /**
  * Clears the pipeline buffers of each vstream in \a input_vstreams.
@@ -3297,7 +3297,7 @@ public static native @Cast("hailo_status") int hailo_vstream_set_nms_max_proposa
  * @param inputs_count [in]                  The amount of elements in \a input_params.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
  */
-
+public static native @Cast("hailo_status") int hailo_clear_input_vstreams(@Cast("const hailo_input_vstream*") _hailo_input_vstream input_vstreams, @Cast("size_t") long inputs_count);
 
 /**
  * Clears the pipeline buffers of each vstream in \a output_vstreams.
@@ -3308,7 +3308,7 @@ public static native @Cast("hailo_status") int hailo_vstream_set_nms_max_proposa
  * \note If not all output vstreams from the same group are passed together, it will cause an <b> undefined behavior </b>.
  *       See ::hailo_get_output_vstream_groups, to get the output vstreams' groups.
  */
-
+public static native @Cast("hailo_status") int hailo_clear_output_vstreams(@Cast("const hailo_output_vstream*") _hailo_output_vstream output_vstreams, @Cast("size_t") long outputs_count);
 
 /**
  * Run simple inference using vstreams pipelines.
