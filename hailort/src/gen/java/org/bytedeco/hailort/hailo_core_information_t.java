@@ -29,6 +29,5 @@ public class hailo_core_information_t extends Pointer {
 
     public native @Cast("bool") boolean is_release(); public native hailo_core_information_t is_release(boolean setter);
     public native @Cast("bool") boolean extended_context_switch_buffer(); public native hailo_core_information_t extended_context_switch_buffer(boolean setter);
-    public native @Cast("bool") boolean extended_fw_check(); public native hailo_core_information_t extended_fw_check(boolean setter);
     public native @ByRef hailo_firmware_version_t fw_version(); public native hailo_core_information_t fw_version(hailo_firmware_version_t setter);
 }

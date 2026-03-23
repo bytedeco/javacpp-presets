@@ -34,7 +34,6 @@ public class hailo_configure_network_group_params_t extends Pointer {
     public native @Cast("uint16_t") short batch_size(); public native hailo_configure_network_group_params_t batch_size(short setter);
     public native @Cast("hailo_power_mode_t") int power_mode(); public native hailo_configure_network_group_params_t power_mode(int setter);
     public native @Cast("hailo_latency_measurement_flags_t") int latency(); public native hailo_configure_network_group_params_t latency(int setter);
-    public native @Cast("bool") boolean enable_kv_cache(); public native hailo_configure_network_group_params_t enable_kv_cache(boolean setter);
     public native @Cast("size_t") long stream_params_by_name_count(); public native hailo_configure_network_group_params_t stream_params_by_name_count(long setter);
     public native @ByRef hailo_stream_parameters_by_name_t stream_params_by_name(int i); public native hailo_configure_network_group_params_t stream_params_by_name(int i, hailo_stream_parameters_by_name_t setter);
     @MemberGetter public native hailo_stream_parameters_by_name_t stream_params_by_name();

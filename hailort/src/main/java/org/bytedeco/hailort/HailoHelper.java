@@ -106,10 +106,6 @@ public class HailoHelper {
     public static int HAILO_HEF_FILE_CORRUPTED = 91; /*!< HEF file is corrupted */
     public static int HAILO_HEF_NOT_SUPPORTED = 92; /*!< HEF file is not supported. Make sure the DFC version is compatible. */
     public static int HAILO_HEF_NOT_COMPATIBLE_WITH_DEVICE = 93; /*!< HEF file is not compatible with device. */
-    public static int HAILO_INVALID_HEF_USE = 94; /*!< Invalid HEF use (i.e. when using HEF from a file path without first copying it's content to a mapped buffer while shared_weights is enabled) */
-    public static int HAILO_OPERATION_ABORTED = 95; /*!< Operation was aborted */
-    public static int HAILO_DEVICE_NOT_CONNECTED = 96; /*!< Device is not connected */
-    public static int HAILO_DEVICE_TEMPORARILY_UNAVAILABLE = 97; /*!< Device is temporarily unavailable, try again later */
 
 
     public static final int INT_MAX = 2147483647;

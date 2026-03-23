@@ -47,7 +47,7 @@ public class hailo_extended_device_information_t extends Pointer {
     @MemberGetter public native @Cast("uint8_t*") BytePointer unit_level_tracking_id();
     /** Hailo device pm values */
     public native @Cast("uint8_t") byte soc_pm_values(int i); public native hailo_extended_device_information_t soc_pm_values(int i, byte setter);
-    @MemberGetter public native @Cast("uint8_t*") BytePointer soc_pm_values();
+    @MemberGetter public native @Cast("uint8_t*") BytePointer soc_pm_values(); 
     /** Hailo device GPIO mask values */
     public native @Cast("uint16_t") short gpio_mask(); public native hailo_extended_device_information_t gpio_mask(short setter);
 }

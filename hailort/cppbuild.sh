@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-HAILORT_VERSION=5.2.0
+HAILORT_VERSION=4.23.0
 download https://github.com/hailo-ai/hailort/archive/refs/tags/v$HAILORT_VERSION.tar.gz hailort-v$HAILORT_VERSION.tar.gz
 mkdir -p $PLATFORM
 cd $PLATFORM

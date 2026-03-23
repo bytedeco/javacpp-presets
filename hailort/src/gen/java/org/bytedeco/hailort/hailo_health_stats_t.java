@@ -9,7 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.hailort.global.hailort.*;
 
 
-/** Health stats (value of '-1' in any field indicates that there was an error retrieving that specific stat) */
 @Properties(inherit = org.bytedeco.hailort.presets.hailort.class)
 public class hailo_health_stats_t extends Pointer {
     static { Loader.load(); }
@@ -28,10 +27,7 @@ public class hailo_health_stats_t extends Pointer {
         return new hailo_health_stats_t((Pointer)this).offsetAddress(i);
     }
 
-    /** Degrees celsius */
     public native @Cast("float32_t") float on_die_temperature(); public native hailo_health_stats_t on_die_temperature(float setter);
-    /** mV */
-    public native int on_die_voltage(); public native hailo_health_stats_t on_die_voltage(int setter);
-    /** Bit mask */
-    public native int bist_failure_mask(); public native hailo_health_stats_t bist_failure_mask(int setter);
+    public native @Cast("float32_t") float on_die_voltage(); public native hailo_health_stats_t on_die_voltage(float setter);
+    public native int startup_bist_mask(); public native hailo_health_stats_t startup_bist_mask(int setter);
 }

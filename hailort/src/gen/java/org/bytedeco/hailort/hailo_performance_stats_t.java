@@ -9,7 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.hailort.global.hailort.*;
 
 
-/** Performance stats (value of '-1' in any field indicates that there was an error retrieving that specific stat) */
 @Properties(inherit = org.bytedeco.hailort.presets.hailort.class)
 public class hailo_performance_stats_t extends Pointer {
     static { Loader.load(); }
@@ -28,16 +27,16 @@ public class hailo_performance_stats_t extends Pointer {
         return new hailo_performance_stats_t((Pointer)this).offsetAddress(i);
     }
 
-    /** Percentage */
+    // In percentage
     public native @Cast("float32_t") float cpu_utilization(); public native hailo_performance_stats_t cpu_utilization(float setter);
-    /** kibiBytes (KiBs) */
+    // In bytes
     public native @Cast("int64_t") long ram_size_total(); public native hailo_performance_stats_t ram_size_total(long setter);
-    /** KibiBytes (KiBs)*/
+    // In bytes
     public native @Cast("int64_t") long ram_size_used(); public native hailo_performance_stats_t ram_size_used(long setter);
-    /** Percentage */
+    // In percentage
     public native @Cast("float32_t") float nnc_utilization(); public native hailo_performance_stats_t nnc_utilization(float setter);
-    /** Per second (not implemented)*/
+    // Per second
     public native int ddr_noc_total_transactions(); public native hailo_performance_stats_t ddr_noc_total_transactions(int setter);
-    /** Percentage (round numbers between 1-100) */
+    // In percentage
     public native int dsp_utilization(); public native hailo_performance_stats_t dsp_utilization(int setter);
 }

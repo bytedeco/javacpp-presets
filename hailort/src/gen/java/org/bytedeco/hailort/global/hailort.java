@@ -43,6 +43,7 @@ public class hailort extends org.bytedeco.hailort.HailoHelper {
 public static final int HAILO_MAX_ENUM = (INT_MAX);
 public static final long HAILO_INFINITE = 0xFFFFFFFFL;
 public static final int HAILO_DEFAULT_ETH_SCAN_TIMEOUT_MS = (10000);
+public static final int HAILO_DEFAULT_ETH_CONTROL_PORT = (22401);
 public static final int HAILO_DEFAULT_ETH_DEVICE_PORT = (0);
 public static final int HAILO_DEFAULT_ETH_MAX_PAYLOAD_SIZE = (1456);
 public static final int HAILO_DEFAULT_ETH_MAX_NUMBER_OF_RETRIES = (3);
@@ -90,10 +91,6 @@ public static final int HAILO_SCHEDULER_PRIORITY_MIN = (0);
 public static final int MAX_NUMBER_OF_PLANES = (4);
 public static final int NUMBER_OF_PLANES_NV12_NV21 = (2);
 public static final int NUMBER_OF_PLANES_I420 = (3);
-
-// #define INVALID_QUANT_INFO {0.0f, 0.0f, 0.0f, 0.0f}
-
-public static final long HAILO_RANDOM_SEED = 0xFFFFFFFFL;
 
 /** HailoRT return codes */
 // #define HAILO_STATUS_VARIABLES
@@ -191,10 +188,6 @@ public static final long HAILO_RANDOM_SEED = 0xFFFFFFFFL;
 //     HAILO_STATUS__X(91, HAILO_HEF_FILE_CORRUPTED                      /*!< HEF file is corrupted */)
 //     HAILO_STATUS__X(92, HAILO_HEF_NOT_SUPPORTED                       /*!< HEF file is not supported. Make sure the DFC version is compatible. */)
 //     HAILO_STATUS__X(93, HAILO_HEF_NOT_COMPATIBLE_WITH_DEVICE          /*!< HEF file is not compatible with device. */)
-//     HAILO_STATUS__X(94, HAILO_INVALID_HEF_USE                         /*!< Invalid HEF use (i.e. when using HEF from a file path without first copying it's content to a mapped buffer while shared_weights is enabled) */)
-//     HAILO_STATUS__X(95, HAILO_OPERATION_ABORTED                       /*!< Operation was aborted */)
-//     HAILO_STATUS__X(96, HAILO_DEVICE_NOT_CONNECTED                    /*!< Device is not connected */)
-//     HAILO_STATUS__X(97, HAILO_DEVICE_TEMPORARILY_UNAVAILABLE          /*!< Device is temporarily unavailable, try again later */)
 
 /** enum hailo_status */
 
@@ -364,6 +357,9 @@ public static final int
 // Targeting ..\hailo_scan_devices_params_t.java
 
 
+// Targeting ..\hailo_eth_device_info_t.java
+
+
 // Targeting ..\hailo_pcie_device_info_t.java
 
 
@@ -405,7 +401,7 @@ public static final int
     HAILO_ARCH_HAILO15L = 4,
     HAILO_ARCH_HAILO15M = 5,
     HAILO_ARCH_HAILO10H = 6,
-    HAILO_ARCH_HAILO12L = 7,
+    HAILO_ARCH_MARS = 7,
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_ARCH_MAX_ENUM = HAILO_MAX_ENUM;
@@ -549,7 +545,7 @@ public static final int
 
     /**
      * Bayer format, same as ::HAILO_FORMAT_ORDER_BAYER_RGB where
-     * Channel is 12-bit
+     * Channel is 12 bit
      */
     HAILO_FORMAT_ORDER_12_BIT_BAYER_RGB                 = 8,
 
@@ -642,7 +638,7 @@ public static final int
      *      };
      *      }</pre>
      *
-     *      The host format type supported ::HAILO_FORMAT_TYPE_UINT8.
+     *      The host format type supported ::HAILO_FORMAT_TYPE_FLOAT32.
      *
      * - Not used for device side
      */
@@ -692,8 +688,6 @@ public static final int
      *
      *      Maximum amount of bboxes is ::hailo_nms_shape_t.max_bboxes_total.
      *      It is possible to use ::hailo_detections_t to parse the data.
-     *
-     *      The host format type supported ::HAILO_FORMAT_TYPE_UINT8.
      *
      * - Not used for device side
      */
@@ -814,10 +808,114 @@ public static final int
 // Targeting ..\hailo_quant_info_t.java
 
 
+// Targeting ..\hailo_eth_input_stream_params_t.java
+
+
+// Targeting ..\hailo_eth_output_stream_params_t.java
+
+
 // Targeting ..\hailo_pcie_input_stream_params_t.java
 
 
 // Targeting ..\hailo_pcie_output_stream_params_t.java
+
+
+
+/** Indicates amount of pixels per clock on a MIPI stream **/
+/** enum hailo_mipi_pixels_per_clock_t */
+public static final int
+    HAILO_MIPI_PIXELS_PER_CLOCK_1        = 0b0,
+    HAILO_MIPI_PIXELS_PER_CLOCK_2        = 0b01,
+    HAILO_MIPI_PIXELS_PER_CLOCK_4        = 0b10,
+
+    /** Max enum value to maintain ABI Integrity */
+    HAILO_MIPI_PIXELS_PER_CLOCK_MAX_ENUM = HAILO_MAX_ENUM;
+
+/** Indicates Range of MIPI clock selection for a MIPI stream **/
+/** enum hailo_mipi_clock_selection_t */
+public static final int
+    HAILO_MIPI_CLOCK_SELECTION_80_TO_100_MBPS    = 0b00000,
+    HAILO_MIPI_CLOCK_SELECTION_100_TO_120_MBPS   = 0b00001,
+    HAILO_MIPI_CLOCK_SELECTION_120_TO_160_MBPS   = 0b00010,
+    HAILO_MIPI_CLOCK_SELECTION_160_TO_200_MBPS   = 0b00011,
+    HAILO_MIPI_CLOCK_SELECTION_200_TO_240_MBPS   = 0b00100,
+    HAILO_MIPI_CLOCK_SELECTION_240_TO_280_MBPS   = 0b00101,
+    HAILO_MIPI_CLOCK_SELECTION_280_TO_320_MBPS   = 0b00110,
+    HAILO_MIPI_CLOCK_SELECTION_320_TO_360_MBPS   = 0b00111,
+    HAILO_MIPI_CLOCK_SELECTION_360_TO_400_MBPS   = 0b01000,
+    HAILO_MIPI_CLOCK_SELECTION_400_TO_480_MBPS   = 0b01001,
+    HAILO_MIPI_CLOCK_SELECTION_480_TO_560_MBPS   = 0b01010,
+    HAILO_MIPI_CLOCK_SELECTION_560_TO_640_MBPS   = 0b01011,
+    HAILO_MIPI_CLOCK_SELECTION_640_TO_720_MBPS   = 0b01100,
+    HAILO_MIPI_CLOCK_SELECTION_720_TO_800_MBPS   = 0b01101,
+    HAILO_MIPI_CLOCK_SELECTION_800_TO_880_MBPS   = 0b01110,
+    HAILO_MIPI_CLOCK_SELECTION_880_TO_1040_MBPS  = 0b01111,
+    HAILO_MIPI_CLOCK_SELECTION_1040_TO_1200_MBPS = 0b10000,
+    HAILO_MIPI_CLOCK_SELECTION_1200_TO_1350_MBPS = 0b10001,
+    HAILO_MIPI_CLOCK_SELECTION_1350_TO_1500_MBPS = 0b10010,
+    HAILO_MIPI_CLOCK_SELECTION_1500_TO_1750_MBPS = 0b10011,
+    HAILO_MIPI_CLOCK_SELECTION_1750_TO_2000_MBPS = 0b10100,
+    HAILO_MIPI_CLOCK_SELECTION_2000_TO_2250_MBPS = 0b10101,
+    HAILO_MIPI_CLOCK_SELECTION_2250_TO_2500_MBPS = 0b10110,
+
+    /** The clock selection is calculated from the data rate. **/
+    HAILO_MIPI_CLOCK_SELECTION_AUTOMATIC         = 0b111111,
+
+    /** Max enum value to maintain ABI Integrity */
+    HAILO_MIPI_CLOCK_SELECTION_MAX_ENUM          = HAILO_MAX_ENUM;
+
+/** Indicates MIPI Rx data type **/
+/** enum hailo_mipi_data_type_rx_t */
+public static final int
+    HAILO_MIPI_RX_TYPE_RGB_444  = 0x20,
+    HAILO_MIPI_RX_TYPE_RGB_555  = 0x21,
+    HAILO_MIPI_RX_TYPE_RGB_565  = 0x22,
+    HAILO_MIPI_RX_TYPE_RGB_666  = 0x23,
+    HAILO_MIPI_RX_TYPE_RGB_888  = 0x24,
+    HAILO_MIPI_RX_TYPE_RAW_6    = 0x28,
+    HAILO_MIPI_RX_TYPE_RAW_7    = 0x29,
+    HAILO_MIPI_RX_TYPE_RAW_8    = 0x2a,
+    HAILO_MIPI_RX_TYPE_RAW_10   = 0x2b,
+    HAILO_MIPI_RX_TYPE_RAW_12   = 0x2c,
+    HAILO_MIPI_RX_TYPE_RAW_14   = 0x2d,
+
+    /** Max enum value to maintain ABI Integrity */
+    HAILO_MIPI_RX_TYPE_MAX_ENUM = HAILO_MAX_ENUM;
+
+/** Indicates ISP input bayer pixel order **/
+/** enum hailo_mipi_isp_image_in_order_t */
+public static final int
+    HAILO_MIPI_ISP_IMG_IN_ORDER_B_FIRST  = 0,
+    HAILO_MIPI_ISP_IMG_IN_ORDER_GB_FIRST = 1,
+    HAILO_MIPI_ISP_IMG_IN_ORDER_GR_FIRST = 2,
+    HAILO_MIPI_ISP_IMG_IN_ORDER_R_FIRST  = 3,
+
+    /** Max enum value to maintain ABI Integrity */
+    HAILO_MIPI_ISP_IMG_IN_ORDER_MAX_ENUM = HAILO_MAX_ENUM;
+
+/** Indicates ISP output data type **/
+/** enum hailo_mipi_isp_image_out_data_type_t */
+public static final int
+    HAILO_MIPI_IMG_OUT_DATA_TYPE_RGB_888  = 0x24,
+    HAILO_MIPI_IMG_OUT_DATA_TYPE_YUV_422  = 0x1E,
+
+    /** Max enum value to maintain ABI Integrity */
+    HAILO_MIPI_IMG_OUT_DATA_TYPE_MAX_ENUM = HAILO_MAX_ENUM;
+
+/** enum hailo_mipi_isp_light_frequency_t */
+public static final int
+    HAILO_MIPI_ISP_LIGHT_FREQUENCY_60HZ = 0,
+    HAILO_MIPI_ISP_LIGHT_FREQUENCY_50HZ = 1,
+
+    /** Max enum value to maintain ABI Integrity */
+    ISP_LIGHT_FREQUENCY_MAX_ENUM = HAILO_MAX_ENUM;
+// Targeting ..\hailo_mipi_common_params_t.java
+
+
+// Targeting ..\hailo_isp_params_t.java
+
+
+// Targeting ..\hailo_mipi_input_stream_params_t.java
 
 
 // Targeting ..\hailo_integrated_input_stream_params_t.java
@@ -1041,13 +1139,11 @@ public static final int
     HAILO_NOTIFICATION_ID_HW_INFER_MANAGER_INFER_DONE = 11,
     /** Matches hailo_notification_message_parameters_t::context_switch_run_time_error */
     HAILO_NOTIFICATION_ID_CONTEXT_SWITCH_RUN_TIME_ERROR_EVENT = 12,
-    /** Empty message: no parameters. */
-    HAILO_NOTIFICATION_ID_NN_CORE_CRC_ERROR_EVENT = 13,
-    /** Matches hailo_notification_message_parameters_t::throttling_state_change */
-    HAILO_NOTIFICATION_ID_THROTTLING_STATE_CHANGE_EVENT = 14,
+    /** Matched hailo_notification_message_parameters_t::start_update_cache_offset_notification */
+    HAILO_NOTIFICATION_ID_START_UPDATE_CACHE_OFFSET = 13,
 
     /** Must be last! */
-    HAILO_NOTIFICATION_ID_COUNT = 15,
+    HAILO_NOTIFICATION_ID_COUNT = 14,
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_NOTIFICATION_ID_MAX_ENUM = HAILO_MAX_ENUM;
@@ -1104,25 +1200,6 @@ public static final int
 // Targeting ..\hailo_context_switch_run_time_error_message_t.java
 
 
-
-/**
- * NOTE:
- * Enum values match {@code mercury_throttling_state} enum
- * defined by Hailo SCU. */
-/** enum hailo_hw_throttling_state_t */
-public static final int
-    HAILO_THROTTLING_STATE_NONE = 0,
-    HAILO_THROTTLING_STATE_0_LIGHT = 1,
-    HAILO_THROTTLING_STATE_1_MEDIUM = 2,
-    HAILO_THROTTLING_STATE_2_HEAVY = 3,
-    HAILO_THROTTLING_STATE_3_SEVERE = 4,
-    HAILO_THROTTLING_STATE_4_STREAMS_OFF = 5,
-    HAILO_THROTTLING_STATE_OVERHEAT = 6,
-
-    HAILO_THROTTLING_STATE_COUNT = 7;
-// Targeting ..\hailo_throttling_state_change_message_t.java
-
-
 // Targeting ..\hailo_notification_message_parameters_t.java
 
 
@@ -1141,7 +1218,6 @@ public static final int
     HAILO_RESET_DEVICE_MODE_NN_CORE     = 1,
     HAILO_RESET_DEVICE_MODE_SOFT        = 2,
     HAILO_RESET_DEVICE_MODE_FORCED_SOFT = 3,
-    HAILO_RESET_DEVICE_MODE_REBOOT      = 4,
 
     HAILO_RESET_DEVICE_MODE_MAX_ENUM    = HAILO_MAX_ENUM;
 
@@ -1204,16 +1280,6 @@ public static final int
     /** Max enum value to maintain ABI Integrity */
     HAILO_FW_LOGGER_LEVEL_MAX_ENUM = HAILO_MAX_ENUM;
 
-
-/** enum hailo_log_type_t */
-public static final int
-    HAILO_LOG_TYPE__RUNTIME = 0,
-    HAILO_LOG_TYPE__SYSTEM_CONTROL = 1,
-    HAILO_LOG_TYPE__NNC = 2,
-
-    /** Max enum value to maintain ABI Integrity */
-    HAILO_LOG_TYPE_MAX__ENUM = HAILO_MAX_ENUM;
-
 // #define HAILO_DEFAULT_TRANSFORM_PARAMS
 //     {
 //         .transform_mode = HAILO_STREAM_TRANSFORM_COPY,
@@ -1224,8 +1290,71 @@ public static final int
 //         },
 //     }                                                                        
 
+// #define HAILO_DEFAULT_SOCKADDR
+//     {
+//         .sin_family = AF_INET,
+//         .sin_port = 0,
+//         .sin_addr = {
+//             .s_addr = INADDR_ANY
+//         },
+//         .sin_zero = {0}
+//     }
+
+// #define HAILO_ETH_INPUT_STREAM_PARAMS_DEFAULT
+//     {
+//         .host_address = HAILO_DEFAULT_SOCKADDR,
+//         .device_port = HAILO_DEFAULT_ETH_DEVICE_PORT,
+//         .is_sync_enabled = false,
+//         .frames_per_sync = 0,
+//         .max_payload_size = HAILO_DEFAULT_ETH_MAX_PAYLOAD_SIZE,
+//         .rate_limit_bytes_per_sec = 0,
+//         .bffers_threshold = HAILO_DEFAULT_BUFFERS_THRESHOLD
+//     }
+
+// #define HAILO_ETH_OUTPUT_STREAM_PARAMS_DEFAULT
+//     {
+//         .host_address = HAILO_DEFAULT_SOCKADDR,
+//         .device_port = HAILO_DEFAULT_ETH_DEVICE_PORT,
+//         .is_sync_enabled = false,
+//         .max_payload_size = HAILO_DEFAULT_ETH_MAX_PAYLOAD_SIZE,
+//         .bffers_threshold = HAILO_DEFAULT_BUFFERS_THRESHOLD
+//     }
+
 // #define HAILO_PCIE_STREAM_PARAMS_DEFAULT
 //     {
+//     }
+
+// #define HAILO_MIPI_INPUT_STREAM_PARAMS_DEFAULT
+//     {
+//         .mipi_common_params = {
+//             .img_width_pixels = 1920,
+//             .img_height_pixels = 1080,
+//             .pixels_per_clock = HAILO_MIPI_PIXELS_PER_CLOCK_4,
+//             .number_of_lanes = 2,
+//             .cock_selection = HAILO_MIPI_CLOCK_SELECTION_AUTOMATIC,
+//             .virtual_channel_index = 0,
+//             .data_rate = 260
+//         },
+//         .mipi_rx_id = 0,
+//         .data_type = HAILO_MIPI_RX_TYPE_RAW_8,
+//         .isp_enable = false,
+//         .isp_params = {
+//             .isp_img_in_order = HAILO_MIPI_ISP_IMG_IN_ORDER_GR_FIRST,
+//             .isp_img_out_data_type = HAILO_MIPI_IMG_OUT_DATA_TYPE_RGB_888,
+//             .isp_crop_enable = false,
+//             .isp_crop_output_width_pixels = 1920,
+//             .isp_crop_output_height_pixels = 1080,
+//             .isp_crop_output_width_start_offset_pixels = 0,
+//             .isp_crop_output_height_start_offset_pixels = 0,
+//             .isp_test_pattern_enable = true,
+//             .isp_configuration_bypass = false,
+//             .isp_run_time_ae_enable = true,
+//             .isp_run_time_awb_enable = true,
+//             .isp_run_time_adt_enable = true,
+//             .isp_run_time_af_enable = false,
+//             .isp_run_time_calculations_interval_ms = 0,
+//             .isp_light_frequency = HAILO_MIPI_ISP_LIGHT_FREQUENCY_50HZ
+//         }
 //     }
 
 // #define HAILO_ACTIVATE_NETWORK_GROUP_PARAMS_DEFAULT
@@ -1258,9 +1387,11 @@ public static native @Cast("const char*") BytePointer hailo_get_status_message(@
  * Returns information on all available devices in the system.
  *
  * @param params [in]                    Scan params, used for future compatibility, only NULL is allowed.
- * @param device_ids [out]               Array of ::hailo_device_id_t that were scanned.
+ * @param device_ids [out]               Array of ::hailo_device_id_t to be fetched from vdevice.
  * @param device_ids_length [inout]      As input - the size of \a device_ids array. As output - the number of
- *                                      devices scanned.
+ *                                      device scanned.
+ * \note ethernet devices are not considered "devices in the system", so they are not scanned in this function.
+ *       use :hailo_scan_ethernet_devices for ethernet devices.
  *
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
  */
@@ -1275,7 +1406,8 @@ public static native @Cast("hailo_status") int hailo_scan_devices(hailo_scan_dev
  *                              [-] for ethernet devices - ip address (xxx.xxx.xxx.xxx)
  *                           If NULL is given, uses an arbitrary device found on the system.
  * @param device [out]        A pointer to a ::hailo_device that receives the allocated PCIe device.
- * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
+ * @return Upon success, returns Expected of a unique_ptr to Device object.
+ *         Otherwise, returns Unexpected of ::hailo_status error.
  *
  * \note To release a device, call the ::hailo_release_device function with the returned ::hailo_device.
  */
@@ -1321,7 +1453,37 @@ public static native @Cast("hailo_status") int hailo_parse_pcie_device_info(Stri
 public static native @Cast("hailo_status") int hailo_create_pcie_device(hailo_pcie_device_info_t device_info, @ByPtrPtr _hailo_device device);
 
 /**
- * Releases an open device.
+ * Returns information on all available ethernet devices in the system.
+ *
+ * @param interface_name [in]            The name of the network interface to scan.
+ * @param eth_device_infos [out]          A pointer to a buffer of ::hailo_eth_device_info_t that receives the
+ *                                       information.
+ * @param eth_device_infos_length [in]   The number of ::hailo_eth_device_info_t elements in the buffer pointed to by
+ *                                       \a eth_device_infos.
+ * @param number_of_devices [out]         This variable will be filled with the number of devices. If the buffer is
+ *                                       insufficient to hold the information a ::HAILO_INSUFFICIENT_BUFFER error is
+ *                                       returned.
+ * @param timeout_ms [in]                The time in milliseconds to scan devices.
+ * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
+ */
+public static native @Cast("hailo_status") int hailo_scan_ethernet_devices(@Cast("const char*") BytePointer interface_name, hailo_eth_device_info_t eth_device_infos,
+    @Cast("size_t") long eth_device_infos_length, @Cast("size_t*") SizeTPointer number_of_devices, @Cast("uint32_t") int timeout_ms);
+public static native @Cast("hailo_status") int hailo_scan_ethernet_devices(String interface_name, hailo_eth_device_info_t eth_device_infos,
+    @Cast("size_t") long eth_device_infos_length, @Cast("size_t*") SizeTPointer number_of_devices, @Cast("uint32_t") int timeout_ms);
+
+/**
+ * Creates an ethernet device.
+ *
+ * @param device_info [in]   Information about the device to open.
+ * @param device [out]        A pointer to a ::hailo_device that receives the allocated ethernet device corresponding to
+ *                           the given information.
+ * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
+ * \note To release a device, call the ::hailo_release_device function with the returned ::hailo_device.
+ */
+public static native @Cast("hailo_status") int hailo_create_ethernet_device(hailo_eth_device_info_t device_info, @ByPtrPtr _hailo_device device);
+
+/**
+ * Release an open device.
  *
  * @param device [in]   A ::hailo_device object to be released.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
@@ -1459,7 +1621,8 @@ public static native @Cast("hailo_status") int hailo_get_previous_system_state(_
 public static native @Cast("hailo_status") int hailo_set_pause_frames(_hailo_device device, @Cast("bool") boolean rx_pause_frames_enable);
 
 /**
- * Get device id which is the identification string of the device (i.e bdf for pcie devices)
+ * Get device id which is the identification string of the device. BDF for PCIe devices, 
+ * IP address for Ethernet devices, "Core" for core devices.
  *
  * @param device [in]           A ::hailo_device object.
  * @param id [out]               The returned device id.
@@ -1473,7 +1636,7 @@ public static native @Cast("hailo_status") int hailo_get_device_id(_hailo_device
  * @param device [in]          A ::hailo_device object.
  * @param temp_info [out]      A \a hailo_chip_temperature_info_t to be filled.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
- * \note Temperature in Celsius of the two internal temperature sensors (TS).
+ * \note Temperature in Celsius of the 2 internal temperature sensors (TS).
  */
 public static native @Cast("hailo_status") int hailo_get_chip_temperature(_hailo_device device, hailo_chip_temperature_info_t temp_info);
 
@@ -2004,6 +2167,30 @@ public static native @Cast("hailo_status") int hailo_hef_get_bottleneck_fps(_hai
 public static native @Cast("hailo_status") int hailo_hef_get_bottleneck_fps(_hailo_hef hef, String network_group_name,
     @Cast("float64_t*") double[] bottleneck_fps);
 
+/**
+ * Calculate the inputs bandwidths supported by the network described by \a hef. Rate limiting
+ * of this manner is to be used for ethernet ::hailo_input_stream.
+ *
+ * @param hef [in]                  A ::hailo_hef object that contains the stream's information.
+ * @param network_group_name [in]   The name of the network_group which contains the stream_infos. If NULL is passed,
+ *                                     the first network_group in the HEF will be addressed.
+ * @param fps [in]                  The desired fps.
+ * @param rates [out]                A pointer to an array of ::hailo_rate_limit_t that receives the rates.
+ * @param rates_length [inout]         As input - the length of \a rates array. As output - the number of H2D streams.
+ * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
+ * \note There are two options to limit the rate of an ethernet input stream to the desired bandwidth:
+ *       - Set ::hailo_eth_input_stream_params_t.rate_limit_bytes_per_sec inside ::hailo_configure_params_t
+ *         before passing it to ::hailo_configure_device.
+ *       - On Unix platforms:
+ *         - You may use the command line tool {@code hailortcli udp-rate-limiter} instead of using this API
+ * \note The resulting rates calculated assures that \a HAILO_DEFAULT_MAX_ETHERNET_BANDWIDTH_BYTES_PER_SEC
+ * will not be exceeded. The actual fps must be lower than given, and appropriate log will be printed.
+ */
+public static native @Cast("hailo_status") int hailo_calculate_eth_input_rate_limits(_hailo_hef hef, @Cast("const char*") BytePointer network_group_name,
+    @Cast("uint32_t") int fps, hailo_rate_limit_t rates, @Cast("size_t*") SizeTPointer rates_length);
+public static native @Cast("hailo_status") int hailo_calculate_eth_input_rate_limits(_hailo_hef hef, String network_group_name,
+    @Cast("uint32_t") int fps, hailo_rate_limit_t rates, @Cast("size_t*") SizeTPointer rates_length);
+
 /** \} */ // end of group_hef_functions
 
 /** \defgroup group_network_group_functions Network group configuration/activation functions
@@ -2044,6 +2231,20 @@ public static native @Cast("hailo_status") int hailo_init_configure_params_by_de
     hailo_configure_params_t params);
 
 /**
+ * Init configure params with default values for a given hef, where all input_streams_params are init to be MIPI type.
+ *
+ * @param hef [in]                      A  ::hailo_hef object to configure the \a device by.
+ * @param output_interface [in]         A \a hailo_stream_interface_t indicating which \a hailo_stream_parameters_t to
+ *                                      create for the output streams.
+ * @param mipi_params [in]              A ::hailo_mipi_input_stream_params_t object which contains the MIPI params for
+ *                                      the input streams.
+ * @param params [out]                   A \a hailo_configure_params_t to be filled.
+ * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
+ */
+public static native @Cast("hailo_status") int hailo_init_configure_params_mipi_input(_hailo_hef hef, @Cast("hailo_stream_interface_t") int output_interface,
+    hailo_mipi_input_stream_params_t mipi_params, hailo_configure_params_t params);
+
+/**
  * Init configure params with default values for a given hef.
  *
  * @param hef [in]                      A  ::hailo_hef object to configure the \a device by.
@@ -2057,6 +2258,24 @@ public static native @Cast("hailo_status") int hailo_init_configure_network_grou
     @Cast("const char*") BytePointer network_group_name, hailo_configure_network_group_params_t params);
 public static native @Cast("hailo_status") int hailo_init_configure_network_group_params(_hailo_hef hef, @Cast("hailo_stream_interface_t") int stream_interface,
     String network_group_name, hailo_configure_network_group_params_t params);
+
+/**
+ * Init configure params with default values for a given hef, where all input_streams_params are init to be MIPI type.
+ *
+ * @param hef [in]                      A  ::hailo_hef object to configure the \a device by.
+ * @param output_interface [in]         A \a hailo_stream_interface_t indicating which \a hailo_stream_parameters_t to
+ *                                      create for the output streams.
+ * @param mipi_params [in]              A ::hailo_mipi_input_stream_params_t object which contains the MIPI params for
+ *                                      the input streams.
+ * @param network_group_name [in]       The name of the network_group to make configure params for. If NULL is passed,
+ *                                      the first network_group in the HEF will be addressed.
+ * @param params [out]                   A \a hailo_configure_params_t to be filled.
+ * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
+ */
+public static native @Cast("hailo_status") int hailo_init_configure_network_group_params_mipi_input(_hailo_hef hef, @Cast("hailo_stream_interface_t") int output_interface,
+    hailo_mipi_input_stream_params_t mipi_params, @Cast("const char*") BytePointer network_group_name, hailo_configure_network_group_params_t params);
+public static native @Cast("hailo_status") int hailo_init_configure_network_group_params_mipi_input(_hailo_hef hef, @Cast("hailo_stream_interface_t") int output_interface,
+    hailo_mipi_input_stream_params_t mipi_params, String network_group_name, hailo_configure_network_group_params_t params);
 
 /**
  * Configure the device from an hef.
@@ -2227,8 +2446,7 @@ public static native @Cast("hailo_status") int hailo_get_latency_measurement(_ha
  * @param network_name [in]                 Network name for which to set the timeout.
  *                                          If NULL is passed, the timeout will be set for all the networks in the network group.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
- * \note The time period is measured from the time the first frame enters the queue. It resets when a switch occurs and there are still frames in the queue.
- <p>
+ * \note The new time period will be measured after the previous time the scheduler allocated run time to this network group.
  * \note Using this function is only allowed when scheduling_algorithm is not ::HAILO_SCHEDULING_ALGORITHM_NONE.
  * \note The default timeout is 0ms.
  * \note Currently, setting the timeout for a specific network is not supported.
@@ -2240,8 +2458,7 @@ public static native @Cast("hailo_status") int hailo_set_scheduler_timeout(_hail
     @Cast("uint32_t") int timeout_ms, String network_name);
 
 /**
- * Sets the scheduler threshold.
- * This threshold sets the minimum number of send requests required before the network is considered ready to get run time from the scheduler.
+ * Sets the minimum number of send requests required before the network is considered ready to get run time from the scheduler.
  * If at least one send request has been sent, but the threshold is not reached within a set time period (e.g. timeout - see hailo_set_scheduler_timeout()),
  *  the scheduler will consider the network ready regardless.
  *
@@ -2251,7 +2468,7 @@ public static native @Cast("hailo_status") int hailo_set_scheduler_timeout(_hail
  *                                          If NULL is passed, the threshold will be set for all the networks in the network group.
  * @return Upon success, returns ::HAILO_SUCCESS. Otherwise, returns a ::hailo_status error.
  * \note Using this function is only allowed when scheduling_algorithm is not ::HAILO_SCHEDULING_ALGORITHM_NONE.
- * \note The default threshold is 1, which means HailoRT will apply an automatic heuristic to choose the threshold.
+ * \note The default threshold is 0, which means HailoRT will apply an automatic heuristic to choose the threshold.
  * \note Currently, setting the threshold for a specific network is not supported.
  * \note The threshold may be ignored to prevent idle time from the device.
  */
@@ -2263,7 +2480,7 @@ public static native @Cast("hailo_status") int hailo_set_scheduler_threshold(_ha
 /**
  * Sets the priority of the network.
  * When the network group scheduler will choose the next network, networks with higher priority will be prioritized in the selection.
- * Larger number represents higher priority
+ * bigger number represent higher priority.
  *
  * @param configured_network_group [in]     NetworkGroup for which to set the scheduler priority.
  * @param priority [in]                     Priority as a number between HAILO_SCHEDULER_PRIORITY_MIN - HAILO_SCHEDULER_PRIORITY_MAX.
@@ -2696,7 +2913,7 @@ public static native @Cast("hailo_status") int hailo_stream_write_raw_buffer_asy
 
 /**
  * Gets the size of a stream's frame on the host side in bytes
- * (the size could be affected by the format type - for example using UINT16, or by the data having not yet been quantized)
+ * (the size could be affected by the format type - for example using UINT16, or by the data not being quantized yet)
  *
  * @param stream_info [in]             The stream's info represented by ::hailo_stream_info_t
  * @param transform_params [in]        Host side transform parameters
@@ -3056,7 +3273,7 @@ public static native @Cast("hailo_status") int hailo_make_output_vstream_params(
     @Cast("size_t*") SizeTPointer output_params_count);
 
 /**
- * Gets output virtual stream groups for given network_group. The groups are split with respect to their low-level streams.
+ * Gets output virtual stream groups for given network_group. The groups are splitted with respect to their low-level streams.
  *
  * @param network_group [in]                   Network group that owns the streams.
  * @param output_name_by_group [out]            List of params for output virtual streams.
@@ -3096,7 +3313,7 @@ public static native @Cast("hailo_status") int hailo_create_output_vstreams(_hai
 
 /**
  * Gets the size of a virtual stream's frame on the host side in bytes
- * (the size could be affected by the format type - for example using UINT16, or by the data having not yet been quantized)
+ * (the size could be affected by the format type - for example using UINT16, or by the data not being quantized yet)
  *
  * @param input_vstream [in]    A ::hailo_input_vstream object.
  * @param frame_size [out]       The size of the frame on the host side in bytes.
@@ -3152,7 +3369,7 @@ public static native @Cast("hailo_status") int hailo_get_output_vstream_quant_in
 
 /**
  * Gets the size of a virtual stream's frame on the host side in bytes
- * (the size could be affected by the format type - for example using UINT16, or by the data having not yet been quantized)
+ * (the size could be affected by the format type - for example using UINT16, or by the data not being quantized yet)
  *
  * @param output_vstream [in]   A ::hailo_output_vstream object.
  * @param frame_size [out]       The size of the frame on the host side in bytes.
@@ -3180,7 +3397,7 @@ public static native @Cast("hailo_status") int hailo_get_output_vstream_user_for
 
 /**
  * Gets the size of a virtual stream's frame in bytes
- * (the size could be affected by the format type - for example using UINT16, or by the data having not yet been quantized)
+ * (the size could be affected by the format type - for example using UINT16, or by the data not being quantized yet)
  *
  * @param vstream_info [in]          A ::hailo_vstream_info_t object.
  * @param user_buffer_format [in]    A ::hailo_format_t object.

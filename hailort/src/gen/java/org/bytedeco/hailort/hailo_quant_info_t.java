@@ -10,16 +10,13 @@ import static org.bytedeco.hailort.global.hailort.*;
 
 
 /** Quantization information.
- * Property of ::hailo_stream_info_t, ::hailo_vstream_info_t.
+ * Property of ::hailo_stream_info_t, ::hailo_vstream_info_t.\n 
  * Hailo devices require input data to be quantized/scaled before it is sent. Similarly, data outputted
  * from the device needs to be 'de-quantized'/rescaled as well.
  * Each input/output layer is assigned two floating point values that are parameters to an input/output
  * transformation: qp_zp (zero_point) and qp_scale. These values are stored in the HEF.
  * - Input transformation: Input data is divided by qp_scale and then qp_zp is added to the result.
  * - Output transformation: qp_zp is subtracted from output data and then the result is multiplied by qp_scale.
- *
- * If the output's quant_info is {@code INVALID_QUANT_INFO}, it means there are multiple quant_infos. In that case,
- * use ::hailo_get_output_stream_quant_infos or ::hailo_get_output_vstream_quant_infos to get the quant info list.
 */
 @Properties(inherit = org.bytedeco.hailort.presets.hailort.class)
 public class hailo_quant_info_t extends Pointer {

@@ -9,7 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.hailort.global.hailort.*;
 
 
-
 /** Core input stream (host to device) parameters */
 @Properties(inherit = org.bytedeco.hailort.presets.hailort.class)
 public class hailo_integrated_input_stream_params_t extends Pointer {

@@ -52,6 +52,4 @@ public class hailo_notification_message_parameters_t extends Pointer {
     public native @ByRef hailo_context_switch_run_time_error_message_t context_switch_run_time_error(); public native hailo_notification_message_parameters_t context_switch_run_time_error(hailo_context_switch_run_time_error_message_t setter);
     /** Start cache offset update notification */
     public native @ByRef hailo_start_update_cache_offset_notification_message_t start_update_cache_offset_notification(); public native hailo_notification_message_parameters_t start_update_cache_offset_notification(hailo_start_update_cache_offset_notification_message_t setter);
-    /** Change in throttling-state notification */
-    public native @ByRef hailo_throttling_state_change_message_t throttling_state_change(); public native hailo_notification_message_parameters_t throttling_state_change(hailo_throttling_state_change_message_t setter);
 }

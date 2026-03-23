@@ -33,6 +33,9 @@ public class hailo_stream_parameters_t extends Pointer {
     public native @Cast("hailo_stream_flags_t") int flags(); public native hailo_stream_parameters_t flags(int setter);
         public native @ByRef hailo_pcie_input_stream_params_t pcie_input_params(); public native hailo_stream_parameters_t pcie_input_params(hailo_pcie_input_stream_params_t setter);
         public native @ByRef hailo_integrated_input_stream_params_t integrated_input_params(); public native hailo_stream_parameters_t integrated_input_params(hailo_integrated_input_stream_params_t setter);
+        public native @ByRef hailo_eth_input_stream_params_t eth_input_params(); public native hailo_stream_parameters_t eth_input_params(hailo_eth_input_stream_params_t setter);
+        public native @ByRef hailo_mipi_input_stream_params_t mipi_input_params(); public native hailo_stream_parameters_t mipi_input_params(hailo_mipi_input_stream_params_t setter);
         public native @ByRef hailo_pcie_output_stream_params_t pcie_output_params(); public native hailo_stream_parameters_t pcie_output_params(hailo_pcie_output_stream_params_t setter);
         public native @ByRef hailo_integrated_output_stream_params_t integrated_output_params(); public native hailo_stream_parameters_t integrated_output_params(hailo_integrated_output_stream_params_t setter);
+        public native @ByRef hailo_eth_output_stream_params_t eth_output_params(); public native hailo_stream_parameters_t eth_output_params(hailo_eth_output_stream_params_t setter);
 }

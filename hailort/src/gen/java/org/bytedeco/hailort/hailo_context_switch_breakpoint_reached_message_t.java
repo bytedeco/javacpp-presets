@@ -29,7 +29,7 @@ public class hailo_context_switch_breakpoint_reached_message_t extends Pointer {
     }
 
     public native @Cast("uint8_t") byte network_group_index(); public native hailo_context_switch_breakpoint_reached_message_t network_group_index(byte setter);
-    public native @Cast("uint32_t") int batch_index(); public native hailo_context_switch_breakpoint_reached_message_t batch_index(int setter);
+    public native @Cast("uint16_t") short batch_index(); public native hailo_context_switch_breakpoint_reached_message_t batch_index(short setter);
     public native @Cast("uint16_t") short context_index(); public native hailo_context_switch_breakpoint_reached_message_t context_index(short setter);
     public native @Cast("uint16_t") short action_index(); public native hailo_context_switch_breakpoint_reached_message_t action_index(short setter);
 }

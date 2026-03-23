@@ -63,6 +63,10 @@ public class hailort implements InfoMapper {
         infoMap.put(new Info("HAILO_INFINITE").javaText("public static final long HAILO_INFINITE = 0xFFFFFFFFL;"));
         infoMap.put(new Info("HAILO_PCIE_ANY_DOMAIN").javaText("public static final long HAILO_PCIE_ANY_DOMAIN = 0xFFFFFFFFL;"));
         infoMap.put(new Info("INVALID_QUANT_INFO").skip());
+        infoMap.put(new Info("HAILO_DEFAULT_SOCKADDR").skip());
+        infoMap.put(new Info("HAILO_ETH_INPUT_STREAM_PARAMS_DEFAULT").skip());
+        infoMap.put(new Info("HAILO_ETH_OUTPUT_STREAM_PARAMS_DEFAULT").skip());
+        infoMap.put(new Info("HAILO_MIPI_INPUT_STREAM_PARAMS_DEFAULT").skip());
         infoMap.put(new Info("HAILO_DEFAULT_TRANSFORM_PARAMS").skip());
         infoMap.put(new Info("HAILO_PCIE_STREAM_PARAMS_DEFAULT").skip());
         infoMap.put(new Info("HAILO_ACTIVATE_NETWORK_GROUP_PARAMS_DEFAULT").skip());

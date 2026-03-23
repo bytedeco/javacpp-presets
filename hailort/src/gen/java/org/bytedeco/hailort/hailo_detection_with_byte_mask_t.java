@@ -41,7 +41,7 @@ public class hailo_detection_with_byte_mask_t extends Pointer {
     public native @Cast("size_t") long mask_size(); public native hailo_detection_with_byte_mask_t mask_size(long setter);
 
     /**
-     * Mask offset in bytes from the start of the buffer.
+     * Byte Mask:
      * The mask is a binary mask that defines a region of interest (ROI) of the image.
      * Mask pixel values of 1 indicate image pixels that belong to the ROI.
      * Mask pixel values of 0 indicate image pixels that are part of the background.
@@ -52,5 +52,4 @@ public class hailo_detection_with_byte_mask_t extends Pointer {
      * First pixel represents the pixel (x_min * image_width, y_min * image_height) in the original input image.
     */
     public native @Cast("uint8_t*") BytePointer mask(); public native hailo_detection_with_byte_mask_t mask(BytePointer setter);
-    public native @Cast("size_t") long mask_offset(); public native hailo_detection_with_byte_mask_t mask_offset(long setter);
 }

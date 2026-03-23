@@ -38,6 +38,4 @@ public class hailo_device_supported_features_t extends Pointer {
     public native @Cast("bool") boolean current_monitoring(); public native hailo_device_supported_features_t current_monitoring(boolean setter);
     /** Is current mdio supported */
     public native @Cast("bool") boolean mdio(); public native hailo_device_supported_features_t mdio(boolean setter);
-    /** Is power measurement supported */
-    public native @Cast("bool") boolean power_measurement(); public native hailo_device_supported_features_t power_measurement(boolean setter);
 }

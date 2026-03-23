@@ -36,7 +36,6 @@ public class hailo_device_identity_t extends Pointer {
     @MemberGetter public native @Cast("char*") BytePointer board_name();
     public native @Cast("bool") boolean is_release(); public native hailo_device_identity_t is_release(boolean setter);
     public native @Cast("bool") boolean extended_context_switch_buffer(); public native hailo_device_identity_t extended_context_switch_buffer(boolean setter);
-    public native @Cast("bool") boolean extended_fw_check(); public native hailo_device_identity_t extended_fw_check(boolean setter);
     public native @Cast("hailo_device_architecture_t") int device_architecture(); public native hailo_device_identity_t device_architecture(int setter);
     public native @Cast("uint8_t") byte serial_number_length(); public native hailo_device_identity_t serial_number_length(byte setter);
     public native @Cast("char") byte serial_number(int i); public native hailo_device_identity_t serial_number(int i, byte setter);
