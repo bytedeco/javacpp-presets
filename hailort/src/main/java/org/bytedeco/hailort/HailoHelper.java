@@ -1,5 +1,8 @@
 package org.bytedeco.hailort;
 
+import org.bytedeco.javacpp.annotation.Properties;
+
+@Properties(inherit = org.bytedeco.hailort.presets.hailort.class)
 public class HailoHelper {
 
     // use a regex search & replace, i.e. replace this:
@@ -43,7 +46,8 @@ public class HailoHelper {
     public static int HAILO_ATR_TABLES_CONF_VALIDATION_FAIL = 33; /*!< Validating address translation tables failure, for FW control use */
     public static int HAILO_EVENT_CREATE_FAIL = 34; /*!< Creating event failure */
     public static int HAILO_READ_EVENT_FAIL = 35; /*!< Reading event failure */
-    public static int HAILO_DRIVER_FAIL = 36; /*!< Driver failure */
+    public static int HAILO_DRIVER_OPERATION_FAILED = 36; /*!< Driver operation (i.e ioctl) returned failure. Read driver log for more info (dmesg for linux) */
+    public static int HAILO_DRIVER_FAIL = HAILO_DRIVER_OPERATION_FAILED; /*!< Driver failure */
     public static int HAILO_INVALID_FIRMWARE_MAGIC = 37; /*!< Invalid FW magic */
     public static int HAILO_INVALID_FIRMWARE_CODE_SIZE = 38; /*!< Invalid FW code size */
     public static int HAILO_INVALID_KEY_CERTIFICATE_SIZE = 39; /*!< Invalid key certificate size */
@@ -71,7 +75,8 @@ public class HailoHelper {
     public static int HAILO_NOT_FOUND = 61; /*!< Could not find element */
     public static int HAILO_COMMUNICATION_CLOSED = 62; /*!< The communication between endpoints is closed */
     public static int HAILO_STREAM_ABORT = 63; /*!< Stream recv/send was aborted */
-    public static int HAILO_PCIE_DRIVER_NOT_INSTALLED = 64; /*!< Pcie driver is not installed */
+    public static int HAILO_DRIVER_NOT_INSTALLED = 64; /*!< Driver is not installed/running on the system. */
+    public static int HAILO_PCIE_DRIVER_NOT_INSTALLED = HAILO_DRIVER_NOT_INSTALLED; /*!< Pcie driver is not installed */
     public static int HAILO_NOT_AVAILABLE = 65; /*!< Component is not available */
     public static int HAILO_TRAFFIC_CONTROL_FAILURE = 66; /*!< Traffic control failure */
     public static int HAILO_INVALID_SECOND_STAGE = 67; /*!< Second stage bin is invalid */
@@ -92,6 +97,19 @@ public class HailoHelper {
     public static int HAILO_QUEUE_IS_FULL = 82; /*!< Cannot push more items into the queue */
     public static int HAILO_DMA_MAPPING_ALREADY_EXISTS = 83; /*!< DMA mapping already exists */
     public static int HAILO_CANT_MEET_BUFFER_REQUIREMENTS = 84; /*!< can't meet buffer requirements */
+    public static int HAILO_DRIVER_INVALID_RESPONSE = 85; /*!< Driver returned invalid response. Make sure the driver version is the same as libhailort  */
+    public static int HAILO_DRIVER_INVALID_IOCTL = 86; /*!< Driver cannot handle ioctl. Can happen on libhailort vs driver version mismatch or when ioctl function is not supported */
+    public static int HAILO_DRIVER_TIMEOUT = 87; /*!< Driver operation returned a timeout. Device reset may be required. */
+    public static int HAILO_DRIVER_INTERRUPTED = 88; /*!< Driver operation interrupted by system request (i.e can happen on application exit) */
+    public static int HAILO_CONNECTION_REFUSED = 89; /*!< Connection was refused by other side */
+    public static int HAILO_DRIVER_WAIT_CANCELED = 90; /*!< Driver operation was canceled */
+    public static int HAILO_HEF_FILE_CORRUPTED = 91; /*!< HEF file is corrupted */
+    public static int HAILO_HEF_NOT_SUPPORTED = 92; /*!< HEF file is not supported. Make sure the DFC version is compatible. */
+    public static int HAILO_HEF_NOT_COMPATIBLE_WITH_DEVICE = 93; /*!< HEF file is not compatible with device. */
+    public static int HAILO_INVALID_HEF_USE = 94; /*!< Invalid HEF use (i.e. when using HEF from a file path without first copying it's content to a mapped buffer while shared_weights is enabled) */
+    public static int HAILO_OPERATION_ABORTED = 95; /*!< Operation was aborted */
+    public static int HAILO_DEVICE_NOT_CONNECTED = 96; /*!< Device is not connected */
+    public static int HAILO_DEVICE_TEMPORARILY_UNAVAILABLE = 97; /*!< Device is temporarily unavailable, try again later */
 
 
     public static final int INT_MAX = 2147483647;

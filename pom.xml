@@ -61,6 +61,7 @@
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
     <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
+    <javacpp.build.shell>bash</javacpp.build.shell>
     <javacpp.packageName>${project.artifactId}</javacpp.packageName>
     <javacpp.platform.nativeOutputPath>org/bytedeco/${javacpp.packageName}/${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.nativeOutputPath>
     <javacpp.platform.root></javacpp.platform.root>
@@ -244,7 +245,7 @@
             <configuration>
               <skip>${javacpp.cppbuild.skip}</skip>
               <buildCommand>
-                <program>bash</program>
+                <program>${javacpp.build.shell}</program>
                 <argument>cppbuild.sh</argument>
                 <argument>install</argument>
                 <argument>${javacpp.moduleId}</argument>
@@ -253,6 +254,7 @@
               </buildCommand>
               <environmentVariables>
                 <ANDROID_NDK>${javacpp.platform.root}</ANDROID_NDK>
+                <CMAKE>${env.CMAKE}</CMAKE>
               </environmentVariables>
               <workingDirectory>${project.basedir}/..</workingDirectory>
             </configuration>
@@ -266,11 +268,15 @@
             <configuration>
               <skip>${javacpp.cppbuild.skip}</skip>
               <buildCommand>
-                <program>bash</program>
+                <program>${javacpp.build.shell}</program>
                 <argument>cppbuild.sh</argument>
                 <argument>clean</argument>
                 <argument>${javacpp.moduleId}</argument>
               </buildCommand>
+              <environmentVariables>
+                <ANDROID_NDK>${javacpp.platform.root}</ANDROID_NDK>
+                <CMAKE>${env.CMAKE}</CMAKE>
+              </environmentVariables>
               <workingDirectory>${project.basedir}/..</workingDirectory>
             </configuration>
           </execution>
