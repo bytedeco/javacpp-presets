@@ -34,7 +34,7 @@ public class HailoDeviceInitialization {
         long deviceCount = count.get();
         if (deviceCount == 0) {
             System.out.println("No Hailo devices were found.");
-            System.out.println("On Windows, confirm the Hailo driver is installed and that the M.2 accelerator is visible through your USB adapter.");
+            System.out.println(noDeviceHint());
             return;
         }
 
@@ -105,5 +105,16 @@ public class HailoDeviceInitialization {
         if (status != HAILO_SUCCESS) {
             throw new IllegalStateException(action + " failed with Hailo status " + status);
         }
+    }
+
+    private static String noDeviceHint() {
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        if (osName.contains("win")) {
+            return "On Windows, confirm the Hailo driver is installed and that the M.2 accelerator is visible through your USB adapter.";
+        }
+        if (osName.contains("linux")) {
+            return "On Linux, confirm the Hailo kernel driver is installed and that the accelerator is visible to HailoRT.";
+        }
+        return "Confirm the Hailo driver/runtime is installed and that the accelerator is visible to HailoRT.";
     }
 }

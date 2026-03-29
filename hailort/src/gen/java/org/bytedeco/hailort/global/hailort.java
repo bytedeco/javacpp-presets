@@ -205,43 +205,43 @@ public static final int
 public static final int HAILO_STREAM_ABORTED_BY_USER = HAILO_STREAM_ABORT; /* 'HAILO_STREAM_ABORTED_BY_USER' is deprecated. Use 'HAILO_STREAM_ABORT' instead */
 public static final int HAILO_DRIVER_FAIL = HAILO_DRIVER_OPERATION_FAILED; /* 'HAILO_DRIVER_FAIL' is deprecated. Use 'HAILO_DRIVER_OPERATION_FAILED' instead */
 public static final int HAILO_PCIE_DRIVER_NOT_INSTALLED = HAILO_DRIVER_NOT_INSTALLED;
-// Targeting ..\hailo_version_t.java
+// Targeting ../hailo_version_t.java
 
 
-// Targeting ..\_hailo_device.java
+// Targeting ../_hailo_device.java
 
 
-// Targeting ..\_hailo_vdevice.java
+// Targeting ../_hailo_vdevice.java
 
 
-// Targeting ..\_hailo_hef.java
+// Targeting ../_hailo_hef.java
 
 
-// Targeting ..\_hailo_input_stream.java
+// Targeting ../_hailo_input_stream.java
 
 
-// Targeting ..\_hailo_output_stream.java
+// Targeting ../_hailo_output_stream.java
 
 
-// Targeting ..\_hailo_configured_network_group.java
+// Targeting ../_hailo_configured_network_group.java
 
 
-// Targeting ..\_hailo_activated_network_group.java
+// Targeting ../_hailo_activated_network_group.java
 
 
-// Targeting ..\_hailo_input_transform_context.java
+// Targeting ../_hailo_input_transform_context.java
 
 
-// Targeting ..\_hailo_output_transform_context.java
+// Targeting ../_hailo_output_transform_context.java
 
 
-// Targeting ..\_hailo_output_demuxer.java
+// Targeting ../_hailo_output_demuxer.java
 
 
-// Targeting ..\_hailo_input_vstream.java
+// Targeting ../_hailo_input_vstream.java
 
 
-// Targeting ..\_hailo_output_vstream.java
+// Targeting ../_hailo_output_vstream.java
 
 
 
@@ -351,19 +351,19 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_MEASUREMENT_BUFFER_INDEX_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_power_measurement_data_t.java
+// Targeting ../hailo_power_measurement_data_t.java
 
 
-// Targeting ..\hailo_scan_devices_params_t.java
+// Targeting ../hailo_scan_devices_params_t.java
 
 
-// Targeting ..\hailo_eth_device_info_t.java
+// Targeting ../hailo_eth_device_info_t.java
 
 
-// Targeting ..\hailo_pcie_device_info_t.java
+// Targeting ../hailo_pcie_device_info_t.java
 
 
-// Targeting ..\hailo_device_id_t.java
+// Targeting ../hailo_device_id_t.java
 
 
 
@@ -387,7 +387,7 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_SCHEDULING_ALGORITHM_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_vdevice_params_t.java
+// Targeting ../hailo_vdevice_params_t.java
 
 
 
@@ -413,13 +413,13 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_CPU_ID_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_firmware_version_t.java
+// Targeting ../hailo_firmware_version_t.java
 
 
-// Targeting ..\hailo_device_identity_t.java
+// Targeting ../hailo_device_identity_t.java
 
 
-// Targeting ..\hailo_core_information_t.java
+// Targeting ../hailo_core_information_t.java
 
 
 
@@ -432,10 +432,10 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_DEVICE_BOOT_SOURCE_MAX = HAILO_MAX_ENUM;
-// Targeting ..\hailo_device_supported_features_t.java
+// Targeting ../hailo_device_supported_features_t.java
 
 
-// Targeting ..\hailo_extended_device_information_t.java
+// Targeting ../hailo_extended_device_information_t.java
 
 
 
@@ -447,10 +447,10 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_ENDIANNESS_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_i2c_slave_config_t.java
+// Targeting ../hailo_i2c_slave_config_t.java
 
 
-// Targeting ..\hailo_fw_user_config_information_t.java
+// Targeting ../hailo_fw_user_config_information_t.java
 
 
 
@@ -728,7 +728,7 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_FORMAT_FLAGS_MAX_ENUM             = HAILO_MAX_ENUM;
-// Targeting ..\hailo_format_t.java
+// Targeting ../hailo_format_t.java
 
 
 
@@ -796,28 +796,28 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_BUFFER_FLAGS_MAX_ENUM     = HAILO_MAX_ENUM;
-// Targeting ..\hailo_buffer_parameters_t.java
+// Targeting ../hailo_buffer_parameters_t.java
 
 
-// Targeting ..\hailo_transform_params_t.java
+// Targeting ../hailo_transform_params_t.java
 
 
-// Targeting ..\hailo_demux_params_t.java
+// Targeting ../hailo_demux_params_t.java
 
 
-// Targeting ..\hailo_quant_info_t.java
+// Targeting ../hailo_quant_info_t.java
 
 
-// Targeting ..\hailo_eth_input_stream_params_t.java
+// Targeting ../hailo_eth_input_stream_params_t.java
 
 
-// Targeting ..\hailo_eth_output_stream_params_t.java
+// Targeting ../hailo_eth_output_stream_params_t.java
 
 
-// Targeting ..\hailo_pcie_input_stream_params_t.java
+// Targeting ../hailo_pcie_input_stream_params_t.java
 
 
-// Targeting ..\hailo_pcie_output_stream_params_t.java
+// Targeting ../hailo_pcie_output_stream_params_t.java
 
 
 
@@ -909,19 +909,19 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     ISP_LIGHT_FREQUENCY_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_mipi_common_params_t.java
+// Targeting ../hailo_mipi_common_params_t.java
 
 
-// Targeting ..\hailo_isp_params_t.java
+// Targeting ../hailo_isp_params_t.java
 
 
-// Targeting ..\hailo_mipi_input_stream_params_t.java
+// Targeting ../hailo_mipi_input_stream_params_t.java
 
 
-// Targeting ..\hailo_integrated_input_stream_params_t.java
+// Targeting ../hailo_integrated_input_stream_params_t.java
 
 
-// Targeting ..\hailo_integrated_output_stream_params_t.java
+// Targeting ../hailo_integrated_output_stream_params_t.java
 
 
 
@@ -934,10 +934,10 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
    HAILO_STREAM_INTERFACE_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_stream_parameters_t.java
+// Targeting ../hailo_stream_parameters_t.java
 
 
-// Targeting ..\hailo_stream_parameters_by_name_t.java
+// Targeting ../hailo_stream_parameters_by_name_t.java
 
 
 
@@ -968,19 +968,19 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_PIPELINE_ELEM_STATS_MAX_ENUM              = HAILO_MAX_ENUM;
-// Targeting ..\hailo_vstream_params_t.java
+// Targeting ../hailo_vstream_params_t.java
 
 
-// Targeting ..\hailo_input_vstream_params_by_name_t.java
+// Targeting ../hailo_input_vstream_params_by_name_t.java
 
 
-// Targeting ..\hailo_output_vstream_params_by_name_t.java
+// Targeting ../hailo_output_vstream_params_by_name_t.java
 
 
-// Targeting ..\hailo_output_vstream_name_by_group_t.java
+// Targeting ../hailo_output_vstream_name_by_group_t.java
 
 
-// Targeting ..\hailo_3d_image_shape_t.java
+// Targeting ../hailo_3d_image_shape_t.java
 
 
 
@@ -988,16 +988,16 @@ public static final int
 public static final int
   HAILO_PIX_BUFFER_MEMORY_TYPE_USERPTR = 0,
   HAILO_PIX_BUFFER_MEMORY_TYPE_DMABUF = 1;
-// Targeting ..\hailo_pix_buffer_plane_t.java
+// Targeting ../hailo_pix_buffer_plane_t.java
 
 
-// Targeting ..\hailo_pix_buffer_t.java
+// Targeting ../hailo_pix_buffer_t.java
 
 
-// Targeting ..\hailo_dma_buffer_t.java
+// Targeting ../hailo_dma_buffer_t.java
 
 
-// Targeting ..\hailo_nms_defuse_info_t.java
+// Targeting ../hailo_nms_defuse_info_t.java
 
 
 
@@ -1010,27 +1010,27 @@ public static final int
     HAILO_BURST_TYPE_H15_PER_FRAME = 4,
 
     HAILO_BURST_TYPE_COUNT = 5;
-// Targeting ..\hailo_nms_info_t.java
+// Targeting ../hailo_nms_info_t.java
 
 
-// Targeting ..\hailo_nms_fuse_input_t.java
+// Targeting ../hailo_nms_fuse_input_t.java
 
 
-// Targeting ..\hailo_nms_shape_t.java
+// Targeting ../hailo_nms_shape_t.java
 
 
 
 // #pragma pack(push, 1)
-// Targeting ..\hailo_bbox_t.java
+// Targeting ../hailo_bbox_t.java
 
 
-// Targeting ..\hailo_bbox_float32_t.java
+// Targeting ../hailo_bbox_float32_t.java
 
 
-// Targeting ..\hailo_rectangle_t.java
+// Targeting ../hailo_rectangle_t.java
 
 
-// Targeting ..\hailo_detection_t.java
+// Targeting ../hailo_detection_t.java
 
 
 
@@ -1041,26 +1041,26 @@ public static final int
 // #endif
 // #if defined(_MSC_VER)
 // #pragma warning(pop)
-// Targeting ..\hailo_detection_with_byte_mask_t.java
+// Targeting ../hailo_detection_with_byte_mask_t.java
 
 
 // #pragma pack(pop)
-// Targeting ..\hailo_stream_write_async_completion_info_t.java
+// Targeting ../hailo_stream_write_async_completion_info_t.java
 
 
-// Targeting ..\hailo_stream_write_async_callback_t.java
+// Targeting ../hailo_stream_write_async_callback_t.java
 
 
-// Targeting ..\hailo_stream_read_async_completion_info_t.java
+// Targeting ../hailo_stream_read_async_completion_info_t.java
 
 
-// Targeting ..\hailo_stream_read_async_callback_t.java
+// Targeting ../hailo_stream_read_async_callback_t.java
 
 
-// Targeting ..\hailo_stream_info_t.java
+// Targeting ../hailo_stream_info_t.java
 
 
-// Targeting ..\hailo_vstream_info_t.java
+// Targeting ../hailo_vstream_info_t.java
 
 
 
@@ -1082,28 +1082,28 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_LATENCY_MAX_ENUM          = HAILO_MAX_ENUM;
-// Targeting ..\hailo_network_parameters_t.java
+// Targeting ../hailo_network_parameters_t.java
 
 
-// Targeting ..\hailo_network_parameters_by_name_t.java
+// Targeting ../hailo_network_parameters_by_name_t.java
 
 
-// Targeting ..\hailo_configure_network_group_params_t.java
+// Targeting ../hailo_configure_network_group_params_t.java
 
 
-// Targeting ..\hailo_configure_params_t.java
+// Targeting ../hailo_configure_params_t.java
 
 
-// Targeting ..\hailo_activate_network_group_params_t.java
+// Targeting ../hailo_activate_network_group_params_t.java
 
 
-// Targeting ..\hailo_network_group_info_t.java
+// Targeting ../hailo_network_group_info_t.java
 
 
-// Targeting ..\hailo_layer_name_t.java
+// Targeting ../hailo_layer_name_t.java
 
 
-// Targeting ..\hailo_network_info_t.java
+// Targeting ../hailo_network_info_t.java
 
 
 
@@ -1147,13 +1147,13 @@ public static final int
 
     /** Max enum value to maintain ABI Integrity */
     HAILO_NOTIFICATION_ID_MAX_ENUM = HAILO_MAX_ENUM;
-// Targeting ..\hailo_rx_error_notification_message_t.java
+// Targeting ../hailo_rx_error_notification_message_t.java
 
 
-// Targeting ..\hailo_debug_notification_message_t.java
+// Targeting ../hailo_debug_notification_message_t.java
 
 
-// Targeting ..\hailo_health_monitor_dataflow_shutdown_notification_message_t.java
+// Targeting ../hailo_health_monitor_dataflow_shutdown_notification_message_t.java
 
 
 
@@ -1162,7 +1162,7 @@ public static final int
     HAILO_TEMPERATURE_PROTECTION_TEMPERATURE_ZONE__GREEN = 0,
     HAILO_TEMPERATURE_PROTECTION_TEMPERATURE_ZONE__ORANGE = 1,
     HAILO_TEMPERATURE_PROTECTION_TEMPERATURE_ZONE__RED = 2;
-// Targeting ..\hailo_health_monitor_temperature_alarm_notification_message_t.java
+// Targeting ../hailo_health_monitor_temperature_alarm_notification_message_t.java
 
 
 
@@ -1170,45 +1170,45 @@ public static final int
 public static final int
     HAILO_OVERCURRENT_PROTECTION_OVERCURRENT_ZONE__GREEN = 0,
     HAILO_OVERCURRENT_PROTECTION_OVERCURRENT_ZONE__RED = 1;
-// Targeting ..\hailo_health_monitor_overcurrent_alert_notification_message_t.java
+// Targeting ../hailo_health_monitor_overcurrent_alert_notification_message_t.java
 
 
-// Targeting ..\hailo_health_monitor_lcu_ecc_error_notification_message_t.java
+// Targeting ../hailo_health_monitor_lcu_ecc_error_notification_message_t.java
 
 
-// Targeting ..\hailo_health_monitor_cpu_ecc_notification_message_t.java
+// Targeting ../hailo_health_monitor_cpu_ecc_notification_message_t.java
 
 
-// Targeting ..\hailo_performance_stats_t.java
+// Targeting ../hailo_performance_stats_t.java
 
 
-// Targeting ..\hailo_health_stats_t.java
+// Targeting ../hailo_health_stats_t.java
 
 
-// Targeting ..\hailo_context_switch_breakpoint_reached_message_t.java
+// Targeting ../hailo_context_switch_breakpoint_reached_message_t.java
 
 
-// Targeting ..\hailo_health_monitor_clock_changed_notification_message_t.java
+// Targeting ../hailo_health_monitor_clock_changed_notification_message_t.java
 
 
-// Targeting ..\hailo_hw_infer_manager_infer_done_notification_message_t.java
+// Targeting ../hailo_hw_infer_manager_infer_done_notification_message_t.java
 
 
-// Targeting ..\hailo_start_update_cache_offset_notification_message_t.java
+// Targeting ../hailo_start_update_cache_offset_notification_message_t.java
 
 
-// Targeting ..\hailo_context_switch_run_time_error_message_t.java
+// Targeting ../hailo_context_switch_run_time_error_message_t.java
 
 
-// Targeting ..\hailo_notification_message_parameters_t.java
+// Targeting ../hailo_notification_message_parameters_t.java
 
 
-// Targeting ..\hailo_notification_t.java
+// Targeting ../hailo_notification_t.java
 
 
 
 // #pragma pack(pop)
-// Targeting ..\hailo_notification_callback.java
+// Targeting ../hailo_notification_callback.java
 
 
 /** Hailo device reset modes */
@@ -1227,25 +1227,25 @@ public static final int
     HAILO_WATCHDOG_MODE_HW_ONLY         = 1,
 
     HAILO_WATCHDOG_MODE_MAX_ENUM        = HAILO_MAX_ENUM;
-// Targeting ..\hailo_chip_temperature_info_t.java
+// Targeting ../hailo_chip_temperature_info_t.java
 
 
-// Targeting ..\hailo_throttling_level_t.java
+// Targeting ../hailo_throttling_level_t.java
 
 
-// Targeting ..\hailo_health_info_t.java
+// Targeting ../hailo_health_info_t.java
 
 
-// Targeting ..\hailo_stream_raw_buffer_t.java
+// Targeting ../hailo_stream_raw_buffer_t.java
 
 
-// Targeting ..\hailo_stream_raw_buffer_by_name_t.java
+// Targeting ../hailo_stream_raw_buffer_by_name_t.java
 
 
-// Targeting ..\hailo_latency_measurement_result_t.java
+// Targeting ../hailo_latency_measurement_result_t.java
 
 
-// Targeting ..\hailo_rate_limit_t.java
+// Targeting ../hailo_rate_limit_t.java
 
 
 
@@ -3743,7 +3743,7 @@ public static native @Cast("hailo_status") int hailo_is_output_transformation_re
 // #ifndef socket_t
 // #if defined(_MSC_VER)
 // #else
-// Targeting ..\timeval_t.java
+// Targeting ../timeval_t.java
 
 
 // #endif

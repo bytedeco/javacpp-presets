@@ -10,8 +10,8 @@ import org.bytedeco.javacpp.tools.*;
                         "hailo/hailort.h",
                         "hailo/platform.h"
                 },
-                        link = "libhailort"),
-                @Platform(value = "windows", define = "WIN32_LEAN_AND_MEAN", include = {}),
+                        link = "hailort"),
+                @Platform(value = "windows", define = "WIN32_LEAN_AND_MEAN", include = {}, link = "libhailort"),
                 @Platform(value = "linux",
                         include = {
 //                        "<unistd.h>",
