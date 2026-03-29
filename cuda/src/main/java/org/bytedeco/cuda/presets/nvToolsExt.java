@@ -33,15 +33,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = cudart.class, value = {
-    @Platform(include = {"<nvToolsExt.h>", "<nvToolsExtCuda.h>", "<nvToolsExtCudaRt.h>"/*, "<nvToolsExtOpenCL.h>"*/},
-              link = "nvToolsExt@.1"),
-    @Platform(value = "windows-x86_64", link = "nvToolsExt64_1",
-              includepath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/include/",
-              linkpath    = "C:/Program Files/NVIDIA Corporation/NvToolsExt/lib/x64/",
-              preloadpath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/")},
-        target = "org.bytedeco.cuda.nvToolsExt", global = "org.bytedeco.cuda.global.nvToolsExt")
-@NoException
+//@Properties(inherit = cudart.class, value = {
+//    @Platform(include = {"<nvToolsExt.h>", "<nvToolsExtCuda.h>", "<nvToolsExtCudaRt.h>"/*, "<nvToolsExtOpenCL.h>"*/},
+//              link = "nvToolsExt@.1"),
+//    @Platform(value = "windows-x86_64", link = "nvToolsExt64_1",
+//              includepath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/include/",
+//              linkpath    = "C:/Program Files/NVIDIA Corporation/NvToolsExt/lib/x64/",
+//              preloadpath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/")},
+//        target = "org.bytedeco.cuda.nvToolsExt", global = "org.bytedeco.cuda.global.nvToolsExt")
+//@NoException
 public class nvToolsExt implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NVTX_DECLSPEC", "NVTX_API", "NVTX_INLINE_STATIC").cppTypes().annotations())

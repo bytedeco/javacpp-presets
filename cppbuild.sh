@@ -87,7 +87,7 @@ echo
 
 if [[ -z ${OPERATION:-} ]]; then
     echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]"
-    echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86, windows-x86_64, etc."
+    echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-arm64, windows-x86, windows-x86_64, etc."
     exit 1
 fi
 
@@ -99,6 +99,7 @@ export ANDROID_BIN="$ANDROID_NDK/toolchains/llvm/prebuilt/$KERNEL-$ARCH/"
 export ANDROID_CC="$ANDROID_NDK/toolchains/llvm/prebuilt/$KERNEL-$ARCH/bin/clang"
 export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/llvm-libc++/"
 export ANDROID_PREFIX="$ANDROID_BIN/bin/llvm"
+export ANDROID_NDK_ROOT="$ANDROID_NDK"
 export ANDROID_ROOT=
 case $PLATFORM in
     android-arm)

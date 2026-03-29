@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.10.0
+OPENCV_VERSION=4.13.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -40,18 +40,18 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
-export PYTHON2_EXECUTABLE=$(which python2)
+#export PYTHON2_EXECUTABLE=$(which python2)
 export PYTHON3_EXECUTABLE=
 export PYTHON3_INCLUDE_DIR=
 export PYTHON3_LIBRARY=
 export PYTHON3_PACKAGES_PATH=
-if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.14/Python.h" ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
-    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.12"
-    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.12/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.12/"
-    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.14"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.14/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.14/"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.14/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.14/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON3_EXECUTABLE"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -60,7 +60,7 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python312.lib"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python314.lib"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
     export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
@@ -72,9 +72,12 @@ tar --totals -xzf ../opencv_contrib-$OPENCV_VERSION.tar.gz
 
 cd opencv_contrib-$OPENCV_VERSION
 patch -Np1 < ../../../opencv_contrib.patch
+patch -Np1 < ../../../opencv_contrib-cudacodec.patch
+#patch -Np1 < ../../../opencv_contrib-cuda13.patch
 
 cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
+#patch -Np1 < ../../../opencv-cuda13.patch
 #patch -Np1 < ../../../opencv-cudnn8.patch
 patch -Np1 < ../../../opencv-linux-ppc64le.patch
 
@@ -83,8 +86,8 @@ patch -Np1 < ../../../opencv-linux-ppc64le.patch
 #sedinplace "s/<LINK_LIBRARIES>/<LINK_LIBRARIES> ${ANDROID_LIBS:-}/g" platforms/android/android.toolchain.cmake
 
 # disable broken NEON code
-sedinplace 's/if(NOT MSVC)/if(FALSE)/g' cmake/OpenCVCompilerOptimizations.cmake
-sedinplace 's/define CV_NEON 1/define CV_NEON 0/g' modules/core/include/opencv2/core/cv_cpu_dispatch.h
+#sedinplace 's/if(NOT MSVC)/if(FALSE)/g' cmake/OpenCVCompilerOptimizations.cmake
+#sedinplace 's/define CV_NEON 1/define CV_NEON 0/g' modules/core/include/opencv2/core/cv_cpu_dispatch.h
 
 # https://github.com/opencv/opencv/issues/19846
 sedinplace 's/dgeev_/OCV_LAPACK_FUNC(dgeev)/g' modules/calib3d/src/usac/dls_solver.cpp modules/calib3d/src/usac/essential_solver.cpp
@@ -116,9 +119,9 @@ sedinplace 's/PythonInterp "${min_version}"/PythonInterp/g' cmake/OpenCVDetectPy
 sedinplace 's/PythonLibs "${_version_major_minor}.${_version_patch}" EXACT/PythonLibs/g' cmake/OpenCVDetectPython.cmake
 sedinplace '/if(PYTHONINTERP_FOUND)/a\
     if(" ${_python_version_major}" STREQUAL " 3")\
-      set(PYTHON_VERSION_STRING "3.12")\
+      set(PYTHON_VERSION_STRING "3.14")\
       set(PYTHON_VERSION_MAJOR "3")\
-      set(PYTHON_VERSION_MINOR "12")\
+      set(PYTHON_VERSION_MINOR "14")\
     endif()\
 ' cmake/OpenCVDetectPython.cmake
 sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
@@ -126,7 +129,7 @@ sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
 BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_objc=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DOPENCV_SKIP_PYTHON_LOADER=ON -DPYTHON3_EXECUTABLE=$PYTHON3_EXECUTABLE -DPYTHON3_INCLUDE_DIR=$PYTHON3_INCLUDE_DIR -DPYTHON3_LIBRARY=$PYTHON3_LIBRARY -DPYTHON3_PACKAGES_PATH=$PYTHON3_PACKAGES_PATH -DPYTHON3_NUMPY_INCLUDE_DIRS=$NUMPY_PATH/python/numpy/_core/include/ -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_sfm=OFF -DBUILD_opencv_img_hash=ON"
 
 # support for OpenMP is NOT thread-safe so make sure to never enable it and use pthreads instead
-WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_VA=OFF -DWITH_INF_ENGINE=OFF -DWITH_EIGEN=OFF -DENABLE_CXX11=ON -DENABLE_LIBJPEG_TURBO_SIMD=OFF"
+WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_VA=OFF -DWITH_INF_ENGINE=OFF -DWITH_EIGEN=OFF -DWITH_KLEIDICV=OFF -DENABLE_CXX11=ON -DENABLE_LIBJPEG_TURBO_SIMD=ON"
 
 # support headless
 if [[ "${HEADLESS:-no}" == "yes" ]]; then
@@ -137,7 +140,7 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
-    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=12.6 -DCUDNN_VERSION=9.3 -DCUDA_ARCH_BIN='5.0;6.0;7.0;8.0;9.0' -DCUDA_ARCH_PTX='' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
+    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=13.0 -DCUDNN_VERSION=9.14 -DCUDA_ARCH_BIN='7.5;8.0;9.0;10.0;12.0' -DCUDA_ARCH_PTX='' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY= -DENABLE_CUDA_FIRST_CLASS_LANGUAGE=ON"
 fi
 
 # exclude openblas dependencies
@@ -339,7 +342,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm64)
-        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
+        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -383,7 +386,7 @@ case $PLATFORM in
     macosx-arm64)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
-        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=ON -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -419,12 +422,12 @@ case $PLATFORM in
         fi
         ninja -j $MAKEJ
         ninja install
-        cp -r ../x86/vc16/lib ..
-        cp -r ../x86/vc16/bin ..
+        cp -r ../x86/vc??/lib ..
+        cp -r ../x86/vc??/bin ..
         cp lib/opencv_java.lib ../lib
         cp lib/opencv_java.dll ../bin
-        sedinplace "s:/x86/vc16/lib/:/lib/:g" ../x86/vc16/lib/OpenCVModules-release.cmake
-        sedinplace "s:/x86/vc16/bin/:/:g" ../x86/vc16/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x86/vc../lib/:/lib/:g" ../x86/vc??/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x86/vc../bin/:/:g" ../x86/vc??/lib/OpenCVModules-release.cmake
         ;;
     windows-x86_64)
         export CC="cl.exe"
@@ -439,12 +442,12 @@ case $PLATFORM in
         [[ ! -f modules/cudev/opencv_cudev_main.cpp ]] || sedinplace '/__termination/d' modules/cudev/opencv_cudev_main.cpp
         ninja -j $MAKEJ
         ninja install
-        cp -r ../x64/vc16/lib ..
-        cp -r ../x64/vc16/bin ..
+        cp -r ../x64/vc??/lib ..
+        cp -r ../x64/vc??/bin ..
         cp lib/opencv_java.lib ../lib
         cp lib/opencv_java.dll ../bin
-        sedinplace "s:/x64/vc16/lib/:/lib/:g" ../x64/vc16/lib/OpenCVModules-release.cmake
-        sedinplace "s:/x64/vc16/bin/:/:g" ../x64/vc16/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x64/vc../lib/:/lib/:g" ../x64/vc??/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x64/vc../bin/:/:g" ../x64/vc??/lib/OpenCVModules-release.cmake
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

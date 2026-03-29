@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * PyTorch 2.3.0  https://pytorch.org/
+ * PyTorch 2.10.0  https://pytorch.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.pytorch</groupId>
     <artifactId>simplemnist</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.13</version>
     <properties>
         <exec.mainClass>SimpleMNIST</exec.mainClass>
     </properties>
@@ -48,28 +48,38 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform</artifactId>
-            <version>2.3.0-1.5.11-SNAPSHOT</version>
+            <version>2.10.0-1.5.13</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform-gpu</artifactId>
-            <version>2.3.0-1.5.11-SNAPSHOT</version>
+            <version>2.10.0-1.5.13</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda-platform-redist</artifactId>
-            <version>12.6-9.3-1.5.11-SNAPSHOT</version>
+            <artifactId>cuda-platform-redist-cudnn</artifactId>
+            <version>13.1-9.19-1.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist-cusolver</artifactId>
+            <version>13.1-9.19-1.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform-redist-nccl</artifactId>
+            <version>13.1-9.19-1.5.13</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2024.0-1.5.11-SNAPSHOT</version>
+            <version>2025.3-1.5.13</version>
         </dependency>
     </dependencies>
     <build>

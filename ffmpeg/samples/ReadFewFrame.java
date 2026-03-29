@@ -156,7 +156,6 @@ public class ReadFewFrame {
 
         av_frame_free(frm);
 
-        avcodec_close(codec_ctx);
         avcodec_free_context(codec_ctx);
 
         avformat_close_input(fmt_ctx);

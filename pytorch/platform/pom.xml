@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.14-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch-platform</artifactId>
-  <version>2.3.0-${project.parent.version}</version>
+  <version>2.10.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for PyTorch</name>
 
   <properties>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.28-${project.parent.version}</version>
+      <version>0.3.31-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -40,6 +40,12 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.macosx-arm64}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -65,7 +71,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-arm64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -111,6 +117,7 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+                      requires static org.bytedeco.${javacpp.moduleId}.macosx.arm64;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }

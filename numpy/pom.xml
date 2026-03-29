@@ -6,24 +6,24 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.14-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy</artifactId>
-  <version>2.0.1-${project.parent.version}</version>
+  <version>2.4.2-${project.parent.version}</version>
   <name>JavaCPP Presets for NumPy</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.28-${project.parent.version}</version>
+      <version>0.3.31-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython</artifactId>
-      <version>3.12.5-${project.parent.version}</version>
+      <version>3.14.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -46,23 +46,23 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.28-${project.parent.version}</version>
+            <version>0.3.31-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.12.5-${project.parent.version}</version>
+            <version>3.14.3-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.28-${project.parent.version}</version>
+            <version>0.3.31-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.12.5-${project.parent.version}</version>
+            <version>3.14.3-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -80,7 +80,7 @@
             <includePath>${basedir}/../cpython/src/main/resources/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/target/classes/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.12/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.14/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/python/numpy/_core/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/python/numpy/_core/include/numpy/</includePath>
           </includePaths>
@@ -107,7 +107,7 @@
             <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
-            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.12/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.14/</includeResource>
           </includeResources>
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/</linkResource>
@@ -171,7 +171,7 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>cpython</artifactId>
-                <version>3.12.5-${project.parent.version}</version>
+                <version>3.14.3-${project.parent.version}</version>
                 <classifier>${os.name}-${os.arch}</classifier>
               </dependency>
             </dependencies>

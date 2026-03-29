@@ -1,0 +1,47 @@
+diff --git a/modules/cudacodec/CMakeLists.txt b/modules/cudacodec/CMakeLists.txt
+index eeda57149f8..95a07bdb399 100644
+--- a/modules/cudacodec/CMakeLists.txt
++++ b/modules/cudacodec/CMakeLists.txt
+@@ -30,25 +30,23 @@ if(WITH_NVCUVENC AND NOT HAVE_NVCUVENC)
+   message(WARNING "cudacodec::VideoWriter requires Nvidia Video Codec SDK. Please resolve dependency or disable WITH_NVCUVENC=OFF")
+ endif()
+ 
+-if(HAVE_NVCUVID OR HAVE_NVCUVENC)
+-  if(ENABLE_CUDA_FIRST_CLASS_LANGUAGE)
+-      list(APPEND extra_libs CUDA::cuda_driver CUDA::cudart${CUDA_LIB_EXT})
+-  else()
+-    list(APPEND extra_libs ${CUDA_CUDA_LIBRARY})
+-  endif()
+-  if(HAVE_NVCUVID)
+-    list(APPEND extra_libs ${CUDA_nvcuvid_LIBRARY})
+-  endif()
+-  if(HAVE_NVCUVENC)
+-      if(WIN32)
+-        list(APPEND extra_libs ${CUDA_nvencodeapi_LIBRARY})
+-      else()
+-        list(APPEND extra_libs ${CUDA_nvidia-encode_LIBRARY})
+-      endif()
+-  endif()
++if(ENABLE_CUDA_FIRST_CLASS_LANGUAGE)
++    list(APPEND extra_libs CUDA::cuda_driver CUDA::cudart${CUDA_LIB_EXT})
++else()
++  list(APPEND extra_libs ${CUDA_CUDA_LIBRARY})
++endif()
++if(HAVE_NVCUVID)
++  list(APPEND extra_libs ${CUDA_nvcuvid_LIBRARY})
++endif()
++if(HAVE_NVCUVENC)
++    if(WIN32)
++      list(APPEND extra_libs ${CUDA_nvencodeapi_LIBRARY})
++    else()
++      list(APPEND extra_libs ${CUDA_nvidia-encode_LIBRARY})
++    endif()
+ endif()
+ 
+ ocv_create_module(${extra_libs})
+ 
+ ocv_add_accuracy_tests()
+-ocv_add_perf_tests()
+\ No newline at end of file
++ocv_add_perf_tests()
+

@@ -42,9 +42,9 @@ import org.bytedeco.leptonica.presets.leptonica;
     @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/export.h", /*"tesseract/osdetect.h",*/ "tesseract/unichar.h",
         "tesseract/version.h", "tesseract/publictypes.h", "tesseract/pageiterator.h", "tesseract/ocrclass.h", "tesseract/ltrresultiterator.h",
         "tesseract/renderer.h", "tesseract/resultiterator.h", "tesseract/baseapi.h", "tesseract/capi.h", "locale.h"},
-        compiler = "cpp14", link = "tesseract@.5.4.1"/*, resource = {"include", "lib"}*/),
+        compiler = "cpp14", link = "tesseract@.5.5"/*, resource = {"include", "lib"}*/),
     @Platform(value = "android", link = "tesseract"),
-    @Platform(value = "windows", link = "tesseract54", preload = "libtesseract54") })
+    @Platform(value = "windows", link = "tesseract55", preload = "libtesseract55") })
 public class tesseract implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tesseract"); }
 

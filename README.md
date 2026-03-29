@@ -92,27 +92,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.10</version>
+    <version>${moduleVersion}-1.5.13</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle.kts` or `build.gradle` file)
 ```groovy
   dependencies {
-    implementation("org.bytedeco:$moduleName-platform:$moduleVersion-1.5.10")
+    implementation("org.bytedeco:$moduleName-platform:$moduleVersion-1.5.13")
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.10")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.13")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.10"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.13"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -122,10 +122,11 @@ Required Software
 -----------------
 To use the JavaCPP Presets, you will need to download and install the following software:
 
- * An implementation of Java SE 7 or newer:
+ * An implementation of Java SE 8 or newer:
    * OpenJDK  http://openjdk.java.net/install/  or
    * Oracle JDK  http://www.oracle.com/technetwork/java/javase/downloads/  or
-   * IBM JDK  http://www.ibm.com/developerworks/java/jdk/
+   * IBM JDK  http://www.ibm.com/developerworks/java/jdk/  or
+   * Microsoft JDK  https://www.microsoft.com/openjdk  etc
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
 
@@ -134,19 +135,19 @@ Further, in the case of Android, the JavaCPP Presets also rely on:
 
 Manual Installation
 -------------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux are built with Ubuntu, so they should work on most distributions currently in use. The ones for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux are built with Ubuntu, so they should work on most distributions currently in use. Here are some more specific instructions for common cases:
 
-NetBeans (Java SE 7 or newer):
+NetBeans (Java SE 8 or newer):
 
  1. In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
  2. Locate the JAR files, select them, and click OK.
 
-Eclipse (Java SE 7 or newer):
+Eclipse (Java SE 8 or newer):
 
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
  
-Visual Studio Code (Java SE 7 or newer):
+Visual Studio Code (Java SE 8 or newer):
 
  1. Navigate to Java Projects > Referenced Libraries, and click `+`.
  2. Locate the JAR files, select them, and click OK.
@@ -175,12 +176,12 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.10  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.13  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.10.x  https://opencv.org/releases/
- * FFmpeg 7.0.x  http://ffmpeg.org/download.html
+ * OpenCV 4.13.x  https://opencv.org/releases/
+ * FFmpeg 8.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 4.0.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -196,45 +197,45 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.14.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
- * MKL 2024.x  https://software.intel.com/mkl
+ * MKL 2025.3.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 3.5.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.28  http://www.openblas.net/
+ * DNNL 3.11.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.31  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
- * CMINPACK 1.3.9  https://github.com/devernay/cminpack
+ * CMINPACK 1.3.11  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.12.x  https://www.python.org/downloads/
- * NumPy 2.0.x  https://github.com/numpy/numpy
- * SciPy 1.14.x  https://github.com/scipy/scipy
+ * CPython 3.14.x  https://www.python.org/downloads/
+ * NumPy 2.4.x  https://github.com/numpy/numpy
+ * SciPy 1.17.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
- * LLVM 18.1.x  http://llvm.org/releases/download.html
- * libffi 3.4.x  https://github.com/libffi/libffi
+ * LLVM 22.1.x  http://llvm.org/releases/download.html
+ * libffi 3.5.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
- * Leptonica 1.84.x  http://www.leptonica.org/download.html
- * Tesseract 5.4.x  https://github.com/tesseract-ocr/tesseract
+ * Leptonica 1.87.x  http://www.leptonica.org/download.html
+ * Tesseract 5.5.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 12.6.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 9.3.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.22.x  https://developer.nvidia.com/nccl
-   * nvCOMP 4.0.x https://developer.nvidia.com/nvcomp
- * NVIDIA Video Codec SDK 12.2.x  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * CUDA 13.1.x  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 9.19.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.29.x  https://developer.nvidia.com/nccl
+   * nvCOMP 5.1.x https://developer.nvidia.com/nvcomp
+ * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
- * PyTorch 2.3.x  https://github.com/pytorch/pytorch
- * SentencePiece 0.2.0  https://github.com/google/sentencepiece
+ * PyTorch 2.10.x  https://github.com/pytorch/pytorch
+ * SentencePiece 0.2.x  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.17.x  https://github.com/tensorflow/tensorflow
- * TensorRT 10.3.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.48.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * TensorFlow Lite 2.21.x  https://github.com/tensorflow/tensorflow
+ * TensorRT 10.15.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.64.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
- * ONNX 1.16.x  https://github.com/onnx/onnx
+ * ONNX 1.20.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.18.x  https://github.com/microsoft/onnxruntime
- * TVM 0.17.x  https://github.com/apache/tvm
+ * ONNX Runtime 1.24.x  https://github.com/microsoft/onnxruntime
+ * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
@@ -283,6 +284,7 @@ where possible platform names are:
 * `linux-x86_64`
 * `macosx-arm64`
 * `macosx-x86_64`
+* `windows-arm64`
 * `windows-x86`
 * `windows-x86_64`
 

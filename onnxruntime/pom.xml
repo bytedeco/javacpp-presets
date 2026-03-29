@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.14-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnxruntime</artifactId>
-  <version>1.18.1-${project.parent.version}</version>
+  <version>1.24.1-${project.parent.version}</version>
   <name>JavaCPP Presets for ONNX Runtime</name>
 
   <properties>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
-      <version>3.5.3-${project.parent.version}</version>
+      <version>3.11-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -38,6 +38,7 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <encoding>UTF-8</encoding>
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
@@ -49,10 +50,11 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>3.5.3-${project.parent.version}</version>
+            <version>3.11-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
+          <encoding>UTF-8</encoding>
           <classPaths>
             <classPath>${basedir}/../opencl/target/classes/</classPath>
             <classPath>${basedir}/../dnnl/target/classes/</classPath>
@@ -152,6 +154,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -7,22 +7,27 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-export CMAKE_FLAGS=
+export CMAKE_FLAGS="-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
 if [[ "$EXTENSION" == *gpu ]]; then
-    export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
+    export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON $CMAKE_FLAGS"
 fi
 
-TENSORFLOW_VERSION=2.17.0
+TENSORFLOW_VERSION=2.21.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
+TENSORFLOW_SOURCE_DIR="$INSTALL_PATH/tensorflow-$TENSORFLOW_VERSION"
+if which cygpath; then
+    TENSORFLOW_SOURCE_DIR=$(cygpath -m $TENSORFLOW_SOURCE_DIR)
+fi
 
 echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || true
 # patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
 # sedinplace 's/common.c/common.cc/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c/CMakeLists.txt
+sedinplace 's/!defined TF_LITE_DISABLE_X86_NEON/0/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/neon_check.h
 sedinplace 's/value = 1 << 20/value = (1 << 20)/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/interpreter_options.h
 sedinplace '/${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/profiler.cc/a\
 ${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/telemetry.cc\
@@ -31,21 +36,41 @@ ${TFLITE_SOURCE_DIR}\/profiling\/telemetry\/c\/telemetry_setting_internal.cc\
 sedinplace '/#include <math.h>/a\
 #include <stdint.h>\
 ' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/spectrogram.cc
+sedinplace "s/TFLITE_VERSION_STRING/\"$TENSORFLOW_VERSION\"/g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/c/c_api.cc
+sedinplace "s/TFLITE_EXTENSION_APIS_VERSION_STRING/\"$TENSORFLOW_VERSION\"/g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/c/c_api.cc
+sedinplace '/private:/d' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/core/model_building.h
+sedinplace '/core\/example/d' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
+sedinplace "s;TENSORFLOW_SOURCE_DIR \"\";TENSORFLOW_SOURCE_DIR \"$TENSORFLOW_SOURCE_DIR\";g" tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
+
+if [[ ! "$PLATFORM" == windows* ]]; then
+    mkdir -p build_flatc
+    cd build_flatc
+
+    "$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
+    "$CMAKE" --build . --parallel $MAKEJ --target flatbuffers-flatc
+    export CMAKE_FLAGS="-DTFLITE_HOST_TOOLS_DIR=$PWD/flatbuffers-flatc $CMAKE_FLAGS"
+
+    cd ..
+fi
 
 mkdir -p build
 cd build
 
 case $PLATFORM in
     android-arm)
+        export AR=ar
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
         ;;
     android-arm64)
+        export AR=ar
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DXNNPACK_ENABLE_ARM_I8MM=OFF $CMAKE_FLAGS"
         ;;
     android-x86)
+        export AR=ar
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
         ;;
     android-x86_64)
+        export AR=ar
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DXNNPACK_ENABLE_AVXVNNI=OFF $CMAKE_FLAGS"
         ;;
     linux-armhf)
@@ -75,7 +100,7 @@ case $PLATFORM in
         sedinplace 's/__PRETTY_FUNCTION__/__func__/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/depthwiseconv*.h ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/integer_ops/depthwise_conv.h
         export CC="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
         export CXX="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
-        export CMAKE_FLAGS="-G Ninja $CMAKE_FLAGS"
+        export CMAKE_FLAGS="-G Ninja -DXNNPACK_ENABLE_AVXVNNIINT8=OFF $CMAKE_FLAGS"
         # create a dummy m.lib to satisfy some dependencies somewhere
         touch m.c
         cl.exe //c m.c
@@ -87,7 +112,10 @@ case $PLATFORM in
         ;;
 esac
 
-"$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib -DTFLITE_C_BUILD_SHARED_LIBS=OFF ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
+V=(${TENSORFLOW_VERSION//./ })
+FLAGS="-DTF_MAJOR_VERSION=${V[0]} -DTF_MINOR_VERSION=${V[1]} -DTF_PATCH_VERSION=${V[2]} -DTF_VERSION_SUFFIX=''"
+"$CMAKE" $CMAKE_FLAGS -DCMAKE_C_FLAGS="$FLAGS" -DCMAKE_CXX_FLAGS="$FLAGS" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib -DTFLITE_C_BUILD_SHARED_LIBS=OFF ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
+"$CMAKE" --build . --parallel $MAKEJ --target absl_log_internal_message
 "$CMAKE" --build . --parallel $MAKEJ
 #"$CMAKE" --install .
 
@@ -95,10 +123,12 @@ esac
 find -L $(pwd) -iname '*.obj' -o -iname '*.o' -not -path "$(pwd)/CMakeFiles/*" > objs
 # remove files with main() functions as well as duplicate or unresolved symbols in them
 sedinplace '/main.o/d' objs
+sedinplace '/flatbuffers-flatc/d' objs
 sedinplace '/CMakeCCompilerId.o/d' objs
 sedinplace '/CMakeCXXCompilerId.o/d' objs
 sedinplace '/tensorflowlite_c.dir/d' objs
 sedinplace '/tensorflow_profiler_logger/d' objs
+sedinplace '/xnnpack-operator-delete.dir/d' objs
 # convert to DOS paths with short names to prevent exceeding MAX_PATH on Windows
 if which cygpath; then
     cygpath -d -f objs > objs.dos

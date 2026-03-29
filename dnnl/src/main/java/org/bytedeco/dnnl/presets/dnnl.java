@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2018-2025 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import org.bytedeco.opencl.presets.*;
     inherit = OpenCL.class,
     value = {
         @Platform(
-            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            value = {"linux", "macosx", "windows"},
             compiler = "cpp11",
 //            define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"oneapi/dnnl/dnnl_common_types.h", "oneapi/dnnl/dnnl_types.h", "oneapi/dnnl/dnnl_common.h",
@@ -98,6 +98,7 @@ public class dnnl implements InfoMapper {
                .put(new Info("dnnl::primitive_desc").pointerTypes("org.bytedeco.dnnl.primitive_desc"))
                .put(new Info("dnnl::memory::desc").pointerTypes("org.bytedeco.dnnl.memory.desc"))
                .put(new Info("dnnl::memory::dims").annotations("@Cast({\"dnnl_dim_t*\", \"std::vector<dnnl_dim_t>&\"}) @StdVector(\"dnnl_dim_t\")").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("std::vector<void*>").annotations("@Cast({\"void**\", \"std::vector<void*>&\"}) @StdVector(\"void*\")").pointerTypes("PointerPointer"))
 //               .put(new Info("std::vector<const_dnnl_primitive_desc_t>").annotations("@StdVector @Cast(\"const_dnnl_primitive_desc_t*\")").pointerTypes("PointerPointer"))
 //               .put(new Info("dnnl::primitive::at").pointerTypes("primitive.at").define())
 //               .put(new Info("dnnl::memory::primitive_desc").pointerTypes("memory.primitive_desc").define())

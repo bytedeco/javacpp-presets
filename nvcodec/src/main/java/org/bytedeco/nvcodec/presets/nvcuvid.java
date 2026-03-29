@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Jeonghwan Park
+ * Copyright (C) 2021-2026 Jeonghwan Park, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -65,7 +65,8 @@ import org.bytedeco.cuda.presets.cudart;
         @Platform(
             value = "windows-x86_64",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Interface/",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/"
+            linkpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/x64/",
+                        "C:/Program Files/NVIDIA GPU Computing Toolkit/VideoCodecSDK/Lib/win/x64/"}
         )
     },
     target = "org.bytedeco.nvcodec.nvcuvid",
@@ -86,9 +87,9 @@ public class nvcuvid implements LoadEnabled, InfoMapper {
 
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
+                lib += lib.equals("cudart") ? "@.13" : lib.equals("nvrtc") ? "@.13" : "@.13";
             } else if (platform.startsWith("windows")) {
-                lib += lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
+                lib += lib.equals("cudart") ? "64_13" : lib.equals("nvrtc") ? "64_130_0" : "64_13";
             } else {
                 continue;
             }

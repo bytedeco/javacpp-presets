@@ -2,6 +2,9 @@
 // #include <torch/torch.h>
 // #include <torch/script.h>
 // #include <torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h>
+// torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+// torch/csrc/distributed/c10d/PrefixStore.hpp
+// torch/csrc/distributed/c10d/logger.hpp
 // as listed by g++ -H torch/torch.h torch/script.h
 // Excluding:
 // - the ones that fill at::meta at::native and at::_ops namespaces
@@ -9,10 +12,39 @@
 // - ATen/ops/_* (internal, API can change)
 // - and some exceptions commented below
 #include "torch/csrc/utils/python_stub.h"
+
+#include "torch/headeronly/macros/cmake_macros.h"
+#include "torch/headeronly/macros/Export.h"
+#include "torch/headeronly/macros/Macros.h"
+#include <torch/headeronly/util/HeaderOnlyArrayRef.h>
+#include "torch/headeronly/util/bit_cast.h"
+#include <torch/headeronly/util/floating_point_utils.h>
+#include <torch/headeronly/util/BFloat16.h>
+#include <torch/headeronly/util/Float4_e2m1fn_x2.h>
+#include <torch/headeronly/util/Float8_e4m3fn.h>
+#include <torch/headeronly/util/Float8_e4m3fnuz.h>
+#include <torch/headeronly/util/Float8_e5m2.h>
+#include <torch/headeronly/util/Float8_e5m2fnuz.h>
+#include <torch/headeronly/util/Float8_e8m0fnu.h>
+#include <torch/headeronly/util/Half.h>
+#include <torch/headeronly/util/bits.h>
+#include <torch/headeronly/util/complex.h>
+#include <torch/headeronly/util/qint32.h>
+#include <torch/headeronly/util/qint8.h>
+#include <torch/headeronly/util/quint2x4.h>
+#include <torch/headeronly/util/quint4x2.h>
+#include <torch/headeronly/util/quint8.h>
+#include <torch/headeronly/core/DeviceType.h>
+#include <torch/headeronly/core/Layout.h>
+#include <torch/headeronly/core/MemoryFormat.h>
+#include <torch/headeronly/core/ScalarType.h>
+
 #include "c10/macros/cmake_macros.h"
 #include "c10/macros/Export.h"
 #include "torch/csrc/Export.h"
 #include "c10/macros/Macros.h"
+#include "c10/util/Lazy.h"
+#include "c10/util/Backtrace.h"
 #include "c10/core/DeviceType.h"
 #include "c10/util/Deprecated.h"
 // #include "c10/util/string_utils.h" // Android only
@@ -20,6 +52,7 @@
 #include "c10/util/StringUtil.h"
 #include "c10/util/Exception.h"
 #include "c10/core/Device.h"
+#include "c10/core/DeviceCapability.h"
 #include "c10/core/DispatchKey.h"
 // #include "c10/util/C++17.h"
 #include "c10/util/TypeTraits.h"
@@ -43,7 +76,7 @@
 #include "c10/util/floating_point_utils.h"
 #include "c10/util/Float8_e4m3fn-inl.h"
 #include "c10/util/Float8_e4m3fn.h"
-#include "c10/util/Float8_fnuz_cvt.h"
+//#include "c10/util/Float8_fnuz_cvt.h"
 #include "c10/util/Float8_e4m3fnuz-inl.h"
 #include "c10/util/Float8_e4m3fnuz.h"
 #include "c10/util/complex_math.h"
@@ -55,6 +88,7 @@
 #include "c10/util/Float8_e5m2.h"
 #include "c10/util/Float8_e5m2fnuz-inl.h"
 #include "c10/util/Float8_e5m2fnuz.h"
+#include "c10/util/Float8_e8m0fnu.h"
 #include "c10/util/bits.h"
 #include "c10/util/qint32.h"
 #include "c10/util/qint8.h"
@@ -156,7 +190,7 @@
 #include "c10/core/impl/InlineStreamGuard.h"
 #include "c10/core/StreamGuard.h"
 #include "c10/util/FunctionRef.h"
-#include "c10/util/intrusive_ptr.h"  // Moved after the definition or its template args
+//#include "c10/util/intrusive_ptr.h"  // Moved after the definition or its template args
 #include "ATen/core/ivalue_inl.h"
 #include "ATen/core/ivalue.h"
 #include "ATen/core/List_inl.h"
@@ -227,19 +261,22 @@
 #include "torch/csrc/autograd/input_buffer.h"
 #include "torch/csrc/autograd/utils/warnings.h"
 #include "torch/csrc/autograd/graph_task.h"
+#include "ATen/BlasBackend.h"
 #include "ATen/core/MT19937RNGEngine.h"
 #include "ATen/CPUGeneratorImpl.h"
 #include "ATen/detail/AcceleratorHooksInterface.h"
 #include "ATen/detail/MTIAHooksInterface.h"
 #include "ATen/DeviceAccelerator.h"
 #include "ATen/LinalgBackend.h"
+#include "ATen/ROCmFABackend.h"
+#include "ATen/SDPBackend.h"
 #include "ATen/core/ATenGeneral.h"
 #include "ATen/core/LegacyTypeDispatch.h"
 #include "ATen/detail/CUDAHooksInterface.h"
 #include "ATen/detail/HIPHooksInterface.h"
 #include "ATen/detail/IPUHooksInterface.h"
 #include "ATen/detail/MPSHooksInterface.h"
-#include "ATen/detail/ORTHooksInterface.h"
+#include "ATen/detail/MAIAHooksInterface.h"
 #include "ATen/detail/PrivateUse1HooksInterface.h"
 #include "ATen/detail/XPUHooksInterface.h"
 #include "c10/core/QEngine.h"
@@ -324,6 +361,7 @@
 #include "ATen/ops/baddbmm.h"
 #include "ATen/ops/bartlett_window.h"
 #include "ATen/ops/batch_norm.h"
+#include "ATen/ops/batch_norm_backward.h"
 #include "ATen/ops/batch_norm_backward_elemt.h"
 #include "ATen/ops/batch_norm_backward_reduce.h"
 #include "ATen/ops/batch_norm_elemt.h"
@@ -936,6 +974,7 @@
 #include "ATen/ops/result_type.h"
 #include "ATen/ops/retain_grad.h"
 #include "ATen/ops/retains_grad.h"
+#include "ATen/ops/rms_norm.h"
 #include "ATen/ops/rnn_relu.h"
 #include "ATen/ops/rnn_relu_cell.h"
 #include "ATen/ops/rnn_tanh.h"
@@ -1197,6 +1236,8 @@
 #include "torch/csrc/utils/variadic.h"
 #include "torch/csrc/autograd/function.h"
 #include "torch/csrc/autograd/variable_info.h"
+#include "torch/csrc/utils/torch_dispatch_mode.h"
+#include "torch/csrc/dynamo/compiled_autograd.h"
 #include "torch/csrc/autograd/custom_function.h"
 #include "torch/csrc/api/include/torch/autograd.h"
 #include "torch/csrc/api/include/torch/cuda.h"
@@ -1217,6 +1258,7 @@
 #include "ATen/core/Scalar.h"
 #include "ATen/core/UnsafeFromTH.h"
 #include "ATen/ATen.h"
+#include "ATen/autocast_mode.h"
 #include "torch/csrc/api/include/torch/detail/TensorDataContainer.h"
 #include "torch/csrc/autograd/generated/variable_factories.h"
 #include "torch/csrc/jit/frontend/function_schema_parser.h"
@@ -1290,7 +1332,7 @@
 #include "torch/csrc/api/include/torch/enum.h"
 #include "torch/csrc/api/include/torch/fft.h"
 #include "torch/csrc/api/include/torch/jit.h"
-#include "torch/csrc/api/include/torch/linalg.h"
+// #include "torch/csrc/api/include/torch/linalg.h"
 #include "torch/csrc/api/include/torch/mps.h"
 #include "torch/csrc/api/include/torch/nested.h"
 #include "torch/csrc/api/include/torch/detail/static.h"
@@ -1403,6 +1445,7 @@
 #include "torch/csrc/api/include/torch/optim/rmsprop.h"
 #include "torch/csrc/api/include/torch/optim/sgd.h"
 #include "torch/csrc/api/include/torch/optim/schedulers/lr_scheduler.h"
+#include "torch/csrc/api/include/torch/optim/schedulers/reduce_on_plateau_scheduler.h"
 #include "torch/csrc/api/include/torch/optim/schedulers/step_lr.h"
 #include "torch/csrc/api/include/torch/optim.h"
 #include "torch/csrc/api/include/torch/sparse.h"
@@ -1436,5 +1479,35 @@
 // #include "torch/csrc/inductor/aoti_runtime/interface.h" // model.so API, not part of libtorch API
 #include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
+#include "torch/csrc/inductor/aoti_package/model_package_loader.h"
+
+#include "torch/csrc/distributed/c10d/Store.hpp"
+#include "torch/csrc/distributed/c10d/Types.hpp"
+#include "torch/csrc/distributed/c10d/Utils.hpp"
+#include "torch/csrc/distributed/c10d/Work.hpp"
+#include "torch/csrc/distributed/c10d/debug.h"
+#include "torch/csrc/distributed/c10d/Backend.hpp"
+#include "torch/csrc/distributed/c10d/ProcessGroup.hpp"
+#include "torch/csrc/distributed/c10d/comm.hpp"
+#include "torch/csrc/distributed/c10d/default_comm_hooks.hpp"
+//#include "torch/csrc/distributed/c10d/symm_mem/intra_node_comm.hpp"
+#include "c10/util/ApproximateClock.h"
+#include "torch/csrc/distributed/c10d/reducer_timer.hpp"
+// #include "torch/csrc/autograd/functions/basic_ops.h" // Not on Windows
+// #include "torch/csrc/autograd/engine.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/message.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/request_callback.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/types.h" // Not on Windows
+// #include "torch/csrc/distributed/rpc/rpc_agent.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/functions/recvrpc_backward.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/functions/sendrpc_backward.h" // Not on Windows
+// #include "torch/csrc/distributed/autograd/context/context.h" // Not on Windows
+#include "torch/csrc/distributed/c10d/reducer.hpp"
+#include "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp"
+#include "torch/csrc/distributed/c10d/PrefixStore.hpp"
+#include "torch/csrc/distributed/c10d/FileStore.hpp"
+#include "torch/csrc/distributed/c10d/TCPStore.hpp"
+#include "torch/csrc/distributed/c10d/logger.hpp"
 
 #include "datasets.h"

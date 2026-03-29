@@ -14,7 +14,7 @@ import org.bytedeco.javacpp.annotation.*;
 @Name("torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> >")  @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ExampleStack extends ExampleCollation {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ExampleStack() { super((Pointer)null); allocate(); }
+    public ExampleStack() { super(null); allocate(); }
     private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExampleStack(Pointer p) { super(p); }

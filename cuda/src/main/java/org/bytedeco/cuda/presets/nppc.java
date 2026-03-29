@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,13 @@
 
 package org.bytedeco.cuda.presets;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -34,11 +41,40 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = {"<npp.h>", /*"<nppversion.h>",*/ "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.12"),
-    @Platform(value = "windows-x86_64", preload = "nppc64_12")},
+    @Platform(include = {"<npp.h>", /*"<nppversion.h>",*/ "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.13"),
+    @Platform(value = "windows-x86_64", preload = "nppc64_13")},
         target = "org.bytedeco.cuda.nppc", global = "org.bytedeco.cuda.global.nppc")
 @NoException
-public class nppc implements InfoMapper {
+public class nppc implements InfoMapper, LoadEnabled {
+    static HashSet<String> includePath = new HashSet<String>();
+
+    @Override
+    public void init(ClassProperties properties) {
+        includePath.addAll(properties.get("platform.includepath"));
+    }
+
+    public static void initSkips(InfoMap infoMap, String... headers) {
+        try {
+            for (String h : headers) {
+                for (String p : includePath) {
+                    Path f = Paths.get(p, h);
+                    if (Files.exists(f)) {
+                        for (String line : Files.readAllLines(f)) {
+                            int begin = line.indexOf("npp");
+                            int end = line.indexOf("(");
+                            if (begin >= 0 && !line.contains("_Ctx") && end > begin) {
+                                infoMap.put(new Info(line.substring(begin, end)).skip());
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NPP_PLUS").define(false))
                .put(new Info("NPP_MAX_64U").translate(false));

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2019-2025 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ import org.bytedeco.dnnl.presets.*;
             define = {"GENERIC_EXCEPTION_CLASS Ort::Exception", "GENERIC_EXCEPTION_TOSTRING what()"},
             include = {
                 "onnxruntime/core/session/onnxruntime_c_api.h",
+                "onnxruntime/core/session/onnxruntime_ep_c_api.h",
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
                 "onnxruntime/core/providers/cpu/cpu_provider_factory.h",
                 "onnxruntime/core/providers/dnnl/dnnl_provider_options.h",
@@ -63,17 +64,16 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/coreml/coreml_provider_factory.h",
 //                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
+                "onnxruntime_training_c_api.h",
             },
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.18.1"}
+            exclude = {"CL/opencl.h", "CL/cl_version.h", "CL/cl_platform.h", "CL/cl.h"/*, "CL/cl_gl.h", "CL/cl_gl_ext.h", "CL/cl_ext.h"*/,
+                       "onnxruntime/core/session/onnxruntime_ep_c_api.h"},
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
-            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.18.1", "onnxruntime_providers_dnnl"}
-        ),
-        @Platform(
-            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            value = {"linux", "macosx", "windows"},
             extension = "-gpu",
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.18.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
     },
     target = "org.bytedeco.onnxruntime",
@@ -101,9 +101,9 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                          "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.11" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.12" : lib.equals("curand") ? "@.10" : lib.equals("cudart") ? "@.13" : "@.13";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_11" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_12" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_12" : lib.equals("curand") ? "64_10" : lib.equals("cudart") ? "64_13" : "64_13";
             } else {
                 continue; // no CUDA
             }
@@ -117,19 +117,26 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
     }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("ORTCHAR_T", "std::basic_string<ORTCHAR_T>",
+        infoMap.putFirst(new Info("opencl.h", "cl_version.h", "cl_platform.h", "cl.h"/*, "cl_gl.h", "cl_gl_ext.h", "cl_ext.h"*/).skip())
+               .put(new Info("ORTCHAR_T", "std::basic_string<ORTCHAR_T>",
                              "onnxruntime_float16::BFloat16Impl<BFloat16_t>",
-                             "onnxruntime_float16::Float16Impl<Float16_t>").cppText("").cppTypes().cast().pointerTypes("Pointer"))
+                             "onnxruntime_float16::Float16Impl<Float16_t>", "Ort::ConstHardwareDevice").cppText("").cppTypes().cast().pointerTypes("Pointer"))
                .put(new Info("ORT_EXPORT", "ORT_API_CALL", "ORT_FILE", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("ORT_API_MANUAL_INIT", "__cpp_if_constexpr").define(false))
                .put(new Info("USE_CUDA", "USE_DNNL").define(true))
-               .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "std::vector<Ort::AllocatedStringPtr>").skip())
+               .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "std::vector<Ort::AllocatedStringPtr>", "not_defined_in_this_build").skip())
                .put(new Info("Ort::AllocatedStringPtr").valueTypes("@UniquePtr(\"char, Ort::detail::AllocatedFree\") @Cast(\"char*\") BytePointer"))
 //               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
+               .put(new Info("const std::vector<Ort::ValueInfo>", "std::vector<Ort::ValueInfo>").pointerTypes("ValueInfoVector").define())
+               .put(new Info("const std::vector<Ort::OpAttr>", "std::vector<Ort::OpAttr>").pointerTypes("OpAttrVector").define())
+               .put(new Info("std::pair<int,int>").pointerTypes("IntPair").define())
+               .put(new Info("std::pair<std::string,int>").pointerTypes("StringIntPair").define())
+               .put(new Info("std::vector<std::pair<std::string,int> >").pointerTypes("StringIntPairVector").define())
                .put(new Info("std::vector<float>", "Ort::ShapeInferContext::Floats").pointerTypes("FloatVector").define())
                .put(new Info("std::vector<int64_t>", "Ort::ShapeInferContext::Ints").pointerTypes("LongVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<Ort::Value>").valueTypes("@StdMove ValueVector").pointerTypes("ValueVector").define())
+               .put(new Info("std::unordered_map<std::string,size_t>").pointerTypes("StringSizeTMap").define())
                .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("Ort::Value").valueTypes("@StdMove Value").pointerTypes("Value"))
                .put(new Info("Ort::Value::CreateTensor<float>").javaNames("CreateTensorFloat"))
@@ -155,6 +162,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::detail::Unowned<OrtAllocator>").pointerTypes("UnownedAllocator").purify())
+               .put(new Info("Ort::detail::Unowned<const OrtEpAssignedNode>").pointerTypes("ConstEpAssignedNode").purify())
+               .put(new Info("Ort::detail::Unowned<const OrtEpAssignedSubgraph>").pointerTypes("ConstEpAssignedSubgraph").purify())
                .put(new Info("Ort::detail::Unowned<const Ort::MemoryInfo>").pointerTypes("UnownedMemoryInfo").purify())
                .put(new Info("Ort::detail::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
                .put(new Info("Ort::detail::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
@@ -163,6 +172,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::MemoryAllocation", "OrtApi").purify())
                .put(new Info("Ort::MemoryAllocation::operator =", "Ort::RunOptions::GetRunLogSeverityLevel", "ShapeInferFn").skip())
 
+               .put(new Info("Ort::detail::ConstGraphImpl<Ort::detail::Unowned<const OrtGraph> >").pointerTypes("ConstGraph"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtGraph> >").pointerTypes("BaseConstGraph"))
                .put(new Info("Ort::detail::ConstValueImpl<detail::Unowned<const OrtValue> >").pointerTypes("ConstValue"))
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >").pointerTypes("BaseConstValue"))
                .put(new Info("Ort::detail::ConstSessionOptionsImpl<detail::Unowned<const OrtSessionOptions> >").pointerTypes("ConstSessionOptions"))
@@ -177,12 +188,19 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtTensorTypeAndShapeInfo> >").pointerTypes("BaseConstTensorTypeAndShapeInfo"))
                .put(new Info("Ort::detail::AllocatorImpl<Ort::detail::Unowned<OrtAllocator> >").pointerTypes("AllocatorWithDefaultOptionsImpl"))
                .put(new Info("Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >").pointerTypes("BaseAllocatorWithDefaultOptions"))
-               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::release",
+               .put(new Info("Ort::detail::EpAssignedNodeImpl<Ort::detail::Unowned<const OrtEpAssignedNode> >").pointerTypes("EpAssignedNodeWithDefaultOptionsImpl"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedNode> >").pointerTypes("BaseEpAssignedNodeWithDefaultOptions"))
+               .put(new Info("Ort::detail::EpAssignedSubgraphImpl<Ort::detail::Unowned<const OrtEpAssignedSubgraph> >").pointerTypes("EpAssignedSubgraphWithDefaultOptionsImpl"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedSubgraph> >").pointerTypes("BaseEpAssignedSubgraphWithDefaultOptions"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtGraph> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtSessionOptions> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtSession> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtMapTypeInfo> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtIoBinding> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<const OrtTensorTypeAndShapeInfo> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedNode> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtEpAssignedSubgraph> >::release",
                              "Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >::release").skip())
 
                .put(new Info("Ort::detail::Base<OrtArenaCfg>", "Ort::detail::Base<OrtArenaCfg>").pointerTypes("BaseArenaCfg"))
@@ -217,12 +235,41 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::ConstValueImpl<OrtValue>").pointerTypes("ConstValueImpl"))
                .put(new Info("Ort::detail::ValueImpl<OrtValue>").pointerTypes("ValueImpl"))
                .put(new Info("Ort::detail::Base<OrtValue>").pointerTypes("BaseValue"))
-               .put(new Info("Ort::detail::Base<OrtOp>").pointerTypes("BaseOrtOp"))
+               .put(new Info("Ort::detail::Base<OrtOp>").pointerTypes("BaseOp"))
                .put(new Info("Ort::detail::Base<OrtOpAttr>").pointerTypes("BaseOpAttr"))
+               .put(new Info("Ort::detail::ConstOpAttrImpl<OrtOpAttr>").pointerTypes("ConstOpAttrImpl"))
                .put(new Info("Ort::detail::Base<OrtStatus>").pointerTypes("BaseStatus"))
+               .put(new Info("Ort::detail::ConstKernelDefImpl<OrtKernelDef>").pointerTypes("ConstKernelDefImpl"))
+               .put(new Info("Ort::detail::Base<OrtKernelDef>").pointerTypes("BaseKernelDef"))
+               .put(new Info("Ort::detail::Base<OrtKernelDefBuilder>").pointerTypes("BaseKernelDefBuilder"))
+               .put(new Info("Ort::detail::Base<OrtKernelRegistry>").pointerTypes("BaseKernelRegistry"))
                .put(new Info("Ort::detail::KernelInfoImpl<OrtKernelInfo>").pointerTypes("KernelInfoImpl"))
                .put(new Info("Ort::detail::Base<OrtKernelInfo>").pointerTypes("BaseKernelInfo"))
                .put(new Info("Ort::detail::Base<OrtThreadingOptions>").pointerTypes("BaseThreadingOptions"))
+               .put(new Info("Ort::detail::Base<OrtLoraAdapter>").pointerTypes("BaseLoraAdapter"))
+               .put(new Info("Ort::detail::Base<OrtModelCompilationOptions>").pointerTypes("BaseModelCompilationOptions"))
+               .put(new Info("Ort::detail::Base<OrtGraph>").pointerTypes("BaseGraph"))
+               .put(new Info("Ort::detail::GraphImpl<OrtGraph>").pointerTypes("GraphImpl"))
+               .put(new Info("Ort::detail::ConstGraphImpl<OrtGraph>").pointerTypes("ConstGraphImpl"))
+               .put(new Info("Ort::detail::Base<OrtKeyValuePairs> ").pointerTypes("BaseKeyValuePairs"))
+               .put(new Info("Ort::detail::KeyValuePairsImpl<OrtKeyValuePairs>").pointerTypes("KeyValuePairsImpl"))
+               .put(new Info("Ort::detail::Base<OrtNode>").pointerTypes("BaseNode"))
+               .put(new Info("Ort::detail::NodeImpl<OrtNode>").pointerTypes("NodeImpl"))
+               .put(new Info("Ort::detail::ConstNodeImpl<OrtNode>").pointerTypes("ConstNodeImpl"))
+               .put(new Info("Ort::detail::Base<OrtModel>").pointerTypes("BaseModel"))
+               .put(new Info("Ort::detail::ModelImpl<OrtModel>").pointerTypes("ModelImpl"))
+               .put(new Info("Ort::detail::Base<OrtValueInfo>").pointerTypes("BaseValueInfo"))
+               .put(new Info("Ort::detail::ValueInfoImpl<OrtValueInfo>").pointerTypes("ValueInfoImpl"))
+               .put(new Info("Ort::detail::ConstValueInfoImpl<OrtValueInfo>").pointerTypes("ConstValueInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtEpDevice>").pointerTypes("BaseEpDevice"))
+               .put(new Info("Ort::detail::EpDeviceImpl<OrtEpDevice>").pointerTypes("EpDeviceImpl"))
+               .put(new Info("Ort::detail::Base<OrtCUDAProviderOptionsV2>").pointerTypes("BaseCUDAProviderOptionsV2"))
+               .put(new Info("Ort::detail::Base<OrtPrepackedWeightsContainer>").pointerTypes("BasePrepackedWeightsContainer"))
+               .put(new Info("Ort::detail::Base<OrtTensorRTProviderOptionsV2>").pointerTypes("BaseTensorRTProviderOptionsV2"))
+               .put(new Info("Ort::detail::Base<OrtSyncStream>").pointerTypes("BaseSyncStream"))
+               .put(new Info("Ort::detail::SyncStreamImpl<OrtSyncStream>").pointerTypes("SyncStreamImpl"))
+               .put(new Info("Ort::detail::Base<OrtExternalInitializerInfo>").pointerTypes("BaseExternalInitializerInfo"))
+               .put(new Info("Ort::detail::ConstExternalInitializerInfoImpl<OrtExternalInitializerInfo>").pointerTypes("ConstExternalInitializerInfoImpl"))
 
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX", "OrtSessionOptionsAppendExecutionProvider_Tensorrt",
                              "OrtSessionOptionsAppendExecutionProvider_ROCM", "Ort::detail::OptionalTypeInfoImpl<OrtTypeInfo>::GetOptionalElementType").skip())

@@ -6,19 +6,19 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.14-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>nvcodec</artifactId>
-  <version>12.2.72-${project.parent.version}</version>
+  <version>13.0.37-${project.parent.version}</version>
   <name>JavaCPP Presets for NVIDIA Video Codec SDK</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>12.6-9.3-${project.parent.version}</version>
+      <version>13.1-9.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -44,7 +44,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>12.6-9.3-${project.parent.version}</version>
+            <version>13.1-9.19-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <executions>

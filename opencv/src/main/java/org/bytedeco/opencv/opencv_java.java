@@ -41,6 +41,7 @@ import org.bytedeco.opencv.presets.*;
         opencv_bgsegm.class,
         opencv_bioinspired.class,
         opencv_face.class,
+        opencv_plot.class,
         opencv_img_hash.class,
         opencv_structured_light.class,
         opencv_text.class,
@@ -49,13 +50,16 @@ import org.bytedeco.opencv.presets.*;
         opencv_ximgproc.class,
         opencv_xphoto.class,
         opencv_barcode.class,
+        opencv_plot.class,
+        opencv_saliency.class,
+        opencv_videoio.class,
         opencv_wechat_qrcode.class,
         opencv_dnn_superres.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.410", "opencv_cudaarithm@.410", "opencv_cudafilters@.410", "opencv_cudaimgproc@.410", "opencv_java"}),
+        @Platform(preload = {"opencv_cuda@.413", "opencv_cudaarithm@.413", "opencv_cudafilters@.413", "opencv_cudaimgproc@.413", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda4100", "opencv_cudaarithm4100", "opencv_cudafilters4100", "opencv_cudaimgproc4100", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda4130", "opencv_cudaarithm4130", "opencv_cudafilters4130", "opencv_cudaimgproc4130", "opencv_java"}),
     }
 )
 public class opencv_java {

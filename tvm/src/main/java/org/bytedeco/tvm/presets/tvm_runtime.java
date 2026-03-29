@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 Samuel Audet
+ * Copyright (C) 2020-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -190,6 +190,11 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                .put(new Info("tvm::runtime::String").pointerTypes("TVMString"))
                .put(new Info("tvm::runtime::StringObj::FromStd", "tvm::runtime::ShapeTupleObj::FromStd",
                              "tvm::runtime::TVMMovableArgValueWithContext_", "llvm::StringRef").skip())
+
+               .put(new Info("tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>").pointerTypes("TVMPODArgValue"))
+               .put(new Info("tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMMovableArgValue_>",
+                             "tvm::runtime::TVMPODValue_CRTP_<TVMMovableArgValue_>").pointerTypes("TVMPODMovableArgValue_"))
+               .put(new Info("tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMRetValue>").pointerTypes("TVMPODRetValue"))
 
                .put(new Info("FDeleter").valueTypes("FDeleter"))
                .put(new Info("tvm::runtime::NDArray::operator ->").javaNames("accessDLTensor"))

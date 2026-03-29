@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,12 +34,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_color_conversion.h>", link = "nppicc@.12"),
-    @Platform(value = "windows-x86_64", preload = "nppicc64_12")},
+    @Platform(include = "<nppi_color_conversion.h>", link = "nppicc@.13"),
+    @Platform(value = "windows-x86_64", preload = "nppicc64_13")},
         /* target = "org.bytedeco.cuda.nppicc", */ global = "org.bytedeco.cuda.global.nppicc")
 @NoException
 public class nppicc implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("nppiHLSToBGR_8u_AC4R").skip());
+        nppc.initSkips(infoMap, "nppi_color_conversion.h");
+        infoMap.put(new Info("nppiUYVP_10u_ToRGB_16u_C3P3R_Ctx", "nppiUYVP_10u_ToRGB_8u_C3AC4R_Ctx", "nppiRGB_8u_ToUYVP_10u_C3P3R_Ctx", "nppiUYVP_10u_ToRGB_8u_C3P3R_Ctx",
+                             "nppiHLSToBGR_8u_AC4R").skip());
     }
 }

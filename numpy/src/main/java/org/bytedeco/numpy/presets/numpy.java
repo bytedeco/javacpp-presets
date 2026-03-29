@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Samuel Audet
+ * Copyright (C) 2019-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.bytedeco.openblas.presets.*;
     inherit = {openblas.class, python.class},
     value = {
         @Platform(
-            define = "NPY_TARGET_VERSION NPY_2_0_API_VERSION",
+            define = "NPY_TARGET_VERSION NPY_2_4_API_VERSION",
             cinclude = {
                 "_numpyconfig.h",
                 "numpyconfig.h",
@@ -139,13 +139,14 @@ public class numpy implements InfoMapper {
                              "NPY_FLOAT256", "NPY_COMPLEX512", "NPY_COMPLEX512_FMT",
                              "NPY_SIGJMP_BUF", "_npy_signbit_f", "_npy_signbit_d", "_npy_signbit_ld",
                              "npy_degrees", "npy_degreesf", "npy_degreesl", "npy_radians", "npy_radiansf", "npy_radiansl",
-                             "PyStringScalarObject", /*"PyUnicodeScalarObject",*/ "__COMP_NPY_UNUSED",
+                             "PyStringScalarObject", /*"PyUnicodeScalarObject",*/ "__COMP_NPY_UNUSED", "_WARN___LOC__",
                              "PyArrayScalar_False", "PyArrayScalar_True", "PyArrayScalar_RETURN_FALSE", "PyArrayScalar_RETURN_TRUE", "NPY_NO_EXPORT",
                              "PyArray_malloc", "PyArray_free", "PyArray_realloc",
                              "NPY_BEGIN_THREADS_DEF", "NPY_BEGIN_ALLOW_THREADS", "NPY_END_ALLOW_THREADS", "NPY_BEGIN_THREADS", "NPY_END_THREADS",
                              "NPY_ALLOW_C_API_DEF", "NPY_ALLOW_C_API", "NPY_DISABLE_C_API",
                              "PyArray_IsNativeByteOrder", "NPY_REFCOUNT", "NUMPY_IMPORT_ARRAY_RETVAL",
-                             "NPY_LOOP_BEGIN_THREADS", "NPY_LOOP_END_THREADS", "NUMPY_IMPORT_UMATH_RETVAL", "UFUNC_NOFPE").cppTypes().annotations())
+                             "NPY_LOOP_BEGIN_THREADS", "NPY_LOOP_END_THREADS", "NUMPY_IMPORT_UMATH_RETVAL", "UFUNC_NOFPE",
+                             "NPY_API_SYMBOL_ATTRIBUTE", "_RETURN_VALUE").cppTypes().annotations())
 
                .put(new Info("defined(_MSC_VER) && defined(_WIN64) && (_MSC_VER > 1400) ||"
                            + "    defined(__MINGW32__) || defined(__MINGW64__)",
@@ -166,6 +167,7 @@ public class numpy implements InfoMapper {
 
                .put(new Info("NPY_BITSOF_LONG == 64", "NPY_BITSOF_LONGLONG == 64",
                              "NPY_BITSOF_INT == 32", "NPY_BITSOF_SHORT == 16",
+                             "NPY_FEATURE_VERSION >= NPY_2_1_API_VERSION",
                              "NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION",
                              "NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION",
                              "NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION",

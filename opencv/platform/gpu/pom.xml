@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.14-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>opencv-platform-gpu</artifactId>
-  <version>4.10.0-${project.parent.version}</version>
+  <version>4.13.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for OpenCV</name>
 
   <properties>
@@ -24,12 +24,18 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.28-${project.parent.version}</version>
+      <version>0.3.31-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -61,7 +67,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64-gpu.jar ${javacpp.moduleId}-macosx-x86_64-gpu.jar ${javacpp.moduleId}-windows-x86_64-gpu.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64-gpu.jar ${javacpp.moduleId}-linux-x86_64-gpu.jar ${javacpp.moduleId}-macosx-x86_64-gpu.jar ${javacpp.moduleId}-windows-x86_64-gpu.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -107,6 +113,7 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform.gpu {
                       requires static transitive org.bytedeco.${javacpp.moduleId};
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.gpu;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.gpu;
 //                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.gpu;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.gpu;

@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorRT 10.3.0.26  https://developer.nvidia.com/tensorrt
+ * TensorRT 10.15.1.29  https://developer.nvidia.com/tensorrt
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -31,11 +31,11 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example of TensorRT ported to Java from the `sampleGoogleNet.cpp` sample file included in `TensorRT-4.0.0.3.Ubuntu-16.04.4.x86_64-gnu.cuda-9.0.cudnn7.0.tar.gz` available at:
+Here is a simple example for TensorRT inference ported to Java from the `sampleOnnxMNIST.cpp` sample file available at:
 
- * https://developer.nvidia.com/nvidia-tensorrt-download
+ * https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleOnnxMNIST
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleGoogleNet.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleOnnxMNIST.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -45,28 +45,28 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
-    <artifactId>samplegooglenet</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <artifactId>sampleonnxmnist</artifactId>
+    <version>1.5.13</version>
     <properties>
-        <exec.mainClass>SampleGoogleNet</exec.mainClass>
+        <exec.mainClass>SampleOnnxMNIST</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.3-1.5.11-SNAPSHOT</version>
+            <version>10.15-1.5.13</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.6-9.3-1.5.11-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.13</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.3-1.5.11-SNAPSHOT</version>
+            <version>10.15-1.5.13</version>
         </dependency>
 
     </dependencies>
@@ -76,231 +76,373 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 </project>
 ```
 
-### The `SampleGoogleNet.java` source file
+### The `SampleOnnxMNIST.java` source file
 ```java
-import java.io.*;
-import java.util.*;
-import org.bytedeco.javacpp.*;
-
-import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.FloatPointer;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.tensorrt.global.nvinfer;
 import org.bytedeco.tensorrt.nvinfer.*;
-import org.bytedeco.tensorrt.nvparsers.*;
+import org.bytedeco.tensorrt.nvonnxparser.IParser;
+import org.bytedeco.tensorrt.nvonnxparser.IParserError;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Objects;
+
 import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
-import static org.bytedeco.tensorrt.global.nvparsers.*;
+import static org.bytedeco.tensorrt.global.nvonnxparser.createParser;
 
-public class SampleGoogleNet {
-    static void CHECK(int status)
-    {
-        if (status != 0)
-        {
-            System.out.println("Cuda failure: " + status);
-            System.exit(6);
-        }
-    }
-
-    // Logger for GIE info/warning/errors
-    static class Logger extends ILogger
-    {
-        @Override public void log(Severity severity, String msg)
-        {
+public class SampleOnnxMNIST {
+    static class Logger extends ILogger {
+        @Override
+        public void log(Severity severity, String message) {
             severity = severity.intern();
 
-            // suppress info-level messages
-            if (severity == Severity.kINFO) return;
-
-            switch (severity)
-            {
-                case kINTERNAL_ERROR: System.err.print("INTERNAL_ERROR: "); break;
-                case kERROR: System.err.print("ERROR: "); break;
-                case kWARNING: System.err.print("WARNING: "); break;
-                case kINFO: System.err.print("INFO: "); break;
-                default: System.err.print("UNKNOWN: "); break;
+            if (severity == Severity.kINFO || severity == Severity.kVERBOSE) {
+                return;
             }
-            System.err.println(msg);
+
+            System.err.println("[TensorRT][" + severity + "] " + message);
         }
     }
-    static Logger gLogger = new Logger();
 
-    static String locateFile(String input, String[] directories)
-    {
-        String file = "";
-        int MAX_DEPTH = 10;
-        boolean found = false;
-        for (String dir : directories)
-        {
-            file = dir + input;
-            for (int i = 0; i < MAX_DEPTH && !found; i++)
-            {
-                File checkFile = new File(file);
-                found = checkFile.exists();
-                if (found) break;
-                file = "../" + file;
+    private static void checkCudaError(int cudaStatus, String operationName) {
+        if (cudaStatus != 0) {
+            try (BytePointer errorStringPointer = cudaGetErrorString(cudaStatus)) {
+                String errorMessage = errorStringPointer != null ? errorStringPointer.getString() : "unknown";
+                throw new IllegalStateException(operationName + " failed: " + errorMessage + " (code=" + cudaStatus + ")");
             }
-            if (found) break;
-            file = "";
         }
-
-        if (file.isEmpty())
-            System.err.println("Could not find a file due to it not existing in the data directory.");
-        return file;
     }
 
-    // stuff we know about the network and the caffe input/output blobs
+    private static float[] loadPgmImage(String imageFilePath) throws IOException {
+        try (InputStream inputStream = Files.newInputStream(Path.of(imageFilePath))) {
+            DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-    static int BATCH_SIZE = 4;
-    static int TIMING_ITERATIONS = 1000;
-
-    static String INPUT_BLOB_NAME = "data";
-    static String OUTPUT_BLOB_NAME = "prob";
-
-
-    static String locateFile(String input)
-    {
-        String[] dirs = {"data/samples/googlenet/", "data/googlenet/"};
-        return locateFile(input, dirs);
-    }
-
-    static class Profiler extends IProfiler
-    {
-        LinkedHashMap<String, Float> mProfile = new LinkedHashMap<String, Float>();
-
-        @Override public void reportLayerTime(String layerName, float ms)
-        {
-            Float time = mProfile.get(layerName);
-            mProfile.put(layerName, (time != null ? time : 0) + ms);
-        }
-
-        public void printLayerTimes()
-        {
-            float totalTime = 0;
-            for (Map.Entry<String,Float> e : mProfile.entrySet())
             {
-                System.out.printf("%-40.40s %4.3fms\n", e.getKey(), e.getValue() / TIMING_ITERATIONS);
-                totalTime += e.getValue();
+                int value1 = dataInputStream.readUnsignedByte();
+                int value2 = dataInputStream.readUnsignedByte();
+
+                if (value1 != 0x50 || value2 != 0x35) {
+                    throw new IllegalArgumentException("Only support P5.");
+                }
             }
-            System.out.printf("Time over all layers: %4.3f\n", totalTime / TIMING_ITERATIONS);
+
+            if (dataInputStream.readUnsignedByte() != 0x0A) {
+                throw new IllegalArgumentException("Unknown file format.");
+            }
+
+            StringBuilder sizeMessageBuilder = new StringBuilder();
+
+            do {
+                int value = dataInputStream.readUnsignedByte();
+
+                if (value == 0x0A) {
+                    break;
+                } else {
+                    sizeMessageBuilder.append((char) value);
+                }
+            } while (true);
+
+
+            StringBuilder maxMessageBuilder = new StringBuilder();
+
+            do {
+                int value = dataInputStream.readUnsignedByte();
+
+                if (value == 0x0A) {
+                    break;
+                } else {
+                    maxMessageBuilder.append((char) value);
+                }
+            } while (true);
+
+            String[] sizes = sizeMessageBuilder.toString().split(" ");
+            int width = Integer.parseInt(sizes[0]);
+            int height = Integer.parseInt(sizes[1]);
+            int max = Integer.parseInt(maxMessageBuilder.toString());
+
+            float[] data = new float[height * width];
+            for (int row = 0; row < height; row++) {
+                for (int column = 0; column < width; column++) {
+                    data[row * width + column] = 1.0f - (float) dataInputStream.readUnsignedByte() / ((float) max);
+                }
+            }
+
+            return data;
+        }
+    }
+
+    public static void main(String[] arguments) throws IOException {
+        // You can download the pre-trained model and input files for inference from the URL above
+        // https://github.com/bytedeco/binaries/releases/download/1.5.14/javacpp-tensorrt-sample-mnist.zip
+        String modelFilePath = "model.onnx";
+        String[] inputImagePaths = new String[]{
+                "images/0.pgm",
+                "images/1.pgm",
+                "images/2.pgm",
+                "images/3.pgm",
+                "images/4.pgm",
+                "images/5.pgm",
+                "images/6.pgm",
+                "images/7.pgm",
+                "images/8.pgm",
+                "images/9.pgm"
+        };
+        int batchSize = inputImagePaths.length;
+
+        if (!Files.exists(Path.of(modelFilePath))) {
+            throw new IllegalStateException("Model file not found: " + modelFilePath);
         }
 
-    }
-    static Profiler gProfiler = new Profiler();
-
-    static void caffeToGIEModel(String deployFile,     // name for caffe prototxt
-                         String modelFile,             // name for model 
-                         String[] outputs,             // network outputs
-                         int maxBatchSize,             // batch size - NB must be at least as large as the batch we want to run with)
-                         IHostMemory[] gieModelStream)
-    {
-        // create API root class - must span the lifetime of the engine usage
-        IBuilder builder = createInferBuilder(gLogger);
-        INetworkDefinition network = builder.createNetwork();
-
-        // parse the caffe model to populate the network, then set the outputs
-        ICaffeParser parser = createCaffeParser();
-
-        boolean useFp16 = builder.platformHasFastFp16();
-
-        DataType modelDataType = useFp16 ? DataType.kHALF : DataType.kFLOAT; // create a 16-bit model if it's natively supported
-        IBlobNameToTensor blobNameToTensor =
-            parser.parse(locateFile(deployFile),                // caffe deploy file
-                                     locateFile(modelFile),     // caffe model file
-                                     network,                   // network definition that the parser will populate
-                                     modelDataType);
-
-        assert blobNameToTensor != null;
-        // the caffe file has no notion of outputs, so we need to manually say which tensors the engine should generate    
-        for (String s : outputs)
-            network.markOutput(blobNameToTensor.find(s));
-
-        // Build the engine
-        builder.setMaxBatchSize(maxBatchSize);
-        builder.setMaxWorkspaceSize(16 << 20);
-
-        // set up the network for paired-fp16 format if available
-        if(useFp16)
-            builder.setHalf2Mode(true);
-
-        ICudaEngine engine = builder.buildCudaEngine(network);
-        assert engine != null;
-
-        // we don't need the network any more, and we can destroy the parser
-        network.destroy();
-        parser.destroy();
-
-        // serialize the engine, then close everything down
-        gieModelStream[0] = engine.serialize();
-        engine.destroy();
-        builder.destroy();
-        shutdownProtobufLibrary();
-    }
-
-    static void timeInference(ICudaEngine engine, int batchSize)
-    {
-        // input and output buffer pointers that we pass to the engine - the engine requires exactly ICudaEngine::getNbBindings(),
-        // of these, but in this case we know that there is exactly one input and one output.
-        assert engine.getNbBindings() == 2;
-        PointerPointer buffers = new PointerPointer(2);
-
-        // In order to bind the buffers, we need to know the names of the input and output tensors.
-        // note that indices are guaranteed to be less than ICudaEngine::getNbBindings()
-        int inputIndex = engine.getBindingIndex(INPUT_BLOB_NAME), outputIndex = engine.getBindingIndex(OUTPUT_BLOB_NAME);
-
-        // allocate GPU buffers
-        DimsCHW inputDims = new DimsCHW(engine.getBindingDimensions(inputIndex)), outputDims = new DimsCHW(engine.getBindingDimensions(outputIndex));
-        long inputSize = batchSize * inputDims.c().get() * inputDims.h().get() * inputDims.w().get() * Float.SIZE / 8;
-        long outputSize = batchSize * outputDims.c().get() * outputDims.h().get() * outputDims.w().get() * Float.SIZE / 8;
-
-        CHECK(cudaMalloc(buffers.position(inputIndex), inputSize));
-        CHECK(cudaMalloc(buffers.position(outputIndex), outputSize));
-
-        IExecutionContext context = engine.createExecutionContext();
-        context.setProfiler(gProfiler);
-
-        // zero the input buffer
-        CHECK(cudaMemset(buffers.position(inputIndex).get(), 0, inputSize));
-
-        for (int i = 0; i < TIMING_ITERATIONS;i++)
-            context.execute(batchSize, buffers.position(0));
-
-        // release the context and buffers
-        context.destroy();
-        CHECK(cudaFree(buffers.position(inputIndex).get()));
-        CHECK(cudaFree(buffers.position(outputIndex).get()));
-    }
-
-
-    public static void main(String[] args)
-    {
-        System.out.println("Building and running a GPU inference engine for GoogleNet, N=4...");
-
-        // parse the caffe model and the mean file
-        IHostMemory[] gieModelStream = { null };
-        caffeToGIEModel("googlenet.prototxt", "googlenet.caffemodel", new String[] { OUTPUT_BLOB_NAME }, BATCH_SIZE, gieModelStream);
-
-        // create an engine
-        IRuntime infer = createInferRuntime(gLogger);
-        ICudaEngine engine = infer.deserializeCudaEngine(gieModelStream[0].data(), gieModelStream[0].size(), null);
-
-        System.out.println("Bindings after deserializing:"); 
-        for (int bi = 0; bi < engine.getNbBindings(); bi++) { 
-            if (engine.bindingIsInput(bi)) { 
-                System.out.printf("Binding %d (%s): Input.\n",  bi, engine.getBindingName(bi));
-            } else { 
-                System.out.printf("Binding %d (%s): Output.\n", bi, engine.getBindingName(bi));
-            } 
+        for (String inputImagePath : inputImagePaths) {
+            if (!Files.exists(Path.of(inputImagePath))) {
+                throw new IllegalStateException("Input image file not found: " + inputImagePath);
+            }
         }
 
-        // run inference with null data to time network performance
-        timeInference(engine, BATCH_SIZE);
+        Logger sampleLogger = new Logger();
 
-        engine.destroy();
-        infer.destroy();
+        IBuilder inferenceBuilder = null;
+        INetworkDefinition networkDefinition = null;
+        IParser onnxParser = null;
+        IBuilderConfig builderConfiguration = null;
+        IHostMemory serializedEngineMemory = null;
+        IRuntime inferenceRuntime = null;
+        ICudaEngine cudaEngine = null;
+        IExecutionContext executionContext = null;
 
-        gProfiler.printLayerTimes();
+        PointerPointer<Pointer> deviceBufferPointers = null;
 
-        System.out.println("Done.");
+        try {
+            inferenceBuilder = Objects.requireNonNull(
+                    createInferBuilder(sampleLogger),
+                    "createInferBuilder failed"
+            );
 
-        System.exit(0);
+            networkDefinition = Objects.requireNonNull(
+                    inferenceBuilder.createNetworkV2(1 << NetworkDefinitionCreationFlag.kSTRONGLY_TYPED.value),
+                    "createNetworkV2 failed"
+            );
+
+            onnxParser = Objects.requireNonNull(
+                    createParser(networkDefinition, sampleLogger),
+                    "createParser failed"
+            );
+
+            // Model parse from a file
+            if (!onnxParser.parseFromFile(modelFilePath, ILogger.Severity.kWARNING.value)) {
+                System.err.println("ONNX parse failed:");
+
+                for (int parserErrorIndex = 0; parserErrorIndex < onnxParser.getNbErrors(); parserErrorIndex++) {
+                    IParserError parserError = onnxParser.getError(parserErrorIndex);
+                    System.err.printf("  - [%s] %s (%s:%d)%n", parserError.code(), parserError.desc(), parserError.file(), parserError.line());
+                }
+
+                return;
+            }
+
+            builderConfiguration = Objects.requireNonNull(inferenceBuilder.createBuilderConfig(), "createBuilderConfig failed");
+            builderConfiguration.setBuilderOptimizationLevel(3);
+            builderConfiguration.setProfilingVerbosity(ProfilingVerbosity.kLAYER_NAMES_ONLY);
+            builderConfiguration.setMemoryPoolLimit(MemoryPoolType.kWORKSPACE, 1L << 28);
+            builderConfiguration.setFlag(BuilderFlag.kTF32);
+
+            serializedEngineMemory = Objects.requireNonNull(
+                    inferenceBuilder.buildSerializedNetwork(networkDefinition, builderConfiguration),
+                    "buildSerializedNetwork failed"
+            );
+
+            inferenceRuntime = Objects.requireNonNull(
+                    createInferRuntime(sampleLogger),
+                    "createInferRuntime failed"
+            );
+
+            cudaEngine = Objects.requireNonNull(
+                    inferenceRuntime.deserializeCudaEngine(serializedEngineMemory.data(), serializedEngineMemory.size()),
+                    "deserializeCudaEngine failed"
+            );
+
+            executionContext = Objects.requireNonNull(
+                    cudaEngine.createExecutionContext(),
+                    "createExecutionContext failed"
+            );
+
+            // Create input and output buffers
+            int inputOutputTensorCount = cudaEngine.getNbIOTensors();
+            int inputTensorIndex = -1;
+            int outputTensorIndex = -1;
+            long[] tensorElementCounts = new long[inputOutputTensorCount];
+            long[] tensorElementSizes = new long[inputOutputTensorCount];
+            deviceBufferPointers = new PointerPointer<>(inputOutputTensorCount);
+
+            for (int tensorIndex = 0; tensorIndex < inputOutputTensorCount; tensorIndex++) {
+                String tensorName = cudaEngine.getIOTensorName(tensorIndex);
+                Dims64 tensorShape = executionContext.getTensorShape(tensorName);
+                nvinfer.DataType tensorDataType = cudaEngine.getTensorDataType(tensorName).intern();
+                TensorIOMode tensorIOMode = cudaEngine.getTensorIOMode(tensorName);
+
+                long tensorElementCount = 1;
+                long[] tensorShapeValues = new long[tensorShape.nbDims()];
+
+                for (int dimensionIndex = 0; dimensionIndex < tensorShape.nbDims(); dimensionIndex++) {
+                    long dimensionValue = tensorShape.d(dimensionIndex);
+
+                    if (dimensionIndex == 0 && dimensionValue != batchSize) {
+                        throw new IllegalStateException("Input tensor " + tensorName + " has incorrect batch size: " + dimensionValue);
+                    }
+
+                    if (dimensionValue < 0) {
+                        throw new IllegalStateException("Unresolved dynamic dimension in tensor " + tensorName + ": " + dimensionValue);
+                    }
+
+                    tensorElementCount *= dimensionValue;
+                    tensorShapeValues[dimensionIndex] = tensorShape.d(dimensionIndex);
+                }
+
+                if (tensorIOMode.value == TensorIOMode.kINPUT.value) {
+                    if (inputTensorIndex != -1) {
+                        throw new IllegalStateException("Unexpected multiple input tensors");
+                    }
+                    inputTensorIndex = tensorIndex;
+                } else if (tensorIOMode.value == TensorIOMode.kOUTPUT.value) {
+                    if (outputTensorIndex != -1) {
+                        throw new IllegalStateException("Unexpected multiple output tensors");
+                    }
+                    outputTensorIndex = tensorIndex;
+                }
+
+                if (tensorDataType.value != nvinfer.DataType.kFLOAT.value) {
+                    throw new IllegalStateException("Unsupported data type in tensor " + tensorName + ": " + tensorDataType);
+                }
+
+                tensorElementCounts[tensorIndex] = tensorElementCount;
+                tensorElementSizes[tensorIndex]  = tensorElementCount * 4;
+                checkCudaError(cudaMalloc(deviceBufferPointers.position(tensorIndex), tensorElementSizes[tensorIndex]), "cudaMalloc(" + tensorName + ")");
+
+                if (!executionContext.setTensorAddress(tensorName, deviceBufferPointers.position(tensorIndex).get())) {
+                    throw new IllegalStateException("setTensorAddress failed: " + tensorName);
+                }
+
+                System.out.printf("Tensor[%d] %s, mode=%s, shape=%s, type=%s, bytes=%d%n",
+                                  tensorIndex, tensorName, tensorIOMode, Arrays.toString(tensorShapeValues), tensorDataType, tensorElementSizes[tensorIndex]);
+            }
+
+            // Read PGM images
+            float[] inputValues = new float[Math.toIntExact(tensorElementCounts[inputTensorIndex])];
+            int inputElementCountPerBatch = inputValues.length / batchSize;
+
+            for (int imageIndex = 0; imageIndex < batchSize; imageIndex++) {
+                float[] imageValues = loadPgmImage(inputImagePaths[imageIndex]);
+
+                if (imageValues.length != inputElementCountPerBatch) {
+                    throw new IllegalStateException("Image " + imageIndex + " has " + imageValues.length + " values, expected " + inputElementCountPerBatch);
+                }
+
+                System.arraycopy(imageValues, 0, inputValues, imageIndex * inputElementCountPerBatch, inputElementCountPerBatch);
+            }
+
+            // Copy image values to the device buffer
+            try (FloatPointer hostInputPointer = new FloatPointer(inputValues)) {
+                checkCudaError(cudaMemcpy(
+                        deviceBufferPointers.position(inputTensorIndex).get(),
+                        hostInputPointer,
+                        tensorElementSizes[inputTensorIndex],
+                        cudaMemcpyHostToDevice
+                ), "cudaMemcpy HostToDevice");
+            }
+
+            // Execute inference
+            executionContext.executeV2(deviceBufferPointers);
+
+            // Copy output values from the device buffer
+            float[] outputValues = new float[Math.toIntExact(tensorElementCounts[outputTensorIndex])];
+
+            try (FloatPointer hostOutputPointer = new FloatPointer(tensorElementCounts[outputTensorIndex])) {
+                checkCudaError(cudaMemcpy(
+                        hostOutputPointer,
+                        deviceBufferPointers.position(outputTensorIndex).get(),
+                        tensorElementSizes[outputTensorIndex],
+                        cudaMemcpyDeviceToHost
+                ), "cudaMemcpy DeviceToHost");
+
+                hostOutputPointer.get(outputValues);
+            }
+
+            System.out.println();
+            System.out.println("Inference finished.");
+            System.out.println();
+
+            // Post-process output values
+            int outputElementCountPerBatch = outputValues.length / batchSize;
+
+            for (int batchIndex = 0; batchIndex < batchSize; batchIndex++) {
+                int segmentStartIndex = batchIndex * outputElementCountPerBatch;
+                float[] oneOutputValues = Arrays.copyOfRange(
+                        outputValues,
+                        segmentStartIndex,
+                        segmentStartIndex + outputElementCountPerBatch
+                );
+
+                float bestScore = Float.NEGATIVE_INFINITY;
+                int bestClassIndex = -1;
+
+                for (int classIndex = 0; classIndex < oneOutputValues.length; classIndex++) {
+                    float score = outputValues[segmentStartIndex + classIndex];
+
+                    if (score > bestScore) {
+                        bestScore      = score;
+                        bestClassIndex = classIndex;
+                    }
+                }
+
+                System.out.println("Image: " + inputImagePaths[batchIndex]);
+                System.out.println("Predicted digit: " + bestClassIndex);
+                System.out.println("Probabilities: " + Arrays.toString(oneOutputValues));
+                System.out.println();
+            }
+        } finally {
+            if (executionContext != null) {
+                executionContext.deallocate();
+            }
+
+            if (cudaEngine != null) {
+                cudaEngine.deallocate();
+            }
+
+            if (inferenceRuntime != null) {
+                inferenceRuntime.deallocate();
+            }
+
+            if (serializedEngineMemory != null) {
+                serializedEngineMemory.deallocate();
+            }
+
+            if (builderConfiguration != null) {
+                builderConfiguration.deallocate();
+            }
+
+            if (onnxParser != null) {
+                onnxParser.deallocate();
+            }
+
+            if (networkDefinition != null) {
+                networkDefinition.deallocate();
+            }
+
+            if (inferenceBuilder != null) {
+                inferenceBuilder.deallocate();
+            }
+
+            sampleLogger.deallocate();
+        }
     }
 }
 ```

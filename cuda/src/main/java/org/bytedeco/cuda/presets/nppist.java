@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,12 +34,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = {"<nppi_statistics_functions.h>", "<nppi_linear_transforms.h>"}, link = "nppist@.12"),
-    @Platform(value = "windows-x86_64", preload = "nppist64_12")},
+    @Platform(include = {"<nppi_statistics_functions.h>", "<nppi_linear_transforms.h>"}, link = "nppist@.13"),
+    @Platform(value = "windows-x86_64", preload = "nppist64_13")},
         global = "org.bytedeco.cuda.global.nppist")
 @NoException
 public class nppist implements InfoMapper {
     public void map(InfoMap infoMap) {
+        nppc.initSkips(infoMap, "nppi_statistics_functions.h", "nppi_linear_transforms.h");
         infoMap.put(new Info("nppiEvenLevelsHost_32s_Ctx", "nppiHistogramEvenGetBufferSize_16s_AC4R_Ctx",
                              "nppiMSEBatchGetBufferHostSize_8u_C1R", "nppiMSEBatchGetBufferHostSize_8u_C3R",
                              "nppiHistogramEvenGetBufferSize_16s_C1R_Ctx", "nppiHistogramEvenGetBufferSize_16s_C3R_Ctx",

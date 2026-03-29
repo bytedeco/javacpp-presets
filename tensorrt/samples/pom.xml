@@ -1,30 +1,30 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorrt</groupId>
-    <artifactId>samplegooglenet</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <artifactId>sampleonnxmnist</artifactId>
+    <version>1.5.14-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>SampleGoogleNet</exec.mainClass>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <exec.mainClass>SampleOnnxMNIST</exec.mainClass>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>10.3-1.5.11-SNAPSHOT</version>
+            <version>10.15-1.5.14-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>12.6-9.3-1.5.11-SNAPSHOT</version>
+            <version>13.1-9.19-1.5.14-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform-redist</artifactId>
-            <version>10.3-1.5.11-SNAPSHOT</version>
+            <version>10.15-1.5.14-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

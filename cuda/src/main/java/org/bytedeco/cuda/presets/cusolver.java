@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2022 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,13 +35,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {cublas.class, cusparse.class}, value = {
     @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverMg.h>", "<cusolverRf.h>", "cusolverSp.h"},
-        link = {"cusolver@.11", "cusolverMg@.11"}),
-    @Platform(value = "windows-x86_64", preload = {"cusolver64_11", "cusolverMg64_11"})},
+        link = {"cusolver@.12", "cusolverMg@.12"}),
+    @Platform(value = "windows-x86_64", preload = {"cusolver64_12", "cusolverMg64_12"})},
         target = "org.bytedeco.cuda.cusolver", global = "org.bytedeco.cuda.global.cusolver")
 @NoException
 public class cusolver implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("CUDENSEAPI", "CRFWINAPI", "CUSOLVERAPI", "CUSOLVER_CPP_VERSION").cppTypes().annotations().cppText(""))
+        infoMap.put(new Info("CUDENSEAPI", "CRFWINAPI", "CUSOLVERAPI", "CUSOLVER_CPP_VERSION", "CUSOLVERMG_CPP_VERSION").cppTypes().annotations().cppText(""))
                .put(new Info("cusolverDnCunmtr_bufferSize", "cusolverDnDormtr_bufferSize", "cusolverDnZunmtr_bufferSize", "cusolverDnZunmtr",
                              "cusolverDnSormtr_bufferSize", "cusolverDnDormtr", "cusolverDnCunmtr", "cusolverDnSormtr",
                              "cusolverDnLoggerSetCallback", "cusolverDnLoggerSetFile", "cusolverDnLoggerOpenFile",

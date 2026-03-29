@@ -32,16 +32,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(
-    inherit = avutil.class,
-    target = "org.bytedeco.ffmpeg.postproc",
-    global = "org.bytedeco.ffmpeg.global.postproc",
-    value = {
-        // GPL only
-        @Platform(cinclude = {"<libpostproc/postprocess.h>", "<libpostproc/version_major.h>", "<libpostproc/version.h>"}, link = "postproc@.58", extension = "-gpl"),
-        @Platform(value = "windows", preload = "postproc-58", extension = "-gpl")
-    }
-)
+//@Properties(
+//    inherit = avutil.class,
+//    target = "org.bytedeco.ffmpeg.postproc",
+//    global = "org.bytedeco.ffmpeg.global.postproc",
+//    value = {
+//        // GPL only
+//        @Platform(cinclude = {"<libpostproc/postprocess.h>", "<libpostproc/version_major.h>", "<libpostproc/version.h>"}, link = "postproc@.58", extension = "-gpl"),
+//        @Platform(value = "windows", preload = "postproc-58", extension = "-gpl")
+//    }
+//)
 public class postproc implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("QP_STORE_T").cppTypes().valueTypes("byte").pointerTypes("BytePointer"))

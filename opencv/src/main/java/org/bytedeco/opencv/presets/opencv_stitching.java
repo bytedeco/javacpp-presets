@@ -40,11 +40,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
             "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
             "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
-            link = "opencv_stitching@.410", preload = {"opencv_cuda@.410", "opencv_cudaarithm@.410", "opencv_cudafilters@.410",
-            "opencv_cudaimgproc@.410", "opencv_cudawarping@.410", "opencv_cudafeatures2d@.410", "opencv_cudalegacy@.410"}),
+            link = "opencv_stitching@.413", preload = {"opencv_cuda@.413", "opencv_cudaarithm@.413", "opencv_cudafilters@.413",
+            "opencv_cudaimgproc@.413", "opencv_cudawarping@.413", "opencv_cudafeatures2d@.413", "opencv_cudalegacy@.413"}),
         @Platform(value = "ios", preload = "libopencv_stitching"),
-        @Platform(value = "windows", link = "opencv_stitching4100", preload = {"opencv_cuda4100", "opencv_cudaarithm4100", "opencv_cudafilters4100",
-            "opencv_cudaimgproc4100", "opencv_cudawarping4100", "opencv_cudafeatures2d4100", "opencv_cudalegacy4100"})},
+        @Platform(value = "windows", link = "opencv_stitching4130", preload = {"opencv_cuda4130", "opencv_cudaarithm4130", "opencv_cudafilters4130",
+            "opencv_cudaimgproc4130", "opencv_cudawarping4130", "opencv_cudafeatures2d4130", "opencv_cudalegacy4130"})},
     target = "org.bytedeco.opencv.opencv_stitching",
     global = "org.bytedeco.opencv.global.opencv_stitching"
 )

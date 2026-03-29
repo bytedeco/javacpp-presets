@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2023 Samuel Audet
+ * Copyright (C) 2017-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -62,8 +62,9 @@ public class mkl_rt implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("mkl_lapack.h").linePatterns(".*_\\(.*", ".*\\).*").skip())
+               .put(new Info("mkl_vml_functions.h").linePatterns(".*, VHABS,.*", ".*, vmhYnI_64,.*").skip())
                .put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
-                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_BF16", "MKL_INT32", "MKL_F16", "NOTHROW",
+                             "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_BF16", "MKL_INT32", "MKL_F16", "MKL_E5M2", "MKL_E4M3", "NOTHROW",
 
                              "CBLAS_INDEX", "lapack_int", "lapack_logical", "lapack_complex_float", "lapack_complex_double", "_INTEGER_t", "_DoubleComplexType",
 
@@ -84,6 +85,9 @@ public class mkl_rt implements InfoMapper {
                              "d_init_Helmholtz_3D", "d_commit_Helmholtz_3D", "d_Helmholtz_3D", "free_Helmholtz_3D",
                              "s_init_Helmholtz_2D", "s_commit_Helmholtz_2D", "s_Helmholtz_2D",
                              "s_init_Helmholtz_3D", "s_commit_Helmholtz_3D", "s_Helmholtz_3D",
+
+                             "LAPACKE_cgedmd", "LAPACKE_cgedmd_work", "LAPACKE_dgedmd", "LAPACKE_dgedmd_work", "LAPACKE_sgedmd", "LAPACKE_sgedmd_work", "LAPACKE_zgedmd", "LAPACKE_zgedmd_work",
+                             "LAPACKE_cgedmdq", "LAPACKE_cgedmdq_work", "LAPACKE_dgedmdq", "LAPACKE_dgedmdq_work", "LAPACKE_sgedmdq", "LAPACKE_sgedmdq_work", "LAPACKE_zgedmdq", "LAPACKE_zgedmdq_work",
 
                              "mkl_dc_type", "mkl_dc_real_type", "mkl_dc_native_type", "mkl_dc_veclen", "MKL_DC_PREC_LETTER",
                              "mkl_dc_gemm", "mkl_dc_syrk", "mkl_dc_trsm", "mkl_dc_axpy", "mkl_dc_dot", "MKL_DC_DOT_CONVERT",

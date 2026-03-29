@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Samuel Audet
+ * Copyright (C) 2015-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,11 +34,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_threshold_and_compare_operations.h>", link = "nppitc@.12"),
-    @Platform(value = "windows-x86_64", preload = "nppitc64_12")},
+    @Platform(include = "<nppi_threshold_and_compare_operations.h>", link = "nppitc@.13"),
+    @Platform(value = "windows-x86_64", preload = "nppitc64_13")},
         global = "org.bytedeco.cuda.global.nppitc")
 @NoException
 public class nppitc implements InfoMapper {
     public void map(InfoMap infoMap) {
+        nppc.initSkips(infoMap, "nppi_threshold_and_compare_operations.h");
     }
 }

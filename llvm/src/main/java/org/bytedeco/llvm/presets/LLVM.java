@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2024 Samuel Audet
+ * Copyright (C) 2014-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,13 +34,13 @@ import org.bytedeco.javacpp.tools.*;
     include = {"<llvm-c/DataTypes.h>", "<llvm-c/Types.h>", "<llvm-c/Support.h>", "<llvm-c/Core.h>", "<llvm-c/Analysis.h>", "<llvm-c/BitReader.h>", "<llvm-c/BitWriter.h>",
                "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", /* "<llvm-c/Initialization.h>",*/ "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
-               "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/Orc.h>", "<llvm-c/Remarks.h>",
+               "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/Orc.h>", "<llvm-c/Remarks.h>", "<llvm-c/Visibility.h>",
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", /*"<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",*/
-               "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp17", link = {"LLVM@.18.1", "LTO@.18.1", "Remarks@.18.1"}, resource = {"include", "lib", "libexec", "share"}),
+               "<llvm-c/Transforms/PassBuilder.h>", /*"<polly/LinkAllPasses.h>",*/ "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
+    compiler = "cpp17", link = {"LLVM@.22.1", "LTO@.22.1", "Remarks@.22.1"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
-        @Platform(value = "windows", link = {"Ws2_32", "LLVM", "LTO", "Remarks"})})
+        @Platform(value = "windows", link = {"ntdll", "Ws2_32", "LLVM", "LTO", "Remarks"})})
 @NoException
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
@@ -58,6 +58,7 @@ public class LLVM implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))
+               .put(new Info("LLVMOpaqueDbgRecord").pointerTypes("LLVMDbgRecordRef"))
                .put(new Info("LLVMOpaqueModule").pointerTypes("LLVMModuleRef"))
                .put(new Info("LLVMOpaqueType").pointerTypes("LLVMTypeRef"))
                .put(new Info("LLVMOpaqueValue").pointerTypes("LLVMValueRef"))
@@ -124,6 +125,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaquePassBuilderOptions").pointerTypes("LLVMPassBuilderOptionsRef"))
 
                .put(new Info("LLVMContextRef").valueTypes("LLVMContextRef").pointerTypes("@ByPtrPtr LLVMContextRef", "@Cast(\"LLVMContextRef*\") PointerPointer"))
+               .put(new Info("LLVMDbgRecordRef").valueTypes("LLVMDbgRecordRef").pointerTypes("@ByPtrPtr LLVMDbgRecordRef", "@Cast(\"LLVMDbgRecordRef*\") PointerPointer"))
                .put(new Info("LLVMModuleRef").valueTypes("LLVMModuleRef").pointerTypes("@ByPtrPtr LLVMModuleRef", "@Cast(\"LLVMModuleRef*\") PointerPointer"))
                .put(new Info("LLVMTypeRef").valueTypes("LLVMTypeRef").pointerTypes("@ByPtrPtr LLVMTypeRef", "@Cast(\"LLVMTypeRef*\") PointerPointer"))
                .put(new Info("LLVMValueRef").valueTypes("LLVMValueRef").pointerTypes("@ByPtrPtr LLVMValueRef", "@Cast(\"LLVMValueRef*\") PointerPointer"))
@@ -191,6 +193,9 @@ public class LLVM implements InfoMapper {
 
                .put(new Info("LLVM_C_EXTERN_C_BEGIN").cppText("#define LLVM_C_EXTERN_C_BEGIN").cppTypes())
                .put(new Info("LLVM_C_EXTERN_C_END").cppText("#define LLVM_C_EXTERN_C_END").cppTypes())
+               .put(new Info("LLVM_C_ABI").cppText("#define LLVM_C_ABI").cppTypes())
+               .put(new Info("LLVM_ATTRIBUTE_C_DEPRECATED").cppText("#define LLVM_ATTRIBUTE_C_DEPRECATED(decl, message) deprecated decl").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("INT64_MIN").cppTypes("long").translate())
                .put(new Info("HUGE_VALF").cppTypes("float").translate(false))
                .put(new Info("defined(_MSC_VER) && !defined(inline)", "GPU_CODEGEN").define(false))

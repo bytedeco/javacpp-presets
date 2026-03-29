@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SENTENCEPIECE_VERSION=0.2.0
+SENTENCEPIECE_VERSION=0.2.1
 download https://github.com/google/sentencepiece/archive/refs/tags/v$SENTENCEPIECE_VERSION.zip sentencepiece-$SENTENCEPIECE_VERSION.zip
 
 mkdir -p $PLATFORM
@@ -31,6 +31,11 @@ case $PLATFORM in
         ;;
     macosx-arm64)
         $CMAKE $CMAKE_CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64" ..
+        ;;
+    windows-*)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        $CMAKE $CMAKE_CONFIG -G "Ninja" ..
         ;;
     *)
         $CMAKE $CMAKE_CONFIG ..

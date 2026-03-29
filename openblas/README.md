@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenBLAS 0.3.28  http://www.openblas.net/
+ * OpenBLAS 0.3.31  http://www.openblas.net/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -20,7 +20,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/openblas/apidocs/
 
-&lowast; The JNI bindings can instead link with [Intel MKL](https://software.intel.com/mkl), or any other arbitrary library found on the "java.library.path" or on the class path, by specifying it with the "org.bytedeco.openblas.load" system property. For example, to use the BLAS library from the [Accelerate framework](https://developer.apple.com/documentation/accelerate) on Mac OS X, we can pass options such as `-Djava.library.path=/usr/lib/ -Dorg.bytedeco.openblas.load=blas`, while for a default installation of MKL that would be `-Dorg.bytedeco.openblas.load=mkl_rt`.
+&lowast; The JNI bindings can instead link with [Intel MKL](https://software.intel.com/mkl), or any other arbitrary library found on the "java.library.path" or on the class path, by specifying it with the "org.bytedeco.openblas.load" system property. For example, to use the BLAS library from the [Accelerate framework](https://developer.apple.com/documentation/accelerate) on Mac OS X, we can pass options such as `-Djava.library.path=/usr/lib/ -Dorg.bytedeco.openblas.load=blas`, while for a default installation of MKL that would be `-Dorg.bytedeco.openblas.load=mkl_rt`. The system property can also be set to "none" to avoid loading OpenBLAS at all.
 
 Intel also offers a stripped-down but free version of MKL named "MKLML" that is bundled with the [JavaCPP Presets for MKL-DNN](../mkl-dnn). After adding the JAR files for MKL-DNN to the class path, it can be accessed with an option like `-Dorg.bytedeco.openblas.load=mklml`. Moreover, it is now possible to do the same with the full version of MKL and the [JavaCPP Presets for MKL](../mkl) with the `-redist` artifacts in the class path and an option like `-Dorg.bytedeco.openblas.load=mkl_rt`.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.openblas</groupId>
     <artifactId>openblas</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.13</version>
     <properties>
         <exec.mainClass>ExampleDGELSrowmajor</exec.mainClass>
     </properties>
@@ -50,7 +50,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.28-1.5.11-SNAPSHOT</version>
+            <version>0.3.31-1.5.13</version>
         </dependency>
     </dependencies>
     <build>

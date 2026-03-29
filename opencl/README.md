@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCL 3.0.16  https://www.khronos.org/registry/OpenCL/
+ * OpenCL 3.0.17  https://www.khronos.org/registry/OpenCL/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.opencl</groupId>
     <artifactId>vecadd</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.13</version>
     <properties>
         <exec.mainClass>VecAdd</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencl-platform</artifactId>
-            <version>3.0-1.5.10</version>
+            <version>3.0-1.5.13</version>
         </dependency>
     </dependencies>
     <build>

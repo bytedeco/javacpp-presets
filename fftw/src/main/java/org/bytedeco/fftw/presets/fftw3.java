@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = javacpp.class, global = "org.bytedeco.fftw.global.fftw3", value = {
     @Platform(include = "<fftw3.h>", link = {"fftw3@.3", "fftw3f@.3"}),
     @Platform(value = "android", link = {"fftw3", "fftw3f"}),
-    @Platform(value = "windows", preload = {"libfftw3-3", "libfftw3f-3"}) })
+    @Platform(value = "windows", preload = {"libwinpthread-1", "libfftw3-3", "libfftw3f-3"}) })
 @NoException
 public class fftw3 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "fftw"); }

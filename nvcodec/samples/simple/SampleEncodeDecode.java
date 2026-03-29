@@ -25,7 +25,7 @@ public class SampleEncodeDecode {
         CUctx_st cuContext = new CUctx_st();
 
         checkCudaApiCall("cuInit", cuInit(0));
-        checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, 0, targetGpu));
+        checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, null, 0, targetGpu));
         try {
             // Check encoder max supported version
             try (IntPointer version = new IntPointer(1)) {

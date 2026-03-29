@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2024 Samuel Audet
+ * Copyright (C) 2016-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -39,26 +39,29 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  *
  * @author Samuel Audet
+ * @author Dragan Djuric
  */
 @Properties(inherit = javacpp.class, global = "org.bytedeco.openblas.global.openblas_nolapack", value = {
     @Platform(define = {"__OPENBLAS 1", "LAPACK_COMPLEX_CPP"},
               include = {"openblas_config.h", "cblas.h"},
               link    =  "openblas_nolapack@.0", resource = {"include", "lib"},
-              preload = {"gcc_s@.1", "quadmath@.0", "gfortran@.5", "gfortran@.4", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
+              preload = {"gcc_s@.1.1", "gcc_s@.1", "quadmath@.0", "gfortran@.5", "gfortran@.4", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
               preloadpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}),
     @Platform(value = "android", link = "openblas", preload = ""),
-    @Platform(value = "macosx-x86_64",  preloadpath = {"/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
-                                                       "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
+    @Platform(value = "macosx",  preloadpath = {"/usr/local/lib/gcc/13/", "/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
+                                                "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
     @Platform(value = "windows", preload = "libopenblas#libopenblas_nolapack"),
-    @Platform(value = "windows-x86",    preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/ia32/",
-                                                       "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/ia32_win/compiler/"}),
-    @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/redist/intel64/",
-                                                       "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/redist/intel64_win/compiler/"}),
+    @Platform(value = "windows-x86",    preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/bin32/",
+                                                       "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin32/"}),
+    @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Intel/oneAPI/mkl/latest/bin/",
+                                                       "C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin/"}),
     @Platform(value = "linux",          preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
     @Platform(value = "linux-armhf",    preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-arm64",    preloadpath = {"/usr/aarch64-linux-gnu/lib/", "/usr/lib/aarch64-linux-gnu/"}),
-    @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/", "/opt/intel/oneapi/mkl/latest/lib/ia32/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/"}),
-    @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/", "/opt/intel/oneapi/mkl/latest/lib/intel64/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/"}),
+    @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/",
+                                                       "/opt/intel/oneapi/mkl/latest/lib32/", "/opt/intel/oneapi/compiler/latest/lib32/"}),
+    @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/",
+                                                       "/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/lib/"}),
     @Platform(value = "linux-ppc64",    preloadpath = {"/usr/powerpc64-linux-gnu/lib/", "/usr/powerpc64le-linux-gnu/lib/",
                                                        "/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
     @Platform(value = "ios", preload = "libopenblas") })
@@ -68,21 +71,29 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
+        List<String> links = properties.get("platform.link");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
-        String className = getClass().getSimpleName(); // "openblas_nolapack" or "openblas"
+        String linkName = getLinkName(); // "openblas_nolapack" or "openblas"
+
+        // Let users enable loading of arbitrary library (for Accelerate, MKL, etc) or "none"
+        String lib = System.getProperty("org.bytedeco." + linkName + ".load", "").toLowerCase();
+        if (lib.length() == 0) {
+            lib = System.getProperty("org.bytedeco.openblas.load", "").toLowerCase();
+        }
+
+        if (lib.equals("none")) {
+            links.clear();
+            preloads.clear();
+            properties.setProperty("platform.library", "#none#");
+            return;
+        }
 
         // Only apply this at load time for this class only, without inheriting, since MKLML,
         // for example, doesn't come with all of LAPACK, the user might want to use it with
         // openblas_nolapack.class, but have openblas.class load something else.
         if (!Loader.isLoadLibraries() || getClass() != properties.getEffectiveClasses().get(0)) {
             return;
-        }
-
-        // Let users enable loading of arbitrary library (for Accelerate, MKL, etc)
-        String lib = System.getProperty("org.bytedeco." + className + ".load", "").toLowerCase();
-        if (lib.length() == 0) {
-            lib = System.getProperty("org.bytedeco.openblas.load", "").toLowerCase();
         }
 
         int i = 0;
@@ -107,11 +118,11 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
 
         if (lib.length() > 0) {
             if (platform.startsWith("linux")) {
-                preloads.add(i, lib + "#" + className + "@.0");
+                preloads.add(i, lib + "#" + linkName + "@.0");
             } else if (platform.startsWith("macosx")) {
-                preloads.add(i, lib + "#" + className + ".0");
+                preloads.add(i, lib + "#" + linkName + ".0");
             } else if (platform.startsWith("windows")) {
-                preloads.add(i, lib + "#lib" + className);
+                preloads.add(i, lib + "#lib" + linkName);
             }
         }
     }
@@ -120,7 +131,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
                              "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "FORTRAN_STRLEN", "lapack_int", "lapack_logical").cppTypes().annotations())
-               .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT",
+               .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT", "defined(__GNUC__) && (__GNUC__ >= 12)",
                              "defined(LAPACK_COMPLEX_STRUCTURE)", "defined(LAPACK_COMPLEX_C99)", "OPENBLAS_OS_LINUX").define(false).translate(true))
                .put(new Info("((defined(__STDC_IEC_559_COMPLEX__) || __STDC_VERSION__ >= 199901L ||"
                        + "      (__GNUC__ >= 3 && !defined(__cplusplus))) && !(defined(FORCE_OPENBLAS_COMPLEX_STRUCT))) && !defined(_MSC_VER)",
@@ -131,40 +142,65 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
         String[] functions = {
             // not available in Accelerate
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "cblas_caxpyc", "cblas_zaxpyc",
-            "cblas_sgemmt", "cblas_dgemmt", "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_sgemmt", "cblas_dgemmt",
             "cblas_cgemm_batch", "cblas_dgemm_batch", "cblas_sgemm_batch", "cblas_zgemm_batch",
             "cblas_samax", "cblas_damax", "cblas_scamax", "cblas_dzamax",
             "cblas_samin", "cblas_damin", "cblas_scamin", "cblas_dzamin",
             // not exported by OpenBLAS
-            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
+            "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
             "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
             "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
             "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
             "cblas_csrot", "cblas_zdrot", "cblas_crotg", "cblas_zrotg",
             // not implemented by MKL
-            "openblas_set_num_threads", "goto_set_num_threads", "openblas_set_num_threads_local", "openblas_get_num_threads", "openblas_get_num_procs",
-            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "openblas_set_threads_callback_function", "cblas_cdotc", "cblas_cdotu",
+            "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
+            "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu",
             "cblas_cimatcopy", "cblas_comatcopy", "cblas_dimatcopy", "cblas_domatcopy", "cblas_cgeadd", "cblas_dgeadd", "cblas_sgeadd",
             "cblas_simatcopy", "cblas_somatcopy", "cblas_zdotc", "cblas_zdotu", "cblas_zgeadd", "cblas_zimatcopy", "cblas_zomatcopy",
             "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
-            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "lapack_make_complex_double", "lapack_make_complex_float",
+            "lapack_make_complex_double", "lapack_make_complex_float",
             "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
-            "clangb", "dlangb", "slangb", "zlangb", "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
             "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
-            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq", "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
+            "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
             // deprecated
-            "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
-            "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
-            "cgelsx",  "clahrd",  "dgegv",   "dggsvp",  "sgegs",   "sggsvd",  "stzrqf",  "zgeqpf",  "zlatzm",
-            "cgeqpf",  "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "sggsvp",  "zgegs",   "zggsvd",  "ztzrqf",
+            "cgegs",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",
+            "cgegv",  "dgegs",   "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
+            "cgelsx", "clahrd",  "dgegv",   "sgegs",   "stzrqf",  "zgeqpf",  "zlatzm",
+            "cgeqpf", "clatzm",  "dgelsx",  "dlahrd",  "sgegv",   "zgegs",   "ztzrqf"};
+        for (String f : functions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(skipFunctions()));
+        }
+
+        String[] brokenFunctions = {
+            // not implemented by MKL
+            "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "clangb", "dlangb", "slangb", "zlangb",
+            "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
+            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq",
+            // deprecated
+            "cggsvd", "dggsvd", "sggsvd", "zggsvd", "zggsvp", "cggsvp", "dggsvp", "sggsvp",
             // extended
-            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod", "cblas_sbdot", "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
             "cgbrfsx", "cporfsx", "dgerfsx", "sgbrfsx", "ssyrfsx", "zherfsx", "cgerfsx", "csyrfsx", "dporfsx", "sgerfsx", "zgbrfsx", "zporfsx",
             "cherfsx", "dgbrfsx", "dsyrfsx", "sporfsx", "zgerfsx", "zsyrfsx", "cgbsvxx", "cposvxx", "dgesvxx", "sgbsvxx", "ssysvxx", "zhesvxx",
-            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx"};
-        for (String f : functions) {
-            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip());
+            "cgesvxx", "csysvxx", "dposvxx", "sgesvxx", "zgbsvxx", "zposvxx", "chesvxx", "dgbsvxx", "dsysvxx", "sposvxx", "zgesvxx", "zsysvxx",
+            //broken on android and Windows
+            "cblas_cgemmt", "cblas_zgemmt",
+            "cblas_sbstobf16", "cblas_sbdtobf16", "cblas_sbf16tos", "cblas_dbf16tod",
+            "cblas_sbdot",  "cblas_sbgemv", "cblas_sbgemm", "cblas_sbgemm_batch",
+            "cblas_cgemm3m", "cblas_zgemm3m", "cblas_bgemm", "cblas_bgemv", "cblas_shgemm",
+            "cblas_cgemm_batch_strided", "cblas_dgemm_batch_strided", "cblas_sgemm_batch_strided", "cblas_zgemm_batch_strided", "cblas_sbgemm_batch_strided",
+            // broken on Windows
+            "openblas_set_num_threads_local", "openblas_set_threads_callback_function"};
+        for (String f : brokenFunctions) {
+            infoMap.put(new Info(f, "LAPACK_" + f, "LAPACK_" + f + "_base", "LAPACKE_" + f, "LAPACKE_" + f + "_work").skip(true));
         }
+    }
+
+    protected boolean skipFunctions() {
+        return true;
+    }
+
+    protected String getLinkName() {
+        return getClass().getSimpleName();
     }
 
     static int maxThreads = -1;

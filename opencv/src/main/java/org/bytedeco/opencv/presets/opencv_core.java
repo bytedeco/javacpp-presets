@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2023 Samuel Audet
+ * Copyright (C) 2013-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -57,10 +57,10 @@ import org.bytedeco.openblas.presets.*;
             "<opencv2/core/utility.hpp>", "<opencv2/core/utils/instrumentation.hpp>", "<opencv2/core/utils/tls.hpp>",
             "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.410", "opencv_imgproc@.410"},
+            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.413", "opencv_imgproc@.413"},
             exclude = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake", "python"}, linkresource = "lib",
-            preload = {"opencv_cudev@.410"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
+            preload = {"opencv_cudev@.413"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
@@ -69,7 +69,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core4100", "opencv_imgproc4100"}, preload = {"opencv_cudev4100"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core4130", "opencv_imgproc4130"}, preload = {"opencv_cudev4130"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -99,9 +99,9 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                          "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.11" : lib.equals("cudart") ? "@.12" : "@.12";
+                lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cufft") ? "@.12" : lib.equals("cudart") ? "@.13" : "@.13";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_11" : lib.equals("cudart") ? "64_12" : "64_12";
+                lib += lib.startsWith("cudnn") ? "64_9" : lib.equals("cufft") ? "64_12" : lib.equals("cudart") ? "64_13" : "64_13";
             } else {
                 continue; // no CUDA
             }
@@ -123,12 +123,13 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                              "defined __GNUC__ || defined __clang__", "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA",
                              "__cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)", "CV_CXX11", "CV_FP16_TYPE", "__EMSCRIPTEN__",
                              "defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)",
-                             "defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus) && !defined(__CUDACC__)").define(false))
+                             "defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus) && !defined(__CUDACC__)", "OPENCV_BINDINGS_PARSER").define(false))
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func",
                              "CV__ErrorNoReturn", "CV__ErrorNoReturn_", "CV_ErrorNoReturn", "CV_ErrorNoReturn_", "CV_USRTYPE1", "CV_Assert_1").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_ALWAYS_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN", "CV__DEBUG_NS_END",
                              "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL", "CV_NODISCARD", "CV_NODISCARD_STD").annotations().cppTypes())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
+               .put(new Info("CV_ND").cppText("#define CV_ND"))
 
                .put(new Info("CV_DEPRECATED").cppText("#define CV_DEPRECATED deprecated").cppTypes())
                .put(new Info("CV_DEPRECATED_EXTERNAL").cppText("#define CV_DEPRECATED_EXTERNAL deprecated").cppTypes())

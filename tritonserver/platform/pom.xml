@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.14-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tritonserver-platform</artifactId>
-  <version>2.48.0-${project.parent.version}</version>
+  <version>2.65.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Triton Inference Server</name>
 
   <properties>
@@ -20,6 +20,11 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp-platform</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -46,7 +51,7 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.10.1</version>
+      <version>2.13.2</version>
     </dependency>
   </dependencies>
 
@@ -119,7 +124,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <phase>package</phase>

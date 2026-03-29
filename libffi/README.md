@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * libffi 3.4.6  https://sourceware.org/libffi/
+ * libffi 3.5.2  https://sourceware.org/libffi/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libffi</groupId>
     <artifactId>simpleexample</artifactId>
-    <version>1.5.11-SNAPSHOT</version>
+    <version>1.5.13</version>
     <properties>
         <exec.mainClass>SimpleExample</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.4.6-1.5.11-SNAPSHOT</version>
+            <version>3.5.2-1.5.13</version>
         </dependency>
     </dependencies>
     <build>

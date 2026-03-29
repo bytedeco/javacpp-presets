@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Samuel Audet
+ * Copyright (C) 2020-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ public class OpenCL implements InfoMapper {
                .put(new Info("cl_int", "cl_uint").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("cl_long", "cl_ulong").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 
-               .put(new Info("__CL_HAS_ANON_STRUCT__", "defined( __cl_uchar2__)",
+               .put(new Info("__CL_HAS_ANON_STRUCT__", "defined( __cl_uchar2__)", "defined(CL_VERSION_2_0) && __CL_HAS_ANON_STRUCT__",
                              "defined( __CL_CHAR2__)", "defined( __CL_CHAR4__)", "defined( __CL_CHAR8__ )", "defined( __CL_CHAR16__ )",
                              "defined( __CL_UCHAR2__)", "defined( __CL_UCHAR4__)", "defined( __CL_UCHAR8__ )", "defined( __CL_UCHAR16__ )",
                              "defined( __CL_SHORT2__)", "defined( __CL_SHORT4__)", "defined( __CL_SHORT8__ )", "defined( __CL_SHORT16__ )",

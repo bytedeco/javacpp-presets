@@ -1,0 +1,21 @@
+diff --git a/aten/src/ATen/native/cuda/SortStable.cu b/aten/src/ATen/native/cuda/SortStable.cu
+index 4d956616371de..8117eeeec558e 100644
+--- a/aten/src/ATen/native/cuda/SortStable.cu
++++ b/aten/src/ATen/native/cuda/SortStable.cu
+@@ -21,9 +21,15 @@ namespace {
+ struct offset_t {
+   int stride;
+   int begin;
+-  __device__ int operator[](int i) {
++  __device__ int operator[](int i) const {
+     return stride * (begin + i);
+   }
++#if CCCL_VERSION >= 3001000
++  __device__ offset_t& operator+=(int i) {
++    begin += i;
++    return *this;
++  }
++#endif
+ };
+ // Segmented sort by full sort algorithm:.
+ // Say we are sorting a (2, 3) tensor. We have in flattened form:

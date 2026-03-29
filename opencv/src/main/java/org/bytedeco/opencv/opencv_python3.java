@@ -46,6 +46,7 @@ import org.bytedeco.opencv.presets.*;
         opencv_bioinspired.class,
         opencv_face.class,
         opencv_img_hash.class,
+        opencv_plot.class,
         opencv_structured_light.class,
         opencv_text.class,
         opencv_tracking.class,
@@ -57,6 +58,7 @@ import org.bytedeco.opencv.presets.*;
         opencv_stitching.class,
         opencv_saliency.class,
         opencv_quality.class,
+        opencv_signal.class,
         opencv_dnn_superres.class,
         opencv_intensity_transform.class,
         opencv_mcc.class,
@@ -65,12 +67,12 @@ import org.bytedeco.opencv.presets.*;
         opencv_wechat_qrcode.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.410", "opencv_cudaarithm@.410", "opencv_cudafilters@.410", "opencv_cudaimgproc@.410",
-                             "opencv_cudacodec@.410", "opencv_cudaobjdetect@.410", "opencv_cudabgsegm@.410", "opencv_cudastereo@.410",
-                             "opencv_cudafeatures2d@.410", "opencv_cudaoptflow@.410", "opencv_cudawarping@.410", "opencv_cudalegacy@.410"}),
-        @Platform(value = "windows", preload = {"opencv_cuda4100", "opencv_cudaarithm4100", "opencv_cudafilters4100", "opencv_cudaimgproc4100",
-                             "opencv_cudacodec4100", "opencv_cudaobjdetect4100", "opencv_cudabgsegm4100", "opencv_cudastereo4100",
-                             "opencv_cudafeatures2d4100", "opencv_cudaoptflow4100", "opencv_cudawarping4100", "opencv_cudalegacy4100"}),
+        @Platform(preload = {"opencv_cuda@.413", "opencv_cudaarithm@.413", "opencv_cudafilters@.413", "opencv_cudaimgproc@.413",
+                             "opencv_cudacodec@.413", "opencv_cudaobjdetect@.413", "opencv_cudabgsegm@.413", "opencv_cudastereo@.413",
+                             "opencv_cudafeatures2d@.413", "opencv_cudaoptflow@.413", "opencv_cudawarping@.413", "opencv_cudalegacy@.413"}),
+        @Platform(value = "windows", preload = {"opencv_cuda4130", "opencv_cudaarithm4130", "opencv_cudafilters4130", "opencv_cudaimgproc4130",
+                             "opencv_cudacodec4130", "opencv_cudaobjdetect4130", "opencv_cudabgsegm4130", "opencv_cudastereo4130",
+                             "opencv_cudafeatures2d4130", "opencv_cudaoptflow4130", "opencv_cudawarping4130", "opencv_cudalegacy4130"}),
     }
 )
 public class opencv_python3 {

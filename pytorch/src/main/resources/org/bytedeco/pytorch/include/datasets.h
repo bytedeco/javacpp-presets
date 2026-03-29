@@ -15,7 +15,7 @@ namespace javacpp {
  struct Dataset : public torch::data::datasets::Dataset<javacpp::Dataset<Data,Target>, torch::data::Example<Data, Target>> {
    virtual ~Dataset() = default;
    virtual torch::data::Example<Data, Target> get(size_t index) override = 0;
-   virtual c10::optional<size_t> size() const override = 0;
+   virtual std::optional<size_t> size() const override = 0;
    virtual std::vector<torch::data::Example<Data, Target>> get_batch(c10::ArrayRef<size_t> indices) override {
      return torch::data::datasets::Dataset<javacpp::Dataset<Data, Target>, torch::data::Example<Data, Target>>::get_batch(indices);
    };
@@ -27,7 +27,7 @@ namespace javacpp {
 template <typename Data, typename Target>
 struct StreamDataset : public torch::data::datasets::BatchDataset<javacpp::StreamDataset<Data,Target>, std::vector<torch::data::Example<Data,Target>>, size_t> {
     virtual ~StreamDataset() = default;
-    virtual c10::optional<size_t> size() const override = 0;
+    virtual std::optional<size_t> size() const override = 0;
     virtual std::vector<torch::data::Example<Data,Target>> get_batch(size_t size) override = 0;
 };
 
@@ -37,8 +37,8 @@ struct StreamDataset : public torch::data::datasets::BatchDataset<javacpp::Strea
 template <typename Data, typename Target>
 struct StatefulDataset : public torch::data::datasets::StatefulDataset<javacpp::StatefulDataset<Data,Target>, std::vector<torch::data::Example<Data,Target>>, size_t> {
   virtual ~StatefulDataset() = default;
-  virtual c10::optional<size_t> size() const override = 0;
-  virtual c10::optional<std::vector<torch::data::Example<Data,Target>>> get_batch(size_t size) override = 0;
+  virtual std::optional<size_t> size() const override = 0;
+  virtual std::optional<std::vector<torch::data::Example<Data,Target>>> get_batch(size_t size) override = 0;
   virtual void reset() override = 0;
   virtual void save(torch::serialize::OutputArchive& archive) const override = 0;
   virtual void load(torch::serialize::InputArchive& archive) override = 0;

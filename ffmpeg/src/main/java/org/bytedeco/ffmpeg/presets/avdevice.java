@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 Samuel Audet
+ * Copyright (C) 2013-2025 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avdevice",
     global = "org.bytedeco.ffmpeg.global.avdevice",
     value = {
-        @Platform(cinclude = {"<libavdevice/avdevice.h>", "<libavdevice/version_major.h>", "<libavdevice/version.h>"}, link = "avdevice@.61"),
-        @Platform(value = "windows", preload = "avdevice-61")
+        @Platform(cinclude = {"<libavdevice/avdevice.h>", "<libavdevice/version_major.h>", "<libavdevice/version.h>"}, link = "avdevice@.62"),
+        @Platform(value = "windows", preload = "avdevice-62")
     }
 )
 public class avdevice implements InfoMapper {
@@ -47,7 +47,8 @@ public class avdevice implements InfoMapper {
                .putFirst(new Info("AVDeviceCapabilitiesQuery").pointerTypes("AVDeviceCapabilitiesQuery"))
                .put(new Info("LIBAVDEVICE_VERSION").cppTypes())
                .put(new Info("LIBAVDEVICE_VERSION_INT", "LIBAVDEVICE_IDENT").translate(false))
-               .put(new Info("FF_API_DEVICE_CAPABILITIES", "FF_API_BKTR_DEVICE", "FF_API_OPENGL_DEVICE", "FF_API_SDL2_DEVICE").define().translate().cppTypes("bool"))
+               .put(new Info("FF_API_DEVICE_CAPABILITIES", "FF_API_BKTR_DEVICE", "FF_API_OPENGL_DEVICE", "FF_API_SDL2_DEVICE",
+                             "FF_API_ALSA_CHANNELS").define().translate().cppTypes("bool"))
                .put(new Info("av_device_capabilities").skip());
     }
 }
