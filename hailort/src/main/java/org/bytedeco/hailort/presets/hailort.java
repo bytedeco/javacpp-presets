@@ -11,22 +11,8 @@ import org.bytedeco.javacpp.tools.*;
                         "hailo/platform.h"
                 },
                         link = "hailort"),
-                @Platform(value = "windows", define = "WIN32_LEAN_AND_MEAN", include = {}, link = "libhailort"),
-                @Platform(value = "linux",
-                        include = {
-//                        "<unistd.h>",
-//                                "<sys/time.h>",
-//                                "<sys/socket.h>",
-//                                "<netinet/in.h>",
-//                                "<arpa/inet.h>"
-                        },
-                        includepath = {
-                                 "hailort/src/test/resources/", // todo remove
-//                                "/usr/include/x86_64-linux-gnu/",
-//                                "/usr/include/"
-                        }
-                ),
-
+                @Platform(value = "windows", define = "WIN32_LEAN_AND_MEAN", link = "libhailort"),
+                @Platform(value = "linux"),
         },
         target = "org.bytedeco.hailort",
         global = "org.bytedeco.hailort.global.hailort",
@@ -40,13 +26,6 @@ public class hailort implements InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-//        infoMap.put(new Info("in.h")
-//                .linePatterns("struct sockaddr_in", "\\s+};",
-//                        "typedef uint32_t in_addr_t;", "\\s+};",
-//                        "/\\* Type to represent a port.  \\*/", "/\\* Standard well-known ports.  \\*/"
-//                        ));
-
-
         // types from platform.h
         infoMap.put(new Info("socket_t").cast().valueTypes("int").pointerTypes("IntPointer"));
         infoMap.put(new Info("port_t").cast().valueTypes("int").pointerTypes("IntPointer"));

@@ -260,9 +260,6 @@
                 <argument>clean</argument>
                 <argument>${javacpp.moduleId}</argument>
               </buildCommand>
-              <environmentVariables>
-                <ANDROID_NDK>${javacpp.platform.root}</ANDROID_NDK>
-              </environmentVariables>
               <workingDirectory>${project.basedir}/..</workingDirectory>
             </configuration>
           </execution>
