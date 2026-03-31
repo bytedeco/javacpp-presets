@@ -13,6 +13,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 mkdir -p include lib bin
+rm -Rf hailort-$HAILORT_VERSION
 tar -xzvf ../hailort-v$HAILORT_VERSION.tar.gz
 cd hailort-$HAILORT_VERSION
 
@@ -33,8 +34,8 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib"
-        "$CMAKE" --build build --config Release --target install --parallel $MAKEJ
+        "$CMAKE" -G "Ninja" -S. -Bbuild-ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib"
+        "$CMAKE" --build build-ninja --config Release --target install --parallel $MAKEJ
         if [[ -f "$INSTALL_PATH/include/hailo/hailort.h" ]]; then
             sedinplace 's/hailo_detection_t detections\[0\];/hailo_detection_t detections[1];/g' "$INSTALL_PATH/include/hailo/hailort.h"
         fi
