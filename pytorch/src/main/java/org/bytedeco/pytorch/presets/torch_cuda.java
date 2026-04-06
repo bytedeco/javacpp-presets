@@ -115,7 +115,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             //// std::vector
             .put(new Info("std::vector<c10::cuda::DeviceAssertionsData>").pointerTypes("DeviceAssertionsDataVector").define())
             .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define())
-            .put(new Info("const std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>", "std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>").pointerTypes("TraceEntryVector").define())
+            .put(new Info("const std::vector<c10::CachingDeviceAllocator::TraceEntry>", "std::vector<c10::CachingDeviceAllocator::TraceEntry>").pointerTypes("TraceEntryVector").define())
 
             //// std::array
             .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray",
@@ -191,6 +191,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("c10::cuda::CUDACachingAllocator::CheckpointDelta").immutable()) // at::DataPtr is not constructible
 
             .put(new Info("c10::cuda::CUDACachingAllocator::kLargeBuffer").skip()) // Triggers UnsatisfiedLinkException as of 2.2.0
+
+            .put(new Info("c10::CachingDeviceAllocator::CreateContextFn", "c10::CachingDeviceAllocator::CreateContextFn*", "CreateContextFn", "CreateContextFn*").skip())
 
             .put(new Info(
                 "at::native::Descriptor<cudnnActivationStruct,cudnnCreateActivationDescriptor&,cudnnDestroyActivationDescriptor&>",

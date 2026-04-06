@@ -41,4 +41,14 @@ public class SourceLocation extends Pointer {
   public native @Cast("const char*") BytePointer function(); public native SourceLocation function(BytePointer setter);
   public native @Cast("const char*") BytePointer file(); public native SourceLocation file(BytePointer setter);
   public native @Cast("uint32_t") int line(); public native SourceLocation line(int setter);
+
+  public static native @Const @ByVal @NoException(true) SourceLocation current(
+        @Cast("const char*") BytePointer file/*=__builtin_FILE()*/,
+        @Cast("const char*") BytePointer function/*=__builtin_FUNCTION()*/,
+        @Cast("const std::uint_least32_t") int line/*=__builtin_LINE()*/);
+  public static native @Const @ByVal @NoException(true) SourceLocation current();
+  public static native @Const @ByVal @NoException(true) SourceLocation current(
+        String file/*=__builtin_FILE()*/,
+        String function/*=__builtin_FUNCTION()*/,
+        @Cast("const std::uint_least32_t") int line/*=__builtin_LINE()*/);
 }

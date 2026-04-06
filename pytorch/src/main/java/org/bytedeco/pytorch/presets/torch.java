@@ -308,7 +308,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "ERROR_UNSUPPORTED_CAST", "LEGACY_CONTIGUOUS_MEMORY_FORMAT", "GFLAGS_DLL_DEFINE_FLAG", "GFLAGS_DLL_DECLARE_FLAG",
                 "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__", "__inline__",
                 "HIDDEN_NAMESPACE_BEGIN", "HIDDEN_NAMESPACE_END", "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
-                "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT",
+                "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT", "C10_HIP_CHECK",
                 "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__",
                 "__ubsan_ignore_signed_int_overflow__", "__ubsan_ignore_pointer_overflow__",
                 "__ubsan_ignore_function__").cppTypes().annotations())
@@ -325,7 +325,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "defined(__APPLE__)",
                 "defined(__aarch64__) && !defined(__CUDACC__)",
                 "defined(__aarch64__) && !defined(C10_MOBILE) && !defined(__CUDACC__)",
-                "defined(__HIP_PLATFORM_HCC__)",
+                "defined(__HIP_PLATFORM_HCC__)", "defined(__HIPCC__)",
                 "defined(_MSC_VER)", "_WIN32",
                 "defined(USE_ROCM)", "USE_ROCM", "SYCL_LANGUAGE_VERSION",
                 "defined(CUDA_VERSION) && CUDA_VERSION >= 11000",
@@ -366,6 +366,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("at::CheckedFrom").cast().valueTypes("BytePointer", "String").pointerTypes("PointerPointer")) // Alias to const char*
             .put(new Info("c10::IValue", "at::IValue", "decltype(auto)").pointerTypes("IValue"))
             //             .put(new Info("c10::IValue::operator ==").skip()) // Possible name conflict with IValue.equals
+            .put(new Info("std::uint_least32_t").cast().valueTypes("int"))
             .put(new Info(
                 "std::size_t",
                 "c10::Dict<c10::IValue,c10::IValue>::size_type",
@@ -751,6 +752,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<c10::intrusive_ptr<c10::ivalue::Future> >").pointerTypes("FutureVector").define())
             .put(new Info("std::vector<c10::intrusive_ptr<c10::SymNodeImpl> >").pointerTypes("SymNodeVector").define())
             .put(new Info("std::vector<std::shared_ptr<::gloo::transport::Device> >").pointerTypes("GlooDeviceVector").define())
+            .put(new Info("const std::vector<c10::SafePyObject>", "std::vector<c10::SafePyObject>").pointerTypes("SafePyObjectVector").define())
         ;
 
 
@@ -1029,6 +1031,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             //.put(new Info("std::tuple<c10::intrusive_ptr<torch::distributed::rpc::Message>,std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > >").pointerTypes("T_MessageWeakStorage_T").define()) // Message not on Windows
             .put(new Info("std::tuple<std::vector<std::vector<size_t> >,std::vector<size_t> >").pointerTypes("T_SizeTVectorVectorSizeTVector_T").define())
             .put(new Info("std::tuple<std::shared_ptr<c10::impl::PyObject_TorchDispatchMode>,c10::impl::TorchDispatchModeKey>").pointerTypes("T_PyObject_TorchDispatchModeTorchDispatchModeKey_T").define())
+            .put(new Info("std::tuple<size_t,std::optional<size_t>,std::vector<size_t> >").pointerTypes("T_SizeTSizeTOptionalSizeTVector_T").define())
         ;
 
 
@@ -1132,6 +1135,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringPair").define())
             .put(new Info("std::pair<int,int>").pointerTypes("IntPair").define())
             .put(new Info("std::pair<size_t,size_t>").pointerTypes("SizeTPair").define())
+            .put(new Info("std::pair<unsigned long long,unsigned long long>", "std::pair<c10::CaptureId_t,c10::CaptureId_t>",
+                          "c10::MempoolId_t").pointerTypes("LongPair").define())
         ;
 
 

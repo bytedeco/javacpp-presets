@@ -104,7 +104,7 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
 
   public native void mtiagraphDestroy(@Cast("int64_t") long handle);
 
-  public native void mtiagraphCaptureBegin(@Cast("int64_t") long handle, @ByVal @Cast("c10::MempoolId_t*") T_TypePtrLong_T pool);
+  public native void mtiagraphCaptureBegin(@Cast("int64_t") long handle, @ByVal LongPair pool);
 
   public native void mtiagraphCaptureEnd(@Cast("int64_t") long handle);
 
@@ -114,9 +114,9 @@ public class MTIAHooksInterface extends AcceleratorHooksInterface {
 
   public native void mtiagraphReset(@Cast("int64_t") long handle);
 
-  public native @ByVal @Cast("c10::MempoolId_t*") T_TypePtrLong_T mtiagraphPool(@Cast("int64_t") long handle);
+  public native @ByVal LongPair mtiagraphPool(@Cast("int64_t") long handle);
 
-  public native @ByVal @Cast("c10::MempoolId_t*") T_TypePtrLong_T graphPoolHandle();
+  public native @ByVal LongPair graphPoolHandle();
 
   public native @Const @ByRef Generator getDefaultGenerator(@Cast("c10::DeviceIndex") byte arg0);
 

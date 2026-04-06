@@ -110,6 +110,11 @@ public class Stream extends Pointer {
   public native @Cast("c10::DeviceIndex") @NoException(true) byte device_index();
   public native @Cast("c10::StreamId") @NoException(true) long id();
 
+  // Returns an opaque, backend-specific handle to the underlying stream.
+  // The handle is non-owning and its concrete type is backend-defined
+  // (e.g., a CUDA stream or a SYCL queue).
+  public native Pointer native_handle();
+
   // Enqueues a wait instruction in the stream's work queue.
   // This instruction is a no-op unless the event is marked
   // for recording. In that case the stream stops processing

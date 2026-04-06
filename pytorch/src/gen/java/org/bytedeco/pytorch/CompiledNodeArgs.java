@@ -70,7 +70,8 @@ public class CompiledNodeArgs extends Pointer {
   public native void collect_pynode_objs(
         @Const Node pynode,
         @ByRef(true) SafePyObject bwd,
-        @ByRef(true) SafePyObjectOptional bwd_state);
+        @ByRef(true) SafePyObjectOptional bwd_state,
+        @ByRef(true) SafePyObjectVector opaque_objs);
 
   public native void add_tensor_pre_hook(@ByRef(true) SafePyObject obj, int index);
 

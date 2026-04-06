@@ -41,7 +41,8 @@ public class Reducer extends Pointer {
         @ByVal SizeTStringMap param_names,
         @Cast("int64_t") long first_bucket_bytes_cap,
         @Cast("bool") boolean skip_all_reduce_unused_params,
-        @Cast("bool") boolean use_python_reducer) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap, skip_all_reduce_unused_params, use_python_reducer); }
+        @Cast("bool") boolean use_python_reducer,
+        @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap, skip_all_reduce_unused_params, use_python_reducer, bucket_bytes_cap_list); }
   private native void allocate(
         @ByVal TensorVector params,
         @ByVal SizeTVectorVector bucket_indices,
@@ -53,7 +54,8 @@ public class Reducer extends Pointer {
         @ByVal SizeTStringMap param_names,
         @Cast("int64_t") long first_bucket_bytes_cap,
         @Cast("bool") boolean skip_all_reduce_unused_params,
-        @Cast("bool") boolean use_python_reducer);
+        @Cast("bool") boolean use_python_reducer,
+        @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list);
 
   // To (re-)initialize bucket assignment, pass a list of buckets, each of
   // which is specified by a list of indices in the bucket's `variables` list.

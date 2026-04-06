@@ -120,6 +120,8 @@ public class CUDAHooksInterface extends AcceleratorHooksInterface {
 
   public native long versionMIOpen();
 
+  public native long versionHipBLASLt();
+
   public native long versionCUDART();
 
   public native @StdString BytePointer showConfig();

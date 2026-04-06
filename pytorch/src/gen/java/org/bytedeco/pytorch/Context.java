@@ -91,6 +91,8 @@ public class Context extends Pointer {
 
   public static native @Cast("const at::cuda::NVRTC*") @ByRef Pointer getNVRTC();
 
+  public static native @Const @ByRef LevelZero getLevelZero();
+
   public static native @Cast("bool") boolean setFlushDenormal(@Cast("bool") boolean on);
 
   // NB: This method is *purely* whether or not a user requested
@@ -130,6 +132,9 @@ public class Context extends Pointer {
 
   public native void setSDPUseFlash(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledFlashSDP();
+
+  public native void setSDPUseFA3(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean userEnabledFA3SDP();
 
   public native void setSDPUseMemEfficient(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledMemEfficientSDP();
@@ -284,8 +289,10 @@ public class Context extends Pointer {
   public native void setQEngine(@ByVal QEngine e);
   public static native @Const @ByRef QEngineVector supportedQEngines();
   public static native @Cast("bool") boolean isXNNPACKAvailable();
-  public native void setCheckSparseTensorInvariants(@Cast("bool") boolean e);
-  public native @Cast("bool") boolean checkSparseTensorInvariants();
+  public native void setCheckSparseTensorInvariants(@ByVal BoolOptional e);
+  public native @ByVal BoolOptional checkSparseTensorInvariants(
+        @Cast("bool") boolean warn_when_uninitialized/*=false*/);
+  public native @ByVal BoolOptional checkSparseTensorInvariants();
   // This method is used to release the original weight after pre-packing.
   // It should be called once before loading/running the model.
   // NB: By default it is set to true for mobile builds.
