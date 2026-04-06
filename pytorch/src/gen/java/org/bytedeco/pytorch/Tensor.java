@@ -137,6 +137,8 @@ public class Tensor extends TensorBase {
 
   
   
+
+  // NOLINTNEXTLINE(performance-noexcept-move-constructor)
   
 
   

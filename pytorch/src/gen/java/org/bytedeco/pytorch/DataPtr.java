@@ -103,7 +103,8 @@ public class DataPtr extends Pointer {
   public native @ByVal Device device();
   // Unsafely mutates the device on a DataPtr.  Under normal use,
   // you should never actually need to call this function.
-  // We need this for the implementation of the hack detailed
-  // in Note [Masquerading as CUDA]
+  // We used to need this for the implementation of the hack detailed
+  // in Note [Masquerading as CUDA], but that hack has been removed.
+  // Other uses of this function now exist so it cannot be deprecated.
   public native void unsafe_set_device(@ByVal Device device);
 }

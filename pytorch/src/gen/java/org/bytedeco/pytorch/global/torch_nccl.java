@@ -258,9 +258,6 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 @Namespace("c10d") public static native @ByRef ScalaTypeDataTypeMap ncclDataType(); public static native void ncclDataType(ScalaTypeDataTypeMap setter);
 
 @Namespace("c10d") public static native @Cast("size_t") long hashTensors(@Const @ByRef TensorVector tensors);
-@Namespace("c10d") public static native int genNcclSplitColor(@StdVector IntPointer ranks);
-@Namespace("c10d") public static native int genNcclSplitColor(@StdVector IntBuffer ranks);
-@Namespace("c10d") public static native int genNcclSplitColor(@StdVector int[] ranks);
 
 @Namespace("c10d") public static native @ByVal T_IntIntInt_T getNcclVersionTuple();
 @Namespace("c10d") public static native int getNcclVersionNumber();

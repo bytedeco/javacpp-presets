@@ -78,7 +78,7 @@ public class Symbol extends Pointer {
   public native @Cast("bool") boolean is_dimname();
 
   // So we can switch on this
-  public native @Cast("c10::unique_t") @Name("operator c10::unique_t") int asInt();
+  public native @Cast("c10::unique_t") @Name("operator c10::unique_t") @NoException(true) int asInt();
 
   public native @ByVal Symbol ns();
 
