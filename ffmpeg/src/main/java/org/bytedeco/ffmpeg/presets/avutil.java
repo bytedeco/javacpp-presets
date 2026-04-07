@@ -89,7 +89,8 @@ public class avutil implements InfoMapper {
                              "FF_API_REORDERED_OPAQUE", "FF_API_FRAME_PICTURE_NUMBER", "FF_API_HDR_VIVID_THREE_SPLINE", "FF_API_FRAME_PKT",
                              "FF_API_INTERLACED_FRAME", "FF_API_FRAME_KEY", "FF_API_PALETTE_HAS_CHANGED", "FF_API_VULKAN_CONTIGUOUS_MEMORY",
                              "FF_API_H274_FILM_GRAIN_VCS", "FF_API_MOD_UINTP2", "FF_API_RISCV_FD_ZBA", "FF_API_VULKAN_FIXED_QUEUES",
-                             "FF_API_OPT_INT_LIST", "FF_API_OPT_PTR").define().translate().cppTypes("bool"))
+                             "FF_API_OPT_INT_LIST", "FF_API_OPT_PTR", "FF_API_CPU_FLAG_FORCE", "FF_API_DOVI_L11_INVALID_PROPS", "FF_API_ASSERT_FPU",
+                             "FF_API_VULKAN_SYNC_QUEUES").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
