@@ -47,7 +47,7 @@ public class avfilter implements InfoMapper {
                .put(new Info("LIBAVFILTER_VERSION").cppTypes())
                .put(new Info("LIBAVFILTER_VERSION_INT", "LIBAVFILTER_IDENT").translate(false))
                .put(new Info("FF_API_SWS_PARAM_OPTION", "FF_API_BUFFERSINK_ALLOC", "FF_API_PAD_COUNT", "FF_API_LIBPLACEBO_OPTS",
-                             "FF_API_LINK_PUBLIC", "FF_API_BUFFERSINK_OPTS", "FF_API_CONTEXT_PUBLIC").define().translate().cppTypes("bool"))
+                             "FF_API_LINK_PUBLIC", "FF_API_BUFFERSINK_OPTS", "FF_API_CONTEXT_PUBLIC", "FF_API_LIBNPP_SUPPORT").define().translate().cppTypes("bool"))
                .put(new Info("AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(true))
                .put(new Info("!FF_API_FOO_COUNT", "FF_INTERNAL_FIELDS").define(false));
     }

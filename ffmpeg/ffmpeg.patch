@@ -1,7 +1,6 @@
-diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
---- ffmpeg-8.0/configure	2025-08-22 18:24:23.000000000 +0900
-+++ ffmpeg-8.0-patch/configure	2025-08-25 00:18:04.652203941 +0900
-@@ -7017,7 +7017,7 @@
+--- ffmpeg-8.1/configure	2026-03-17 03:13:04.000000000 +0900
++++ ffmpeg-8.1-patch/configure	2026-04-08 11:10:29.980501821 +0900
+@@ -7232,7 +7232,7 @@
  enabled jni               && { [ $target_os = "android" ] && check_headers jni.h && enabled pthreads || die "ERROR: jni not found"; }
  enabled ladspa            && require_headers "ladspa.h dlfcn.h"
  enabled lcms2             && require_pkg_config lcms2 "lcms2 >= 2.13" lcms2.h cmsCreateContext
@@ -10,7 +9,7 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
  enabled liboapv           && require_pkg_config liboapv "oapv >= 0.2.0.0" "oapv/oapv.h" oapve_encode
  enabled libaribb24        && { check_pkg_config libaribb24 "aribb24 > 1.0.3" "aribb24/aribb24.h" arib_instance_new ||
                                 { enabled gpl && require_pkg_config libaribb24 aribb24 "aribb24/aribb24.h" arib_instance_new; } ||
-@@ -7046,7 +7046,7 @@
+@@ -7261,7 +7261,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
  enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
@@ -18,8 +17,8 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
 +enabled libfreetype       && add_cppflags -I ../include/freetype2/ && require libfreetype "ft2build.h FT_FREETYPE_H" FT_Init_FreeType -lfreetype
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
  enabled libharfbuzz       && require_pkg_config libharfbuzz harfbuzz hb.h hb_buffer_create
- enabled libglslang && { check_lib spirv_compiler glslang/Include/glslang_c_interface.h glslang_initialize_process \
-@@ -7078,15 +7078,7 @@
+ if enabled libglslang; then
+@@ -7297,15 +7297,7 @@
  # pkg-config support.  Instead, users should make sure that the build
  # can find the libraries and headers through other means.
  elif enabled libmfx; then
@@ -28,7 +27,7 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
 -#   includedir=/usr/include
 -#   Cflags: -I${includedir}
 -# So add -I${includedir}/mfx to CFLAGS
--      { check_pkg_config libmfx "libmfx >= 1.28 libmfx < 2.0" "mfx/mfxvideo.h" MFXInit && add_cflags -I${libmfx_incdir}/mfx; } ||
+-      { check_pkg_config libmfx "libmfx >= 1.28 libmfx < 2.0" "mfx/mfxvideo.h" MFXInit && add_cppflags -I${libmfx_incdir}/mfx; } ||
 -      { require libmfx "mfxvideo.h mfxdefs.h" MFXInit "-llibmfx $advapi32_extralibs" &&
 -        { test_cpp_condition mfxdefs.h "MFX_VERSION >= 1028 && MFX_VERSION < 2000" || die "ERROR: libmfx version must be >= 1.28 and < 2.0"; }  &&
 -        warn "using libmfx without pkg-config"; } } &&
@@ -36,10 +35,10 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
      warn "libmfx is deprecated. Please run configure with --enable-libvpl to use libvpl instead."
  elif enabled libvpl; then
  # Consider pkg-config only. The name of libmfx is still passed to check_pkg_config function for --enable-libvpl option
-@@ -7115,21 +7107,14 @@
-                                { check_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
-                                  require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
-                                require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
+@@ -7340,21 +7332,14 @@
+ enabled libopencv         && { check_pkg_config libopencv opencv4 opencv2/core/core_c.h cvCreateImageHeader ||
+                                require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; }
+ enabled libopencolorio    && require_pkg_config_cxx libopencolorio "OpenColorIO" OpenColorIO/OpenColorIO.h OCIO_NAMESPACE::Config
 -enabled libopenh264       && require_pkg_config libopenh264 "openh264 >= 1.3.0" wels/codec_api.h WelsGetCodecVersion
 +enabled libopenh264       && require libopenh264 wels/codec_api.h WelsGetCodecVersion -lopenh264 $pthreads_extralibs
  enabled libopenjpeg       && { check_pkg_config libopenjpeg "libopenjp2 >= 2.1.0" openjpeg.h opj_version ||
@@ -60,7 +59,7 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
  enabled libplacebo        && require_pkg_config libplacebo "libplacebo >= 5.229.0" libplacebo/vulkan.h pl_vulkan_create
  enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
  enabled libqrencode       && require_pkg_config libqrencode libqrencode qrencode.h QRcode_encodeString
-@@ -7147,9 +7132,9 @@
+@@ -7372,9 +7357,9 @@
  enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy -lstdc++
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh "libssh >= 0.6.0" libssh/sftp.h sftp_init
@@ -70,10 +69,10 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
 +enabled libspeex          && require libspeex speex/speex.h speex_decoder_init -lspeex
 +enabled libsrt            && require libsrt srt/srt.h srt_startup -lsrt -lcrypto -lssl
 +enabled libsvtav1         && require libsvtav1 EbSvtAv1Enc.h svt_av1_enc_init_handle -lSvtAv1Enc $pthreads_extralibs
+ enabled libsvtjpegxs      && require_pkg_config libsvtjpegxs "SvtJpegxs >= 0.10.0" SvtJpegxsEnc.h svt_jpeg_xs_encoder_init
  enabled libtensorflow     && require libtensorflow tensorflow/c/c_api.h TF_Version -ltensorflow
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
- enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
-@@ -7171,19 +7156,15 @@
+@@ -7399,19 +7384,15 @@
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -93,7 +92,7 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs $pthreads_extralibs"
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -7193,27 +7174,27 @@
+@@ -7421,15 +7402,15 @@
  
  enabled libvvenc          && require_pkg_config libvvenc "libvvenc >= 1.6.1" "vvenc/vvenc.h" vvenc_get_version
  enabled libwebp           && {
@@ -113,8 +112,9 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
                               require_cpp_condition libx265 x265.h "X265_BUILD >= 89"
  enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode "-lxavs $pthreads_extralibs $libm_extralibs"
  enabled libxavs2          && require_pkg_config libxavs2 "xavs2 >= 1.3.0" "stdint.h xavs2.h" xavs2_api_get
- enabled libxevd           && require_pkg_config libxevd "xevd >= 0.4.1" "xevd.h" xevd_decode
+@@ -7438,12 +7419,12 @@
  enabled libxeve           && require_pkg_config libxeve "xeve >= 0.5.1" "xeve.h" xeve_encode
+ enabled libxeveb          && require_pkg_config libxeveb "xeveb >= 0.5.1" "xeve.h" xeve_encode
  enabled libxvid           && require libxvid xvid.h xvid_global -lxvidcore
 -enabled libzimg           && require_pkg_config libzimg "zimg >= 2.7.0" zimg.h zimg_get_api_version
 +enabled libzimg           && require libzimg zimg.h zimg_get_api_version -lzimg
@@ -127,57 +127,50 @@ diff -ruN ffmpeg-8.0/configure ffmpeg-8.0-patch/configure
  enabled mbedtls           && { check_pkg_config mbedtls mbedtls mbedtls/x509_crt.h mbedtls_x509_crt_init ||
                                 check_pkg_config mbedtls mbedtls mbedtls/ssl.h mbedtls_ssl_init ||
                                 check_lib mbedtls mbedtls/ssl.h mbedtls_ssl_init -lmbedtls -lmbedx509 -lmbedcrypto ||
-@@ -7258,11 +7239,12 @@
+@@ -7489,13 +7470,14 @@
  enabled omx               && require_headers OMX_Core.h && \
      warn "The OpenMAX encoders are deprecated and will be removed in future versions"
  
--enabled openssl           && { { check_pkg_config openssl "openssl >= 3.0.0" openssl/ssl.h OPENSSL_init_ssl &&
+-enabled openssl           && { { check_pkg_config openssl "openssl >= 3.0.0" openssl/ssl.h DTLS_get_data_mtu &&
 -                                 { enabled gplv3 || ! enabled gpl || enabled nonfree || die "ERROR: OpenSSL >=3.0.0 requires --enable-version3"; }; } ||
 -                               { enabled gpl && ! enabled nonfree && die "ERROR: OpenSSL <3.0.0 is incompatible with the gpl"; } ||
--                               check_pkg_config openssl "openssl >= 1.1.0" openssl/ssl.h OPENSSL_init_ssl ||
+-                               check_pkg_config openssl "openssl >= 1.1.1" openssl/ssl.h DTLS_get_data_mtu ||
+-                               check_lib openssl openssl/ssl.h DTLS_get_data_mtu -lssl -lcrypto ||
+-                               check_lib openssl openssl/ssl.h DTLS_get_data_mtu -lssl -lcrypto -lws2_32 -lgdi32 ||
+-                               die "ERROR: openssl (>= 1.1.1) not found"; }
 +enabled openssl           && { 
 +                               check_pkg_config openssl openssl openssl/ssl.h OPENSSL_init_ssl ||
 +                               check_pkg_config openssl openssl openssl/ssl.h SSL_library_init ||
-                                check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto ||
++                               check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto ||
 +                               check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto $pthreads_extralibs ||
 +                               check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl32 -leay32 ||
-                                check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto -lws2_32 -lgdi32 ||
-                                die "ERROR: openssl (>= 1.1.0) not found"; }
++                               check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto -lws2_32 -lgdi32 ||
++                               die "ERROR: openssl (>= 1.1.0) not found"; }
  enabled pocketsphinx      && require_pkg_config pocketsphinx pocketsphinx pocketsphinx/pocketsphinx.h ps_init
-@@ -7273,15 +7255,6 @@
-                              }
- enabled vapoursynth       && require_headers "vapoursynth/VSScript4.h vapoursynth/VapourSynth4.h"
- 
--enabled openssl            && {
--    enabled whip_muxer && {
--        $pkg_config --exists --print-errors "openssl >= 1.0.1k" ||
--        require_pkg_config openssl "openssl >= 1.0.1k" openssl/ssl.h SSL_library_init ||
--        require_pkg_config openssl "openssl >= 1.0.1k" openssl/ssl.h OPENSSL_init_ssl
--    }
--}
--
--
- if enabled gcrypt; then
-     GCRYPT_CONFIG="${cross_prefix}libgcrypt-config"
-     if "${GCRYPT_CONFIG}" --version > /dev/null 2>&1; then
-@@ -7513,19 +7486,13 @@
- enabled vdpau &&
+ enabled rkmpp             && { require_pkg_config rkmpp "rockchip_mpp >= 1.3.8" "rockchip/rk_mpi.h rockchip/mpp_buffer.h" "mpp_create mpp_buffer_sync_begin_f" &&
+                                { enabled libdrm ||
+@@ -7735,10 +7717,7 @@
      check_lib vdpau_x11 "vdpau/vdpau.h vdpau/vdpau_x11.h" vdp_device_create_x11 -lvdpau -lX11
  
+ # Check for the Vulkan headers
 -if enabled_all vulkan vulkan_static; then
 -    check_pkg_config vulkan "vulkan >= 1.3.277" "vulkan/vulkan.h" "defined VK_VERSION_1_3" ||
 -        check_lib vulkan "vulkan/vulkan.h" vkGetInstanceProcAddr -lvulkan
 -elif enabled vulkan; then
 +if enabled vulkan; then
      check_pkg_config_header_only vulkan "vulkan >= 1.3.277" "vulkan/vulkan.h" "defined VK_VERSION_1_3" ||
-         check_cpp_condition vulkan "vulkan/vulkan.h" "defined(VK_VERSION_1_4) || (defined(VK_VERSION_1_3) && VK_HEADER_VERSION >= 277)"
+         check_cpp_condition vulkan "vulkan/vulkan.h" "defined(VK_VERSION_1_4) || (defined(VK_VERSION_1_3) && VK_HEADER_VERSION >= 277)" $vulkan_incflags
  fi
+@@ -7783,11 +7762,7 @@
+ }
  
- if disabled vulkan; then
-     disable libglslang libshaderc spirv_compiler
--else
+ if enabled vulkan; then
 -    check_pkg_config_header_only vulkan_1_4 "vulkan >= 1.4.317" "vulkan/vulkan.h" "defined VK_VERSION_1_4" ||
--        check_cpp_condition vulkan_1_4 "vulkan/vulkan.h" "defined(VK_VERSION_1_5) || (defined(VK_VERSION_1_4) && VK_HEADER_VERSION >= 317)"
+-        check_cpp_condition vulkan_1_4 "vulkan/vulkan.h" "defined(VK_VERSION_1_5) || (defined(VK_VERSION_1_4) && VK_HEADER_VERSION >= 317)" $vulkan_incflags
+-    for program in $glslc glslc glslang glslangValidator; do
+-        probe_glslc $program && break
+-    done
++    disable spirv_compiler
+ else
+     disable libglslang libshaderc spirv_library spirv_compiler
  fi
- 
- if enabled x86; then
