@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.31-1.5.14-SNAPSHOT</version>
+            <version>0.3.32-1.5.14-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

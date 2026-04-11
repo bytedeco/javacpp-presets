@@ -165,4 +165,6 @@ public class PyThreadState extends Pointer {
     */
     public native PyObject threading_local_sentinel(); public native PyThreadState threading_local_sentinel(PyObject setter);
     public native @ByRef _PyRemoteDebuggerSupport remote_debugger_support(); public native PyThreadState remote_debugger_support(_PyRemoteDebuggerSupport setter);
+
+    public native _PyStackChunk datastack_cached_chunk(); public native PyThreadState datastack_cached_chunk(_PyStackChunk setter);
 }

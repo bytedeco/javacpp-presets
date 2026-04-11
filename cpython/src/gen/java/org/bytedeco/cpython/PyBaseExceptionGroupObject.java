@@ -35,4 +35,5 @@ public class PyBaseExceptionGroupObject extends Pointer {
              public native @Cast("char") byte suppress_context(); public native PyBaseExceptionGroupObject suppress_context(byte setter);
     public native PyObject msg(); public native PyBaseExceptionGroupObject msg(PyObject setter);
     public native PyObject excs(); public native PyBaseExceptionGroupObject excs(PyObject setter);
+    public native PyObject excs_str(); public native PyBaseExceptionGroupObject excs_str(PyObject setter);
 }
