@@ -814,10 +814,16 @@ public class TensorImpl extends Pointer {
   // be ignored.
 
   /**
-   * One TensorImpl can be copied to another TensorImpl if they have the same
-   * DispatchKeySet. The only two special cases (for legacy reason) are:
-   * CPU is compatible with CUDA and SparseCPU is
-   * compatible with SparseCUDA.
+   * One TensorImpl can be copied to another TensorImpl if
+   * - They have the same DispatchKeySet.
+   * - Or both have DispatchKey::Dense and a supported dense backend
+   *   (CPU, CUDA, MPS, HIP, XPU, HPU, MTIA)
+   * - Or both have DispatchKey::Sparse and a supported sparse backend
+   *   (CPU, CUDA, MPS, HIP, XPU)
+   * - Or both have DispatchKey::SparseCsr
+   * For PrivateUse1 backend, user can implement their own
+   * {@code _has_compatible_shallow_copy_type} operator.
+   * See OpenRegMinimal.cpp for an example of overriding this operator.
    */
   public native @Cast("bool") boolean has_compatible_shallow_copy_type(@ByVal DispatchKeySet from);
   public native @IntrusivePtr("c10::TensorImpl") @Cast({"", "c10::intrusive_ptr<c10::TensorImpl>&"}) TensorImpl shallow_copy_and_detach(

@@ -41,7 +41,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.10.0
+PYTORCH_VERSION=2.11.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -190,6 +190,8 @@ case $PLATFORM in
         return 0
         ;;
 esac
+
+#sedinplace 's/,code=sm_.*)/,code=compute_60)/g' cmake/Modules_CUDA_fix/upstream/FindCUDA/select_compute_arch.cmake
 
 # work around issues with the build system
 sedinplace '/Werror/d' CMakeLists.txt third_party/fbgemm/CMakeLists.txt third_party/fmt/CMakeLists.txt

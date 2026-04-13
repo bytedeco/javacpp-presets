@@ -37,5 +37,5 @@ public class MempoolIdHash extends Pointer {
         return new MempoolIdHash((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("std::size_t") @Name("operator ()") @NoException(true) long apply(@Cast("const c10::MempoolId_t*") @ByRef T_TypePtrLong_T mempool_id);
+  public native @Cast("std::size_t") @Name("operator ()") @NoException(true) long apply(@Const @ByRef LongPair mempool_id);
 }

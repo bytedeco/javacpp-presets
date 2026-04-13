@@ -43,5 +43,5 @@ public class ArgumentSpec extends Pointer {
   public native @Const @ByRef ArgumentInfo tensorAt(@Cast("size_t") long i);
   public native @Cast("size_t") long numOptionals();
   public native @Cast("bool") boolean isPresent(@Cast("size_t") long i);
-  public native @Cast("size_t") @Name("hashCode") long _hashCode();
+  public native @Cast("size_t") @Name("hashCode") @NoException(true) long _hashCode();
 }

@@ -38,7 +38,7 @@ public class CacheKey extends Pointer {
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef CacheKey other);
 
-  public native @Cast("size_t") long hash();
+  public native @Cast("size_t") @NoException(true) long hash();
 
   public native @ByRef @Cast("std::type_index*") Pointer node_type(); public native CacheKey node_type(Pointer setter);
   public native @Cast("uint16_t") short key_size(); public native CacheKey key_size(short setter);

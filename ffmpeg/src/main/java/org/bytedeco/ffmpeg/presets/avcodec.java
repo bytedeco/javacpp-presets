@@ -58,7 +58,8 @@ public class avcodec implements InfoMapper {
                              "FF_API_AVCTX_FRAME_NUMBER", "FF_CODEC_CRYSTAL_HD", "FF_API_SLICE_OFFSET", "FF_API_SUBFRAMES", "FF_API_TICKS_PER_FRAME",
                              "FF_API_DROPCHANGED", "FF_API_AVFFT", "FF_API_FF_PROFILE_LEVEL", "FF_API_AVCODEC_CLOSE", "FF_API_BUFFER_MIN_SIZE",
                              "FF_API_VDPAU_ALLOC_GET_SET", "FF_API_QUALITY_FACTOR", "FF_API_V408_CODECID", "FF_API_CODEC_PROPS", "FF_API_EXR_GAMMA",
-                             "FF_API_NVDEC_OLD_PIX_FMTS", "FF_CODEC_OMX", "FF_CODEC_SONIC_ENC", "FF_CODEC_SONIC_DEC").define().translate().cppTypes("bool"))
+                             "FF_API_INTRA_DC_PRECISION", "FF_API_NVDEC_OLD_PIX_FMTS", "FF_API_PARSER_PRIVATE", "FF_API_PARSER_CODECID", "FF_CODEC_OMX",
+                             "FF_CODEC_SONIC_ENC", "FF_CODEC_SONIC_DEC").define().translate().cppTypes("bool"))
                .put(new Info("AVCodecInternal", "AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
                .put(new Info("av_jni_get_android_app_ctx").annotations("@Platform(\"android\")").javaNames("av_jni_get_android_app_ctx"))
                .put(new Info("av_jni_set_android_app_ctx").annotations("@Platform(\"android\")").javaNames("av_jni_set_android_app_ctx"))

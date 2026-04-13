@@ -75,6 +75,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../WeakStorageVector.java
 
 
+// Targeting ../SafePyObjectVector.java
+
+
 // Targeting ../StringTensorDictItemVector.java
 
 
@@ -270,6 +273,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../SizeTPair.java
 
 
+// Targeting ../LongPair.java
+
+
 // Targeting ../T_DataPtrSizeT_T.java
 
 
@@ -340,6 +346,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../T_PyObject_TorchDispatchModeTorchDispatchModeKey_T.java
+
+
+// Targeting ../T_SizeTSizeTOptionalSizeTVector_T.java
 
 
 // Targeting ../NodeNodeCallMap.java
@@ -846,14 +855,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #else
 // #define TORCH_CUDA_CPP_API C10_IMPORT
 // #define TORCH_CUDA_CU_API C10_IMPORT
-// #endif
-
-// #if defined(TORCH_HIP_BUILD_MAIN_LIB)
-// #define TORCH_HIP_CPP_API C10_EXPORT
-// #define TORCH_HIP_API C10_EXPORT
-// #else
-// #define TORCH_HIP_CPP_API C10_IMPORT
-// #define TORCH_HIP_API C10_IMPORT
 // #endif
 
 // #if defined(TORCH_XPU_BUILD_MAIN_LIB)
@@ -4112,13 +4113,16 @@ public static final int C10_X86_F16 = 1;
 // #define FATAL_IF(condition)
 //   condition ? (void)0
 //             : ::c10::LoggerVoidify() &
-//           ::c10::MessageLogger(__FILE__, __LINE__, ::google::GLOG_FATAL)
+//           ::c10::MessageLogger(
+//               ::c10::SourceLocation::current(), ::google::GLOG_FATAL)
 //               .stream()
 // #else
 // #define FATAL_IF(condition)
 //   condition ? (void)0
 //             : ::c10::LoggerVoidify() &
-//           ::c10::MessageLogger(__FILE__, __LINE__, ::c10::GLOG_FATAL).stream()
+//           ::c10::MessageLogger(
+//               ::c10::SourceLocation::current(), ::c10::GLOG_FATAL)
+//               .stream()
 // #endif
 // #endif
 
@@ -4128,13 +4132,14 @@ public static final int C10_X86_F16 = 1;
 //   condition ? (void)0
 //             : ::c10::LoggerVoidify() &
 //           ::c10::MessageLogger(
-//               __FILE__, __LINE__, ::google::GLOG_FATAL, false)
+//               ::c10::SourceLocation::current(), ::google::GLOG_FATAL, false)
 //               .stream()
 // #else
 // #define NON_FATAL_IF(condition)
 //   condition ? (void)0
 //             : ::c10::LoggerVoidify() &
-//           ::c10::MessageLogger(__FILE__, __LINE__, ::c10::GLOG_FATAL, false)
+//           ::c10::MessageLogger(
+//               ::c10::SourceLocation::current(), ::c10::GLOG_FATAL, false)
 //               .stream()
 // #endif
 // #endif
@@ -6144,6 +6149,12 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 @Namespace("c10_complex_math") public static native @ByVal @Name("pow<double>") DoubleComplex pow(
     @Const @ByRef DoubleComplex x,
     @Const @ByRef DoubleComplex y);
+
+// Regression in ROCm 7.2. See https://github.com/ROCm/rocm-libraries/pull/3836.
+// Specialized version for complex<float> on AMD GPUs to use FMA-based
+// multiplication
+// #if defined(__HIPCC__)
+// #endif
 
 @Namespace("c10_complex_math") public static native @ByVal @Name("pow<float>") FloatComplex pow(
     @Const @ByRef FloatComplex x,
@@ -18038,10 +18049,11 @@ public static final byte min_lookups = min_lookups();
         needs_fixed_stride_order(10),
         nondeterministic_bitwise(11),
         nondeterministic_seeded(12),
-        pointwise(13),
-        pt2_compliant_tag(14),
-        reduction(15),
-        view_copy(16);
+        out_variant(13),
+        pointwise(14),
+        pt2_compliant_tag(15),
+        reduction(16),
+        view_copy(17);
 
         public final int value;
         private Tag(int v) { this.value = v; }
@@ -18425,7 +18437,7 @@ public static final byte min_lookups = min_lookups();
 //   static const torch::detail::TorchLibraryInit TORCH_LIBRARY_static_init_##ns(
 //       torch::Library::DEF,
 //       &TORCH_LIBRARY_init_##ns,
-//       #ns,
+//       C10_STRINGIZE(ns),
 //       std::nullopt,
 //       __FILE__,
 //       __LINE__);
@@ -18464,7 +18476,7 @@ public static final byte min_lookups = min_lookups();
 //       TORCH_LIBRARY_FRAGMENT_static_init_##ns##_, uid)(
 //       torch::Library::FRAGMENT,
 //       &C10_CONCATENATE(TORCH_LIBRARY_FRAGMENT_init_##ns##_, uid),
-//       #ns,
+//       C10_STRINGIZE(ns),
 //       std::nullopt,
 //       __FILE__,
 //       __LINE__);
@@ -18528,7 +18540,7 @@ public static final byte min_lookups = min_lookups();
 //       TORCH_LIBRARY_IMPL_static_init_##ns##_##k##_, uid)(
 //       torch::Library::IMPL,
 //       &C10_CONCATENATE(TORCH_LIBRARY_IMPL_init_##ns##_##k##_, uid),
-//       #ns,
+//       C10_STRINGIZE(ns),
 //       std::make_optional(c10::DispatchKey::k),
 //       __FILE__,
 //       __LINE__);
@@ -19458,6 +19470,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/Registry.h>
 
 // #include <ATen/detail/AcceleratorHooksInterface.h>
+// Targeting ../LevelZero.java
+
+
+
 // Targeting ../XPUHooksInterface.java
 
 
@@ -60557,6 +60573,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_foreach_neg.h>
 // #include <ATen/ops/_foreach_norm.h>
 // #include <ATen/ops/_foreach_pow.h>
+// #include <ATen/ops/_foreach_powsum.h>
 // #include <ATen/ops/_foreach_reciprocal.h>
 // #include <ATen/ops/_foreach_round.h>
 // #include <ATen/ops/_foreach_rsqrt.h>
@@ -60802,6 +60819,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_upsample_nearest_exact3d_backward.h>
 // #include <ATen/ops/_use_cudnn_ctc_loss.h>
 // #include <ATen/ops/_use_cudnn_rnn_flatten_weight.h>
+// #include <ATen/ops/_use_miopen_ctc_loss.h>
 // #include <ATen/ops/_validate_compressed_sparse_indices.h>
 // #include <ATen/ops/_validate_sparse_bsc_tensor_args.h>
 // #include <ATen/ops/_validate_sparse_bsr_tensor_args.h>
@@ -61219,6 +61237,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/lift.h>
 // #include <ATen/ops/lift_fresh.h>
 // #include <ATen/ops/lift_fresh_copy.h>
+// #include <ATen/ops/linalg__powsum.h>
 // #include <ATen/ops/linalg_cholesky.h>
 // #include <ATen/ops/linalg_cholesky_ex.h>
 // #include <ATen/ops/linalg_cond.h>
@@ -61329,6 +61348,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/miopen_convolution_add_relu.h>
 // #include <ATen/ops/miopen_convolution_relu.h>
 // #include <ATen/ops/miopen_convolution_transpose.h>
+// #include <ATen/ops/miopen_ctc_loss.h>
 // #include <ATen/ops/miopen_depthwise_convolution.h>
 // #include <ATen/ops/miopen_rnn.h>
 // #include <ATen/ops/miopen_rnn_backward.h>
@@ -64000,6 +64020,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_foreach_neg_native.h>
 // #include <ATen/ops/_foreach_norm_native.h>
 // #include <ATen/ops/_foreach_pow_native.h>
+// #include <ATen/ops/_foreach_powsum_native.h>
 // #include <ATen/ops/_foreach_reciprocal_native.h>
 // #include <ATen/ops/_foreach_round_native.h>
 // #include <ATen/ops/_foreach_rsqrt_native.h>
@@ -64245,6 +64266,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_upsample_nearest_exact3d_backward_native.h>
 // #include <ATen/ops/_use_cudnn_ctc_loss_native.h>
 // #include <ATen/ops/_use_cudnn_rnn_flatten_weight_native.h>
+// #include <ATen/ops/_use_miopen_ctc_loss_native.h>
 // #include <ATen/ops/_validate_compressed_sparse_indices_native.h>
 // #include <ATen/ops/_validate_sparse_bsc_tensor_args_native.h>
 // #include <ATen/ops/_validate_sparse_bsr_tensor_args_native.h>
@@ -64662,6 +64684,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/lift_native.h>
 // #include <ATen/ops/lift_fresh_native.h>
 // #include <ATen/ops/lift_fresh_copy_native.h>
+// #include <ATen/ops/linalg__powsum_native.h>
 // #include <ATen/ops/linalg_cholesky_native.h>
 // #include <ATen/ops/linalg_cholesky_ex_native.h>
 // #include <ATen/ops/linalg_cond_native.h>
@@ -64772,6 +64795,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/miopen_convolution_add_relu_native.h>
 // #include <ATen/ops/miopen_convolution_relu_native.h>
 // #include <ATen/ops/miopen_convolution_transpose_native.h>
+// #include <ATen/ops/miopen_ctc_loss_native.h>
 // #include <ATen/ops/miopen_depthwise_convolution_native.h>
 // #include <ATen/ops/miopen_rnn_native.h>
 // #include <ATen/ops/miopen_rnn_backward_native.h>
@@ -80023,8 +80047,7 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
 
 
- // namespace serialize
- // namespace caffe2
+ // namespace caffe2::serialize
 
 
 // Parsed from caffe2/serialize/istream_adapter.h
@@ -80039,8 +80062,7 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
 
 
- // namespace serialize
- // namespace caffe2
+ // namespace caffe2::serialize
 
 
 // Parsed from caffe2/serialize/versions.h
@@ -80173,8 +80195,7 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 @Namespace("caffe2::serialize") @MemberGetter public static native @Cast("const uint64_t") long kMinSupportedBytecodeVersion();
 @Namespace("caffe2::serialize") @MemberGetter public static native @Cast("const uint64_t") long kMaxSupportedBytecodeVersion();
 
- // namespace serialize
- // namespace caffe2
+ // namespace caffe2::serialize
 
 
 // Parsed from torch/csrc/jit/serialization/unpickler.h
@@ -80751,8 +80772,7 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace detail
 
- // namespace serialize
- // namespace caffe2
+ // namespace caffe2::serialize
 
 
 // Parsed from torch/csrc/jit/serialization/import.h

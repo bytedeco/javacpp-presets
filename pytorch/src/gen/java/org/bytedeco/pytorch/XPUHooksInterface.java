@@ -17,6 +17,7 @@ import org.bytedeco.javacpp.chrono.*;
 import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
+ // namespace xpu
 
 
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
@@ -67,4 +68,6 @@ public class XPUHooksInterface extends AcceleratorHooksInterface {
   public native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
 
   public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
+
+  public native @Const @ByRef LevelZero level_zero();
 }

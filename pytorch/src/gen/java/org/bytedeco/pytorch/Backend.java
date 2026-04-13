@@ -54,6 +54,8 @@ public class Backend extends CustomClassHolder {
             @StdString String backend) { super((Pointer)null); allocate(backend); }
     @IntrusivePtr @Name("c10::make_intrusive<c10d::Backend::Options>") private native void allocate(
             @StdString String backend);
+    public Options(@Const @ByRef Options arg0) { super((Pointer)null); allocate(arg0); }
+    @IntrusivePtr @Name("c10::make_intrusive<c10d::Backend::Options>") private native void allocate(@Const @ByRef Options arg0);
 
     public native @ByRef Milliseconds timeout(); public native Options timeout(Milliseconds setter);
 
@@ -61,6 +63,7 @@ public class Backend extends CustomClassHolder {
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     @MemberGetter public native @StdString BytePointer backend();
     public native @StdString BytePointer group_name(); public native Options group_name(BytePointer setter);
+    public native @StdString BytePointer group_desc(); public native Options group_desc(BytePointer setter);
     public native @Cast("uint64_t*") @StdVector LongPointer global_ranks_in_group(); public native Options global_ranks_in_group(LongPointer setter);
   }
 

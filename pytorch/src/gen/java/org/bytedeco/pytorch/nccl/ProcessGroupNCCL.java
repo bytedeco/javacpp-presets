@@ -245,6 +245,10 @@ public class ProcessGroupNCCL extends Backend {
     @IntrusivePtr @Name("c10::make_intrusive<c10d::ProcessGroupNCCL::Options>") private native void allocate(@Cast("bool") boolean is_high_priority_stream/*=false*/);
     public Options() { super((Pointer)null); allocate(); }
     @IntrusivePtr @Name("c10::make_intrusive<c10d::ProcessGroupNCCL::Options>") private native void allocate();
+    public Options(@Const @ByRef Options arg0) { super((Pointer)null); allocate(arg0); }
+    @IntrusivePtr @Name("c10::make_intrusive<c10d::ProcessGroupNCCL::Options>") private native void allocate(@Const @ByRef Options arg0);
+    
+    
 
     // return intrusive_ptr of the object
     public static native @IntrusivePtr("c10d::ProcessGroupNCCL::Options") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroupNCCL::Options>&"}) Options create(

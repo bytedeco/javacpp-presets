@@ -117,6 +117,15 @@ public class DeviceGuardImplInterface extends Pointer {
   public native @ByVal Stream exchangeStream(@ByVal Stream arg0);
 
   /**
+   * Returns a backend-specific, opaque native handle associated with the given
+   * stream.
+   *
+   * The returned pointer is owned and managed by PyTorch. Callers must not
+   * modify or free it.
+   */
+  public native Pointer getStreamNativeHandle(@Const @ByVal Stream arg0);
+
+  /**
    * Destroys the given event.
    */
   public native @NoException(true) void destroyEvent(Pointer arg0, @Cast("const c10::DeviceIndex") byte arg1);
