@@ -16,6 +16,7 @@ env:
   CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
   CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
   STAGING_REPOSITORY: ${{ secrets.STAGING_REPOSITORY }}
+  CI_DEPLOY_KEEP_M2_SNAPSHOTS: 1
 jobs:
   linux-x86_64:
     runs-on: ubuntu-22.04

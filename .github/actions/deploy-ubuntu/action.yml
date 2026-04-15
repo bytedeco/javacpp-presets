@@ -362,4 +362,6 @@ runs:
       shell: bash
       run: |
         cd $HOME
-        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+        if [[ -z ${CI_DEPLOY_KEEP_M2_SNAPSHOTS:-} ]]; then
+          rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+        fi
