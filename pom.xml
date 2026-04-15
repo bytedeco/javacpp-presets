@@ -629,6 +629,7 @@
         <module>depthai</module>
         <module>onnx</module>
         <module>ngraph</module>
+        <module>openvino</module>
         <module>onnxruntime</module>
         <module>tvm</module>
         <module>bullet</module>
