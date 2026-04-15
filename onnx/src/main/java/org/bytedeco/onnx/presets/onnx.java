@@ -161,8 +161,10 @@ public class onnx implements InfoMapper {
                              "onnx::_ShardedDimProto_default_instance_", "onnx::_ShardingSpecProto_default_instance_", "onnx::_SimpleShardedDimProto_default_instance_").skip())
 
                .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("onnx::DataTypeSet").pointerTypes("DataTypeSet").define())
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
                .put(new Info("onnx::OpSchema::FormalParameter").pointerTypes("OpSchema.FormalParameter"))
+               .put(new Info("onnx::OpSchema::FormalParameter::FormalParameter", "onnx::OpSchema::SetDoc").skip())
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))
 
                .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringStringPair").define())
