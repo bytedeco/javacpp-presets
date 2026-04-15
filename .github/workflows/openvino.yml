@@ -21,32 +21,48 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - name: Collect Linux build artifacts from Maven local repository
+        if: always()
+        shell: bash
+        run: |
+          VERSION=2025.4.1-1.5.14-SNAPSHOT
+          SRC="$HOME/.m2/repository/org/bytedeco/openvino/$VERSION"
+          DST="$GITHUB_WORKSPACE/openvino-artifacts/linux-x86_64"
+          mkdir -p "$DST"
+          cp -v "$SRC"/*.jar "$DST"/ || true
+          cp -v "$SRC"/*.pom "$DST"/ || true
+          cp -v openvino/pom.xml openvino/platform/pom.xml "$DST"/
+          ls -lah "$DST"
       - name: Upload Linux build artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: openvino-linux-x86_64-jars-and-poms
           if-no-files-found: warn
-          path: |
-            openvino/target/*.jar
-            openvino/platform/target/*.jar
-            openvino/pom.xml
-            openvino/platform/pom.xml
+          path: openvino-artifacts/linux-x86_64/**
   windows-x86_64:
     runs-on: windows-2022
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+      - name: Collect Windows build artifacts from Maven local repository
+        if: always()
+        shell: powershell
+        run: |
+          $version = "2025.4.1-1.5.14-SNAPSHOT"
+          $src = "$env:USERPROFILE\\.m2\\repository\\org\\bytedeco\\openvino\\$version"
+          $dst = "$env:GITHUB_WORKSPACE\\openvino-artifacts\\windows-x86_64"
+          New-Item -ItemType Directory -Force -Path $dst | Out-Null
+          Copy-Item "$src\\*.jar" $dst -ErrorAction SilentlyContinue
+          Copy-Item "$src\\*.pom" $dst -ErrorAction SilentlyContinue
+          Copy-Item "openvino\\pom.xml","openvino\\platform\\pom.xml" $dst -ErrorAction SilentlyContinue
+          Get-ChildItem $dst
       - name: Upload Windows build artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: openvino-windows-x86_64-jars-and-poms
           if-no-files-found: warn
-          path: |
-            openvino/target/*.jar
-            openvino/platform/target/*.jar
-            openvino/pom.xml
-            openvino/platform/pom.xml
+          path: openvino-artifacts/windows-x86_64/**
   platform:
     needs: [linux-x86_64, windows-x86_64]
     runs-on: ubuntu-22.04
