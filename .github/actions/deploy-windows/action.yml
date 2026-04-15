@@ -368,6 +368,4 @@ runs:
           set "PATH=C:\hostedtoolcache\windows\Python\3.10.11\x64;C:\msys64\usr\bin;%PATH%"
         )
 
-        if "%CI_DEPLOY_KEEP_M2_SNAPSHOTS%"=="" (
-          bash -c "rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')"
-        )
+        bash -c "rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')"
