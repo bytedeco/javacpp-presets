@@ -21,10 +21,32 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - name: Upload Linux build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openvino-linux-x86_64-jars-and-poms
+          if-no-files-found: warn
+          path: |
+            openvino/target/*.jar
+            openvino/platform/target/*.jar
+            openvino/pom.xml
+            openvino/platform/pom.xml
   windows-x86_64:
     runs-on: windows-2022
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+      - name: Upload Windows build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openvino-windows-x86_64-jars-and-poms
+          if-no-files-found: warn
+          path: |
+            openvino/target/*.jar
+            openvino/platform/target/*.jar
+            openvino/pom.xml
+            openvino/platform/pom.xml
   platform:
     needs: [linux-x86_64, windows-x86_64]
     runs-on: ubuntu-22.04
