@@ -113,7 +113,7 @@ public class onnx implements InfoMapper {
                              "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
                              "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer",
                              "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass", "onnx::optimization::ImmutablePass",
-                             "onnx::OpSchema::SetDoc", "TableStruct_onnx_2fonnx_2ddata_2eproto", "TableStruct_onnx_2fonnx_2dml_2eproto", "TableStruct_onnx_2fonnx_2doperators_2dml_2eproto",
+                             "TableStruct_onnx_2fonnx_2ddata_2eproto", "TableStruct_onnx_2fonnx_2dml_2eproto", "TableStruct_onnx_2fonnx_2doperators_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2doperators_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2ddata_2eproto").skip())
@@ -161,10 +161,10 @@ public class onnx implements InfoMapper {
                              "onnx::_ShardedDimProto_default_instance_", "onnx::_ShardingSpecProto_default_instance_", "onnx::_SimpleShardedDimProto_default_instance_").skip())
 
                .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("onnx::DataTypeSet").pointerTypes("DataTypeSet").define())
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
                .put(new Info("onnx::OpSchema::FormalParameter").pointerTypes("OpSchema.FormalParameter"))
-               .put(new Info("onnx::DataTypeSet").pointerTypes("DataTypeSet").define())
-               .put(new Info("onnx::OpSchema::FormalParameter::FormalParameter").skip())
+               .put(new Info("onnx::OpSchema::FormalParameter::FormalParameter", "onnx::OpSchema::SetDoc").skip())
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))
 
                .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringStringPair").define())

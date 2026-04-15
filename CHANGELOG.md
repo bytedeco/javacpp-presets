@@ -1,9 +1,9 @@
+
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
- * Upgrade presets for FFmpeg 8.1, OpenBLAS 0.3.32, CPython 3.14.4, NumPy 2.4.4, SciPy 1.17.1, LLVM 22.1.1, PyTorch 2.11.0, TensorFlow Lite 2.21.0, and their dependencies
+ * Upgrade presets for FFmpeg 8.1, OpenBLAS 0.3.32, CPython 3.14.4, NumPy 2.4.4, SciPy 1.17.1, LLVM 22.1.1, PyTorch 2.11.0, TensorFlow Lite 2.21.0, ONNX 1.21.0, ONNX Runtime 1.24.4 ([pull #1750](https://github.com/bytedeco/javacpp-presets/pull/1750)), and their dependencies
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
- * Upgrade presets for ONNX Runtime 1.24.4
 
 ### February 22, 2026 version 1.5.13
  * Ensure ONNX Runtime libraries get linked with `-z noexecstack` on Linux ([issue #1715](https://github.com/bytedeco/javacpp-presets/issues/1715))
@@ -26,7 +26,7 @@
  * Introduce CUDA-enabled `linux-arm64-gpu` builds to presets for OpenCV ([pull #1651](https://github.com/bytedeco/javacpp-presets/pull/1651))
  * Reenable again `linux-arm64` builds for CPython and NumPy ([pull #1652](https://github.com/bytedeco/javacpp-presets/pull/1652))
  * Bundle libraries for VA-API 2.x with FFmpeg to avoid loading issues ([issue bytedeco/javacv#2340](https://github.com/bytedeco/javacv/issues/2340))
- * Upgrade presets for OpenCV 4.13.0, FFmpeg 8.0.1, MKL 2025.3.1, DNNL 3.11, OpenBLAS 0.3.31, CUDA 13.1.1, cuDNN 9.19.0.56, NCCL 2.29.3, nvCOMP 5.1.0.21, NVIDIA Video Codec SDK 13.0.37, CPython 3.14.3, NumPy 2.4.2, SciPy 1.17.0, LLVM 21.1.8, libffi 3.5.2, Leptonica 1.87.0, Tesseract 5.5.2, PyTorch 2.10.0, SentencePiece 0.2.1, TensorFlow Lite 2.20.0, TensorRT 10.15.1.29, Triton Inference Server 2.65.0, ONNX 1.21.0, ONNX Runtime 1.24.1, and their dependencies
+ * Upgrade presets for OpenCV 4.13.0, FFmpeg 8.0.1, MKL 2025.3.1, DNNL 3.11, OpenBLAS 0.3.31, CUDA 13.1.1, cuDNN 9.19.0.56, NCCL 2.29.3, nvCOMP 5.1.0.21, NVIDIA Video Codec SDK 13.0.37, CPython 3.14.3, NumPy 2.4.2, SciPy 1.17.0, LLVM 21.1.8, libffi 3.5.2, Leptonica 1.87.0, Tesseract 5.5.2, PyTorch 2.10.0, SentencePiece 0.2.1, TensorFlow Lite 2.20.0, TensorRT 10.15.1.29, Triton Inference Server 2.65.0, ONNX 1.20.1, ONNX Runtime 1.24.1, and their dependencies
 
 ### June 30, 2025 version 1.5.12
  * Add presets for the CUFILE module of CUDA
