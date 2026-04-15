@@ -2,7 +2,7 @@
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
- * Upgrade presets for FFmpeg 8.1, OpenBLAS 0.3.32, CPython 3.14.4, NumPy 2.4.4, SciPy 1.17.1, LLVM 22.1.1, PyTorch 2.11.0, TensorFlow Lite 2.21.0, and their dependencies
+ * Upgrade presets for FFmpeg 8.1, OpenBLAS 0.3.32, CPython 3.14.4, NumPy 2.4.4, SciPy 1.17.1, LLVM 22.1.1, PyTorch 2.11.0, TensorFlow Lite 2.21.0, ONNX 1.21.0, ONNX Runtime 1.24.4 ([pull #1750](https://github.com/bytedeco/javacpp-presets/pull/1750)), and their dependencies
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
 
 ### February 22, 2026 version 1.5.13
