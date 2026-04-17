@@ -1,8 +1,12 @@
 JavaCPP Presets
 ===============
 
-[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/)  
-<sup>Build status for all platforms (Android, iOS, Linux, Mac OS X, Windows):</sup>
+[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp)
+![Maven Central Version](https://img.shields.io/maven-central/v/org.bytedeco/javacpp-presets?label=maven-central%20%28javacpp-presets%29)
+![Maven Central Version (Snapshots)](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Forg%2Fbytedeco%2Fjavacpp-presets%2Fmaven-metadata.xml&label=maven-central-snapshot%20%28javacpp-presets%29)
+![Maven Central Version](https://img.shields.io/maven-central/v/org.bytedeco/javacpp-presets-platform?label=maven-central%20%28javacpp-presets-platform%29)
+![Maven Central Version (Snapshots)](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Forg%2Fbytedeco%2Fjavacpp-presets-platform%2Fmaven-metadata.xml&label=maven-central-snapshot%20%28javacpp-presets-platform%29)
+
 [![opencv](https://github.com/bytedeco/javacpp-presets/workflows/opencv/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencv)
 [![ffmpeg](https://github.com/bytedeco/javacpp-presets/workflows/ffmpeg/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Affmpeg)
 [![flycapture](https://github.com/bytedeco/javacpp-presets/workflows/flycapture/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aflycapture)
@@ -63,7 +67,6 @@ JavaCPP Presets
 [![cpu_features](https://github.com/bytedeco/javacpp-presets/workflows/cpu_features/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acpu_features)
 [![modsecurity](https://github.com/bytedeco/javacpp-presets/workflows/modsecurity/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amodsecurity)
 [![systems](https://github.com/bytedeco/javacpp-presets/workflows/systems/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asystems)  
-<sup>Commercial support and paid services for custom presets:</sup> [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/bytedeco/javacpp-presets)
 
 Introduction
 ------------
