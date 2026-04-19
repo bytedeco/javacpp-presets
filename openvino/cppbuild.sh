@@ -17,11 +17,12 @@ INSTALL_PATH=`pwd`
 mkdir -p include lib bin
 
 extract_openvino_archive() {
-    local archive_name=$1
+    local archive_platform=$1
+    local archive_name=$2
     local archive_dir
 
     find . -maxdepth 1 -type d -name "openvino_toolkit_*" -exec rm -rf {} \;
-    download "${OPENVINO_PACKAGES_URL}/${archive_name}" "${archive_name}"
+    download "${OPENVINO_PACKAGES_URL}/${archive_platform}/${archive_name}" "${archive_name}"
 
     case "$archive_name" in
         *.zip)
@@ -59,14 +60,14 @@ extract_openvino_archive() {
 
 case $PLATFORM in
     linux-x86_64)
-        extract_openvino_archive openvino_toolkit_ubuntu22_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.tgz
+        extract_openvino_archive linux openvino_toolkit_ubuntu22_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.tgz
         pushd lib
         ln -sf $(ls libopenvino.so.* | head -n 1) libopenvino.so
         ln -sf $(ls libopenvino_c.so.* | head -n 1) libopenvino_c.so
         popd
         ;;
     windows-x86_64)
-        extract_openvino_archive openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
+        extract_openvino_archive windows openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
