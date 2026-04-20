@@ -2254,7 +2254,7 @@ index 0000000000..8e7e241e36
 +static int v4l2_request_post_process(void *logctx, AVFrame *frame)
 +{
 +    V4L2RequestFrameDescriptor *desc = v4l2_request_framedesc(frame);
-+    FrameDecodeData *fdd = (FrameDecodeData*)frame->private_ref->data;
++    FrameDecodeData *fdd = (FrameDecodeData*)frame->private_ref;
 +    V4L2RequestContext *ctx = fdd->hwaccel_priv;
 +
 +    // Wait on capture buffer before returning the frame to application
@@ -2279,7 +2279,7 @@ index 0000000000..8e7e241e36
 +{
 +    V4L2RequestContext *ctx = v4l2_request_context(avctx);
 +    V4L2RequestFrameDescriptor *desc = v4l2_request_framedesc(frame);
-+    FrameDecodeData *fdd = (FrameDecodeData*)frame->private_ref->data;
++    FrameDecodeData *fdd = (FrameDecodeData*)frame->private_ref;
 +    int ret;
 +
 +    // Get next output buffer from circular queue
