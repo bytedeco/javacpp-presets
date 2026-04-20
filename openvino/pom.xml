@@ -37,6 +37,25 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/lib/intel64/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/lib/intel64/Release/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/lib/intel64/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/3rdparty/tbb/lib/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/bin/intel64/Release/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/3rdparty/tbb/bin/</preloadPath>
+          </preloadPaths>
+          <resourcePaths>
+            <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
+          </resourcePaths>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

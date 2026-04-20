@@ -41,8 +41,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             include = {
                 "openvino/c/openvino.h"
             },
-            link = {"openvino_c", "openvino"},
-            preloadpath = {"lib/tbb/"},
+            link = {"openvino_c@.2541", "openvino@.2541"},
+            preloadresource = {
+                "openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/lib/intel64/",
+                "openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/3rdparty/tbb/lib/"
+            },
             preload = {
                 "openvino_auto_batch_plugin",
                 "openvino_auto_plugin",
@@ -50,15 +53,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino_intel_cpu_plugin",
                 "openvino_intel_gpu_plugin",
                 "openvino_intel_npu_plugin",
-                "openvino_ir_frontend",
-                "openvino_onnx_frontend",
-                "openvino_paddle_frontend",
-                "openvino_pytorch_frontend",
-                "openvino_tensorflow_frontend",
-                "openvino_tensorflow_lite_frontend",
+                "openvino_ir_frontend@.2541",
+                "openvino_onnx_frontend@.2541",
+                "openvino_paddle_frontend@.2541",
+                "openvino_pytorch_frontend@.2541",
+                "openvino_tensorflow_frontend@.2541",
+                "openvino_tensorflow_lite_frontend@.2541",
                 "tbb@.12"
             },
-            resource = {"include", "lib"}
+            resource = {"openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime"}
         ),
         @Platform(
             value = {"windows-x86_64"},
@@ -66,7 +69,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino/c/openvino.h"
             },
             link = {"openvino_c", "openvino"},
-            preloadpath = {"bin/tbb/"},
+            preloadresource = {
+                "openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/bin/intel64/Release/",
+                "openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/3rdparty/tbb/bin/"
+            },
             preload = {
                 "openvino_auto_batch_plugin",
                 "openvino_auto_plugin",
@@ -82,7 +88,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino_tensorflow_lite_frontend",
                 "tbb12"
             },
-            resource = {"include", "lib", "bin"}
+            resource = {"openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime"}
         ),
     },
     target = "org.bytedeco.openvino",
