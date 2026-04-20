@@ -31,7 +31,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: ./.github/actions/deploy-ubuntu
 #  android-x86:
 #    runs-on: ubuntu-22.04
 #    strategy:
@@ -45,7 +45,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: ./.github/actions/deploy-ubuntu
 #  linux-armhf:
 #    runs-on: ubuntu-22.04
 #    strategy:
@@ -59,7 +59,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: ./.github/actions/deploy-ubuntu
 #  linux-ppc64le:
 #    runs-on: ubuntu-22.04
 #    strategy:
@@ -80,7 +80,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: ./.github/actions/deploy-ubuntu
   macosx-arm64:
     runs-on: macos-15-intel
     strategy:
