@@ -53,7 +53,6 @@ runs:
           export CUDNN=cuda-13-9.19.0.56-1.aarch64
           export NCCL=2.29.3-1+cuda13.1.aarch64
           export NVCOMP=nvcomp-linux-sbsa-5.1.0.21_cuda13-archive
-          export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export ARCH_CUDA=ppc64le
@@ -120,7 +119,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
-        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
+        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
         $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
@@ -162,7 +161,9 @@ runs:
           bash $USERLAND_BUILDME
           popd
           export USERLAND_PATH=$(pwd)/userland-master/
+          export USERLAND_LIBRARY_PATH=$USERLAND_PATH/build/lib/
           echo "USERLAND_PATH=$USERLAND_PATH" >> $GITHUB_ENV
+          echo "USERLAND_LIBRARY_PATH=$USERLAND_LIBRARY_PATH" >> $GITHUB_ENV
         fi
 
         if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
@@ -171,7 +172,7 @@ runs:
           ln -sf android-ndk-r29 android-ndk
           export MAVEN_OPTIONS="-Djavacpp.platform.root=$(pwd)/android-ndk/ -Djava.library.path="
         else
-          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
+          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/${USERLAND_LIBRARY_PATH:+:$USERLAND_LIBRARY_PATH}"
         fi
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
