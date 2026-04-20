@@ -42,6 +42,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino/c/openvino.h"
             },
             link = {"openvino_c", "openvino"},
+            preloadpath = {"lib/tbb/"},
             preload = {
                 "openvino_auto_batch_plugin",
                 "openvino_auto_plugin",
@@ -50,16 +51,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino_intel_gpu_plugin",
                 "openvino_intel_npu_plugin",
                 "openvino_ir_frontend",
-                "openvino_jax_frontend",
                 "openvino_onnx_frontend",
                 "openvino_paddle_frontend",
                 "openvino_pytorch_frontend",
                 "openvino_tensorflow_frontend",
                 "openvino_tensorflow_lite_frontend",
-                "tbb",
-                "tbbbind_2_5",
-                "tbbmalloc",
-                "tbbmalloc_proxy"
+                "tbb@.12"
             },
             resource = {"include", "lib"}
         ),
@@ -69,25 +66,21 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino/c/openvino.h"
             },
             link = {"openvino_c", "openvino"},
+            preloadpath = {"bin/tbb/"},
             preload = {
                 "openvino_auto_batch_plugin",
                 "openvino_auto_plugin",
                 "openvino_hetero_plugin",
                 "openvino_intel_cpu_plugin",
                 "openvino_intel_gpu_plugin",
-                "openvino_intel_npu_compiler",
                 "openvino_intel_npu_plugin",
                 "openvino_ir_frontend",
-                "openvino_jax_frontend",
                 "openvino_onnx_frontend",
                 "openvino_paddle_frontend",
                 "openvino_pytorch_frontend",
                 "openvino_tensorflow_frontend",
                 "openvino_tensorflow_lite_frontend",
-                "tbb12",
-                "tbbbind_2_5",
-                "tbbmalloc",
-                "tbbmalloc_proxy"
+                "tbb12"
             },
             resource = {"include", "lib", "bin"}
         ),
