@@ -53,6 +53,7 @@ runs:
           export CUDNN=cuda-13-9.19.0.56-1.aarch64
           export NCCL=2.29.3-1+cuda13.1.aarch64
           export NVCOMP=nvcomp-linux-sbsa-5.1.0.21_cuda13-archive
+          export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export ARCH_CUDA=ppc64le
@@ -161,9 +162,7 @@ runs:
           bash $USERLAND_BUILDME
           popd
           export USERLAND_PATH=$(pwd)/userland-master/
-          export USERLAND_LIBRARY_PATH=$USERLAND_PATH/build/lib/
           echo "USERLAND_PATH=$USERLAND_PATH" >> $GITHUB_ENV
-          echo "USERLAND_LIBRARY_PATH=$USERLAND_LIBRARY_PATH" >> $GITHUB_ENV
         fi
 
         if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
@@ -172,7 +171,7 @@ runs:
           ln -sf android-ndk-r29 android-ndk
           export MAVEN_OPTIONS="-Djavacpp.platform.root=$(pwd)/android-ndk/ -Djava.library.path="
         else
-          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/${USERLAND_LIBRARY_PATH:+:$USERLAND_LIBRARY_PATH}"
+          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
         fi
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
