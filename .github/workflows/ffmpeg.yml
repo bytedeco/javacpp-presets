@@ -31,7 +31,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: ./.github/actions/deploy-ubuntu
+      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@ffmpeg-v4l2-request
 #  android-x86:
 #    runs-on: ubuntu-22.04
 #    strategy:
@@ -45,7 +45,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: ./.github/actions/deploy-ubuntu
+      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@ffmpeg-v4l2-request
 #  linux-armhf:
 #    runs-on: ubuntu-22.04
 #    strategy:
@@ -59,7 +59,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: ./.github/actions/deploy-ubuntu
+      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@ffmpeg-v4l2-request
 #  linux-ppc64le:
 #    runs-on: ubuntu-22.04
 #    strategy:
@@ -80,7 +80,7 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: ./.github/actions/deploy-ubuntu
+      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@ffmpeg-v4l2-request
   macosx-arm64:
     runs-on: macos-15-intel
     strategy:
