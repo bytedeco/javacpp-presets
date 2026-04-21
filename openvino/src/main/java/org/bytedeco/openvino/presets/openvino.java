@@ -25,16 +25,16 @@ package org.bytedeco.openvino.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+import org.bytedeco.opencl.presets.OpenCL;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = javacpp.class,
+    inherit = OpenCL.class,
     value = {
         @Platform(
             value = {"linux-x86_64"},
@@ -43,8 +43,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             },
             link = {"openvino_c@.2541", "openvino@.2541"},
             preloadresource = {
-                "openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/lib/intel64/",
-                "openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime/3rdparty/tbb/lib/"
+                "runtime/lib/intel64/",
+                "runtime/3rdparty/tbb/lib/"
             },
             preload = {
                 "openvino_auto_batch_plugin",
@@ -61,7 +61,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino_tensorflow_lite_frontend@.2541",
                 "tbb@.12"
             },
-            resource = {"openvino_toolkit_ubuntu22_2025.4.1.20426.82bbf0292c5_x86_64/runtime"}
+            resource = {"runtime"}
         ),
         @Platform(
             value = {"windows-x86_64"},
@@ -70,8 +70,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             },
             link = {"openvino_c", "openvino"},
             preloadresource = {
-                "openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/bin/intel64/Release/",
-                "openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime/3rdparty/tbb/bin/"
+                "runtime/bin/intel64/Release/",
+                "runtime/3rdparty/tbb/bin/"
             },
             preload = {
                 "openvino_auto_batch_plugin",
@@ -88,7 +88,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "openvino_tensorflow_lite_frontend",
                 "tbb12"
             },
-            resource = {"openvino_toolkit_windows_2025.4.1.20426.82bbf0292c5_x86_64/runtime"}
+            resource = {"runtime"}
         ),
     },
     target = "org.bytedeco.openvino",

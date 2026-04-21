@@ -16,15 +16,18 @@ cd "$PLATFORM"
 
 archive_name=
 archive_platform=
+archive_root=
 
 case $PLATFORM in
     linux-x86_64)
         archive_name=openvino_toolkit_ubuntu22_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.tgz
         archive_platform=linux
+        archive_root=${archive_name%.tgz}
         ;;
     windows-x86_64)
         archive_name=openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
         archive_platform=windows
+        archive_root=${archive_name%.zip}
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -36,10 +39,14 @@ download "${OPENVINO_PACKAGES_URL}/${archive_platform}/${archive_name}" "${archi
 
 case "$archive_name" in
     *.tgz)
-        tar -xzf "$archive_name"
+        tar -xzf "$archive_name" --strip-components=1 "${archive_root}/runtime"
         ;;
     *.zip)
-        unzip -q -o "$archive_name"
+        unzip -q -o "$archive_name" "${archive_root}/runtime/*"
+        if [[ -d "$archive_root/runtime" ]]; then
+            mv "$archive_root/runtime" .
+            rmdir "$archive_root"
+        fi
         ;;
     *)
         echo "Error: Unsupported archive \"$archive_name\""
