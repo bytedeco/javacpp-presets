@@ -3533,6 +3533,7 @@ index 0000000000..92c81509e6
 +                               const HEVCContext *h)
 +{
 +    const HEVCFrame *pic = h->cur_frame;
++    const HEVCLayerContext *const l = &h->layers[h->cur_layer];
 +    const SliceHeader *sh = &h->sh;
 +    int i, entries = 0;
 +
@@ -3551,8 +3552,8 @@ index 0000000000..92c81509e6
 +                                h->sh.short_term_rps->rps_idx_num_delta_pocs;
 +#endif
 +
-+    for (i = 0; i < FF_ARRAY_ELEMS(h->DPB); i++) {
-+        const HEVCFrame *frame = &h->DPB[i];
++    for (i = 0; i < FF_ARRAY_ELEMS(l->DPB); i++) {
++        const HEVCFrame *frame = &l->DPB[i];
 +        if (frame != pic &&
 +            (frame->flags & (HEVC_FRAME_FLAG_LONG_REF | HEVC_FRAME_FLAG_SHORT_REF))) {
 +            struct v4l2_hevc_dpb_entry *entry = &decode_params->dpb[entries++];
@@ -4040,7 +4041,7 @@ index 0000000000..92c81509e6
 +    return v4l2_request_hevc_queue_decode(avctx, true);
 +}
 +
-+static void v4l2_request_hevc_free_frame_priv(FFRefStructOpaque hwctx, void *data)
++static void v4l2_request_hevc_free_frame_priv(AVRefStructOpaque hwctx, void *data)
 +{
 +    V4L2RequestControlsHEVC *controls = data;
 +
