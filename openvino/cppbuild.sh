@@ -42,10 +42,10 @@ case "$archive_name" in
         tar -xzf "$archive_name" --strip-components=1 "${archive_root}/runtime"
         ;;
     *.zip)
-        unzip -q -o "$archive_name" "${archive_root}/runtime/*"
+        unzip -q -o "$archive_name"
         if [[ -d "$archive_root/runtime" ]]; then
             mv "$archive_root/runtime" .
-            rmdir "$archive_root"
+            rm -rf "$archive_root"
         fi
         ;;
     *)
