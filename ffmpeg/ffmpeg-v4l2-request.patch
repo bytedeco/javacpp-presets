@@ -2435,7 +2435,7 @@ new file mode 100644
 index 0000000000..998c91355a
 --- /dev/null
 +++ b/libavcodec/v4l2_request_mpeg2.c
-@@ -0,0 +1,176 @@
+@@ -0,0 +1,179 @@
 +/*
 + * This file is part of FFmpeg.
 + *
@@ -2778,7 +2778,7 @@ new file mode 100644
 index 0000000000..57651282ce
 --- /dev/null
 +++ b/libavcodec/v4l2_request_h264.c
-@@ -0,0 +1,523 @@
+@@ -0,0 +1,524 @@
 +/*
 + * This file is part of FFmpeg.
 + *
@@ -3411,7 +3411,7 @@ new file mode 100644
 index 0000000000..92c81509e6
 --- /dev/null
 +++ b/libavcodec/v4l2_request_hevc.c
-@@ -0,0 +1,790 @@
+@@ -0,0 +1,792 @@
 +/*
 + * This file is part of FFmpeg.
 + *
