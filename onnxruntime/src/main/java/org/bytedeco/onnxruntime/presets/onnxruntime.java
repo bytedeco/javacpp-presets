@@ -270,7 +270,20 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::SyncStreamImpl<OrtSyncStream>").pointerTypes("SyncStreamImpl"))
                .put(new Info("Ort::detail::Base<OrtExternalInitializerInfo>").pointerTypes("BaseExternalInitializerInfo"))
                .put(new Info("Ort::detail::ConstExternalInitializerInfoImpl<OrtExternalInitializerInfo>").pointerTypes("ConstExternalInitializerInfoImpl"))
-
+               .put(new Info("Ort::detail::OpSchemaImpl<OrtOpSchema>",
+                             "Ort::detail::ConstOpSchemaImpl<OrtOpSchema>",
+                             "Ort::detail::OpSchemaTypeConstraintImpl<OrtOpSchemaTypeConstraint>",
+                             "Ort::detail::ConstOpSchemaTypeConstraintImpl<OrtOpSchemaTypeConstraint>",
+                             "Ort::detail::ProfilingEventImpl<OrtProfilingEvent>",
+                             "Ort::detail::ConstProfilingEventImpl<OrtProfilingEvent>",
+                             "Ort::detail::BaseConstGraph", "BaseConstGraph",
+                             "Ort::detail::Base::contained_type").skip())
+               .put(new Info("OrtOpSchema").cast().pointerTypes("OpSchema"))
+               .put(new Info("OrtOpSchemaTypeConstraint").cast().pointerTypes("OpSchemaTypeConstraint"))
+               .put(new Info("OrtProfilingEvent").cast().pointerTypes("ProfilingEvent"))
+               .put(new Info("Ort::OpSchema").cast().pointerTypes("OpSchema").purify())
+               .put(new Info("Ort::OpSchemaTypeConstraint").cast().pointerTypes("OpSchemaTypeConstraint").purify())
+               .put(new Info("Ort::ProfilingEvent").cast().pointerTypes("ProfilingEvent").purify())
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX", "OrtSessionOptionsAppendExecutionProvider_Tensorrt",
                              "OrtSessionOptionsAppendExecutionProvider_ROCM", "Ort::detail::OptionalTypeInfoImpl<OrtTypeInfo>::GetOptionalElementType").skip())
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
