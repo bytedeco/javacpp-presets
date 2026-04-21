@@ -2456,8 +2456,10 @@ index 0000000000..998c91355a
 +
 +#include "config.h"
 +
++#include "libavutil/buffer.h"
 +#include "hwaccel_internal.h"
 +#include "hwconfig.h"
++#include "mathops.h"
 +#include "mpegvideo.h"
 +#include "v4l2_request.h"
 +
@@ -2469,6 +2471,7 @@ index 0000000000..998c91355a
 +} V4L2RequestControlsMPEG2;
 +
 +static int v4l2_request_mpeg2_start_frame(AVCodecContext *avctx,
++                                          av_unused const AVBufferRef *buf_ref,
 +                                          av_unused const uint8_t *buffer,
 +                                          av_unused uint32_t size)
 +{
@@ -3005,6 +3008,7 @@ index 0000000000..57651282ce
 +}
 +
 +static int v4l2_request_h264_start_frame(AVCodecContext *avctx,
++                                         av_unused const AVBufferRef *buf_ref,
 +                                         av_unused const uint8_t *buffer,
 +                                         av_unused uint32_t size)
 +{
@@ -3770,6 +3774,7 @@ index 0000000000..92c81509e6
 +}
 +
 +static int v4l2_request_hevc_start_frame(AVCodecContext *avctx,
++                                         av_unused const AVBufferRef *buf_ref,
 +                                         av_unused const uint8_t *buffer,
 +                                         av_unused uint32_t size)
 +{
