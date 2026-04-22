@@ -147,9 +147,6 @@ patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < $V4L2_REQUEST_PATCH_FFMPEG_81
-if [[ "$PLATFORM" == "linux-arm64" ]]; then
-    patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-v4l2-request-local.patch
-fi
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
@@ -1537,7 +1534,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../harfbuzz-$HARFBUZZ_VERSION
-        echo "[binaries]" > linux-arm.ini
+        echo "[binaries]" >> linux-arm.ini
         echo "c = 'aarch64-linux-gnu-gcc'" >> linux-arm.ini
         echo "cpp = 'aarch64-linux-gnu-g++'" >> linux-arm.ini
         echo "ar = 'aarch64-linux-gnu-ar'" >> linux-arm.ini
@@ -1551,7 +1548,7 @@ EOF
         echo "cpu_family = 'aarch64'" >> linux-arm.ini
         echo "cpu = 'aarch64'" >> linux-arm.ini
         echo "endian = 'little'" >> linux-arm.ini
-        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-arm.ini --pkg-config-path=$INSTALL_PATH/lib/pkgconfig
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-arm.ini --pkg-config-path=/usr/bin/pkg-config
         cd build
         meson compile
         meson install
@@ -1573,15 +1570,10 @@ EOF
         make install
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        PULSE=
-        VULKAN=
-        if PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ pkg-config --exists libpulse 2>/dev/null; then
-            PULSE=--enable-libpulse
+        if [[ ! -d $USERLAND_PATH ]]; then
+          USERLAND_PATH="$(which aarch64-linux-gnu-gcc | grep -o '.*/tools/')../userland"
         fi
-        if PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ pkg-config --exists vulkan 2>/dev/null; then
-            VULKAN=$ENABLE_VULKAN
-        fi
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libdrm --enable-libudev --enable-v4l2-request --enable-pthreads --enable-libxcb $PULSE --cc="aarch64-linux-gnu-gcc" --cxx="aarch64-linux-gnu-g++" --extra-cflags="$CFLAGS -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lasound -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-omx `#--enable-mmal` --enable-omx-rpi --enable-pthreads --enable-libxcb --enable-libpulse --cc="aarch64-linux-gnu-gcc" --cxx="aarch64-linux-gnu-g++" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm `#-lvcsm` -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
