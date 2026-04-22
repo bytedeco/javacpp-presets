@@ -51,6 +51,9 @@ AOMAV1_VERSION=3.13.3
 SVTAV1_VERSION=4.1.0
 ZIMG_VERSION=3.0.6
 FFMPEG_VERSION=8.1
+V4L2_REQUEST_PATCH_URL=https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
+V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847.patch
+V4L2_REQUEST_PATCH_FFMPEG_81=ffmpeg-v4l2-request-20847-ffmpeg-8.1.patch
 download https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -75,6 +78,7 @@ download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
 download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
+download $V4L2_REQUEST_PATCH_URL $V4L2_REQUEST_PATCH
 
 mkdir -p $PLATFORM$EXTENSION
 cd $PLATFORM$EXTENSION
@@ -120,12 +124,32 @@ cd ..
 export PATH=$INSTALL_PATH/bin:$PATH
 export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
+# FFmpeg 8.1 only rejects the Changelog hunk from the upstream mail series.
+awk '
+{
+    if (skip) {
+        if ($0 ~ /^diff --git / || $0 ~ /^From /) {
+            skip = 0
+        } else {
+            next
+        }
+    }
+    if ($0 ~ /^diff --git a\/Changelog b\/Changelog$/) {
+        skip = 1
+        next
+    }
+    print
+}' ../$V4L2_REQUEST_PATCH > $V4L2_REQUEST_PATCH_FFMPEG_81
+
 patch -Np1 -d $LAME < ../../lame.patch
 # patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-v4l2-request.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < $V4L2_REQUEST_PATCH_FFMPEG_81
+if [[ "$PLATFORM" == "linux-arm64" ]]; then
+    patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-v4l2-request-local.patch
+fi
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
@@ -1513,7 +1537,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../harfbuzz-$HARFBUZZ_VERSION
-        echo "[binaries]" >> linux-arm.ini
+        echo "[binaries]" > linux-arm.ini
         echo "c = 'aarch64-linux-gnu-gcc'" >> linux-arm.ini
         echo "cpp = 'aarch64-linux-gnu-g++'" >> linux-arm.ini
         echo "ar = 'aarch64-linux-gnu-ar'" >> linux-arm.ini
@@ -1527,7 +1551,7 @@ EOF
         echo "cpu_family = 'aarch64'" >> linux-arm.ini
         echo "cpu = 'aarch64'" >> linux-arm.ini
         echo "endian = 'little'" >> linux-arm.ini
-        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-arm.ini --pkg-config-path=/usr/bin/pkg-config
+        meson setup build --prefix=$INSTALL_PATH $HARFBUZZ_CONFIG --cross-file=linux-arm.ini --pkg-config-path=$INSTALL_PATH/lib/pkgconfig
         cd build
         meson compile
         meson install
@@ -1549,7 +1573,15 @@ EOF
         make install
         cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $ENABLE_VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libdrm --enable-libudev --enable-v4l2-request --enable-pthreads --enable-libxcb --enable-libpulse --cc="aarch64-linux-gnu-gcc" --cxx="aarch64-linux-gnu-g++" --extra-cflags="$CFLAGS -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lasound -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
+        PULSE=
+        VULKAN=
+        if PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ pkg-config --exists libpulse 2>/dev/null; then
+            PULSE=--enable-libpulse
+        fi
+        if PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ pkg-config --exists vulkan 2>/dev/null; then
+            VULKAN=$ENABLE_VULKAN
+        fi
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/aarch64-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $VULKAN --enable-cuda --enable-cuvid --enable-nvenc --enable-libdrm --enable-libudev --enable-v4l2-request --enable-pthreads --enable-libxcb $PULSE --cc="aarch64-linux-gnu-gcc" --cxx="aarch64-linux-gnu-g++" --extra-cflags="$CFLAGS -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lasound -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
