@@ -51,9 +51,9 @@ AOMAV1_VERSION=3.13.3
 SVTAV1_VERSION=4.1.0
 ZIMG_VERSION=3.0.6
 FFMPEG_VERSION=8.1
-V4L2_REQUEST_PATCH_URL=https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
-V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847.patch
-V4L2_REQUEST_PATCH_FFMPEG_81=ffmpeg-v4l2-request-20847-ffmpeg-8.1.patch
+# Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
+# with the unsupported FFmpeg 8.1 Changelog hunk already removed.
+V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847-ffmpeg-8.1.patch
 download https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -78,7 +78,6 @@ download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$ZIMG_VERSION.tar.gz zimg-release-$ZIMG_VERSION.tar.gz
 download https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
-download $V4L2_REQUEST_PATCH_URL $V4L2_REQUEST_PATCH
 
 mkdir -p $PLATFORM$EXTENSION
 cd $PLATFORM$EXTENSION
@@ -124,29 +123,12 @@ cd ..
 export PATH=$INSTALL_PATH/bin:$PATH
 export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
-# FFmpeg 8.1 only rejects the Changelog hunk from the upstream mail series.
-awk '
-{
-    if (skip) {
-        if ($0 ~ /^diff --git / || $0 ~ /^From /) {
-            skip = 0
-        } else {
-            next
-        }
-    }
-    if ($0 ~ /^diff --git a\/Changelog b\/Changelog$/) {
-        skip = 1
-        next
-    }
-    print
-}' ../$V4L2_REQUEST_PATCH > $V4L2_REQUEST_PATCH_FFMPEG_81
-
 patch -Np1 -d $LAME < ../../lame.patch
 # patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < $V4L2_REQUEST_PATCH_FFMPEG_81
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
