@@ -63,9 +63,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../PropertyVector.java
 
 
-// Targeting ../OptimizerParamGroupVector.java
-
-
 // Targeting ../FunctionSchemaVector.java
 
 
@@ -163,6 +160,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../TensorOptionalVector.java
+
+
+// Targeting ../OptimizerParamGroupVector.java
 
 
 // Targeting ../FunctionVector.java
