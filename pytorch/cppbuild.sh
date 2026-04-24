@@ -208,9 +208,19 @@ sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' .
 sedinplace "s/BUILD_DIR = .build./BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
 sedinplace 's/var.startswith(("BUILD_", "USE_", "CMAKE_"))/var.startswith(("BUILD_", "USE_", "CMAKE_", "CUDA_"))/g' tools/setup_helpers/cmake.py
 
-# allow resizing std::vector<at::indexing::TensorIndex>
+# allow resizing std::vector<at::indexing::TensorIndex> and std::vector<torch::optim::OptimizerParamGroup>
 sedinplace 's/TensorIndex(c10::nullopt_t.*)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 sedinplace 's/TensorIndex(std::nullopt_t.*)/TensorIndex(std::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
+sedinplace '/OptimizerParamGroup& operator=(const OptimizerParamGroup& param_group) =/{N;d;}' torch/csrc/api/include/torch/optim/optimizer.h
+sedinplace '/OptimizerParamGroup& operator=(OptimizerParamGroup&& param_group)/i\
+  OptimizerParamGroup() {}\
+  OptimizerParamGroup& operator=(const OptimizerParamGroup& param_group) {\
+      params_ = param_group.params();\
+      if (param_group.has_options())\
+          options_ = param_group.options().clone();\
+      return *this;\
+  }\
+' torch/csrc/api/include/torch/optim/optimizer.h
 
 # add missing declarations
 sedinplace '/using ExampleType = ExampleType_;/a\

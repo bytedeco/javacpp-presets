@@ -26,6 +26,15 @@ public class OptimizerParamGroup extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OptimizerParamGroup(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OptimizerParamGroup(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OptimizerParamGroup position(long position) {
+        return (OptimizerParamGroup)super.position(position);
+    }
+    @Override public OptimizerParamGroup getPointer(long i) {
+        return new OptimizerParamGroup((Pointer)this).offsetAddress(i);
+    }
 
   // NOTE: In order to store `OptimizerParamGroup` in a `std::vector`, it has to
   // be copy-constructible.
@@ -40,8 +49,9 @@ public class OptimizerParamGroup extends Pointer {
         @ByVal TensorVector params,
         @UniquePtr @ByVal OptimizerOptions options);
 
-  
-  public native @ByRef @Name("operator =") @NoException(true) OptimizerParamGroup put(@ByRef(true) OptimizerParamGroup param_group);
+  public OptimizerParamGroup() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public native @ByRef @Name("operator =") OptimizerParamGroup put(@Const @ByRef OptimizerParamGroup param_group);
   public native @Cast("bool") boolean has_options();
   public native @ByRef OptimizerOptions options();
   public native void set_options(@UniquePtr @ByVal OptimizerOptions options);
