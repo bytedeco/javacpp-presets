@@ -1,4 +1,5 @@
 
+ * Add V4L2 Request API hwaccels in presets for FFmpeg ([pull #1755](https://github.com/bytedeco/javacpp-presets/pull/1755))
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
