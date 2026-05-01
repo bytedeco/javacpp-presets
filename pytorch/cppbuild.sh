@@ -200,6 +200,7 @@ sedinplace 's/build_python=True/build_python=False/g' setup.py
 sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
+sedinplace 's/-Xcompiler  \/Zc:__cplusplus/-Xcompiler  \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' CMakeLists.txt
 
 #sedinplace '/pycore_opcode.h/d' torch/csrc/dynamo/cpython_defs.c functorch/csrc/dim/dim*
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
