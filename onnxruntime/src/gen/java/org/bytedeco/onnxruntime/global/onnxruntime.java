@@ -92,7 +92,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 24;
+public static final int ORT_API_VERSION = 25;
 
 // #ifdef __cplusplus
 // #endif
@@ -643,6 +643,21 @@ public static native @Const OrtApiBase OrtGetApiBase();
 // Targeting ../OrtCustomJoinThreadFn.java
 
 
+// Targeting ../OrtThreadPoolWorkEnqueueFn.java
+
+
+// Targeting ../OrtThreadPoolWorkStartFn.java
+
+
+// Targeting ../OrtThreadPoolWorkStopFn.java
+
+
+// Targeting ../OrtThreadPoolWorkAbandonFn.java
+
+
+// Targeting ../OrtThreadPoolCallbacksConfig.java
+
+
 // Targeting ../RegisterCustomOpsFn.java
 
 
@@ -677,6 +692,26 @@ public static final int
   /** Shared HANDLE from ID3D12Device::CreateSharedHandle(fence) */
   ORT_EXTERNAL_SEMAPHORE_D3D12_FENCE = 0;
 // Targeting ../OrtExternalSemaphoreDescriptor.java
+
+
+
+/** \brief Graphics API type for interop configuration.
+ *
+ * Specifies the graphics API used for GPU interop with the execution provider.
+ * This enables synchronization between graphics workloads (e.g., rendering, compute shaders)
+ * and ONNX Runtime inference.
+ *
+ * @since Version 1.25.
+ */
+/** enum OrtGraphicsApi */
+public static final int
+  /** No graphics interop (default) */
+  ORT_GRAPHICS_API_NONE = 0,
+  /** Direct3D 12 interop */
+  ORT_GRAPHICS_API_D3D12 = 1,
+  /** Vulkan interop */
+  ORT_GRAPHICS_API_VULKAN = 2;
+// Targeting ../OrtGraphicsInteropConfig.java
 
 
 // Targeting ../OrtExternalTensorDescriptor.java
@@ -828,6 +863,18 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 // Targeting ../OrtNodeComputeContext.java
 
 
+// Targeting ../OpSchema.java
+
+
+// Targeting ../OpSchemaTypeConstraint.java
+
+
+// Targeting ../OrtProfilingEventsContainer.java
+
+
+// Targeting ../ProfilingEvent.java
+
+
 // Targeting ../OrtExternalMemoryHandle.java
 
 
@@ -859,6 +906,24 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
 
 
 // Targeting ../OrtExternalResourceImporterImpl.java
+
+
+
+/** \brief The event category for profiling events reported by an execution provider.
+ *
+ * @since Version 1.25.
+ */
+/** enum OrtProfilingEventCategory */
+public static final int
+  /** Session-level event */
+  OrtProfilingEventCategory_SESSION = 0,
+  /** Node-level event */
+  OrtProfilingEventCategory_NODE = 1,
+  /** Kernel-level event */
+  OrtProfilingEventCategory_KERNEL = 2,
+  /** API-level event */
+  OrtProfilingEventCategory_API = 3;
+// Targeting ../OrtEpProfilerImpl.java
 
 
 // Targeting ../OrtNodeFusionOptions.java
@@ -1113,6 +1178,8 @@ public static final int
 @Namespace("Ort::detail") public static native void OrtRelease(OrtKernelDef ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtKernelDefBuilder ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtKernelRegistry ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(@Cast("OrtOpSchema*") OpSchema ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(@Cast("OrtProfilingEvent*") ProfilingEvent ptr);
 
 // This is defined explicitly since OrtTensorRTProviderOptionsV2 is not a C API type,
 // but the struct has V2 in its name to indicate that it is the second version of the options.
@@ -1447,6 +1514,29 @@ public static final int
 /** \brief Constant wrapper around ::OrtEpAssignedSubgraph
  * \remarks EpAssignedSubgraph is always read-only for ORT API users.
  */
+  // namespace detail
+
+/** \brief Non-owning const wrapper around ::OrtProfilingEvent.
+ *
+ * Use this to read fields from the OrtProfilingEvent pointer passed to OrtEpProfilerImpl::StopEvent.
+ *
+ * This is based on the Trace Event Format's "complete event".
+ * @since Version 1.25.
+ */
+
+/** \brief Owning wrapper around ::OrtProfilingEvent.
+ *
+ * Use this to create profiling events via OrtEpApi::CreateProfilingEvent. The event is released
+ * automatically on destruction.
+ * @since Version 1.25.
+ */
+  // namespace detail
+
+/** \brief Non-owning wrapper around ::OrtProfilingEventsContainer.
+ *
+ * Use this to add EP profiling events to a container owned by ORT during the call to OrtEpProfilerImpl::EndProfiling.
+ * @since Version 1.25.
+ */
 // Targeting ../Env.java
 
 
@@ -1711,6 +1801,8 @@ public static final int
 @Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, String name, @ByRef FloatVector arg2);
 @Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, @Cast("const char*") BytePointer name, @ByRef LongVector arg2);
 @Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, String name, @ByRef LongVector arg2);
+@Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, @Cast("const char*") BytePointer name, @ByRef StringVector arg2);
+@Namespace("Ort::detail::attr_utils") public static native void GetAttrs(@Const OrtKernelInfo p, String name, @ByRef StringVector arg2);
 
 // Targeting ../KernelInfoImpl.java
 
@@ -1790,6 +1882,27 @@ public static final long MAX_CUSTOM_OP_END_VER = (1L << 31) - 1;
 // Targeting ../KernelRegistry.java
 
 
+  // namespace detail
+
+/** Non-owning wrapper around a {@code const OrtOpSchemaTypeConstraint*}.
+ *  Holds a single type constraint from an operator schema, providing access to
+ *  the constraint's name, allowed data types, and associated input/output indices. */
+  // namespace detail
+
+/** Owning wrapper around an {@code OrtOpSchema*}.
+ *  Provides access to operator schema metadata such as version, input/output names,
+ *  and type constraints. The underlying OrtOpSchema is owned by this wrapper and
+ *  released automatically on destruction. */
+
+///
+
+/** \brief Get an operator schema from the global schema registry.
+ * 
+ *  Wraps OrtEpApi::GetOpSchema. Returns an OpSchema that may wrap nullptr if the schema is not found.
+ *  Available schemas include standard ONNX ops (domain "" or "ai.onnx"), ONNX ML ops ("ai.onnx.ml"),
+ *  and ORT contrib ops ("com.microsoft"). */
+@Namespace("Ort") public static native @ByVal @Cast("Ort::OpSchema*") OpSchema GetOpSchema(@Cast("const char*") BytePointer name, int max_inclusive_version, @Cast("const char*") BytePointer domain);
+@Namespace("Ort") public static native @ByVal @Cast("Ort::OpSchema*") OpSchema GetOpSchema(String name, int max_inclusive_version, String domain);
   // namespace detail
 
 /** \brief Convenience C++ wrapper class around a ::OrtSharedPrePackedWeightCache instance owned by ORT.

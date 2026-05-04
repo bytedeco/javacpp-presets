@@ -88,4 +88,17 @@ public class RunOptions extends BaseRunOptions {
    * @param stream The OrtSyncStream to associate with these run options. May be nullptr to clear.
    */
   public native @ByRef RunOptions SetSyncStream(OrtSyncStream stream);
+
+  /** \brief Enable profiling for this run
+   *
+   * Wraps OrtApi::RunOptionsEnableProfiling
+   * @param profile_file_prefix The prefix for the profile file
+   */
+  public native @ByRef RunOptions EnableProfiling(@Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
+
+  /** \brief Disable profiling for this run
+   *
+   * Wraps OrtApi::RunOptionsDisableProfiling
+   */
+  public native @ByRef RunOptions DisableProfiling();
 }
