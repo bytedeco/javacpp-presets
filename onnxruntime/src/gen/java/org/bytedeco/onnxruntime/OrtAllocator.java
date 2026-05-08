@@ -147,4 +147,20 @@ public class OrtAllocator extends Pointer {
       public native Pointer call(OrtAllocator this_, @Cast("size_t") long size, OrtSyncStream stream);
   }
   public native AllocOnStream_OrtAllocator_long_OrtSyncStream AllocOnStream(); public native OrtAllocator AllocOnStream(AllocOnStream_OrtAllocator_long_OrtSyncStream setter);
+
+  /** \brief Release unused memory held by the allocator back to the system.
+   *
+   * For arena-based allocators, this frees allocation regions that are completely unused.
+   * For mempool-based allocators, this trims the pool to a configured minimum.
+   * For non-arena allocators this is a no-op.
+   *
+   * @param this_ [in] OrtAllocator instance
+   *
+   * @return nullptr on success, or an OrtStatus* on failure.
+   *
+   * \note Implementation of this function is optional and Shrink may be set to a nullptr.
+   *       Callers must check for nullptr before invoking.
+   * @since 1.25
+   */
+  public native OrtStatus Shrink( OrtAllocator this_);
 }

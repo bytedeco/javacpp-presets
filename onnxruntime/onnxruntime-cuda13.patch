@@ -1,3 +1,99 @@
+From 712fbe0f6e491a2edd7388f99ea4124f25cda774 Mon Sep 17 00:00:00 2001
+From: "M. Chornyi" <99709299+mc-nv@users.noreply.github.com>
+Date: Fri, 1 May 2026 21:48:54 +0000
+Subject: [PATCH] Fix CUDA 13.2 (CUB 3.2.0) build failure: invalid C++ in
+ device_transform.cuh
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CUB 3.2.0 ships device_transform.cuh with an invalid template specialisation:
+  struct ::cuda::proclaims_copyable_arguments<...> : ::cuda::std::true_type {};
+A globally-qualified class name in a specialisation is rejected by the compiler
+under -std=c++20.  device_copy.cuh transitively pulls device_transform.cuh in
+via dispatch_copy_mdspan.cuh, so it fails for the same reason.
+
+Fix: two shadow stubs under onnxruntime/cub/device/, resolved first via -I
+ahead of the -isystem CUDA toolkit path.
+
+  device_transform.cuh — re-emits the parts Thrust uses internally
+    (cub::detail::__return_constant and the proclaims_copyable_arguments
+    specialisation) with the specialisation written inside the cuda namespace
+    so the class name is unqualified. cub::DeviceTransform is omitted.
+
+  device_copy.cuh — empty stub. ORT does not use cub::DeviceCopy.
+
+cub.cuh is unchanged.
+---
+ onnxruntime/cub/device/device_copy.cuh      |  9 +++++
+ onnxruntime/cub/device/device_transform.cuh | 42 +++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 onnxruntime/cub/device/device_copy.cuh
+ create mode 100644 onnxruntime/cub/device/device_transform.cuh
+
+diff --git a/onnxruntime/cub/device/device_copy.cuh b/onnxruntime/cub/device/device_copy.cuh
+new file mode 100644
+index 0000000000000..14e9f1772a3ef
+--- /dev/null
++++ b/onnxruntime/cub/device/device_copy.cuh
+@@ -0,0 +1,9 @@
++// Copyright (c) Microsoft Corporation. All rights reserved.
++// Licensed under the MIT License.
++
++// Shadow stub for <cub/device/device_copy.cuh>. The real header transitively
++// includes dispatch_copy_mdspan.cuh, which references cub::DeviceTransform — a
++// type our device_transform.cuh stub intentionally omits. ORT does not use
++// cub::DeviceCopy, so this empty stub is sufficient.
++
++#pragma once
+diff --git a/onnxruntime/cub/device/device_transform.cuh b/onnxruntime/cub/device/device_transform.cuh
+new file mode 100644
+index 0000000000000..378bd8f0b5be8
+--- /dev/null
++++ b/onnxruntime/cub/device/device_transform.cuh
+@@ -0,0 +1,42 @@
++// Copyright (c) Microsoft Corporation. All rights reserved.
++// Licensed under the MIT License.
++
++// Shadow stub for <cub/device/device_transform.cuh>. Resolved first via -I,
++// ahead of the -isystem CUDA toolkit path.
++//
++// CUB 3.2.0 (CUDA 13.2) ships an invalid template specialisation:
++//   struct ::cuda::proclaims_copyable_arguments<...> : ::cuda::std::true_type {};
++// A globally-qualified class name in a specialisation is rejected by the compiler.
++// We re-emit the parts Thrust needs internally with the fixed syntax (the
++// specialisation is written inside the cuda namespace so the name is unqualified).
++// cub::DeviceTransform itself is not used by ORT and is intentionally omitted.
++
++#pragma once
++
++#include <cub/version.cuh>
++
++#if CUB_VERSION >= 300200
++
++#include <cub/device/dispatch/dispatch_transform.cuh>  // cub::detail::transform::dispatch_t (Thrust)
++#include <cuda/__functional/address_stability.h>       // cuda::proclaims_copyable_arguments primary
++
++CUB_NAMESPACE_BEGIN
++namespace detail
++{
++template <typename T>
++struct __return_constant
++{
++  T value;
++  template <typename... Args>
++  _CCCL_HOST_DEVICE T operator()(Args&&...) const { return value; }
++};
++} // namespace detail
++CUB_NAMESPACE_END
++
++_CCCL_BEGIN_NAMESPACE_CUDA
++template <typename T>
++struct proclaims_copyable_arguments<CUB_NS_QUALIFIER::detail::__return_constant<T>>
++    : ::cuda::std::true_type {};
++_CCCL_END_NAMESPACE_CUDA
++
++#endif  // CUB_VERSION >= 300200
 diff --git a/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu b/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu
 index 638c7d6637..73063765d7 100644
 --- a/orttraining/orttraining/training_ops/cuda/reduction/all_impl.cu

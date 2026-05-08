@@ -271,5 +271,51 @@ public class OrtInteropApi extends Pointer {
                     OrtSyncStream stream,
                     @Cast("uint64_t") long value);
 
+  /** \}
+   *  \name Graphics interop
+   *  \{
+  <p>
+  /** \brief Initialize graphics interop for an execution provider device.
+   *
+   * Requests the EP factory to set up graphics interop for the given ep_device using the
+   * provided config. How the factory uses the config (e.g. creating a context, affecting
+   * later stream creation) is implementation-defined. The config (OrtGraphicsInteropConfig)
+   * supplies the graphics API and optional handles; the command_queue member is optional.
+   * Passing command_queue and calling this before CreateSyncStreamForEpDevice for the same
+   * ep_device may allow the factory to enable more efficient GPU-side sync; see the EP
+   * documentation for details.
+   *
+   * Initialization is tied to the OrtEpDevice instance and applies across all sessions
+   * that use that ep_device (i.e. it is global per ep_device, not per-session).
+   *
+   * @param ep_device [in] The OrtEpDevice to initialize graphics interop for.
+   * @param config [in] Configuration (OrtGraphicsInteropConfig): required fields are version (ORT_API_VERSION)
+   *             and graphics_api; optional handles include command_queue and additional_options.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus InitGraphicsInteropForEpDevice( @Const OrtEpDevice ep_device,
+                    @Const OrtGraphicsInteropConfig config);
+
+  /** \brief Deinitialize graphics interop for an execution provider device.
+   *
+   * This function cleans up the graphics interop context that was created by InitGraphicsInteropForEpDevice.
+   * Should be called when graphics interop is no longer needed for the ep_device.
+   *
+   * The caller must release all resources that use the interop context before calling this function:
+   * - OrtSyncStream instances created for this ep_device via CreateSyncStreamForEpDevice
+   * - OrtExternalSemaphoreHandle and OrtExternalResourceImporter instances created for this ep_device
+   * Failure to do so may lead to undefined behavior if the implementation destroys the underlying context.
+   *
+   * @param ep_device [in] The OrtEpDevice to deinitialize graphics interop for.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus DeinitGraphicsInteropForEpDevice( @Const OrtEpDevice ep_device);
+
   /** \} */
 }

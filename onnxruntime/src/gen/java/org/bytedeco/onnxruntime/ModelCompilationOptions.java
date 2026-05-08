@@ -68,4 +68,7 @@ public class ModelCompilationOptions extends BaseModelCompilationOptions {
 
   /** Wraps OrtApi::ModelCompilationOptions_SetGraphOptimizationLevel */
   public native @ByRef ModelCompilationOptions SetGraphOptimizationLevel(@Cast("GraphOptimizationLevel") int graph_optimization_level);
+
+  /** Wraps OrtCompileApi::ModelCompilationOptions_SetInputModel */
+  public native @ByRef ModelCompilationOptions SetInputModel(@Const OrtModel model);
 }

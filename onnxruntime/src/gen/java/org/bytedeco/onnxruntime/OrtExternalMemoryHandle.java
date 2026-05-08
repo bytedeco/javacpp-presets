@@ -13,7 +13,7 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
-
+  // Based on the Trace Event Format's "complete event"
 
 /** \brief Base struct for imported external memory handles.
  *

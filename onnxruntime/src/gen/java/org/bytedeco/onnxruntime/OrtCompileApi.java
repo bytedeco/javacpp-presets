@@ -303,4 +303,27 @@ public class OrtCompileApi extends Pointer {
   public native OrtStatus ModelCompilationOptions_SetOutputModelGetInitializerLocationFunc(
                     OrtModelCompilationOptions model_compile_options,
                     OrtGetInitializerLocationFunc get_initializer_location_func, Pointer state);
+
+  /** \brief Sets the OrtModel to compile.
+   *
+   * Sets an OrtModel created via the Model Editor API as the input for compilation.
+   *
+   * The input model's source (file path, memory buffer, or OrtModel) must be set with
+   * one of: ModelCompilationOptions_SetInputModelPath, ModelCompilationOptions_SetInputModelFromBuffer,
+   * or ModelCompilationOptions_SetInputModel.
+   *
+   * The OrtModel must have a complete graph with inputs, outputs, and nodes defined.
+   * The caller retains ownership of the OrtModel and must not release it until after
+   * CompileModel returns.
+   *
+   * @param model_compile_options [in] The OrtModelCompilationOptions instance.
+   * @param model [in] The OrtModel to compile. The model is borrowed (not copied or owned).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.24.
+   */
+  public native OrtStatus ModelCompilationOptions_SetInputModel(
+                    OrtModelCompilationOptions model_compile_options,
+                    @Const OrtModel model);
 }

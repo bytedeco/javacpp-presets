@@ -471,4 +471,54 @@ public class OrtEpFactory extends Pointer {
                     @Cast("OrtCustomOpDomain**") PointerPointer domains, @Cast("size_t") long num_domains);
   public native OrtStatus GetCustomOpDomains( OrtEpFactory this_ptr,
                     @ByPtrPtr OrtCustomOpDomain domains, @Cast("size_t") long num_domains);
+
+  /** \brief Initialize graphics interop for the EP factory.
+   *
+   * This function sets up graphics interop context that enables synchronization between
+   * external graphics API workloads (D3D12, Vulkan) and ONNX Runtime inference.
+   *
+   * The factory stores the graphics context configuration and uses it when creating
+   * synchronization streams via CreateSyncStreamForDevice. This approach
+   * is more graceful than passing the command queue directly during stream creation.
+   *
+   * The implementation is EP-specific. EPs may create a specialized interop context using
+   * platform-specific APIs to enable GPU-GPU synchronization.
+   *
+   * Key design points:
+   * - Single init function with all required params (avoids multiple init signatures)
+   * - Factory stores context and uses it in stream creation
+   * - Paired with DeinitGraphicsInterop for cleanup
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param ep_device [in] The OrtEpDevice to initialize graphics interop for.
+   * @param config [in] Configuration specifying the graphics API and required handles.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional.
+   *       EPs that don't support graphics interop should set this to nullptr or return ORT_NOT_IMPLEMENTED.
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus InitGraphicsInterop( OrtEpFactory this_ptr,
+                    @Const OrtEpDevice ep_device,
+                    @Const OrtGraphicsInteropConfig config);
+
+  /** \brief Deinitialize graphics interop for the EP factory.
+   *
+   * This function cleans up any graphics interop context that was set up by InitGraphicsInterop.
+   * Should be called when graphics interop is no longer needed.
+   *
+   * @param this_ptr [in] The OrtEpFactory instance.
+   * @param ep_device [in] The OrtEpDevice to deinitialize graphics interop for.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional.
+   *       EPs that don't support graphics interop should set this to nullptr or return ORT_NOT_IMPLEMENTED.
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus DeinitGraphicsInterop( OrtEpFactory this_ptr,
+                    @Const OrtEpDevice ep_device);
 }

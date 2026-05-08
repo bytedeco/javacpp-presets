@@ -129,4 +129,10 @@ public class Env extends BaseEnv {
   public native @ByVal Status CopyTensors(@StdMove ValueVector src_tensors,
                        @StdMove ValueVector dst_tensors,
                        OrtSyncStream stream);
+
+  /** \brief Wraps OrtApi::SetPerSessionThreadPoolCallbacks
+   *  Stores work callbacks on the Env for per-session thread pools.
+   *  Only affects sessions created after this call. Does not affect global thread pools.
+   *  Requires ORT built with --enable_session_threadpool_callbacks. */
+  public native @ByRef Env SetPerSessionThreadPoolCallbacks(@Const @ByRef OrtThreadPoolCallbacksConfig config);
 }
