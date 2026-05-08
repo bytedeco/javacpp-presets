@@ -49,10 +49,10 @@ runs:
           export ARCH=arm64
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-13-1-local-13.1.1_590.48.01-1.aarch64.rpm
-          export CUDNN=cuda-13-9.19.0.56-1.aarch64
-          export NCCL=2.29.3-1+cuda13.1.aarch64
-          export NVCOMP=nvcomp-linux-sbsa-5.1.0.21_cuda13-archive
+          export CUDA=cuda-repo-rhel8-13-2-local-13.2.1_595.58.03-1.aarch64.rpm
+          export CUDNN=cuda-13-9.21.1.3-1.aarch64
+          export NCCL=2.30.4-1+cuda13.2.aarch64
+          export NVCOMP=nvcomp-linux-sbsa-5.2.0.10_cuda13-archive
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
@@ -71,10 +71,10 @@ runs:
           export ARCH=amd64
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
-          export CUDNN=cuda-13-9.19.0.56-1.x86_64
-          export NCCL=2.29.3-1+cuda13.1.x86_64
-          export NVCOMP=nvcomp-linux-x86_64-5.1.0.21_cuda13-archive
+          export CUDA=cuda-repo-rhel8-13-2-local-13.2.1_595.58.03-1.x86_64.rpm
+          export CUDNN=cuda-13-9.21.1.3-1.x86_64
+          export NCCL=2.30.4-1+cuda13.2.x86_64
+          export NVCOMP=nvcomp-linux-x86_64-5.2.0.10_cuda13-archive
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -120,7 +120,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
-        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH
+        $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
         $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
@@ -176,7 +176,7 @@ runs:
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/13.2.1/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-devel-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn9-headers-$CUDNN.rpm
@@ -185,9 +185,9 @@ runs:
 
           $SUDO rpm -i --force --ignorearch --nodeps $CUDA libcudnn*.rpm libnccl*.rpm
           rm -f *.rpm *.tgz *.txz *.tar.*
-          pushd /var/cuda-repo-rhel8-13-1-local/; $SUDO rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; $SUDO rm *.rpm; popd
-          $SUDO ln -snf /usr/local/cuda/targets/*/include /usr/local/cuda/include
-          $SUDO ln -snf /usr/local/cuda/targets/*/lib /usr/local/cuda/lib64
+          pushd /var/cuda-repo-rhel8-13-2-local/; $SUDO rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; $SUDO rm *.rpm; popd
+          $SUDO ln -snf $(ls -1d /usr/local/cuda/targets/*/include | tail -n 1) /usr/local/cuda/include
+          $SUDO ln -snf $(ls -1d /usr/local/cuda/targets/*/lib | tail -n 1) /usr/local/cuda/lib64
           $SUDO ln -sf /usr/local/cuda/lib64/ /usr/local/cuda/lib
           $SUDO ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           $SUDO ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
@@ -228,8 +228,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.15.1/tars/TensorRT-10.15.1.29.Linux.aarch64-gnu.cuda-13.1.tar.gz
-          $SUDO tar -hxvf TensorRT-10.15.1.29.Linux.aarch64-gnu.cuda-13.1.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.16.1/tars/TensorRT-10.16.1.11.Linux.aarch64-gnu.cuda-13.2.tar.gz
+          $SUDO tar -hxvf TensorRT-10.16.1.11.Linux.aarch64-gnu.cuda-13.2.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space
@@ -239,8 +239,8 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           # python3 -m gdown 1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.15.1/tars/TensorRT-10.15.1.29.Linux.x86_64-gnu.cuda-13.1.tar.gz
-          $SUDO tar -hxvf TensorRT-10.15.1.29.Linux.x86_64-gnu.cuda-13.1.tar.gz -C /usr/local/
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.16.1/tars/TensorRT-10.16.1.11.Linux.x86_64-gnu.cuda-13.2.tar.gz
+          $SUDO tar -hxvf TensorRT-10.16.1.11.Linux.x86_64-gnu.cuda-13.2.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
           $SUDO patchelf --set-rpath '$ORIGIN' /usr/local/tensorrt/lib/libnvinfer.so
           # Remove downloaded archives and unused libraries to avoid running out of disk space

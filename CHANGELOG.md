@@ -1,8 +1,10 @@
 
+ * Allow creating new `std::vector<torch::optim::OptimizerParamGroup>` in presets for PyTorch ([issue #1756](https://github.com/bytedeco/javacpp-presets/issues/1756))
+ * Add V4L2 Request API hwaccels in presets for FFmpeg ([pull #1755](https://github.com/bytedeco/javacpp-presets/pull/1755))
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
- * Upgrade presets for FFmpeg 8.1, OpenBLAS 0.3.32, CPython 3.14.4, NumPy 2.4.4, SciPy 1.17.1, LLVM 22.1.1, PyTorch 2.11.0, TensorFlow Lite 2.21.0, ONNX 1.21.0, ONNX Runtime 1.24.4 ([pull #1750](https://github.com/bytedeco/javacpp-presets/pull/1750)), and their dependencies
+ * Upgrade presets for FFmpeg 8.1, OpenBLAS 0.3.32, CUDA 13.2.1, cuDNN 9.21.1.3, NCCL 2.30.4, nvCOMP 5.2.0.10, CPython 3.14.4, NumPy 2.4.4, SciPy 1.17.1, LLVM 22.1.1, PyTorch 2.11.0, TensorFlow Lite 2.21.0, TensorRT 10.16.1.11, Triton Inference Server 2.68.0, ONNX 1.21.0, ONNX Runtime 1.24.4 ([pull #1750](https://github.com/bytedeco/javacpp-presets/pull/1750)), and their dependencies
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
 
 ### February 22, 2026 version 1.5.13
