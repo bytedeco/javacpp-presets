@@ -15,10 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-@Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class OrtTrainingApi extends Pointer {
+@Name("OrtOpSchema") @Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+public class OpSchema extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public OrtTrainingApi() { super((Pointer)null); }
+    public OpSchema() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OrtTrainingApi(Pointer p) { super(p); }
+    public OpSchema(Pointer p) { super(p); }
 }

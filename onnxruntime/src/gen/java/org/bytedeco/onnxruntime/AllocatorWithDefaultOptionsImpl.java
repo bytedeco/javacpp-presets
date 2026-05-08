@@ -34,6 +34,7 @@ public class AllocatorWithDefaultOptionsImpl extends BaseAllocatorWithDefaultOpt
 
 
   public native Pointer Alloc(@Cast("size_t") long size);
+  public native Pointer Reserve(@Cast("size_t") long size);
   public native @ByVal MemoryAllocation GetAllocation(@Cast("size_t") long size);
   public native void Free(Pointer p);
   public native @ByVal @Cast("Ort::ConstMemoryInfo*") MemoryInfoImpl GetInfo();
@@ -43,4 +44,10 @@ public class AllocatorWithDefaultOptionsImpl extends BaseAllocatorWithDefaultOpt
    * @return A pointer to a KeyValuePairs object that will be filled with the allocator statistics.
    */
   public native @ByVal KeyValuePairs GetStats();
+
+  /** \brief Release unused memory held by the allocator.
+   *
+   * Calls the optional Shrink function pointer if available; does nothing otherwise.
+   */
+  public native void Shrink();
 }

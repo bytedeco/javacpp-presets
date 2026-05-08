@@ -12,6 +12,7 @@ export DNNL_FLAGS="--use_dnnl"
 export CMAKE_ARGS=
 export COREML_FLAGS=
 export OPENMP_FLAGS= # "--use_openmp"
+export TRAINING_FLAGS= # --enable_training_apis --enable_training_ops
 export CUDAFLAGS="-v"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
 export CUDA_HOME="/usr/local/cuda"
@@ -25,7 +26,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.24.4
+ONNXRUNTIME=1.25.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -69,7 +70,7 @@ case $PLATFORM in
         ;;
 esac
 
-patch -Np1 < ../../../onnxruntime-cuda13.patch
+patch -Np1 < ../../../onnxruntime-cuda13.patch || true
 
 #if [[ -n "$ARCH_FLAGS" ]]; then
 #    # build host version of protoc
@@ -107,6 +108,10 @@ sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnx
 sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_compile_flags.cmake cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
+sedinplace '/CXX>:\/permissive/a\
+      "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
+' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.11)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
@@ -132,7 +137,7 @@ sedinplace '/cvtfp16Avx/d' cmake/onnxruntime_mlas.cmake
 sedinplace 's/MlasCastF16ToF32KernelAvx;/MlasCastF16ToF32KernelAvx2;/g' onnxruntime/core/mlas/lib/platform.cpp
 
 # compile for all CUDA archs instead of using PTX to reduce load time
-sedinplace 's/"60;70;75;80;86;89;90;100;120"/"75;80;90;100;120"/g' cmake/external/cuda_configuration.cmake
+sedinplace 's/75;80;86;89;90;100;120/75;80;90;100;120/g' cmake/external/cuda_configuration.cmake
 sedinplace 's/"all"/"50-real;60-real;70-real;80-real;90-real;100-real;120-real"/g' cmake/CMakeLists.txt
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_90,code=sm_90/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
@@ -187,10 +192,12 @@ sedinplace 's/devicePtrs = allocarray/devicePtrs = (const OrtEpDevice**)allocarr
 sedinplace 's/UTFChars(javaNameStrings/UTFChars((jstring)javaNameStrings/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 sedinplace 's/initializers = allocarray/initializers = (const OrtValue**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 
+sedinplace 's/SoftMaxComputeHelper<T, TOut, true>(ctx->GetComputeStream()/SoftMaxComputeHelper<T, TOut, true>((CUstream_st*)ctx->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/loss/softmax_cross_entropy_loss_impl.cc
+sedinplace 's/SoftMaxComputeHelper<T, T, true>(ctx->GetComputeStream()/SoftMaxComputeHelper<T, T, true>((CUstream_st*)ctx->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/loss/softmaxcrossentropy_impl.cc
+sedinplace 's/PrepareCompute<TIndex>(context->GetComputeStream()/PrepareCompute<TIndex>(context->GetComputeStream()->GetHandle(), (CUstream_st*)context->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/tensor/gather_nd_grad.cc
+
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-for i in {1..2}; do
-  "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --enable_training_apis --enable_training_ops --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $GPU_FLAGS || sedinplace 's/5ea4d05e62d7f954a46b3213f9b2535bdd866803/51982be81bbe52572b54180454df11a3ece9a934/g' cmake/deps.txt
-done
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
 
 # install headers and libraries in standard directories
 cp -r include/* ../include

@@ -13,11 +13,11 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
-  // Type that enables performing training for the given user models.
-@Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class OrtCheckpointState extends Pointer {
+
+@Name("OrtProfilingEvent") @Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+public class ProfilingEvent extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public OrtCheckpointState() { super((Pointer)null); }
+    public ProfilingEvent() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OrtCheckpointState(Pointer p) { super(p); }
+    public ProfilingEvent(Pointer p) { super(p); }
 }
