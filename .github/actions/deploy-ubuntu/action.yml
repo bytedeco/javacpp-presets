@@ -50,7 +50,7 @@ runs:
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-13-2-local-13.2.1_595.58.03-1.aarch64.rpm
-          export CUDNN=cuda-13-9.21.1.3-1.aarch64
+          export CUDNN=cuda-13-9.22.0.52-1.aarch64
           export NCCL=2.30.4-1+cuda13.2.aarch64
           export NVCOMP=nvcomp-linux-sbsa-5.2.0.10_cuda13-archive
           export USERLAND_BUILDME="buildme --aarch64"
@@ -72,7 +72,7 @@ runs:
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
           export CUDA=cuda-repo-rhel8-13-2-local-13.2.1_595.58.03-1.x86_64.rpm
-          export CUDNN=cuda-13-9.21.1.3-1.x86_64
+          export CUDNN=cuda-13-9.22.0.52-1.x86_64
           export NCCL=2.30.4-1+cuda13.2.x86_64
           export NVCOMP=nvcomp-linux-x86_64-5.2.0.10_cuda13-archive
         fi

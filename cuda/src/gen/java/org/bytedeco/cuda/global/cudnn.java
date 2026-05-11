@@ -146,8 +146,8 @@ public class cudnn extends org.bytedeco.cuda.presets.cudnn {
 // #define CUDNN_VERSION_H_
 
 public static final int CUDNN_MAJOR = 9;
-public static final int CUDNN_MINOR = 21;
-public static final int CUDNN_PATCHLEVEL = 1;
+public static final int CUDNN_MINOR = 22;
+public static final int CUDNN_PATCHLEVEL = 0;
 
 public static final int CUDNN_VERSION = (CUDNN_MAJOR * 10000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
 
