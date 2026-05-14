@@ -104,8 +104,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-12.0.0.r81.g90abf784a-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-12.0.0.r81.g90abf784a-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-12.0.0.r81.g90abf784a-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-headers-1.3.296.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-loader-1.3.296.0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-headers-1.4.313.0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-vulkan-loader-1.4.313.0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-SDL2-2.30.12-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-14.2.0-3-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-14.2.0-3-any.pkg.tar.zst
@@ -124,8 +124,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-12.0.0.r81.g90abf784a-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-12.0.0.r81.g90abf784a-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-12.0.0.r81.g90abf784a-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-headers-1.3.296.0-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-loader-1.3.296.0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-headers-1.4.313.0-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-vulkan-loader-1.4.313.0-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-SDL2-2.30.12-1-any.pkg.tar.zst
           bash -c "pacman -Rc --noconfirm mingw-w64-x86_64-gdb-multiarch mingw-w64-x86_64-gdb mingw-w64-x86_64-libb2 mingw-w64-x86_64-python"
           bash -c "pacman -U --noconfirm *.pkg.tar.zst"
