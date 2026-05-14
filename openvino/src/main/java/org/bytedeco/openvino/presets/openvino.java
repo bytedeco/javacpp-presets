@@ -90,6 +90,31 @@ import org.bytedeco.opencl.presets.OpenCL;
             },
             resource = {"runtime"}
         ),
+        @Platform(
+            value = {"macosx-arm64"},
+            include = {
+                "openvino/c/openvino.h"
+            },
+            link = {"openvino_c@.2610", "openvino@.2610"},
+            preloadresource = {
+                "runtime/lib/arm64/Release/",
+                "runtime/3rdparty/tbb/lib/"
+            },
+            preload = {
+                "openvino_auto_batch_plugin",
+                "openvino_auto_plugin",
+                "openvino_hetero_plugin",
+                "openvino_arm_cpu_plugin",
+                "openvino_ir_frontend@.2610",
+                "openvino_onnx_frontend@.2610",
+                "openvino_paddle_frontend@.2610",
+                "openvino_pytorch_frontend@.2610",
+                "openvino_tensorflow_frontend@.2610",
+                "openvino_tensorflow_lite_frontend@.2610",
+                "tbb@.12"
+            },
+            resource = {"runtime"}
+        ),
     },
     target = "org.bytedeco.openvino",
     global = "org.bytedeco.openvino.global.openvino"
