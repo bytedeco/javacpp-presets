@@ -13,13 +13,24 @@
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>openvino</artifactId>
-            <version>2025.4.1-1.5.14-SNAPSHOT</version>
+            <artifactId>opencl</artifactId>
+            <version>3.0-1.5.14-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencl</artifactId>
+            <version>3.0-1.5.14-SNAPSHOT</version>
+            <classifier>linux-x86_64</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openvino</artifactId>
-            <version>2025.4.1-1.5.14-SNAPSHOT</version>
+            <version>2026.1.0-1.5.14-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>openvino</artifactId>
+            <version>2026.1.0-1.5.14-SNAPSHOT</version>
             <classifier>linux-x86_64</classifier>
         </dependency>
     </dependencies>

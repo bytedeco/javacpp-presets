@@ -25,8 +25,12 @@ jobs:
     runs-on: windows-2022
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
+  macosx-arm64:
+    runs-on: macos-15
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   platform:
-    needs: [linux-x86_64, windows-x86_64]
+    needs: [linux-x86_64, windows-x86_64, macosx-arm64]
     runs-on: ubuntu-22.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

@@ -7,9 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENVINO_VERSION=2025.4.1
-OPENVINO_BUILD=20426.82bbf0292c5
-OPENVINO_PACKAGES_URL=https://storage.openvinotoolkit.org/repositories/openvino/packages/${OPENVINO_VERSION}
+OPENVINO_VERSION=2026.1.0
+OPENVINO_BUILD=21367.63e31528c62
+OPENVINO_PACKAGES_URL=https://storage.openvinotoolkit.org/repositories/openvino/packages/2026.1
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
@@ -28,6 +28,11 @@ case $PLATFORM in
         archive_name=openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
         archive_platform=windows
         archive_root=${archive_name%.zip}
+        ;;
+    macosx-arm64)
+        archive_name=openvino_toolkit_macos_12_6_${OPENVINO_VERSION}.${OPENVINO_BUILD}_arm64.tgz
+        archive_platform=macos
+        archive_root=${archive_name%.tgz}
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

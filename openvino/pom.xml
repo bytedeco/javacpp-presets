@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openvino</artifactId>
-  <version>2025.4.1-${project.parent.version}</version>
+  <version>2026.1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenVINO</name>
 
   <dependencies>
@@ -63,6 +63,7 @@
             <linkPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/lib/intel64/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/lib/intel64/Release/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/lib/arm64/Release/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/bin/</preloadPath>
@@ -70,6 +71,7 @@
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/3rdparty/tbb/lib/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/bin/intel64/Release/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/3rdparty/tbb/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/runtime/bin/arm64/Release/</preloadPath>
           </preloadPaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
