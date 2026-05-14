@@ -7,9 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENVINO_VERSION=2025.4.1
-OPENVINO_BUILD=20426.82bbf0292c5
-OPENVINO_PACKAGES_URL=https://storage.openvinotoolkit.org/repositories/openvino/packages/${OPENVINO_VERSION}
+OPENVINO_VERSION=2026.1.0
+OPENVINO_BUILD=21367.63e31528c62
+OPENVINO_PACKAGES_URL=https://storage.openvinotoolkit.org/repositories/openvino/packages/2026.1
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"

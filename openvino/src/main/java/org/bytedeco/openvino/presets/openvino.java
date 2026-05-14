@@ -41,7 +41,7 @@ import org.bytedeco.opencl.presets.OpenCL;
             include = {
                 "openvino/c/openvino.h"
             },
-            link = {"openvino_c@.2541", "openvino@.2541"},
+            link = {"openvino_c@.2610", "openvino@.2610"},
             preloadresource = {
                 "runtime/lib/intel64/",
                 "runtime/3rdparty/tbb/lib/"
@@ -53,12 +53,12 @@ import org.bytedeco.opencl.presets.OpenCL;
                 "openvino_intel_cpu_plugin",
                 "openvino_intel_gpu_plugin",
                 "openvino_intel_npu_plugin",
-                "openvino_ir_frontend@.2541",
-                "openvino_onnx_frontend@.2541",
-                "openvino_paddle_frontend@.2541",
-                "openvino_pytorch_frontend@.2541",
-                "openvino_tensorflow_frontend@.2541",
-                "openvino_tensorflow_lite_frontend@.2541",
+                "openvino_ir_frontend@.2610",
+                "openvino_onnx_frontend@.2610",
+                "openvino_paddle_frontend@.2610",
+                "openvino_pytorch_frontend@.2610",
+                "openvino_tensorflow_frontend@.2610",
+                "openvino_tensorflow_lite_frontend@.2610",
                 "tbb@.12"
             },
             resource = {"runtime"}
