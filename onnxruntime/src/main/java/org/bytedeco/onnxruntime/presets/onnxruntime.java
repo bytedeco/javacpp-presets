@@ -71,7 +71,7 @@ import org.bytedeco.dnnl.presets.*;
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
-            value = {"linux-x86_64", "windows-x86_64"},
+            value = {"linux-x86_64", "macosx-arm64", "windows-x86_64"},
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino"}
         ),
         @Platform(

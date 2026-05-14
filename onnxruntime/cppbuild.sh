@@ -74,7 +74,7 @@ case $PLATFORM in
 esac
 
 case $PLATFORM in
-    linux-x86_64|windows-x86_64)
+    linux-x86_64|macosx-arm64|windows-x86_64)
         "$PYTHON_BIN_PATH" -m pip install openvino==$OPENVINO
         OPENVINO_CMAKE_DIR=$("$PYTHON_BIN_PATH" -c "import pathlib, openvino; print(pathlib.Path(openvino.__file__).parent / 'cmake')")
         export OPENVINO_FLAGS="--use_openvino CPU --cmake_extra_defines OpenVINO_DIR=$OPENVINO_CMAKE_DIR"
