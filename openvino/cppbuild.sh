@@ -29,6 +29,11 @@ case $PLATFORM in
         archive_platform=windows
         archive_root=${archive_name%.zip}
         ;;
+    macosx-arm64)
+        archive_name=openvino_toolkit_macos_12_6_${OPENVINO_VERSION}.${OPENVINO_BUILD}_arm64.tgz
+        archive_platform=macos
+        archive_root=${archive_name%.tgz}
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         exit 1
