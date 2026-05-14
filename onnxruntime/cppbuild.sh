@@ -11,6 +11,7 @@ export ARCH_FLAGS="--allow_running_as_root"
 export DNNL_FLAGS="--use_dnnl"
 export CMAKE_ARGS=
 export COREML_FLAGS=
+export OPENVINO_FLAGS=
 export OPENMP_FLAGS= # "--use_openmp"
 export TRAINING_FLAGS= # --enable_training_apis --enable_training_ops
 export CUDAFLAGS="-v"
@@ -67,6 +68,17 @@ case $PLATFORM in
         export CXX="cl.exe"
         export ARCH_FLAGS="--cmake_generator Ninja"
         export PYTHON_BIN_PATH=$(which python.exe)
+        ;;
+esac
+
+case $PLATFORM in
+    linux-x86_64)
+        export OPENVINO_FLAGS="--use_openvino CPU"
+        # Match OpenVINO's libstdc++ ABI to avoid protobuf/ONNX link errors.
+        export CXXFLAGS="${CXXFLAGS:-} -D_GLIBCXX_USE_CXX11_ABI=0"
+        ;;
+    windows-x86_64)
+        export OPENVINO_FLAGS="--use_openvino CPU"
         ;;
 esac
 
@@ -197,7 +209,7 @@ sedinplace 's/SoftMaxComputeHelper<T, T, true>(ctx->GetComputeStream()/SoftMaxCo
 sedinplace 's/PrepareCompute<TIndex>(context->GetComputeStream()/PrepareCompute<TIndex>(context->GetComputeStream()->GetHandle(), (CUstream_st*)context->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/tensor/gather_nd_grad.cc
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENVINO_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
 
 # install headers and libraries in standard directories
 cp -r include/* ../include
