@@ -183,7 +183,15 @@ sedinplace 's/Throw(javaException)/Throw((jthrowable)javaException)/g' java/src/
 sedinplace '/jint JNI_OnLoad/,/}/d' java/src/main/native/OrtJniUtil.cpp
 sedinplace '/static synchronized void init() throws IOException {/a\
 loaded = org.bytedeco.javacpp.Loader.load(org.bytedeco.onnxruntime.presets.onnxruntime.class) != null;\
-ortApiHandle = initialiseAPIBase(ORT_API_VERSION_1);\
+ortApiHandle = initialiseAPIBase(ORT_API_VERSION_23);\
+if (ortApiHandle == 0L) {\
+  throw new IllegalStateException("There is a mismatch between the ORT class files and the ORT native library, and the native library could not be loaded");\
+}\
+ortTrainingApiHandle = initialiseTrainingAPIBase(ortApiHandle, ORT_API_VERSION_23);\
+ortCompileApiHandle = initialiseCompileAPIBase(ortApiHandle);\
+trainingEnabled = ortTrainingApiHandle != 0L;\
+providers = initialiseProviders(ortApiHandle);\
+version = initialiseVersion();\
 ' java/src/main/java/ai/onnxruntime/OnnxRuntime.java
 sedinplace 's/Names = malloc/Names = (const char**)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/Strings = malloc/Strings = (jobject*)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp

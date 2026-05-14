@@ -72,7 +72,7 @@ import org.bytedeco.dnnl.presets.*;
         ),
         @Platform(
             value = {"linux-x86_64", "windows-x86_64"},
-            link = "onnxruntime_providers_openvino"
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino"}
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -166,6 +166,10 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::detail::Unowned<OrtAllocator>").pointerTypes("UnownedAllocator").purify())
+               .put(new Info("Ort::detail::Base<OrtDeviceEpIncompatibilityDetails>").pointerTypes("BaseDeviceEpIncompatibilityDetails"))
+               .put(new Info("DeviceEpIncompatibilityDetailsImpl<OrtDeviceEpIncompatibilityDetails>",
+                             "Ort::detail::DeviceEpIncompatibilityDetailsImpl<OrtDeviceEpIncompatibilityDetails>").pointerTypes("DeviceEpIncompatibilityDetailsImpl"))
+               .put(new Info("DeviceEpIncompatibilityDetails", "Ort::DeviceEpIncompatibilityDetails").pointerTypes("DeviceEpIncompatibilityDetails"))
                .put(new Info("Ort::detail::Unowned<const OrtEpAssignedNode>").pointerTypes("ConstEpAssignedNode").purify())
                .put(new Info("Ort::detail::Unowned<const OrtEpAssignedSubgraph>").pointerTypes("ConstEpAssignedSubgraph").purify())
                .put(new Info("Ort::detail::Unowned<const Ort::MemoryInfo>").pointerTypes("UnownedMemoryInfo").purify())
