@@ -1,4 +1,5 @@
 
+ * Add presets for OpenVINO 2026.1.0 ([pull #1752](https://github.com/bytedeco/javacpp-presets/pull/1752))
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))

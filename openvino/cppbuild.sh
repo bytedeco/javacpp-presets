@@ -24,15 +24,15 @@ case $PLATFORM in
         archive_platform=linux
         archive_root=${archive_name%.tgz}
         ;;
-    windows-x86_64)
-        archive_name=openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
-        archive_platform=windows
-        archive_root=${archive_name%.zip}
-        ;;
     macosx-arm64)
         archive_name=openvino_toolkit_macos_12_6_${OPENVINO_VERSION}.${OPENVINO_BUILD}_arm64.tgz
         archive_platform=macos
         archive_root=${archive_name%.tgz}
+        ;;
+    windows-x86_64)
+        archive_name=openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
+        archive_platform=windows
+        archive_root=${archive_name%.zip}
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

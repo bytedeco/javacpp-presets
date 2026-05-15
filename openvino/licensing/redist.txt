@@ -1,0 +1,33 @@
+This text file is the file (e.g., redist.txt, etc) specified in the accompanying
+End User License Agreement for the Intel(R) Distribution of OpenVINO(TM) Toolkit ("Agreement").
+All capitalized terms used but not defined in this text file have the same meaning as specified in the Agreement.
+
+Also included as Redistributables are executables and shared and static libraries you create by linking your program
+with libraries provided by Intel as part of the Materials for this product but which are not listed in this redist.txt file (“Libraries”);
+provided that you do not redistribute those Intel provided libraries or any other portion of those Intel provided libraries in any other way.
+
+YOU MAY NOT REDISTRIBUTE THESE MATERIALS UNDER AN EVALUATION LICENSE
+
+################################################################################
+###   OpenVINO(TM) Runtime for Windows*
+################################################################################
+<install_root>/docs/licensing/redist.txt
+<install_root>/runtime/bin/intel64/Debug/*
+<install_root>/runtime/bin/intel64/Release/*
+<install_root>/runtime/3rdparty/tbb/bin/*
+
+################################################################################
+###   OpenVINO(TM) Runtime for Linux* 
+################################################################################
+<install_root>/docs/licensing/redist.txt
+<install_root>/runtime/lib/intel64/*
+
+
+################################################################################
+###   OpenVINO(TM) Runtime for macOS*
+################################################################################
+<install_root>/docs/licensing/redist.txt
+<install_root>/runtime/3rdparty/tbb/lib/*
+<install_root>/runtime/lib/intel64/*
+
+* Other names and brands may be claimed as the property of others.
