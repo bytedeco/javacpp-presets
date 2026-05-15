@@ -1445,6 +1445,7 @@
         <module>cpu_features</module>
         <module>modsecurity</module>
         <module>systems</module>
+        <module>openvino</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1502,6 +1503,7 @@
         <module>onnx</module>
         <module>onnxruntime</module>
         <module>systems</module>
+        <module>openvino</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1775,6 +1777,7 @@
         <module>qt</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>openvino</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
