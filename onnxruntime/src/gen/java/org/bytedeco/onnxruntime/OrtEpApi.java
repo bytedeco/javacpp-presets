@@ -927,4 +927,500 @@ public class OrtEpApi extends Pointer {
    */
   public native OrtStatus GetEnvConfigEntries( @Cast("OrtKeyValuePairs**") PointerPointer config_entries);
   public native OrtStatus GetEnvConfigEntries( @ByPtrPtr OrtKeyValuePairs config_entries);
+
+  /** \brief Get an operator schema from the global schema registry.
+   *
+   * Looks up a schema by name, maximum inclusive version, and domain.
+   * The returned pointer is owned by the caller and must be released via ReleaseOpSchema.
+   * If the schema is not found, *out_schema is set to nullptr (no allocation occurs).
+   *
+   * Available schemas include standard ONNX operators (domain "" or "ai.onnx"), ONNX ML operators
+   * (domain "ai.onnx.ml"), and ORT contrib operators (domain "com.microsoft").
+   *
+   * @param name [in] A null-terminated string for the operator name.
+   * @param max_inclusive_version [in] The maximum inclusive opset version.
+   * @param domain [in] A null-terminated string for the operator domain.
+   * @param out_schema [out] Output parameter set to the schema pointer, or nullptr if not found.
+   *                        Must be released via OrtEpApi::ReleaseOpSchema.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus GetOpSchema( @Cast("const char*") BytePointer name, int max_inclusive_version,
+                    @Cast("const char*") BytePointer domain, @Cast("OrtOpSchema**") PointerPointer out_schema);
+  public native OrtStatus GetOpSchema( @Cast("const char*") BytePointer name, int max_inclusive_version,
+                    @Cast("const char*") BytePointer domain, @Cast("OrtOpSchema**") @ByPtrPtr OpSchema out_schema);
+  public native OrtStatus GetOpSchema( String name, int max_inclusive_version,
+                    String domain, @Cast("OrtOpSchema**") @ByPtrPtr OpSchema out_schema);
+
+  public native void ReleaseOpSchema(@Cast("OrtOpSchema*") OpSchema input);
+
+  /** \brief Get the first ONNX opset version that introduced this operator schema.
+   *
+   * If an operator has had no changes that break backwards compatibility, the {@code since_version} is
+   * just the first opset version that introduced the operator. However, if the operator has had breaking changes,
+   * then {@code since_version} corresponds to the opset version that introduced the breaking change.
+   *
+   * For example, suppose operator "Foo" was added in version 3 and had a breaking change in version 6.
+   * Then, there will be an operator schema entry for "Foo" with a since_version of 3 and another updated
+   * operator schema entry for "Foo" with a since_version of 6.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param out [out] Output parameter set to the ONNX opset version.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetSinceVersion( @Cast("const OrtOpSchema*") OpSchema schema, IntPointer out);
+  public native OrtStatus OpSchema_GetSinceVersion( @Cast("const OrtOpSchema*") OpSchema schema, IntBuffer out);
+  public native OrtStatus OpSchema_GetSinceVersion( @Cast("const OrtOpSchema*") OpSchema schema, int[] out);
+
+  /** \brief Get the number of inputs defined by the operator schema.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param out [out] Output parameter set to the number of inputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetNumInputs( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Get the name of the i-th input formal parameter from an operator schema.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param index [in] Zero-based index of the input parameter.
+   * @param out [out] Output parameter set to the name of the input parameter (null-terminated UTF8 string).
+   *                 Valid as long as the OrtOpSchema exists.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetInputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") PointerPointer out);
+  public native OrtStatus OpSchema_GetInputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus OpSchema_GetInputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus OpSchema_GetInputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the type constraint for the i-th input formal parameter from an operator schema.
+   *
+   * Returns a non-owning pointer to the OrtOpSchemaTypeConstraint associated with the given input.
+   * The returned pointer is valid as long as the parent OrtOpSchema is alive.
+   * If the input has no type constraint, *out is set to nullptr.
+   *
+   * Multiple inputs sharing the same type constraint (e.g., both using "T") return the same pointer.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param index [in] Zero-based index of the input parameter.
+   * @param out [out] Output parameter set to the type constraint, or NULL if the input has no type constraint.
+   *                 Valid as long as the OrtOpSchema exists.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetInputTypeConstraint( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const OrtOpSchemaTypeConstraint**") PointerPointer out);
+  public native OrtStatus OpSchema_GetInputTypeConstraint( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const OrtOpSchemaTypeConstraint**") @ByPtrPtr OpSchemaTypeConstraint out);
+
+  /** \brief Get the number of outputs defined by the operator schema.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param out [out] Output parameter set to the number of outputs.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetNumOutputs( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Get the name of the i-th output formal parameter from an operator schema.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param index [in] Zero-based index of the output parameter.
+   * @param out [out] Output parameter set to the name of the output parameter (null-terminated UTF8 string).
+   *                 Valid as long as the OrtOpSchema exists.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetOutputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") PointerPointer out);
+  public native OrtStatus OpSchema_GetOutputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus OpSchema_GetOutputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus OpSchema_GetOutputName( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the type constraint for the i-th output formal parameter from an operator schema.
+   *
+   * Returns a non-owning pointer to the OrtOpSchemaTypeConstraint associated with the given output.
+   * The returned pointer is valid as long as the parent OrtOpSchema is alive.
+   * If the output has no type constraint, *out is set to nullptr.
+   *
+   * Multiple outputs sharing the same type constraint return the same pointer.
+   * Pointer equality can be used to check if two outputs share a type constraint.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param index [in] Zero-based index of the output parameter.
+   * @param out [out] Output parameter set to the type constraint, or NULL if the output has no type constraint.
+   *                 Valid as long as the OrtOpSchema exists.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetOutputTypeConstraint( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const OrtOpSchemaTypeConstraint**") PointerPointer out);
+  public native OrtStatus OpSchema_GetOutputTypeConstraint( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const OrtOpSchemaTypeConstraint**") @ByPtrPtr OpSchemaTypeConstraint out);
+
+  /** \brief Get the number of unique type constraints in the operator schema.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param out [out] Output set to the number of type constraints.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetTypeConstraintCount( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Get the i-th type constraint from the operator schema.
+   *
+   * Returns a non-owning pointer to the OrtOpSchemaTypeConstraint at the given index.
+   * The returned pointer is valid as long as the parent OrtOpSchema is alive.
+   *
+   * Constraints are returned in the order they are declared in the ONNX operator schema
+   * definition. The order is stable but has no semantic significance.
+   *
+   * Use this API to iterate all type constraints (e.g., to register allowed types for
+   * each constraint). Use OpSchema_GetInputTypeConstraint / OpSchema_GetOutputTypeConstraint
+   * to look up the constraint for a specific input or output.
+   *
+   * @param schema [in] The OrtOpSchema instance.
+   * @param index [in] Zero-based index of the type constraint.
+   * @param out [out] Output parameter set to the type constraint.
+   *                 Valid as long as the OrtOpSchema exists.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchema_GetTypeConstraint( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const OrtOpSchemaTypeConstraint**") PointerPointer out);
+  public native OrtStatus OpSchema_GetTypeConstraint( @Cast("const OrtOpSchema*") OpSchema schema, @Cast("size_t") long index,
+                    @Cast("const OrtOpSchemaTypeConstraint**") @ByPtrPtr OpSchemaTypeConstraint out);
+
+  /** \brief Get the type parameter name of a type constraint (e.g., "T", "T1").
+   *
+   * @param type_constraint [in] The OrtOpSchemaTypeConstraint instance.
+   * @param out [out] Output parameter set to the type parameter name.
+   *                 Valid as long as the parent OrtOpSchema exists.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchemaTypeConstraint_GetTypeParamName( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const char**") PointerPointer out);
+  public native OrtStatus OpSchemaTypeConstraint_GetTypeParamName( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus OpSchemaTypeConstraint_GetTypeParamName( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus OpSchemaTypeConstraint_GetTypeParamName( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the allowed type strings for a type constraint.
+   *
+   * Returns an array of null-terminated strings representing the allowed data types
+   * (e.g., "tensor(float)", "tensor(double)"). The array and its contents are valid
+   * as long as the parent OrtOpSchema exists.
+   *
+   * @param type_constraint [in] The OrtOpSchemaTypeConstraint instance.
+   * @param out_types [out] Output parameter set to the output array of type strings.
+   *                       Valid as long as the parent OrtOpSchema exists.
+   * @param num_types [out] Output parameter set to the number of elements in the output array.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchemaTypeConstraint_GetAllowedTypes( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const char*const**") @ByPtrPtr PointerPointer out_types, @Cast("size_t*") SizeTPointer num_types);
+
+  /** \brief Get the input indices that use a type constraint.
+   *
+   * Returns an array of zero-based input indices whose formal parameter type string
+   * matches this type constraint. The array is valid as long as the parent OrtOpSchema exists.
+   *
+   * @param type_constraint [in] The OrtOpSchemaTypeConstraint instance.
+   * @param out_indices [out] Output parameter set to the output array of input indices.
+   * @param count [out] Output parameter set to the number of elements in the output array.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchemaTypeConstraint_GetInputIndices( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const size_t**") PointerPointer out_indices, @Cast("size_t*") SizeTPointer count);
+  public native OrtStatus OpSchemaTypeConstraint_GetInputIndices( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const size_t**") @ByPtrPtr SizeTPointer out_indices, @Cast("size_t*") SizeTPointer count);
+
+  /** \brief Get the output indices that use a type constraint.
+   *
+   * Returns an array of zero-based output indices whose formal parameter type string
+   * matches this type constraint. The array is valid as long as the parent OrtOpSchema exists.
+   *
+   * @param type_constraint [in] The OrtOpSchemaTypeConstraint instance.
+   * @param out_indices [out] Output parameter set to the output array of output indices.
+   * @param count [out] Output parameter set to the number of elements in the output array.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus OpSchemaTypeConstraint_GetOutputIndices( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const size_t**") PointerPointer out_indices, @Cast("size_t*") SizeTPointer count);
+  public native OrtStatus OpSchemaTypeConstraint_GetOutputIndices( @Cast("const OrtOpSchemaTypeConstraint*") OpSchemaTypeConstraint type_constraint,
+                    @Cast("const size_t**") @ByPtrPtr SizeTPointer out_indices, @Cast("size_t*") SizeTPointer count);
+
+  /** \brief Create a profiling event.
+   *
+   * An EP profiler calls this to create an event to pass to OrtEpApi::ProfilingEventsContainer_AddEvents.
+   * The returned event must be released via OrtEpApi::ReleaseProfilingEvent after it has been added.
+   *
+   * @param category [in] The event category (e.g., session, node, kernel, or API).
+   * @param process_id [in] Process ID. Set to -1 if does not apply.
+   * @param thread_id [in] Thread ID. Set to -1 if does not apply.
+   * @param event_name [in] Null-terminated string representing the event name. ORT copies this string.
+   * @param timestamp_us [in] Starting timestamp in microseconds relative to the profiling start time.
+   *                         An OrtEpProfilerImpl should record its own clock's profiling start time and
+   *                         use the {@code ep_profiling_start_offset_ns} value passed to OrtEpProfilerImpl::StartProfiling
+   *                         to compute this value as:
+   *                           timestamp_us = (ep_profiling_start_offset_ns +
+   *                                           (ep_event_time_ns - ep_profiling_start_time_ns)) / 1000
+   * @param duration_us [in] Duration in microseconds.
+   * @param arg_keys [in] Array of null-terminated argument key strings. Can be NULL if num_args is 0.
+   *                     ORT copies these strings.
+   * @param arg_values [in] Array of null-terminated argument value strings. Can be NULL if num_args is 0.
+   *                       ORT copies these strings.
+   * @param num_args [in] Number of key-value argument pairs.
+   * @param out [out] Output parameter set to the created profiling event.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    @Cast("const char*") BytePointer event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") PointerPointer arg_keys,
+                    @Cast("const char*const*") PointerPointer arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") PointerPointer out);
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    @Cast("const char*") BytePointer event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer arg_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") @ByPtrPtr ProfilingEvent out);
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    String event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer arg_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") @ByPtrPtr ProfilingEvent out);
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    @Cast("const char*") BytePointer event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") @ByPtrPtr byte[] arg_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") @ByPtrPtr ProfilingEvent out);
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    String event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer arg_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") @ByPtrPtr ProfilingEvent out);
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    @Cast("const char*") BytePointer event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer arg_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") @ByPtrPtr ProfilingEvent out);
+  public native OrtStatus CreateProfilingEvent(
+                    @Cast("OrtProfilingEventCategory") int category,
+                    int process_id,
+                    int thread_id,
+                    String event_name,
+                    @Cast("int64_t") long timestamp_us,
+                    @Cast("int64_t") long duration_us,
+                    @Cast("const char*const*") @ByPtrPtr byte[] arg_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] arg_values,
+                    @Cast("size_t") long num_args,
+                    @Cast("OrtProfilingEvent**") @ByPtrPtr ProfilingEvent out);
+
+  /** \brief Release an opaque profiling event created via CreateProfilingEvent.
+   *
+   * @since Version 1.25.
+   */
+  public native void ReleaseProfilingEvent(@Cast("OrtProfilingEvent*") ProfilingEvent input);
+
+  /** \brief Get the event category of a profiling event.
+   *
+   * @param event [in] The OrtProfilingEvent instance.
+   * @param out [out] Output parameter set to the event category.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus ProfilingEvent_GetCategory( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("OrtProfilingEventCategory*") IntPointer out);
+  public native OrtStatus ProfilingEvent_GetCategory( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("OrtProfilingEventCategory*") IntBuffer out);
+  public native OrtStatus ProfilingEvent_GetCategory( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("OrtProfilingEventCategory*") int[] out);
+
+  /** \brief Get the event name of a profiling event.
+   *
+   * @param event [in] The OrtProfilingEvent instance.
+   * @param out [out] Output parameter set to the event name as a null-terminated UTF-8 string.
+   *                 Do not free as it is owned by the OrtProfilingEvent instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus ProfilingEvent_GetName( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("const char**") PointerPointer out);
+  public native OrtStatus ProfilingEvent_GetName( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus ProfilingEvent_GetName( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus ProfilingEvent_GetName( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Get the start timestamp of a profiling event in microseconds.
+   *
+   * @param event [in] The OrtProfilingEvent instance.
+   * @param out [out] Output parameter set to the start timestamp of the profiling event in microseconds relative to
+   *                 the profiling start time.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus ProfilingEvent_GetTimestampUs( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("int64_t*") LongPointer out);
+  public native OrtStatus ProfilingEvent_GetTimestampUs( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("int64_t*") LongBuffer out);
+  public native OrtStatus ProfilingEvent_GetTimestampUs( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("int64_t*") long[] out);
+
+  /** \brief Get the duration of a profiling event in microseconds.
+   *
+   * @param event [in] The OrtProfilingEvent instance.
+   * @param out [out] Output parameter set to the event duration in microseconds.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus ProfilingEvent_GetDurationUs( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("int64_t*") LongPointer out);
+  public native OrtStatus ProfilingEvent_GetDurationUs( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("int64_t*") LongBuffer out);
+  public native OrtStatus ProfilingEvent_GetDurationUs( @Cast("const OrtProfilingEvent*") ProfilingEvent event,
+                    @Cast("int64_t*") long[] out);
+
+  /** \brief Get the value of an event argument by its key.
+   *
+   * The value is set to NULL if the key is not found.
+   *
+   * @param event [in] The OrtProfilingEvent instance.
+   * @param key [in] Null-terminated argument key to look up.
+   * @param out [out] Output parameter set to the argument value string, or NULL if not found.
+   *                 The value is a null-terminated UTF-8 string.
+   *                 Do not free as the string is owned by the OrtProfilingEvent instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.25.
+   */
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, @Cast("const char*") BytePointer key,
+                    @Cast("const char**") PointerPointer out);
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, @Cast("const char*") BytePointer key,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, String key,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, @Cast("const char*") BytePointer key,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, String key,
+                    @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, @Cast("const char*") BytePointer key,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus ProfilingEvent_GetArgValue( @Cast("const OrtProfilingEvent*") ProfilingEvent event, String key,
+                    @Cast("const char**") @ByPtrPtr byte[] out);
+
+  /** \brief Add EP profiling events to an events container.
+   *
+   * An EP profiler calls this function to report new EP profiling events (e.g., GPU kernel timings) during
+   * OrtEpProfilerImpl::EndProfiling(). ORT copies the EP event data during this call. The EP retains ownership of the
+   * OrtProfilingEvent instances and must release them via ReleaseProfilingEvent after this call returns.
+   * This function may be called multiple times within a single EndProfiling call to add EP events in batches.
+   *
+   * @param events_container [in] The OrtProfilingEventsContainer instance provided by ORT
+   *                             to OrtEpProfilerImpl::EndProfiling().
+   * @param events [in] Array of pointers to opaque OrtProfilingEvent instances.
+   * @param num_events [in] Number of events in the {@code events} array. Must be greater than 0.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus ProfilingEventsContainer_AddEvents( OrtProfilingEventsContainer events_container,
+                    @Cast("const OrtProfilingEvent*const*") PointerPointer events,
+                    @Cast("size_t") long num_events);
+  public native OrtStatus ProfilingEventsContainer_AddEvents( OrtProfilingEventsContainer events_container,
+                    @Cast("const OrtProfilingEvent*const*") @ByPtrPtr ProfilingEvent events,
+                    @Cast("size_t") long num_events);
 }

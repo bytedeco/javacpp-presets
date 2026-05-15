@@ -51,6 +51,9 @@ AOMAV1_VERSION=3.13.3
 SVTAV1_VERSION=4.1.0
 ZIMG_VERSION=3.0.6
 FFMPEG_VERSION=8.1
+# Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
+# with the unsupported FFmpeg 8.1 Changelog hunk already removed.
+V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847-ffmpeg-8.1.patch
 download https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download https://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download https://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -125,6 +128,7 @@ patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH
 # patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp

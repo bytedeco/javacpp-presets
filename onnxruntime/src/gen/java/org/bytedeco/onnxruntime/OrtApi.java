@@ -7578,4 +7578,77 @@ public class OrtApi extends Pointer {
                     @Cast("ONNXTensorElementDataType*") int[] elem_type,
                     @Cast("const int64_t**") @ByPtrPtr long[] shape_data,
                     @Cast("size_t*") SizeTPointer shape_data_count);
+
+  /** \brief Enable profiling for this run
+   *
+   * @param options [in]
+   * @param profile_file_prefix [in] The prefix for the profile file. The actual filename will be:
+   *                                [profile_file_prefix]_[timestamp].json
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus RunOptionsEnableProfiling( OrtRunOptions options, @Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
+
+  /** \brief Disable profiling for this run
+   *
+   * @param options [in]
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus RunOptionsDisableProfiling( OrtRunOptions options);
+
+  /** \brief Fetch an array of strings stored as an attribute in the graph node
+   *
+   * If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
+   * array and a success status is returned.
+   *
+   * Otherwise, the strings and pointer array are allocated using {@code allocator}.
+   * The caller must free each string and the pointer array with {@code allocator}.
+   * If the attribute array is empty, {@code *out} is set to nullptr and {@code *size} is set to 0.
+   *
+   * @param info [in] instance
+   * @param name [in] name of the attribute to be parsed
+   * @param allocator [in] allocator used to allocate the returned string array and strings
+   * @param out [out] pointer to the returned array of null-terminated UTF-8 strings
+   * @param size [out] actual size of attribute array
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus KernelInfoGetAttributeArray_string( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    OrtAllocator allocator, @Cast("char***") @ByPtrPtr PointerPointer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_string( @Const OrtKernelInfo info, String name,
+                    OrtAllocator allocator, @Cast("char***") @ByPtrPtr PointerPointer out, @Cast("size_t*") SizeTPointer size);
+
+  /** \}
+   *  \name OrtEnv
+   *  \{
+  <p>
+  /** \brief Set thread pool work callbacks for per-session thread pools.
+   *
+   * Stores callbacks on the Env that will be applied to per-session thread pools
+   * created by subsequent sessions. Does not affect sessions already created or
+   * global thread pools created via OrtApi::CreateEnvWithGlobalThreadPools.
+   *
+   * Requires ORT built with --enable_session_threadpool_callbacks.
+   *
+   * @param env [in] OrtEnv instance.
+   * @param config [in] Versioned callbacks configuration. ORT copies the struct contents;
+   *                   the caller does not need to keep the struct alive after this call returns.
+   *                   However, all pointers within the struct must remain valid for the
+   *                   lifetime of any session that uses these callbacks.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus SetPerSessionThreadPoolCallbacks( OrtEnv env,
+                    @Const OrtThreadPoolCallbacksConfig config);
+
+  /** \} */
 }

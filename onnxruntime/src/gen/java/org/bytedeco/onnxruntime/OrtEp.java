@@ -383,4 +383,45 @@ public class OrtEp extends Pointer {
    */
   public native OrtStatus IsConcurrentRunSupported( OrtEp this_ptr, @Cast("bool*") BoolPointer is_supported);
   public native OrtStatus IsConcurrentRunSupported( OrtEp this_ptr, @Cast("bool*") boolean[] is_supported);
+
+  /** \brief Called by ORT to block until the device has completed all preceding requested tasks.
+   *
+   * Currently this is primarily used by the IOBinding object to ensure that all inputs have been copied
+   * to the device before execution begins.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   *
+   * \note Implementation of this function is optional.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus Sync( OrtEp this_ptr);
+
+  /** \brief Return a new profiler for the execution provider.
+   *
+   * If the EP supports profiling, it should create and return an OrtEpProfilerImpl instance.
+   * ORT takes ownership of each non-NULL instance returned and will call OrtEpProfilerImpl::Release when
+   * it is no longer needed.
+   *
+   * ORT may call this function multiple times over the lifetime of a single OrtEp instance, for example
+   * during EP registration and again per run if run-level profiling is enabled. Each call is independent and
+   * the EP must return a new profiler instance (or NULL if profiling is not supported).
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param profiler [out] Output parameter set to a new OrtEpProfilerImpl instance created by the EP.
+   *                      Set to NULL if the EP does not support profiling.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional. If set to NULL, ORT assumes the EP does not
+   *       support profiling.
+   *
+   * @since Version 1.25.
+   */
+  public native OrtStatus CreateProfiler( OrtEp this_ptr,
+                    @Cast("OrtEpProfilerImpl**") PointerPointer profiler);
+  public native OrtStatus CreateProfiler( OrtEp this_ptr,
+                    @ByPtrPtr OrtEpProfilerImpl profiler);
 }

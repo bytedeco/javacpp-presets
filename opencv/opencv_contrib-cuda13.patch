@@ -1,25 +1,73 @@
-diff --git a/modules/videostab/src/cuda/global_motion.cu b/modules/videostab/src/cuda/global_motion.cu
-index 7eca6ff76b7..c20ccfc2ed4 100644
---- a/modules/videostab/src/cuda/global_motion.cu
-+++ b/modules/videostab/src/cuda/global_motion.cu
-@@ -52,6 +52,11 @@ namespace cv { namespace cuda { namespace device { namespace globmotion {
- __constant__ float cml[9];
- __constant__ float cmr[9];
+From ee880ead509f1ce77b1443e8787d7e4f2853686c Mon Sep 17 00:00:00 2001
+From: John Zhang <john.zhang@tetratech.com>
+Date: Mon, 23 Mar 2026 21:58:25 +0000
+Subject: [PATCH 1/2] fixed opencv build issue with CUDA toolkit 13.2, it would
+ complain namespace not exist
+
+---
+ modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp b/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp
+index f60ab5d0eb7..d04c9cc1ef9 100644
+--- a/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp
++++ b/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp
+@@ -179,7 +179,7 @@ template <class PtrTuple> struct PtrTraits< ZipPtrSz<PtrTuple> > : PtrTraitsBase
+ }}
  
-+struct is_zero
-+{
-+    __host__ __device__ bool operator()(uchar x) const { return x == 0; }
-+};
+ #if defined(__CUDACC_VER_MAJOR__) && (__CUDACC_VER_MAJOR__ > 12 || (__CUDACC_VER_MAJOR__ == 12 && __CUDACC_VER_MINOR__ >= 4))
+-_LIBCUDACXX_BEGIN_NAMESPACE_STD
++namespace cuda { namespace std {
+ 
+ template< class... Types >
+ struct tuple_size< cv::cudev::ZipPtr<tuple<Types...> > >
+@@ -198,7 +198,7 @@ template<size_t N, class... Types >
+ struct tuple_element<N, cv::cudev::ZipPtrSz<tuple<Types...> > >
+ : tuple_element<N, tuple<Types...> > { };
+ 
+-_LIBCUDACXX_END_NAMESPACE_STD
++}}
+ 
+ #endif
+ #endif
+
+From 12c198989fddec78d2d3b41cd36b1ef8cd866324 Mon Sep 17 00:00:00 2001
+From: John Zhang <john.zhang@tetratech.com>
+Date: Tue, 24 Mar 2026 15:44:42 +0000
+Subject: [PATCH 2/2] fix opencv build issue for cuda 13.2 - missing namespace
+
+---
+ modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp b/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp
+index d04c9cc1ef9..2bcc2fb3aab 100644
+--- a/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp
++++ b/modules/cudev/include/opencv2/cudev/ptr2d/zip.hpp
+@@ -179,7 +179,12 @@ template <class PtrTuple> struct PtrTraits< ZipPtrSz<PtrTuple> > : PtrTraitsBase
+ }}
+ 
+ #if defined(__CUDACC_VER_MAJOR__) && (__CUDACC_VER_MAJOR__ > 12 || (__CUDACC_VER_MAJOR__ == 12 && __CUDACC_VER_MINOR__ >= 4))
+-namespace cuda { namespace std {
++#if (__CUDACC_VER_MAJOR__ > 13 || (__CUDACC_VER_MAJOR__ == 13 && __CUDACC_VER_MINOR__ >= 2))
++_CCCL_BEGIN_NAMESPACE_CUDA_STD
++#else
++_LIBCUDACXX_BEGIN_NAMESPACE_STD
++#endif
 +
- int compactPoints(int N, float *points0, float *points1, const uchar *mask)
- {
-     thrust::device_ptr<float2> dpoints0((float2*)points0);
-@@ -60,7 +65,7 @@ int compactPoints(int N, float *points0, float *points1, const uchar *mask)
  
-     return (int)(thrust::remove_if(thrust::make_zip_iterator(thrust::make_tuple(dpoints0, dpoints1)),
-                              thrust::make_zip_iterator(thrust::make_tuple(dpoints0 + N, dpoints1 + N)),
--                             dmask, thrust::not1(thrust::identity<uchar>()))
-+                             dmask, is_zero())
-            - thrust::make_zip_iterator(make_tuple(dpoints0, dpoints1)));
- }
+ template< class... Types >
+ struct tuple_size< cv::cudev::ZipPtr<tuple<Types...> > >
+@@ -198,7 +203,11 @@ template<size_t N, class... Types >
+ struct tuple_element<N, cv::cudev::ZipPtrSz<tuple<Types...> > >
+ : tuple_element<N, tuple<Types...> > { };
  
+-}}
++#if (__CUDACC_VER_MAJOR__ > 13 || (__CUDACC_VER_MAJOR__ == 13 && __CUDACC_VER_MINOR__ >= 2))
++_CCCL_END_NAMESPACE_CUDA_STD
++#else
++_LIBCUDACXX_END_NAMESPACE_STD
++#endif
+ 
+ #endif
+ #endif
