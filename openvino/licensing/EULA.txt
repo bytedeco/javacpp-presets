@@ -1,0 +1,163 @@
+Intel(R) OpenVINO(TM) Distribution License (Version May 2021)
+
+This License Agreement ("Agreement") is a contract between you
+and Intel Corporation and its affiliates ("Intel"). It governs
+your use of the Intel(R) Distribution of OpenVINO(TM) Toolkit.
+If you are accepting this Agreement on behalf of your employer,
+you represent and warrant you have the authority to bind your
+employer to these terms. By downloading, installing, or using the
+Toolkit, you agree to these terms. If you do not agree, do not use
+the Toolkit, and destroy all copies.
+
+1. Definitions.
+    1.1 "Confidential Information" means any information
+from Intel identified as confidential as well as the
+following whether or not marked as confidential, and
+code for OpenVINO which is provided as early access or
+pre-release.
+    1.2 "including" means including but not limited to, whether
+or not capitalized.
+    1.3 "Toolkit" means any component of the Intel(R)
+Distribution of OpenVINO(TM) Toolkit in unmodified form
+as provided by Intel, including software,  any updates,
+and new versions of the software from Intel, and the
+accompanying documentation.
+    1.4 "Redistributables" means any Intel copyrighted Toolkit
+component identified in an accompanying  text file (i.e.
+redist.txt) as redistributable.
+    1.5 "you or your" means you or you and your employer,
+whether or not capitalized.
+
+2. License.
+    2.1   License. Subject to this Agreement, Intel grants to you,
+for the term, a worldwide, nonexclusive,
+nontransferable, non-sublicensable, revocable, fully
+paid-up license to:
+(a)  use the Toolkit in your workplace;
+(b) modify source code of the Toolkit; and
+(c) distribute an object code version of the
+Redistributables under terms at least as restrictive
+as the terms in this Agreement.
+    2.2 Restrictions. Except as authorized by a license from
+Intel or a third party open source license, you will not:
+(a) disclose Confidential Information to anyone who
+does not have a specific need to know the Confidential
+Information to exercise the rights granted in  Section
+    2.1; (b) use or modify the Toolkit in any other way; (c)
+reverse engineer, decompile, or disassemble the
+Toolkit; or (d) use the Toolkit to cause or contribute to a
+violation of any internationally recognized human right.
+    2.3   No Other  Licenses. In this Agreement, Intel does not
+license you to make, have made, sell or import anything
+or perform any patented process or method under any
+legal theory. Any other license from Intel requires
+additional consideration. Nothing in this Agreement
+requires Intel to grant any additional licenses.
+    2.4  Feedback. If you give Intel information related to the
+Toolkit, Intel can use it in any way and disclose it to
+anyone, without payment or other obligation to you. 
+    2.5 Third-party Software. This Toolkit distribution may
+include software licensed directly to you by a third
+party. Your use of any third-party software is subject to
+your compliance with the third-party license. See the
+text files accompanying the Toolkit for any third party or
+additional Intel license terms.
+    2.6 Open Source Licenses. Nothing in this Agreement limits
+any rights under, or grants rights that supersede or
+restrict, the terms of any applicable open source
+software license.
+
+3. Ownership. Ownership of the Toolkit and related
+intellectual property rights is unchanged. You must
+maintain all copyright or other notices in the Toolkit.
+
+4. No Warranty. The Toolkit is provided "as is," without
+any express or implied warranty of any kind including
+warranties of merchantability, non-infringement, title,
+or fitness for a particular purpose. The Toolkit may
+include pre-release software or algorithms and may not
+be fully functional. Intel is not required to maintain,
+update, or support the Toolkit.
+
+5. Limit on Liability. Intel is providing the Toolkit for free.
+Use it at your own risk. Intel will not be liable to you
+under any legal theory for any losses or damages in
+connection with or related to the Toolkit, including
+consequential damages, even if the possibility of
+damages was foreseeable or known. If any liability is
+found, Intel's total, cumulative liability to you will not
+exceed $100.00 USD for all claims arising from or
+related to this Agreement. These liability limitations are
+a fundamental basis of bargain and Intel would not
+have entered into this Agreement without them.
+
+6. Indemnity. You will indemnify, defend, and hold Intel
+harmless from any allegation against Intel arising in
+connection with your use of the Toolkit and you will pay
+all of Intel's losses, liabilities, and costs (including
+attorneys' fees) arising from any allegation.
+
+7. Privacy and Data Collection.
+    7.1 Privacy. Intel respects your privacy. For information
+about why and how Intel may collect and use
+information from your use of the Toolkit see
+http://www.intel.com/privacy.
+    7.2 Data Collection. Some Toolkit software may generate
+and collect information about the software and usage
+and transmit it to Intel to help Intel's products and
+services.  This collected information may include
+product name, product version, time of event
+collection, license type, support type, installation status,
+hardware and software performance and use.
+
+8. General
+    8.1  Compliance with Export Laws. The materials are
+subject to export controls under applicable government
+laws and regulations, including in the U.S. You must: a)
+comply with applicable laws and regulations and obtain
+any necessary authorizations; b) not export, import, or
+transfer the materials to any prohibited or sanctioned
+country, person, or entity; or c) not use the materials for
+the development, design, manufacture, or production of
+nuclear, missile, chemical, or biological weapons.
+    8.2 Governing Law; Jurisdiction. This Agreement is
+governed by USA and Delaware law without regard to
+conflict of laws principles. The United Nations
+Convention on Contracts for the International Sale of
+Goods does not apply. All disputes and actions arising
+out of or related to this Agreement are subject to the
+exclusive jurisdiction of the state and federal courts in
+Wilmington, Delaware and you consent to personal
+jurisdiction in those courts.
+    8.3 Severability. If a court holds a provision of this
+Agreement unenforceable, the court will modify that
+part to the minimum extent necessary to make that part
+enforceable or, if necessary, to sever that part. The rest
+of the provision remains fully enforceable.
+    8.4  Waiver. No waiver of any provision of this Agreement
+will be valid unless in a writing signed by an authorized
+representative of Intel that specifies the waived
+provision. That signed waiver will not constitute a
+waiver of any other provision. The failure in enforcing
+any provision will not operate as a waiver.
+    8.5  Assignment. You may not assign your rights or
+obligations under this Agreement without Intel's prior
+written consent.
+    8.6 Entire Agreement. This Agreement constitutes the
+entire agreement and supersedes all prior agreements
+or dealings between Intel and you concerning its subject
+matter.
+
+9. Term, Termination, Survival
+    9.1 Term. This Agreement begins upon your acceptance of
+its terms and continues until terminated under Section 9.2.
+    9.2  Termination. This Agreement will automatically
+terminate upon your breach of the Agreement or an
+allegation that you do not have authority to bind your
+employer to these terms.
+    9.3 Effect of Termination. Upon termination of the
+Agreement, the license to you will immediately
+terminate. You must cease utilizing the Toolkit and
+destroy all copies in your possession.
+    9.4 Survival. All sections except Section 2.1 (license) 
+survive termination of this Agreement.

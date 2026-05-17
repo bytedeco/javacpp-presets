@@ -54,6 +54,7 @@ JavaCPP Presets
 [![depthai](https://github.com/bytedeco/javacpp-presets/workflows/depthai/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adepthai)
 [![onnx](https://github.com/bytedeco/javacpp-presets/workflows/onnx/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnx)
 [![ngraph](https://github.com/bytedeco/javacpp-presets/workflows/ngraph/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Angraph)
+[![openvino](https://github.com/bytedeco/javacpp-presets/workflows/openvino/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopenvino)
 [![onnxruntime](https://github.com/bytedeco/javacpp-presets/workflows/onnxruntime/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnxruntime)
 [![tvm](https://github.com/bytedeco/javacpp-presets/workflows/tvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atvm)
 [![bullet](https://github.com/bytedeco/javacpp-presets/workflows/bullet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Abullet)
@@ -234,6 +235,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.20.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
+ * OpenVINO 2026.1.x  https://github.com/openvinotoolkit/openvino
  * ONNX Runtime 1.25.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org

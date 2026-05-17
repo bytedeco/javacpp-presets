@@ -66,6 +66,7 @@
 <!--    <module>../depthai/platform</module>-->
     <module>../onnx/platform</module>
 <!--    <module>../ngraph/platform</module>-->
+    <module>../openvino/platform</module>
     <module>../onnxruntime/platform</module>
 <!--    <module>../tvm/platform</module>-->
 <!--    <module>../bullet/platform</module>-->
@@ -339,6 +340,11 @@
 <!--      <artifactId>ngraph-platform</artifactId>-->
 <!--      <version>0.26.0-${project.version}</version>-->
 <!--    </dependency>-->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>openvino-platform</artifactId>
+      <version>2026.1.0-${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
