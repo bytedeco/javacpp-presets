@@ -29,7 +29,6 @@ if [[ "$EXTENSION" == *gpu ]]; then
 fi
 
 ONNXRUNTIME=1.26.0
-OPENVINO=2026.1.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -75,8 +74,18 @@ esac
 
 case $PLATFORM in
     linux-x86_64|macosx-arm64|windows-x86_64)
-        "$PYTHON_BIN_PATH" -m pip install openvino==$OPENVINO
-        OPENVINO_CMAKE_DIR=$("$PYTHON_BIN_PATH" -c "import pathlib, openvino; print(pathlib.Path(openvino.__file__).parent / 'cmake')")
+        OPENVINO_CMAKE_DIR="$TOP_PATH/openvino/cppbuild/$PLATFORM/runtime/cmake"
+        if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
+            echo "OpenVINO preset is missing for $PLATFORM; installing it first"
+            mkdir -p "$TOP_PATH/openvino/cppbuild"
+            pushd "$TOP_PATH/openvino/cppbuild"
+            source ../cppbuild.sh
+            popd
+        fi
+        if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
+            echo "Error: OpenVINOConfig.cmake not found in $OPENVINO_CMAKE_DIR"
+            exit 1
+        fi
         export OPENVINO_FLAGS="--use_openvino CPU --cmake_extra_defines OpenVINO_DIR=$OPENVINO_CMAKE_DIR"
         ;;
 esac
