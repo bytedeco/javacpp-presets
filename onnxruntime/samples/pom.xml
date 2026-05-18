@@ -15,21 +15,33 @@
             <version>1.26.0-1.5.14-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>onnxruntime-platform-gpu</artifactId>
-            <version>1.26.0-1.5.14-SNAPSHOT</version>
-        </dependency>
-
-        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda-platform-redist-cudnn</artifactId>
-            <version>13.2-9.21-1.5.14-SNAPSHOT</version>
+            <artifactId>openvino-platform</artifactId>
+            <version>2026.1.0-1.5.14-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
+    <profiles>
+        <profile>
+            <id>cuda</id>
+            <dependencies>
+                <!-- Additional dependencies required to use CUDA and cuDNN -->
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>onnxruntime-platform-gpu</artifactId>
+                    <version>1.26.0-1.5.14-SNAPSHOT</version>
+                </dependency>
+
+                <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>cuda-platform-redist-cudnn</artifactId>
+                    <version>13.2-9.21-1.5.14-SNAPSHOT</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
     <build>
         <sourceDirectory>.</sourceDirectory>
     </build>
