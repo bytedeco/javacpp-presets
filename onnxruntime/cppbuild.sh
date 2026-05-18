@@ -74,18 +74,7 @@ esac
 
 case $PLATFORM in
     linux-x86_64|macosx-arm64|windows-x86_64)
-        OPENVINO_CMAKE_DIR="$TOP_PATH/openvino/cppbuild/$PLATFORM/runtime/cmake"
-        if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
-            echo "OpenVINO preset is missing for $PLATFORM; installing it first"
-            mkdir -p "$TOP_PATH/openvino/cppbuild"
-            pushd "$TOP_PATH/openvino/cppbuild"
-            source ../cppbuild.sh
-            popd
-        fi
-        if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
-            echo "Error: OpenVINOConfig.cmake not found in $OPENVINO_CMAKE_DIR"
-            exit 1
-        fi
+        export OPENVINO_CMAKE_DIR="$TOP_PATH/openvino/cppbuild/$PLATFORM/runtime/cmake"
         export OPENVINO_FLAGS="--use_openvino CPU --cmake_extra_defines OpenVINO_DIR=$OPENVINO_CMAKE_DIR"
         ;;
 esac
