@@ -145,6 +145,8 @@ sedinplace 's/floor(/floorf(/g' onnxruntime/core/providers/cuda/tensor/resize_im
 sedinplace 's/round(/roundf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
 sedinplace 's/#include <array>/#include <array>\n#include <charconv>/g' onnxruntime/core/providers/openvino/backend_manager.cc
 sedinplace 's/#include <exception>/#include <charconv>\n#include <exception>/g' onnxruntime/core/providers/openvino/exceptions.h
+sedinplace 's/#include "weak_singleton.h"/#include "weak_singleton.h"\n#include <optional>/g' onnxruntime/core/providers/openvino/ov_bin_manager.h
+sedinplace 's/#include <map>/#include <map>\n#include <optional>/g' onnxruntime/core/providers/openvino/ov_shared_context.h
 sedinplace 's/, dims_span);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_reduce.cc
 sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_squeeze.cc
 sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
