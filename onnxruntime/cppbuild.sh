@@ -122,6 +122,8 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
 git apply --recount ../../../onnxruntime-openvino-no-format.patch
+git apply --recount ../../../onnxruntime-openvino-gcc11.patch
+git apply --recount ../../../onnxruntime-openvino-gcc13.patch
 #patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt

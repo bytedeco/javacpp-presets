@@ -1,0 +1,32 @@
+diff --git a/onnxruntime/core/providers/openvino/ov_versions/utils.cc b/onnxruntime/core/providers/openvino/ov_versions/utils.cc
+index dd43f856e0..6a34827b1a 100644
+--- a/onnxruntime/core/providers/openvino/ov_versions/utils.cc
++++ b/onnxruntime/core/providers/openvino/ov_versions/utils.cc
+@@ -9,13 +9,11 @@
+ #elif __GNUC__
+ #pragma GCC diagnostic push
+ #pragma GCC diagnostic ignored "-Wunused-parameter"
+-#endif
+-
+-#if defined(_MSC_VER)
+-#pragma warning(default : 4244 4245)
+-#elif __GNUC__
+-#pragma GCC diagnostic pop
++#if __GNUC__ >= 13
++#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
++#endif
+ #endif
+ 
+ namespace onnxruntime {
+ namespace openvino_ep {
+ 
+@@ -1080,3 +1078,10 @@ void GetInputsOutputsOfCluster(const GraphViewer& graph_viewer, const std::vecto
+ 
+ }  // namespace openvino_ep
+ }  // namespace onnxruntime
++
++#if defined(_MSC_VER)
++#pragma warning(default : 4244 4245)
++#elif __GNUC__
++#pragma GCC diagnostic pop
++#endif
