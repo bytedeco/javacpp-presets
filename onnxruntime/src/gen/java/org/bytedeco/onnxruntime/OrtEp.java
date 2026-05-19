@@ -258,6 +258,8 @@ public class OrtEp extends Pointer {
    * @param run_options [in] The run options for this run.
    *
    * \note Implementation of this function is optional.
+   *       When graph capture/replay is enabled and a graph has already been captured, ORT skips
+   *       normal execution and calls ReplayGraph() directly, so this callback is not invoked for replay runs.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    *
@@ -273,6 +275,8 @@ public class OrtEp extends Pointer {
    *                        Only applicable if there is such a stream.
    *
    * \note Implementation of this function is optional.
+   *       When graph capture/replay is enabled and a graph has already been captured, ORT skips
+   *       normal execution and calls ReplayGraph() directly, so this callback is not invoked for replay runs.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    *
@@ -424,4 +428,145 @@ public class OrtEp extends Pointer {
                     @Cast("OrtEpProfilerImpl**") PointerPointer profiler);
   public native OrtStatus CreateProfiler( OrtEp this_ptr,
                     @ByPtrPtr OrtEpProfilerImpl profiler);
+
+  /** \brief Indicate whether the graph capturing mode (e.g., CUDA graph) is enabled for the provider.
+   *
+   * Graph capture allows an EP to record a sequence of device (e.g., GPU) operations during an initial run and replay
+   * them on subsequent runs, bypassing per-kernel CPU launch overhead.
+   *
+   * Applications enable graph capture via EP-specific provider options (e.g., {@code enable_cuda_graph=1}
+   * for the CUDA EP). An EP should return true from this function if it has been configured to enable
+   * graph capture/replay.
+   *
+   * **ORT graph capture/replay summary:**
+   * During OrtSession initialization, ORT calls OrtEp::IsGraphCaptureEnabled() on each EP in the order specified during
+   * provider registration with the session. If an EP returns true, ORT validates that the graph is suitable for
+   * graph capture, and if so, caches the EP for graph capture during the next run. The graph validation ensures
+   * that there are no control flow nodes and that node-to-EP assignments are compatible with the policy specified
+   * by the EP via OrtEp::GetGraphCaptureNodeAssignmentPolicy().
+   * Note that an OrtSession only supports graph capture for one EP (i.e., the first EP to claim support).
+   *
+   * During the first call to OrtApi::Run() for the OrtSession, ORT performs multiple internal runs of the model
+   * until the EP indicates that the graph has been captured by returning {@code true} from {@code OrtEp::IsGraphCaptured()}.
+   * If the EP is unable to capture the graph within 8 runs, the call to OrtApi::Run() returns an error OrtStatus.
+   * Each internal run invokes {@code OrtEp::OnRunStart()}, normal execution, and {@code OrtEp::OnRunEnd()}. EPs should use
+   * these run callbacks to track the number of necessary warm-up runs and begin/end graph capture when ready.
+   *
+   * After successful graph capture, subsequent calls to OrtApi::Run() skip normal execution and ORT instead calls
+   * {@code OrtEp::ReplayGraph()} directly.
+   *
+   * Applications can capture and replay multiple graphs (e.g., one per distinct input shape) by setting the
+   * {@code "gpu_graph_id"} run config entry via {@code OrtApi::AddRunConfigEntry()} to different integer values. ORT passes
+   * the value as the {@code graph_annotation_id} parameter to {@code OrtEp::IsGraphCaptured()} and {@code OrtEp::ReplayGraph()}.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @return true if graph capture mode is enabled, false otherwise.
+   *
+   * \note Implementation of this function is optional. If set to NULL, ORT assumes graph capture is not enabled.
+   * \note If this function returns true, {@code OrtEp::IsGraphCaptured} and {@code OrtEp::ReplayGraph} must also be implemented.
+   *       If either is NULL, ORT will log a warning and ignore this EP for graph capture.
+   *
+   * @since Version 1.26.
+   */
+  public static class IsGraphCaptureEnabled_OrtEp extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    IsGraphCaptureEnabled_OrtEp(Pointer p) { super(p); }
+      protected IsGraphCaptureEnabled_OrtEp() { allocate(); }
+      private native void allocate();
+      public native @Cast("bool") boolean call( @Const OrtEp this_ptr);
+  }
+  public native IsGraphCaptureEnabled_OrtEp IsGraphCaptureEnabled(); public native OrtEp IsGraphCaptureEnabled(IsGraphCaptureEnabled_OrtEp setter);
+
+  /** \brief Indicate whether a graph has been captured and instantiated.
+   *
+   * ORT calls this before each {@code Session::Run()}. If true, ORT calls {@code ReplayGraph()} instead of
+   * normal execution. After a run where this returns false, ORT automatically retries until it
+   * returns true (handling warm-up runs transparently).
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param graph_annotation_id [in] Identifies which captured graph to query.
+   *            Applications can set this value via {@code OrtApi::AddRunConfigEntry()} with the key {@code "gpu_graph_id"}.
+   *            The default value is 0 when the run config entry is not set.
+   *            Setting different IDs allows the EP to capture and manage multiple graphs (e.g., one per
+   *            distinct input shape). A value of -1 means graph capture/replay should be skipped for this run.
+   * @return true if the graph has been captured, false otherwise.
+   *
+   * \note This function must be implemented if {@code OrtEp::IsGraphCaptureEnabled} is implemented and may return true.
+   *
+   * @since Version 1.26.
+   */
+  public static class IsGraphCaptured_OrtEp_int extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    IsGraphCaptured_OrtEp_int(Pointer p) { super(p); }
+      protected IsGraphCaptured_OrtEp_int() { allocate(); }
+      private native void allocate();
+      public native @Cast("bool") boolean call( @Const OrtEp this_ptr, int graph_annotation_id);
+  }
+  public native IsGraphCaptured_OrtEp_int IsGraphCaptured(); public native OrtEp IsGraphCaptured(IsGraphCaptured_OrtEp_int setter);
+
+  /** \brief Run the instantiated (captured) graph.
+   *
+   * Called by ORT instead of normal execution when {@code IsGraphCaptured()} returns true.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param graph_annotation_id [in] Identifies which captured graph to replay.
+   *            Applications can set this value via {@code OrtApi::AddRunConfigEntry()} with the key {@code "gpu_graph_id"}.
+   *            The default value is 0 when the run config entry is not set.
+   *            A value of -1 means graph replay should be skipped for this run.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note This function must be implemented if {@code OrtEp::IsGraphCaptureEnabled} is implemented and may return true.
+   *
+   * @since Version 1.26.
+   */
+  public native OrtStatus ReplayGraph( OrtEp this_ptr, int graph_annotation_id);
+
+  /** \brief Get the node assignment validation policy for graph capture.
+   *
+   * When graph capture is enabled, ORT validates that nodes are assigned to EPs in a way that is
+   * compatible with graph capture. This function tells ORT which validation policy to apply.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @return The node assignment policy for graph capture.
+   *
+   * \note Implementation of this function is optional. If set to NULL, ORT uses
+   *       OrtGraphCaptureNodeAssignmentPolicy_ALL_NODES_ON_EP (strictest validation).
+   *
+   * @since Version 1.26.
+   */
+  public static class GetGraphCaptureNodeAssignmentPolicy_OrtEp extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetGraphCaptureNodeAssignmentPolicy_OrtEp(Pointer p) { super(p); }
+      protected GetGraphCaptureNodeAssignmentPolicy_OrtEp() { allocate(); }
+      private native void allocate();
+      public native @Cast("OrtGraphCaptureNodeAssignmentPolicy") int call(
+              @Const OrtEp this_ptr);
+  }
+  public native GetGraphCaptureNodeAssignmentPolicy_OrtEp GetGraphCaptureNodeAssignmentPolicy(); public native OrtEp GetGraphCaptureNodeAssignmentPolicy(GetGraphCaptureNodeAssignmentPolicy_OrtEp setter);
+
+  /** \brief Query the available device resource for partitioning budget.
+   *
+   * Called by ORT during graph partitioning when no explicit resource budget threshold
+   * has been configured via session options. The EP should query its device for the
+   * currently available resource (e.g., free GPU memory) and return it as an OrtResourceCount.
+   *
+   * If the EP does not support resource querying, set this function pointer to NULL.
+   * ORT will skip threshold-based budget enforcement in that case.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param available [out] The available device resource.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional. If set to NULL, no automatic
+   *       resource threshold is established and budget enforcement requires an explicit
+   *       threshold from session options.
+   *
+   * @since Version 1.26.
+   */
+  public native OrtStatus GetAvailableResource( @Const OrtEp this_ptr, OrtResourceCount available);
 }

@@ -74,12 +74,19 @@ esac
 
 case $PLATFORM in
     linux-x86_64|macosx-arm64|windows-x86_64)
-        export OPENVINO_CMAKE_DIR="$TOP_PATH/openvino/cppbuild/$PLATFORM/runtime/cmake"
-        if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
-            (cd "$TOP_PATH" && bash cppbuild.sh install openvino -platform "$PLATFORM")
+        if [[ -n "${BUILD_PATH:-}" ]]; then
+            PREVIFS="$IFS"
+            IFS="$BUILD_PATH_SEPARATOR"
+            for P in $BUILD_PATH; do
+                if [[ -f "$P/runtime/cmake/OpenVINOConfig.cmake" ]]; then
+                    export OPENVINO_CMAKE_DIR="$P/runtime/cmake"
+                    break
+                fi
+            done
+            IFS="$PREVIFS"
         fi
         if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
-            echo "Error: OpenVINOConfig.cmake not found in $OPENVINO_CMAKE_DIR"
+            echo "Error: OpenVINOConfig.cmake not found. Make sure the OpenVINO platform artifact includes runtime/cmake and is listed in buildResources."
             exit 1
         fi
         export OPENVINO_FLAGS="--use_openvino CPU --cmake_extra_defines OpenVINO_DIR=$OPENVINO_CMAKE_DIR"

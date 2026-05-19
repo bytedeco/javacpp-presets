@@ -125,10 +125,48 @@ public class Env extends BaseEnv {
 
   public native @Cast("Ort::ConstEpDevice*") @StdVector EpDeviceImpl GetEpDevices();
 
+  /** \brief Get the number of available hardware devices.
+   *
+   * Returns the count of hardware devices discovered on the system.
+   * @return The number of hardware devices available.
+   * @throws Ort::Exception on error.
+   */
+  /** Wraps OrtApi::GetNumHardwareDevices */
+  public native @Cast("size_t") long GetNumHardwareDevices();
+
+  /** \brief Get the list of available hardware devices.
+   *
+   * Enumerates hardware devices available on the system.
+   * @return A vector of hardware devices.
+   * @throws Ort::Exception on error.
+   */
+  /** Wraps OrtApi::GetHardwareDevices */
+  public native @Cast("Ort::ConstHardwareDevice*") @StdVector Pointer GetHardwareDevices();
+
+  /** \brief Check for known incompatibility issues between hardware device and a specific execution provider.
+   *
+   * If returned incompatibility details have non-zero reasons, it indicates the device is not compatible.
+   * However, if the returned details have reasons == 0, that does not guarantee 100% compatibility for all models.
+   *
+   * @param ep_name The name of the execution provider to check.
+   * @param hw The hardware device to check for incompatibility.
+   * @return DeviceEpIncompatibilityDetails containing reasons for incompatibility if any.
+   * @throws Ort::Exception on error.
+   */
+  /** Wraps OrtApi::GetHardwareDeviceEpIncompatibilityDetails */
+  public native @ByVal DeviceEpIncompatibilityDetails GetHardwareDeviceEpIncompatibilityDetails(
+        @Cast("const char*") BytePointer ep_name, @ByVal @Cast("Ort::ConstHardwareDevice*") Pointer hw);
+  public native @ByVal DeviceEpIncompatibilityDetails GetHardwareDeviceEpIncompatibilityDetails(
+        String ep_name, @ByVal @Cast("Ort::ConstHardwareDevice*") Pointer hw);
+
   /** Wraps OrtApi::CopyTensors */
   public native @ByVal Status CopyTensors(@StdMove ValueVector src_tensors,
                        @StdMove ValueVector dst_tensors,
                        OrtSyncStream stream);
+
+  /** Wraps OrtApi::CopyTensors
+   *  Copies only one src tensor to another dst tensor. */
+  public native @ByVal Status CopyTensor(@Const OrtValue src_tensor, OrtValue dst_tensor, OrtSyncStream stream);
 
   /** \brief Wraps OrtApi::SetPerSessionThreadPoolCallbacks
    *  Stores work callbacks on the Env for per-session thread pools.

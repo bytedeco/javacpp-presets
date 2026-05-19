@@ -118,6 +118,10 @@
             <linkResource>/org/bytedeco/opencl/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/dnnl/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/dnnl/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/openvino/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/openvino/${javacpp.platform}/runtime/lib/intel64/</linkResource>
+            <linkResource>/org/bytedeco/openvino/${javacpp.platform}/runtime/lib/intel64/Release/</linkResource>
+            <linkResource>/org/bytedeco/openvino/${javacpp.platform}/runtime/lib/arm64/Release/</linkResource>
           </linkResources>
           <compilerOptions>
             <compilerOption>${onnxruntime.path}/java/src/main/native/ai_onnxruntime_OnnxMap.cpp</compilerOption>
