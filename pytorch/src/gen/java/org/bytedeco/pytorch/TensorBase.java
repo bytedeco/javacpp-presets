@@ -335,6 +335,8 @@ public class TensorBase extends AbstractTensor {
   //              migrating to mutable_data_ptr().
   public native Pointer data_ptr();
 
+  // Implemented in aten/src/ATen/templates/TensorMethods.cpp
+
   // Legacy interface during the migration to indicate that a callsite
   // has not been audited for mutability.
   //

@@ -36,8 +36,8 @@ public class StreamSegmentSize extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StreamSegmentSize(Pointer p) { super(p); }
 
-  public StreamSegmentSize(CUstream_st s, @Cast("bool") boolean small, @Cast("size_t") long sz) { super((Pointer)null); allocate(s, small, sz); }
-  private native void allocate(CUstream_st s, @Cast("bool") boolean small, @Cast("size_t") long sz);
+  public StreamSegmentSize(CUstream_st s, @Cast("bool") boolean small_, @Cast("size_t") long sz) { super((Pointer)null); allocate(s, small_, sz); }
+  private native void allocate(CUstream_st s, @Cast("bool") boolean small_, @Cast("size_t") long sz);
   public native CUstream_st stream(); public native StreamSegmentSize stream(CUstream_st setter);
   public native @Cast("bool") boolean is_small_pool(); public native StreamSegmentSize is_small_pool(boolean setter);
   public native @Cast("size_t") long total_size(); public native StreamSegmentSize total_size(long setter);

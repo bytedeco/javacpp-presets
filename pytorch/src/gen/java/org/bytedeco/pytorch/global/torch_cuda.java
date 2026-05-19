@@ -583,11 +583,13 @@ manage their own state. There is only a single CUDA context/state.
 
 /* Handles */
 @Namespace("at::cuda") public static native cusparseContext getCurrentCUDASparseHandle();
+@Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle(@Cast("bool") boolean setup/*=true*/);
 @Namespace("at::cuda") public static native cublasContext getCurrentCUDABlasHandle();
 
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
-@Namespace("at::cuda") public static native @Cast("size_t") long getChosenWorkspaceSize();
+@Namespace("at::cuda") public static native void clearCublasWorkspacesForStream(CUstream_st stream);
+
 @Namespace("at::cuda") public static native @Cast("size_t") long getCUDABlasLtWorkspaceSize();
 @Namespace("at::cuda") public static native Pointer getCUDABlasLtWorkspace();
 
@@ -940,9 +942,11 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // #pragma once
 
+// #include <c10/core/Allocator.h>
 // #include <c10/cuda/CUDAStream.h>
+
 // #include <iostream>
-// #include <utility>
+// #include <optional>
 
 // CUDA Graphs utils used by c10 and aten.
 // aten/cuda/CUDAGraphsUtils.cuh adds utils used by aten only.
@@ -959,6 +963,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // Use this version where you're sure a CUDA context exists already.
 @Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int currentStreamCaptureStatusMayInitCtx();
+
+@Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int captureStatusMayInitCtx(CUstream_st stream);
+
+@Namespace("c10::cuda") public static native @Cast("bool") boolean isStreamCapturingMayInitCtx(CUstream_st stream);
+
+@Namespace("c10::cuda") public static native @ByVal LongOptional currentStreamCaptureIdMayInitCtx();
+
+@Namespace("c10::cuda") public static native @ByVal LongOptional captureIdMayInitCtx(CUstream_st stream);
 
  // namespace c10::cuda
 
@@ -1077,6 +1089,13 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Targeting ../cuda/CheckpointDelta.java
 
 
+
+// Observer called when an allocation is preemptively rejected due to
+// throw_on_cudamalloc_oom policy. Parameters:
+//   - device: GPU device index
+//   - alloc_size: size of the rejected allocation request
+//   - total_allocated: total memory allocated before the request
+//   - device_total: total GPU memory
 // Targeting ../cuda/ShareableHandle.java
 
 
@@ -1155,9 +1174,13 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @SharedPtr GatheredContext getContextForPointer(@Const Pointer ptr);
 
 
 
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void attachOomRejectionObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OomRejectionObserver*") AllocatorTraceTracker observer);
 
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void attachAllocatorTraceTracker(@ByVal AllocatorTraceTracker tracker);
 

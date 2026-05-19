@@ -65,8 +65,6 @@ private native void allocate(@Cast("int64_t") long d);
   public SymInt(@Cast("c10::SymInt::Unchecked") int arg0, @Cast("int64_t") long d) { super((Pointer)null); allocate(arg0, d); }
   private native void allocate(@Cast("c10::SymInt::Unchecked") int arg0, @Cast("int64_t") long d);
 
-  // TODO: these implementations are not optimal because they allocate a
-  // temporary and then use the move constructor/assignment
   public SymInt(@Const @ByRef SymInt s) { super((Pointer)null); allocate(s); }
   private native void allocate(@Const @ByRef SymInt s);
 

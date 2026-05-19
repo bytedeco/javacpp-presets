@@ -80,6 +80,11 @@ public class GraphExecutor extends Pointer {
         @ByVal(nullValue = "std::optional<size_t>(std::nullopt)") SizeTOptional remaining_bailout_depth);
   public native @Const @ByRef ExecutionPlan getPlanFor(
         @ByRef IValueVector inputs);
+  // Returns an optimized execution plan without requiring input arguments.
+  // Runs input-independent optimization passes (e.g. inlining, constant
+  // propagation, peephole, CSE) but skips profiling-based specializations
+  // that require runtime type/shape information.
+  public native @Const @ByRef ExecutionPlan getInputIndependentPlan();
   public native @ByVal GraphExecutorState getDebugState();
 
   public native void debugFlushCompilationCache();

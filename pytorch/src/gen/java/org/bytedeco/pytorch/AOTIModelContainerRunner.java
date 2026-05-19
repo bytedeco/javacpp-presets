@@ -29,7 +29,6 @@ public class AOTIModelContainerRunner extends Pointer {
   
   
   
-  
 
   public native @ByVal TensorVector run(
         @Const @ByRef TensorVector inputs,

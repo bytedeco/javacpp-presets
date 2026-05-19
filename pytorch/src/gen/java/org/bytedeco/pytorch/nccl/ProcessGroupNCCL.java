@@ -792,4 +792,11 @@ public class ProcessGroupNCCL extends Backend {
         @Const @ByRef Milliseconds timeout);
 
   public native void setEnableNanCheck(@Cast("bool") boolean enableNanCheck);
+
+  // APIs related to memory offload (require NCCL 2.29.7+ at runtime)
+  public native void suspend();
+
+  public native void resume();
+
+  public native @ByVal StringULongMap getMemoryStats();
 }

@@ -115,6 +115,8 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
+  ///
+  ///
   public native @SharedPtr("torch::nn::Module") @ByVal @Virtual(subclasses=false, method="clone") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) @Const({false, false, true}) Module clone(
         @Const @ByRef(nullValue = "std::optional<torch::Device>(std::nullopt)") DeviceOptional device);
 
@@ -123,12 +125,16 @@ public class Module extends Pointer {
    * 
    *  \rst
    *  .. code-block:: cpp
-   *    MyModule module;
-   *    module->apply([](nn::Module& module) {
-   *      std::cout << module.name() << std::endl;
-   *    });
+   * 
+   *     MyModule module;
+   *     module->apply([](nn::Module& module) {
+   *       std::cout << module.name() << std::endl;
+   *     });
+   * 
    *  \endrst */
   
+  ///
+  ///
   ///
   public native void apply(@Const @ByRef ModuleApplyFunction function);
 
@@ -137,10 +143,12 @@ public class Module extends Pointer {
    * 
    *  \rst
    *  .. code-block:: cpp
-   *    MyModule module;
-   *    module->apply([](const nn::Module& module) {
-   *      std::cout << module.name() << std::endl;
-   *    });
+   * 
+   *     MyModule module;
+   *     module->apply([](const nn::Module& module) {
+   *       std::cout << module.name() << std::endl;
+   *     });
+   * 
    *  \endrst */
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
@@ -151,12 +159,16 @@ public class Module extends Pointer {
    * 
    *  \rst
    *  .. code-block:: cpp
-   *    MyModule module;
-   *    module->apply([](const std::string& key, nn::Module& module) {
-   *      std::cout << key << ": " << module.name() << std::endl;
-   *    });
+   * 
+   *     MyModule module;
+   *     module->apply([](const std::string& key, nn::Module& module) {
+   *       std::cout << key << ": " << module.name() << std::endl;
+   *     });
+   * 
    *  \endrst */
   
+  ///
+  ///
   ///
   public native void apply(
         @Const @ByRef NamedModuleApplyFunction function,
@@ -175,10 +187,12 @@ public class Module extends Pointer {
    * 
    *  \rst
    *  .. code-block:: cpp
-   *    MyModule module;
-   *    module->apply([](const std::string& key, const nn::Module& module) {
-   *      std::cout << key << ": " << module.name() << std::endl;
-   *    });
+   * 
+   *     MyModule module;
+   *     module->apply([](const std::string& key, const nn::Module& module) {
+   *       std::cout << key << ": " << module.name() << std::endl;
+   *     });
+   * 
    *  \endrst */
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
@@ -186,12 +200,16 @@ public class Module extends Pointer {
    * 
    *  \rst
    *  .. code-block:: cpp
-   *    MyModule module;
-   *    module->apply([](const std::shared_ptr<nn::Module>& module) {
-   *      std::cout << module->name() << std::endl;
-   *    });
+   * 
+   *     MyModule module;
+   *     module->apply([](const std::shared_ptr<nn::Module>& module) {
+   *       std::cout << module->name() << std::endl;
+   *     });
+   * 
    *  \endrst */
   
+  ///
+  ///
   ///
   public native void apply(@Cast("const torch::nn::Module::ModulePointerApplyFunction*") @ByRef SharedModuleApplyFunction function);
 
@@ -204,11 +222,13 @@ public class Module extends Pointer {
    * 
    *  \rst
    *  .. code-block:: cpp
-   *    MyModule module;
-   *    module->apply([](const std::string& key,
-   *                     const std::shared_ptr<nn::Module>& module) {
-   *      std::cout << key << ": " << module->name() << std::endl;
-   *    });
+   * 
+   *     MyModule module;
+   *     module->apply([](const std::string& key,
+   *                      const std::shared_ptr<nn::Module>& module) {
+   *       std::cout << key << ": " << module->name() << std::endl;
+   *     });
+   * 
    *  \endrst */
   public native void apply(
         @Const @ByRef NamedSharedModuleApplyFunction function,
@@ -343,58 +363,69 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Virtual(subclasses=false, method="zero_grad") void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
    *  This method is useful when calling {@code apply()}.
+   * 
    *  \rst
    *  .. code-block:: cpp
    * 
-   *    void initialize_weights(nn::Module& module) {
-   *      torch::NoGradGuard no_grad;
-   *      if (auto* linear = module.as<nn::Linear>()) {
-   *        linear->weight.normal_(0.0, 0.02);
-   *      }
-   *    }
+   *     void initialize_weights(nn::Module& module) {
+   *       torch::NoGradGuard no_grad;
+   *       if (auto* linear = module.as<nn::Linear>()) {
+   *         linear->weight.normal_(0.0, 0.02);
+   *       }
+   *     }
    * 
-   *    MyModule module;
-   *    module->apply(initialize_weights);
+   *     MyModule module;
+   *     module->apply(initialize_weights);
+   * 
    *  \endrst */
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
    *  This method is useful when calling {@code apply()}.
+   * 
    *  \rst
    *  .. code-block:: cpp
-   *    void initialize_weights(nn::Module& module) {
-   *      torch::NoGradGuard no_grad;
-   *      if (auto* linear = module.as<nn::Linear>()) {
-   *        linear->weight.normal_(0.0, 0.02);
-   *      }
-   *    }
    * 
-   *    MyModule module;
-   *    module->apply(initialize_weights);
+   *     void initialize_weights(nn::Module& module) {
+   *       torch::NoGradGuard no_grad;
+   *       if (auto* linear = module.as<nn::Linear>()) {
+   *         linear->weight.normal_(0.0, 0.02);
+   *       }
+   *     }
+   * 
+   *     MyModule module;
+   *     module->apply(initialize_weights);
+   * 
    *  \endrst */
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
    *  This method is useful when calling {@code apply()}.
+   * 
    *  \rst
    *  .. code-block:: cpp
    * 
-   *    void initialize_weights(nn::Module& module) {
-   *      torch::NoGradGuard no_grad;
-   *      if (auto* linear = module.as<nn::Linear>()) {
-   *        linear->weight.normal_(0.0, 0.02);
-   *      }
-   *    }
+   *     void initialize_weights(nn::Module& module) {
+   *       torch::NoGradGuard no_grad;
+   *       if (auto* linear = module.as<nn::Linear>()) {
+   *         linear->weight.normal_(0.0, 0.02);
+   *       }
+   *     }
    * 
-   *    MyModule module;
-   *    module.apply(initialize_weights);
+   *     MyModule module;
+   *     module.apply(initialize_weights);
+   * 
    *  \endrst */
   
+  ///
+  ///
   ///
   ///
   ///
@@ -403,8 +434,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ModuleListImpl,int>") @NoException(true) ModuleListImpl asModuleList();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -413,8 +448,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ParameterDictImpl,int>") @NoException(true) ParameterDictImpl asParameterDict();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -423,8 +462,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::AdaptiveLogSoftmaxWithLossImpl,int>") @NoException(true) AdaptiveLogSoftmaxWithLossImpl asAdaptiveLogSoftmaxWithLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -433,8 +476,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::InstanceNorm1dImpl,int>") @NoException(true) InstanceNorm1dImpl asInstanceNorm1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -443,8 +490,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ConvTranspose1dImpl,int>") @NoException(true) ConvTranspose1dImpl asConvTranspose1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -453,8 +504,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::BatchNorm2dImpl,int>") @NoException(true) BatchNorm2dImpl asBatchNorm2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -463,8 +518,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::Conv2dImpl,int>") @NoException(true) Conv2dImpl asConv2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -473,8 +532,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::Dropout2dImpl,int>") @NoException(true) Dropout2dImpl asDropout2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -483,8 +546,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::InstanceNorm3dImpl,int>") @NoException(true) InstanceNorm3dImpl asInstanceNorm3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -493,8 +560,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ConvTranspose3dImpl,int>") @NoException(true) ConvTranspose3dImpl asConvTranspose3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -503,8 +574,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::AlphaDropoutImpl,int>") @NoException(true) AlphaDropoutImpl asAlphaDropout();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -513,8 +588,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::CosineSimilarityImpl,int>") @NoException(true) CosineSimilarityImpl asCosineSimilarity();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -523,8 +602,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::EmbeddingImpl,int>") @NoException(true) EmbeddingImpl asEmbedding();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -533,8 +616,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::FoldImpl,int>") @NoException(true) FoldImpl asFold();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -543,8 +630,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::IdentityImpl,int>") @NoException(true) IdentityImpl asIdentity();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -553,8 +644,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::BilinearImpl,int>") @NoException(true) BilinearImpl asBilinear();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -563,8 +658,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::UnflattenImpl,int>") @NoException(true) UnflattenImpl asUnflatten();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -573,8 +672,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::KLDivLossImpl,int>") @NoException(true) KLDivLossImpl asKLDivLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -583,8 +686,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::BCELossImpl,int>") @NoException(true) BCELossImpl asBCELoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -593,8 +700,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MultiMarginLossImpl,int>") @NoException(true) MultiMarginLossImpl asMultiMarginLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -603,8 +714,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::SmoothL1LossImpl,int>") @NoException(true) SmoothL1LossImpl asSmoothL1Loss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -613,8 +728,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MultiLabelMarginLossImpl,int>") @NoException(true) MultiLabelMarginLossImpl asMultiLabelMarginLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -623,8 +742,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MultiLabelSoftMarginLossImpl,int>") @NoException(true) MultiLabelSoftMarginLossImpl asMultiLabelSoftMarginLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -633,8 +756,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::TripletMarginWithDistanceLossImpl,int>") @NoException(true) TripletMarginWithDistanceLossImpl asTripletMarginWithDistanceLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -643,8 +770,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::PoissonNLLLossImpl,int>") @NoException(true) PoissonNLLLossImpl asPoissonNLLLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -653,8 +784,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::NLLLossImpl,int>") @NoException(true) NLLLossImpl asNLLLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -663,8 +798,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::BCEWithLogitsLossImpl,int>") @NoException(true) BCEWithLogitsLossImpl asBCEWithLogitsLoss();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -673,8 +812,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ReplicationPad1dImpl,int>") @NoException(true) ReplicationPad1dImpl asReplicationPad1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -683,8 +826,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ZeroPad1dImpl,int>") @NoException(true) ZeroPad1dImpl asZeroPad1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -693,8 +840,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MaxPool1dImpl,int>") @NoException(true) MaxPool1dImpl asMaxPool1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -703,8 +854,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::AdaptiveMaxPool1dImpl,int>") @NoException(true) AdaptiveMaxPool1dImpl asAdaptiveMaxPool1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -713,8 +868,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::LPPool1dImpl,int>") @NoException(true) LPPool1dImpl asLPPool1d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -723,8 +882,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ReplicationPad2dImpl,int>") @NoException(true) ReplicationPad2dImpl asReplicationPad2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -733,8 +896,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ZeroPad2dImpl,int>") @NoException(true) ZeroPad2dImpl asZeroPad2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -743,8 +910,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MaxPool2dImpl,int>") @NoException(true) MaxPool2dImpl asMaxPool2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -753,8 +924,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::AdaptiveMaxPool2dImpl,int>") @NoException(true) AdaptiveMaxPool2dImpl asAdaptiveMaxPool2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -763,8 +938,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::FractionalMaxPool2dImpl,int>") @NoException(true) FractionalMaxPool2dImpl asFractionalMaxPool2d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -773,8 +952,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ReflectionPad3dImpl,int>") @NoException(true) ReflectionPad3dImpl asReflectionPad3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -783,8 +966,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ConstantPad3dImpl,int>") @NoException(true) ConstantPad3dImpl asConstantPad3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -793,8 +980,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::AvgPool3dImpl,int>") @NoException(true) AvgPool3dImpl asAvgPool3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -803,8 +994,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::AdaptiveAvgPool3dImpl,int>") @NoException(true) AdaptiveAvgPool3dImpl asAdaptiveAvgPool3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -813,8 +1008,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MaxUnpool3dImpl,int>") @NoException(true) MaxUnpool3dImpl asMaxUnpool3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -823,8 +1022,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::LPPool3dImpl,int>") @NoException(true) LPPool3dImpl asLPPool3d();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -833,8 +1036,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::LSTMImpl,int>") @NoException(true) LSTMImpl asLSTM();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -843,8 +1050,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::RNNCellImpl,int>") @NoException(true) RNNCellImpl asRNNCell();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -853,8 +1064,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::GRUCellImpl,int>") @NoException(true) GRUCellImpl asGRUCell();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -863,8 +1078,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::PixelUnshuffleImpl,int>") @NoException(true) PixelUnshuffleImpl asPixelUnshuffle();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -873,8 +1092,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ELUImpl,int>") @NoException(true) ELUImpl asELU();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -883,8 +1106,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::HardshrinkImpl,int>") @NoException(true) HardshrinkImpl asHardshrink();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -893,8 +1120,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::LeakyReLUImpl,int>") @NoException(true) LeakyReLUImpl asLeakyReLU();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -903,8 +1134,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::SoftmaxImpl,int>") @NoException(true) SoftmaxImpl asSoftmax();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -913,8 +1148,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::LogSoftmaxImpl,int>") @NoException(true) LogSoftmaxImpl asLogSoftmax();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -923,8 +1162,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::PReLUImpl,int>") @NoException(true) PReLUImpl asPReLU();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -933,8 +1176,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::ReLU6Impl,int>") @NoException(true) ReLU6Impl asReLU6();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -943,8 +1190,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::CELUImpl,int>") @NoException(true) CELUImpl asCELU();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -953,8 +1204,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::GELUImpl,int>") @NoException(true) GELUImpl asGELU();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -963,8 +1218,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MishImpl,int>") @NoException(true) MishImpl asMish();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -973,8 +1232,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::SoftplusImpl,int>") @NoException(true) SoftplusImpl asSoftplus();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -983,8 +1246,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::SoftsignImpl,int>") @NoException(true) SoftsignImpl asSoftsign();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -993,8 +1260,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::TanhshrinkImpl,int>") @NoException(true) TanhshrinkImpl asTanhshrink();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -1003,8 +1274,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::MultiheadAttentionImpl,int>") @NoException(true) MultiheadAttentionImpl asMultiheadAttention();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -1013,8 +1288,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::LocalResponseNormImpl,int>") @NoException(true) LocalResponseNormImpl asLocalResponseNorm();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -1023,8 +1302,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::GroupNormImpl,int>") @NoException(true) GroupNormImpl asGroupNorm();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -1033,8 +1316,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::TransformerDecoderLayerImpl,int>") @NoException(true) TransformerDecoderLayerImpl asTransformerDecoderLayer();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -1043,8 +1330,12 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  ///
+  ///
   public native @Name("as<torch::nn::TransformerDecoderImpl,int>") @NoException(true) TransformerDecoderImpl asTransformerDecoder();
   
+  ///
+  ///
   ///
   ///
   ///
@@ -1053,18 +1344,20 @@ public class Module extends Pointer {
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
    *  This method is useful when calling {@code apply()}.
+   * 
    *  \rst
    *  .. code-block:: cpp
    * 
-   *    void initialize_weights(nn::Module& module) {
-   *      torch::NoGradGuard no_grad;
-   *      if (auto* linear = module.as<nn::Linear>()) {
-   *        linear->weight.normal_(0.0, 0.02);
-   *      }
-   *    }
+   *     void initialize_weights(nn::Module& module) {
+   *       torch::NoGradGuard no_grad;
+   *       if (auto* linear = module.as<nn::Linear>()) {
+   *         linear->weight.normal_(0.0, 0.02);
+   *       }
+   *     }
    * 
-   *    MyModule module;
-   *    module.apply(initialize_weights);
+   *     MyModule module;
+   *     module.apply(initialize_weights);
+   * 
    *  \endrst */
 
   /** Serializes the {@code Module} into the given {@code OutputArchive}.
@@ -1141,7 +1434,7 @@ public class Module extends Pointer {
    * 
    *  A buffer is intended to be state in your module that does not record
    *  gradients, such as running statistics. Registering it makes it available
-   *  to methods such as {@code buffers()}, {@code clone()} or {@code to().
+   *  to methods such as {@code buffers()}, {@code clone()} or {@code to()}.
    * 
    *  \rst
    *  .. code-block:: cpp
@@ -1197,26 +1490,24 @@ public class Module extends Pointer {
   /** Replaces a registered submodule with this {@code Module}.
    * 
    *  This takes care of the registration, if you used submodule members, you
-   *  should */
-  //  assign the submodule as well, i.e. use as
-  /**     module->submodule_ = module->replace_module("linear",
-  /**     torch::nn::Linear(3, 4));
-  /** It only works when a module of the name is already registered.
-  /**
-  /** This is useful for replacing a module after initialization, e.g.
-  /** for finetuning. */
+   *  should assign the submodule as well, i.e. use as
+   *      module->submodule_ = module->replace_module("linear",
+   *      torch::nn::Linear(3, 4));
+   *  It only works when a module of the name is already registered.
+   * 
+   *  This is useful for replacing a module after initialization, e.g.
+   *  for finetuning. */
 
   /** Replaces a registered submodule with this {@code Module}.
    *  This method deals with {@code ModuleHolder}s.
    * 
    *  This takes care of the registration, if you used submodule members, you
-   *  should */
-  //  assign the submodule as well, i.e. use as
-  /**     module->submodule_ = module->replace_module("linear", linear_holder);
-  /** It only works when a module of the name is already registered.
-  /**
-  /** This is useful for replacing a module after initialization, e.g.
-  /** for finetuning. */
+   *  should assign the submodule as well, i.e. use as
+   *      module->submodule_ = module->replace_module("linear", linear_holder);
+   *  It only works when a module of the name is already registered.
+   * 
+   *  This is useful for replacing a module after initialization, e.g.
+   *  for finetuning. */
 
   /** Unregisters a submodule from this {@code Module}. If there is no such module
    *  with {@code name} an exception is thrown. */

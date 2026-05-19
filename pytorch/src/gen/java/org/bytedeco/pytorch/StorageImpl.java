@@ -122,6 +122,8 @@ public class StorageImpl extends Pointer {
 
   public native void set_data_ptr_noswap(@StdMove DataPtr data_ptr);
 
+  public native void swap_data_ptr(@ByRef StorageImpl other);
+
   public native @Const Pointer data();
 
   public native Pointer mutable_data();
@@ -170,6 +172,8 @@ public class StorageImpl extends Pointer {
 
   public native void release_data_and_set_meta_custom_data_ptr_error_msg_(
         @ByVal StringOptional s);
+
+  public native void clear_data_ptr_access_error_msg_();
 
   public native void set_throw_on_mutable_data_ptr();
 

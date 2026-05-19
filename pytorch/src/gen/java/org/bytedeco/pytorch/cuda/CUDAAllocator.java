@@ -88,6 +88,8 @@ public class CUDAAllocator extends DeviceAllocator {
   public native @SharedPtr Pointer getIpcDevPtr(@StdString BytePointer handle);
   public native @SharedPtr Pointer getIpcDevPtr(@StdString String handle);
   public native @Cast("bool") boolean isHistoryEnabled();
+  public native @SharedPtr GatheredContext getContextForPointer(
+        @Const Pointer ptr);
   public native void recordHistory(
         @Cast("bool") boolean enabled,
         @ByVal @Cast("c10::cuda::CUDACachingAllocator::CreateContextFn*") Pointer context_recorder,
@@ -110,6 +112,7 @@ public class CUDAAllocator extends DeviceAllocator {
   public native void setUserMetadata(@StdString String metadata);
   public native @StdString BytePointer getUserMetadata();
   public native void attachOutOfMemoryObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OutOfMemoryObserver*") AllocatorTraceTracker observer);
+  public native void attachOomRejectionObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OomRejectionObserver*") AllocatorTraceTracker observer);
 
   // Attached AllocatorTraceTracker callbacks will be called while the
   // per-device allocator lock is held. Any additional locks taken from within

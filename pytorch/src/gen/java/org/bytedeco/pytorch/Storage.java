@@ -161,6 +161,8 @@ public class Storage extends Pointer {
 
   public native void set_data_ptr_noswap(@StdMove DataPtr data_ptr);
 
+  public native void swap_data_ptr(@ByRef Storage other);
+
   public native DeviceType device_type();
 
   public native Allocator allocator();

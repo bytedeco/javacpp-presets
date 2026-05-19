@@ -138,4 +138,11 @@ public class NCCLComm extends Pointer {
   public native @Cast("ncclResult_t") int deregisterSegment(Pointer ptr);
 
   public native @StdString BytePointer repr();
+
+  // APIs related to memory offload (require NCCL 2.29.7+ at runtime)
+  public native void suspend();
+
+  public native void resume();
+
+  public native @ByVal StringULongMap getMemoryStats();
 }

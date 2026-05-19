@@ -735,6 +735,12 @@ public class Tensor extends TensorBase {
   public native @Cast("bool") boolean is_same_size(@Const @ByRef Tensor other);
   public native @Cast("bool") boolean __dispatch_is_signed();
   public native @Cast("bool") boolean __dispatch_is_inference();
+  public native @Cast("int64_t") long __dispatch_numel();
+  public native @Cast("int64_t") long __dispatch_dim();
+  public native @Cast("int64_t") long __dispatch_get_device();
+  public native @Cast("int64_t") long __dispatch_storage_offset();
+  public native @Cast("bool") boolean __dispatch_is_contiguous();
+  public native @Cast("bool") boolean __dispatch_is_contiguous(@ByVal MemoryFormat memory_format);
   public native @ByVal Tensor kron(@Const @ByRef Tensor other);
   public native @ByVal T_TensorTensor_T kthvalue(@Cast("int64_t") long k, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean keepdim/*=false*/);
   public native @ByVal T_TensorTensor_T kthvalue(@Cast("int64_t") long k);
@@ -1100,6 +1106,10 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor view_as(@Const @ByRef Tensor other);
   public native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Tensor other);
   public native @ByVal Tensor where(@Const @ByRef Tensor condition, @Const @ByRef Scalar other);
+  public native @ByRef Tensor _philox_normal_(@Const @ByRef Tensor key, double mean/*=0*/, double std/*=1*/);
+  public native @ByRef Tensor _philox_normal_(@Const @ByRef Tensor key);
+  public native @ByRef Tensor _philox_uniform_(@Const @ByRef Tensor key, double low/*=0*/, double high/*=1*/);
+  public native @ByRef Tensor _philox_uniform_(@Const @ByRef Tensor key);
   public native @ByVal Tensor norm(@Const @ByRef ScalarOptional p, ScalarType dtype);
   public native @ByVal Tensor norm(@Const @ByRef(nullValue = "at::Scalar(2)") Scalar p);
   public native @ByVal Tensor norm();

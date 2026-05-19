@@ -343,4 +343,11 @@ public class Backend extends CustomClassHolder {
   // Shutdown the backend if the backend supports it. This should be used for
   // normal shutdown.
   public native void shutdown();
+
+  // APIs related to memory offload
+  public native void suspend();
+
+  public native void resume();
+
+  public native @ByVal StringULongMap getMemoryStats();
 }

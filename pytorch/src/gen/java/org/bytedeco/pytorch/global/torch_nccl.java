@@ -137,6 +137,10 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // #define NCCL_HAS_COMM_SHRINK
 // #endif
 
+// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 29, 7)
+// #define NCCL_HAS_COMM_OFFLOAD
+// #endif
+
 // Macro to throw on a non-successful NCCL return value.
 // #define C10D_NCCL_CHECK(cmd, failureReason)
 //   do {
