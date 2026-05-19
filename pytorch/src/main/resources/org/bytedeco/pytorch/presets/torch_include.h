@@ -38,6 +38,7 @@
 #include <torch/headeronly/core/Layout.h>
 #include <torch/headeronly/core/MemoryFormat.h>
 #include <torch/headeronly/core/ScalarType.h>
+#include "torch/headeronly/core/enum_tag.h"
 
 #include "c10/macros/cmake_macros.h"
 #include "c10/macros/Export.h"

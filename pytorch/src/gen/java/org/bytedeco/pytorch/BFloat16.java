@@ -53,7 +53,7 @@ public class BFloat16 extends Pointer {
 private native void allocate(float value);
   public native @Name("operator float") float asFloat();
 
-// #if defined(__CUDACC__) && !defined(USE_ROCM)
+// #if defined(__CUDACC__) && (!defined(USE_ROCM) || (TORCH_HIP_VERSION >= 702))
 // #endif
 
 // #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)

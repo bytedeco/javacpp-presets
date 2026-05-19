@@ -95,6 +95,9 @@ public class DeviceStats extends Pointer {
   // un-mapped and free memory.
   public native @Cast("int64_t") long num_device_free(); public native DeviceStats num_device_free(long setter);
 
+  // COUNT: total number of allocations rejected by OOM preemption policy
+  public native @Cast("int64_t") long num_oom_rejections(); public native DeviceStats num_oom_rejections(long setter);
+
   // SIZE: maximum block size that is allowed to be split.
   public native @Cast("int64_t") long max_split_size(); public native DeviceStats max_split_size(long setter);
 }

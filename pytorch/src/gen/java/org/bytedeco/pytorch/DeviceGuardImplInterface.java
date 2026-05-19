@@ -197,6 +197,11 @@ public class DeviceGuardImplInterface extends Pointer {
   public native void synchronizeStream(@Const @ByRef Stream arg0);
 
   /**
+   * Return true if this stream is currently recording work for graph capture.
+   */
+  public native @Cast("bool") boolean isStreamCapturing(@Const @ByRef Stream arg0);
+
+  /**
    * Wait (by blocking the calling thread) until all the work previously
    * recorded on the event has completed running on the device.
    */

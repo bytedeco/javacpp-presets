@@ -92,6 +92,15 @@ public class TCPStore extends Store {
 
   public native @ByVal StringVector listKeys();
 
+  public native void barrier(
+        @StdString BytePointer key,
+        @Cast("int64_t") long world_size,
+        @Const @ByRef Milliseconds timeout);
+  public native void barrier(
+        @StdString String key,
+        @Cast("int64_t") long world_size,
+        @Const @ByRef Milliseconds timeout);
+
   // Waits for all workers to join.
   public native void waitForWorkers();
 

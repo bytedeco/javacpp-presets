@@ -430,6 +430,14 @@ public class ProcessGroupGloo extends Backend {
         @Cast("std::vector<int64_t>*") @ByRef LongVector outputCounts,
         @Cast("std::vector<int64_t>*") @ByRef LongVector inputCounts);
 
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work alltoall(
+        @ByRef TensorVector outputTensors,
+        @ByRef TensorVector inputTensors,
+        @Const @ByRef(nullValue = "c10d::AllToAllOptions()") AllToAllOptions opts);
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work alltoall(
+        @ByRef TensorVector outputTensors,
+        @ByRef TensorVector inputTensors);
+
   public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work send(
         @ByRef TensorVector tensors,
         int dstRank,

@@ -19,6 +19,34 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
+/**
+ * OptimizerCloneableOptions provides parameter group inheritance functionality
+ * for PyTorch C++ optimizer options. When creating parameter groups with
+ * partial options (e.g., AdamOptions().weight_decay(0.1)), fields not
+ * explicitly set by the user inherit from the optimizer's default values,
+ * while explicitly set fields are preserved.
+ *
+ * This enables Python-like behavior in C++:
+ * <pre>{@code cpp
+ * // Python equivalent:
+ * // optimizer = Adam([{'params': params1, 'weight_decay': 0.1}], lr=0.01)
+ * // Result: weight_decay=0.1 preserved, lr=0.01 inherited
+ *
+ * AdamOptions defaults;
+ * defaults.lr(0.01).weight_decay(0.05);
+ *
+ * std::vector<OptimizerParamGroup> groups;
+ * groups.emplace_back(params1, std::make_unique<AdamOptions>(
+ *     AdamOptions().weight_decay(0.1)));  // Only weight_decay specified
+ *
+ * Adam optimizer(groups, defaults);
+ * // Result: group inherits lr=0.01, preserves weight_decay=0.1
+ * }</pre>
+ *
+ * **Implementation**: Uses SFINAE-based field detection and constructor-default
+ * comparison to distinguish explicitly set fields from default values.
+ * Fields that match constructor defaults are inherited; others are preserved.
+ */
 @Name("torch::optim::OptimizerCloneableOptions<torch::optim::AdagradOptions>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class OptimizerCloneableAdagradOptions extends OptimizerOptions {
     static { Loader.load(); }

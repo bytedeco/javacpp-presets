@@ -120,4 +120,20 @@ public class Store extends CustomClassHolder {
   public native @Cast("int64_t") long queueLen(@StdString String key);
 
   public native @ByVal StringVector listKeys();
+
+  // Barrier operation that blocks until world_size workers have reached it.
+  // This is an optimized operation that combines increment and wait into a
+  // single operation, reducing network round trips compared to using
+  // separate add() and wait() calls.
+  public native void barrier(
+        @StdString BytePointer key,
+        @Cast("int64_t") long world_size,
+        @Const @ByRef Milliseconds timeout);
+  public native void barrier(
+        @StdString String key,
+        @Cast("int64_t") long world_size,
+        @Const @ByRef Milliseconds timeout);
+
+  public native void barrier(@StdString BytePointer key, @Cast("int64_t") long world_size);
+  public native void barrier(@StdString String key, @Cast("int64_t") long world_size);
 }
