@@ -1,0 +1,154 @@
+diff --git a/onnxruntime/core/providers/openvino/ov_factory.cc b/onnxruntime/core/providers/openvino/ov_factory.cc
+index 599a38758f..e6b13056ca 100644
+--- a/onnxruntime/core/providers/openvino/ov_factory.cc
++++ b/onnxruntime/core/providers/openvino/ov_factory.cc
+@@ -7,7 +7,6 @@
+ #include <algorithm>
+ #include <vector>
+ #include <ranges>
+-#include <format>
+ 
+ #define ORT_API_MANUAL_INIT
+ #include "onnxruntime_cxx_api.h"
+@@ -170,7 +169,8 @@ OrtStatus* CreateEpFactories(const char* /*registration_name*/, const OrtApiBase
+ 
+   const size_t required_factories = supported_factories.size();
+   if (max_factories < required_factories) {
+-    return Ort::Status(std::format("Not enough space to return EP factories. Need at least {} factories.", required_factories).c_str(), ORT_INVALID_ARGUMENT);
++    const std::string message = "Not enough space to return EP factories. Need at least " + std::to_string(required_factories) + " factories.";
++    return Ort::Status(message.c_str(), ORT_INVALID_ARGUMENT);
+   }
+ 
+   size_t factory_index = 0;
+diff --git a/onnxruntime/core/providers/openvino/ov_interface.cc b/onnxruntime/core/providers/openvino/ov_interface.cc
+index 424396c36e..0fa94b7458 100644
+--- a/onnxruntime/core/providers/openvino/ov_interface.cc
++++ b/onnxruntime/core/providers/openvino/ov_interface.cc
+@@ -3,7 +3,9 @@
+ 
+ #include "core/providers/openvino/ov_interface.h"
+ 
+-#include <format>
++#include <sstream>
++#include <string_view>
++#include <utility>
+ 
+ #define ORT_API_MANUAL_INIT
+ #include "core/session/onnxruntime_cxx_api.h"
+@@ -16,19 +18,39 @@
+ namespace onnxruntime {
+ namespace openvino_ep {
+ 
++namespace {
++inline void AppendFormat(std::ostringstream& stream, std::string_view fmt) {
++  stream << fmt;
++}
++
++template <typename T, typename... Args>
++void AppendFormat(std::ostringstream& stream, std::string_view fmt, T&& value, Args&&... args) {
++  const auto placeholder_pos = fmt.find("{}");
++  if (placeholder_pos == std::string_view::npos) {
++    stream << fmt;
++    return;
++  }
++
++  stream << fmt.substr(0, placeholder_pos) << std::forward<T>(value);
++  AppendFormat(stream, fmt.substr(placeholder_pos + 2), std::forward<Args>(args)...);
++}
++
++template <typename... Args>
++std::string FormatMessage(std::string_view fmt, Args&&... args) {
++  std::ostringstream stream;
++  AppendFormat(stream, fmt, std::forward<Args>(args)...);
++  return stream.str();
++}
++}  // namespace
++
+ template <bool typed, typename Func, typename... Args>
+-inline auto OvExceptionBoundary(Func&& func, std::format_string<Args...>&& fmt, Args&&... args) {
++inline auto OvExceptionBoundary(Func&& func, std::string_view fmt, Args&&... args) {
+   try {
+     return func();
+   } catch (const ov::Exception& e) {
+     if constexpr (typed) {
+       throw ovep_exception(e, ovep_exception::type::import_model);
+     } else {
+-      ORT_THROW(log_tag + std::vformat(fmt.get(), std::make_format_args(args...)) + ": " + std::string(e.what()));
++      ORT_THROW(log_tag + FormatMessage(fmt, std::forward<Args>(args)...) + ": " + std::string(e.what()));
+     }
+   } catch (...) {
+-    ORT_THROW(log_tag + std::vformat(fmt.get(), std::make_format_args(args...)));
++    ORT_THROW(log_tag + FormatMessage(fmt, std::forward<Args>(args)...));
+   }
+ }
+ 
+@@ -665,8 +687,8 @@ OVTensorPtr StatefulOVInferRequest::GetTensor(const std::string& input_name) {
+   if (_npu_logits_slice_required) {
+     if (input_name == "logits") {
+       if (tobj->get_shape().size() != 3) {
+-        ORT_THROW(log_tag + std::format("Expected logits to have shape of rank 3, but it has shape of rank {}",
+-                                        tobj->get_shape().size()));
++        ORT_THROW(log_tag + "Expected logits to have shape of rank 3, but it has shape of rank " +
++                  std::to_string(tobj->get_shape().size()));
+       }
+ 
+       // When _npu_logits_slice_required is true, it means that prefill may produce logits of shape:
+diff --git a/onnxruntime/core/providers/openvino/qdq_transformations/qdq_scales_fix.cc b/onnxruntime/core/providers/openvino/qdq_transformations/qdq_scales_fix.cc
+index 5de7607a87..56ce53b986 100644
+--- a/onnxruntime/core/providers/openvino/qdq_transformations/qdq_scales_fix.cc
++++ b/onnxruntime/core/providers/openvino/qdq_transformations/qdq_scales_fix.cc
+@@ -5,10 +5,12 @@
+ #include "core/providers/openvino/ov_protobuf_utils.h"
+ #include "core/framework/ort_value.h"
+ 
+ #include <fstream>
++#include <iomanip>
+ #include <list>
++#include <sstream>
+ #include <string>
+ #include <vector>
+ #include <unordered_set>
+ #include <filesystem>
+ #include <ranges>
+@@ -260,24 +262,35 @@ struct GraphNode {
+     std::string node_input_name_str = print_string_vector(node_input_name);
+     std::string node_output_name_str = print_string_vector(node_output_name);
+ 
+     auto print_bool = [](bool val) -> std::string {
+       return (val) ? "True" : "False";
+     };
+ 
+     auto print_opt_bool = [print_bool](std::optional<bool> val) -> std::string {
+       return (val.has_value()) ? print_bool(val.value()) : "None";
+     };
+ 
+-    auto string = std::format("node_name={} op_type={} scale_factor={:.2f} visited={} queued={} down_to_output={} processed={} from_node={} to_node={} node_input_name={} node_output_name={}",
+-                              node_name,
+-                              op_type,
+-                              scale_factor,
+-                              visited,
+-                              print_bool(queued),
+-                              print_opt_bool(down_to_output),
+-                              print_bool(processed),
+-                              from_node_str,
+-                              to_node_str,
+-                              node_input_name_str,
+-                              node_output_name_str);
+-    return string;
++    std::ostringstream string_stream;
++    string_stream << std::fixed << std::setprecision(2)
++                  << "node_name=" << node_name
++                  << " op_type=" << op_type
++                  << " scale_factor=" << scale_factor
++                  << " visited=" << visited
++                  << " queued=" << print_bool(queued)
++                  << " down_to_output=" << print_opt_bool(down_to_output)
++                  << " processed=" << print_bool(processed)
++                  << " from_node=" << from_node_str
++                  << " to_node=" << to_node_str
++                  << " node_input_name=" << node_input_name_str
++                  << " node_output_name=" << node_output_name_str;
++    return string_stream.str();
+   }
+ 
+   const Node* node_ptr{nullptr};
