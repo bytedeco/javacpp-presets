@@ -121,9 +121,7 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
-git apply --recount ../../../onnxruntime-openvino-no-format.patch
-git apply --recount ../../../onnxruntime-openvino-gcc11.patch
-git apply --recount ../../../onnxruntime-openvino-gcc13.patch
+git apply --recount ../../../onnxruntime-openvino.patch
 #patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
@@ -135,6 +133,8 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
+# CUDA 13 on Windows needs the ORT CUB wrapper to undefine MSVC SAL macros: https://github.com/microsoft/onnxruntime/pull/28309
+sedinplace 's|#include <cub/cub.cuh>|#include "core/providers/cuda/cu_inc/cub.cuh"|g' onnxruntime/contrib_ops/cuda/bert/gqa_unfused_attention.cu
 sedinplace '/CXX>:\/permissive/a\
       "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
 ' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
@@ -200,18 +200,6 @@ sedinplace 's/offsets = allocarray/offsets = (size_t*)allocarray/g' java/src/mai
 sedinplace 's/tempBuffer = realloc/tempBuffer = (char*)realloc/g' java/src/main/native/OrtJniUtil.cpp
 sedinplace 's/Throw(javaException)/Throw((jthrowable)javaException)/g' java/src/main/native/OrtJniUtil.cpp
 sedinplace '/jint JNI_OnLoad/,/}/d' java/src/main/native/OrtJniUtil.cpp
-sedinplace '/static synchronized void init() throws IOException {/a\
-loaded = org.bytedeco.javacpp.Loader.load(org.bytedeco.onnxruntime.presets.onnxruntime.class) != null;\
-ortApiHandle = initialiseAPIBase(ORT_API_VERSION_23);\
-if (ortApiHandle == 0L) {\
-  throw new IllegalStateException("There is a mismatch between the ORT class files and the ORT native library, and the native library could not be loaded");\
-}\
-ortTrainingApiHandle = initialiseTrainingAPIBase(ortApiHandle, ORT_API_VERSION_23);\
-ortCompileApiHandle = initialiseCompileAPIBase(ortApiHandle);\
-trainingEnabled = ortTrainingApiHandle != 0L;\
-providers = initialiseProviders(ortApiHandle);\
-version = initialiseVersion();\
-' java/src/main/java/ai/onnxruntime/OnnxRuntime.java
 sedinplace 's/Names = malloc/Names = (const char**)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/Strings = malloc/Strings = (jobject*)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/inputValuePtrs = malloc/inputValuePtrs = (const OrtValue**)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp

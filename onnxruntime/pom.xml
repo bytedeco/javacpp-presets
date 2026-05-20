@@ -16,7 +16,6 @@
 
   <properties>
     <onnxruntime.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/onnxruntime</onnxruntime.path>
-    <openvino.link.path>${basedir}/../openvino/cppbuild/${javacpp.platform}/runtime/lib/intel64/</openvino.link.path>
   </properties>
 
   <dependencies>
@@ -24,11 +23,13 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
       <version>3.11-${project.parent.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openvino</artifactId>
       <version>2026.1.0-${project.parent.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -89,7 +90,9 @@
           <linkPaths>
             <linkPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../dnnl/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${openvino.link.path}</linkPath>
+            <linkPath>${basedir}/../openvino/cppbuild/${javacpp.platform}/runtime/lib/intel64/</linkPath>
+            <linkPath>${basedir}/../openvino/cppbuild/${javacpp.platform}/runtime/lib/intel64/Release/</linkPath>
+            <linkPath>${basedir}/../openvino/cppbuild/${javacpp.platform}/runtime/lib/arm64/Release/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
@@ -180,32 +183,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>macosx-arm64</id>
-      <activation>
-        <property>
-          <name>javacpp.platform</name>
-          <value>macosx-arm64</value>
-        </property>
-      </activation>
-      <properties>
-        <openvino.link.path>${basedir}/../openvino/cppbuild/${javacpp.platform}/runtime/lib/arm64/Release/</openvino.link.path>
-      </properties>
-    </profile>
-    <profile>
-      <id>windows-x86_64</id>
-      <activation>
-        <property>
-          <name>javacpp.platform</name>
-          <value>windows-x86_64</value>
-        </property>
-      </activation>
-      <properties>
-        <openvino.link.path>${basedir}/../openvino/cppbuild/${javacpp.platform}/runtime/lib/intel64/Release/</openvino.link.path>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>

@@ -152,3 +152,45 @@ index 5de7607a87..56ce53b986 100644
    }
  
    const Node* node_ptr{nullptr};
+@@ -563,7 +576,9 @@ struct CustomGraph {
+       if (!found) {
+         // Connect the last valid node to the graph output
+-        for (auto node : std::ranges::reverse_view(original_graph.Nodes())) {
++        auto graph_nodes = original_graph.Nodes();
++        for (auto node_it = graph_nodes.rbegin(); node_it != graph_nodes.rend(); ++node_it) {
++          auto node = *node_it;
+           if (!node->OutputDefs().empty()) {
+             const auto& name = (*node->OutputDefs().begin())->Name();
+             auto& node_arg = original_graph.GetOrCreateNodeArg(name, output->TypeAsProto());
+diff --git a/onnxruntime/core/providers/openvino/ov_versions/utils.cc b/onnxruntime/core/providers/openvino/ov_versions/utils.cc
+index dd43f856e0..6a34827b1a 100644
+--- a/onnxruntime/core/providers/openvino/ov_versions/utils.cc
++++ b/onnxruntime/core/providers/openvino/ov_versions/utils.cc
+@@ -9,13 +9,11 @@
+ #elif __GNUC__
+ #pragma GCC diagnostic push
+ #pragma GCC diagnostic ignored "-Wunused-parameter"
+-#endif
+-
+-#if defined(_MSC_VER)
+-#pragma warning(default : 4244 4245)
+-#elif __GNUC__
+-#pragma GCC diagnostic pop
++#if __GNUC__ >= 13
++#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
++#endif
+ #endif
+ 
+ namespace onnxruntime {
+ namespace openvino_ep {
+ 
+@@ -1080,3 +1078,10 @@ void GetInputsOutputsOfCluster(const GraphViewer& graph_viewer, const std::vecto
+ 
+ }  // namespace openvino_ep
+ }  // namespace onnxruntime
++
++#if defined(_MSC_VER)
++#pragma warning(default : 4244 4245)
++#elif __GNUC__
++#pragma GCC diagnostic pop
++#endif

@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.Base64;
 
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.onnxruntime.Env;
 import org.bytedeco.onnxruntime.MemoryInfo;
@@ -50,9 +52,11 @@ public class OpenVINOExecutionProviderSample {
         Session session = new Session(env, modelData, modelBytes.length, sessionOptions);
 
         float[] input = new float[] {1.25f, -2.5f, 3.75f};
+        FloatPointer inputData = new FloatPointer(input);
         long[] shape = new long[] {3};
+        LongPointer shapeData = new LongPointer(shape);
         MemoryInfo memoryInfo = MemoryInfo.CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-        Value inputTensor = Value.CreateTensorFloat(memoryInfo.asOrtMemoryInfo(), input, input.length, shape, shape.length);
+        Value inputTensor = Value.CreateTensorFloat(memoryInfo.asOrtMemoryInfo(), inputData, input.length, shapeData, shape.length);
 
         BytePointer inputName = new BytePointer("input");
         BytePointer outputName = new BytePointer("output");
