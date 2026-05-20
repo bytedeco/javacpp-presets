@@ -68,6 +68,11 @@ import org.bytedeco.dnnl.presets.*;
             },
             exclude = {"CL/opencl.h", "CL/cl_version.h", "CL/cl_platform.h", "CL/cl.h"/*, "CL/cl_gl.h", "CL/cl_gl_ext.h", "CL/cl_ext.h"*/,
                        "onnxruntime/core/session/onnxruntime_ep_c_api.h"},
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino"}
+        ),
+        @Platform(
+            value = {"linux", "windows"},
+            extension = "-gpu",
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino", "onnxruntime_providers_cuda"}
         ),
     },
