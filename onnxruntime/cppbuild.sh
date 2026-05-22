@@ -133,14 +133,6 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
-# CUDA 13 on Windows needs the ORT CUB wrapper to undefine MSVC SAL macros: https://github.com/microsoft/onnxruntime/pull/28309
-sedinplace 's|#include <cub/cub.cuh>|#include "core/providers/cuda/cu_inc/cub.cuh"|g' onnxruntime/contrib_ops/cuda/bert/gqa_unfused_attention.cu
-grep -Fq '#include "core/providers/cuda/cu_inc/cub.cuh"' onnxruntime/contrib_ops/cuda/bert/gqa_unfused_attention.cu || {
-    echo "Failed to apply ORT CUB wrapper include workaround to gqa_unfused_attention.cu"
-    exit 1
-}
-# CUDA 13.2 can still reach tcgen05_ld.h through the following CUDA fp headers,
-# after the ORT CUB wrapper has restored MSVC's __out SAL macro.
 sedinplace '/#include "core\/providers\/cuda\/cu_inc\/cub.cuh"/i\
 #if defined(_MSC_VER)\
 #pragma push_macro("__out")\
