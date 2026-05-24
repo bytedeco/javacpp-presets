@@ -133,17 +133,6 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
-sedinplace '/#include "core\/providers\/cuda\/cu_inc\/cub.cuh"/i\
-#if defined(_MSC_VER)\
-#pragma push_macro("__out")\
-#undef __out\
-#endif
-' onnxruntime/contrib_ops/cuda/bert/gqa_unfused_attention.cu
-sedinplace '/#include <cuda_fp16.h>/a\
-#if defined(_MSC_VER)\
-#pragma pop_macro("__out")\
-#endif
-' onnxruntime/contrib_ops/cuda/bert/gqa_unfused_attention.cu
 sedinplace '/CXX>:\/permissive/a\
       "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
 ' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
