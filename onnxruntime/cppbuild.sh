@@ -131,6 +131,7 @@ sedinplace "s/Visual Studio 1. 20../Ninja/g" tools/ci_build/build.py
 sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_compile_flags.cmake cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
+sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
 sedinplace '/CXX>:\/permissive/a\
       "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
