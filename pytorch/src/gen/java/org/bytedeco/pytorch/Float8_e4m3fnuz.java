@@ -48,4 +48,5 @@ public class Float8_e4m3fnuz extends Pointer {
   private native void allocate(float value);
   public native @Name("operator float") float asFloat();
   public native @Cast("bool") boolean isnan();
+  public native @Cast("bool") boolean isinf();
 }

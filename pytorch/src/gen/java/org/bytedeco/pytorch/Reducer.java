@@ -42,6 +42,34 @@ public class Reducer extends Pointer {
         @Cast("int64_t") long first_bucket_bytes_cap,
         @Cast("bool") boolean skip_all_reduce_unused_params,
         @Cast("bool") boolean use_python_reducer,
+        @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list,
+        @Cast("bool") boolean batched_grad_copy/*=false*/) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap, skip_all_reduce_unused_params, use_python_reducer, bucket_bytes_cap_list, batched_grad_copy); }
+  private native void allocate(
+        @ByVal TensorVector params,
+        @ByVal SizeTVectorVector bucket_indices,
+        @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+        @ByVal BoolVector expect_sparse_gradients,
+        @Cast("int64_t") long bucket_bytes_cap,
+        @Cast("bool") boolean find_unused_parameters,
+        @Cast("bool") boolean gradient_as_bucket_view,
+        @ByVal SizeTStringMap param_names,
+        @Cast("int64_t") long first_bucket_bytes_cap,
+        @Cast("bool") boolean skip_all_reduce_unused_params,
+        @Cast("bool") boolean use_python_reducer,
+        @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list,
+        @Cast("bool") boolean batched_grad_copy/*=false*/);
+  public Reducer(
+        @ByVal TensorVector params,
+        @ByVal SizeTVectorVector bucket_indices,
+        @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup process_group,
+        @ByVal BoolVector expect_sparse_gradients,
+        @Cast("int64_t") long bucket_bytes_cap,
+        @Cast("bool") boolean find_unused_parameters,
+        @Cast("bool") boolean gradient_as_bucket_view,
+        @ByVal SizeTStringMap param_names,
+        @Cast("int64_t") long first_bucket_bytes_cap,
+        @Cast("bool") boolean skip_all_reduce_unused_params,
+        @Cast("bool") boolean use_python_reducer,
         @ByVal @Cast("std::vector<int64_t>*") LongVector bucket_bytes_cap_list) { super((Pointer)null); allocate(params, bucket_indices, process_group, expect_sparse_gradients, bucket_bytes_cap, find_unused_parameters, gradient_as_bucket_view, param_names, first_bucket_bytes_cap, skip_all_reduce_unused_params, use_python_reducer, bucket_bytes_cap_list); }
   private native void allocate(
         @ByVal TensorVector params,

@@ -18,7 +18,6 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-
 @Name("torch::optim::OptimizerCloneableOptions<torch::optim::RMSpropOptions>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class OptimizerCloneableRMSpropOptions extends OptimizerOptions {
     static { Loader.load(); }

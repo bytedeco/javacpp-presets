@@ -95,6 +95,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             ))
 
             .put(new Info(
+                "at::cuda::getChosenWorkspaceSize",
                 "at::cuda::EventPool",
                 "at::cuda::WorkspaceMapWithMutex",
                 "at::CUDAGeneratorImpl",

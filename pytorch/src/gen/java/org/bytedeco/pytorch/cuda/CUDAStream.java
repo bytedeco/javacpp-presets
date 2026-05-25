@@ -90,6 +90,8 @@ public class CUDAStream extends Pointer {
 
   public native void synchronize();
 
+  public native @Cast("bool") boolean is_capturing();
+
   public native int priority();
 
   /** Explicit conversion to cudaStream_t. */

@@ -316,10 +316,12 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("defined(__CUDACC__) || defined(__HIPCC__)",
                 "defined(__HIPCC__) && defined(USE_ROCM)",
                 "defined(__CUDACC__) && !defined(USE_ROCM)",
+                "defined(__CUDACC__) && (!defined(USE_ROCM) || (TORCH_HIP_VERSION >= 702))",
                 "defined(USE_ROCM) && defined(__HIPCC__)",
                 "defined(TORCH_LIBRARY_THREAD_UNSAFE_LAZY_INIT) && defined(C10_MOBILE)",
                 "defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)",
                 "defined(_MSC_VER) && _MSC_VER <= 1900",
+                "defined(C10_ARMTSC)",
                 "defined(NDEBUG)",
                 "defined(__ANDROID__)",
                 "defined(__APPLE__)",
@@ -441,7 +443,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::optional<bool>").pointerTypes("BoolOptional").define())
             .put(new Info("std::optional<int8_t>", "std::optional<c10::DeviceIndex>").pointerTypes("ByteOptional").define())
             .put(new Info("std::optional<int>", "std::optional<int32_t>").pointerTypes("IntOptional").define())
-            .put(new Info("std::optional<int64_t>", "c10::remove_symint<std::optional<c10::SymInt> >::type").pointerTypes("LongOptional").define())
+            .put(new Info("std::optional<int64_t>", "std::optional<c10::CaptureId_t>", "std::optional<CaptureId_t>", "c10::remove_symint<std::optional<c10::SymInt> >::type").pointerTypes("LongOptional").define())
             .put(new Info("std::optional<float>").pointerTypes("FloatOptional").define())
             .put(new Info("std::optional<double>").pointerTypes("DoubleOptional").define())
             .put(new Info("std::optional<size_t>").pointerTypes("SizeTOptional").define())
@@ -968,6 +970,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::unordered_map<c10::IValue,c10::IValue,c10::IValue::HashAliasedIValue,c10::IValue::CompAliasedIValues>").pointerTypes("HashAliasedIValueMap").define())
             .put(new Info("std::unordered_map<std::string,bool>").pointerTypes("StringBoolMap").define())
             .put(new Info("std::unordered_map<std::string,size_t>").pointerTypes("StringSizeTMap").define())
+            .put(new Info("std::unordered_map<std::string,uint64_t>").pointerTypes("StringULongMap").define())
             .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("ExtraFilesMap").define())
             .put(new Info("std::unordered_map<std::string,at::Tensor>").pointerTypes("StringTensorUMap").define())
             .put(new Info("std::unordered_map<std::string,c10::TypePtr>").pointerTypes("TypeEnv").define())
