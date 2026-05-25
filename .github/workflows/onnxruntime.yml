@@ -61,7 +61,7 @@ jobs:
           key: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@
           path: ~/ccache/?
-      - uses: barrypitman/javacpp-presets/.github/actions/deploy-ubuntu@codex/update-onnxruntime-to-version-1.26.0
+      - uses: barrypitman/javacpp-presets/.github/actions/deploy-windows@codex/update-onnxruntime-to-version-1.26.0
         timeout-minutes: 350
       - name: Sleep 60 seconds to avoid cache errors
         run: sleep 60
