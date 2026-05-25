@@ -133,15 +133,19 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 #sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
-sedinplace '/#include <sal.h>/i\
-#ifndef WIN32_LEAN_AND_MEAN\
-#define WIN32_LEAN_AND_MEAN\
-#endif\
-#ifndef NOMINMAX\
-#define NOMINMAX\
-#endif\
-#include <windows.h>
-' onnxruntime/core/providers/cuda/cu_inc/cub.cuh
+CUDA_HOME_UNIX="$CUDA_HOME"
+if command -v cygpath >/dev/null 2>&1; then
+    CUDA_HOME_UNIX="$(cygpath -u "$CUDA_HOME")"
+fi
+CUDA_TCGEN05_LD_H="$CUDA_HOME_UNIX/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h"
+if [[ -f "$CUDA_TCGEN05_LD_H" ]]; then
+    echo "Patching CUDA CCCL tcgen05_ld.h from $CUDA_TCGEN05_LD_H"
+    mkdir -p onnxruntime/cuda/__ptx/instructions/generated
+    cp "$CUDA_TCGEN05_LD_H" onnxruntime/cuda/__ptx/instructions/generated/tcgen05_ld.h
+    sedinplace 's/__out/__cccl_out/g' onnxruntime/cuda/__ptx/instructions/generated/tcgen05_ld.h
+else
+    echo "CUDA CCCL tcgen05_ld.h not found at $CUDA_TCGEN05_LD_H"
+fi
 sedinplace '/CXX>:\/permissive/a\
       "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
 ' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
