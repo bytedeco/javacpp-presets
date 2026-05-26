@@ -14,6 +14,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
+// #endif
 
 /**
  * \brief The OrtEpApi struct provides functions that are relevant to the implementation of an execution provider.
@@ -826,8 +827,8 @@ public class OrtEpApi extends Pointer {
    * @param kernel_info [in] The ::OrtKernelInfo instance for an If node. This function returns error ORT_FAIL
    *                        if the opset version specified by {@code kernel_info} is unsupported.
    * @param kernel_out [out] Output parameter set to the OrtKernelImpl instance for the If node.
-   *                        Must be released via ::ReleaseKernelImpl, unless ownership is transferred
-   *                        to ORT (see OrtKernelCreateFunc and ::KernelRegistry_AddKernel()).
+   *                        Must be released via OrtEpApi::ReleaseKernelImpl, unless ownership is transferred
+   *                        to ORT (see OrtKernelCreateFunc and OrtEpApi::KernelRegistry_AddKernel).
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    * @since Version 1.24
@@ -863,8 +864,8 @@ public class OrtEpApi extends Pointer {
    *                   execution to operate on tensors allocated with the EP's device memory.
    *                   ORT will call OrtLoopKernelHelper::Release() to release the helper and its resources.
    * @param kernel_out [out] Output parameter set to the OrtKernelImpl instance for the Loop node.
-   *                        Must be released via ::ReleaseKernelImpl, unless ownership is transferred
-   *                        to ORT (see OrtKernelCreateFunc and ::KernelRegistry_AddKernel()).
+   *                        Must be released via OrtEpApi::ReleaseKernelImpl, unless ownership is transferred
+   *                        to ORT (see OrtKernelCreateFunc and OrtEpApi::KernelRegistry_AddKernel).
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    * @since Version 1.24
@@ -897,8 +898,8 @@ public class OrtEpApi extends Pointer {
    *                   execution to operate on tensors allocated with the EP's device memory.
    *                   ORT will call OrtScanKernelHelper::Release() to release the helper and its resources.
    * @param kernel_out [out] Output parameter set to the OrtKernelImpl instance for the Scan node.
-   *                        Must be released via ::ReleaseKernelImpl, unless ownership is transferred
-   *                        to ORT (see OrtKernelCreateFunc and ::KernelRegistry_AddKernel()).
+   *                        Must be released via OrtEpApi::ReleaseKernelImpl, unless ownership is transferred
+   *                        to ORT (see OrtKernelCreateFunc and OrtEpApi::KernelRegistry_AddKernel).
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    * @since Version 1.24

@@ -92,7 +92,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 25;
+public static final int ORT_API_VERSION = 26;
 
 // #ifdef __cplusplus
 // #endif
@@ -670,8 +670,6 @@ public static native @Const OrtApiBase OrtGetApiBase();
 
 /** \brief External memory handle type for importing GPU resources.
  *
- * \todo Add OPAQUE_WIN32 for Windows Vulkan-specific memory handles
- * \todo Add POSIX file descriptor (OPAQUE_FD) for Linux Vulkan/CUDA/OpenCL interop
  * \todo Add Linux DMA-BUF file descriptor for embedded GPU memory sharing
  *
  * @since Version 1.24.
@@ -681,7 +679,11 @@ public static final int
   /** Shared HANDLE from ID3D12Device::CreateSharedHandle(resource) */
   ORT_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE = 0,
   /** Shared HANDLE from ID3D12Device::CreateSharedHandle(heap) */
-  ORT_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP = 1;
+  ORT_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP = 1,
+  /** Shared HANDLE from vkGetMemoryWin32HandleKHR, non-dedicated allocation */
+  ORT_EXTERNAL_MEMORY_HANDLE_TYPE_VK_MEMORY_WIN32 = 2,
+  /** File descriptor from vkGetMemoryOpaqueFdKHR, non-dedicated allocation */
+  ORT_EXTERNAL_MEMORY_HANDLE_TYPE_VK_MEMORY_OPAQUE_FD = 3;
 // Targeting ../OrtExternalMemoryDescriptor.java
 
 
@@ -693,7 +695,11 @@ public static final int
 /** enum OrtExternalSemaphoreType */
 public static final int
   /** Shared HANDLE from ID3D12Device::CreateSharedHandle(fence) */
-  ORT_EXTERNAL_SEMAPHORE_D3D12_FENCE = 0;
+  ORT_EXTERNAL_SEMAPHORE_D3D12_FENCE = 0,
+  /** Shared HANDLE from vkGetSemaphoreWin32HandleKHR of a VkSemaphore created as VK_SEMAPHORE_TYPE_TIMELINE */
+  ORT_EXTERNAL_SEMAPHORE_VK_TIMELINE_SEMAPHORE_WIN32 = 1,
+  /** File descriptor from vkGetSemaphoreFdKHR of a VkSemaphore created as VK_SEMAPHORE_TYPE_TIMELINE */
+  ORT_EXTERNAL_SEMAPHORE_VK_TIMELINE_SEMAPHORE_OPAQUE_FD = 2;
 // Targeting ../OrtExternalSemaphoreDescriptor.java
 
 
@@ -947,6 +953,26 @@ public static final int
 // Targeting ../OrtScanKernelHelper.java
 
 
+
+/**
+ * \brief Discriminator for the resource count type stored in an OrtResourceCount.
+ *
+ * New resource accounting types can be added by appending new enum values.
+ * The OrtResourceCount union storage is large enough to hold all current and future types.
+ *
+ * @since Version 1.26.
+ */
+/** enum OrtResourceCountKind */
+public static final int
+  /** Unset / zero-cost sentinel. */
+  OrtResourceCountKind_None = 0,
+  /** Single uint64_t: byte count (cost or budget). */
+  OrtResourceCountKind_TotalBytes = 1;
+// Targeting ../OrtResourceCount.java
+
+
+
+// #ifdef __cplusplus
 // Targeting ../OrtEpApi.java
 
 
@@ -965,6 +991,23 @@ public static final int
   OrtEpDataLayout_NHWC = 1,
 
   OrtEpDataLayout_Default = OrtEpDataLayout_NCHW;
+
+/**
+ * \brief Node assignment policies for graph capture validation.
+ *
+ * When graph capture is enabled, ORT validates that nodes are assigned to EPs in a way that is
+ * compatible with graph capture. An EP can specify which validation policy ORT should apply.
+ *
+ * @since Version 1.26.
+ */
+/** enum OrtGraphCaptureNodeAssignmentPolicy */
+public static final int
+  /** All nodes in the main graph must be assigned to this EP. No CPU fallback is allowed. */
+  OrtGraphCaptureNodeAssignmentPolicy_ALL_NODES_ON_EP = 0,
+
+  /** Compute nodes must be on this EP. CPU nodes are allowed for shape computation as long as
+   *  no memory copy nodes exist. */
+  OrtGraphCaptureNodeAssignmentPolicy_ALLOW_CPU_FOR_SHAPES = 1;
 // Targeting ../OrtEp.java
 
 
@@ -1149,6 +1192,7 @@ public static final int
 @Namespace("Ort::detail") public static native void OrtRelease(OrtAllocator ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtArenaCfg ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtCustomOpDomain ptr);
+@Namespace("Ort::detail") public static native void OrtRelease(OrtDeviceEpIncompatibilityDetails ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtEnv ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtExternalInitializerInfo ptr);
 @Namespace("Ort::detail") public static native void OrtRelease(OrtGraph ptr);
@@ -1210,6 +1254,9 @@ public static final int
 
 
 // Targeting ../UnownedMapTypeInfo.java
+
+
+// Targeting ../BaseDeviceEpIncompatibilityDetails.java
 
 
 // Targeting ../BaseConstGraph.java
@@ -1440,6 +1487,13 @@ public static final int
 /** \brief Wrapper around ::OrtHardwareDevice
  * \remarks HardwareDevice is always read-only for API users.
  */
+// Targeting ../DeviceEpIncompatibilityDetailsImpl.java
+
+
+
+// Targeting ../DeviceEpIncompatibilityDetails.java
+
+
 // Targeting ../EpDeviceImpl.java
 
 
@@ -1927,6 +1981,7 @@ public static final long MAX_CUSTOM_OP_END_VER = (1L << 31) - 1;
 
 /** Wraps OrtEpApi::GetEnvConfigEntries() */
 @Namespace("Ort") public static native @ByVal KeyValuePairs GetEnvConfigEntries();
+
   // namespace Ort
 // #include "onnxruntime_cxx_inline.h"
 

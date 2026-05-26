@@ -71,9 +71,13 @@ import org.bytedeco.dnnl.presets.*;
             link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
-            value = {"linux", "macosx", "windows"},
+            value = {"linux-x86_64", "macosx-arm64", "windows-x86_64"},
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino"}
+        ),
+        @Platform(
+            value = {"linux-x86_64", "windows-x86_64"},
             extension = "-gpu",
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_openvino", "onnxruntime_providers_cuda"}
         ),
     },
     target = "org.bytedeco.onnxruntime",
@@ -123,7 +127,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                              "onnxruntime_float16::Float16Impl<Float16_t>", "Ort::ConstHardwareDevice").cppText("").cppTypes().cast().pointerTypes("Pointer"))
                .put(new Info("ORT_EXPORT", "ORT_API_CALL", "ORT_FILE", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("ORT_API_MANUAL_INIT", "__cpp_if_constexpr").define(false))
-               .put(new Info("USE_CUDA", "USE_DNNL").define(true))
+               .put(new Info("USE_CUDA", "USE_DNNL", "USE_OPENVINO").define(true))
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "std::vector<Ort::AllocatedStringPtr>", "not_defined_in_this_build").skip())
                .put(new Info("Ort::AllocatedStringPtr").valueTypes("@UniquePtr(\"char, Ort::detail::AllocatedFree\") @Cast(\"char*\") BytePointer"))
 //               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
@@ -162,6 +166,10 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
                .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
                .put(new Info("Ort::detail::Unowned<OrtAllocator>").pointerTypes("UnownedAllocator").purify())
+               .put(new Info("Ort::detail::Base<OrtDeviceEpIncompatibilityDetails>").pointerTypes("BaseDeviceEpIncompatibilityDetails"))
+               .put(new Info("DeviceEpIncompatibilityDetailsImpl<OrtDeviceEpIncompatibilityDetails>",
+                             "Ort::detail::DeviceEpIncompatibilityDetailsImpl<OrtDeviceEpIncompatibilityDetails>").pointerTypes("DeviceEpIncompatibilityDetailsImpl"))
+               .put(new Info("DeviceEpIncompatibilityDetails", "Ort::DeviceEpIncompatibilityDetails").pointerTypes("DeviceEpIncompatibilityDetails"))
                .put(new Info("Ort::detail::Unowned<const OrtEpAssignedNode>").pointerTypes("ConstEpAssignedNode").purify())
                .put(new Info("Ort::detail::Unowned<const OrtEpAssignedSubgraph>").pointerTypes("ConstEpAssignedSubgraph").purify())
                .put(new Info("Ort::detail::Unowned<const Ort::MemoryInfo>").pointerTypes("UnownedMemoryInfo").purify())

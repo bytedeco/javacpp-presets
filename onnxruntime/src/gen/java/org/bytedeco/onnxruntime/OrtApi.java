@@ -7544,7 +7544,7 @@ public class OrtApi extends Pointer {
 
   /** \brief Get the element data type and shape for an OrtValue that represents a Tensor (scalar, dense, or sparse).
    *
-   * \note This function is an alternative to ::GetTensorTypeAndShape() that does not allocate a new array for
+   * \note This function is an alternative to OrtApi::GetTensorTypeAndShape that does not allocate a new array for
    *       the shape data. The OrtValue instance's internal shape data is returned directly.
    *
    * \note Returns an error if the underlying OrtValue is not a Tensor.
@@ -7625,8 +7625,7 @@ public class OrtApi extends Pointer {
   public native OrtStatus KernelInfoGetAttributeArray_string( @Const OrtKernelInfo info, String name,
                     OrtAllocator allocator, @Cast("char***") @ByPtrPtr PointerPointer out, @Cast("size_t*") SizeTPointer size);
 
-  /** \}
-   *  \name OrtEnv
+  /** \name OrtEnv
    *  \{
   <p>
   /** \brief Set thread pool work callbacks for per-session thread pools.
