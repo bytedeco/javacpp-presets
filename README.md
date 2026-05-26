@@ -236,7 +236,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.20.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * OpenVINO 2026.1.x  https://github.com/openvinotoolkit/openvino
- * ONNX Runtime 1.25.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.26.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

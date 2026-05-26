@@ -11,6 +11,8 @@ export ARCH_FLAGS="--allow_running_as_root"
 export DNNL_FLAGS="--use_dnnl"
 export CMAKE_ARGS=
 export COREML_FLAGS=
+export OPENVINO_FLAGS=
+export OPENVINO_CMAKE_DIR=
 export OPENMP_FLAGS= # "--use_openmp"
 export TRAINING_FLAGS= # --enable_training_apis --enable_training_ops
 export CUDAFLAGS="-v"
@@ -26,7 +28,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.25.1
+ONNXRUNTIME=1.26.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -70,6 +72,27 @@ case $PLATFORM in
         ;;
 esac
 
+case $PLATFORM in
+    linux-x86_64|macosx-arm64|windows-x86_64)
+        if [[ -n "${BUILD_PATH:-}" ]]; then
+            PREVIFS="$IFS"
+            IFS="$BUILD_PATH_SEPARATOR"
+            for P in $BUILD_PATH; do
+                if [[ -f "$P/runtime/cmake/OpenVINOConfig.cmake" ]]; then
+                    export OPENVINO_CMAKE_DIR="$P/runtime/cmake"
+                    break
+                fi
+            done
+            IFS="$PREVIFS"
+        fi
+        if [[ ! -f "$OPENVINO_CMAKE_DIR/OpenVINOConfig.cmake" ]]; then
+            echo "Error: OpenVINOConfig.cmake not found. Make sure the OpenVINO platform artifact includes runtime/cmake and is listed in buildResources."
+            exit 1
+        fi
+        export OPENVINO_FLAGS="--use_openvino CPU --cmake_extra_defines OpenVINO_DIR=$OPENVINO_CMAKE_DIR"
+        ;;
+esac
+
 patch -Np1 < ../../../onnxruntime-cuda13.patch || true
 
 #if [[ -n "$ARCH_FLAGS" ]]; then
@@ -98,6 +121,7 @@ sedinplace 's/MLAS_CPUIDINFO::GetCPUIDInfo().HasArmNeon_I8MM()/false/g' onnxrunt
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
+git apply --recount ../../../onnxruntime-openvino.patch
 #patch -p1 < ../../../onnxruntime-cuda.patch # https://github.com/microsoft/onnxruntime/pull/22316
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
@@ -127,6 +151,10 @@ sedinplace 's/ceil(/ceilf(/g' onnxruntime/core/providers/cuda/object_detection/r
 sedinplace 's/ceil(/ceilf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
 sedinplace 's/floor(/floorf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
 sedinplace 's/round(/roundf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
+sedinplace 's/#include <array>/#include <array>\n#include <charconv>/g' onnxruntime/core/providers/openvino/backend_manager.cc
+sedinplace 's/#include <exception>/#include <charconv>\n#include <exception>/g' onnxruntime/core/providers/openvino/exceptions.h
+sedinplace 's/#include "weak_singleton.h"/#include "weak_singleton.h"\n#include <optional>/g' onnxruntime/core/providers/openvino/ov_bin_manager.h
+sedinplace 's/#include <map>/#include <map>\n#include <optional>/g' onnxruntime/core/providers/openvino/ov_shared_context.h
 sedinplace 's/, dims_span);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_reduce.cc
 sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_squeeze.cc
 sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
@@ -172,7 +200,15 @@ sedinplace 's/Throw(javaException)/Throw((jthrowable)javaException)/g' java/src/
 sedinplace '/jint JNI_OnLoad/,/}/d' java/src/main/native/OrtJniUtil.cpp
 sedinplace '/static synchronized void init() throws IOException {/a\
 loaded = org.bytedeco.javacpp.Loader.load(org.bytedeco.onnxruntime.presets.onnxruntime.class) != null;\
-ortApiHandle = initialiseAPIBase(ORT_API_VERSION_1);\
+ortApiHandle = initialiseAPIBase(ORT_API_VERSION_23);\
+if (ortApiHandle == 0L) {\
+  throw new IllegalStateException("There is a mismatch between the ORT class files and the ORT native library, and the native library could not be loaded");\
+}\
+ortTrainingApiHandle = initialiseTrainingAPIBase(ortApiHandle, ORT_API_VERSION_23);\
+ortCompileApiHandle = initialiseCompileAPIBase(ortApiHandle);\
+trainingEnabled = ortTrainingApiHandle != 0L;\
+providers = initialiseProviders(ortApiHandle);\
+version = initialiseVersion();\
 ' java/src/main/java/ai/onnxruntime/OnnxRuntime.java
 sedinplace 's/Names = malloc/Names = (const char**)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/Strings = malloc/Strings = (jobject*)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
@@ -197,7 +233,7 @@ sedinplace 's/SoftMaxComputeHelper<T, T, true>(ctx->GetComputeStream()/SoftMaxCo
 sedinplace 's/PrepareCompute<TIndex>(context->GetComputeStream()/PrepareCompute<TIndex>(context->GetComputeStream()->GetHandle(), (CUstream_st*)context->GetComputeStream()->GetHandle()/g' orttraining/orttraining/training_ops/cuda/tensor/gather_nd_grad.cc
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
-"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
+"$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --parallel $MAKEJ --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $COREML_FLAGS $OPENVINO_FLAGS $OPENMP_FLAGS $TRAINING_FLAGS $GPU_FLAGS
 
 # install headers and libraries in standard directories
 cp -r include/* ../include

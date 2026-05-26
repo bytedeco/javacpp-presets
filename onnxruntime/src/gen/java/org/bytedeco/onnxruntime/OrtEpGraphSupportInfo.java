@@ -15,6 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 // #endif
+
+/** \addtogroup Global
+ * \{
+ */
 @Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtEpGraphSupportInfo extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
