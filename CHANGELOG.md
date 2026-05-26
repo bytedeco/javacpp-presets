@@ -1,5 +1,5 @@
 
- * Enable support for OpenVINO in presets for ONNX Runtime ([pull #1769](https://github.com/bytedeco/javacpp-presets/pull/1769)
+ * Enable support for OpenVINO in presets for ONNX Runtime ([pull #1769](https://github.com/bytedeco/javacpp-presets/pull/1769))
  * Add presets for OpenVINO 2026.1.0 ([pull #1752](https://github.com/bytedeco/javacpp-presets/pull/1752))
  * Allow creating new `std::vector<torch::optim::OptimizerParamGroup>` in presets for PyTorch ([issue #1756](https://github.com/bytedeco/javacpp-presets/issues/1756))
  * Add V4L2 Request API hwaccels in presets for FFmpeg ([pull #1755](https://github.com/bytedeco/javacpp-presets/pull/1755))
