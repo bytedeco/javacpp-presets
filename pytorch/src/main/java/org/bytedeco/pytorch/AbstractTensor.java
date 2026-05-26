@@ -44,8 +44,8 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
     public static Tensor create(boolean... data) { return create(data, data.length); }
 
     public static Tensor create(byte[] data, boolean signed, long... shape) {
-        try (PointerScope scope = new PointerScope(TensorOptions.class, Device.class)) {
-            Tensor t = empty(shape, new TensorOptions(signed ? ScalarType.Char : ScalarType.Byte), null);
+        try (PointerScope scope = new PointerScope()) {
+            Tensor t = empty(shape, new TensorOptions(signed ? ScalarType.Char : ScalarType.Byte), null).retainReference();
             ByteBuffer b = t.createBuffer();
             b.put(data);
             return t;
@@ -88,7 +88,7 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
     }
     /** Returns {@link #data_ptr()} wrapped in a {@link Buffer} of appropriate type starting at given index. */
     public <B extends Buffer> B createBuffer(long index) {
-        try (PointerScope scope = new PointerScope(TensorOptions.class, Device.class)) {
+        try (PointerScope scope = new PointerScope()) {
             TensorOptions options = options();
             if (options.layout().intern() != Layout.Strided) {
                 throw new UnsupportedOperationException("Layout not supported: " + options.layout().intern());
@@ -127,7 +127,7 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
         return (I)createIndexer(true);
     }
     @Override public <I extends Indexer> I createIndexer(boolean direct) {
-        try (PointerScope scope = new PointerScope(TensorOptions.class, Device.class)) {
+        try (PointerScope scope = new PointerScope()) {
             TensorOptions options = options();
             if (options.layout().intern() != Layout.Strided) {
                 throw new UnsupportedOperationException("Layout not supported: " + options.layout().intern());
