@@ -3959,7 +3959,7 @@ public static final boolean FF_CODEC_SONIC_DEC =         (LIBAVCODEC_VERSION_MAJ
 // #include "version_major.h"
 
 public static final int LIBAVCODEC_VERSION_MINOR =  28;
-public static final int LIBAVCODEC_VERSION_MICRO = 100;
+public static final int LIBAVCODEC_VERSION_MICRO = 101;
 
 public static native @MemberGetter int LIBAVCODEC_VERSION_INT();
 public static final int LIBAVCODEC_VERSION_INT = LIBAVCODEC_VERSION_INT();

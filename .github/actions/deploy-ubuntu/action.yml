@@ -121,7 +121,7 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install python3 python3-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH libpulse-dev:$ARCH libva-dev:$ARCH libdrm-dev:$ARCH libudev-dev:$ARCH
-        $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev
+        $SUDO apt-get -y install build-essential pkgconf ccache clang $TOOLCHAIN openjdk-8-jdk ant python3-pip swig git file wget zstd unzip tar bzip2 gzip patch autoconf-archive autogen automake cmake make ninja-build libtool bison flex perl nasm ragel curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev libdrm-dev libxcb-glx0-dev libwayland-dev wayland-protocols qtbase5-dev qtwayland5
 
         export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$HOST_ARCH/
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -145,15 +145,18 @@ runs:
 
         # install vulkan sdk
         echo Installing Vulkan-SDK
-        if [[ "$CODENAME" == "jammy" ]]; then
-          curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
-          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-jammy.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-jammy.list
-          $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk && $SUDO apt-get clean
-        elif [[ "$CODENAME" == "focal" ]]; then
-          curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO apt-key add -
-          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-focal.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-focal.list
-          $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk && $SUDO apt-get clean
-        fi
+        # if [[ "$CODENAME" == "jammy" ]]; then
+        #   curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
+        #   $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-jammy.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-jammy.list
+        #   $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk && $SUDO apt-get clean
+        # elif [[ "$CODENAME" == "focal" ]]; then
+        #   curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO apt-key add -
+        #   $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-focal.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-focal.list
+        #   $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk && $SUDO apt-get clean
+        # fi
+        curl -LO https://sdk.lunarg.com/sdk/download/1.4.313.0/linux/vulkansdk-linux-x86_64-1.4.313.0.tar.xz
+        tar -xvf vulkansdk-linux-x86_64-1.4.313.0.tar.xz
+        $SUDO cp -a 1.4.313.0/x86_64/* /usr/local/
 
         if [[ -n ${USERLAND_BUILDME:-} ]]; then
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz

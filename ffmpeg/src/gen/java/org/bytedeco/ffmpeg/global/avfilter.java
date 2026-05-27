@@ -1257,7 +1257,7 @@ public static final boolean FF_API_LIBNPP_SUPPORT =  (LIBAVFILTER_VERSION_MAJOR 
 // #include "version_major.h"
 
 public static final int LIBAVFILTER_VERSION_MINOR =  14;
-public static final int LIBAVFILTER_VERSION_MICRO = 100;
+public static final int LIBAVFILTER_VERSION_MICRO = 101;
 
 
 public static native @MemberGetter int LIBAVFILTER_VERSION_INT();

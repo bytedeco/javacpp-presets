@@ -703,7 +703,7 @@ public static final int LIBSWRESAMPLE_VERSION_MAJOR =   6;
 // #include "version_major.h"
 
 public static final int LIBSWRESAMPLE_VERSION_MINOR =   3;
-public static final int LIBSWRESAMPLE_VERSION_MICRO = 100;
+public static final int LIBSWRESAMPLE_VERSION_MICRO = 101;
 
 public static native @MemberGetter int LIBSWRESAMPLE_VERSION_INT();
 public static final int LIBSWRESAMPLE_VERSION_INT = LIBSWRESAMPLE_VERSION_INT();
