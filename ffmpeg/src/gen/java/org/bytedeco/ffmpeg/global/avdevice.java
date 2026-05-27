@@ -541,7 +541,7 @@ public static final boolean FF_API_ALSA_CHANNELS = (LIBAVDEVICE_VERSION_MAJOR < 
 // #include "version_major.h"
 
 public static final int LIBAVDEVICE_VERSION_MINOR =   3;
-public static final int LIBAVDEVICE_VERSION_MICRO = 100;
+public static final int LIBAVDEVICE_VERSION_MICRO = 101;
 
 public static native @MemberGetter int LIBAVDEVICE_VERSION_INT();
 public static final int LIBAVDEVICE_VERSION_INT = LIBAVDEVICE_VERSION_INT();
