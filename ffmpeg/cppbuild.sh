@@ -34,23 +34,24 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.5.5
+OPENSSL=openssl-3.5.6
 OPENH264_VERSION=2.6.0
 X264=x264-stable
 X265=3.4
 VPX_VERSION=1.16.0
 ALSA_VERSION=1.2.15.3
 FREETYPE_VERSION=2.14.3
-HARFBUZZ_VERSION=14.1.0
+HARFBUZZ_VERSION=14.2.0
 MFX_VERSION=1.35.1
 NVCODEC_VERSION=13.0.19.0
 XML2=libxml2-2.9.12
-LIBSRT_VERSION=1.5.4
+LIBSRT_VERSION=1.5.5
 WEBP_VERSION=1.6.0
-AOMAV1_VERSION=3.13.3
+AOMAV1_VERSION=3.14.1
 SVTAV1_VERSION=4.1.0
 ZIMG_VERSION=3.0.6
-FFMPEG_VERSION=8.1
+FFMPEG_VERSION=8.1.1
+
 # Vendored snapshot of https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20847.patch
 # with the unsupported FFmpeg 8.1 Changelog hunk already removed.
 V4L2_REQUEST_PATCH=ffmpeg-v4l2-request-20847-ffmpeg-8.1.patch
@@ -70,9 +71,9 @@ download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_
 download https://ftp.osuosl.org/pub/blfs/conglomeration/freetype/freetype-$FREETYPE_VERSION.tar.xz freetype-$FREETYPE_VERSION.tar.xz
 download https://github.com/harfbuzz/harfbuzz/archive/refs/tags/$HARFBUZZ_VERSION.tar.gz harfbuzz-$HARFBUZZ_VERSION.tar.gz
 download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx_dispatch-$MFX_VERSION.tar.gz
+download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
-download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
 download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
@@ -125,7 +126,7 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
 # patch -Np1 -d $OPENSSL < ../../openssl-android.patch
-patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
+# patch -Np1 -d $OPENSSL < ../../openssl-windows.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-vulkan.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../$V4L2_REQUEST_PATCH

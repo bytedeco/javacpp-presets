@@ -2872,7 +2872,7 @@ public static final int FF_API_R_FRAME_RATE =            1;
 // #include "version_major.h"
 
 public static final int LIBAVFORMAT_VERSION_MINOR =  12;
-public static final int LIBAVFORMAT_VERSION_MICRO = 100;
+public static final int LIBAVFORMAT_VERSION_MICRO = 101;
 
 public static native @MemberGetter int LIBAVFORMAT_VERSION_INT();
 public static final int LIBAVFORMAT_VERSION_INT = LIBAVFORMAT_VERSION_INT();
