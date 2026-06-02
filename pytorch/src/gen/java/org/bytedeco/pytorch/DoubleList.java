@@ -47,6 +47,8 @@ public class DoubleList extends Pointer {
    */
   public DoubleList(@ByVal DoubleArrayRef initial_values) { super((Pointer)null); allocate(initial_values); }
   private native void allocate(@ByVal DoubleArrayRef initial_values);
+  public DoubleList(@ByVal @Cast({"double*", "c10::ArrayRef<double>", "std::vector<double>&"}) @StdVector("double") double... initial_values) { super((Pointer)null); allocate(initial_values); }
+  private native void allocate(@ByVal @Cast({"double*", "c10::ArrayRef<double>", "std::vector<double>&"}) @StdVector("double") double... initial_values);
 
   /**
    * Create a generic list with runtime type information.
