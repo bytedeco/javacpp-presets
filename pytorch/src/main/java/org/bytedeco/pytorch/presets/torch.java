@@ -772,7 +772,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                                                                                     "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").elementValueType("boolean"),
             new ArrayInfo("Byte").itPointerType("BytePointer").elementTypes("jbyte", "int8_t", "uint8_t").elementValueType("byte"),
             new ArrayInfo("Dimname").otherCppNames("at::DimnameList").elementTypes("at::Dimname").otherPointerTypes("DimnameVector"),
-            new ArrayInfo("Double").itPointerType("DoublePointer").elementTypes("double"),
+            new ArrayInfo("Double").itPointerType("DoublePointer").elementTypes("double").elementValueType("double"),
             new ArrayInfo("DoubleComplex") /*.itPointertype("DoublePointer") */.elementTypes("c10::complex<double>"),
             new ArrayInfo("EnumNameValue").elementTypes("c10::EnumNameValue"),
             new ArrayInfo("Float").itPointerType("FloatPointer").elementTypes("float").elementValueType("float"),
