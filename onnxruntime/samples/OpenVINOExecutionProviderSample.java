@@ -30,9 +30,8 @@ public class OpenVINOExecutionProviderSample {
     public static void main(String[] args) throws Exception {
         String deviceType = args.length > 0 ? args[0] : "CPU";
 
-        // Load the OpenVINO preset first so that ONNX Runtime's OpenVINO provider can resolve
-        // the OpenVINO and TBB native libraries bundled by the openvino-platform dependency.
-        Loader.load(org.bytedeco.openvino.global.openvino.class);
+        // Loading the ONNX Runtime preset also preloads the OpenVINO runtime inherited by it,
+        // which lets the OpenVINO execution provider resolve its bundled native dependencies.
         Loader.load(org.bytedeco.onnxruntime.global.onnxruntime.class);
 
         System.out.println("Available ONNX Runtime providers: " + GetAvailableProviders());

@@ -14,13 +14,6 @@
             <artifactId>onnxruntime-platform</artifactId>
             <version>1.26.0-1.5.14-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>openvino-platform</artifactId>
-            <version>2026.1.0-1.5.14-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
     <profiles>
         <profile>
