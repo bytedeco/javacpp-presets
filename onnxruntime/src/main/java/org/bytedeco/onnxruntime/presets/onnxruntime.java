@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.dnnl.presets.*;
-import org.bytedeco.openvino.presets.openvino;
+import org.bytedeco.openvino.presets.*;
 
 /**
  *
