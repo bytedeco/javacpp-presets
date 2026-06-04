@@ -32,13 +32,14 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.dnnl.presets.*;
+import org.bytedeco.openvino.presets.*;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = dnnl.class,
+    inherit = {dnnl.class, openvino.class},
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
