@@ -46,7 +46,7 @@ public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 65536;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 32768;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
 // #define OPENBLAS_EXPRECISION 
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.32 ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.33 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -79,8 +79,14 @@ public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.32 ";
 // #endif
 
 // #if defined(__GNUC__) && (__GNUC__ > 12)
-// #if defined(OPENBLAS_ARCH_POWER)
+// #if defined(OPENBLAS_ARCH_POWER) || defined(OPENBLAS_ARCH_LOONGARCH64)
 // #else
+// #define __STDC_WANT_IEC_60559_TYPES_EXT__
+// #include <float.h>
+// #ifdef FLT16_MAX
+// #else
+// #include <stdint.h>
+// #endif
 // #endif
 // #else
 // #include <stdint.h>
