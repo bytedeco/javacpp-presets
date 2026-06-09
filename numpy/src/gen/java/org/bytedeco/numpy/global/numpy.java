@@ -513,8 +513,8 @@ public static final int NPY_SIZEOF_HASH_T = NPY_SIZEOF_HASH_T();
 // #include <complex.h>
 
 
-// #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
-// #else /* !defined(_MSC_VER) || defined(__INTEL_COMPILER) */
+// #if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
+// #else /* !defined(_MSC_VER) || defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER) */
 // #endif
 
 // #endif
@@ -2987,8 +2987,9 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 //                               ((type) <= NPY_LONGDOUBLE)) ||
 //                               ((type) == NPY_HALF))
 
-// #define PyTypeNum_ISNUMBER(type) (((type) <= NPY_CLONGDOUBLE) ||
-//                                   ((type) == NPY_HALF))
+// #define PyTypeNum_ISNUMBER(type) (((type) >= 0) &&
+//                                   (((type) <= NPY_CLONGDOUBLE) ||
+//                                    ((type) == NPY_HALF)))
 
 // #define PyTypeNum_ISSTRING(type) (((type) == NPY_STRING) ||
 //                                   ((type) == NPY_UNICODE))
