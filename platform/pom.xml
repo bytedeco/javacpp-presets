@@ -183,7 +183,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>3.11-${project.version}</version>
+      <version>3.12.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -203,7 +203,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>fftw-platform</artifactId>
-      <version>3.3.10-${project.version}</version>
+      <version>3.3.11-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -283,7 +283,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencl-platform</artifactId>
-      <version>3.0-${project.version}</version>
+      <version>3.1-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->

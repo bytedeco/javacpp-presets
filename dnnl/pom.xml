@@ -11,14 +11,14 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>dnnl</artifactId>
-  <version>3.11-${project.parent.version}</version>
+  <version>3.12.1-${project.parent.version}</version>
   <name>JavaCPP Presets for DNNL</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencl</artifactId>
-      <version>3.0-${project.parent.version}</version>
+      <version>3.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -41,7 +41,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencl-platform</artifactId>
-            <version>3.0-${project.parent.version}</version>
+            <version>3.1-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
