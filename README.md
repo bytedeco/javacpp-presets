@@ -200,11 +200,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2025.3.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 3.11.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 3.12.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.33  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.11  https://github.com/devernay/cminpack
- * FFTW 3.3.10  http://www.fftw.org/download.html
+ * FFTW 3.3.11  http://www.fftw.org/download.html
  * GSL 2.8  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.14.x  https://www.python.org/downloads/
  * NumPy 2.4.x  https://github.com/numpy/numpy
@@ -223,7 +223,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * NCCL 2.30.x  https://developer.nvidia.com/nccl
    * nvCOMP 5.2.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 13.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
- * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
+ * OpenCL 3.1.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
  * PyTorch 2.12.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.2.x  https://github.com/google/sentencepiece

@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCL_VERSION=2025.07.22
-CLHPP_VERSION=2025.07.22
+OPENCL_VERSION=2026.05.29
+CLHPP_VERSION=2026.05.29
 download https://github.com/KhronosGroup/OpenCL-Headers/archive/v$OPENCL_VERSION.tar.gz OpenCL-Headers-$OPENCL_VERSION.tar.gz
 download https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/v$OPENCL_VERSION.tar.gz OpenCL-ICD-Loader-$OPENCL_VERSION.tar.gz
 download https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v$CLHPP_VERSION.tar.gz OpenCL-CLHPP-$CLHPP_VERSION.tar.gz

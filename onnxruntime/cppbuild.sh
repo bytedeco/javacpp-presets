@@ -137,7 +137,7 @@ sedinplace '/CXX>:\/permissive/a\
       "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
 ' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers_cpu.cmake cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.11)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.12.1)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace "s/ CMAKE_ARGS/ CMAKE_ARGS $CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=SEQ/g" cmake/external/dnnl.cmake

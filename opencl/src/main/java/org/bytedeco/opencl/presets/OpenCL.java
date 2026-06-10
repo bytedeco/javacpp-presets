@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2025 Samuel Audet
+ * Copyright (C) 2020-2026 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ public class OpenCL implements InfoMapper {
                              "CL_API_SUFFIX__VERSION_1_0", "CL_API_SUFFIX__VERSION_1_1",
                              "CL_API_SUFFIX__VERSION_1_2", "CL_API_SUFFIX__VERSION_2_0",
                              "CL_API_SUFFIX__VERSION_2_1", "CL_API_SUFFIX__VERSION_2_2",
-                             "CL_API_SUFFIX__VERSION_3_0", "CL_API_SUFFIX__EXPERIMENTAL").cppTypes().annotations())
+                             "CL_API_SUFFIX__VERSION_3_0", "CL_API_SUFFIX__VERSION_3_1", "CL_API_SUFFIX__EXPERIMENTAL").cppTypes().annotations())
                .put(new Info("CL_NAN", "CL_IMPORT_MEMORY_WHOLE_ALLOCATION_ARM").translate(false))
                .put(new Info("CL_HUGE_VAL", "nanf").skip())
 
