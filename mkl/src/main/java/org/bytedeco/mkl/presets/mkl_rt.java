@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2024 Samuel Audet
+ * Copyright (C) 2017-2026 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",
         "mkl_dnn_types.h", "mkl_dnn.h", "mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
               compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/oneapi/mkl/latest/include/",
-              linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}, link = "mkl_rt@.2",
-              preload = {"mkl_core@.2", "iomp5", "libiomp5md", "mkl_gnu_thread@.2", "mkl_intel_lp64@.2", "mkl_intel_thread@.2",
-                         "mkl_def@.2", "mkl_mc@.2", "mkl_mc3@.2", "mkl_p4@.2", "mkl_p4m@.2", "mkl_p4m3@.2", "mkl_avx@.2", "mkl_avx2@.2", "mkl_avx512@.2", "mkl_avx512_mic@.2",
-                         "mkl_vml_def@.2", "mkl_vml_ia@.2", "mkl_vml_mc@.2", "mkl_vml_mc2@.2", "mkl_vml_mc3@.2", "mkl_vml_p4@.2", "mkl_vml_p4m@.2", "mkl_vml_p4m2@.2", "mkl_vml_p4m3@.2",
-                         "mkl_vml_avx@.2", "mkl_vml_avx2@.2", "mkl_vml_avx512@.2", "mkl_vml_avx512_mic@.2", "mkl_vml_cmpt@.2"}, resource = {"include"}),
+              linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}, link = "mkl_rt@.3",
+              preload = {"mkl_core@.3", "iomp5", "libiomp5md", "mkl_gnu_thread@.3", "mkl_intel_lp64@.3", "mkl_intel_thread@.3",
+                         "mkl_def@.3", "mkl_mc@.3", "mkl_mc3@.3", "mkl_p4@.3", "mkl_p4m@.3", "mkl_p4m3@.3", "mkl_avx@.3", "mkl_avx2@.3", "mkl_avx10@.3", "mkl_avx512@.3", "mkl_avx512_mic@.3",
+                         "mkl_vml_def@.3", "mkl_vml_ia@.3", "mkl_vml_mc@.3", "mkl_vml_mc2@.3", "mkl_vml_mc3@.3", "mkl_vml_p4@.3", "mkl_vml_p4m@.3", "mkl_vml_p4m2@.3", "mkl_vml_p4m3@.3",
+                         "mkl_vml_avx@.3", "mkl_vml_avx2@.3", "mkl_vml_avx10@.3", "mkl_vml_avx512@.3", "mkl_vml_avx512_mic@.3", "mkl_vml_cmpt@.3"}, resource = {"include"}),
     @Platform(value = "linux-x86",    linkpath = {"/opt/intel/oneapi/mkl/latest/lib32/", "/opt/intel/oneapi/compiler/latest/lib32/"}),
     @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/lib/"}),
     @Platform(value = "windows",     includepath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/include/"),

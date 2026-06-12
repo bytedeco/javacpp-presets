@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=22.1.1
+LLVM_VERSION=22.1.7
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
@@ -23,7 +23,7 @@ sedinplace 's/if (NOT Python3_EXECUTABLE/if (TRUE/g' clang/lib/Tooling/CMakeList
 mkdir -p build
 cd build
 
-PROJECTS="clang;lld;polly"
+PROJECTS="clang;lld;polly;mlir"
 
 TBLGEN_BUILD="${BUILD_DIR:-$(pwd)}/../tblgen"
 LLVM_BUILD="${BUILD_DIR:-$(pwd)}"
