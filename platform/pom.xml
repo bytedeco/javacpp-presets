@@ -173,7 +173,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2025.3-${project.version}</version>
+      <version>2026.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -233,7 +233,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>22.1.1-${project.version}</version>
+      <version>22.1.7-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
