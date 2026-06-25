@@ -14,6 +14,8 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+
+
 // #ifndef Py_LIMITED_API
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyUnicodeScalarObject extends Pointer {

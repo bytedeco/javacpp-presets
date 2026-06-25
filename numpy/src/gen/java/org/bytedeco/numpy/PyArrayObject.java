@@ -45,7 +45,9 @@ public class PyArrayObject extends PyObject {
         return new PyArrayObject((Pointer)this).offsetAddress(i);
     }
 
+// #ifndef Py_TARGET_ABI3T
     public native @ByRef PyObject ob_base(); public native PyArrayObject ob_base(PyObject setter);
+// #endif
     /* Pointer to the raw data buffer */
     public native @Cast("char*") BytePointer data(); public native PyArrayObject data(BytePointer setter);
     /* The number of dimensions, also called 'ndim' */

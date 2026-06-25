@@ -14,8 +14,10 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+// #endif
 
 
+// #if !defined(Py_TARGET_ABI3T)
 /*
  * Umodified PyArray_Descr struct identical to NumPy 1.x.  This struct is
  * used as a prototype for registering a new legacy DType.

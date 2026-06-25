@@ -20,31 +20,32 @@ import static org.bytedeco.numpy.global.numpy.*;
  * Any object passed to PyArray_Broadcast must be binary compatible
  * with this structure.
  */
-
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
-public class PyArrayMultiIterObject extends Pointer {
+public class PyArrayMultiIterObject_fields extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PyArrayMultiIterObject() { super((Pointer)null); allocate(); }
+    public PyArrayMultiIterObject_fields() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyArrayMultiIterObject(long size) { super((Pointer)null); allocateArray(size); }
+    public PyArrayMultiIterObject_fields(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyArrayMultiIterObject(Pointer p) { super(p); }
+    public PyArrayMultiIterObject_fields(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public PyArrayMultiIterObject position(long position) {
-        return (PyArrayMultiIterObject)super.position(position);
+    @Override public PyArrayMultiIterObject_fields position(long position) {
+        return (PyArrayMultiIterObject_fields)super.position(position);
     }
-    @Override public PyArrayMultiIterObject getPointer(long i) {
-        return new PyArrayMultiIterObject((Pointer)this).offsetAddress(i);
+    @Override public PyArrayMultiIterObject_fields getPointer(long i) {
+        return new PyArrayMultiIterObject_fields((Pointer)this).offsetAddress(i);
     }
 
-        public native @ByRef PyObject ob_base(); public native PyArrayMultiIterObject ob_base(PyObject setter);
-        public native int numiter(); public native PyArrayMultiIterObject numiter(int setter);                 /* number of iters */
-        public native @Cast("npy_intp") long size(); public native PyArrayMultiIterObject size(long setter);                    /* broadcasted size */
-        public native @Cast("npy_intp") long index(); public native PyArrayMultiIterObject index(long setter);                   /* current index */
-        public native int nd(); public native PyArrayMultiIterObject nd(int setter);                      /* number of dims */
-        public native @Cast("npy_intp") long dimensions(int i); public native PyArrayMultiIterObject dimensions(int i, long setter);
+// #ifndef Py_TARGET_ABI3T
+        public native @ByRef PyObject ob_base(); public native PyArrayMultiIterObject_fields ob_base(PyObject setter);
+// #endif
+        public native int numiter(); public native PyArrayMultiIterObject_fields numiter(int setter);                 /* number of iters */
+        public native @Cast("npy_intp") long size(); public native PyArrayMultiIterObject_fields size(long setter);                    /* broadcasted size */
+        public native @Cast("npy_intp") long index(); public native PyArrayMultiIterObject_fields index(long setter);                   /* current index */
+        public native int nd(); public native PyArrayMultiIterObject_fields nd(int setter);                      /* number of dims */
+        public native @Cast("npy_intp") long dimensions(int i); public native PyArrayMultiIterObject_fields dimensions(int i, long setter);
         @MemberGetter public native @Cast("npy_intp*") SizeTPointer dimensions(); /* dimensions */
         /*
          * Space for the individual iterators, do not specify size publicly
@@ -54,7 +55,7 @@ public class PyArrayMultiIterObject extends Pointer {
          * to be runtime dependent.
          */
 // #if (defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD)
-        public native PyArrayIterObject iters(int i); public native PyArrayMultiIterObject iters(int i, PyArrayIterObject setter);
+        public native PyArrayIterObject iters(int i); public native PyArrayMultiIterObject_fields iters(int i, PyArrayIterObject setter);
         @MemberGetter public native @Cast("PyArrayIterObject**") PointerPointer iters();
 // #elif defined(__cplusplus)
         /*

@@ -33,7 +33,7 @@ public class PyArray_StringDTypeObject extends Pointer {
         return new PyArray_StringDTypeObject((Pointer)this).offsetAddress(i);
     }
 
-    public native @ByRef PyArray_Descr base(); public native PyArray_StringDTypeObject base(PyArray_Descr setter);
+    public native @ByRef PyArray_Descr_fields base(); public native PyArray_StringDTypeObject base(PyArray_Descr_fields setter);
     // The object representing a null value
     public native PyObject na_object(); public native PyArray_StringDTypeObject na_object(PyObject setter);
     // Flag indicating whether or not to coerce arbitrary objects to strings
