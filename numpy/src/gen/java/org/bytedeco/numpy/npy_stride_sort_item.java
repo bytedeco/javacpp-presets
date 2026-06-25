@@ -14,6 +14,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+/* default integer type defined in npy_2_compat header */
 
 /************************************************************
  * A struct used by PyArray_CreateSortedStridePerm, new in 1.7.

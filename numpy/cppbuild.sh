@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=2.4.6
+NUMPY_VERSION=2.5.0
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -85,7 +85,7 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-TOOLS="setuptools==67.6.1 cython==3.0.10"
+TOOLS="setuptools==67.6.1 cython==3.2.6"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.14"
@@ -128,7 +128,7 @@ case $PLATFORM in
         ;;
     linux-x86)
         # https://github.com/numpy/numpy/pull/20695
-        sedinplace 's/machine = platform.machine()/return False/g' numpy/core/setup.py
+        # sedinplace 's/machine = platform.machine()/return False/g' numpy/core/setup.py
         ATLAS=None CC="gcc -m32" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         strip $(find ../ -iname *.so)
         ;;
@@ -137,14 +137,14 @@ case $PLATFORM in
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
-        sedinplace 's/-std=c99/-w/g' numpy/distutils/ccompiler.py
+        # sedinplace 's/-std=c99/-w/g' numpy/distutils/ccompiler.py
         ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f; done
         ;;
     windows-x86)
-        sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC
-        sedinplace 's/ltype = long_double_representation(pyod("_configtest"))/ltype = "IEEE_DOUBLE_LE"/g' numpy/core/setup_common.py
+        # sedinplace '/ccompiler._default_compilers = /,+2d' numpy/distutils/ccompiler.py # don't try to use GCC
+        # sedinplace 's/ltype = long_double_representation(pyod("_configtest"))/ltype = "IEEE_DOUBLE_LE"/g' numpy/core/setup_common.py
         ATLAS=None "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH --config-settings=build-dir=build
         ;;
     windows-x86_64)

@@ -15,60 +15,14 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
-// #if NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION
-/*
- * Public version of the Descriptor struct as of 2.x
- */
-@Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
+// #else  /* 1.x and 2.x compatible version (only shared fields): */
+
+// #endif  /* 1.x and 2.x compatible version */
+
+@Opaque @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyArray_Descr extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyArray_Descr() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyArray_Descr(long size) { super((Pointer)null); allocateArray(size); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyArray_Descr() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyArray_Descr(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyArray_Descr position(long position) {
-        return (PyArray_Descr)super.position(position);
-    }
-    @Override public PyArray_Descr getPointer(long i) {
-        return new PyArray_Descr((Pointer)this).offsetAddress(i);
-    }
-
-        public native @ByRef PyObject ob_base(); public native PyArray_Descr ob_base(PyObject setter);
-        /*
-         * the type object representing an
-         * instance of this type -- should not
-         * be two type_numbers with the same type
-         * object.
-         */
-        public native PyTypeObject typeobj(); public native PyArray_Descr typeobj(PyTypeObject setter);
-        /* kind for this type */
-        public native @Cast("char") byte kind(); public native PyArray_Descr kind(byte setter);
-        /* unique-character representing this type */
-        public native @Cast("char") byte type(); public native PyArray_Descr type(byte setter);
-        /*
-         * '>' (big), '<' (little), '|'
-         * (not-applicable), or '=' (native).
-         */
-        public native @Cast("char") byte byteorder(); public native PyArray_Descr byteorder(byte setter);
-        /* Former flags flags space (unused) to ensure type_num is stable. */
-        public native @Cast("char") byte _former_flags(); public native PyArray_Descr _former_flags(byte setter);
-        /* number representing this type */
-        public native int type_num(); public native PyArray_Descr type_num(int setter);
-        /* Space for dtype instance specific flags. */
-        public native @Cast("npy_uint64") long flags(); public native PyArray_Descr flags(long setter);
-        /* element size (itemsize) for this type */
-        public native @Cast("npy_intp") long elsize(); public native PyArray_Descr elsize(long setter);
-        /* alignment needed for this type */
-        public native @Cast("npy_intp") long alignment(); public native PyArray_Descr alignment(long setter);
-        /* metadata dict or NULL */
-        public native PyObject metadata(); public native PyArray_Descr metadata(PyObject setter);
-        /* Cached hash value (-1 if not yet computed). */
-        public native @Cast("npy_hash_t") long hash(); public native PyArray_Descr hash(long setter);
-        /* Unused slot (must be initialized to NULL) for future use */
-        public native Pointer reserved_null(int i); public native PyArray_Descr reserved_null(int i, Pointer setter);
-        @MemberGetter public native @Cast("void**") PointerPointer reserved_null();
 }

@@ -14,6 +14,8 @@ import static org.bytedeco.cpython.global.python.*;
 
 import static org.bytedeco.numpy.global.numpy.*;
 
+// #else
+// #endif
 
 /*
  * type of the function which translates a set of coordinates to a

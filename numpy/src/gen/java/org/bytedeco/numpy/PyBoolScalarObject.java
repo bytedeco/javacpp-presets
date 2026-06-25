@@ -15,6 +15,7 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
+// #ifndef Py_TARGET_ABI3T
 // #ifndef _MULTIARRAYMODULE
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyBoolScalarObject extends Pointer {

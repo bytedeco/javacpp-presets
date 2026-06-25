@@ -15,6 +15,9 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 // #endif
+// #else
+// #endif
+
 
 /*
  * Removed 2020-Nov-25, NumPy 1.20
@@ -29,7 +32,7 @@ import static org.bytedeco.numpy.global.numpy.*;
  */
 
 /* Mirrors buffer object to ptr */
-
+// #ifndef Py_TARGET_ABI3T
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyArray_Chunk extends Pointer {
     static { Loader.load(); }

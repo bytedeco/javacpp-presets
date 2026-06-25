@@ -44,7 +44,7 @@ import org.bytedeco.openblas.presets.*;
     inherit = {openblas.class, python.class},
     value = {
         @Platform(
-            define = "NPY_TARGET_VERSION NPY_2_4_API_VERSION",
+            define = "NPY_TARGET_VERSION NPY_2_5_API_VERSION",
             cinclude = {
                 "_numpyconfig.h",
                 "numpyconfig.h",
@@ -108,10 +108,12 @@ public class numpy implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__multiarray_api.h").linePatterns("#define PyArray_GetNDArrayCVersion .*",
-                                                                "    PyArray_API\\[365\\]\\)").skip())
+                                                                "    PyArray_API\\[378\\]\\)").skip())
                .put(new Info("__ufunc_api.h").linePatterns("#define PyUFunc_Type .*",
                                                            "         PyUFunc_API\\[46\\]\\)").skip())
                .put(new Info("npy_math.h").linePatterns("#define npy_.*").skip())
+               .put(new Info("npy_2_compat.h").linePatterns("#define _PyArrayInitDTypeMeta_FromSpec .*",
+                                                            "#undef PyArrayInitDTypeMeta_FromSpec").skip())
 
                .put(new Info("NPY_VISIBILITY_HIDDEN", "NPY_FEATURE_VERSION", "NPY_NOINLINE", "NPY_GCC_UNROLL_LOOPS", "NPY_GCC_OPT_3",
                              "NPY_GCC_TARGET_AVX", "NPY_GCC_TARGET_FMA", "NPY_GCC_TARGET_AVX2", "NPY_GCC_TARGET_AVX512F", "NPY_GCC_TARGET_AVX512_SKX",
@@ -163,6 +165,7 @@ public class numpy implements InfoMapper {
                              "NPY_BITSOF_INT == 16",   "NPY_BITSOF_SHORT == 32",
                              "NPY_BITSOF_INT == 64",   "NPY_BITSOF_SHORT == 64",
                              "NPY_BITSOF_INT == 128",  "NPY_BITSOF_SHORT == 128", "NPY_BITSOF_CHAR == 128",
+                             "defined(Py_TARGET_ABI3T)", "Py_TARGET_ABI3T",
                              "defined(PY_ARRAY_UNIQUE_SYMBOL)", "defined(PY_UFUNC_UNIQUE_SYMBOL)").define(false))
 
                .put(new Info("NPY_BITSOF_LONG == 64", "NPY_BITSOF_LONGLONG == 64",
@@ -171,6 +174,7 @@ public class numpy implements InfoMapper {
                              "NPY_FEATURE_VERSION >= NPY_2_0_API_VERSION",
                              "NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION",
                              "NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION",
+                             "!defined(Py_TARGET_ABI3T)",
                              "PY_VERSION_HEX >= 0x03080000").define(true))
 
                .put(new Info("NPY_MAX_INT", "INT_MIN", "NPY_MIN_INT", "NPY_MAX_UINT", "NPY_MAX_LONG", "NPY_MIN_LONG", "NPY_MAX_ULONG",
