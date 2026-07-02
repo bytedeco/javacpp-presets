@@ -197,7 +197,12 @@ runs:
           $SUDO mv /usr/include/cudnn* /usr/include/nccl* /usr/local/cuda/include/
           $SUDO mv /usr/lib64/libcudnn* /usr/lib64/libnccl* /usr/local/cuda/lib64/
           for f in /usr/local/cuda/include/*_v9.h; do $SUDO ln -sf $f ${f:0:${#f}-5}.h; done
-          for f in /usr/local/cuda/lib64/libcudnn*so.9.*; do $SUDO ln -sf $f ${f:0:${#f}-4}; $SUDO ln -sf $f ${f:0:${#f}-6}; done
+
+          for f in /usr/local/cuda/lib64/libcudnn*.so.9.*; do
+            BASE_NAME=${f%.9.*}
+            $SUDO ln -sf $f $BASE_NAME
+            $SUDO ln -sf $f $BASE_NAME.9
+          done
 
           if [[ -n ${NVCOMP:-} ]]; then
             curl -LO https://developer.download.nvidia.com/compute/nvcomp/redist/nvcomp/linux-$ARCH_CUDA/$NVCOMP.tar.xz
