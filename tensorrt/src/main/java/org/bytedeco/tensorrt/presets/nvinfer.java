@@ -100,7 +100,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
                          "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
-                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn",
+                         "cudnn_engines_tensor_ir", "cudnn_ext"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.9" : lib.equals("cudart") ? "@.13" : lib.equals("nvrtc") ? "@.13" : "@.13";

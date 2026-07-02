@@ -187,7 +187,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "cupti", "curand", "nvJitLink", "cusparse", "cusolver",
                          "cudnn", "cufile", "cufile_rdma", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer",
                          "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
-                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
+                         "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn",
+                         "cudnn_engines_tensor_ir", "cudnn_ext"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.9"
