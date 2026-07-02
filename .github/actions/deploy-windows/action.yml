@@ -169,7 +169,6 @@ runs:
           bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cusolverSp.h'"
           bash -c "sed -i 's/#if !defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/driver_types.h'"
           bash -c "sed -i 's/__out/__cccl_out/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h'"
-          bash -c "find '/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/bin/x64/' -name '*9.dll' -exec bash -c 'ln -sf \"\$1\" \"\${1%9.dll}.dll\"' _ {} \;"
           rem bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"
           rem bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"
           rem bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"

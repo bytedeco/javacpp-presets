@@ -36,8 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cublas.class, value = {
     @Platform(include = {"<cudnn.h>", "<cudnn_version.h>", "<cudnn_graph.h>", "<cudnn_ops.h>", "<cudnn_adv.h>", "<cudnn_cnn.h>", "<cudnn_backend.h>"},
         link = {"cudnn@.9", "cudnn_graph@.9", "cudnn_engines_precompiled@.9", "cudnn_engines_runtime_compiled@.9",
-                "cudnn_heuristic@.9", "cudnn_ops@.9", "cudnn_adv@.9", "cudnn_cnn@.9",
-                "cudnn_engines_tensor_ir@.9", "cudnn_ext@.9"}),
+                "cudnn_heuristic@.9", "cudnn_ops@.9", "cudnn_adv@.9", "cudnn_cnn@.9", "cudnn_engines_tensor_ir@.9"}),
     @Platform(value = "windows-x86_64", preload = {"zlibwapi", "cudnn64_9", "cudnn_graph64_9", "cudnn_engines_precompiled64_9", "cudnn_engines_runtime_compiled64_9",
                                                    "cudnn_heuristic64_9", "cudnn_ops64_9", "cudnn_adv64_9", "cudnn_cnn64_9"})},
         target = "org.bytedeco.cuda.cudnn", global = "org.bytedeco.cuda.global.cudnn")
