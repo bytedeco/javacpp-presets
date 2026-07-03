@@ -1,3 +1,5 @@
+
+ * Bundle missing `cudnn_engines_tensor_ir` library for `cuda-redist-cudnn` artifact ([pull #1785](https://github.com/bytedeco/javacpp-presets/pull/1785))
  * Add missing mappings for `c10::ArrayRef<double>` in presets for PyTorch ([issue #1770](https://github.com/bytedeco/javacpp-presets/issues/1770))
  * Reduce overhead of `Tensor` factory methods `create()`, `createBuffer()`, and `createIndexer()` for PyTorch ([issue #1770](https://github.com/bytedeco/javacpp-presets/issues/1770))
  * Enable support for OpenVINO in presets for ONNX Runtime ([pull #1769](https://github.com/bytedeco/javacpp-presets/pull/1769))
@@ -9,7 +11,6 @@
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
  * Upgrade presets for FFmpeg 8.1.1, MKL 2026.0.0, DNNL 3.12.1, OpenBLAS 0.3.33, CUDA 13.2.1, cuDNN 9.21.1.3, NCCL 2.30.4, nvCOMP 5.2.0.10, OpenCL 3.1.1, FFTW 3.3.11, CPython 3.14.6, NumPy 2.5.0, SciPy 1.18.0, LLVM 22.1.7, PyTorch 2.12.0, TensorFlow Lite 2.21.0, TensorRT 10.16.1.11, Triton Inference Server 2.68.0, ONNX 1.21.0, ONNX Runtime 1.26.0 ([pull #1753](https://github.com/bytedeco/javacpp-presets/pull/1753)), and their dependencies
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
- * Add `cudnn_engines_tensor_ir` to cuda-redist-cudnn
 
 ### February 22, 2026 version 1.5.13
  * Ensure ONNX Runtime libraries get linked with `-z noexecstack` on Linux ([issue #1715](https://github.com/bytedeco/javacpp-presets/issues/1715))
