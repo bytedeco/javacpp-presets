@@ -44,94 +44,12 @@ public class IPluginRegistry extends Pointer {
     /**
      *  \brief Pointer for plugin library handle.
      *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
     @Namespace @Name("void") @Opaque public static class PluginLibraryHandle extends Pointer {
         /** Empty constructor. Calls {@code super((Pointer)null)}. */
         public PluginLibraryHandle() { super((Pointer)null); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PluginLibraryHandle(Pointer p) { super(p); }
     }
-
-    /**
-     *  \brief Register a plugin creator implementing IPluginCreator. Returns false if any plugin creator with the same
-     *  name, version or namespace is already registered.
-     * 
-     *  \warning The string pluginNamespace must be 1024 bytes or less including the NULL terminator and must be NULL
-     *  terminated.
-     * 
-     *  \u005Cusage
-     *  - Allowed context for the API call
-     *    - Thread-safe: Yes; calls to this method will be synchronized by a mutex.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. Superseded by
-     *  IPluginRegistry::registerCreator(IPluginCreatorInterface&, AsciiChar const* const).
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean registerCreator(
-            @ByRef IPluginCreator creator, String pluginNamespace);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean registerCreator(
-            @ByRef IPluginCreator creator, @Cast("const char*") BytePointer pluginNamespace);
-
-    /**
-     *  \brief Return all the registered plugin creators and the number of
-     *  registered plugin creators. Returns nullptr if none found.
-     * 
-     *  \warning If any plugin creators are registered or deregistered after calling this function, the returned pointer
-     *  is not guaranteed to be valid thereafter.
-     * 
-     *  \u005Cusage
-     *  - Allowed context for the API call
-     *    - Thread-safe: No
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. Superseded by IPluginRegistry::getAllCreators(int32_t* const).
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("nvinfer1::IPluginCreator*const*") PointerPointer getPluginCreatorList(IntPointer numCreators);
-
-    /**
-     *  \brief Return plugin creator based on plugin name, version, and
-     *  namespace associated with plugin during network creation.
-     * 
-     *  \warning The strings pluginName, pluginVersion, and pluginNamespace must be 1024 bytes or less including the
-     *  NULL terminator and must be NULL terminated.
-     * 
-     *  \warning Returns nullptr if a plugin creator with matching name, version, and namespace is found, but is not a
-     *  descendent of IPluginCreator
-     * 
-     *  \u005Cusage
-     *  - Allowed context for the API call
-     *    - Thread-safe: Yes
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. Superseded by IPluginRegistry::getCreator(AsciiChar const* const,
-     *  AsciiChar const* const, AsciiChar const* const).
-     *  */
-    public native @Deprecated @NoException(true) IPluginCreator getPluginCreator(String pluginName,
-            String pluginVersion, String pluginNamespace/*=""*/);
-    public native @Deprecated @NoException(true) IPluginCreator getPluginCreator(String pluginName,
-            String pluginVersion);
-    public native @Deprecated @NoException(true) IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginName,
-            @Cast("const char*") BytePointer pluginVersion, @Cast("const char*") BytePointer pluginNamespace/*=""*/);
-    public native @Deprecated @NoException(true) IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginName,
-            @Cast("const char*") BytePointer pluginVersion);
 
     // @cond SuppressDoxyWarnings
     
@@ -185,34 +103,7 @@ public class IPluginRegistry extends Pointer {
     //!
     //!
     //!
-    //!
-    //!
     public native @NoException(true) IErrorRecorder getErrorRecorder();
-
-    /**
-     *  \brief Deregister a previously registered plugin creator implementing IPluginCreator.
-     * 
-     *  Since there may be a desire to limit the number of plugins,
-     *  this function provides a mechanism for removing plugin creators registered in TensorRT.
-     *  The plugin creator that is specified by \p creator is removed from TensorRT and no longer tracked.
-     * 
-     *  @return True if the plugin creator was deregistered, false if it was not found in the registry or otherwise
-     *  could not be deregistered.
-     * 
-     *  \u005Cusage
-     *  - Allowed context for the API call
-     *    - Thread-safe: Yes
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. Superseded by
-     *  IPluginRegistry::deregisterCreator(IPluginCreatorInterface const&).
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean deregisterCreator(@Const @ByRef IPluginCreator creator);
 
     /**
      *  \brief Return whether the parent registry will be searched if a plugin is not found in this registry

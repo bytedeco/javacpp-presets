@@ -87,54 +87,6 @@ public class IParser extends Pointer {
     public native @Cast("bool") @NoException(true) boolean parseFromFile(@Cast("const char*") BytePointer onnxModelFile, int verbosity);
 
     /**
-     *  [DEPRECATED] Deprecated in TensorRT 10.1. See supportsModelV2.
-     * 
-     *  \brief Check whether TensorRT supports a particular ONNX model.
-     *         If the function returns True, one can proceed to engine building
-     *         without having to call \p parse or \p parseFromFile.
-     * 
-     *  @param serialized_onnx_model Pointer to the serialized ONNX model. Can be freed after this function returns.
-     *  @param serialized_onnx_model_size Size of the serialized ONNX model
-     *         in bytes
-     *  @param sub_graph_collection Container to hold supported subgraphs
-     *  @param model_path Absolute path to the model file for loading external weights if required
-     *  @return true if the model is supported
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
-            @ByRef SubGraphCollection_t sub_graph_collection, String model_path/*=nullptr*/);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
-            @ByRef SubGraphCollection_t sub_graph_collection);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
-            @ByRef SubGraphCollection_t sub_graph_collection, @Cast("const char*") BytePointer model_path/*=nullptr*/);
-
-    /**
-     *  [DEPRECATED] Deprecated in TensorRT 10.13. See loadInitializer().
-     * 
-     * \brief Parse a serialized ONNX model into the TensorRT network
-     *  with consideration of user provided weights
-     * 
-     *  @param serialized_onnx_model Pointer to the serialized ONNX model. Can be freed after this function returns.
-     *  @param serialized_onnx_model_size Size of the serialized ONNX model
-     *         in bytes
-     *  @return true if the model was parsed successfully
-     *  @see getNbErrors() getError()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean parseWithWeightDescriptors(
-            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
-
-    /**
      * \brief Returns whether the specified operator may be supported by the
      *          parser.
      * 
@@ -197,7 +149,7 @@ public class IParser extends Pointer {
      *  @param nbPluginLibs [out] Returns the number of plugin libraries in the array, or -1 if there was an error.
      *  @return Array of {@code nbPluginLibs} C-strings describing plugin library paths on the filesystem if nbPluginLibs > 0,
      *  or nullptr otherwise.  This array is owned by the IParser, and the pointers in the array are only valid until
-     *  the next call to parse(), supportsModel(), parseFromFile(), or parseWithWeightDescriptors().
+     *  the next call to parse() or parseFromFile().
      *  */
     
     
@@ -391,8 +343,8 @@ public class IParser extends Pointer {
     public native @Cast("int64_t*") @NoException(true) long[] getSubgraphNodes(@Cast("const int64_t") long index, @Cast("int64_t*") @ByRef long[] subgraphLength);
 
     /**
-     *  \brief Load a serialized ONNX model into the parser. Unlike the parse(), parseFromFile(), or
-     *  parseWithWeightDescriptors() functions, this function does not immediately convert the model into a TensorRT
+     *  \brief Load a serialized ONNX model into the parser. Unlike the parse() or parseFromFile()
+     *  functions, this function does not immediately convert the model into a TensorRT
      *  INetworkDefinition. Using this function allows users to provide their own initializers for the ONNX model
      *  through the loadInitializer() function.
      * 

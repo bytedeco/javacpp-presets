@@ -29,22 +29,8 @@ public class VOptimizationProfile extends VRoot {
     public native @Cast("bool") @NoException(true) boolean setDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Cast("const nvinfer1::Dims*") @ByRef Dims64 dims);
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions(String inputName, OptProfileSelector select);
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
-    public native @Cast("bool") @NoException(true) boolean setShapeValues(
-            String inputName, OptProfileSelector select, @Const IntPointer values, int nbValues);
-    public native @Cast("bool") @NoException(true) boolean setShapeValues(
-            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const IntBuffer values, int nbValues);
-    public native @Cast("bool") @NoException(true) boolean setShapeValues(
-            String inputName, OptProfileSelector select, @Const int[] values, int nbValues);
-    public native @Cast("bool") @NoException(true) boolean setShapeValues(
-            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const IntPointer values, int nbValues);
-    public native @Cast("bool") @NoException(true) boolean setShapeValues(
-            String inputName, OptProfileSelector select, @Const IntBuffer values, int nbValues);
-    public native @Cast("bool") @NoException(true) boolean setShapeValues(
-            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const int[] values, int nbValues);
     public native @NoException(true) int getNbShapeValues(String inputName);
     public native @NoException(true) int getNbShapeValues(@Cast("const char*") BytePointer inputName);
-    public native @Const @NoException(true) IntPointer getShapeValues(String inputName, OptProfileSelector select);
-    public native @Const @NoException(true) IntBuffer getShapeValues(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
     public native @Cast("bool") @NoException(true) boolean setExtraMemoryTarget(float target);
     public native @NoException(true) float getExtraMemoryTarget();
     public native @Cast("bool") @NoException(true) boolean isValid();

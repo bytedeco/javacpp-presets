@@ -30,10 +30,7 @@ public class VTensor extends VRoot {
     public native @NoException(true) String getName();
     public native @NoException(true) void setDimensions(@Cast("const nvinfer1::Dims*") @ByRef Dims64 dimensions);
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions();
-    public native @NoException(true) void setType(DataType type);
-    public native @NoException(true) void setType(@Cast("nvinfer1::DataType") int type);
     public native @NoException(true) DataType getType();
-    public native @Cast("bool") @NoException(true) boolean setDynamicRange(float min, float max);
     public native @Cast("bool") @NoException(true) boolean isNetworkInput();
     public native @Cast("bool") @NoException(true) boolean isNetworkOutput();
     public native @NoException(true) void setBroadcastAcrossBatch(@Cast("bool") boolean broadcastAcrossBatch);
@@ -41,10 +38,6 @@ public class VTensor extends VRoot {
     public native @NoException(true) TensorLocation getLocation();
     public native @NoException(true) void setLocation(TensorLocation location);
     public native @NoException(true) void setLocation(@Cast("nvinfer1::TensorLocation") int location);
-    public native @Cast("bool") @NoException(true) boolean dynamicRangeIsSet();
-    public native @NoException(true) void resetDynamicRange();
-    public native @NoException(true) float getDynamicRangeMin();
-    public native @NoException(true) float getDynamicRangeMax();
     public native @NoException(true) void setAllowedFormats(@Cast("nvinfer1::TensorFormats") int formats);
     public native @Cast("nvinfer1::TensorFormats") @NoException(true) int getAllowedFormats();
     public native @Cast("bool") @NoException(true) boolean isShapeTensor();

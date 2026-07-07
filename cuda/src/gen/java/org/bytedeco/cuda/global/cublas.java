@@ -98,9 +98,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 13;
-public static final int CUBLAS_VER_MINOR = 4;
+public static final int CUBLAS_VER_MINOR = 6;
 public static final int CUBLAS_VER_PATCH = 0;
-public static final int CUBLAS_VER_BUILD = 1;
+public static final int CUBLAS_VER_BUILD = 2;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 10000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -13395,7 +13395,18 @@ public static final int
   CUBLASLT_MATMUL_TILE_256x1024 = 632,
   CUBLASLT_MATMUL_TILE_512x512 = 633,
   CUBLASLT_MATMUL_TILE_512x1024 = 634,
-  CUBLASLT_MATMUL_TILE_END = 635;
+  CUBLASLT_MATMUL_TILE_4x1 = 635,
+  CUBLASLT_MATMUL_TILE_8x1 = 636,
+  CUBLASLT_MATMUL_TILE_16x1 = 637,
+  CUBLASLT_MATMUL_TILE_24x1 = 638,
+  CUBLASLT_MATMUL_TILE_32x1 = 639,
+  CUBLASLT_MATMUL_TILE_40x1 = 640,
+  CUBLASLT_MATMUL_TILE_48x1 = 641,
+  CUBLASLT_MATMUL_TILE_64x1 = 642,
+  CUBLASLT_MATMUL_TILE_128x1 = 643,
+  CUBLASLT_MATMUL_TILE_192x1 = 644,
+  CUBLASLT_MATMUL_TILE_256x1 = 645,
+  CUBLASLT_MATMUL_TILE_END = 646;
 
 /** Size and number of stages in which elements are read into shared memory
  *
@@ -14975,6 +14986,68 @@ public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoGetHeuristic(
                                                            cublasLtMatmulHeuristicResult_t heuristicResultsArray,
                                                            int[] returnAlgoCount);
 
+/** Query cublasLt heuristic for algorithm appropriate for given use case and execution context (specified by the
+ * stream).
+ *
+ * @param lightHandle [in]            Pointer to the allocated cuBLASLt handle for the cuBLASLt
+ *                                        context. See cublasLtHandle_t.
+ * @param operationDesc [in]          Handle to the matrix multiplication descriptor.
+ * @param Adesc [in]                  Handle to the layout descriptors for matrix A.
+ * @param Bdesc [in]                  Handle to the layout descriptors for matrix B.
+ * @param Cdesc [in]                  Handle to the layout descriptors for matrix C.
+ * @param Ddesc [in]                  Handle to the layout descriptors for matrix D.
+ * @param preference [in]             Pointer to the structure holding the heuristic search
+ *                                        preferences descriptor. See cublasLtMatrixLayout_t.
+ * @param requestedAlgoCount [in]     Size of heuristicResultsArray (in elements) and requested
+ *                                        maximum number of algorithms to return.
+ * @param heuristicResultsArray [in, out]  Output algorithms and associated runtime characteristics,
+ *                                        ordered in increasing estimated compute time.
+ * @param returnAlgoCount [out]        The number of heuristicResultsArray elements written.
+ * @param stream [in]                 CUDA stream to use for the operation.
+ *
+ * \retval  CUBLAS_STATUS_INVALID_VALUE   if requestedAlgoCount is less or equal to zero
+ * \retval  CUBLAS_STATUS_NOT_SUPPORTED   if no heuristic function available for current configuration
+ * \retval  CUBLAS_STATUS_SUCCESS         if query was successful, inspect
+ *                                        heuristicResultsArray[0 to (returnAlgoCount - 1)].state
+ *                                        for detail status of results
+ */
+public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoGetHeuristicForStream(
+    cublasLtContext lightHandle,
+    @Cast("cublasLtMatmulDesc_t") cublasLtMatmulDescOpaque_t operationDesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Adesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Bdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Cdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Ddesc,
+    @Cast("cublasLtMatmulPreference_t") cublasLtMatmulPreferenceOpaque_t preference,
+    int requestedAlgoCount,
+    cublasLtMatmulHeuristicResult_t heuristicResultsArray,
+    IntPointer returnAlgoCount,
+    CUstream_st stream);
+public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoGetHeuristicForStream(
+    cublasLtContext lightHandle,
+    @Cast("cublasLtMatmulDesc_t") cublasLtMatmulDescOpaque_t operationDesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Adesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Bdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Cdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Ddesc,
+    @Cast("cublasLtMatmulPreference_t") cublasLtMatmulPreferenceOpaque_t preference,
+    int requestedAlgoCount,
+    cublasLtMatmulHeuristicResult_t heuristicResultsArray,
+    IntBuffer returnAlgoCount,
+    CUstream_st stream);
+public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoGetHeuristicForStream(
+    cublasLtContext lightHandle,
+    @Cast("cublasLtMatmulDesc_t") cublasLtMatmulDescOpaque_t operationDesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Adesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Bdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Cdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Ddesc,
+    @Cast("cublasLtMatmulPreference_t") cublasLtMatmulPreferenceOpaque_t preference,
+    int requestedAlgoCount,
+    cublasLtMatmulHeuristicResult_t heuristicResultsArray,
+    int[] returnAlgoCount,
+    CUstream_st stream);
+
 /* ---------------------------------------------------------------------------------------*/
 /* Lower level API to be able to implement own Heuristic and Find routines                */
 /* ---------------------------------------------------------------------------------------*/
@@ -15062,6 +15135,42 @@ public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoCheck(
     @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Ddesc,
     @Const cublasLtMatmulAlgo_t algo,
     cublasLtMatmulHeuristicResult_t result);
+
+/** Check configured algo descriptor for correctness and support on current device and execution context (specified by
+ * the stream).
+ *
+ * Result includes required workspace size and calculated wave count.
+ *
+ * CUBLAS_STATUS_SUCCESS doesn't fully guarantee algo will run (will fail if e.g. buffers are not correctly aligned);
+ * but if cublasLtMatmulAlgoCheckForStream fails, the algo will not run.
+ *
+ * @param lightHandle [in]      handle to the cuBLASLt context
+ * @param operationDesc [in]    operation descriptor
+ * @param Adesc [in]            descriptor for matrix A
+ * @param Bdesc [in]            descriptor for matrix B
+ * @param Cdesc [in]            descriptor for matrix C
+ * @param Ddesc [in]            descriptor for matrix D
+ * @param algo [in]             algo configuration to check
+ * @param result [out]           result structure to report algo runtime characteristics; algo field is never updated
+ * @param stream [in]           CUDA stream for context limitations
+ *
+ * \retval     CUBLAS_STATUS_INVALID_VALUE  if matrix layout descriptors or operation descriptor don't match algo
+ *                                          descriptor
+ * \retval     CUBLAS_STATUS_NOT_SUPPORTED  if algo configuration or data type combination is not currently supported on
+ *                                          given device
+ * \retval     CUBLAS_STATUS_ARCH_MISMATCH  if algo configuration cannot be run using the selected device
+ * \retval     CUBLAS_STATUS_SUCCESS        if check was successful
+ */
+public static native @Cast("cublasStatus_t") int cublasLtMatmulAlgoCheckForStream(
+    cublasLtContext lightHandle,
+    @Cast("cublasLtMatmulDesc_t") cublasLtMatmulDescOpaque_t operationDesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Adesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Bdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Cdesc,
+    @Cast("cublasLtMatrixLayout_t") cublasLtMatrixLayoutOpaque_t Ddesc,
+    @Const cublasLtMatmulAlgo_t algo,
+    cublasLtMatmulHeuristicResult_t result,
+    CUstream_st stream);
 
 /** Capabilities Attributes that can be retrieved from an initialized Algo structure
  */
@@ -15457,7 +15566,7 @@ public static native @Cast("cublasStatus_t") int cublasLtLoggerForceDisable();
 // #include "driver_types.h"
 // #include "cuComplex.h" /* import complex data type */
 
-// #include "cublas_api.h"
+// #include "cublas_v2.h"
 
 // #if defined(__cplusplus)
 // Targeting ../cublas/cublasXtContext.java

@@ -15,6 +15,7 @@ import static org.bytedeco.cuda.global.cublas.*;
 import static org.bytedeco.cuda.global.cudnn.*;
   /* use biases in attention input and output projections */
 
+/** \brief Opaque multi-head attention descriptor. @deprecated Since cuDNN 9.0.0. @since cuDNN 9.0.0 */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnAttnStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

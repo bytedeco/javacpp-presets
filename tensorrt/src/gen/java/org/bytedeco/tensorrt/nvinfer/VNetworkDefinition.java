@@ -94,15 +94,11 @@ public class VNetworkDefinition extends VRoot {
     public native @NoException(true) IResizeLayer addResize(@ByRef ITensor input);
     public native @NoException(true) ILoop addLoop();
     public native @NoException(true) ISelectLayer addSelect(@ByRef ITensor condition, @ByRef ITensor thenInput, @ByRef ITensor elseInput);
-    public native @NoException(true) IFillLayer addFill(@Cast("const nvinfer1::Dims*") @ByRef Dims64 dimensions, FillOperation op);
-    public native @NoException(true) IFillLayer addFill(@Cast("const nvinfer1::Dims*") @ByRef Dims64 dimensions, @Cast("nvinfer1::FillOperation") int op);
     public native @NoException(true) IPaddingLayer addPaddingNd(@ByRef ITensor input, @Cast("const nvinfer1::Dims*") @ByRef Dims64 prePadding, @Cast("const nvinfer1::Dims*") @ByRef Dims64 postPadding);
     public native @Cast("bool") @NoException(true) boolean setWeightsName(@ByVal Weights weights, String name);
     public native @Cast("bool") @NoException(true) boolean setWeightsName(@ByVal Weights weights, @Cast("const char*") BytePointer name);
     public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
     public native @NoException(true) IErrorRecorder getErrorRecorder();
-    public native @NoException(true) IDequantizeLayer addDequantize(@ByRef ITensor input, @ByRef ITensor scale);
-    public native @NoException(true) IQuantizeLayer addQuantize(@ByRef ITensor input, @ByRef ITensor scale);
     public native @NoException(true) IGatherLayer addGatherV2(@ByRef ITensor data, @ByRef ITensor indices, GatherMode mode);
     public native @NoException(true) IGatherLayer addGatherV2(@ByRef ITensor data, @ByRef ITensor indices, @Cast("nvinfer1::GatherMode") int mode);
     public native @NoException(true) IIfConditional addIfConditional();
@@ -163,9 +159,9 @@ public class VNetworkDefinition extends VRoot {
             @ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass, DataType indicesType);
     public native @NoException(true) INMSLayer addNMSV2(
             @ByRef ITensor boxes, @ByRef ITensor scores, @ByRef ITensor maxOutputBoxesPerClass, @Cast("nvinfer1::DataType") int indicesType);
-    public native @NoException(true) IAttention addAttention(
+    public native @Deprecated @NoException(true) IAttention addAttention(
             @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean isCausal);
-    public native @NoException(true) IAttention addAttention(
+    public native @Deprecated @NoException(true) IAttention addAttention(
             @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean isCausal);
     public native @NoException(true) IRotaryEmbeddingLayer addRotaryEmbedding(@ByRef ITensor input, @ByRef ITensor cosCache, @ByRef ITensor sinCache,
             @Cast("bool") boolean interleaved, int rotaryEmbeddingDim);
@@ -193,4 +189,8 @@ public class VNetworkDefinition extends VRoot {
             ReduceOperation reduceOp, @Cast("int64_t") long root, @Cast("int64_t*") LongBuffer groups, @Cast("int64_t") long groupSize);
     public native @NoException(true) IDistCollectiveLayer addDistCollective(@ByRef ITensor input, @Cast("nvinfer1::CollectiveOperation") int distCollectiveOp,
             @Cast("nvinfer1::ReduceOperation") int reduceOp, @Cast("int64_t") long root, @Cast("int64_t*") long[] groups, @Cast("int64_t") long groupSize);
+    public native @NoException(true) IAttention addAttentionV2(@ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp,
+            CausalMaskKind causalKind);
+    public native @NoException(true) IAttention addAttentionV2(@ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp,
+            @Cast("nvinfer1::CausalMaskKind") int causalKind);
 }

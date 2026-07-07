@@ -15,6 +15,9 @@ import static org.bytedeco.cuda.global.cublas.*;
 import static org.bytedeco.cuda.global.cudnn.*;
 
 
+/** \brief Integer fraction with numerator and denominator.
+ *  @since cuDNN 9.0.0
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnFraction_t extends Pointer {
     static { Loader.load(); }
@@ -33,6 +36,8 @@ public class cudnnFraction_t extends Pointer {
         return new cudnnFraction_t((Pointer)this).offsetAddress(i);
     }
 
+    /** Fraction numerator. */
     public native @Cast("int64_t") long numerator(); public native cudnnFraction_t numerator(long setter);
+    /** Fraction denominator. */
     public native @Cast("int64_t") long denominator(); public native cudnnFraction_t denominator(long setter);
 }

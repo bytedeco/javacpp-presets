@@ -19,10 +19,7 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
-/** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
- *  The name v_1_0 may change in future versions of TensorRT.
- <p>
- * 
+/**
  *  \class ILogger
  * 
  *  \brief Application-implemented logging interface for the builder, refitter and runtime.
@@ -34,20 +31,21 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  interface implementation and TensorRT does not hold any synchronization primitives when calling the interface
  *  functions.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class ILogger extends Pointer {
+@Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class ILogger extends IVersionedInterface {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILogger(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ILogger(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ILogger position(long position) {
-        return (ILogger)super.position(position);
-    }
-    @Override public ILogger getPointer(long i) {
-        return new ILogger((Pointer)this).offsetAddress(i);
-    }
+
+    /**
+     *  \brief Return version information associated with this interface. Applications must not override this method.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @ByVal @NoException(true) InterfaceInfo getInterfaceInfo();
 
     /**
      *  \enum Severity
@@ -91,8 +89,6 @@ public class ILogger extends Pointer {
      *                   when multiple execution contexts are used during runtime, or if the same logger is used
      *                   for multiple runtimes, builders, or refitters.
      *  */
-    @Virtual(true) public native @NoException(true) void log(Severity severity, String msg);
-
-    public ILogger() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    public native @NoException(true) void log(Severity severity, String msg);
+    public native @NoException(true) void log(@Cast("nvinfer1::v_1_0::ILogger::Severity") int severity, @Cast("const char*") BytePointer msg);
 }

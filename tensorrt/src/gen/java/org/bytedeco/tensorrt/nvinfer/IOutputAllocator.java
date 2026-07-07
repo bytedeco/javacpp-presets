@@ -66,9 +66,9 @@ public class IOutputAllocator extends IVersionedInterface {
     //!
     //!
     public native @Deprecated @NoException(true) Pointer reallocateOutput(
-            String tensorName, Pointer currentMemory, @Cast("uint64_t") long size, @Cast("uint64_t") long alignment);
+            String arg0, Pointer arg1, @Cast("uint64_t") long arg2, @Cast("uint64_t") long arg3);
     public native @Deprecated @NoException(true) Pointer reallocateOutput(
-            @Cast("const char*") BytePointer tensorName, Pointer currentMemory, @Cast("uint64_t") long size, @Cast("uint64_t") long alignment);
+            @Cast("const char*") BytePointer arg0, Pointer arg1, @Cast("uint64_t") long arg2, @Cast("uint64_t") long arg3);
 
     /**
      *  \brief Return a pointer to memory for an output tensor, or nullptr if memory cannot be allocated.
@@ -99,9 +99,11 @@ public class IOutputAllocator extends IVersionedInterface {
     //!
     //!
     public native Pointer reallocateOutputAsync(
-            String tensorName, Pointer currentMemory, @Cast("uint64_t") long size, @Cast("uint64_t") long alignment, CUstream_st arg4);
+            String tensorName, Pointer currentMemory, @Cast("uint64_t") long size,
+            @Cast("uint64_t") long alignment, CUstream_st arg4);
     public native Pointer reallocateOutputAsync(
-            @Cast("const char*") BytePointer tensorName, Pointer currentMemory, @Cast("uint64_t") long size, @Cast("uint64_t") long alignment, CUstream_st arg4);
+            @Cast("const char*") BytePointer tensorName, Pointer currentMemory, @Cast("uint64_t") long size,
+            @Cast("uint64_t") long alignment, CUstream_st arg4);
 
     /**
      *  \brief Called by TensorRT when the shape of the output tensor is known.

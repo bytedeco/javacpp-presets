@@ -13,10 +13,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cusparse.*;
 
 
-// #############################################################################
-// # SPARSE MATRIX-VECTOR MULTIPLICATION - CUSTOM EPILOGUE
-// #############################################################################
-// #ifdef CUSPARSE_ENABLE_EXPERIMENTAL_API
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusparse.class)
 public class cusparseSpMVOpDescr extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

@@ -15,6 +15,9 @@ import static org.bytedeco.cuda.global.cublas.*;
 import static org.bytedeco.cuda.global.cudnn.*;
 
 
+/** \brief Opaque pointer to a cuDNN backend descriptor.
+ *  @since cuDNN 9.0.0
+ */
 @Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnBackendDescriptor_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

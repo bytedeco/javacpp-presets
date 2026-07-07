@@ -79,8 +79,8 @@ runs:
 
         if not "%CI_DEPLOY_NEED_CACHE%"=="" (
           echo Installing ccache
-          curl -LO https://github.com/ccache/ccache/releases/download/v4.6/ccache-4.6-windows-64.zip
-          unzip -j ccache-4.6-windows-64.zip -d C:/msys64/usr/bin/
+          curl -LO https://github.com/ccache/ccache/releases/download/v4.13.6/ccache-4.13.6-windows-x86_64.zip
+          unzip -j ccache-4.13.6-windows-x86_64.zip -d C:/msys64/usr/bin/
           mkdir ccache
           echo max_size = 8.0G                                                                        > ccache\ccache.conf
           echo hash_dir = false                                                                      >> ccache\ccache.conf
@@ -146,50 +146,50 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/13.2.1/local_installers/cuda_13.2.1_windows.exe
-          curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-x86_64/cudnn-windows-x86_64-9.21.1.3_cuda13-archive.zip
+          curl -LO https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda_13.3.1_windows.exe
+          curl -LO https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/windows-x86_64/cudnn-windows-x86_64-9.24.0.43_cuda13-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
           curl -LO https://developer.download.nvidia.com/compute/nvcomp/redist/nvcomp/windows-x86_64/nvcomp-windows-x86_64-5.2.0.10_cuda13-archive.zip
-          cuda_13.2.1_windows.exe -s
-          unzip cudnn-windows-x86_64-9.21.1.3_cuda13-archive.zip
+          cuda_13.3.1_windows.exe -s
+          unzip cudnn-windows-x86_64-9.24.0.43_cuda13-archive.zip
           unzip zlib123dllx64.zip
           unzip nvcomp-windows-x86_64-5.2.0.10_cuda13-archive.zip
-          move cudnn-windows-x86_64-9.21.1.3_cuda13-archive\bin\x64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\bin\x64"
-          move cudnn-windows-x86_64-9.21.1.3_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\include"
-          move cudnn-windows-x86_64-9.21.1.3_cuda13-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\lib\x64"
-          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\bin\x64"
-          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\include"
-          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\include\nvcomp "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\include"
-          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\bin\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\bin\x64"
-          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\lib\x64"
+          move cudnn-windows-x86_64-9.24.0.43_cuda13-archive\bin\x64\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\bin\x64"
+          move cudnn-windows-x86_64-9.24.0.43_cuda13-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\include"
+          move cudnn-windows-x86_64-9.24.0.43_cuda13-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\lib\x64"
+          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\bin\x64"
+          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\include"
+          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\include\nvcomp "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\include"
+          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\bin\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\bin\x64"
+          move nvcomp-windows-x86_64-5.2.0.10_cuda13-archive\lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\lib\x64"
 
           rem echo Applying hotfix to Visual Studio 2019 for CUDA
           rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
           rem bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
-          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cusolverSp.h'"
-          bash -c "sed -i 's/#if !defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/driver_types.h'"
-          bash -c "sed -i 's/__out/__cccl_out/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h'"
-          rem bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"
-          rem bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"
-          rem bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"
-          rem bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cub/cub.cuh'"
-          rem bash -c "cp -a ""C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/cccl/*"" ""C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/"""
-          bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/'"
+          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cusolverSp.h'"
+          bash -c "sed -i 's/#if !defined(__cplusplus) || __cplusplus >= 201103L/#if 1/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/driver_types.h'"
+          bash -c "sed -i 's/__out/__cccl_out/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cccl/cuda/__ptx/instructions/generated/tcgen05_ld.h'"
+          rem bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cub/cub.cuh'"
+          rem bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cub/cub.cuh'"
+          rem bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cub/cub.cuh'"
+          rem bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cub/cub.cuh'"
+          rem bash -c "cp -a ""C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cccl/*"" ""C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/"""
+          bash -c "find 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/'"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown 1qnRE4nF8XP8ifWH49BwIaYnoYuqH0Zrk
-          unzip Video_Codec_SDK_13.0.37.zip
-          move Video_Codec_SDK_13.0.37 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+          python -m gdown 1d_i_qrkS9rvDMgYUY7O5vQHCf_rj1Jjy
+          unzip Video_Codec_SDK_13.1.15.zip
+          move Video_Codec_SDK_13.1.15 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
           rem python -m gdown 1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
-          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.16.1/zip/TensorRT-10.16.1.11.Windows.amd64.cuda-13.2.zip
-          unzip TensorRT-10.16.1.11.Windows.amd64.cuda-13.2.zip
-          move TensorRT-10.16.1.11 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          curl -LO https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/11.1.0/zip/TensorRT-Enterprise-11.1.0.106-Windows-amd64-cuda-13.3-Release-external.zip
+          unzip TensorRT-Enterprise-11.1.0.106-Windows-amd64-cuda-13.3-Release-external.zip
+          move TensorRT-11.1.0.106 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
@@ -268,10 +268,10 @@ runs:
           C:/msys64/usr/bin/bazel.exe version
         )
         if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2"
-          set "CUDA_PATH_V13_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2"
-          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\libnvvp;%PATH%"
-          echo CUDA Version 13.2.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.2\version.txt"
+          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3"
+          set "CUDA_PATH_V13_3=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3"
+          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\libnvvp;%PATH%"
+          echo CUDA Version 13.3.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v13.3\version.txt"
         )
 
         set "CCACHE_DIR=%USERPROFILE%\ccache"

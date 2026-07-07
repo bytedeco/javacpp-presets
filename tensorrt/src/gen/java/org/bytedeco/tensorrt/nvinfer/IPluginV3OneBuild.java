@@ -225,8 +225,8 @@ public class IPluginV3OneBuild extends IPluginCapability {
     //!
     //!
     //!
-    public native @Cast("size_t") @NoException(true) long getWorkspaceSize(@Const DynamicPluginTensorDesc inputs, int nbInputs,
-            @Const DynamicPluginTensorDesc outputs, int nbOutputs);
+    public native @Cast("size_t") @NoException(true) long getWorkspaceSize(@Const DynamicPluginTensorDesc arg0, int arg1,
+            @Const DynamicPluginTensorDesc arg2, int arg3);
 
     /**
      *  \brief Query for any custom tactics that the plugin intends to use
@@ -263,9 +263,9 @@ public class IPluginV3OneBuild extends IPluginCapability {
     
     //!
     //!
-    public native @NoException(true) int getValidTactics(IntPointer tactics, int nbTactics);
-    public native @NoException(true) int getValidTactics(IntBuffer tactics, int nbTactics);
-    public native @NoException(true) int getValidTactics(int[] tactics, int nbTactics);
+    public native @NoException(true) int getValidTactics(IntPointer arg0, int arg1);
+    public native @NoException(true) int getValidTactics(IntBuffer arg0, int arg1);
+    public native @NoException(true) int getValidTactics(int[] arg0, int arg1);
 
     /**
      *  \brief Query for the number of custom tactics the plugin intends to use

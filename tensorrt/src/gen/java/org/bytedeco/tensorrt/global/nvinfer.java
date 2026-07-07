@@ -48,10 +48,10 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // #ifndef NV_INFER_VERSION_H
 // #define NV_INFER_VERSION_H
 
-public static final int TRT_MAJOR_ENTERPRISE = 10;
-public static final int TRT_MINOR_ENTERPRISE = 16;
-public static final int TRT_PATCH_ENTERPRISE = 1;
-public static final int TRT_BUILD_ENTERPRISE = 11;
+public static final int TRT_MAJOR_ENTERPRISE = 11;
+public static final int TRT_MINOR_ENTERPRISE = 1;
+public static final int TRT_PATCH_ENTERPRISE = 0;
+public static final int TRT_BUILD_ENTERPRISE = 106;
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = TRT_MAJOR_ENTERPRISE;
 /** TensorRT minor version. */
@@ -79,7 +79,6 @@ public static final int NV_TENSORRT_RELEASE_TYPE_GENERAL_AVAILABILITY = 2;
 public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENERAL_AVAILABILITY;
 
 // #endif // NV_INFER_VERSION_H
-
 
 // Parsed from NvInferRuntimeBase.h
 
@@ -204,12 +203,13 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
 /** AsciiChar is the type used by TensorRT to represent valid ASCII characters.
  *  This type is widely used in automotive safety context. */
 
-/** Forward declare IErrorRecorder for use in other interfaces. */
+/** Forward declare IErrorRecorder and ILogger for use in other interfaces. */
  // namespace v_1_0
-/** Declaration of EnumMaxImpl struct to store maximum number of elements in an enumeration type. */
+/** Declaration of EnumMaxImpl struct to store the exclusive upper bound of an enumeration type. */
  // namespace impl
 
-/** Maximum number of elements in an enumeration type. */
+/** One greater than the maximum value of enumeration type T.
+ *  For example, if the highest enumerator in T has value 5, then EnumMax<T>() returns 6. */
 
 
 /**
@@ -274,7 +274,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
     public DataType intern() { for (DataType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/** Maximum number of elements in DataType enum. @see DataType */
+/** One greater than the maximum value of DataType enum. @see DataType */
 
 // Targeting ../nvinfer/Dims64.java
 
@@ -308,7 +308,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
     public APILanguage intern() { for (APILanguage e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/** Maximum number of elements in APILanguage enum. @see APILanguage */
+/** One greater than the maximum value of APILanguage enum. @see APILanguage */
 
 // Targeting ../nvinfer/IVersionedInterface.java
 
@@ -454,7 +454,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
     public ErrorCode intern() { for (ErrorCode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/** Maximum number of elements in ErrorCode enum. @see ErrorCode */
+/** One greater than the maximum value of ErrorCode enum. @see ErrorCode */
 
 // Targeting ../nvinfer/IErrorRecorder.java
 
@@ -515,7 +515,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION();
     public TensorIOMode intern() { for (TensorIOMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/** Maximum number of elements in TensorIOMode enum. @see TensorIOMode */
+/** One greater than the maximum value of TensorIOMode enum. @see TensorIOMode */
  // namespace impl
  // namespace nvinfer1
 
@@ -532,7 +532,7 @@ public static native @NoException(true) int getInferLibVersion();
 // Parsed from NvInferRuntimeCommon.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -573,6 +573,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 // #undef NV_INFER_INTERNAL_INCLUDE
 // #include "NvInferRuntimePlugin.h"
 // Targeting ../nvinfer/IPluginRegistry.java
+
+
 
 
 
@@ -738,12 +740,14 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     public EngineCapability intern() { for (EngineCapability e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/** Maximum number of elements in EngineCapability enum. @see EngineCapability */
 
+/** Maximum number of elements in EngineCapability enum. @see EngineCapability */
 // Targeting ../nvinfer/Weights.java
 
 
 // Targeting ../nvinfer/IHostMemory.java
+
+
 
 
 
@@ -786,7 +790,6 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
 /** Maximum number of elements in DimensionOperation enum. @see DimensionOperation */
 
-
 /**
  *  \enum TensorLocation
  * 
@@ -804,12 +807,16 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     public TensorLocation intern() { for (TensorLocation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/** Maximum number of elements in TensorLocation enum. @see TensorLocation */
 
+/** Maximum number of elements in TensorLocation enum. @see TensorLocation */
 // Targeting ../nvinfer/IDimensionExpr.java
 
 
+
+
 // Targeting ../nvinfer/IExprBuilder.java
+
+
 
 
 // Targeting ../nvinfer/DimsExprs.java
@@ -836,6 +843,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  * 
  *  \note To ensure compatibility of source code with future versions of TensorRT, use IStreamReader, not
  *        v_1_0::IStreamReader
+ * 
+ *  @deprecated Deprecated in TensorRT 11.0. Superseded by IStreamReaderV2.
  *  */
 
 
@@ -900,6 +909,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 //!
 //!
 // Targeting ../nvinfer/IPluginResourceContext.java
+
+
 
 
 // Targeting ../nvinfer/IPluginV3OneCore.java
@@ -1025,7 +1036,6 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
 /** Maximum number of elements in WeightsRole enum. @see WeightsRole */
 
-
 /**
  *  \enum DeviceType
  *  \brief The device that this layer/network will execute on.
@@ -1045,7 +1055,6 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of elements in DeviceType enum. @see DeviceType */
-
 
 /**
  *  \enum TempfileControlFlag
@@ -1076,7 +1085,6 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of elements in TempfileControlFlag enum. @see TempfileControlFlag */
-
 
 /**
  *  \brief Represents a collection of one or more TempfileControlFlag values combined using bitwise-OR operations.
@@ -1265,8 +1273,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     public TensorFormat intern() { for (TensorFormat e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /** Maximum number of elements in TensorFormat enum. @see TensorFormat */
- // namespace impl
 
 /**
  *  \enum AllocatorFlag
@@ -1283,21 +1291,16 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     public AllocatorFlag intern() { for (AllocatorFlag e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /** Maximum number of elements in AllocatorFlag enum. @see AllocatorFlag */
- // namespace impl
 
-
-
-//!
-//!
-//!
-//!
-//!
+/** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
+ *  The name v_1_0 may change in future versions of TensorRT. */
 // Targeting ../nvinfer/ILogger.java
 
 
-/** Maximum number of elements in ILogger::Severity enum. @see ILogger::Severity */
 
+ // namespace v_1_0
 // Targeting ../nvinfer/IGpuAllocator.java
 
 
@@ -1334,7 +1337,11 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 // Targeting ../nvinfer/IRuntime.java
 
 
+
+
 // Targeting ../nvinfer/IRefitter.java
+
+
 
 
 
@@ -1346,7 +1353,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  *         The minimum and maximum specify the permitted range that is supported at runtime, while the optimum value
  *         is used for the kernel selection. This should be the "typical" value that is expected to occur at runtime.
  * 
- *  @see IOptimizationProfile::setDimensions(), IOptimizationProfile::setShapeValuesV2(), IOptimizationProfile::setShapeValues()
+ *  @see IOptimizationProfile::setDimensions(), IOptimizationProfile::setShapeValuesV2()
  *  */
 @Namespace("nvinfer1") public enum OptProfileSelector {
     /** This is used to set or get the minimum permitted value for dynamic dimensions etc. */
@@ -1363,13 +1370,10 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-/**
- *  \brief Number of different values of OptProfileSelector enum.
- * 
- *  @see OptProfileSelector
- *  */
-
+/** Number of different values of OptProfileSelector enum. @see OptProfileSelector */
 // Targeting ../nvinfer/IOptimizationProfile.java
+
+
 
 
 
@@ -1381,28 +1385,14 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
  *  @see TacticSources, IBuilderConfig::setTacticSources(), IBuilderConfig::getTacticSources()
  *  */
 @Namespace("nvinfer1") public enum TacticSource {
-    /** cuBLAS tactics. Disabled by default.
-     *  \note Disabling kCUBLAS will cause the cuBLAS handle passed to plugins in attachToContext to be null.
-     *  @deprecated Deprecated in TensorRT 10.0. */
-    kCUBLAS(0),
-
-    /** cuBLAS LT tactics. Disabled by default.
-     *  @deprecated Deprecated in TensorRT 9.0. */
-    kCUBLAS_LT(1),
-
-    /** cuDNN tactics. Disabled by default.
-     *  \note Disabling kCUDNN will cause the cuDNN handle passed to plugins in attachToContext to be null.
-     *  @deprecated Deprecated in TensorRT 10.0. */
-    kCUDNN(2),
-
     /** Enables convolution tactics implemented with edge mask tables. These tactics tradeoff memory for performance by
      *  consuming additional memory space proportional to the input size.
      *  Enabled by default. */
-    kEDGE_MASK_CONVOLUTIONS(3),
+    kEDGE_MASK_CONVOLUTIONS(0),
 
     /** Enables convolution tactics implemented with source-code JIT fusion. The engine building time may increase
      *  when this is enabled. Enabled by default. */
-    kJIT_CONVOLUTIONS(4);
+    kJIT_CONVOLUTIONS(1);
 
     public final int value;
     private TacticSource(int v) { this.value = v; }
@@ -1411,7 +1401,7 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-
+/** Maximum number of tactic sources in TacticSource enum. @see TacticSource */
 
 /**
  *  \brief Represents a collection of one or more TacticSource values
@@ -1452,7 +1442,6 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
 /** Maximum number of profile verbosity levels in ProfilingVerbosity enum. @see ProfilingVerbosity */
 
-
 /**
  *  \brief Represents one or more SerializationFlag values using binary OR
  *  operations, e.g., 1U << SerializationFlag::kEXCLUDE_LEAN_RUNTIME
@@ -1489,8 +1478,9 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 }
 
 /** Maximum number of serialization flags in SerializationFlag enum. @see SerializationFlag */
-
 // Targeting ../nvinfer/ISerializationConfig.java
+
+
 
 
 
@@ -1520,15 +1510,13 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-/**
- *  \brief Maximum number of memory allocation strategies in ExecutionContextAllocationStrategy enum.
- * 
- *  @see ExecutionContextAllocationStrategy
- *  */
-
+/** Maximum number of memory allocation strategies in ExecutionContextAllocationStrategy enum. @see
+ *  ExecutionContextAllocationStrategy */
 // Targeting ../nvinfer/IRuntimeConfig.java
 
  // class IRuntimeConfig
+
+
 
 /**
  *  \enum EngineStat
@@ -1552,13 +1540,10 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-/**
- *  \brief Maximum number of engine statistic kinds in EngineStat enum.
- * 
- *  @see EngineStat
- *  */
-
+/** Maximum number of engine statistic kinds in EngineStat enum. @see EngineStat */
 // Targeting ../nvinfer/ICudaEngine.java
+
+
 
 
 // Targeting ../nvinfer/IOutputAllocator.java
@@ -1593,6 +1578,8 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
 
  // class IExecutionContext
 
+
+
 /**
  *  \enum LayerInformationFormat
  * 
@@ -1613,12 +1600,12 @@ public static final int NV_INFER_INTERNAL_INCLUDE = 1;
     @Override public String toString() { return intern().name(); }
 }
 
-/** Maximum number of layer information formats in LayerInformationFormat enum.
- *  @see LayerInformationFormat */
-
+/** Maximum number of layer information formats in LayerInformationFormat enum. @see LayerInformationFormat */
 // Targeting ../nvinfer/IEngineInspector.java
 
  // class IEngineInspector
+
+
 
  // namespace nvinfer1
 
@@ -1695,9 +1682,13 @@ public static native @NoException(true) ILogger getLogger();
 
 // #define REGISTER_TENSORRT_PLUGIN(name)
 //     static nvinfer1::PluginRegistrar<name> pluginRegistrar##name {}
+/** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
+ *  The name v_1_0 may change in future versions of TensorRT. */
 // Targeting ../nvinfer/ILoggerFinder.java
 
 
+
+ // namespace v_1_0
 // Targeting ../nvinfer/IGpuAsyncAllocator.java
 
 
@@ -1967,7 +1958,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see LayerType
  *  */
 
-
 /**
  *  \brief It is capable of representing one or more TensorFormat by binary OR
  *  operations, e.g., 1U << TensorFormat::kCHW4 | 1U << TensorFormat::kCHW32.
@@ -2021,16 +2011,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public ActivationType intern() { for (ActivationType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in ActivationType enum.
  * 
  *  @see ActivationType
  *  */
-
 // Targeting ../nvinfer/ITensor.java
 
 
+
+
 // Targeting ../nvinfer/ILayer.java
+
+
 
 
 
@@ -2206,16 +2200,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public PaddingMode intern() { for (PaddingMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in PaddingMode enum.
  * 
  *  @see PaddingMode
  *  */
-
 // Targeting ../nvinfer/IConvolutionLayer.java
 
 
+
+
 // Targeting ../nvinfer/IActivationLayer.java
+
+
 
 
 
@@ -2238,16 +2236,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public PoolingType intern() { for (PoolingType e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in PoolingType enum.
  * 
  *  @see PoolingType
  *  */
-
 // Targeting ../nvinfer/IPoolingLayer.java
 
 
+
+
 // Targeting ../nvinfer/ILRNLayer.java
+
+
 
 
 
@@ -2276,17 +2278,24 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ScaleMode
  *  */
-
 // Targeting ../nvinfer/IScaleLayer.java
+
+
 
 
 // Targeting ../nvinfer/ISoftMaxLayer.java
 
 
+
+
 // Targeting ../nvinfer/IConcatenationLayer.java
 
 
+
+
 // Targeting ../nvinfer/IDeconvolutionLayer.java
+
+
 
 
 
@@ -2338,13 +2347,15 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public ElementWiseOperation intern() { for (ElementWiseOperation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in ElementWiseOperation enum.
  * 
  *  @see ElementWiseOperation
  *  */
-
 // Targeting ../nvinfer/IElementWiseLayer.java
+
+
 
 
 
@@ -2373,14 +2384,19 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see GatherMode
  *  */
-
 // Targeting ../nvinfer/IGatherLayer.java
+
+
 
 
 // Targeting ../nvinfer/IPluginV2Layer.java
 
 
+
+
 // Targeting ../nvinfer/IPluginV3Layer.java
+
+
 
 
 
@@ -2464,8 +2480,9 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see UnaryOperation
  *  */
-
 // Targeting ../nvinfer/IUnaryLayer.java
+
+
 
 
 
@@ -2519,7 +2536,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see ReduceOperation
  *  */
 
-
 /**
  *  \enum CollectiveOperation
  * 
@@ -2537,7 +2553,13 @@ public static native @NoException(true) int getInferLibBuildVersion();
     /** Reduce. */
     kREDUCE(3),
     /** Reduce scatter. */
-    kREDUCE_SCATTER(4);
+    kREDUCE_SCATTER(4),
+    /** All-to-all exchange. */
+    kALL_TO_ALL(5),
+    /** Gather to root. */
+    kGATHER(6),
+    /** Scatter from root. */
+    kSCATTER(7);
 
     public final int value;
     private CollectiveOperation(int v) { this.value = v; }
@@ -2554,13 +2576,19 @@ public static native @NoException(true) int getInferLibBuildVersion();
 // Targeting ../nvinfer/IReduceLayer.java
 
 
+
+
 // Targeting ../nvinfer/IPaddingLayer.java
+
+
 
 
 // Targeting ../nvinfer/Permutation.java
 
 
 // Targeting ../nvinfer/IShuffleLayer.java
+
+
 
 
 
@@ -2595,11 +2623,14 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see SampleMode
  *  */
-
 // Targeting ../nvinfer/ISliceLayer.java
 
 
+
+
 // Targeting ../nvinfer/IShapeLayer.java
+
+
 
 
 
@@ -2626,8 +2657,9 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see TopKOperation
  *  */
-
 // Targeting ../nvinfer/ITopKLayer.java
+
+
 
 
 
@@ -2673,26 +2705,39 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see DataType
  *  */
-
 // Targeting ../nvinfer/IMatrixMultiplyLayer.java
+
+
 
 
 // Targeting ../nvinfer/INonZeroLayer.java
 
 
+
+
 // Targeting ../nvinfer/IRaggedSoftMaxLayer.java
+
+
 
 
 // Targeting ../nvinfer/IIdentityLayer.java
 
 
+
+
 // Targeting ../nvinfer/ICastLayer.java
+
+
 
 
 // Targeting ../nvinfer/IConstantLayer.java
 
 
+
+
 // Targeting ../nvinfer/IParametricReLULayer.java
+
+
 
 
 
@@ -2715,12 +2760,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public InterpolationMode intern() { for (InterpolationMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in InterpolationMode enum.
  * 
  *  @see InterpolationMode
  *  */
- // namespace impl
 
 /**
  *  \enum ResizeCoordinateTransformation
@@ -2772,12 +2817,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public ResizeCoordinateTransformation intern() { for (ResizeCoordinateTransformation e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in ResizeCoordinateTransformation enum.
  * 
  *  @see ResizeCoordinateTransformation
  *  */
- // namespace impl
 
 /**
  *  \enum ResizeSelector
@@ -2799,12 +2844,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public ResizeSelector intern() { for (ResizeSelector e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in ResizeSelector enum.
  * 
  *  @see ResizeSelector
  *  */
- // namespace impl
 
 /**
  *  \enum ResizeRoundMode
@@ -2832,13 +2877,15 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public ResizeRoundMode intern() { for (ResizeRoundMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in ResizeRoundMode enum.
  * 
  *  @see ResizeRoundMode
  *  */
-
 // Targeting ../nvinfer/IResizeLayer.java
+
+
 
 
 
@@ -2870,7 +2917,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see DataType
  *  */
 
-
 /**
  *  \enum TripLimit
  * 
@@ -2895,44 +2941,69 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see DataType
  *  */
-
 // Targeting ../nvinfer/ILoopBoundaryLayer.java
+
+
 
 
 // Targeting ../nvinfer/IIfConditionalBoundaryLayer.java
 
 
+
+
 // Targeting ../nvinfer/IConditionLayer.java
+
+
 
 
 // Targeting ../nvinfer/IIfConditionalOutputLayer.java
 
 
+
+
 // Targeting ../nvinfer/IIfConditionalInputLayer.java
+
+
 
 
 // Targeting ../nvinfer/IIfConditional.java
 
 
+
+
 // Targeting ../nvinfer/IRecurrenceLayer.java
+
+
 
 
 // Targeting ../nvinfer/ILoopOutputLayer.java
 
 
+
+
 // Targeting ../nvinfer/ITripLimitLayer.java
+
+
 
 
 // Targeting ../nvinfer/IIteratorLayer.java
 
 
+
+
 // Targeting ../nvinfer/ILoop.java
+
+
 
 
 // Targeting ../nvinfer/ISelectLayer.java
 
 
+
+
 // Targeting ../nvinfer/IAssertionLayer.java
+
+
 
 
 
@@ -2982,20 +3053,29 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see FillOperation
  *  */
-
 // Targeting ../nvinfer/IFillLayer.java
+
+
 
 
 // Targeting ../nvinfer/IQuantizeLayer.java
 
 
+
+
 // Targeting ../nvinfer/IDequantizeLayer.java
+
+
 
 
 // Targeting ../nvinfer/IDynamicQuantizeLayer.java
 
 
+
+
 // Targeting ../nvinfer/IEinsumLayer.java
+
+
 
 
 
@@ -3024,16 +3104,21 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see ScatterMode
  *  */
-
 // Targeting ../nvinfer/IScatterLayer.java
+
+ // class IScatterLayer
 
 
 // Targeting ../nvinfer/IOneHotLayer.java
 
 
+
+
 // Targeting ../nvinfer/IGridSampleLayer.java
 
  // class IGridSampleLayer
+
+
 
 /**
  *  \enum BoundingBoxFormat
@@ -3060,20 +3145,29 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see BoundingBoxFormat
  *  */
-
 // Targeting ../nvinfer/INMSLayer.java
+
+ // class INMSLayer
 
 
 // Targeting ../nvinfer/IReverseSequenceLayer.java
+
+ // class IReverseSequenceLayer
 
 
 // Targeting ../nvinfer/INormalizationLayer.java
 
 
+
+
 // Targeting ../nvinfer/ISqueezeLayer.java
 
 
+
+
 // Targeting ../nvinfer/IUnsqueezeLayer.java
+
+
 
 
 
@@ -3104,9 +3198,9 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see CumulativeOperation
  *  */
-
-
 // Targeting ../nvinfer/ICumulativeLayer.java
+
+
 
 
 
@@ -3128,26 +3222,98 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public AttentionNormalizationOp intern() { for (AttentionNormalizationOp e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in AttentionNormalizationOp enum.
  * 
  *  @see AttentionNormalizationOp
  *  */
 
+/**
+ *  \enum CausalMaskKind
+ * 
+ *  \brief Enumerates the causal mask alignment orientation for the attention.
+ * 
+ *  When s_q == s_kv, both kUPPER_LEFT and kLOWER_RIGHT produce identical triangular masks.
+ *  When s_q != s_kv (e.g., during LLM generation where s_q=1 and s_kv grows):
+ *  - kUPPER_LEFT: Diagonal anchored at top-left corner (j <= i). Query tokens attend only to the earliest cache
+ *  positions.
+ *  - kLOWER_RIGHT: Diagonal anchored at bottom-right corner (j <= i + (s_kv - s_q)). Query tokens attend to all
+ *  preceding context, which is the correct behavior for autoregressive generation.
+ * 
+ *  @see IAttention::setCausalKind(), IAttention::getCausalKind()
+ *  */
+@Namespace("nvinfer1") public enum CausalMaskKind {
+    /** No causal masking applied. */
+    kNONE(0),
 
+    /** Diagonal anchored at top-left corner (legacy default when causal=true). */
+    kUPPER_LEFT(1),
+
+    /** Diagonal anchored at bottom-right corner (decode-aligned semantics). */
+    kLOWER_RIGHT(2);
+
+    public final int value;
+    private CausalMaskKind(int v) { this.value = v; }
+    private CausalMaskKind(CausalMaskKind e) { this.value = e.value; }
+    public CausalMaskKind intern() { for (CausalMaskKind e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/**
+ *  Maximum number of elements in CausalMaskKind enum.
+ * 
+ *  @see CausalMaskKind
+ *  */
+
+/**
+ *  \enum AttentionIOForm
+ * 
+ *  \brief Enumerates the layout of the input/output tensors in an Attention layer.
+ *  */
+@Namespace("nvinfer1") public enum AttentionIOForm {
+    /** All batches padded to maximum length.
+     *  Shape: [batch_size, num_heads, num_tokens, head_dim] */
+    kPADDED_BHND(0),
+    /** All batches concatenated without padding.
+     *  Shape: [total_tokens, num_heads, head_dim] */
+    kPACKED_NHD(1);
+
+    public final int value;
+    private AttentionIOForm(int v) { this.value = v; }
+    private AttentionIOForm(AttentionIOForm e) { this.value = e.value; }
+    public AttentionIOForm intern() { for (AttentionIOForm e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/**
+ *  Maximum number of elements in AttentionIOForm enum.
+ * 
+ *  @see AttentionIOForm
+ *  */
 // Targeting ../nvinfer/IAttentionBoundaryLayer.java
+
+
 
 
 // Targeting ../nvinfer/IAttentionInputLayer.java
 
 
+
+
 // Targeting ../nvinfer/IAttentionOutputLayer.java
+
+
 
 
 // Targeting ../nvinfer/IAttention.java
 
 
+
+
 // Targeting ../nvinfer/IRotaryEmbeddingLayer.java
+
+
 
 
 
@@ -3166,14 +3332,15 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public KVCacheMode intern() { for (KVCacheMode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in KVCacheMode enum.
  * 
  *  @see KVCacheMode
  *  */
-
-
 // Targeting ../nvinfer/IKVCacheUpdateLayer.java
+
+
 
 
 
@@ -3198,205 +3365,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see MoEActType
  *  */
-
-
 // Targeting ../nvinfer/IMoELayer.java
 
 
+
+
 // Targeting ../nvinfer/IDistCollectiveLayer.java
+
+ // class IDistCollectiveLayer
 
 
 // Targeting ../nvinfer/INetworkDefinition.java
 
 
 
-/**
- *  \enum CalibrationAlgoType
- * 
- *  \brief Version of calibration algorithm to use.
- * 
- *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
- *  */
-@Namespace("nvinfer1") public enum CalibrationAlgoType {
-    /** Legacy calibration */
-    kLEGACY_CALIBRATION(0),
-    /** Legacy entropy calibration */
-    kENTROPY_CALIBRATION(1),
-    /** Entropy calibration */
-    kENTROPY_CALIBRATION_2(2),
-    /** Minmax calibration */
-    kMINMAX_CALIBRATION(3);
-
-    public final int value;
-    private CalibrationAlgoType(int v) { this.value = v; }
-    private CalibrationAlgoType(CalibrationAlgoType e) { this.value = e.value; }
-    public CalibrationAlgoType intern() { for (CalibrationAlgoType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/**
- *  Maximum number of elements in CalibrationAlgoType enum.
- * 
- *  @see DataType
- *  */
-
-// Targeting ../nvinfer/IInt8Calibrator.java
-
-
-// Targeting ../nvinfer/IInt8EntropyCalibrator.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IInt8EntropyCalibrator
- * 
- *  \brief Entropy calibrator.
- * 
- *  This is the Legacy Entropy calibrator. It is less complicated than the legacy calibrator and
- *  produces better results.
- * 
- *  \note To ensure compatibility of source code with future versions of TensorRT, use IEntropyCalibrator, not
- *        v_1_0::IEntropyCalibrator
- * 
- *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
- *  */
-// Targeting ../nvinfer/IInt8EntropyCalibrator2.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IInt8EntropyCalibrator2
- * 
- *  \brief Entropy calibrator 2.
- * 
- *  This is the preferred calibrator. This is the required calibrator for DLA, as it supports per
- *  activation tensor scaling.
- * 
- *  \note To ensure compatibility of source code with future versions of TensorRT, use IEntropyCalibrator2, not
- *         v_1_0::IEntropyCalibrator2
- * 
- *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
- *  */
-// Targeting ../nvinfer/IInt8MinMaxCalibrator.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IInt8MinMaxCalibrator
- * 
- *  \brief MinMax Calibrator.
- * 
- *  It supports per activation tensor scaling.
- * 
- *  \note To ensure compatibility of source code with future versions of TensorRT, use IMinMaxCalibrator>, not
- *        v_1_0::IMinMaxCalibrator
- * 
- *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
- *  */
-// Targeting ../nvinfer/IInt8LegacyCalibrator.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IInt8LegacyCalibrator
- * 
- *  \brief Legacy calibrator.
- * 
- *  This calibrator requires user parameterization,
- *  and is provided as a fallback option if the other calibrators yield poor results.
- * 
- *  \note To ensure compatibility of source code with future versions of TensorRT, use ILegacyCalibrator, not
- *        v_1_0::ILegacyCalibrator
- * 
- *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
- *  */
-
-
-//!
-//!
-//!
-//!
-//!
-// Targeting ../nvinfer/IAlgorithmIOInfo.java
-
-
-// Targeting ../nvinfer/IAlgorithmVariant.java
-
-
-// Targeting ../nvinfer/IAlgorithmContext.java
-
-
-// Targeting ../nvinfer/IAlgorithm.java
-
-
-// Targeting ../nvinfer/IAlgorithmSelector.java
-
-
- // namespace v_1_0
-
-/**
- *  \class IAlgorithmSelector
- * 
- *  \brief Interface implemented by application for selecting and reporting algorithms of a layer provided by the
- *         builder.
- *  \note A layer in context of algorithm selection may be different from ILayer in INetworkDefinition.
- *        For example, an algorithm might be implementing a conglomeration of multiple ILayers in INetworkDefinition.
- *  \note To ensure compatibility of source code with future versions of TensorRT, use IAlgorithmSelector, not
- *        v_1_0::IAlgorithmSelector
- * 
- *  @deprecated Deprecated in TensorRT 10.8. Please use editable mode in ITimingCache instead.
- *  */
-
-
-//!
-//!
-//!
-
-/**
- *  \brief Represents one or more QuantizationFlag values using binary OR
- *  operations.
- * 
- *  @see IBuilderConfig::getQuantizationFlags(), IBuilderConfig::setQuantizationFlags()
- *  */
-
-
-//!
-//!
-//!
-//!
-//!
-
-/**
- *  \enum QuantizationFlag
- * 
- *  \brief List of valid flags for quantizing the network to int8
- * 
- *  @see IBuilderConfig::setQuantizationFlag(), IBuilderConfig::getQuantizationFlag()
- * 
- *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
- *  */
-@Namespace("nvinfer1") public enum QuantizationFlag {
-    /** Run int8 calibration pass before layer fusion. Only valid for IInt8LegacyCalibrator and
-     *  IInt8EntropyCalibrator. The builder always runs the int8 calibration pass before layer fusion for
-     *  IInt8MinMaxCalibrator and IInt8EntropyCalibrator2. Disabled by default. */
-    kCALIBRATE_BEFORE_FUSION(0);
-
-    public final int value;
-    private QuantizationFlag(int v) { this.value = v; }
-    private QuantizationFlag(QuantizationFlag e) { this.value = e.value; }
-    public QuantizationFlag intern() { for (QuantizationFlag e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-/**
- *  Maximum number of quantization flags in QuantizationFlag enum.
- * 
- *  @see QuantizationFlag
- *  */
 
 
 /**
@@ -3431,16 +3413,16 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public RuntimePlatform intern() { for (RuntimePlatform e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in RuntimePlatform enum.
  * 
  *  @see RuntimePlatform
  *  */
- // namespace impl
 
 /**
  *  \brief Represents one or more BuilderFlag values using binary OR
- *  operations, e.g., 1U << BuilderFlag::kFP16 | 1U << BuilderFlag::kDEBUG.
+ *  operations, e.g., 1U << BuilderFlag::kDEBUG.
  * 
  *  @see IBuilderConfig::setFlags(), IBuilderConfig::getFlags()
  *  */
@@ -3459,13 +3441,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see IBuilderConfig::setFlags(), IBuilderConfig::getFlags()
  *  */
 @Namespace("nvinfer1") public enum BuilderFlag {
-    /** Enable FP16 layer selection, with FP32 fallback.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kFP16(0),
-
-    /** Enable Int8 layer selection, with FP32 fallback with FP16 fallback if kFP16 also specified.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kINT8(1),
 
     /** Enable debugging of layers via synchronizing after every layer. */
     kDEBUG(2),
@@ -3503,26 +3478,14 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  This flag is retained for API compatibility but is ignored. */
     kSAFETY_SCOPE(8),
 
-    /** Require that layers execute in specified precisions. Build fails otherwise.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kOBEY_PRECISION_CONSTRAINTS(9),
-
-    /** Prefer that layers execute in specified precisions.
-     *  Fall back (with warning) to another precision if build would otherwise fail.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kPREFER_PRECISION_CONSTRAINTS(10),
 
     /** Require that no reformats be inserted between a layer and a network I/O tensor
      *  for which ITensor::setAllowedFormats was called.
      *  Build fails if a reformat is required for functional correctness.
      *  @deprecated Deprecated in TensorRT 10.7. Unneeded API. */
-    kDIRECT_IO(11),
-
-    /** Fail if IAlgorithmSelector::selectAlgorithms returns an empty set of algorithms.
-     *  @deprecated Deprecated in TensorRT 10.10. Unneeded API due to IAlgorithmSelector deprecation. */
     
 //!
-    kREJECT_EMPTY_ALGORITHMS(12),
+    kDIRECT_IO(11),
 
     /** Restrict to lean runtime operators to provide version forward compatibility
      *  for the plan.
@@ -3531,40 +3494,28 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  This flag is not supported in NVIDIA Drive(R) products. */
     
 //!
-    kVERSION_COMPATIBLE(13),
+    kVERSION_COMPATIBLE(12),
 
     /** Exclude lean runtime from the plan when version forward compatability is enabled.
      *  By default, this flag is unset, so the lean runtime will be included in the plan.
      * 
      *  If BuilderFlag::kVERSION_COMPATIBLE is not set then the value of this flag will be ignored. */
-    kEXCLUDE_LEAN_RUNTIME(14),
+    kEXCLUDE_LEAN_RUNTIME(13),
 
-    /** Enable plugins with FP8 input/output.
-     *  This flag is not supported when HardwareCompatibilityLevel::kAMPERE_PLUS is enabled.
-     *  @see HardwareCompatibilityLevel
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kFP8(15),
 
     /** Emit error when a tactic being timed is not present in the timing cache.
      *  This flag has an effect only when IBuilderConfig has an associated ITimingCache. */
-    kERROR_ON_TIMING_CACHE_MISS(16),
+    kERROR_ON_TIMING_CACHE_MISS(15),
 
-    /** Enable DataType::kBF16 layer selection, with FP32 fallback.
-     *  This flag is only supported by NVIDIA Ampere and later GPUs.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kBF16(17),
 
     /** Disable caching of JIT-compilation results during engine build.
      *  By default, JIT-compiled code will be serialized as part of the timing cache, which may significantly increase
      *  the cache size. Setting this flag prevents the code from being serialized. This flag has an effect only when
      *  BuilderFlag::DISABLE_TIMING_CACHE is not set. */
-    kDISABLE_COMPILATION_CACHE(18),
+    kDISABLE_COMPILATION_CACHE(17),
 
     /** Strip the refittable weights from the engine plan file. */
-    kSTRIP_PLAN(19),
-
-    /** @deprecated Deprecated in TensorRT 10.0. Superseded by kSTRIP_PLAN. */
-    kWEIGHTLESS(kSTRIP_PLAN.value),
+    kSTRIP_PLAN(18),
 
     /** Create a refittable engine under the assumption that the refit weights will be identical to those provided at
      *  build time. The resulting engine will have the same performance as a non-refittable one. All refittable weights
@@ -3582,7 +3533,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
 //!
 //!
 //!
-    kREFIT_IDENTICAL(20),
+    kREFIT_IDENTICAL(19),
 
     /**
      *  \brief Enable weight streaming for the current engine.
@@ -3609,17 +3560,14 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *       ICudaEngine::getMinimumWeightStreamingBudget,
      *       ICudaEngine::setWeightStreamingBudget
      *  */
-    kWEIGHT_STREAMING(21),
+    kWEIGHT_STREAMING(20),
 
-    /** Enable plugins with INT4 input/output.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kINT4(22),
 
     /** Enable building a refittable engine and provide fine-grained control. This allows
      *  control over which weights are refittable or not using INetworkDefinition::markWeightsRefittable and
      *  INetworkDefinition::unmarkWeightsRefittable. By default, all weights are non-refittable when this flag is
      *  enabled. This flag cannot be used together with kREFIT or kREFIT_IDENTICAL. */
-    kREFIT_INDIVIDUAL(23),
+    kREFIT_INDIVIDUAL(22),
 
     /**  Disable floating-point optimizations: 0*x => 0, x-x => 0, or x/x => 1. These identities are
      *   not true when x is a NaN or Inf, and thus might hide propagation or generation of NaNs. This flag is typically
@@ -3629,17 +3577,14 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *   2. Enable sparsity only where it does not affect propagation/generation of NaNs. Both kSPARSE_WEIGHTS and
      *   kSTRICT_NANS are set
      *   3. Enable all sparsity. kSPARSE_WEIGHTS is set and kSTRICT_NANS is unset */
-    kSTRICT_NANS(24),
+    kSTRICT_NANS(23),
 
     /** Enable memory monitor during build time. */
-    kMONITOR_MEMORY(25),
+    kMONITOR_MEMORY(24),
 
-    /** Enable plugins with FP4 input/output.
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing. */
-    kFP4(26),
 
     /** Enable editable timing cache. */
-    kEDITABLE_TIMING_CACHE(27),
+    kEDITABLE_TIMING_CACHE(26),
 
     /** Enable distributive independence.
      *  When BuilderFlag::kDISTRIBUTIVE_INDEPENDENCE is set and a layer documents axis i of an output as a distributive
@@ -3651,17 +3596,7 @@ public static native @NoException(true) int getInferLibBuildVersion();
      *  All non-reduction axes are distributive axes.
      *  For layers that perform einsum:
      *  Let n be the leftmost reduction axis. The axes to the left of n are distributive axes. */
-    kDISTRIBUTIVE_INDEPENDENCE(28),
-
-// #if ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
-    /** Build an engine that requires user allocation when creating an execution context.
-     *  This means that runtime allocation will not be enabled even when the tensor dimensions
-     *  exceed the limits for static allocation, and ensures that inference will support graph
-     *  capture unless the network includes operations such as data-dependent dynamic shapes
-     *  (INonZeroLayer, ITripLimitLayer, etc.) that require runtime allocation. If such operations
-     *  are present, the engine build will fail with an error message. */
-    kREQUIRE_USER_ALLOCATION(29);
-// #endif // ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
+    kDISTRIBUTIVE_INDEPENDENCE(27);
 
     public final int value;
     private BuilderFlag(int v) { this.value = v; }
@@ -3675,7 +3610,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see BuilderFlag
  *  */
-
 // Targeting ../nvinfer/TimingCacheKey.java
 
 
@@ -3684,6 +3618,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
 
 
 // Targeting ../nvinfer/ITimingCache.java
+
+
 
 
 
@@ -3697,9 +3633,8 @@ public static native @NoException(true) int getInferLibBuildVersion();
 @Namespace("nvinfer1") public enum MemoryPoolType {
     /**
      *  kWORKSPACE is used by TensorRT to store intermediate buffers within an operation.
-     *  This defaults to max device memory. Set to a smaller value to restrict tactics that use over the
-     *  threshold en masse. For more targeted removal of tactics use the IAlgorithmSelector
-     *  interface.
+     *  This defaults to max device memory. Set to a smaller value to restrict tactics whose workspace usage
+     *  exceeds the threshold en masse.
      *  */
     
 
@@ -3783,7 +3718,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see MemoryPoolType
  *  */
 
-
 /**
  *  \enum PreviewFeature
  * 
@@ -3794,44 +3728,20 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  */
 @Namespace("nvinfer1") public enum PreviewFeature {
     /**
-     *  Allows optimization profiles to be shared across execution contexts.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. The default value for this flag is on and can not be changed.
-     *  */
-    
-
-//!
-//!
-    kPROFILE_SHARING_0806(0),
-
-    /**
      *  Allows plugin I/O to be aliased when using IPluginV3OneBuildV2
      *  */
     
 
 //!
 //!
-    kALIASED_PLUGIN_IO_10_03(1),
+    kALIASED_PLUGIN_IO_10_03(0),
 
     /**
      *  Allows IExecutionContext::updateDeviceMemorySizeForShapes to resize runner internal activation memory.
      *  Using this feature can reduce runtime memory requirement when the actual input tensor shapes are smaller than
      *  the maximum input tensor dimensions.
      *  */
-    
-
-//!
-//!
-    kRUNTIME_ACTIVATION_RESIZE_10_10(2),
-
-    /**
-     *  Enabling multi-device mode in TRT.
-     *  Allows building an engine that contains multi-device enabled nodes,
-     *  such as IDistCollective.
-     * 
-     *  \note: The preview flag must be set if there are any layers in the
-     *  INetworkDefinition that need multi-device capabilities. Otherwise, an engine cannot be built. */
-    kMULTIDEVICE_RUNTIME_10_16(3);
+    kRUNTIME_ACTIVATION_RESIZE_10_10(1);
 
     public final int value;
     private PreviewFeature(int v) { this.value = v; }
@@ -3839,12 +3749,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public PreviewFeature intern() { for (PreviewFeature e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in PreviewFeature enum.
  * 
  *  @see PreviewFeature
  *  */
- // namespace impl
 
 /**
  *  \enum HardwareCompatibilityLevel
@@ -3896,12 +3806,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public HardwareCompatibilityLevel intern() { for (HardwareCompatibilityLevel e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
 /**
  *  Maximum number of elements in HardwareCompatibilityLevel enum.
  * 
  *  @see HardwareCompatibilityLevel
  *  */
- // namespace impl
 
 
 /**
@@ -3932,12 +3842,6 @@ public static native @NoException(true) int getInferLibBuildVersion();
     public TilingOptimizationLevel intern() { for (TilingOptimizationLevel e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-/**
- *  Maximum number of elements in TilingOptimizationLevel enum.
- * 
- *  @see TilingOptimizationLevel
- *  */
-
 // Targeting ../nvinfer/IProgressMonitor.java
 
  // class IProgressMonitor
@@ -3972,10 +3876,12 @@ public static native @NoException(true) int getInferLibBuildVersion();
 
 
 
+
+
 /**
  *  \brief Represents one or more NetworkDefinitionCreationFlag flags
  *  using binary OR operations.
- *   e.g., 1U << NetworkDefinitionCreationFlag::kSTRONGLY_TYPED
+ *  e.g., 1U << NetworkDefinitionCreationFlag::kPREFER_JIT_PYTHON_PLUGINS
  * 
  *  @see IBuilder::createNetworkV2
  *  */
@@ -3995,25 +3901,23 @@ public static native @NoException(true) int getInferLibBuildVersion();
  *  @see IBuilder::createNetworkV2
  *  */
 @Namespace("nvinfer1") public enum NetworkDefinitionCreationFlag {
-    /** Ignored because networks are always "explicit batch" in TensorRT 10.0.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. */
-    kEXPLICIT_BATCH(0),
-
     /** Mark the network to be strongly typed.
      *  Every tensor in the network has a data type defined in the network following only type inference rules and the
      *  inputs/operator annotations. Setting layer precision and layer output types is not allowed, and the network
-     *  output types will be inferred based on the input types and the type inference rules. */
-    kSTRONGLY_TYPED(1),
+     *  output types will be inferred based on the input types and the type inference rules.
+     * 
+     *  @deprecated Deprecated in TensorRT 11.0. Strongly typed mode is always enabled.
+     *  This flag is retained for API compatibility but is ignored. */
+    kSTRONGLY_TYPED(0),
     /** If set, for a Python plugin with both AOT and JIT implementations, the JIT implementation will be used.
      *  Any plugin-specific JIT/AOT specification may override this.
      *  Cannot be used in conjunction with NetworkDefinitionCreationFlag::kPREFER_AOT_PYTHON_PLUGINS. */
-    kPREFER_JIT_PYTHON_PLUGINS(2),
+    kPREFER_JIT_PYTHON_PLUGINS(1),
 
     /** If set, for a Python plugin with both AOT and JIT implementations, the AOT implementation will be used.
      *  Any plugin-specific JIT/AOT specification may override this.
      *  Cannot be used in conjunction with NetworkDefinitionCreationFlag::kPREFER_JIT_PYTHON_PLUGINS. */
-    kPREFER_AOT_PYTHON_PLUGINS(3);
+    kPREFER_AOT_PYTHON_PLUGINS(2);
 
     public final int value;
     private NetworkDefinitionCreationFlag(int v) { this.value = v; }
@@ -4027,8 +3931,9 @@ public static native @NoException(true) int getInferLibBuildVersion();
  * 
  *  @see NetworkDefinitionCreationFlag
  *  */
-
 // Targeting ../nvinfer/IBuilder.java
+
+
 
 
 
@@ -4136,7 +4041,6 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
  // namespace v_1_0
  // namespace v_1_0
  // namespace v_1_0
- // namespace v_1_0
 // Targeting ../nvinfer/IPlugin.java
 
 
@@ -4153,13 +4057,15 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 
 /** enum class nvinfer1::ActivationType */
 ;
+/** enum class nvinfer1::AttentionIOForm */
+;
 /** enum class nvinfer1::AttentionNormalizationOp */
 ;
 /** enum class nvinfer1::BoundingBoxFormat */
 ;
-/** enum class nvinfer1::BuilderFlag */
+/** enum class nvinfer1::CausalMaskKind */
 ;
-/** enum class nvinfer1::CalibrationAlgoType */
+/** enum class nvinfer1::BuilderFlag */
 ;
 /** enum class nvinfer1::CumulativeOperation */
 ;
@@ -4198,8 +4104,6 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 /** enum class nvinfer1::PoolingType */
 ;
 /** enum class nvinfer1::ProfilingVerbosity */
-;
-/** enum class nvinfer1::QuantizationFlag */
 ;
 /** enum class nvinfer1::ReduceOperation */
 ;
@@ -4475,18 +4379,6 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 // Targeting ../nvinfer/VNetworkDefinition.java
 
 
-// Targeting ../nvinfer/VAlgorithmIOInfo.java
-
-
-// Targeting ../nvinfer/VAlgorithmVariant.java
-
-
-// Targeting ../nvinfer/VAlgorithmContext.java
-
-
-// Targeting ../nvinfer/VAlgorithm.java
-
-
 // Targeting ../nvinfer/VTimingCache.java
 
 
@@ -4517,7 +4409,7 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 // Parsed from NvInferPluginBase.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2024-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 2024-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4711,7 +4603,7 @@ public static native @NoException(true) Pointer createInferBuilder_INTERNAL(Poin
 // Parsed from NvInferRuntimePlugin.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

@@ -34,16 +34,7 @@ public class VLayer extends VRoot {
     public native @NoException(true) int getNbOutputs();
     public native @NoException(true) ITensor getOutput(int index);
     public native @NoException(true) void setInput(int index, @ByRef ITensor tensor);
-    public native @NoException(true) void setPrecision(DataType dataType);
-    public native @NoException(true) void setPrecision(@Cast("nvinfer1::DataType") int dataType);
-    public native @NoException(true) DataType getPrecision();
-    public native @Cast("bool") @NoException(true) boolean precisionIsSet();
-    public native @NoException(true) void resetPrecision();
-    public native @NoException(true) void setOutputType(int index, DataType dataType);
-    public native @NoException(true) void setOutputType(int index, @Cast("nvinfer1::DataType") int dataType);
     public native @NoException(true) DataType getOutputType(int index);
-    public native @Cast("bool") @NoException(true) boolean outputTypeIsSet(int index);
-    public native @NoException(true) void resetOutputType(int index);
     public native @NoException(true) void setMetadata(String docString);
     public native @NoException(true) void setMetadata(@Cast("const char*") BytePointer docString);
     public native @NoException(true) String getMetadata();

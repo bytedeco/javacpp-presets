@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // namespace impl
+
 
 /** \class IKVCacheUpdateLayer
  * 
@@ -55,6 +55,8 @@ public class IKVCacheUpdateLayer extends ILayer {
      *  Input 0 is the input cache tensor.
      *  Input 1 is the input update tensor.
      *  Input 2 is the input writeIndices tensor.
+     *  Input 3 is the optional updateLengths tensor. setUpdateLengths should be used instead of setInput
+     *    to set this tensor.
      *  */
     
     
@@ -83,5 +85,88 @@ public class IKVCacheUpdateLayer extends ILayer {
      * 
      *  @return The mode of the KVCacheUpdate layer.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) KVCacheMode getCacheMode();
+
+    /**
+     *  \brief Set the update form.
+     * 
+     *  Default is kPADDED_BHND. When set to kPACKED_NHD, the update tensor shape is [totalTokens, numHeads, dimHead]
+     *  instead of [batchSize, numHeads, numTokens, dimHead], and the updateLengths tensor must be provided.
+     * 
+     *  @param form The update form.
+     * 
+     *  @return True if the update form is set successfully, false otherwise.
+     * 
+     *  @see getUpdateForm()
+     *  @see AttentionIOForm
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setUpdateForm(AttentionIOForm form);
+    public native @Cast("bool") @NoException(true) boolean setUpdateForm(@Cast("nvinfer1::AttentionIOForm") int form);
+
+    /**
+     *  \brief Get the update form.
+     * 
+     *  @return The update form.
+     * 
+     *  @see setUpdateForm()
+     *  @see AttentionIOForm
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) AttentionIOForm getUpdateForm();
+
+    /**
+     *  \brief Set the update lengths tensor.
+     * 
+     *  Only valid when the update form is kPACKED_NHD. Provides a cumulative token counts tensor
+     *  with shape [batchSize + 1]. The first element should be 0 and the last element equals totalTokens.
+     *  The number of tokens for batch i is lengths[i + 1] - lengths[i].
+     *  Must be set when update form is kPACKED_NHD.
+     * 
+     *  \warning Providing a first element that is not 0 results in undefined behavior.
+     * 
+     *  @param lengths A 1D tensor of type kINT32 with shape [batchSize + 1],
+     *    or nullptr to clear a previously set update lengths tensor.
+     * 
+     *  @return True if the update lengths tensor is set successfully, false otherwise.
+     * 
+     *  @see getUpdateLengths()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setUpdateLengths(ITensor lengths);
+
+    /**
+     *  \brief Get the update lengths tensor.
+     * 
+     *  @return The update lengths tensor, or nullptr if not set.
+     * 
+     *  @see setUpdateLengths()
+     *  */
+    public native @NoException(true) ITensor getUpdateLengths();
 }

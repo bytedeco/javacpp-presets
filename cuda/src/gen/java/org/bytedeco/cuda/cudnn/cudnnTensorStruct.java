@@ -17,6 +17,8 @@ import static org.bytedeco.cuda.global.cudnn.*;
 // #endif
 
 /* Data structures to represent Image/Filter and the Neural Network Layer */
+
+/** \brief Opaque descriptor for a tensor. @since cuDNN 9.0.0 */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnTensorStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

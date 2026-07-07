@@ -29,20 +29,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IBuilderConfig extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IBuilderConfig() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IBuilderConfig(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBuilderConfig(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IBuilderConfig position(long position) {
-        return (IBuilderConfig)super.position(position);
-    }
-    @Override public IBuilderConfig getPointer(long i) {
-        return new IBuilderConfig((Pointer)this).offsetAddress(i);
-    }
 
 
     /**
@@ -106,36 +94,9 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) EngineCapability getEngineCapability();
-
-    /**
-     *  \brief Set Int8 Calibration interface.
-     * 
-     *  The calibrator is to minimize the information loss during the INT8 quantization process.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setInt8Calibrator(IInt8Calibrator calibrator);
-
-    /**
-     *  \brief Get Int8 Calibration interface.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) IInt8Calibrator getInt8Calibrator();
 
     /**
      *  \brief Set the build mode flags to turn on builder options for this network.
@@ -461,175 +422,10 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
     public native @NoException(true) ProfilingVerbosity getProfilingVerbosity();
-
-    /**
-     *  \brief Set Algorithm Selector.
-     * 
-     *  @param selector The algorithm selector to be set in the build config.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.8. Please use editable mode in ITimingCache instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setAlgorithmSelector(IAlgorithmSelector selector);
-
-    /**
-     *  \brief Get Algorithm Selector.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.8. Please use editable mode in ITimingCache instead.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) IAlgorithmSelector getAlgorithmSelector();
-
-    /**
-     *  \brief Add a calibration profile.
-     * 
-     *  Calibration optimization profile must be set if int8 calibration is used to set scales for a network with
-     *  runtime dimensions.
-     * 
-     *  @param profile The new calibration profile, which must satisfy profile->isValid() == true or be nullptr.
-     *  MIN and MAX values will be overwritten by kOPT.
-     * 
-     *  @return True if the calibration profile was set correctly.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setCalibrationProfile(@Const IOptimizationProfile profile);
-
-    /**
-     *  \brief Get the current calibration profile.
-     * 
-     *  @return A pointer to the current calibration profile or nullptr if calibration profile is unset.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Const @Deprecated @NoException(true) IOptimizationProfile getCalibrationProfile();
-
-    /**
-     *  \brief Set the quantization flags.
-     * 
-     *  The flags are listed in the QuantizationFlag enum.
-     *  The flags set configuration options to quantize the network in int8.
-     * 
-     *  @param flags The quantization flags.
-     * 
-     *  \note This function will override the previous set flags, rather than bitwise ORing the new flag.
-     * 
-     *  @see getQuantizationFlags()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setQuantizationFlags(@Cast("nvinfer1::QuantizationFlags") int flags);
-
-    /**
-     *  \brief Get the quantization flags.
-     * 
-     *  @return The quantization flags as a bitmask.
-     * 
-     *  @see setQuantizationFlag()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("nvinfer1::QuantizationFlags") @Deprecated @NoException(true) int getQuantizationFlags();
-
-    /**
-     *  \brief clear a quantization flag.
-     * 
-     *  Clears the quantization flag from the enabled quantization flags.
-     * 
-     *  @see setQuantizationFlags()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void clearQuantizationFlag(QuantizationFlag flag);
-    public native @Deprecated @NoException(true) void clearQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
-
-    /**
-     *  \brief Set a single quantization flag.
-     * 
-     *  Add the input quantization flag to the already enabled quantization flags.
-     * 
-     *  @see setQuantizationFlags()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setQuantizationFlag(QuantizationFlag flag);
-    public native @Deprecated @NoException(true) void setQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
-
-    /**
-     *  \brief Returns true if the quantization flag is set.
-     * 
-     *  @see getQuantizationFlags()
-     * 
-     *  @return True if quantization flag is set, false if unset.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.10. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean getQuantizationFlag(QuantizationFlag flag);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean getQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
 
     /**
      *  \brief Set tactic sources.
@@ -638,10 +434,10 @@ public class IBuilderConfig extends INoCopy {
      *  selection.
      * 
      *  Multiple tactic sources may be combined with a bitwise OR operation. For example,
-     *  to enable cublas and cublasLt as tactic sources, use a value of:
+     *  to enable edge mask convolutions and JIT convolutions as tactic sources, use a value of:
      * 
-     *  1U << static_cast<uint32_t>(TacticSource::kCUBLAS) | 1U <<
-     *  static_cast<uint32_t>(TacticSource::kCUBLAS_LT)
+     *  1U << static_cast<uint32_t>(TacticSource::kEDGE_MASK_CONVOLUTIONS) | 1U <<
+     *  static_cast<uint32_t>(TacticSource::kJIT_CONVOLUTIONS)
      * 
      *  @see getTacticSources
      * 
@@ -993,6 +789,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) int getNbPluginsToSerialize();
 
     /**
@@ -1015,7 +812,9 @@ public class IBuilderConfig extends INoCopy {
      *  \note Using more auxiliary leads to more memory usage at runtime since some activation memory blocks will not
      *  be able to be reused.
      * 
-     *  @param nbStreams The maximum number of auxiliary streams that TRT is allowed to use.
+     *  @param nbStreams The maximum number of auxiliary streams that TRT is allowed to use. Must be non-negative.
+     * 
+     *  @return true if the value was set successfully, false if nbStreams is negative.
      * 
      *  @see getMaxAuxStreams(), ICudaEngine::getNbAuxStreams(), IExecutionContext::setAuxStreams()
      *  */
@@ -1024,7 +823,7 @@ public class IBuilderConfig extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) void setMaxAuxStreams(int nbStreams);
+    public native @Cast("bool") @NoException(true) boolean setMaxAuxStreams(int nbStreams);
 
     /**
      *  \brief Get the maximum number of auxiliary streams that TRT is allowed to use.
@@ -1233,5 +1032,92 @@ public class IBuilderConfig extends INoCopy {
      * 
      *  @return The current string for remote auto tuning, or nullptr if not set.
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) String getRemoteAutoTuningConfig();
+
+    /**
+     *  \brief Set the build route to be passed to the compiler.
+     * 
+     *  The build route string is a configuration string that changes the
+     *  compilation behavior to customize the engine building for different
+     *  models.
+     * 
+     *  @param buildRoute The build route string to be used during compilation.
+     * 
+     *  @return True if successful, false otherwise
+     * 
+     *  For example, the following is the format of the input:
+     *  "-conv_use_long_w=off -kgen:codegen:cuda_tile=2"
+     * 
+     *  \note Calling this method invalidates any pointer previously returned by
+     *  getBuildRoute().
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setBuildRoute(String buildRoute);
+    public native @Cast("bool") @NoException(true) boolean setBuildRoute(@Cast("const char*") BytePointer buildRoute);
+
+    /**
+     *  \brief Get the build route string.
+     * 
+     *  @return The current build route string, or an empty string if not set.
+     * 
+     *  The returned pointer is owned by the IBuilderConfig and remains valid
+     *  until the next call to setBuildRoute() or until the IBuilderConfig is
+     *  destroyed. The caller must not free it.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) String getBuildRoute();
+
+    /**
+     *  \brief Get all available build routes.
+     * 
+     *  This returns a JSON string containing all available build route options
+     *  supported by the compiler. This is initialized when the IBuilderConfig
+     *  is created.
+     * 
+     *  @return A JSON string containing all available build routes.
+     * 
+     *  For example, the below is the format of the output:
+     *  {
+     *      "tuner_version": "2.19.15",
+     *      "tuner_options": [
+     *          {
+     *              "option": "-conv_use_long_w",
+     *              "allowed_values": "-conv_use_long_w=[on|off]",
+     *              "default_value": "on",
+     *              "help": "Convert Conv [N, C, X, 1] to [N, C, 1, X] in CASK params for perf."
+     *          },
+     *          {
+     *              "option": "-kgen:codegen:cuda_tile",
+     *              "allowed_values": "-kgen:codegen:cuda_tile=[0|1|2|3]",
+     *              "default_value": "1",
+     *              "help": "CUDA Tile codegen. 0: disable, 1: where profitable, 2: supported kdags, 3: force all."
+     *          },
+     *          ...
+     *  }
+     * 
+     *  The returned pointer is owned by the IBuilderConfig and remains valid
+     *  for the lifetime of the IBuilderConfig. The caller must not free it.
+     *  */
+    public native @NoException(true) String getAllBuildRoutes();
 }

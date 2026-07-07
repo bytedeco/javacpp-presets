@@ -14,6 +14,8 @@ import static org.bytedeco.cuda.global.cublas.*;
 
 import static org.bytedeco.cuda.global.cudnn.*;
 
+
+/** \brief Opaque descriptor for an activation function. @since cuDNN 9.0.0 @deprecated Since cuDNN 9.0.0. Use graph API instead. */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnActivationStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

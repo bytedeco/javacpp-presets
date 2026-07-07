@@ -38,10 +38,10 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 
 public static final int NCCL_MAJOR = 2;
 public static final int NCCL_MINOR = 30;
-public static final int NCCL_PATCH = 4;
+public static final int NCCL_PATCH = 7;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 23004;
+public static final int NCCL_VERSION_CODE = 23007;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -128,6 +128,7 @@ public static final int NCCL_REVOKE_DEFAULT = 0x00;
 //   NCCL_CONFIG_UNDEF_INT,                    /* graphUsageMode */
 //   NCCL_CONFIG_UNDEF_INT,                    /* numRmaCtx */
 //   NCCL_CONFIG_UNDEF_INT,                    /* maxP2pPeers */
+//   NCCL_CONFIG_UNDEF_INT,                    /* graphStreamOrdering */
 // }
 // Targeting ../nccl/ncclSimInfo_t.java
 
@@ -789,7 +790,7 @@ public static native @Cast("ncclResult_t") int pncclGroupEnd();
  */
 public static native @Cast("ncclResult_t") int ncclGroupSimulateEnd(ncclSimInfo_t simInfo);
 public static native @Cast("ncclResult_t") int pncclGroupSimulateEnd(ncclSimInfo_t simInfo);
-// Targeting ../nccl/ncclParamHandle_t.java
+// Targeting ../nccl/ncclParamHandle.java
 
 
 
@@ -798,99 +799,97 @@ public static native @Cast("ncclResult_t") int pncclGroupSimulateEnd(ncclSimInfo
  * out. The returned handle is owned by the parameter system and must not
  * be freed by the caller.
  */
-public static native @Cast("ncclResult_t") int ncclParamBind(@Cast("ncclParamHandle_t**") PointerPointer out, @Cast("const char*") BytePointer key);
-public static native @Cast("ncclResult_t") int ncclParamBind(@ByPtrPtr ncclParamHandle_t out, @Cast("const char*") BytePointer key);
-public static native @Cast("ncclResult_t") int ncclParamBind(@ByPtrPtr ncclParamHandle_t out, String key);
-public static native @Cast("ncclResult_t") int pncclParamBind(@Cast("ncclParamHandle_t**") PointerPointer out, @Cast("const char*") BytePointer key);
-public static native @Cast("ncclResult_t") int pncclParamBind(@ByPtrPtr ncclParamHandle_t out, @Cast("const char*") BytePointer key);
-public static native @Cast("ncclResult_t") int pncclParamBind(@ByPtrPtr ncclParamHandle_t out, String key);
+public static native @Cast("ncclResult_t") int ncclParamBind(@ByPtrPtr ncclParamHandle out, @Cast("const char*") BytePointer key);
+public static native @Cast("ncclResult_t") int ncclParamBind(@Cast("ncclParamHandle**") PointerPointer out, String key);
+public static native @Cast("ncclResult_t") int pncclParamBind(@ByPtrPtr ncclParamHandle out, @Cast("const char*") BytePointer key);
+public static native @Cast("ncclResult_t") int pncclParamBind(@Cast("ncclParamHandle**") PointerPointer out, String key);
 
 /*
  * Read the value of the parameter bound to h as the type of out.
  * Function names are suffixed with I/U and 8/16/32/64 for 8-, 16-, 32- and 64-bit
  * signed and unsigned integers.
  */
-public static native @Cast("ncclResult_t") int ncclParamGetI8(ncclParamHandle_t h, BytePointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI8(ncclParamHandle_t h, ByteBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI8(ncclParamHandle_t h, byte[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetI8(ncclParamHandle_t h, BytePointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI8(ncclParamHandle_t h, ByteBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI8(ncclParamHandle_t h, byte[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetI8(ncclParamHandle h, BytePointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI8(ncclParamHandle h, ByteBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI8(ncclParamHandle h, byte[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetI8(ncclParamHandle h, BytePointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI8(ncclParamHandle h, ByteBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI8(ncclParamHandle h, byte[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetI16(ncclParamHandle_t h, ShortPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI16(ncclParamHandle_t h, ShortBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI16(ncclParamHandle_t h, short[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetI16(ncclParamHandle_t h, ShortPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI16(ncclParamHandle_t h, ShortBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI16(ncclParamHandle_t h, short[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetI16(ncclParamHandle h, ShortPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI16(ncclParamHandle h, ShortBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI16(ncclParamHandle h, short[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetI16(ncclParamHandle h, ShortPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI16(ncclParamHandle h, ShortBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI16(ncclParamHandle h, short[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetI32(ncclParamHandle_t h, IntPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI32(ncclParamHandle_t h, IntBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI32(ncclParamHandle_t h, int[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetI32(ncclParamHandle_t h, IntPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI32(ncclParamHandle_t h, IntBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI32(ncclParamHandle_t h, int[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetI32(ncclParamHandle h, IntPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI32(ncclParamHandle h, IntBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI32(ncclParamHandle h, int[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetI32(ncclParamHandle h, IntPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI32(ncclParamHandle h, IntBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI32(ncclParamHandle h, int[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetI64(ncclParamHandle_t h, @Cast("int64_t*") LongPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI64(ncclParamHandle_t h, @Cast("int64_t*") LongBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetI64(ncclParamHandle_t h, @Cast("int64_t*") long[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetI64(ncclParamHandle_t h, @Cast("int64_t*") LongPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI64(ncclParamHandle_t h, @Cast("int64_t*") LongBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetI64(ncclParamHandle_t h, @Cast("int64_t*") long[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetI64(ncclParamHandle h, @Cast("int64_t*") LongPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI64(ncclParamHandle h, @Cast("int64_t*") LongBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetI64(ncclParamHandle h, @Cast("int64_t*") long[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetI64(ncclParamHandle h, @Cast("int64_t*") LongPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI64(ncclParamHandle h, @Cast("int64_t*") LongBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetI64(ncclParamHandle h, @Cast("int64_t*") long[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetU8(ncclParamHandle_t h, @Cast("uint8_t*") BytePointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU8(ncclParamHandle_t h, @Cast("uint8_t*") ByteBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU8(ncclParamHandle_t h, @Cast("uint8_t*") byte[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetU8(ncclParamHandle_t h, @Cast("uint8_t*") BytePointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU8(ncclParamHandle_t h, @Cast("uint8_t*") ByteBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU8(ncclParamHandle_t h, @Cast("uint8_t*") byte[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetU8(ncclParamHandle h, @Cast("uint8_t*") BytePointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU8(ncclParamHandle h, @Cast("uint8_t*") ByteBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU8(ncclParamHandle h, @Cast("uint8_t*") byte[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetU8(ncclParamHandle h, @Cast("uint8_t*") BytePointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU8(ncclParamHandle h, @Cast("uint8_t*") ByteBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU8(ncclParamHandle h, @Cast("uint8_t*") byte[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetU16(ncclParamHandle_t h, @Cast("uint16_t*") ShortPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU16(ncclParamHandle_t h, @Cast("uint16_t*") ShortBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU16(ncclParamHandle_t h, @Cast("uint16_t*") short[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetU16(ncclParamHandle_t h, @Cast("uint16_t*") ShortPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU16(ncclParamHandle_t h, @Cast("uint16_t*") ShortBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU16(ncclParamHandle_t h, @Cast("uint16_t*") short[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetU16(ncclParamHandle h, @Cast("uint16_t*") ShortPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU16(ncclParamHandle h, @Cast("uint16_t*") ShortBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU16(ncclParamHandle h, @Cast("uint16_t*") short[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetU16(ncclParamHandle h, @Cast("uint16_t*") ShortPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU16(ncclParamHandle h, @Cast("uint16_t*") ShortBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU16(ncclParamHandle h, @Cast("uint16_t*") short[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetU32(ncclParamHandle_t h, @Cast("uint32_t*") IntPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU32(ncclParamHandle_t h, @Cast("uint32_t*") IntBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU32(ncclParamHandle_t h, @Cast("uint32_t*") int[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetU32(ncclParamHandle_t h, @Cast("uint32_t*") IntPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU32(ncclParamHandle_t h, @Cast("uint32_t*") IntBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU32(ncclParamHandle_t h, @Cast("uint32_t*") int[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetU32(ncclParamHandle h, @Cast("uint32_t*") IntPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU32(ncclParamHandle h, @Cast("uint32_t*") IntBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU32(ncclParamHandle h, @Cast("uint32_t*") int[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetU32(ncclParamHandle h, @Cast("uint32_t*") IntPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU32(ncclParamHandle h, @Cast("uint32_t*") IntBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU32(ncclParamHandle h, @Cast("uint32_t*") int[] out);
 
-public static native @Cast("ncclResult_t") int ncclParamGetU64(ncclParamHandle_t h, @Cast("uint64_t*") LongPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU64(ncclParamHandle_t h, @Cast("uint64_t*") LongBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetU64(ncclParamHandle_t h, @Cast("uint64_t*") long[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetU64(ncclParamHandle_t h, @Cast("uint64_t*") LongPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU64(ncclParamHandle_t h, @Cast("uint64_t*") LongBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetU64(ncclParamHandle_t h, @Cast("uint64_t*") long[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetU64(ncclParamHandle h, @Cast("uint64_t*") LongPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU64(ncclParamHandle h, @Cast("uint64_t*") LongBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetU64(ncclParamHandle h, @Cast("uint64_t*") long[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetU64(ncclParamHandle h, @Cast("uint64_t*") LongPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU64(ncclParamHandle h, @Cast("uint64_t*") LongBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetU64(ncclParamHandle h, @Cast("uint64_t*") long[] out);
 
 /*
  * Read the value of the parameter bound to h as a string.
  * Returned pointer is owned by the parameter system and is valid until the
  * next ncclParamGetStr() call on the same thread.
  */
-public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") PointerPointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") @ByPtrPtr BytePointer out);
-public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") @ByPtrPtr ByteBuffer out);
-public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") @ByPtrPtr byte[] out);
-public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") PointerPointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") @ByPtrPtr BytePointer out);
-public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") @ByPtrPtr ByteBuffer out);
-public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle_t h, @Cast("const char**") @ByPtrPtr byte[] out);
+public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle h, @Cast("const char**") PointerPointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle h, @Cast("const char**") @ByPtrPtr BytePointer out);
+public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle h, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+public static native @Cast("ncclResult_t") int ncclParamGetStr(ncclParamHandle h, @Cast("const char**") @ByPtrPtr byte[] out);
+public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle h, @Cast("const char**") PointerPointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle h, @Cast("const char**") @ByPtrPtr BytePointer out);
+public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle h, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+public static native @Cast("ncclResult_t") int pncclParamGetStr(ncclParamHandle h, @Cast("const char**") @ByPtrPtr byte[] out);
 
 /*
  * Read the value of the parameter bound to h as raw binary data.
  * The user needs to allocate a buffer for the result and the parameter value is copied
  * into user buffer as bytes.
  */
-public static native @Cast("ncclResult_t") int ncclParamGet(ncclParamHandle_t h, Pointer out, int maxLen, IntPointer len);
-public static native @Cast("ncclResult_t") int ncclParamGet(ncclParamHandle_t h, Pointer out, int maxLen, IntBuffer len);
-public static native @Cast("ncclResult_t") int ncclParamGet(ncclParamHandle_t h, Pointer out, int maxLen, int[] len);
-public static native @Cast("ncclResult_t") int pncclParamGet(ncclParamHandle_t h, Pointer out, int maxLen, IntPointer len);
-public static native @Cast("ncclResult_t") int pncclParamGet(ncclParamHandle_t h, Pointer out, int maxLen, IntBuffer len);
-public static native @Cast("ncclResult_t") int pncclParamGet(ncclParamHandle_t h, Pointer out, int maxLen, int[] len);
+public static native @Cast("ncclResult_t") int ncclParamGet(ncclParamHandle h, Pointer out, int maxLen, IntPointer len);
+public static native @Cast("ncclResult_t") int ncclParamGet(ncclParamHandle h, Pointer out, int maxLen, IntBuffer len);
+public static native @Cast("ncclResult_t") int ncclParamGet(ncclParamHandle h, Pointer out, int maxLen, int[] len);
+public static native @Cast("ncclResult_t") int pncclParamGet(ncclParamHandle h, Pointer out, int maxLen, IntPointer len);
+public static native @Cast("ncclResult_t") int pncclParamGet(ncclParamHandle h, Pointer out, int maxLen, IntBuffer len);
+public static native @Cast("ncclResult_t") int pncclParamGet(ncclParamHandle h, Pointer out, int maxLen, int[] len);
 
 /*
  * Key-based API (no handle required, typeless access, return value as string)

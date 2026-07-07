@@ -96,91 +96,13 @@ public class IOptimizationProfile extends INoCopy {
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions(String inputName, OptProfileSelector select);
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
 
     /**
-     *  \brief Set the minimum / optimum / maximum values for an input shape tensor.
-     * 
-     *  This function must be called three times for every input tensor t that is a shape tensor (t.isShape() == true).
-     *  This implies that the dimensions of t are fixed at network definition time and the volume does not exceed 64.
-     *  This function must not be called for any input tensor that is not a shape tensor.
-     * 
-     *  Each time this function is called for the same input tensor, the same nbValues must be supplied (either 1
-     *  if the tensor rank is 0, or dims.d[0] if the rank is 1). Furthermore, if minVals, optVals, maxVals are the
-     *  minimum, optimum, and maximum values, it must be true that minVals[i] <= optVals[i] <= maxVals[i] for
-     *  i = 0, ..., nbValues - 1. Execution of the network must be valid for the optVals.
-     * 
-     *  Shape tensors are tensors that contribute to shape calculations in some way. While input shape tensors can be
-     *  type kINT32 or kINT64, the values used to set the minimum, optimum, and maximum values must fit in int32_t.
-     * 
-     *  Examples:
-     * 
-     *  * A shape tensor used as the second input to IShuffleLayer can contain a -1 wildcard.
-     *    The corresponding minVal[i] should be -1.
-     * 
-     *  * A shape tensor used as the stride input to ISliceLayer can contain any valid strides.
-     *    The values could be positive, negative, or zero.
-     * 
-     *  * A shape tensor subtracted from zero to compute the size input of an ISliceLayer can
-     *    contain any non-positive values that yield a valid slice operation.
-     * 
-     *  Tightening the minVals and maxVals bounds to cover only values that are necessary may help optimization.
-     * 
-     *  @param inputName The input tensor name
-     *  @param select Whether to set the minimum, optimum, or maximum input values.
-     *  @param values An array of length nbValues containing the minimum, optimum, or maximum shape tensor elements.
-     *                For multidimensional tensors, the array is in row-major order.
-     *  @param nbValues The length of the value array, which must equal the number of shape tensor elements (>= 1)
-     * 
-     *  @return false if an inconsistency was detected (e.g. nbValues does not match a previous call for the same
-     *          tensor), else true. As for setDimensions(), a full validation can only be performed at engine build
-     *          time.
-     * 
-     *  \warning If run on DLA, minimum, optimum, and maximum shape values must to be the same.
-     * 
-     *  \warning The string inputName must be null-terminated, and be at most 4096 bytes including the terminator.
-     * 
-     *  \warning When setShapeValuesV2 is called after setShapeValues, a following call to getShapeValues will
-     *  return nullptr. Vice versa, a call to setShapeValues undoes the effects of setShapeValuesV2.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.11. Superseded by setShapeValuesV2().
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setShapeValues(
-            String inputName, OptProfileSelector select, @Const IntPointer values, int nbValues);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setShapeValues(
-            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const IntBuffer values, int nbValues);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setShapeValues(
-            String inputName, OptProfileSelector select, @Const int[] values, int nbValues);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setShapeValues(
-            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const IntPointer values, int nbValues);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setShapeValues(
-            String inputName, OptProfileSelector select, @Const IntBuffer values, int nbValues);
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setShapeValues(
-            @Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select, @Const int[] values, int nbValues);
-
-    /**
      *  \brief Get the number of values for an input shape tensor.
      * 
-     *  This will return the number of shape values if setShapeValues() has been called before for this input tensor.
+     *  This will return the number of shape values if setShapeValuesV2() has been called before for this input tensor.
      *  Otherwise, return -1.
      * 
      *  \warning The string inputName must be null-terminated, and be at most 4096 bytes including the terminator.
@@ -191,27 +113,8 @@ public class IOptimizationProfile extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) int getNbShapeValues(String inputName);
     public native @NoException(true) int getNbShapeValues(@Cast("const char*") BytePointer inputName);
-
-    /**
-     *  \brief Get the minimum / optimum / maximum values for an input shape tensor.
-     * 
-     *  If the shape values have not been set previously with setShapeValues(), this returns nullptr.
-     * 
-     *  \warning The string inputName must be null-terminated, and be at most 4096 bytes including the terminator.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.11. Superseded by getShapeValuesV2().
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Const @Deprecated @NoException(true) IntPointer getShapeValues(String inputName, OptProfileSelector select);
-    public native @Const @Deprecated @NoException(true) IntBuffer getShapeValues(@Cast("const char*") BytePointer inputName, @Cast("nvinfer1::OptProfileSelector") int select);
 
     /**
      *  \brief Set a target for extra GPU memory that may be used by this profile.
@@ -278,7 +181,6 @@ public class IOptimizationProfile extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @Cast("bool") @NoException(true) boolean isValid();
 
     /**
@@ -322,9 +224,6 @@ public class IOptimizationProfile extends INoCopy {
      *  \warning If run on DLA, minimum, optimum, and maximum shape values must to be the same.
      * 
      *  \warning The string inputName must be null-terminated, and be at most 4096 bytes including the terminator.
-     * 
-     *  \warning When setShapeValues is called after setShapeValuesV2, input shape would be overwritten as 32 bit
-     *  and getShapeValuesV2 would return nullptr.
      *  */
     
     

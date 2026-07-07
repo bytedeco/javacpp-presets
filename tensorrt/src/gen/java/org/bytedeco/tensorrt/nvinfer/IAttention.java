@@ -48,23 +48,34 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  The attention has the following inputs, in order of input index:
  * 
- *  * Query contains the input query. It is a tensor of type kFLOAT, kHALF or kBF16 with
- *    shape [batchSize, numHeadsQuery, sequenceLengthQuery, dimHead]
- *  * Key contains the input key. It is a tensor of type kFLOAT, kHALF or kBF16 with
- *    shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead]
- *  * Value contains the input value. It is a tensor of type kFLOAT, kHALF or kBF16 with
- *    shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead]
- *  * Mask (optional) contains the mask value. It is a tensor of type kBOOL or the same data type of
- *    BMM1 output with shape [batchSize, numHeadsQuery, sequenceLengthQuery, sequenceLengthKeyValue]
- *    with batchSize and numHeadsQuery broadcastable. For a kBOOL mask, a True value indicates that the corresponding
- *    position is allowed to attend. For other data types, the mask values will be added to the BMM1 output, known
- *    as an add mask.
+ *  * Query contains the input query. It is a tensor of type kFLOAT, kHALF or kBF16, its shape depends on the query
+ *  form.
+ *    - For query form kPADDED_BHND, shape is [batchSize, numHeadsQuery, numTokens, dimHead]
+ *    - For query form kPACKED_NHD, shape is [totalTokens, numHeadsQuery, dimHead]
+ *  * Key contains the input key. It is a tensor of type kFLOAT, kHALF or kBF16, its shape depends on the key value
+ *  form.
+ *    - For key value form kPADDED_BHND, shape is [batchSize, numHeadsKeyValue, numTokens, dimHead]
+ *    - For key value form kPACKED_NHD, shape is [totalTokens, numHeadsKeyValue, dimHead]
+ *  * Value contains the input value. It is a tensor of type kFLOAT, kHALF or kBF16, its shape depends on the key value
+ *  form.
+ *    - For key value form kPADDED_BHND, shape is [batchSize, numHeadsKeyValue, numTokens, dimHead]
+ *    - For key value form kPACKED_NHD, shape is [totalTokens, numHeadsKeyValue, dimHead]
+ *  * Mask (optional) contains the mask value. It is a tensor of type kBOOL or the same data type of BMM1 output.
+ *    Shape is [batchSize, numHeadsQuery, numTokensQuery, numTokensKeyValue] with batchSize
+ *    and numHeadsQuery broadcastable. TensorRT uses stride-based indexing to load the mask data.
+ *    - For a kBOOL mask, a True value indicates that the corresponding position is allowed to attend.
+ *    - For other data types, the mask values will be added to the BMM1 output, known as an add mask.
  *  * NormalizationQuantizeScale (optional) contains the quantization scale for the attention normalization output.
  *    It is a tensor of type kFLOAT, kHALF or kBF16 with dimension 0 or 1.
  * 
+ *  The attention has one output:
+ *  * Output has the same shape, form, and data type as the query input.
+ *    - For query form kPADDED_BHND, output shape is [batchSize, numHeadsQuery, numTokens, dimHead]
+ *    - For query form kPACKED_NHD, output shape is [totalTokens, numHeadsQuery, dimHead]
+ * 
  *  @see
- *  https://docs.nvidia.com/deeplearning/tensorrt/latest/inference-library/work-with-transformers.html#multi-head-attention-fusion
- *  for the complete matrix of fused kernel support.
+ *  https://docs.nvidia.com/deeplearning/tensorrt/latest/performance/best-practices.html#multi-head-attention-fusion for
+ *  the complete matrix of fused kernel support.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
@@ -139,13 +150,20 @@ public class IAttention extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
     public native @NoException(true) ITensor getMask();
 
     /**
      *  \brief Set whether the attention will run a causal inference.
      *  Cannot be used together with setMask().
      * 
-     *  @see getCausal
+     *  @param isCausal True to enable causal masking with kUPPER_LEFT alignment,
+     *                  false to disable causal masking.
+     * 
+     *  @see getCausal(), setCausalKind()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.16. Superseded by setCausalKind.
      * 
      *  @return True if the causal inference is set successfully, false otherwise.
      *  */
@@ -155,12 +173,15 @@ public class IAttention extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean setCausal(@Cast("bool") boolean isCausal);
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setCausal(@Cast("bool") boolean isCausal);
 
     /**
      *  \brief Get whether the attention will run a causal inference.
      * 
-     *  @see setCausal
+     *  @see setCausal(), getCausalKind()
+     * 
+     *  @deprecated Deprecated in TensorRT 10.16. Superseded by getCausalKind.
      * 
      *  @return True if the attention will run a causal inference, false otherwise. Default is false.
      *  */
@@ -170,7 +191,49 @@ public class IAttention extends INoCopy {
     //!
     //!
     //!
-    public native @Cast("bool") @NoException(true) boolean getCausal();
+    //!
+    //!
+    //!
+    public native @Cast("bool") @Deprecated @NoException(true) boolean getCausal();
+
+    /**
+     *  \brief Set the causal mask alignment orientation for the attention.
+     * 
+     *  When set to kUPPER_LEFT or kLOWER_RIGHT, an implicit causal mask is applied.
+     *  When set to kNONE, no causal masking is applied.
+     * 
+     *  Cannot be used together with setMask(). Building with both a mask tensor and
+     *  a causal orientation other than kNONE will fail validation.
+     * 
+     *  @param kind The causal mask alignment to apply.
+     * 
+     *  @see getCausalKind(), CausalMaskKind
+     * 
+     *  @return True if the causal mask kind is set successfully, false otherwise.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setCausalKind(CausalMaskKind kind);
+    public native @Cast("bool") @NoException(true) boolean setCausalKind(@Cast("nvinfer1::CausalMaskKind") int kind);
+
+    /**
+     *  \brief Get the causal mask alignment orientation for the attention.
+     * 
+     *  @see setCausalKind(), CausalMaskKind
+     * 
+     *  @return The causal mask alignment orientation. Default is kNONE.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) CausalMaskKind getCausalKind();
 
     /**
      *  \brief Set whether the attention can be decomposed to use multiple kernels if no fused kernel support found.
@@ -449,5 +512,176 @@ public class IAttention extends INoCopy {
      * 
      *  @see setNbRanks()
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) int getNbRanks();
+
+    /**
+     *  \brief Set the query form.
+     * 
+     *  Default is kPADDED_BHND.
+     * 
+     *  @param form The query form.
+     * 
+     *  @return True if the query form is set successfully, false otherwise.
+     * 
+     *  @see getQueryForm()
+     *  @see AttentionIOForm
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setQueryForm(AttentionIOForm form);
+    public native @Cast("bool") @NoException(true) boolean setQueryForm(@Cast("nvinfer1::AttentionIOForm") int form);
+
+    /**
+     *  \brief Get the query form.
+     * 
+     *  @return The query form. Default is kPADDED_BHND.
+     * 
+     *  @see setQueryForm()
+     *  @see AttentionIOForm
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) AttentionIOForm getQueryForm();
+
+    /**
+     *  \brief Set the key-value form.
+     * 
+     *  Default is kPADDED_BHND.
+     * 
+     *  @param form The key-value form.
+     * 
+     *  @return True if the key-value form is set successfully, false otherwise.
+     * 
+     *  @see getKeyValueForm()
+     *  @see AttentionIOForm
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setKeyValueForm(AttentionIOForm form);
+    public native @Cast("bool") @NoException(true) boolean setKeyValueForm(@Cast("nvinfer1::AttentionIOForm") int form);
+
+    /**
+     *  \brief Get the key-value form.
+     * 
+     *  @return The key-value form. Default is kPADDED_BHND.
+     * 
+     *  @see setKeyValueForm()
+     *  @see AttentionIOForm
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) AttentionIOForm getKeyValueForm();
+
+    /**
+     *  \brief Set the query lengths tensor.
+     * 
+     *  An optional tensor to specify the cumulative number of tokens per batch element.
+     *  Must be set when query form is kPACKED_NHD. Ignored when query form is kPADDED_BHND.
+     *  When set, contains cumulative token counts with shape [batchSize + 1].
+     *  The first element should be 0 and the last element equals totalTokens.
+     *  The number of tokens for batch i is lengths[i + 1] - lengths[i].
+     *  The total_tokens dimension of the query tensor must be >= the last element of this tensor.
+     * 
+     *  \warning Providing a first element that is not 0 results in undefined behavior.
+     * 
+     *  @param lengths A 1D tensor of type kINT32 with shape [batchSize + 1].
+     *         If nullptr, clears a previously set query lengths tensor.
+     * 
+     *  @return True if the query lengths tensor is set or cleared successfully, false otherwise.
+     * 
+     *  @see getQueryLengths()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setQueryLengths(ITensor lengths);
+
+    /**
+     *  \brief Get the query lengths tensor.
+     * 
+     *  @return The query lengths tensor, or nullptr if not set.
+     * 
+     *  @see setQueryLengths()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) ITensor getQueryLengths();
+
+    /**
+     *  \brief Set the key-value lengths tensor.
+     * 
+     *  An optional tensor to specify per-batch key-value lengths. The semantics depend on the key-value form:
+     *  - When key-value form is kPADDED_BHND: contains per-batch lengths with shape [batchSize].
+     *    Each element must be <= the sequence length dimension of the KV tensor.
+     *    If not set, the sequence length dimension of the KV tensor is used for all batches.
+     *  - When key-value form is kPACKED_NHD: contains cumulative token counts with shape [batchSize + 1].
+     *    The first element should be 0 and the last element equals totalTokens.
+     *    The total_tokens dimension of the KV tensor must be >= the last element of this tensor.
+     *    Must be set when key-value form is kPACKED_NHD.
+     * 
+     *  \warning When key-value form is kPACKED_NHD, providing a first element that is not 0
+     *           results in undefined behavior.
+     * 
+     *  @param lengths A 1D tensor of type kINT32.
+     *         If nullptr, clears a previously set key-value lengths tensor.
+     * 
+     *  @return True if the key-value lengths tensor is set or cleared successfully, false otherwise.
+     * 
+     *  @see getKeyValueLengths()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") @NoException(true) boolean setKeyValueLengths(ITensor lengths);
+
+    /**
+     *  \brief Get the key-value lengths tensor.
+     * 
+     *  @return The key-value lengths tensor, or nullptr if not set.
+     * 
+     *  @see setKeyValueLengths()
+     *  */
+    public native @NoException(true) ITensor getKeyValueLengths();
 }

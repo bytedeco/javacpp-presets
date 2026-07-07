@@ -49,5 +49,7 @@ public class IAttentionInputLayer extends IAttentionBoundaryLayer {
      *  Input 3 is the optional mask tensor. setMask should be used instead of setInput
      *  Input 4 is the optional normalizationQuantizeScale tensor. setNormalizationQuantizeScale should be used instead
      *  of setInput
+     *  Input 5 is the optional queryLengths tensor. setQueryLengths should be used instead of setInput
+     *  Input 6 is the optional keyValueLengths tensor. setKeyValueLengths should be used instead of setInput
      *  */
 }

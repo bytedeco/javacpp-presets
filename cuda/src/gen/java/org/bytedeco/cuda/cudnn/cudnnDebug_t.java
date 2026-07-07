@@ -15,6 +15,9 @@ import static org.bytedeco.cuda.global.cublas.*;
 import static org.bytedeco.cuda.global.cudnn.*;
 
 
+/** \brief Debug callback metadata containing version, status, timestamps, handle, stream, PID, TID, and device ID.
+ *  @since cuDNN 9.0.0
+ */
 /* struct containing useful informaiton for each API call */
 @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnDebug_t extends Pointer {
@@ -34,16 +37,27 @@ public class cudnnDebug_t extends Pointer {
         return new cudnnDebug_t((Pointer)this).offsetAddress(i);
     }
 
+    /** cuDNN library version. */
     public native @Cast("unsigned") int cudnn_version(); public native cudnnDebug_t cudnn_version(int setter);
+    /** Status code for this API call. */
     public native @Cast("cudnnStatus_t") int cudnnStatus(); public native cudnnDebug_t cudnnStatus(int setter);
-    public native @Cast("unsigned") int time_sec(); public native cudnnDebug_t time_sec(int setter);      /* epoch time in seconds */
-    public native @Cast("unsigned") int time_usec(); public native cudnnDebug_t time_usec(int setter);     /* microseconds part of epoch time */
-    public native @Cast("unsigned") int time_delta(); public native cudnnDebug_t time_delta(int setter);    /* time since start in seconds */
-    public native cudnnContext handle(); public native cudnnDebug_t handle(cudnnContext setter);   /* cudnn handle */
-    public native CUstream_st stream(); public native cudnnDebug_t stream(CUstream_st setter);    /* cuda stream ID */
-    public native @Cast("unsigned long long") long pid(); public native cudnnDebug_t pid(long setter); /* process ID */
-    public native @Cast("unsigned long long") long tid(); public native cudnnDebug_t tid(long setter); /* thread ID */
-    public native int cudaDeviceId(); public native cudnnDebug_t cudaDeviceId(int setter);       /* CUDA device ID */
+    /** Epoch time in seconds. */
+    public native @Cast("unsigned") int time_sec(); public native cudnnDebug_t time_sec(int setter);
+    /** Microseconds part of epoch time. */
+    public native @Cast("unsigned") int time_usec(); public native cudnnDebug_t time_usec(int setter);
+    /** Time since start in seconds. */
+    public native @Cast("unsigned") int time_delta(); public native cudnnDebug_t time_delta(int setter);
+    /** cuDNN handle. */
+    public native cudnnContext handle(); public native cudnnDebug_t handle(cudnnContext setter);
+    /** CUDA stream ID. */
+    public native CUstream_st stream(); public native cudnnDebug_t stream(CUstream_st setter);
+    /** Process ID. */
+    public native @Cast("unsigned long long") long pid(); public native cudnnDebug_t pid(long setter);
+    /** Thread ID. */
+    public native @Cast("unsigned long long") long tid(); public native cudnnDebug_t tid(long setter);
+    /** CUDA device ID. */
+    public native int cudaDeviceId(); public native cudnnDebug_t cudaDeviceId(int setter);
+    /** Reserved for future use. */
     public native int reserved(int i); public native cudnnDebug_t reserved(int i, int setter);
-    @MemberGetter public native IntPointer reserved();       /* reserved for future use */
+    @MemberGetter public native IntPointer reserved();
 }

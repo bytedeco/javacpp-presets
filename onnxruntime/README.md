@@ -60,7 +60,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist-cudnn</artifactId>
-            <version>13.2-9.21-1.5.14-SNAPSHOT</version>
+            <version>13.3-9.24-1.5.14-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

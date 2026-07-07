@@ -30,20 +30,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IRuntime extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IRuntime() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IRuntime(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IRuntime(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IRuntime position(long position) {
-        return (IRuntime)super.position(position);
-    }
-    @Override public IRuntime getPointer(long i) {
-        return new IRuntime((Pointer)this).offsetAddress(i);
-    }
 
 
     /**
@@ -172,38 +160,7 @@ public class IRuntime extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) ICudaEngine deserializeCudaEngine(@Const Pointer blob, @Cast("std::size_t") long size);
-
-    /**
-     *  \brief Deserialize an engine from a stream.
-     * 
-     *  If an error recorder has been set for the runtime, it will also be passed to the
-     *  engine.
-     * 
-     *  This deserialization path will reduce host memory usage when weight streaming is enabled.
-     * 
-     *  \warning Destroying the IRuntime before destroying all associated ICudaEngine instances results in undefined
-     *  behavior.
-     * 
-     *  @param streamReader a read-only stream from which TensorRT will deserialize a
-     *         previously serialized engine.
-     * 
-     *  @return The engine, or nullptr if it could not be deserialized.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.7. Superseded by deserializeCudaEngine that takes an IStreamReaderV2
-     *  instead of IStreamReader.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated ICudaEngine deserializeCudaEngine(@ByRef IStreamReader streamReader);
 
     /**
      *  \brief Deserialize an engine from a stream. IStreamReaderV2 is expected to support reading to both host and

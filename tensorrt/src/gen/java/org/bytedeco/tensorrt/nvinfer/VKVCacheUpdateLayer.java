@@ -28,4 +28,9 @@ public class VKVCacheUpdateLayer extends VRoot {
     public native @Cast("bool") @NoException(true) boolean setCacheMode(KVCacheMode cacheMode);
     public native @Cast("bool") @NoException(true) boolean setCacheMode(@Cast("nvinfer1::KVCacheMode") int cacheMode);
     public native @NoException(true) KVCacheMode getCacheMode();
+    public native @Cast("bool") @NoException(true) boolean setUpdateForm(AttentionIOForm form);
+    public native @Cast("bool") @NoException(true) boolean setUpdateForm(@Cast("nvinfer1::AttentionIOForm") int form);
+    public native @NoException(true) AttentionIOForm getUpdateForm();
+    public native @Cast("bool") @NoException(true) boolean setUpdateLengths(ITensor lengths);
+    public native @NoException(true) ITensor getUpdateLengths();
 }

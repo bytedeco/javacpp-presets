@@ -11,6 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
+
 /**
  * Graph node parameters.  See ::cuGraphAddNode.
  */
@@ -66,6 +67,9 @@ public class CUgraphNodeParams extends Pointer {
         public native @ByRef CUDA_BATCH_MEM_OP_NODE_PARAMS_v2 memOp(); public native CUgraphNodeParams memOp(CUDA_BATCH_MEM_OP_NODE_PARAMS_v2 setter);
         /** Conditional node parameters. */
         public native @ByRef CUDA_CONDITIONAL_NODE_PARAMS conditional(); public native CUgraphNodeParams conditional(CUDA_CONDITIONAL_NODE_PARAMS setter);
+        /** Padding as bytes */
+        public native @Cast("char") byte asBytes(int i); public native CUgraphNodeParams asBytes(int i, byte setter);
+        @MemberGetter public native @Cast("char*") BytePointer asBytes();
 
     /** Reserved bytes. Must be zero. */
     public native long reserved2(); public native CUgraphNodeParams reserved2(long setter);

@@ -66,55 +66,24 @@ public class CUpti_ActivityEnvironment extends Pointer {
      * Data returned for CUPTI_ACTIVITY_ENVIRONMENT_SPEED environment
      * kind.
      */
-      /**
-       * The SM frequency in MHz
-       */
-      @Name("data.speed.smClock") public native @Cast("uint32_t") int data_speed_smClock(); public native CUpti_ActivityEnvironment data_speed_smClock(int setter);
-
-      /**
-       * The memory frequency in MHz
-       */
-      @Name("data.speed.memoryClock") public native @Cast("uint32_t") int data_speed_memoryClock(); public native CUpti_ActivityEnvironment data_speed_memoryClock(int setter);
-
-      /**
-       * The PCIe link generation.
-       */
-      @Name("data.speed.pcieLinkGen") public native @Cast("uint32_t") int data_speed_pcieLinkGen(); public native CUpti_ActivityEnvironment data_speed_pcieLinkGen(int setter);
-
-      /**
-       * The PCIe link width.
-       */
-      @Name("data.speed.pcieLinkWidth") public native @Cast("uint32_t") int data_speed_pcieLinkWidth(); public native CUpti_ActivityEnvironment data_speed_pcieLinkWidth(int setter);
-
-      /**
-       * The clocks throttle reasons.
-       */
-      @Name("data.speed.clocksThrottleReasons") public native @Cast("CUpti_EnvironmentClocksThrottleReason") int data_speed_clocksThrottleReasons(); public native CUpti_ActivityEnvironment data_speed_clocksThrottleReasons(int setter);
+    @Name("data.speed") public native @ByRef CUpti_ActivityEnvironmentSpeed data_speed(); public native CUpti_ActivityEnvironment data_speed(CUpti_ActivityEnvironmentSpeed setter);
 
     /**
      * Data returned for CUPTI_ACTIVITY_ENVIRONMENT_TEMPERATURE
      * environment kind.
      */
-      /**
-       * The GPU temperature in degrees C.
-       */
-      @Name("data.temperature.gpuTemperature") public native @Cast("uint32_t") int data_temperature_gpuTemperature(); public native CUpti_ActivityEnvironment data_temperature_gpuTemperature(int setter);
+    @Name("data.temperature") public native @ByRef CUpti_ActivityEnvironmentTemperature data_temperature(); public native CUpti_ActivityEnvironment data_temperature(CUpti_ActivityEnvironmentTemperature setter);
 
     /**
      * Data returned for CUPTI_ACTIVITY_ENVIRONMENT_POWER environment kind.
      * The power in milliwatts consumed by GPU and associated circuitry.
      * The power in milliwatts that will trigger power management algorithm.
      */
-
-      @Name("data.power.power") public native @Cast("uint32_t") int data_power_power(); public native CUpti_ActivityEnvironment data_power_power(int setter);
-      @Name("data.power.powerLimit") public native @Cast("uint32_t") int data_power_powerLimit(); public native CUpti_ActivityEnvironment data_power_powerLimit(int setter);
+    @Name("data.power") public native @ByRef CUpti_ActivityEnvironmentPower data_power(); public native CUpti_ActivityEnvironment data_power(CUpti_ActivityEnvironmentPower setter);
 
     /**
      * Data returned for CUPTI_ACTIVITY_ENVIRONMENT_COOLING
      * environment kind.
      */
-      /**
-       * The fan speed as percentage of maximum.
-       */
-      @Name("data.cooling.fanSpeed") public native @Cast("uint32_t") int data_cooling_fanSpeed(); public native CUpti_ActivityEnvironment data_cooling_fanSpeed(int setter);
+    @Name("data.cooling") public native @ByRef CUpti_ActivityEnvironmentCooling data_cooling(); public native CUpti_ActivityEnvironment data_cooling(CUpti_ActivityEnvironmentCooling setter);
 }

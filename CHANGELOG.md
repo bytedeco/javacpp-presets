@@ -9,7 +9,7 @@
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
- * Upgrade presets for FFmpeg 8.1.1, MKL 2026.0.0, DNNL 3.12.1, OpenBLAS 0.3.33, CUDA 13.2.1, cuDNN 9.21.1.3, NCCL 2.30.4, nvCOMP 5.2.0.10, OpenCL 3.1.1, FFTW 3.3.11, CPython 3.14.6, NumPy 2.5.0, SciPy 1.18.0, LLVM 22.1.7, PyTorch 2.12.0, TensorFlow Lite 2.21.0, TensorRT 10.16.1.11, Triton Inference Server 2.68.0, ONNX 1.21.0, ONNX Runtime 1.26.0 ([pull #1753](https://github.com/bytedeco/javacpp-presets/pull/1753)), and their dependencies
+ * Upgrade presets for FFmpeg 8.1.1, MKL 2026.0.0, DNNL 3.12.1, OpenBLAS 0.3.33, CUDA 13.3.1, cuDNN 9.24.0.43, NCCL 2.30.7, nvCOMP 5.2.0.10, NVIDIA Video Codec SDK 13.1.15, OpenCL 3.1.1, FFTW 3.3.11, CPython 3.14.6, NumPy 2.5.0, SciPy 1.18.0, LLVM 22.1.7, PyTorch 2.12.0, TensorFlow Lite 2.21.0, TensorRT 11.1.0.106, Triton Inference Server 2.70.0, ONNX 1.21.0, ONNX Runtime 1.26.0 ([pull #1753](https://github.com/bytedeco/javacpp-presets/pull/1753)), and their dependencies
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
 
 ### February 22, 2026 version 1.5.13

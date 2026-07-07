@@ -17,7 +17,9 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // namespace impl
+
+
+/** Maximum number of elements in ILogger::Severity enum. @see ILogger::Severity */
 
 @Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IGpuAllocator extends IVersionedInterface {

@@ -16,14 +16,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>13.0.37-1.5.14-SNAPSHOT</version>
+            <version>13.1.15-1.5.14-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>13.2-9.21-1.5.14-SNAPSHOT</version>
+            <version>13.3-9.24-1.5.14-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

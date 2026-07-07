@@ -273,12 +273,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>13.2-9.21-${project.version}</version>
+      <version>13.3-9.24-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>nvcodec-platform</artifactId>
-      <version>13.0.37-${project.version}</version>
+      <version>13.1.15-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -313,12 +313,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>10.16-${project.version}</version>
+      <version>11.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tritonserver-platform</artifactId>
-      <version>2.68.0-${project.version}</version>
+      <version>2.70.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->

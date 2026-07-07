@@ -92,37 +92,13 @@ public class CUpti_ActivityPcie extends Pointer {
   /**
    * Attributes for more information about GPU (gpuAttr) or PCI Bridge (bridgeAttr)
    */
-      /**
-       * UUID for the device. \ref CUpti_ActivityDevice6.
-       */
-      @Name("attr.gpuAttr.uuidDev") public native @ByRef CUuuid attr_gpuAttr_uuidDev(); public native CUpti_ActivityPcie attr_gpuAttr_uuidDev(CUuuid setter);
+    /**
+     * Attributes for more information about GPU (gpuAttr).
+     */
+    @Name("attr.gpuAttr") public native @ByRef CUpti_ActivityPcieGpuAttr attr_gpuAttr(); public native CUpti_ActivityPcie attr_gpuAttr(CUpti_ActivityPcieGpuAttr setter);
 
-      /**
-       * CUdevice with which this device has P2P capability.
-       * This can also be obtained by querying cuDeviceCanAccessPeer or
-       * cudaDeviceCanAccessPeer APIs
-       */
-      @Name("attr.gpuAttr.peerDev") public native @Cast("CUdevice") int attr_gpuAttr_peerDev(int i); public native CUpti_ActivityPcie attr_gpuAttr_peerDev(int i, int setter);
-      @Name("attr.gpuAttr.peerDev") @MemberGetter public native @Cast("CUdevice*") IntPointer attr_gpuAttr_peerDev();
-
-      /**
-       * The downstream bus number, used to search downstream devices/bridges connected
-       * to this bridge.
-       */
-      @Name("attr.bridgeAttr.secondaryBus") public native @Cast("uint16_t") short attr_bridgeAttr_secondaryBus(); public native CUpti_ActivityPcie attr_bridgeAttr_secondaryBus(short setter);
-
-      /**
-       * Device ID of the bridge
-       */
-      @Name("attr.bridgeAttr.deviceId") public native @Cast("uint16_t") short attr_bridgeAttr_deviceId(); public native CUpti_ActivityPcie attr_bridgeAttr_deviceId(short setter);
-
-      /**
-       * Vendor ID of the bridge
-       */
-      @Name("attr.bridgeAttr.vendorId") public native @Cast("uint16_t") short attr_bridgeAttr_vendorId(); public native CUpti_ActivityPcie attr_bridgeAttr_vendorId(short setter);
-
-      /**
-       * Padding for alignment
-       */
-      @Name("attr.bridgeAttr.pad0") public native @Cast("uint16_t") short attr_bridgeAttr_pad0(); public native CUpti_ActivityPcie attr_bridgeAttr_pad0(short setter);
+    /**
+     * Attributes for more information about PCI Bridge (bridgeAttr).
+     */
+    @Name("attr.bridgeAttr") public native @ByRef CUpti_ActivityPcieBridgeAttr attr_bridgeAttr(); public native CUpti_ActivityPcie attr_bridgeAttr(CUpti_ActivityPcieBridgeAttr setter);
 }

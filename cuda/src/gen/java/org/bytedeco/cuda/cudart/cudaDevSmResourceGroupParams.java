@@ -40,7 +40,7 @@ public class cudaDevSmResourceGroupParams extends Pointer {
     public native @Cast("unsigned int") int preferredCoscheduledSmCount(); public native cudaDevSmResourceGroupParams preferredCoscheduledSmCount(int setter);
     /** Combination of \p cudaDevSmResourceGroup_flags values to indicate this this group is created. */
     public native @Cast("unsigned int") int flags(); public native cudaDevSmResourceGroupParams flags(int setter);
-    /** Reserved for future use - ensure this is is zero initialized. */
+    /** Reserved for future use - ensure this is zero initialized. */
     public native @Cast("unsigned int") int reserved(int i); public native cudaDevSmResourceGroupParams reserved(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 }

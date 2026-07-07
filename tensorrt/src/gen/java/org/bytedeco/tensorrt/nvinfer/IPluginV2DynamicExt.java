@@ -185,8 +185,6 @@ public class IPluginV2DynamicExt extends IPluginV2Ext {
      *   kOPT
      *     field of the current profile. Wildcard dimensions will not exist during this phase.
      *   * IExecutionContext will call this during the next subsequent instance enqueue[V2]() or execute[V2]() if:
-     *     - The batch size is changed from previous call of execute()/enqueue() if hasImplicitBatchDimension() returns
-     *     true.
      *     - The optimization profile is changed via setOptimizationProfileAsync().
      *     - An input execution binding is changed via setInputShape().
      *  \warning The execution phase is timing critical during IExecutionContext but is not part of the timing loop when

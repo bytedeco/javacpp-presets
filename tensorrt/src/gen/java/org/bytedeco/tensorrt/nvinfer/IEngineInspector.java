@@ -37,20 +37,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IEngineInspector extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IEngineInspector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IEngineInspector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IEngineInspector(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IEngineInspector position(long position) {
-        return (IEngineInspector)super.position(position);
-    }
-    @Override public IEngineInspector getPointer(long i) {
-        return new IEngineInspector((Pointer)this).offsetAddress(i);
-    }
 
 
     /**

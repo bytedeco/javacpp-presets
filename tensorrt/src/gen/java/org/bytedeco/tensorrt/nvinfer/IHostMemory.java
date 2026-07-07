@@ -32,20 +32,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IHostMemory extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IHostMemory() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IHostMemory(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IHostMemory(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IHostMemory position(long position) {
-        return (IHostMemory)super.position(position);
-    }
-    @Override public IHostMemory getPointer(long i) {
-        return new IHostMemory((Pointer)this).offsetAddress(i);
-    }
 
 
     /** A pointer to the raw data that is owned by the library. */
