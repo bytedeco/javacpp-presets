@@ -137,12 +137,7 @@ public class ILayer extends INoCopy {
      *  */
     
     
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
+    
     //!
     //!
     //!
@@ -150,165 +145,17 @@ public class ILayer extends INoCopy {
     //!
     public native @NoException(true) void setInput(int index, @ByRef ITensor tensor);
 
-    /**
-     *  \brief Set the preferred or required computational precision of this layer in a weakly-typed network.
-     * 
-     *  Setting the precision directs TensorRT to choose an implementation that runs at this computational precision.
-     *  TensorRT could still choose a non-conforming fastest implementation that ignores the requested precision.
-     *  To force choosing an implementation with the requested precision, set exactly one of the following flags,
-     *  which differ in what happens if no such implementation exists:
-     * 
-     *  * BuilderFlag::kOBEY_PRECISION_CONSTRAINTS - build fails with an error message.
-     * 
-     *  * BuilderFlag::kPREFER_PRECISION_CONSTRAINTS - TensorRT falls back to an
-     *    implementation without the requested precision.
-     * 
-     *  If precision is not set, or falling back, TensorRT will select the layer computational precision
-     *  and layer input type based on global performance considerations and the flags specified to the builder.
-     * 
-     *  For a IIdentityLayer: If it casts to/from float/half/int8/uint8, the precision must be one of those types,
-     *  otherwise it must be either the input or output type.
-     * 
-     *  Strongly-typed networks reject calls to method setPrecision. In strongly-typed networks, the computation
-     *  precision is typically controlled by casting the input tensors to the desired type.
-     * 
-     *  @param dataType the computational precision.
-     * 
-     *  @see getPrecision() precisionIsSet() resetPrecision()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setPrecision(DataType dataType);
-    public native @Deprecated @NoException(true) void setPrecision(@Cast("nvinfer1::DataType") int dataType);
-
-    /**
-     *  \brief get the computational precision of this layer
-     * 
-     *  @return the computational precision
-     * 
-     *  @see setPrecision() precisionIsSet() resetPrecision()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @NoException(true) DataType getPrecision();
-
-    /**
-     *  \brief whether the computational precision has been set for this layer
-     * 
-     *  @return whether the computational precision has been explicitly set
-     * 
-     *  @see setPrecision() getPrecision() resetPrecision()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean precisionIsSet();
-
-    /**
-     *  \brief reset the computational precision for this layer
-     * 
-     *  @see setPrecision() getPrecision() precisionIsSet()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void resetPrecision();
-
-    /**
-     *  \brief Set the output type of this layer in a weakly-typed network.
-     * 
-     *  Setting the output type constrains TensorRT to choose implementations which generate output data with the
-     *  given type. If it is not set, TensorRT will select output type based on layer computational precision. TensorRT
-     *  could still choose non-conforming output type based on fastest implementation. To force choosing the requested
-     *  output type, set exactly one of the following flags, which differ in what happens if no such implementation
-     *  exists:
-     * 
-     *  * BuilderFlag::kOBEY_PRECISION_CONSTRAINTS - build fails with an error message.
-     * 
-     *  * BuilderFlag::kPREFER_PRECISION_CONSTRAINTS - TensorRT falls back to an
-     *    implementation with a non-conforming output type.
-     * 
-     *  In case layer precision is not specified, or falling back, the output type depends on the
-     *  chosen implementation, based on performance considerations and the flags specified to the builder.
-     * 
-     *  This method cannot be used to set the data type of the second output tensor of the TopK layer. The data type of
-     *  the second output tensor of the topK layer is always Int32. Also the output type of all layers that are shape
-     *  operations must be DataType::kINT32, and all attempts to set the output type to some other data type will be
-     *  ignored except for issuing an error message.
-     * 
-     *  Note that the layer output type is generally not identical to the data type of the output tensor, as TensorRT
-     *  may insert implicit reformatting operations to convert the former to the latter. Calling layer->setOutputType(i,
-     *  type) has no effect on the data type of the i-th output tensor of layer, and users need to call
-     *  layer->getOutput(i)->setType(type) to change the tensor data type. This is particularly relevant if the tensor
-     *  is marked as a network output, since only setType() [but not setOutputType()] will affect the data
-     *  representation in the corresponding output binding.
-     * 
-     *  Strongly-typed networks reject calls to method setOutputType. Instead, the output type can be set
-     *  only for layers that define method setToType(). Those layers are:
-     * 
-     *  * ICastLayer
-     *  * IDequantizeLayer
-     *  * IDynamicQuantizeLayer
-     *  * IFillLayer
-     *  * IQuantizeLayer
-     * 
-     *  @param index the index of the output to set
-     *  @param dataType the type of the output
-     * 
-     *  @see getOutputType() outputTypeIsSet() resetOutputType()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setOutputType(int index, DataType dataType);
-    public native @Deprecated @NoException(true) void setOutputType(int index, @Cast("nvinfer1::DataType") int dataType);
 
     /**
      *  \brief get the output type of this layer
      * 
      *  @param index the index of the output
      * 
-     *  @return the output precision. If no precision has been set, DataType::kFLOAT will be returned,
-     *          unless the output type is inherently DataType::kINT32.
+     *  @return the inferred output type.
      * 
      *  @see getOutputType() outputTypeIsSet() resetOutputType()
      *  */
+    
     
     
     //!
@@ -319,44 +166,6 @@ public class ILayer extends INoCopy {
     //!
     public native @NoException(true) DataType getOutputType(int index);
 
-    /**
-     *  \brief whether the output type has been set for this layer
-     * 
-     *  @param index the index of the output
-     * 
-     *  @return whether the output type has been explicitly set
-     * 
-     *  @see setOutputType() getOutputType() resetOutputType()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean outputTypeIsSet(int index);
-
-    /**
-     *  \brief reset the output type for this layer
-     * 
-     *  @param index the index of the output
-     * 
-     *  @see setOutputType() getOutputType() outputTypeIsSet()
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void resetOutputType(int index);
 
     /**
      *  \brief Set the metadata for this layer.

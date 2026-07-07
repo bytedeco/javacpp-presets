@@ -120,7 +120,7 @@ public class cudart extends org.bytedeco.cuda.presets.cudart {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 13020;
+public static final int CUDA_VERSION = 13030;
 
 // #ifdef __cplusplus
 // #endif
@@ -943,7 +943,7 @@ public static final int
     CU_DEVICE_ATTRIBUTE_COOPERATIVE_LAUNCH = 95,
     /** Deprecated, ::cuLaunchCooperativeKernelMultiDevice is deprecated. */
     CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH = 96,
-    /** Maximum optin shared memory per block */
+    /** Maximum optin shared memory per block. That is shared memory that is available for dynamic allocation or static allocation (including architecture specific static shared memory) on this device but is not guaranteed to be portable. */
     CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN = 97,
     /** The ::CU_STREAM_WAIT_VALUE_FLUSH flag and the ::CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES MemOp are supported on the device. See \ref CUDA_MEMOP for additional details. */
     CU_DEVICE_ATTRIBUTE_CAN_FLUSH_REMOTE_WRITES = 98,
@@ -1049,7 +1049,19 @@ public static final int
     CU_DEVICE_ATTRIBUTE_ONLY_PARTIAL_HOST_NATIVE_ATOMIC_SUPPORTED = 147,
     /** Device supports atomic reduction operations in stream batch memory operations */
     CU_DEVICE_ATTRIBUTE_ATOMIC_REDUCTION_SUPPORTED = 148,
-    CU_DEVICE_ATTRIBUTE_MAX = 149;
+    /** Device supports CIG streams with D3D12 */
+    CU_DEVICE_ATTRIBUTE_D3D12_CIG_STREAMS_SUPPORTED = 151,
+    /** Device supports mmap() of dmabuf file descriptors for CUDA device memory allocations */
+    CU_DEVICE_ATTRIBUTE_DMA_BUF_MMAP_SUPPORTED = 152,
+    /** Device supports unicast logical endpoints */
+    CU_DEVICE_ATTRIBUTE_LOGICAL_ENDPOINT_UNICAST_SUPPORTED = 153,
+    /** Device supports multicast logical endpoints */
+    CU_DEVICE_ATTRIBUTE_LOGICAL_ENDPOINT_MULTICAST_SUPPORTED = 154,
+    /** Device supports counted operations via logical endpoints */
+    CU_DEVICE_ATTRIBUTE_LOGICAL_ENDPOINT_COUNTED_OPS_SUPPORTED = 155,
+    /** Device supports unicast logical endpoint access on the owner device */
+    CU_DEVICE_ATTRIBUTE_LOGICAL_ENDPOINT_UNICAST_ACCESS_ON_OWNER_DEVICE_SUPPORTED = 156,
+    CU_DEVICE_ATTRIBUTE_MAX = 157;
 // Targeting ../cudart/CUdevprop_v1.java
 
 
@@ -1253,7 +1265,14 @@ public static final int
      */
     CU_FUNC_ATTRIBUTE_CLUSTER_SCHEDULING_POLICY_PREFERENCE = 15,
 
-    CU_FUNC_ATTRIBUTE_MAX = 16;
+    /**
+     * Whether the function can be updated on device. 1 means device node update is
+     * supported, 0 is unsupported.
+     * See ::cuFuncGetAttribute.
+     */
+    CU_FUNC_ATTRIBUTE_DEVICE_NODE_UPDATE_SUPPORTED = 16,
+
+    CU_FUNC_ATTRIBUTE_MAX = 17;
 
 /**
  * Function cache configurations
@@ -2102,7 +2121,9 @@ public static final int
                                                   <p>
                                                   To set the control value, supply a default value when creating the handle and/or
                                                   call ::cudaGraphSetConditional from device code.*/
-    CU_GRAPH_NODE_TYPE_CONDITIONAL      = 13;
+    CU_GRAPH_NODE_TYPE_CONDITIONAL      = 13,
+    /** Reserved */
+    CU_GRAPH_NODE_TYPE_RESERVED_16        = 16;
 
 /**
  * Type annotations that can be applied to graph edges as part of ::CUgraphEdgeData.
@@ -2222,13 +2243,13 @@ public static final int
 /** enum CUsharedMemoryMode */
 public static final int
     /** The default to use for shared memory on launch - uses current function attribute
-                                                       for ::CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES */
+                                                                for ::CU_FUNC_ATTRIBUTE_MAX_DYNAMIC_SHARED_SIZE_BYTES */
     CU_SHARED_MEMORY_MODE_DEFAULT = 0,
     /** Specifies that the dynamic shared size bytes requested must be a portable size within
-                                                       the bounds of ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK */
+                                                                the bounds of ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK */
     CU_SHARED_MEMORY_MODE_REQUIRE_PORTABLE = 1,
     /** Specifies that the dynamic shared size bytes requested may be a non-portable size but still within
-                                                       the bounds of ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN */
+                                                                the bounds of ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK_OPTIN */
     CU_SHARED_MEMORY_MODE_ALLOW_NON_PORTABLE = 2;
 
 /**
@@ -2636,7 +2657,6 @@ public static final int
      * to allow the API call to succeed.
      */
     CUDA_ERROR_CALL_REQUIRES_NEWER_DRIVER          = 36,
-
 
     /**  
      * This indicates that requested CUDA device is unavailable at the current
@@ -3236,6 +3256,11 @@ public static final int
      * with the stream has been destroyed, limiting the stream's operational capabilities.
      */
     CUDA_ERROR_STREAM_DETACHED                = 917,
+
+    /**
+     * This error indicates that a graph recapture failed and had to be terminated.
+     */
+    CUDA_ERROR_GRAPH_RECAPTURE_FAILURE        = 918,
 
     /**
      * This indicates that an unknown internal error has occurred.
@@ -6191,7 +6216,6 @@ public static native @Cast("CUresult") int cuCtxSetLimit(@Cast("CUlimit") int _l
  *   device runtime launches that can be made from this context.
  * - ::CU_LIMIT_MAX_L2_FETCH_GRANULARITY: L2 cache fetch granularity.
  * - ::CU_LIMIT_PERSISTING_L2_CACHE_SIZE: Persisting L2 cache size in bytes
- *
  * @param limit  - Limit to query
  * @param pvalue - Returned size of limit
  *
@@ -12234,6 +12258,15 @@ public static native @Cast("CUresult") int cuMipmappedArrayDestroy(CUmipmappedAr
 * supported platform, will give a DMA_BUF handle mapped via PCIE BAR1 or will
 * return an error otherwise.
 *
+* If the device attribute ::CU_DEVICE_ATTRIBUTE_DMA_BUF_MMAP_SUPPORTED is set
+* and a CUmemRangeHandleType::CU_MEM_RANGE_HANDLE_TYPE_DMA_BUF_FD is requested
+* for a device memory range then the returned dmabuf file descriptor may be
+* passed as the file descriptor argument to the mmap() system call.
+*
+* For device memory on x86 systems the mapping will be a write combined
+* mapping. On coherent ARM platforms these mappings will be regular cached
+* memory. On all other platforms these mappings will be uncached.
+*
 * @param handle [out]     - Pointer to the location where the returned handle will be stored.
 * @param dptr [in]        - Pointer to a valid CUDA device allocation. Must be aligned to host page size.
 * @param size [in]        - Length of the address range. Must be aligned to host page size.
@@ -13178,7 +13211,8 @@ public static native @Cast("CUresult") int cuMemPoolGetAccess(@Cast("CUmemAccess
  * ::CUmemPoolProps::CUmemLocation::id must specify the NUMA ID of the host memory node.
  * Specifying ::CU_MEM_LOCATION_TYPE_HOST_NUMA_CURRENT as the
  * ::CUmemPoolProps::CUmemLocation::type will result in ::CUDA_ERROR_INVALID_VALUE.
-* By default, the pool's memory will be accessible from the device it is allocated on.
+ *
+ * By default, the pool's memory will be accessible from the device it is allocated on.
  * In the case of pools created with ::CU_MEM_LOCATION_TYPE_HOST_NUMA or
  * ::CU_MEM_LOCATION_TYPE_HOST, their default accessibility will be from the
  * host CPU.
@@ -13249,11 +13283,12 @@ public static native @Cast("CUresult") int cuMemPoolDestroy(CUmemPoolHandle_st p
 /**
  * \brief Returns the default memory pool for a given location and allocation type
  *
- * The memory location can be of one of ::CU_MEM_LOCATION_TYPE_DEVICE, ::CU_MEM_LOCATION_TYPE_HOST or
- * ::CU_MEM_LOCATION_TYPE_HOST_NUMA. The allocation type can be one of ::CU_MEM_ALLOCATION_TYPE_PINNED or 
+ * The memory location can be of one of ::CU_MEM_LOCATION_TYPE_DEVICE, ::CU_MEM_LOCATION_TYPE_HOST,
+ * or ::CU_MEM_LOCATION_TYPE_HOST_NUMA. 
+ * The allocation type can be one of ::CU_MEM_ALLOCATION_TYPE_PINNED or 
  * ::CU_MEM_ALLOCATION_TYPE_MANAGED. When the allocation type is ::CU_MEM_ALLOCATION_TYPE_MANAGED, 
  * the location type can also be ::CU_MEM_LOCATION_TYPE_NONE to indicate no preferred location 
- * for the managed memory pool. In all other cases, the call returns ::CUDA_ERROR_INVALID_VALUE.
+ * for the managed memory pool.
  *
  * @return
  * ::CUDA_SUCCESS,
@@ -13272,10 +13307,13 @@ public static native @Cast("CUresult") int cuMemGetDefaultMemPool(@ByPtrPtr CUme
  * \brief Gets the current memory pool for a memory location and of a particular allocation type
  *
  * The memory location can be of one of ::CU_MEM_LOCATION_TYPE_DEVICE, ::CU_MEM_LOCATION_TYPE_HOST or
- * ::CU_MEM_LOCATION_TYPE_HOST_NUMA. The allocation type can be one of ::CU_MEM_ALLOCATION_TYPE_PINNED or 
+ * ::CU_MEM_LOCATION_TYPE_HOST_NUMA,
+ * or ::CU_MEM_LOCATION_TYPE_HOST_NUMA.
+ * The allocation type can be one of ::CU_MEM_ALLOCATION_TYPE_PINNED or 
  * ::CU_MEM_ALLOCATION_TYPE_MANAGED. When the allocation type is ::CU_MEM_ALLOCATION_TYPE_MANAGED, 
  * the location type can also be ::CU_MEM_LOCATION_TYPE_NONE to indicate no preferred location 
- * for the managed memory pool. In all other cases, the call returns ::CUDA_ERROR_INVALID_VALUE
+ * for the managed memory pool.
+ * In all other cases, the call returns ::CUDA_ERROR_INVALID_VALUE
  *
  * Returns the last pool provided to ::cuMemSetMemPool or ::cuDeviceSetMemPool for this location and allocation type
  * or the location's default memory pool if ::cuMemSetMemPool or ::cuDeviceSetMemPool for that allocType and location
@@ -13294,10 +13332,13 @@ public static native @Cast("CUresult") int cuMemGetMemPool(@ByPtrPtr CUmemPoolHa
  * \brief Sets the current memory pool for a memory location and allocation type
  *
  * The memory location can be of one of ::CU_MEM_LOCATION_TYPE_DEVICE, ::CU_MEM_LOCATION_TYPE_HOST or
- * ::CU_MEM_LOCATION_TYPE_HOST_NUMA. The allocation type can be one of ::CU_MEM_ALLOCATION_TYPE_PINNED or 
+ * or ::CU_MEM_LOCATION_TYPE_HOST_NUMA.
+ * The allocation type can be one of ::CU_MEM_ALLOCATION_TYPE_PINNED or 
  * ::CU_MEM_ALLOCATION_TYPE_MANAGED. When the allocation type is ::CU_MEM_ALLOCATION_TYPE_MANAGED, 
  * the location type can also be ::CU_MEM_LOCATION_TYPE_NONE to indicate no preferred location 
- * for the managed memory pool. In all other cases, the call returns ::CUDA_ERROR_INVALID_VALUE.
+ * for the managed memory pool.
+ * ::CU_MEM_ALLOCATION_TYPE_MANAGED can not be used with ::CU_MEM_LOCATION_TYPE_DEVICE_MEMORY_NODE.
+ * In all other cases, the call returns ::CUDA_ERROR_INVALID_VALUE.
  * 
  * When a memory pool is set as the current memory pool, the location parameter should be the same as the location of the pool.
  * The location and allocation type specified must match those of the pool otherwise ::CUDA_ERROR_INVALID_VALUE is returned.
@@ -13886,6 +13927,632 @@ public static native @Cast("CUresult") int cuMulticastUnbind(@Cast("CUmemGeneric
 public static native @Cast("CUresult") int cuMulticastGetGranularity(@Cast("size_t*") SizeTPointer granularity, @Cast("const CUmulticastObjectProp*") CUmulticastObjectProp_v1 prop, @Cast("CUmulticastGranularity_flags") int option);
 
 /** \} */ /* END CUDA_MULTICAST */
+
+/**
+ * \defgroup CUDA_LOGICAL_ENDPOINT Logical Endpoint
+ *
+ * ___MANBRIEF___ logical endpoint functions of the low-level CUDA driver
+ * API (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the logical endpoint functions of the
+ * low-level CUDA driver application programming interface.
+ *
+ * \{
+ */
+
+/** An ID that represents a logical endpoint */
+
+/** IPC handle types that can be requested/queried for a given logical endpoint */
+/** enum CUlogicalEndpointIpcHandleType */
+public static final int
+    CU_LOGICAL_ENDPOINT_IPC_HANDLE_TYPE_NONE = 0,
+    CU_LOGICAL_ENDPOINT_IPC_HANDLE_TYPE_FABRIC = 1;
+// Targeting ../cudart/CUlogicalEndpointFabricHandle.java
+
+
+
+/** Logical endpoint type */
+/** enum CUlogicalEndpointType */
+public static final int
+    CU_LOGICAL_ENDPOINT_TYPE_INVALID = 0,
+    CU_LOGICAL_ENDPOINT_TYPE_UNICAST = 1,
+    CU_LOGICAL_ENDPOINT_TYPE_MULTICAST = 2;
+
+/** Flags for ::CUlogicalEndpointProp */
+/** enum CUlogicalEndpointFlag */
+public static final int
+    /** Default flag for logical endpoint construction */
+    CU_LOGICAL_ENDPOINT_FLAG_NONE = 0x0,
+    /** Indicate the programmer's intention to use counted operations with the logical endpoint */
+    CU_LOGICAL_ENDPOINT_FLAG_COUNTED_OPS = 0x1;
+// Targeting ../cudart/CUlogicalEndpointProp.java
+
+
+
+/**
+ * \brief Reserves a range of logical endpoint ids
+ *
+ * Reserves a range of logical endpoint ids starting at \p *baseLeId and
+ * extending for \p count.
+ * The reserved ids can be used to create or import logical endpoints
+ * via ::cuLogicalEndpointCreate or ::cuLogicalEndpointImport respectively.
+ *
+ * @param baseLeId [out] If ::cuLogicalEndpointIdReserve returns CUDA_SUCCESS,
+ *                      *baseLeId contains the base logical endpoint id of the
+ *                      reserved logical endpoint id range.
+ * @param count [in] The number of logical endpoint ids to reserve.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointIdReserve(@Cast("CUlogicalEndpointId*") IntPointer baseLeId, @Cast("cuuint32_t") int count);
+public static native @Cast("CUresult") int cuLogicalEndpointIdReserve(@Cast("CUlogicalEndpointId*") IntBuffer baseLeId, @Cast("cuuint32_t") int count);
+public static native @Cast("CUresult") int cuLogicalEndpointIdReserve(@Cast("CUlogicalEndpointId*") int[] baseLeId, @Cast("cuuint32_t") int count);
+
+/**
+ * \brief Releases a range of logical endpoint ids
+ *
+ * Releases up to \p count logical endpoint ids starting at \p baseLeId.
+ * The range of ids represented by [\p baseLeId, \p baseLeId + \p count) must
+ * all be previously reserved. All logical endpoints in the range must be
+ * destroyed before they can be released.
+ *
+ * @param baseLeId [in] First logical endpoint id to be released back to the system.
+ * @param count [in] Number of logical endpoint ids to release back to the system.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointIdRelease(@Cast("CUlogicalEndpointId") int baseLeId, @Cast("cuuint32_t") int count);
+
+/**
+ * \brief Creates a logical endpoint with the requested properties and associates it with the logical endpoint id
+ *
+ * This creates a logical endpoint as described by \p prop. The number of
+ * participating devices is determined by the ::CUlogicalEndpointProp::type.
+ * If the type is ::CU_LOGICAL_ENDPOINT_TYPE_UNICAST then
+ * ::CUlogicalEndpointProp::unicast::device specifies the owner device of the
+ * unicast logical endpoint.
+ * If the type is ::CU_LOGICAL_ENDPOINT_TYPE_MULTICAST then
+ * ::CUlogicalEndpointProp::multicast::numDevices specifies the number of
+ * devices in the multicast logical endpoint team.
+ *
+ * Devices can be added to a multicast logical endpoint via
+ * ::cuLogicalEndpointAddDevice. After all the participating devices have been
+ * added, a call to ::cuLogicalEndpointQuery must be made to ensure that the
+ * logical endpoint is ready for memory binding and access.
+ *
+ * A unicast logical endpoint does not have a notion of adding devices via
+ * ::cuLogicalEndpointAddDevice. However, a call to ::cuLogicalEndpointQuery
+ * must still be made to ensure that the logical endpoint is ready for memory
+ * binding and access.
+ *
+ * Memory is bound to the logical endpoint via either
+ * ::cuLogicalEndpointBindAddr or ::cuLogicalEndpointBindMem, and can be unbound
+ * via ::cuLogicalEndpointUnbind. The total amount of memory that can be bound
+ * per device is specified by ::CUlogicalEndpointProp::size. This size must be a
+ * multiple of the value for \p bindAlignment as returned by
+ * ::cuLogicalEndpointGetLimits. The maximum size for the logical endpoint
+ * cannot exceed the value for \p maxSize as returned by
+ * ::cuLogicalEndpointGetLimits. The bind alignment and maximum size depend on
+ * the properties of the logical endpoint.
+ *
+ * @param leId [in] Logical endpoint id that will be associated with the newly
+ *                 created logical endpoint.
+ * @param prop [in] Properties of the logical endpoint to create.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ *
+ * @see
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointCreate(@Cast("CUlogicalEndpointId") int leId, @Const CUlogicalEndpointProp prop);
+
+/**
+ * \brief Associates a device to a multicast logical endpoint
+ *
+ * Associates a device to a logical endpoint. The type of the logical endpoint
+ * must be ::CU_LOGICAL_ENDPOINT_TYPE_MULTICAST.
+ * The added device will be a part of the multicast team of size specified by
+ * CUlogicalEndpointProp::multicast::numDevices during ::cuLogicalEndpointCreate.
+ * The association of the device to the multicast logical endpoint is permanent
+ * during the life time of the multicast logical endpoint. All devices must be
+ * added to the multicast logical endpoint before any memory can be bound to any
+ * device in the team.
+ * A multicast logical endpoint will not be ready for use until all devices have
+ * been added. User can query whether the logical endpoint is ready for use via
+ * ::cuLogicalEndpointQuery.
+ *
+ * @param leId [in] Logical endpoint id representing
+ *                a multicast logical endpoint.
+ * @param dev [in] Device that will be associated
+ *                with the multicast logical endpoint.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointAddDevice(@Cast("CUlogicalEndpointId") int leId, @Cast("CUdevice") int dev);
+
+/**
+ * \brief Removes the association of the logical endpoint from the logical endpoint id
+ *
+ * Removes the association between the logical endpoint id and the logical
+ * endpoint resources. Any memory bound by this process to any device associated
+ * with the logical endpoint will be unbound. If this was the last reference to
+ * the logical endpoint, all associated resources will be destroyed.
+ *
+ * @param leId [in] Logical endpoint id of the logical endpoint to be destroyed.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointDestroy(@Cast("CUlogicalEndpointId") int leId);
+
+/**
+ * \brief Bind a memory allocation represented by a virtual address to a logical endpoint
+ *
+ * Binds the memory allocation specified by its mapped address \p ptr to a
+ * logical endpoint represented by \p leId at the offset \p offset.
+ * The memory must have been allocated via ::cuMemCreate or ::cudaMallocAsync.
+ * The intended \p size of the bind, the \p offset in the logical endpoint range
+ * and \p ptr must be multiples of the value for \p bindAlignment as returned
+ * by ::cuLogicalEndpointGetLimits.
+ *
+ * The \p size cannot be larger than the size of the allocated memory.
+ * Similarly the \p size + \p offset cannot be larger than the total size of the
+ * logical endpoint.
+ *
+ * For device memory, i.e., type ::CU_MEM_LOCATION_TYPE_DEVICE, the memory
+ * allocation must have been created on the device specified by \p dev.
+ * For host NUMA memory, i.e., type ::CU_MEM_LOCATION_TYPE_HOST_NUMA, the memory
+ * allocation must have been created on the CPU NUMA node closest to \p dev.
+ * That is, the value returned when querying ::CU_DEVICE_ATTRIBUTE_HOST_NUMA_ID
+ * for \p dev, must be the CPU NUMA node where the memory was allocated.
+ * 
+ * For multicast endpoints, the device named by \p dev must have been added to
+ * the multicast team via ::cuLogicalEndpointAddDevice.
+ *
+ * For unicast endpoints the device named by \p dev must be the owner device
+ * specified during ::cuLogicalEndpointCreate via
+ * ::CUlogicalEndpointProp::unicast::device.
+ *
+ * Externally shareable as well as imported multicast endpoints can be bound
+ * only to externally shareable memory.
+ * Imported unicast endpoints cannot be bound to any memory.
+ *
+ * This call will return ::CUDA_ERROR_INVALID_VALUE if ::cuLogicalEndpointQuery
+ * has not been called for the logical endpoint to ensure that the endpoint is
+ * ready for memory binding.
+ *
+ * Note that this call will return ::CUDA_ERROR_OUT_OF_MEMORY if there are
+ * insufficient resources required to perform the bind. This call may also
+ * return ::CUDA_ERROR_SYSTEM_NOT_READY if the necessary system software is not
+ * initialized or running. This call may return ::CUDA_ERROR_ILLEGAL_STATE if the
+ * system configuration is in an illegal state. In such cases, to continue using
+ * logical endpoints, verify that the system configuration is in a valid state
+ * and all required driver daemons are running properly.
+ *
+ * @param leId [in] Logical endpoint to which memory will be associated.
+ * @param dev [in] Device on which the memory will be bound to the logical endpoint
+ * @param offset [in] Offset into the logical endpoint space.
+ * @param ptr [in] Virtual address of the memory allocation.
+ * @param size [in] Size of memory that will be bound to the logical endpoint.
+ * @param flags [in] Flags for future use, must be zero for now.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointBindAddr(@Cast("CUlogicalEndpointId") int leId, @Cast("CUdevice") int dev, @Cast("cuuint64_t") long offset, Pointer ptr, @Cast("cuuint64_t") long size, @Cast("unsigned long long") long flags);
+
+/**
+ * \brief Binds memory object represented by a handle to the logical endpoint
+ *
+ * Binds the memory allocation specified by \p memHandle to a logical endpoint
+ * represented by \p leId at the offset \p offset. The memory must have been
+ * allocated via ::cuMemCreate. The intended \p size of the
+ * bind, the offset in the logical endpoint range \p offset and the offset in
+ * the memory handle \p memOffset must be multiples of the value for
+ * \p bindAlignment as returned by ::cuLogicalEndpointGetLimits.
+ *
+ * The \p size + \p memOffset cannot be larger than the size of the allocated
+ * memory. Similarly the \p size + \p offset cannot be larger than the total
+ * size of the logical endpoint.
+ *
+ * For device memory, i.e., type ::CU_MEM_LOCATION_TYPE_DEVICE, the memory
+ * allocation must have been created on the device specified by \p dev.
+ * For host NUMA memory, i.e., type ::CU_MEM_LOCATION_TYPE_HOST_NUMA, the memory
+ * allocation must have been created on the CPU NUMA node closest to \p dev.
+ * That is, the value returned when querying ::CU_DEVICE_ATTRIBUTE_HOST_NUMA_ID
+ * for \p dev, must be the CPU NUMA node where the memory was allocated.
+ * 
+ * For multicast endpoints, the device named by \p dev must have been added to
+ * the multicast team via ::cuLogicalEndpointAddDevice.
+ *
+ * For unicast endpoints the device named by \p dev must be the owner device
+ * specified during ::cuLogicalEndpointCreate via
+ * ::CUlogicalEndpointProp::unicast::device.
+ *
+ * Externally shareable as well as imported multicast endpoints can be bound
+ * only to externally shareable memory.
+ * Imported unicast endpoints cannot be bound to any memory.
+ *
+ * This call will return ::CUDA_ERROR_INVALID_VALUE if ::cuLogicalEndpointQuery
+ * has not been called for the logical endpoint to ensure that the endpoint is
+ * ready for memory binding.
+ *
+ * Note that this call will return ::CUDA_ERROR_OUT_OF_MEMORY if there are
+ * insufficient resources required to perform the bind. This call may also
+ * return ::CUDA_ERROR_SYSTEM_NOT_READY if the necessary system software is not
+ * initialized or running. This call may return ::CUDA_ERROR_ILLEGAL_STATE if the
+ * system configuration is in an illegal state. In such cases, to continue using
+ * logical endpoints, verify that the system configuration is in a valid state
+ * and all required driver daemons are running properly.
+ *
+ * @param leId [in] Logical endpoint to which memory will be associated.
+ * @param dev [in] Device on which the memory will be bound to the logical endpoint
+ * @param offset [in] Offset into the logical endpoint space.
+ * @param memHandle [in] Handle representing a memory allocation.
+ * @param memOffset [in] Offset into the memory for the attachment
+ * @param size [in] Size of memory that will be bound to the logical endpoint.
+ * @param flags [in] Flags for future use, must be zero for now.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointBindMem(@Cast("CUlogicalEndpointId") int leId, @Cast("CUdevice") int dev, @Cast("cuuint64_t") long offset, @Cast("CUmemGenericAllocationHandle") long memHandle, @Cast("cuuint64_t") long memOffset, @Cast("cuuint64_t") long size, @Cast("unsigned long long") long flags);
+
+/**
+ * \brief Unbinds any binding at offset from the logical endpoint
+ *
+ * Unbinds any memory allocations bound to the logical endpoint on \p dev at
+ * \p offset and up to the given \p size. The intended \p size of the unbind and
+ * the offset in the logical endpoint range \p offset must be multiples of the
+ * value for \p bindAlignment as returned by ::cuLogicalEndpointGetLimits.
+ *
+ * \note
+ * The \p offset must correspond to a value specified during a bind call.
+ * The \p size must either match the bind call of the offset or be the combined
+ * \p size of multiple bind calls. The \p size + \p offset must fully enclose
+ * all bindings that are covered.
+ *
+ * @param leId [in] Logical endpoint id representing a logical endpoint.
+ * @param dev [in] Device on which the memory is bound to the logical endpoint
+ * @param offset [in] Offset into the logical endpoint.
+ * @param size [in] Desired size to unbind.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointUnbind(@Cast("CUlogicalEndpointId") int leId, @Cast("CUdevice") int dev, @Cast("cuuint64_t") long offset, @Cast("cuuint64_t") long size);
+
+/**
+ * \brief Exports a logical endpoint associated with leId to an IPC handle
+ *
+ * Given a logical endpoint id \p leId, create a shareable handle \p handle that
+ * can be used to share the logical endpoint with other processes. The recipient
+ * process can convert the shareable handle back into a logical endpoint id
+ * using ::cuLogicalEndpointImport.
+ * The implementation of what this \p handle is and how it can be transfered is
+ * defined by the requested handle type in \p handletype.
+ *
+ * @param handle [out] Pointer to the location in which to store the requested
+ *                    handle type.
+ * @param leId [in] Logical endpoint id of logical endpoint.
+ * @param handleType [in] Type of shareable handle requested.
+ *                       Defines type and size of the handle output parameter.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointExport(Pointer handle, @Cast("CUlogicalEndpointId") int leId, @Cast("CUlogicalEndpointIpcHandleType") int handleType);
+
+/**
+ * \brief Imports a logical endpoint from the given IPC handle and associates it with a logical endpoint id
+ *
+ * Imports a logical endpoint from the given IPC \p handle and associates it
+ * with the logical endpoint id specified by \p leId.
+ *
+ * If the current process cannot support the logical endpoint described by the
+ * shareable handle, this API will error as ::CUDA_ERROR_NOT_SUPPORTED.
+ * If \p handle is of type ::CU_LOGICAL_ENDPOINT_IPC_HANDLE_TYPE_FABRIC and the
+ * importer process does not have access permissions,
+ * then ::CUDA_ERROR_NOT_PERMITTED will be returned
+ *
+ * @param leId [in] Logical endpoint id that will be used to access the exported
+ *                 logical endpoint.
+ * @param handle [in] Shareable handle representing the logical endpoint that is
+ *                   to be imported.
+ * @param handleType [in] Handle type of the exported handle
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointGetLimits,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointImport(@Cast("CUlogicalEndpointId") int leId, @Const Pointer handle, @Cast("CUlogicalEndpointIpcHandleType") int handleType);
+
+/**
+ * \brief Calculates the minimum alignment and the maximum size for the given logical endpoint properties
+ *
+ * The \p bindAlignment can be used as a multiple for size and bind offset
+ * values. The \p maxSize is the maximum size of the logical endpoint.
+ * If \p maxSize is less than ::CUlogicalEndpointProp:size the user must adjust
+ * the request to the smaller value.
+ *
+ * @param bindAlignment [out] Minimum alignment granularity of the proposed
+ *                           logical endpoint.
+ * @param maxSize [out] Maximum size of the logical endpoint.
+ * @param prop [in] Properties of the logical endpoint.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointQuery
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointGetLimits(@Cast("cuuint64_t*") LongPointer bindAlignment, @Cast("cuuint64_t*") LongPointer maxSize, @Const CUlogicalEndpointProp prop);
+public static native @Cast("CUresult") int cuLogicalEndpointGetLimits(@Cast("cuuint64_t*") LongBuffer bindAlignment, @Cast("cuuint64_t*") LongBuffer maxSize, @Const CUlogicalEndpointProp prop);
+public static native @Cast("CUresult") int cuLogicalEndpointGetLimits(@Cast("cuuint64_t*") long[] bindAlignment, @Cast("cuuint64_t*") long[] maxSize, @Const CUlogicalEndpointProp prop);
+
+/**
+ * \brief Determines if all logical endpoints in the range have been successfully constructed
+ *
+ * Queries the driver to determine if all logical endpoints in the given range
+ * starting at \p leId and extending for \p count have been successfully
+ * constructed.
+ *
+ * Provides a mechanism to ensure that it is safe to begin using a logical
+ * endpoint ID. Using a logical endpoint ID before verifying that it is fully
+ * constructed can result in undefined behavior.
+ *
+ * This is not a blocking API, it returns immediately with a \p queryStatus of 0
+ * if any logical endpoint ID in the given range is not fully constructed,
+ * and a non-zero value otherwise.
+ *
+ * @param leId [in] First logical endpoint ID to be queried.
+ * @param count [in] Number of logical endpoints IDs to be queried.
+ * @param queryStatus [out] Status of the logical endpoints.
+ *                         Returns 0 if any logical endpoint in the given range
+ *                         is not fully constructed,
+ *                         and non-zero if all logical endpoints in the given
+ *                         range are fully constructed.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_SYSTEM_NOT_READY,
+ * ::CUDA_ERROR_ILLEGAL_STATE
+ *
+ *
+ * @see
+ * ::cuLogicalEndpointCreate,
+ * ::cuLogicalEndpointIdReserve,
+ * ::cuLogicalEndpointIdRelease,
+ * ::cuLogicalEndpointAddDevice,
+ * ::cuLogicalEndpointDestroy,
+ * ::cuLogicalEndpointBindAddr,
+ * ::cuLogicalEndpointBindMem,
+ * ::cuLogicalEndpointUnbind,
+ * ::cuLogicalEndpointExport,
+ * ::cuLogicalEndpointImport,
+ * ::cuLogicalEndpointGetLimits
+ */
+public static native @Cast("CUresult") int cuLogicalEndpointQuery(@Cast("CUlogicalEndpointId") int leId, @Cast("cuuint32_t") int count, IntPointer queryStatus);
+public static native @Cast("CUresult") int cuLogicalEndpointQuery(@Cast("CUlogicalEndpointId") int leId, @Cast("cuuint32_t") int count, IntBuffer queryStatus);
+public static native @Cast("CUresult") int cuLogicalEndpointQuery(@Cast("CUlogicalEndpointId") int leId, @Cast("cuuint32_t") int count, int[] queryStatus);
+
+/** \} */ /* END CUDA_LOGICAL_ENDPOINT */
 
 /**
  * \defgroup CUDA_UNIFIED Unified Addressing
@@ -14846,6 +15513,9 @@ public static native @Cast("CUresult") int cuStreamCreateWithPriority(@ByPtrPtr 
 /**
  * \brief Begins capture to CIG on a stream
  *
+ * Support for CIG streams with D3D12 can be determined using ::cuDeviceGetAttribute() with 
+ * ::CU_DEVICE_ATTRIBUTE_D3D12_CIG_STREAMS_SUPPORTED.
+ * 
  * Begin CIG (CUDA in Graphics) capture on \p hStream for the graphics API as provided in
  * \p streamCigCaptureParams. When a stream is in CIG capture mode, all operations
  * pushed into the stream will not be executed, but will instead be captured into
@@ -15327,6 +15997,59 @@ public static native @Cast("CUresult") int cuStreamAddCallback(CUstream_st hStre
  * ::cuThreadExchangeStreamCaptureMode
  */
 public static native @Cast("CUresult") int cuStreamBeginCapture(CUstream_st hStream, @Cast("CUstreamCaptureMode") int mode);
+
+/** enum CUgraphRecaptureStatus */
+public static final int
+     /** Node is eligible for update in an instantiated graph. */
+     CU_GRAPH_RECAPTURE_ELIGIBLE_FOR_UPDATE = 0,
+     /** Parameter changes in the node cannot be applied to an instantiated graph. */
+     CU_GRAPH_RECAPTURE_INELIGIBLE_FOR_UPDATE = 1,
+     /** Error while attempting to recapture the node. The recapture will be ended regardless of the return value from the callback. */
+     CU_GRAPH_RECAPTURE_ERROR = 2;
+// Targeting ../cudart/CUgraphRecaptureCallback.java
+
+
+
+/**
+ * \brief Begin graph capture on a stream to an existing graph.
+ *
+ * Begin graph capture on \p hStream to the existing \p hGraph. The node creation order while recapturing the graph
+ * must be identical to the original graph. The recapture will fail immediately for:
+ *   * Topology mismatches between the existing graph and the recaptured graph
+ *   * Parameter mismatches for memory allocation or free nodes
+ *
+ * Any other node parameter mismatches during recapture can be configured to call the function provided in \p callbackFunc.
+ * The recapture will fail immediately if the callback returns anything other than CUDA_SUCCESS.
+ *
+ * If the recapture fails for any reason, the \p graph will be in an undefined state and should be destroyed.
+ *
+ * See cuStreamBeginCapture for additional detail on beginning the capture.
+ *
+ * \note Any user objects associated with \p graph will be released prior to the recapture.
+ *
+ * @param hStream - Stream in which to initiate capture
+ * @param mode    - Controls the interaction of this capture sequence with other API
+ *                  calls that are potentially unsafe. For more details see
+ *                  ::cuThreadExchangeStreamCaptureMode.
+ * @param hGraph  - Existing CUDA graph to be captured into
+ * @param callbackFunc - Function that will be called for all parameter mismatches from the original graph
+ * @param userData - A generic pointer to user data that is passed into the callback function
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \notefnerr
+ *
+ * @see
+ * ::cuStreamCreate,
+ * ::cuStreamBeginCapture,
+ * ::cuStreamIsCapturing,
+ * ::cuStreamEndCapture,
+ * ::cuThreadExchangeStreamCaptureMode
+ */
+public static native @Cast("CUresult") int cuStreamBeginRecaptureToGraph(CUstream_st hStream, @Cast("CUstreamCaptureMode") int mode, CUgraph_st hGraph, CUgraphRecaptureCallback callbackFunc, Pointer userData);
 
 /**
  * \brief Begins graph capture on a stream to an existing graph
@@ -17939,146 +18662,6 @@ public static native @Cast("CUresult") int cuLaunchCooperativeKernel(CUfunc_st f
                                 @Cast("void**") @ByPtrPtr Pointer kernelParams);
 
 /**
- * \brief Launches CUDA functions on multiple devices where thread blocks can cooperate and synchronize as they execute
- *
- * @deprecated This function is deprecated as of CUDA 11.3.
- *
- * Invokes kernels as specified in the \p launchParamsList array where each element
- * of the array specifies all the parameters required to perform a single kernel launch.
- * These kernels can cooperate and synchronize as they execute. The size of the array is
- * specified by \p numDevices.
- *
- * No two kernels can be launched on the same device. All the devices targeted by this
- * multi-device launch must be identical. All devices must have a non-zero value for the
- * device attribute ::CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH.
- *
- * All kernels launched must be identical with respect to the compiled code. Note that
- * any __device__, __constant__ or __managed__ variables present in the module that owns
- * the kernel launched on each device, are independently instantiated on every device.
- * It is the application's responsibility to ensure these variables are initialized and
- * used appropriately.
- *
- * The size of the grids as specified in blocks, the size of the blocks themselves
- * and the amount of shared memory used by each thread block must also match across
- * all launched kernels.
- *
- * The streams used to launch these kernels must have been created via either ::cuStreamCreate
- * or ::cuStreamCreateWithPriority. The NULL stream or ::CU_STREAM_LEGACY or ::CU_STREAM_PER_THREAD
- * cannot be used.
- *
- * The total number of blocks launched per kernel cannot exceed the maximum number of blocks
- * per multiprocessor as returned by ::cuOccupancyMaxActiveBlocksPerMultiprocessor (or
- * ::cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) times the number of multiprocessors
- * as specified by the device attribute ::CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT. Since the
- * total number of blocks launched per device has to match across all devices, the maximum
- * number of blocks that can be launched per device will be limited by the device with the
- * least number of multiprocessors.
- *
- * The kernels cannot make use of CUDA dynamic parallelism.
- *
- * The ::CUDA_LAUNCH_PARAMS structure is defined as:
- * <pre>{@code
-        typedef struct CUDA_LAUNCH_PARAMS_st
-        {
-            CUfunction function;
-            unsigned int gridDimX;
-            unsigned int gridDimY;
-            unsigned int gridDimZ;
-            unsigned int blockDimX;
-            unsigned int blockDimY;
-            unsigned int blockDimZ;
-            unsigned int sharedMemBytes;
-            CUstream hStream;
-            void **kernelParams;
-        } CUDA_LAUNCH_PARAMS;
- * }</pre>
- * where:
- * - ::CUDA_LAUNCH_PARAMS::function specifies the kernel to be launched. All functions must
- *   be identical with respect to the compiled code.
- *   Note that you can also specify context-less kernel ::CUkernel by querying the handle
- *   using ::cuLibraryGetKernel() and then casting to ::CUfunction. In this case, the context to
- *   launch the kernel on be taken from the specified stream ::CUDA_LAUNCH_PARAMS::hStream.
- * - ::CUDA_LAUNCH_PARAMS::gridDimX is the width of the grid in blocks. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::gridDimY is the height of the grid in blocks. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::gridDimZ is the depth of the grid in blocks. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::blockDimX is the X dimension of each thread block. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::blockDimX is the Y dimension of each thread block. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::blockDimZ is the Z dimension of each thread block. This must match across
- *   all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::sharedMemBytes is the dynamic shared-memory size per thread block in bytes.
- *   This must match across all kernels launched.
- * - ::CUDA_LAUNCH_PARAMS::hStream is the handle to the stream to perform the launch in. This cannot
- *   be the NULL stream or ::CU_STREAM_LEGACY or ::CU_STREAM_PER_THREAD. The CUDA context associated
- *   with this stream must match that associated with ::CUDA_LAUNCH_PARAMS::function.
- * - ::CUDA_LAUNCH_PARAMS::kernelParams is an array of pointers to kernel parameters. If
- *   ::CUDA_LAUNCH_PARAMS::function has N parameters, then ::CUDA_LAUNCH_PARAMS::kernelParams
- *   needs to be an array of N pointers. Each of ::CUDA_LAUNCH_PARAMS::kernelParams[0] through
- *   ::CUDA_LAUNCH_PARAMS::kernelParams[N-1] must point to a region of memory from which the actual
- *   kernel parameter will be copied. The number of kernel parameters and their offsets and sizes
- *   do not need to be specified as that information is retrieved directly from the kernel's image.
- *
- * By default, the kernel won't begin execution on any GPU until all prior work in all the specified
- * streams has completed. This behavior can be overridden by specifying the flag
- * ::CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_PRE_LAUNCH_SYNC. When this flag is specified, each kernel
- * will only wait for prior work in the stream corresponding to that GPU to complete before it begins
- * execution.
- *
- * Similarly, by default, any subsequent work pushed in any of the specified streams will not begin
- * execution until the kernels on all GPUs have completed. This behavior can be overridden by specifying
- * the flag ::CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_POST_LAUNCH_SYNC. When this flag is specified,
- * any subsequent work pushed in any of the specified streams will only wait for the kernel launched
- * on the GPU corresponding to that stream to complete before it begins execution.
- *
- * Calling ::cuLaunchCooperativeKernelMultiDevice() sets persistent function state that is
- * the same as function state set through ::cuLaunchKernel API when called individually for each
- * element in \p launchParamsList.
- *
- * When kernels are launched via ::cuLaunchCooperativeKernelMultiDevice(), the previous
- * block shape, shared size and parameter info associated with each ::CUDA_LAUNCH_PARAMS::function
- * in \p launchParamsList is overwritten.
- *
- * Note that to use ::cuLaunchCooperativeKernelMultiDevice(), the kernels must either have
- * been compiled with toolchain version 3.2 or later so that it will
- * contain kernel parameter information, or have no kernel parameters.
- * If either of these conditions is not met, then ::cuLaunchCooperativeKernelMultiDevice() will
- * return ::CUDA_ERROR_INVALID_IMAGE.
- *
- * @param launchParamsList - List of launch parameters, one per device
- * @param numDevices       - Size of the \p launchParamsList array
- * @param flags            - Flags to control launch behavior
- *
- * @return
- * ::CUDA_SUCCESS,
- * ::CUDA_ERROR_DEINITIALIZED,
- * ::CUDA_ERROR_NOT_INITIALIZED,
- * ::CUDA_ERROR_INVALID_CONTEXT,
- * ::CUDA_ERROR_INVALID_HANDLE,
- * ::CUDA_ERROR_INVALID_IMAGE,
- * ::CUDA_ERROR_INVALID_VALUE,
- * ::CUDA_ERROR_LAUNCH_FAILED,
- * ::CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES,
- * ::CUDA_ERROR_LAUNCH_TIMEOUT,
- * ::CUDA_ERROR_LAUNCH_INCOMPATIBLE_TEXTURING,
- * ::CUDA_ERROR_COOPERATIVE_LAUNCH_TOO_LARGE,
- * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
- * \note_null_stream
- * \notefnerr
- *
- * @see ::cuCtxGetCacheConfig,
- * ::cuCtxSetCacheConfig,
- * ::cuFuncSetCacheConfig,
- * ::cuFuncGetAttribute,
- * ::cuLaunchCooperativeKernel,
- * ::cudaLaunchCooperativeKernelMultiDevice
- */
-public static native @Cast("CUresult") @Deprecated int cuLaunchCooperativeKernelMultiDevice(@Cast("CUDA_LAUNCH_PARAMS*") CUDA_LAUNCH_PARAMS_v1 launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags);
-
-/**
  * \brief Enqueues a host function call in a stream
  *
  * Enqueues a host function to run in a stream.  The function will be called
@@ -18594,6 +19177,145 @@ public static native @Cast("CUresult") @Deprecated int cuLaunchGrid(CUfunc_st f,
  */
 public static native @Cast("CUresult") @Deprecated int cuLaunchGridAsync(CUfunc_st f, int grid_width, int grid_height, CUstream_st hStream);
 
+/**
+ * \brief Launches CUDA functions on multiple devices where thread blocks can cooperate and synchronize as they execute
+ *
+ * @deprecated This function is deprecated as of CUDA 11.3.
+ *
+ * Invokes kernels as specified in the \p launchParamsList array where each element
+ * of the array specifies all the parameters required to perform a single kernel launch.
+ * These kernels can cooperate and synchronize as they execute. The size of the array is
+ * specified by \p numDevices.
+ *
+ * No two kernels can be launched on the same device. All the devices targeted by this
+ * multi-device launch must be identical. All devices must have a non-zero value for the
+ * device attribute ::CU_DEVICE_ATTRIBUTE_COOPERATIVE_MULTI_DEVICE_LAUNCH.
+ *
+ * All kernels launched must be identical with respect to the compiled code. Note that
+ * any __device__, __constant__ or __managed__ variables present in the module that owns
+ * the kernel launched on each device, are independently instantiated on every device.
+ * It is the application's responsibility to ensure these variables are initialized and
+ * used appropriately.
+ *
+ * The size of the grids as specified in blocks, the size of the blocks themselves
+ * and the amount of shared memory used by each thread block must also match across
+ * all launched kernels.
+ *
+ * The streams used to launch these kernels must have been created via either ::cuStreamCreate
+ * or ::cuStreamCreateWithPriority. The NULL stream or ::CU_STREAM_LEGACY or ::CU_STREAM_PER_THREAD
+ * cannot be used.
+ *
+ * The total number of blocks launched per kernel cannot exceed the maximum number of blocks
+ * per multiprocessor as returned by ::cuOccupancyMaxActiveBlocksPerMultiprocessor (or
+ * ::cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) times the number of multiprocessors
+ * as specified by the device attribute ::CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT. Since the
+ * total number of blocks launched per device has to match across all devices, the maximum
+ * number of blocks that can be launched per device will be limited by the device with the
+ * least number of multiprocessors.
+ *
+ * The kernels cannot make use of CUDA dynamic parallelism.
+ *
+ * The ::CUDA_LAUNCH_PARAMS structure is defined as:
+ * <pre>{@code
+        typedef struct CUDA_LAUNCH_PARAMS_st
+        {
+            CUfunction function;
+            unsigned int gridDimX;
+            unsigned int gridDimY;
+            unsigned int gridDimZ;
+            unsigned int blockDimX;
+            unsigned int blockDimY;
+            unsigned int blockDimZ;
+            unsigned int sharedMemBytes;
+            CUstream hStream;
+            void **kernelParams;
+        } CUDA_LAUNCH_PARAMS;
+ * }</pre>
+ * where:
+ * - ::CUDA_LAUNCH_PARAMS::function specifies the kernel to be launched. All functions must
+ *   be identical with respect to the compiled code.
+ *   Note that you can also specify context-less kernel ::CUkernel by querying the handle
+ *   using ::cuLibraryGetKernel() and then casting to ::CUfunction. In this case, the context to
+ *   launch the kernel on be taken from the specified stream ::CUDA_LAUNCH_PARAMS::hStream.
+ * - ::CUDA_LAUNCH_PARAMS::gridDimX is the width of the grid in blocks. This must match across
+ *   all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::gridDimY is the height of the grid in blocks. This must match across
+ *   all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::gridDimZ is the depth of the grid in blocks. This must match across
+ *   all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::blockDimX is the X dimension of each thread block. This must match across
+ *   all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::blockDimX is the Y dimension of each thread block. This must match across
+ *   all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::blockDimZ is the Z dimension of each thread block. This must match across
+ *   all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::sharedMemBytes is the dynamic shared-memory size per thread block in bytes.
+ *   This must match across all kernels launched.
+ * - ::CUDA_LAUNCH_PARAMS::hStream is the handle to the stream to perform the launch in. This cannot
+ *   be the NULL stream or ::CU_STREAM_LEGACY or ::CU_STREAM_PER_THREAD. The CUDA context associated
+ *   with this stream must match that associated with ::CUDA_LAUNCH_PARAMS::function.
+ * - ::CUDA_LAUNCH_PARAMS::kernelParams is an array of pointers to kernel parameters. If
+ *   ::CUDA_LAUNCH_PARAMS::function has N parameters, then ::CUDA_LAUNCH_PARAMS::kernelParams
+ *   needs to be an array of N pointers. Each of ::CUDA_LAUNCH_PARAMS::kernelParams[0] through
+ *   ::CUDA_LAUNCH_PARAMS::kernelParams[N-1] must point to a region of memory from which the actual
+ *   kernel parameter will be copied. The number of kernel parameters and their offsets and sizes
+ *   do not need to be specified as that information is retrieved directly from the kernel's image.
+ *
+ * By default, the kernel won't begin execution on any GPU until all prior work in all the specified
+ * streams has completed. This behavior can be overridden by specifying the flag
+ * ::CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_PRE_LAUNCH_SYNC. When this flag is specified, each kernel
+ * will only wait for prior work in the stream corresponding to that GPU to complete before it begins
+ * execution.
+ *
+ * Similarly, by default, any subsequent work pushed in any of the specified streams will not begin
+ * execution until the kernels on all GPUs have completed. This behavior can be overridden by specifying
+ * the flag ::CUDA_COOPERATIVE_LAUNCH_MULTI_DEVICE_NO_POST_LAUNCH_SYNC. When this flag is specified,
+ * any subsequent work pushed in any of the specified streams will only wait for the kernel launched
+ * on the GPU corresponding to that stream to complete before it begins execution.
+ *
+ * Calling ::cuLaunchCooperativeKernelMultiDevice() sets persistent function state that is
+ * the same as function state set through ::cuLaunchKernel API when called individually for each
+ * element in \p launchParamsList.
+ *
+ * When kernels are launched via ::cuLaunchCooperativeKernelMultiDevice(), the previous
+ * block shape, shared size and parameter info associated with each ::CUDA_LAUNCH_PARAMS::function
+ * in \p launchParamsList is overwritten.
+ *
+ * Note that to use ::cuLaunchCooperativeKernelMultiDevice(), the kernels must either have
+ * been compiled with toolchain version 3.2 or later so that it will
+ * contain kernel parameter information, or have no kernel parameters.
+ * If either of these conditions is not met, then ::cuLaunchCooperativeKernelMultiDevice() will
+ * return ::CUDA_ERROR_INVALID_IMAGE.
+ *
+ * @param launchParamsList - List of launch parameters, one per device
+ * @param numDevices       - Size of the \p launchParamsList array
+ * @param flags            - Flags to control launch behavior
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_HANDLE,
+ * ::CUDA_ERROR_INVALID_IMAGE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_LAUNCH_FAILED,
+ * ::CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES,
+ * ::CUDA_ERROR_LAUNCH_TIMEOUT,
+ * ::CUDA_ERROR_LAUNCH_INCOMPATIBLE_TEXTURING,
+ * ::CUDA_ERROR_COOPERATIVE_LAUNCH_TOO_LARGE,
+ * ::CUDA_ERROR_SHARED_OBJECT_INIT_FAILED
+ * \note_null_stream
+ * \notefnerr
+ *
+ * @see ::cuCtxGetCacheConfig,
+ * ::cuCtxSetCacheConfig,
+ * ::cuFuncSetCacheConfig,
+ * ::cuFuncGetAttribute,
+ * ::cuLaunchCooperativeKernel,
+ * ::cudaLaunchCooperativeKernelMultiDevice
+ */
+public static native @Cast("CUresult") @Deprecated int cuLaunchCooperativeKernelMultiDevice(@Cast("CUDA_LAUNCH_PARAMS*") CUDA_LAUNCH_PARAMS_v1 launchParamsList, @Cast("unsigned int") int numDevices, @Cast("unsigned int") int flags);
 
 /**
  * \brief Adds a texture-reference to the function's argument list
@@ -18674,6 +19396,7 @@ public static native @Cast("CUresult") @Deprecated int cuParamSetTexRef(CUfunc_s
 public static native @Cast("CUresult") @Deprecated int cuFuncSetSharedMemConfig(CUfunc_st hfunc, @Cast("CUsharedconfig") int config);
 
 /** \} */ /* END CUDA_EXEC_DEPRECATED */
+
 
 /**
  * \defgroup CUDA_GRAPH Graph Management
@@ -24710,6 +25433,9 @@ public static final int
     CU_COREDUMP_SKIP_ABORT                   = (1 << 4),
     CU_COREDUMP_SKIP_CONSTBANK_MEMORY        = (1 << 5),
     CU_COREDUMP_GZIP_COMPRESS                = (1 << 6),
+    CU_COREDUMP_FAULTED_CONTEXTS_ONLY        = (1 << 7),
+    CU_COREDUMP_NO_ERRBAR_AT_EXIT            = (1 << 30),
+    CU_COREDUMP_LOG_ONLY                     = (1 << 31),
 
     CU_COREDUMP_LIGHTWEIGHT_FLAGS = CU_COREDUMP_SKIP_NONRELOCATED_ELF_IMAGES
                                      | CU_COREDUMP_SKIP_GLOBAL_MEMORY
@@ -24766,6 +25492,17 @@ public static final int
  *      + ::CU_COREDUMP_SKIP_ABORT - If set, GPU exceptions will not raise an abort() in the host CPU
  *          process. Same functional goal as ::CU_COREDUMP_TRIGGER_HOST but better reflects the default
  *          behavior.
+ *      + ::CU_COREDUMP_SKIP_CONSTBANK_MEMORY - Coredump will not include constbank memory.
+ *      + ::CU_COREDUMP_GZIP_COMPRESS - The generated coredump will be compressed with gzip, and .gz
+ *          suffix will be appended to the filename, if it's not a part of it already.
+ *      + ::CU_COREDUMP_FAULTED_CONTEXTS_ONLY - The coredump will only include contexts that have
+ *          encountered an exception or a trap.
+ *      + ::CU_COREDUMP_NO_ERRBAR_AT_EXIT - By default, when coredumps are requested, the GPU will ensure
+ *          memory faults and other errors prevent warps from exiting, if possible. This can potentially
+ *          affect the performance of the application. Setting this flag will disable this functionality,
+ *          making it possible for faulted warps to exit, but also avoiding the potential performance hit.
+ *      + ::CU_COREDUMP_LOG_ONLY - Setting this flag will disable actual generation of the coredump file,
+ *          but exception details will still be logged.
  *
  * @param attrib - The enum defining which value to fetch.
  * @param value - void* containing the requested data.
@@ -24835,6 +25572,17 @@ public static native @Cast("CUresult") int cuCoredumpGetAttribute(@Cast("CUcored
  *      + ::CU_COREDUMP_SKIP_ABORT - If set, GPU exceptions will not raise an abort() in the host CPU
  *          process. Same functional goal as ::CU_COREDUMP_TRIGGER_HOST but better reflects the default
  *          behavior.
+ *      + ::CU_COREDUMP_SKIP_CONSTBANK_MEMORY - Coredump will not include constbank memory.
+ *      + ::CU_COREDUMP_GZIP_COMPRESS - The generated coredump will be compressed with gzip, and .gz
+ *          suffix will be appended to the filename, if it's not a part of it already.
+ *      + ::CU_COREDUMP_FAULTED_CONTEXTS_ONLY - The coredump will only include contexts that have
+ *          encountered an exception or a trap.
+ *      + ::CU_COREDUMP_NO_ERRBAR_AT_EXIT - By default, when coredumps are requested, the GPU will ensure
+ *          memory faults and other errors prevent warps from exiting, if possible. This can potentially
+ *          affect the performance of the application. Setting this flag will disable this functionality,
+ *          making it possible for faulted warps to exit, but also avoiding the potential performance hit.
+ *      + ::CU_COREDUMP_LOG_ONLY - Setting this flag will disable actual generation of the coredump file,
+ *          but exception details will still be logged.
  *
  * @param attrib - The enum defining which value to fetch.
  * @param value - void* containing the requested data.
@@ -24906,6 +25654,23 @@ public static native @Cast("CUresult") int cuCoredumpGetAttributeGlobal(@Cast("C
  *      + ::CU_COREDUMP_SKIP_ABORT - If set, GPU exceptions will not raise an abort() in the host CPU
  *          process. Same functional goal as ::CU_COREDUMP_TRIGGER_HOST but better reflects the default
  *          behavior.
+ *      + ::CU_COREDUMP_SKIP_CONSTBANK_MEMORY - Coredump will not include constbank memory.
+ *      + ::CU_COREDUMP_GZIP_COMPRESS - The generated coredump will be compressed with gzip, and .gz
+ *          suffix will be appended to the filename, if it's not a part of it already.
+ *      + ::CU_COREDUMP_FAULTED_CONTEXTS_ONLY - The coredump will only include contexts that have
+ *          encountered an exception or a trap.
+ *      + ::CU_COREDUMP_NO_ERRBAR_AT_EXIT - By default, when coredumps are requested, the GPU will ensure
+ *          memory faults and other errors prevent warps from exiting, if possible. This can potentially
+ *          affect the performance of the application. Setting this flag will disable this functionality,
+ *          making it possible for faulted warps to exit, but also avoiding the potential performance hit.
+ *      + ::CU_COREDUMP_LOG_ONLY - Setting this flag will disable actual generation of the coredump file,
+ *          but exception details will still be logged.
+ *
+ * \note ::CU_COREDUMP_GENERATION_FLAGS replaces all previously set coredump flags.
+ *       Mixing ::CU_COREDUMP_GENERATION_FLAGS with the deprecated boolean attributes
+ *       (::CU_COREDUMP_TRIGGER_HOST, ::CU_COREDUMP_LIGHTWEIGHT) can result in undefined behavior.
+ *       To avoid issues, either use only ::CU_COREDUMP_GENERATION_FLAGS or combine all desired
+ *       flag bits (including ::CU_COREDUMP_SKIP_ABORT) in a single call.
  *
  * @param attrib - The enum defining which value to set.
  * @param value - void* containing the requested data.
@@ -24985,6 +25750,23 @@ public static native @Cast("CUresult") int cuCoredumpSetAttribute(@Cast("CUcored
  *      + ::CU_COREDUMP_SKIP_ABORT - If set, GPU exceptions will not raise an abort() in the host CPU
  *          process. Same functional goal as ::CU_COREDUMP_TRIGGER_HOST but better reflects the default
  *          behavior.
+ *      + ::CU_COREDUMP_SKIP_CONSTBANK_MEMORY - Coredump will not include constbank memory.
+ *      + ::CU_COREDUMP_GZIP_COMPRESS - The generated coredump will be compressed with gzip, and .gz
+ *          suffix will be appended to the filename, if it's not a part of it already.
+ *      + ::CU_COREDUMP_FAULTED_CONTEXTS_ONLY - The coredump will only include contexts that have
+ *          encountered an exception or a trap.
+ *      + ::CU_COREDUMP_NO_ERRBAR_AT_EXIT - By default, when coredumps are requested, the GPU will ensure
+ *          memory faults and other errors prevent warps from exiting, if possible. This can potentially
+ *          affect the performance of the application. Setting this flag will disable this functionality,
+ *          making it possible for faulted warps to exit, but also avoiding the potential performance hit.
+ *      + ::CU_COREDUMP_LOG_ONLY - Setting this flag will disable actual generation of the coredump file,
+ *          but exception details will still be logged.
+ *
+ * \note ::CU_COREDUMP_GENERATION_FLAGS replaces all previously set coredump flags.
+ *       Mixing ::CU_COREDUMP_GENERATION_FLAGS with the deprecated boolean attributes
+ *       (::CU_COREDUMP_TRIGGER_HOST, ::CU_COREDUMP_LIGHTWEIGHT) can result in undefined behavior.
+ *       To avoid issues, either use only ::CU_COREDUMP_GENERATION_FLAGS or combine all desired
+ *       flag bits (including ::CU_COREDUMP_SKIP_ABORT) in a single call.
  *
  * @param attrib - The enum defining which value to set.
  * @param value - void* containing the requested data.
@@ -25108,9 +25890,14 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 
 
 
+/**
+ * \typedef enum CUgreenCtxCreate_flags
+ * Flags for green context creation
+ */
 /** enum CUgreenCtxCreate_flags */
 public static final int
-    /** Required. Creates a default stream to use inside the green context */
+    CU_GREEN_CTX_NONE = 0x0,
+    /** Creates a default stream to use inside the green context */
     CU_GREEN_CTX_DEFAULT_STREAM = 0x1;
 
 /**
@@ -25199,10 +25986,11 @@ public static final int
  * @param phCtx - Pointer for the output handle to the green context
  * @param desc - Descriptor generated via ::cuDevResourceGenerateDesc which contains the set of resources to be used
  * @param dev - Device on which to create the green context.
- * @param flags - One of the supported green context creation flags. \p CU_GREEN_CTX_DEFAULT_STREAM is required.
+ * @param flags - One of the supported green context creation flags.
  *
  * The supported flags are:
- * - \p CU_GREEN_CTX_DEFAULT_STREAM : Creates a default stream to use inside the green context. Required.
+ * - \p CU_GREEN_CTX_NONE : Default behavior.
+ * - \p CU_GREEN_CTX_DEFAULT_STREAM : Creates a default stream to use inside the green context.
  *
  * @return
  * ::CUDA_SUCCESS,
@@ -25253,18 +26041,29 @@ public static native @Cast("CUresult") int cuGreenCtxCreate(@ByPtrPtr CUgreenCtx
 public static native @Cast("CUresult") int cuGreenCtxDestroy(CUgreenCtx_st hCtx);
 
 /**
- * \brief Converts a green context into the primary context
+ * \brief Returns a ::CUcontext handle for a green context
  *
- * The API converts a green context into the primary context returned in \p pContext. It is important
- * to note that the converted context \p pContext is a normal primary context but with
- * the resources of the specified green context \p hCtx. Once converted, it can then
- * be used to set the context current with ::cuCtxSetCurrent or with any of the CUDA APIs
- * that accept a CUcontext parameter.
+ * This API returns in \p pContext a ::CUcontext handle that represents the specified green context \p hCtx.
+ * The returned handle can be passed to CUDA APIs that accept a ::CUcontext and will be treated as if it
+ * were a primary context, while still honoring the resources and configuration associated with \p hCtx as applicable.
  *
- * Users are expected to call this API before calling any CUDA APIs that accept a
- * CUcontext. Failing to do so will result in the APIs returning ::CUDA_ERROR_INVALID_CONTEXT.
+ * Applications that wish to use a green context with CUDA APIs that require a ::CUcontext must use this API to obtain
+ * a handle to a ::CUcontext representing the green context.
+ * Otherwise, passing a green context to such APIs will fail with ::CUDA_ERROR_INVALID_CONTEXT.
+ * 
+ * The ::CUcontext returned by ::cuCtxFromGreenCtx may be passed to CUDA Driver APIs that accept a ::CUcontext.
+ *  - For APIs whose semantics are independent of green context resources, the operation is performed identically to
+ *    how it would perform with a primary context.
+ *  - For APIs whose behavior depends on green context resources (for example, kernel launch), the operation is
+ *    performed using the resources and configuration of the specified green context \p hCtx.
  *
- * @param pContext Returned primary context with green context resources
+ * This call does not create a new independent context and does not change the underlying context lifetime.
+ * The validity of the returned \p pContext is tied to \p hCtx, and no additional destruction or release is
+ * required beyond correctly managing \p hCtx with the green context APIs.
+ * Destroying \p pContext via ::cuCtxDestroy is undefined behavior.
+ *
+ *
+ * @param pContext Returned ::CUcontext with green context resources
  * @param hCtx Green context to convert
  *
  * @return
@@ -25478,7 +26277,7 @@ CU_DEV_SM_RESOURCE_GROUP_PARAMS params { 0, 0, 0, 0 };
 // Example 2
 // Assuming the device has 10+ SMs, the result will have 10 SMs that are co-scheduled in groups of 2 SMs.
 // The rest is placed in the optional remainder.
-CU_DEV_SM_RESOURCE_GROUP_PARAMS params { 10, 2, 0, 0};
+CU_DEV_SM_RESOURCE_GROUP_PARAMS params { 10, 2, 0, 0 };
 // Setting the coscheduledSmCount to 2 guarantees that we can always have a valid result
 // as long as the SM count is less than or equal to the input resource SM count.
  * }</pre>
@@ -27706,6 +28505,10 @@ public static final int
      * with the stream has been destroyed, limiting the stream's operational capabilities.
      */
     cudaErrorStreamDetached               = 917,
+    /**
+     * This error indicates that a graph recapture failed and had to be terminated.
+     */
+    cudaErrorGraphRecaptureFailure        = 918,
 
     /**
      * This indicates that an unknown internal error has occurred.
@@ -27780,7 +28583,35 @@ public static final int
     /** 4 channel unsigned normalized block-compressed (BC7 compression) format with sRGB encoding */
     cudaChannelFormatKindUnsignedBlockCompressed7SRGB   = 30,
     /** 4 channel unsigned normalized (10-bit, 10-bit, 10-bit, 2-bit) format */
-    cudaChannelFormatKindUnsignedNormalized1010102      = 31;
+    cudaChannelFormatKindUnsignedNormalized1010102      = 31,
+    /** 4 channel unsigned 8-bit packed format, with 4:2:2 sampling */
+    cudaChannelFormatKindUnsigned8Packed422       = 32,
+    /** 4 channel unsigned 8-bit packed format, with 4:4:4 sampling */
+    cudaChannelFormatKindUnsigned8Packed444       = 33,
+    /** 3 channel unsigned 8-bit semi-planar format, with 4:2:0 sampling */
+    cudaChannelFormatKindUnsigned8SemiPlanar420   = 34,
+    /** 3 channel unsigned 16-bit semi-planar format, with 4:2:0 sampling */
+    cudaChannelFormatKindUnsigned16SemiPlanar420  = 35,
+    /** 3 channel unsigned 8-bit semi-planar format, with 4:2:2 sampling */
+    cudaChannelFormatKindUnsigned8SemiPlanar422   = 36,
+    /** 3 channel unsigned 16-bit semi-planar format, with 4:2:2 sampling */
+    cudaChannelFormatKindUnsigned16SemiPlanar422  = 37,
+    /** 3 channel unsigned 8-bit semi-planar format, with 4:4:4 sampling */
+    cudaChannelFormatKindUnsigned8SemiPlanar444   = 38,
+    /** 3 channel unsigned 16-bit semi-planar format, with 4:4:4 sampling */
+    cudaChannelFormatKindUnsigned16SemiPlanar444  = 39,
+    /** 3 channel unsigned 8-bit planar format, with 4:2:0 sampling */
+    cudaChannelFormatKindUnsigned8Planar420       = 40,
+    /** 3 channel unsigned 16-bit planar format, with 4:2:0 sampling */
+    cudaChannelFormatKindUnsigned16Planar420      = 41,
+    /** 3 channel unsigned 8-bit planar format, with 4:2:2 sampling */
+    cudaChannelFormatKindUnsigned8Planar422       = 42,
+    /** 3 channel unsigned 16-bit planar format, with 4:2:2 sampling */
+    cudaChannelFormatKindUnsigned16Planar422      = 43,
+    /** 3 channel unsigned 8-bit planar format, with 4:4:4 sampling */
+    cudaChannelFormatKindUnsigned8Planar444       = 44,
+    /** 3 channel unsigned 16-bit planar format, with 4:4:4 sampling */
+    cudaChannelFormatKindUnsigned16Planar444      = 45;
 
 /**
  * An opaque descriptor handle. The descriptor encapsulates multiple created and configured resources.
@@ -27913,6 +28744,18 @@ public static final int
     /** Stream is part of a capture sequence that
                                                    has been invalidated, but not terminated */
     cudaStreamCaptureStatusInvalidated = 2;
+
+/**
+ * Possible recapture statuses that can be returned to the user callback
+ */
+/** enum cudaGraphRecaptureStatus */
+public static final int
+    /** Node is eligible for update in an instantiated graph. */
+    cudaGraphRecaptureEligibleForUpdate = 0,
+    /** Parameter changes in the node cannot be applied to an instantiated graph. */
+    cudaGraphRecaptureIneligibleForUpdate = 1,
+    /** Error while attempting to recapture the node. The recapture will be ended regardless of the return value from the callback. */
+    cudaGraphRecaptureError = 2;
 
 /**
  * Possible modes for stream capture thread interactions. For more details see
@@ -28121,6 +28964,19 @@ public static final int
 // Targeting ../cudart/cudaResourceViewDesc.java
 
 
+
+/**
+ * Shared memory related attributes for use with ::cuLaunchKernelEx
+ */
+/** enum cudaSharedMemoryMode */
+public static final int
+    /** The default to use for allowing non-portable shared memory size on launch - uses current function attributes
+                                                          for ::cudaFuncAttributeMaxDynamicSharedMemorySize */
+    cudaSharedMemoryModeDefault = 0,
+    /** Specifies that the shared memory size requested must be a portable size within ::cudaDevAttrMaxSharedMemoryPerBlock*/
+    cudaSharedMemoryModeRequirePortable = 1,
+    /** Specifies that the shared memory size requested may be a non-portable size up to ::cudaDevAttrMaxSharedMemoryPerBlockOptin*/
+    cudaSharedMemoryModeAllowNonPortable = 2;
 // Targeting ../cudart/cudaPointerAttributes.java
 
 
@@ -28568,8 +29424,12 @@ public static final int
     cudaDevAttrReserved145                    = 145,
     /** Link between the device and the host supports only some native atomic operations */
     cudaDevAttrOnlyPartialHostNativeAtomicSupported = 147,
+    /** Device supports atomic reduction operations in stream batch memory operations */
+    cudaDevAttrAtomicReductionSupported       = 148,
+    /** Device supports CIG streams */
+    cudaDevAttrCigStreamsSupported            = 151,
 
-    cudaDevAttrMax = 148;
+    cudaDevAttrMax = 152;
 
 /**
  * CUDA memory pool attributes
@@ -29519,7 +30379,9 @@ public static final int
                                               To set the control value, supply a default value when creating the handle and/or
                                               call ::cudaGraphSetConditional from device code.*/
     cudaGraphNodeTypeConditional = 0x0d,
-    cudaGraphNodeTypeCount = 0x0d + 1;
+    /** Reserved. */
+    cudaGraphNodeTypeReserved16  = 0x10,
+    cudaGraphNodeTypeCount = 0x10 + 1;
 
 /**
  * Child graph node ownership
@@ -29774,19 +30636,6 @@ public static final int
     cudaLaunchPortableClusterModeAllowNonPortable = 2;
 
 /**
- * Shared memory related attributes for use with ::cuLaunchKernelEx
- */
-/** enum cudaSharedMemoryMode */
-public static final int
-    /** The default to use for allowing non-portable shared memory size on launch - uses current function attributes
-                                                    for ::cudaFuncAttributeMaxDynamicSharedMemorySize */
-    cudaSharedMemoryModeDefault = 0,
-    /** Specifies that the shared memory size requested must be a portable size within ::cudaDevAttrMaxSharedMemoryPerBlock*/
-    cudaSharedMemoryModeRequirePortable = 1,
-    /** Specifies that the shared memory size requested may be a non-portable size up to ::cudaDevAttrMaxSharedMemoryPerBlockOptin*/
-    cudaSharedMemoryModeAllowNonPortable = 2;
-
-/**
  * Launch attributes enum; used as id field of ::cudaLaunchAttribute
  */
 /** enum cudaLaunchAttributeID */
@@ -30037,6 +30886,22 @@ public static final int
 public static final int
     cudaLogLevelError = 0,
     cudaLogLevelWarning = 1;
+
+/** Fabric operation status source */
+/** enum cudaFabricOpStatusSource */
+public static final int
+    /** 1B-aligned 1B-wide status from an mbarrier.layout::v1 */
+    cudaFabricOpStatusSourceMbarrierV1 = 0x0,
+
+    cudaFabricOpStatusSourceMax        = 0x7FFFFFFF;
+
+/** Fabric operation status info */
+/** enum cudaFabricOpStatusInfo */
+public static final int
+    cudaFabricOpStatusInfoSuccess           = 0x0,
+    cudaFabricOpStatusInfoLast              = cudaFabricOpStatusInfoSuccess,
+
+    cudaFabricOpStatusInfoMax               = 0x7FFFFFFF;
 
 /** \} */
 /** \} */ /* END CUDART_TYPES */
@@ -30887,7 +31752,7 @@ public static final int
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  13020;
+public static final int CUDART_VERSION =  13030;
 
 // #if defined(__CUDA_API_VER_MAJOR__) && defined(__CUDA_API_VER_MINOR__)
 public static native @MemberGetter int __CUDART_API_VERSION();
@@ -33194,6 +34059,58 @@ public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_
  * ::cudaThreadExchangeStreamCaptureMode
  */
 public static native @Cast("cudaError_t") int cudaStreamBeginCapture(CUstream_st stream, @Cast("cudaStreamCaptureMode") int mode);
+// Targeting ../cudart/cudaGraphRecaptureCallback_t.java
+
+
+// Targeting ../cudart/cudaGraphRecaptureCallbackData.java
+
+
+
+/**
+ * \brief Begin graph capture on a stream to an existing graph.
+ *
+ * Begin graph capture on \p stream to the existing \p graph. The node creation order while recapturing the graph
+ * must be identical to the original graph. The recapture will fail immediately for:
+ *   * Topology mismatches between the existing graph and the recaptured graph
+ *   * Parameter mismatches for memory allocation or free nodes
+ *
+ * Any other node parameter mismatches during recapture can be configured to call the function provided in \p callbackFunc.
+ * The recapture will fail immediately if the callback returns anything other than cudaSuccess. 
+ *
+ * If the recapture fails for any reason, the \p graph will be in an undefined state and should be destroyed.
+ *
+ * See cudaStreamBeginCapture for additional detail on beginning the capture.
+ *
+ * \note Any user objects associated with \p graph will be released prior to the recapture. 
+ *
+ * @param stream - Stream in which to initiate capture
+ * @param mode - Controls the interaction of this capture sequence with other API
+ * calls that are potentially unsafe. For more details see
+ * ::cudaThreadExchangeStreamCaptureMode. 
+ * @param graph   - Existing CUDA graph to be captured into
+ * @param callbackData - Optional struct of callback data that will be invoked for all parameter mismatches from the original graph
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorDeinitialized,
+ * ::cudaErrorNotInitialized,
+ * ::cudaErrorInvalidValue,
+ * \notefnerr
+ *
+ * @see
+ * ::cudaStreamCreate,
+ * ::cudaStreamBeginCapture,
+ * ::cudaStreamIsCapturing,
+ * ::cudaStreamEndCapture,
+ * ::cudaThreadExchangeStreamCaptureMode
+ */
+public static native @Cast("cudaError_t") int cudaStreamBeginRecaptureToGraph(CUstream_st stream,
+    @Cast("cudaStreamCaptureMode") int mode,
+    CUgraph_st graph,
+    cudaGraphRecaptureCallbackData callbackData/*=0*/);
+public static native @Cast("cudaError_t") int cudaStreamBeginRecaptureToGraph(CUstream_st stream,
+    @Cast("cudaStreamCaptureMode") int mode,
+    CUgraph_st graph);
 
 /**
  * \brief Begins graph capture on a stream to an existing graph
@@ -36043,67 +36960,23 @@ public static native @Cast("cudaError_t") int cudaMalloc3D(cudaPitchedPtr pitche
  * Note that 2D CUDA arrays have different size requirements if the ::cudaArrayTextureGather flag is set. In that
  * case, the valid range for (width, height, depth) is ((1,maxTexture2DGather[0]), (1,maxTexture2DGather[1]), 0).
  *
- * \xmlonly
- * <table outputclass="xmlonly">
- * <tgroup cols="3" colsep="1" rowsep="1">
- * <colspec colname="c1" colwidth="1.0*"/>
- * <colspec colname="c2" colwidth="3.0*"/>
- * <colspec colname="c3" colwidth="3.0*"/>
- * <thead>
- * <row>
- * <entry>CUDA array type</entry>
- * <entry>Valid extents that must always be met {(width range in elements),
- * (height range), (depth range)}</entry>
- * <entry>Valid extents with cudaArraySurfaceLoadStore set {(width range in
- * elements), (height range), (depth range)}</entry>
- * </row>
- * </thead>
- * <tbody>
- * <row>
- * <entry>1D</entry>
- * <entry>{ (1,maxTexture1D), 0, 0 }</entry>
- * <entry>{ (1,maxSurface1D), 0, 0 }</entry>
- * </row>
- * <row>
- * <entry>2D</entry>
- * <entry>{ (1,maxTexture2D[0]), (1,maxTexture2D[1]), 0 }</entry>
- * <entry>{ (1,maxSurface2D[0]), (1,maxSurface2D[1]), 0 }</entry>
- * </row>
- * <row>
- * <entry>3D</entry>
- * <entry>{ (1,maxTexture3D[0]), (1,maxTexture3D[1]), (1,maxTexture3D[2]) }
- * OR { (1,maxTexture3DAlt[0]), (1,maxTexture3DAlt[1]),
- * (1,maxTexture3DAlt[2]) }</entry>
- * <entry>{ (1,maxSurface3D[0]), (1,maxSurface3D[1]), (1,maxSurface3D[2]) }</entry>
- * </row>
- * <row>
- * <entry>1D Layered</entry>
- * <entry>{ (1,maxTexture1DLayered[0]), 0, (1,maxTexture1DLayered[1]) }</entry>
- * <entry>{ (1,maxSurface1DLayered[0]), 0, (1,maxSurface1DLayered[1]) }</entry>
- * </row>
- * <row>
- * <entry>2D Layered</entry>
- * <entry>{ (1,maxTexture2DLayered[0]), (1,maxTexture2DLayered[1]),
- * (1,maxTexture2DLayered[2]) }</entry>
- * <entry>{ (1,maxSurface2DLayered[0]), (1,maxSurface2DLayered[1]),
- * (1,maxSurface2DLayered[2]) }</entry>
- * </row>
- * <row>
- * <entry>Cubemap</entry>
- * <entry>{ (1,maxTextureCubemap), (1,maxTextureCubemap), 6 }</entry>
- * <entry>{ (1,maxSurfaceCubemap), (1,maxSurfaceCubemap), 6 }</entry>
- * </row>
- * <row>
- * <entry>Cubemap Layered</entry>
- * <entry>{ (1,maxTextureCubemapLayered[0]), (1,maxTextureCubemapLayered[0]),
- * (1,maxTextureCubemapLayered[1]) }</entry>
- * <entry>{ (1,maxSurfaceCubemapLayered[0]), (1,maxSurfaceCubemapLayered[0]),
- * (1,maxSurfaceCubemapLayered[1]) }</entry>
- * </row>
- * </tbody>
- * </tgroup>
+ * <table>
+ * <tr><th>CUDA array type<th>Valid extents that must always be met {(width range in elements),
+ * (height range), (depth range)}<th>Valid extents with cudaArraySurfaceLoadStore set 
+ * {(width range in elements), (height range), (depth range)}
+ * <tr><td>1D<td>{ (1,maxTexture1D), 0, 0 }<td>{ (1,maxSurface1D), 0, 0 }
+ * <tr><td>2D<td>{ (1,maxTexture2D[0]), (1,maxTexture2D[1]), 0 }<td>{ (1,maxSurface2D[0]), (1,maxSurface2D[1]), 0 }
+ * <tr><td>3D<td>{ (1,maxTexture3D[0]), (1,maxTexture3D[1]), (1,maxTexture3D[2]) } OR { (1,maxTexture3DAlt[0]),
+ * (1,maxTexture3DAlt[1]), (1,maxTexture3DAlt[2]) }<td>{ (1,maxSurface3D[0]), (1,maxSurface3D[1]), (1,maxSurface3D[2]) }
+ * <tr><td>1D Layered<td>{ (1,maxTexture1DLayered[0]), 0, (1,maxTexture1DLayered[1]) }<td>{ (1,maxSurface1DLayered[0]), 0,
+ * (1,maxSurface1DLayered[1]) }
+ * <tr><td>2D Layered<td>{ (1,maxTexture2DLayered[0]), (1,maxTexture2DLayered[1]), (1,maxTexture2DLayered[2]) }
+ * <td>{ (1,maxSurface2DLayered[0]), (1,maxSurface2DLayered[1]), (1,maxSurface2DLayered[2]) }
+ * <tr><td>Cubemap<td>{ (1,maxTextureCubemap), (1,maxTextureCubemap), 6 }<td>{ (1,maxSurfaceCubemap), (1,maxSurfaceCubemap), 6 }
+ * <tr><td>Cubemap Layered<td>{ (1,maxTextureCubemapLayered[0]), (1,maxTextureCubemapLayered[0]), 
+ * (1,maxTextureCubemapLayered[1]) } <td>{ (1,maxSurfaceCubemapLayered[0]), (1,maxSurfaceCubemapLayered[0]),
+ * (1,maxSurfaceCubemapLayered[1]) }
  * </table>
- * \endxmlonly
  *
  * @param array  - Pointer to allocated array in device memory
  * @param desc   - Requested channel format
@@ -36188,67 +37061,24 @@ public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaAr
  * The width, height and depth extents must meet certain size requirements as listed in the following table.
  * All values are specified in elements.
  *
- * \xmlonly
- * <table outputclass="xmlonly">
- * <tgroup cols="3" colsep="1" rowsep="1">
- * <colspec colname="c1" colwidth="1.0*"/>
- * <colspec colname="c2" colwidth="3.0*"/>
- * <colspec colname="c3" colwidth="3.0*"/>
- * <thead>
- * <row>
- * <entry>CUDA array type</entry>
- * <entry>Valid extents that must always be met {(width range in elements),
- * (height range), (depth range)}</entry>
- * <entry>Valid extents with cudaArraySurfaceLoadStore set {(width range in
- * elements), (height range), (depth range)}</entry>
- * </row>
- * </thead>
- * <tbody>
- * <row>
- * <entry>1D</entry>
- * <entry>{ (1,maxTexture1DMipmap), 0, 0 }</entry>
- * <entry>{ (1,maxSurface1D), 0, 0 }</entry>
- * </row>
- * <row>
- * <entry>2D</entry>
- * <entry>{ (1,maxTexture2DMipmap[0]), (1,maxTexture2DMipmap[1]), 0 }</entry>
- * <entry>{ (1,maxSurface2D[0]), (1,maxSurface2D[1]), 0 }</entry>
- * </row>
- * <row>
- * <entry>3D</entry>
- * <entry>{ (1,maxTexture3D[0]), (1,maxTexture3D[1]), (1,maxTexture3D[2]) }
+ * <table>
+ * <tr><th>CUDA array type<th>Valid extents that must always be met {(width range in elements),
+ * (height range), (depth range)}<th>Valid extents with cudaArraySurfaceLoadStore set {(width range in
+ * elements), (height range), (depth range)}
+ * <tr><td>1D<td>{ (1,maxTexture1DMipmap), 0, 0 }<td>{ (1,maxSurface1D), 0, 0 }
+ * <tr><td>2D<td>{ (1,maxTexture2DMipmap[0]), (1,maxTexture2DMipmap[1]), 0 }<td>{ (1,maxSurface2D[0]), (1,maxSurface2D[1]), 0 }
+ * <tr><td>3D<td>{ (1,maxTexture3D[0]), (1,maxTexture3D[1]), (1,maxTexture3D[2]) }
  * OR { (1,maxTexture3DAlt[0]), (1,maxTexture3DAlt[1]),
- * (1,maxTexture3DAlt[2]) }</entry>
- * <entry>{ (1,maxSurface3D[0]), (1,maxSurface3D[1]), (1,maxSurface3D[2]) }</entry>
- * </row>
- * <row>
- * <entry>1D Layered</entry>
- * <entry>{ (1,maxTexture1DLayered[0]), 0, (1,maxTexture1DLayered[1]) }</entry>
- * <entry>{ (1,maxSurface1DLayered[0]), 0, (1,maxSurface1DLayered[1]) }</entry>
- * </row>
- * <row>
- * <entry>2D Layered</entry>
- * <entry>{ (1,maxTexture2DLayered[0]), (1,maxTexture2DLayered[1]),
- * (1,maxTexture2DLayered[2]) }</entry>
- * <entry>{ (1,maxSurface2DLayered[0]), (1,maxSurface2DLayered[1]),
- * (1,maxSurface2DLayered[2]) }</entry>
- * </row>
- * <row>
- * <entry>Cubemap</entry>
- * <entry>{ (1,maxTextureCubemap), (1,maxTextureCubemap), 6 }</entry>
- * <entry>{ (1,maxSurfaceCubemap), (1,maxSurfaceCubemap), 6 }</entry>
- * </row>
- * <row>
- * <entry>Cubemap Layered</entry>
- * <entry>{ (1,maxTextureCubemapLayered[0]), (1,maxTextureCubemapLayered[0]),
- * (1,maxTextureCubemapLayered[1]) }</entry>
- * <entry>{ (1,maxSurfaceCubemapLayered[0]), (1,maxSurfaceCubemapLayered[0]),
- * (1,maxSurfaceCubemapLayered[1]) }</entry>
- * </row>
- * </tbody>
- * </tgroup>
+ * (1,maxTexture3DAlt[2]) }<td>{ (1,maxSurface3D[0]), (1,maxSurface3D[1]), (1,maxSurface3D[2]) }
+ * <tr><td>1D Layered<td>{ (1,maxTexture1DLayered[0]), 0, (1,maxTexture1DLayered[1]) }<td>{ (1,maxSurface1DLayered[0]), 0, (1,maxSurface1DLayered[1]) }
+ * <tr><td>2D Layered<td>{ (1,maxTexture2DLayered[0]), (1,maxTexture2DLayered[1]),
+ * (1,maxTexture2DLayered[2]) }<td>{ (1,maxSurface2DLayered[0]), (1,maxSurface2DLayered[1]),
+ * (1,maxSurface2DLayered[2]) }
+ * <tr><td>Cubemap<td>{ (1,maxTextureCubemap), (1,maxTextureCubemap), 6 }<td>{ (1,maxSurfaceCubemap), (1,maxSurfaceCubemap), 6 }
+ * <tr><td>Cubemap Layered<td>{ (1,maxTextureCubemapLayered[0]), (1,maxTextureCubemapLayered[0]),
+ * (1,maxTextureCubemapLayered[1]) }<td>{ (1,maxSurfaceCubemapLayered[0]), (1,maxSurfaceCubemapLayered[0]),
+ * (1,maxSurfaceCubemapLayered[1]) }
  * </table>
- * \endxmlonly
  *
  * @param mipmappedArray  - Pointer to allocated mipmapped array in device memory
  * @param desc            - Requested channel format
@@ -39011,7 +39841,7 @@ public static native @Cast("cudaError_t") int cudaMemPoolGetAccess(@Cast("cudaMe
  * ::cudaMemPoolProps::cudaMemLocation::id must specify the NUMA ID of the host memory node.
  * Specifying ::cudaMemLocationTypeHostNumaCurrent as the
  * ::cudaMemPoolProps::cudaMemLocation::type will result in ::cudaErrorInvalidValue.
-* By default, the pool's memory will be accessible from the device it is allocated on.
+ * By default, the pool's memory will be accessible from the device it is allocated on.
  * In the case of pools created with ::cudaMemLocationTypeHostNuma or
  * ::cudaMemLocationTypeHost, their default accessibility will be from the host
  * CPU.
@@ -39078,11 +39908,13 @@ public static native @Cast("cudaError_t") int cudaMemPoolDestroy(CUmemPoolHandle
 /**
  * \brief Returns the default memory pool for a given location and allocation type 
  *
- * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
- * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or
+ * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost,
+ * or ::cudaMemLocationTypeHostNuma.
+ * The allocation type can be one of ::cudaMemAllocationTypePinned or
  * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged,
  * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
- * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
+ * for the managed memory pool.
+ * In all other cases, the call return ::cudaErrorInvalidValue
  *
  * @return
  * ::cudaSuccess,
@@ -39096,11 +39928,13 @@ public static native @Cast("cudaError_t") int cudaMemGetDefaultMemPool(@ByPtrPtr
 /**
  * \brief Gets the current memory pool for a given memory location and allocation type
  * 
- * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
- * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
+ * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost,
+ * or ::cudaMemLocationTypeHostNuma.
+ * The allocation type can be one of ::cudaMemAllocationTypePinned or 
  * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
  * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
- * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
+ * for the managed memory pool.
+ * In all other cases, the call return ::cudaErrorInvalidValue
  *
  * Returns the last pool provided to ::cudaMemSetMemPool or ::cudaDeviceSetMemPool for this location and allocation type
  * or the location's default memory pool if ::cudaMemSetMemPool or ::cudaDeviceSetMemPool for that allocType and location 
@@ -39119,11 +39953,13 @@ public static native @Cast("cudaError_t") int cudaMemGetMemPool(@ByPtrPtr CUmemP
 /**
  * \brief Sets the current memory pool for a memory location and allocation type
  *
- * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost or
- * ::cudaMemLocationTypeHostNuma. The allocation type can be one of ::cudaMemAllocationTypePinned or 
+ * The memory location can be of one of ::cudaMemLocationTypeDevice, ::cudaMemLocationTypeHost
+ * or ::cudaMemLocationTypeHostNuma.
+ * The allocation type can be one of ::cudaMemAllocationTypePinned or 
  * ::cudaMemAllocationTypeManaged. When the allocation type is ::cudaMemAllocationTypeManaged, 
  * the location type can also be ::cudaMemLocationTypeNone to indicate no preferred location
- * for the managed memory pool. In all other cases, the call return ::cudaErrorInvalidValue
+ * for the managed memory pool.
+ * In all other cases, the call return ::cudaErrorInvalidValue
  *
  * When a memory pool is set as the current memory pool, the location parameter should be the same as the location of the pool.
  * If the location type or index don't match, the call returns ::cudaErrorInvalidValue.
@@ -44246,7 +45082,6 @@ public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v
  *
  * @deprecated This function is deprecated as of CUDA 13.0
  *
- *
  * Returns in \p **funcPtr the address of the CUDA driver function for the requested flags.
  *
  * For a requested driver symbol, if the CUDA version in which the driver symbol was
@@ -44299,7 +45134,6 @@ public static native @Cast("cudaError_t") int cudaGraphConditionalHandleCreate_v
  *
  * \note This API is deprecated and ::cudaGetDriverEntryPointByVersion (with a hardcoded 
  *       ::cudaVersion) should be used instead.
- *
  *
  * @return
  * ::cudaSuccess,
@@ -49884,11 +50718,7 @@ public static final int CUDART_ONE_FP16 = CUDART_ONE_FP16();
 // #if !defined(__CUDA_NO_HALF_CONVERSIONS__)
 
 
-public static native void __internal_float_to_half(__half to, float from);
 
-
-
-public static native void __internal_double2half(__half to, double from);
 
 
 // #if !(defined __CUDA_FP16_DISABLE_IMPLICIT_INTEGER_CONVERTS_FOR_HOST_COMPILERS__) || (defined __CUDACC__)
@@ -49904,27 +50734,12 @@ public static native void __internal_double2half(__half to, double from);
 
 
 
-public static native void __internal_short2half_rn(__half to, short from);
 
 
 
-public static native void __internal_ushort2half_rn(__half to, @Cast("const unsigned short") short from);
 
 
 
-public static native void __internal_int2half_rn(__half to, int from);
-
-
-
-public static native void __internal_uint2half_rn(__half to, @Cast("const unsigned int") int from);
-
-
-
-public static native void __internal_ll2half_rn(__half to, long from);
-
-
-
-public static native void __internal_ull2half_rn(__half to, @Cast("const unsigned long long") long from);
 
 
 
@@ -49932,8 +50747,6 @@ public static native void __internal_ull2half_rn(__half to, @Cast("const unsigne
 // #endif /* !defined(__CUDA_NO_HALF_CONVERSIONS__) */
 // #if !defined(__CUDA_NO_HALF_OPERATORS__)
 /* Some basic arithmetic operations expected of a built-in */
-public static native @ByVal __half __internal_hinc(@ByVal __half h);
-public static native @ByVal __half __internal_hdec(@ByVal __half h);
 // #endif /* !defined(__CUDA_NO_HALF_OPERATORS__) */
 // #if defined(__CPP_VERSION_AT_LEAST_11_FP16)
 
@@ -53543,11 +54356,7 @@ public static final int CUDART_ONE_BF16 = CUDART_ONE_BF16();
 // #if !defined(__CUDA_NO_BFLOAT16_CONVERSIONS__)
     
 
-    public static native void __internal_float_to_bfloat16(__nv_bfloat16 to, float from);
-
     
-
-    public static native void __internal_double2bfloat16(__nv_bfloat16 to, double from);
 
     
 
@@ -53566,31 +54375,16 @@ public static final int CUDART_ONE_BF16 = CUDART_ONE_BF16();
     
     
     
-    
-    
-    
-
-    public static native void __internal_short2bfloat16_rn(__nv_bfloat16 to, short from);
 
     
 
-    public static native void __internal_ushort2bfloat16_rn(__nv_bfloat16 to, @Cast("const unsigned short") short from);
+    
 
     
 
-    public static native void __internal_int2bfloat16_rn(__nv_bfloat16 to, int from);
-
-    
-
-    public static native void __internal_uint2bfloat16_rn(__nv_bfloat16 to, @Cast("const unsigned int") int from);
-
-    
-
-    public static native void __internal_ll2bfloat16_rn(__nv_bfloat16 to, long from);
     
     
-
-    public static native void __internal_ull2bfloat16_rn(__nv_bfloat16 to, @Cast("const unsigned long long") long from);
+    
 
     
 // #endif /* !(defined __CUDA_BF16_DISABLE_IMPLICIT_INTEGER_CONVERTS_FOR_HOST_COMPILERS__) || (defined __CUDACC__) */
@@ -53598,10 +54392,6 @@ public static final int CUDART_ONE_BF16 = CUDART_ONE_BF16();
 
 
 // #if !defined(__CUDA_NO_BFLOAT16_OPERATORS__)
-
-public static native @ByVal __nv_bfloat16 __internal_hinc(@ByVal __nv_bfloat16 h);
-
-public static native @ByVal __nv_bfloat16 __internal_hdec(@ByVal __nv_bfloat16 h);
 // #endif /* !defined(__CUDA_NO_BFLOAT16_OPERATORS__) */
 
 // #if defined(__CPP_VERSION_AT_LEAST_11_BF16)

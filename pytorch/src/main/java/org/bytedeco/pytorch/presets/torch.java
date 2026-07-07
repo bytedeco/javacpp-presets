@@ -94,15 +94,15 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
-            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/include/"},
+            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/"},
             preloadpath = {
-                "/usr/local/cuda-13.2/lib64/",
-                "/usr/local/cuda-13.2/extras/CUPTI/lib64/",
+                "/usr/local/cuda-13.3/lib64/",
+                "/usr/local/cuda-13.3/extras/CUPTI/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/local/cuda/extras/CUPTI/lib64/",
                 "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
             extension = "-gpu"
@@ -186,7 +186,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "cupti", "curand", "nvJitLink", "cusparse", "cusolver",
                          "cudnn", "cufile", "cufile_rdma", "nccl", "nvrtc", "nvrtc-builtins", "myelin", "nvinfer",
-                         "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
+                         "cudnn_ext", "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
                          "cudnn_engines_tensor_ir", "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
@@ -200,7 +200,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("curand") ? "@.10"
                     : lib.equals("cusparse") ? "@.12"
                     : lib.equals("cusolver") ? "@.12"
-                    : lib.equals("nvrtc-builtins") ? "@.13.2"
+                    : lib.equals("nvrtc-builtins") ? "@.13.3"
                     : "@.13";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_9"
@@ -214,9 +214,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                     : lib.equals("cusparse") ? "64_12"
                     : lib.equals("cusolver") ? "64_12"
                     : lib.equals("nvrtc") ? "64_130_0"
-                    : lib.equals("nvrtc-builtins") ? "64_132"
+                    : lib.equals("nvrtc-builtins") ? "64_133"
                     : lib.equals("nvJitLink") ? "_130_0"
-                    : lib.equals("cupti") ? "64_2026.1.1"
+                    : lib.equals("cupti") ? "64_2026.2.1"
                     : "64_13";
             } else {
                 continue; // no CUDA

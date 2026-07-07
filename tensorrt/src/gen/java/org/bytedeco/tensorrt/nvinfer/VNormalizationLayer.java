@@ -31,8 +31,5 @@ public class VNormalizationLayer extends VRoot {
     public native @Cast("uint32_t") @NoException(true) int getAxes();
     public native @NoException(true) void setNbGroups(@Cast("int64_t") long nbGroups);
     public native @Cast("int64_t") @NoException(true) long getNbGroups();
-    public native @NoException(true) void setComputePrecision(DataType type);
-    public native @NoException(true) void setComputePrecision(@Cast("nvinfer1::DataType") int type);
-    public native @NoException(true) DataType getComputePrecision();
     public native @Cast("bool") @NoException(true) boolean isV2();
 }

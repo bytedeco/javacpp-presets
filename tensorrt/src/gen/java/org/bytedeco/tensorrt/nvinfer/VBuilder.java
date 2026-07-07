@@ -25,8 +25,6 @@ public class VBuilder extends VRoot {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VBuilder(Pointer p) { super(p); }
 
-    public native @Cast("bool") @NoException(true) boolean platformHasFastFp16();
-    public native @Cast("bool") @NoException(true) boolean platformHasFastInt8();
     public native @NoException(true) int getMaxDLABatchSize();
     public native @NoException(true) int getNbDLACores();
     public native @NoException(true) void setGpuAllocator(IGpuAllocator allocator);
@@ -36,7 +34,6 @@ public class VBuilder extends VRoot {
     public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
     public native @NoException(true) IErrorRecorder getErrorRecorder();
     public native @NoException(true) void reset();
-    public native @Cast("bool") @NoException(true) boolean platformHasTf32();
     public native @NoException(true) IHostMemory buildSerializedNetwork(
             @ByRef INetworkDefinition network, @ByRef IBuilderConfig config);
     public native @Cast("bool") @NoException(true) boolean isNetworkSupported(@Const @ByRef INetworkDefinition network, @Const @ByRef IBuilderConfig config);

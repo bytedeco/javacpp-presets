@@ -39,6 +39,4 @@ public class CUcheckpointRestoreArgs extends Pointer {
     /** Reserved for future use, must be zeroed */
     public native @Cast("char") byte reserved(int i); public native CUcheckpointRestoreArgs reserved(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer reserved();
-    /** Reserved for future use, must be zeroed */
-    public native @Cast("cuuint64_t") long reserved1(); public native CUcheckpointRestoreArgs reserved1(long setter);
 }

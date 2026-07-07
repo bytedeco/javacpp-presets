@@ -16,6 +16,13 @@ import static org.bytedeco.cuda.global.cudnn.*;
 
 
 /* cudnnFusedOps... */
+
+/**
+ * \brief Opaque descriptor for fused operations constant parameter pack.
+ *
+ * @deprecated Since cuDNN 9.0.0. Use graph API instead.
+ * @since cuDNN 9.0.0
+ */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnFusedOpsConstParamStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

@@ -32,20 +32,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IExecutionContext extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IExecutionContext() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IExecutionContext(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IExecutionContext(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IExecutionContext position(long position) {
-        return (IExecutionContext)super.position(position);
-    }
-    @Override public IExecutionContext getPointer(long i) {
-        return new IExecutionContext((Pointer)this).offsetAddress(i);
-    }
 
 
     /**
@@ -149,9 +137,9 @@ public class IExecutionContext extends INoCopy {
      *  \brief Set the device memory for use by this execution context.
      * 
      *  The memory must be aligned with CUDA memory alignment property (using cudaGetDeviceProperties()), and its size
-     *  must be large enough for performing inference with the given network inputs. getDeviceMemorySize() and
-     *  getDeviceMemorySizeForProfile() report upper bounds of the size. Setting memory to nullptr is acceptable if the
-     *  reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
+     *  must be large enough for performing inference with the given network inputs. getDeviceMemorySizeV2() and
+     *  getDeviceMemorySizeForProfileV2() report upper bounds of the size. Setting memory to nullptr is acceptable if
+     *  the reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
      *  enqueueV3() until network execution is complete. If using executeV2(), it is in use until executeV2() returns.
      *  Releasing or otherwise using the memory for other purposes, including using it in another execution context
      *  running in parallel, during this time will result in undefined behavior.
@@ -161,11 +149,10 @@ public class IExecutionContext extends INoCopy {
      *  \warning Weight streaming related scratch memory will be allocated by TensorRT if the memory is set by this API.
      *           Please use setDeviceMemoryV2() instead.
      * 
-     *  @see ICudaEngine::getDeviceMemorySize()
-     *  @see ICudaEngine::getDeviceMemorySizeForProfile()
+     *  @see ICudaEngine::getDeviceMemorySizeV2()
+     *  @see ICudaEngine::getDeviceMemorySizeForProfileV2()
      *  @see ExecutionContextAllocationStrategy
      *  @see ICudaEngine::createExecutionContext()
-     *  @see ICudaEngine::createExecutionContextWithoutDeviceMemory()
      *  */
     
     
@@ -179,9 +166,9 @@ public class IExecutionContext extends INoCopy {
      *  \brief Set the device memory and its corresponding size for use by this execution context.
      * 
      *  The memory must be aligned with CUDA memory alignment property (using cudaGetDeviceProperties()), and its size
-     *  must be large enough for performing inference with the given network inputs. getDeviceMemorySize() and
-     *  getDeviceMemorySizeForProfile() report upper bounds of the size. Setting memory to nullptr is acceptable if the
-     *  reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
+     *  must be large enough for performing inference with the given network inputs. getDeviceMemorySizeV2() and
+     *  getDeviceMemorySizeForProfileV2() report upper bounds of the size. Setting memory to nullptr is acceptable if
+     *  the reported size is 0. If using enqueueV3() to run the network, the memory is in use from the invocation of
      *  enqueueV3() until network execution is complete. If using executeV2(), it is in use until executeV2() returns.
      *  Releasing or otherwise using the memory for other purposes, including using it in another execution context
      *  running in parallel, during this time will result in undefined behavior.
@@ -190,7 +177,6 @@ public class IExecutionContext extends INoCopy {
      *  @see ICudaEngine::getDeviceMemorySizeForProfileV2()
      *  @see ExecutionContextAllocationStrategy
      *  @see ICudaEngine::createExecutionContext()
-     *  @see ICudaEngine::createExecutionContextWithoutDeviceMemory()
      *  */
     
     
@@ -330,28 +316,6 @@ public class IExecutionContext extends INoCopy {
     //!
     //!
     public native @Cast("bool") @NoException(true) boolean allInputDimensionsSpecified();
-
-    /**
-     *  \brief Whether all input shape bindings have been specified
-     * 
-     *  @return True if all input shape bindings have been specified by setInputShapeBinding().
-     * 
-     *  Trivially true if network has no input shape bindings.
-     * 
-     *  Does not work with name-base interfaces eg. IExecutionContext::setInputShape(). Use
-     *  IExecutionContext::inferShapes() instead.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. setInputShapeBinding() is removed since TensorRT 10.0.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean allInputShapesSpecified();
 
     /**
      *  \brief Set the ErrorRecorder for this interface
@@ -1180,40 +1144,14 @@ public class IExecutionContext extends INoCopy {
      *  @return true if unfused tensors debug state is on. False if unfused tensors debug state is off.
      *  */
     
+    
+    //!
+    //!
     //!
     //!
     //!
     //!
     public native @Cast("bool") @NoException(true) boolean getUnfusedTensorsDebugState();
-// #if ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
-    /**
-     *  \brief Check if a subsequent call to enqueueV3 is graph-capturable on the provided stream.
-     * 
-     *  @param stream The stream to check.
-     * 
-     *  @return true if a subsequent call to enqueueV3 is graph-capturable on the provided stream.
-     *  Reasons why graph capture may fail include:
-     *   - blocking runtime allocation due to large dynamically sized tensors that cannot be
-     *      statically allocated,
-     *   - dynamically shaped tensors whose size contains on the tensor contents, like the output
-     *      of an INonZeroLayer,
-     *   - conditional control flow depending on the contents of on-device tensors, like an
-     *      ITripLimitLayer whose input tensor resides on the device,
-     *   - engines that have been built for weight streaming.
-     * 
-     *  \note If this API returns false, enqueueV3 may not be called on a capturable stream
-     *  (i.e. users may not call cudaStreamBeingCapture before starting inference). Otherwise,
-     *  inference will fail with an error message. */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @NoException(true) boolean isStreamCapturable(CUstream_st stream);
-// #endif // ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
 
     /**
      *  \brief Set the NCCL communicator for the execution context.

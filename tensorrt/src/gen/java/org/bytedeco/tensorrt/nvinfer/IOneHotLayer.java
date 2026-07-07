@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // class IScatterLayer
+
 
 /**
  *  \class IOneHotLayer
@@ -28,7 +28,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  Output, and an axis attribute.
  *  * Indices is an Int32 tensor that determines which locations in Output to set as on_value.
  *  * Values is a two-element (rank=1) tensor that consists of [off_value, on_value]
- *  * Depth is an 0D tensor of type Int32 or Int64, which contains the depth (number of classes) of the one-hot encoding.
+ *  * Depth is an 0D tensor of type Int32 or Int64, which contains the depth (number of classes) of the one-hot
+ *  encoding.
  *    The depth tensor must be a positive build-time constant.
  *  * Output is a tensor with rank = rank(indices)+1, where the added dimension contains the one-hot encoding.
  *    The data types of Output is equal to the Values data type.

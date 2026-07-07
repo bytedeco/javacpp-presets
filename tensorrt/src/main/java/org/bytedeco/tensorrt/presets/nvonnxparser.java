@@ -37,13 +37,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "NvOnnxParser.h",
-            link = "nvonnxparser@.10",
-            preload = "nvinfer_vc_plugin@.10"
+            link = "nvonnxparser@.11",
+            preload = "nvinfer_vc_plugin@.11"
         ),
         @Platform(
             value = "windows-x86_64",
-            link = "nvonnxparser_10",
-            preload = "nvinfer_vc_plugin_10"
+            link = "nvonnxparser_11",
+            preload = "nvinfer_vc_plugin_11"
         )
     },
     target = "org.bytedeco.tensorrt.nvonnxparser",
@@ -52,8 +52,8 @@ public class nvonnxparser implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("SWIG").define(false))
                .put(new Info("nvonnxparser::EnumMax").skip())
-               .put(new Info("std::pair<std::vector<size_t>,bool>").pointerTypes("SubGraph_t").define())
-               .put(new Info("std::vector<SubGraph_t>").pointerTypes("SubGraphCollection_t").define())
+//               .put(new Info("std::pair<std::vector<size_t>,bool>").pointerTypes("SubGraph_t").define())
+//               .put(new Info("std::vector<SubGraph_t>").pointerTypes("SubGraphCollection_t").define())
                .put(new Info("std::vector<size_t>").annotations("@StdVector").pointerTypes("SizeTPointer"))
                .put(new Info("nvonnxparser::IPluginFactory").pointerTypes("OnnxPluginFactory"))
                .put(new Info("nvonnxparser::IPluginFactoryExt").pointerTypes("OnnxPluginFactoryExt"))

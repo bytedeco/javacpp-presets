@@ -101,7 +101,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
         if (platform.startsWith("windows")) {
             preloads.add(i++, "zlibwapi");
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cudnn",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cudnn", "cudnn_ext",
                          "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
                          "cudnn_engines_tensor_ir", "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {

@@ -17,6 +17,15 @@ import static org.bytedeco.cuda.global.cudnn.*;
 
 /* helper function to provide the convolution backward data algo that fit best the requirement */
 
+/**
+ * \brief Performance results for backward data convolution algorithm selection.
+ *
+ * Contains timing, memory usage, and determinism information for a given
+ * backward data convolution algorithm. Returned by algorithm search functions.
+ *
+ * @deprecated Since cuDNN 9.0.0. Use graph API instead.
+ * @since cuDNN 9.0.0
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     static { Loader.load(); }
@@ -35,12 +44,19 @@ public class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
         return new cudnnConvolutionBwdDataAlgoPerf_t((Pointer)this).offsetAddress(i);
     }
 
+    /** The backward data convolution algorithm. */
     public native @Cast("cudnnConvolutionBwdDataAlgo_t") int algo(); public native cudnnConvolutionBwdDataAlgoPerf_t algo(int setter);
+    /** Status returned when running this algorithm. */
     public native @Cast("cudnnStatus_t") int status(); public native cudnnConvolutionBwdDataAlgoPerf_t status(int setter);
+    /** Execution time in milliseconds. */
     public native float time(); public native cudnnConvolutionBwdDataAlgoPerf_t time(float setter);
+    /** Workspace memory required in bytes. */
     public native @Cast("size_t") long memory(); public native cudnnConvolutionBwdDataAlgoPerf_t memory(long setter);
+    /** Whether the algorithm is deterministic. */
     public native @Cast("cudnnDeterminism_t") int determinism(); public native cudnnConvolutionBwdDataAlgoPerf_t determinism(int setter);
+    /** Math type used by the algorithm. */
     public native @Cast("cudnnMathType_t") int mathType(); public native cudnnConvolutionBwdDataAlgoPerf_t mathType(int setter);
+    /** Reserved for future use. */
     public native int reserved(int i); public native cudnnConvolutionBwdDataAlgoPerf_t reserved(int i, int setter);
     @MemberGetter public native IntPointer reserved();
 }

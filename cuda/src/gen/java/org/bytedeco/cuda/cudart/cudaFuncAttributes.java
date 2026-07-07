@@ -145,7 +145,13 @@ public class cudaFuncAttributes extends Pointer {
     */
    public native int nonPortableClusterSizeAllowed(); public native cudaFuncAttributes nonPortableClusterSizeAllowed(int setter);
 
-   public native int reserved0(); public native cudaFuncAttributes reserved0(int setter);
+   /**
+     * Whether the function can be updated on device. 1 means device node update is
+     * supported, 0 is unsupported or driver is too old to check the value.
+     */
+   public native int deviceNodeUpdateStatus(); public native cudaFuncAttributes deviceNodeUpdateStatus(int setter);
+
+   public native int reserved1(); public native cudaFuncAttributes reserved1(int setter);
 
    /**
     * Reserved for future use.

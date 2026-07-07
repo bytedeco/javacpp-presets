@@ -29,20 +29,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ICudaEngine extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public ICudaEngine() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ICudaEngine(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ICudaEngine(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public ICudaEngine position(long position) {
-        return (ICudaEngine)super.position(position);
-    }
-    @Override public ICudaEngine getPointer(long i) {
-        return new ICudaEngine((Pointer)this).offsetAddress(i);
-    }
 
 
     /**
@@ -237,21 +225,6 @@ public class ICudaEngine extends INoCopy {
     public native @NoException(true) @Cast("const char*") BytePointer getAliasedInputTensor(@Cast("const char*") BytePointer tensorName);
 
     /**
-     *  \brief create an execution context without any device memory allocated
-     * 
-     *  The memory for execution of this device context must be supplied by the application.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. Superseded by createExecutionContext() with parameter.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) IExecutionContext createExecutionContextWithoutDeviceMemory();
-
-    /**
      *  \brief Create an execution context with TensorRT JIT runtime config.
      * 
      *  @param runtimeConfig The runtime config for TensorRT JIT.
@@ -285,42 +258,10 @@ public class ICudaEngine extends INoCopy {
     /**
      *  \brief Return the maximum device memory required by the context over all profiles.
      * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by getDeviceMemorySizeV2().
-     * 
-     *  @see IExecutionContext::setDeviceMemory()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("size_t") @Deprecated @NoException(true) long getDeviceMemorySize();
-
-    /**
-     *  \brief Return the maximum device memory required by the context for a profile.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by getDeviceMemorySizeForProfileV2(int32_t).
-     * 
-     *  @see IExecutionContext::setDeviceMemoryV2()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("size_t") @Deprecated @NoException(true) long getDeviceMemorySizeForProfile(int profileIndex);
-
-    /**
-     *  \brief Return the maximum device memory required by the context over all profiles.
-     * 
      *  This API is stateful, so its call returns different values based on the following calls:
-     *  * setWeightStreamingBudget()
      *  * setWeightStreamingBudgetV2()
      * 
      *  @see IExecutionContext::setDeviceMemoryV2()
-     *  @see setWeightStreamingBudget()
      *  @see setWeightStreamingBudgetV2()
      *  */
     
@@ -335,11 +276,9 @@ public class ICudaEngine extends INoCopy {
      *  \brief Return the maximum device memory required by the context for a profile.
      * 
      *  This API is stateful, so its call returns different values based on the following calls:
-     *  * setWeightStreamingBudget()
      *  * setWeightStreamingBudgetV2()
      * 
      *  @see IExecutionContext::setDeviceMemoryV2()
-     *  @see setWeightStreamingBudget()
      *  @see setWeightStreamingBudgetV2()
      *  */
     
@@ -657,43 +596,8 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    //!
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getProfileShape(String tensorName, int profileIndex, OptProfileSelector select);
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getProfileShape(@Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
-
-    /**
-     *  \brief Get the minimum / optimum / maximum values (not dimensions) for an input tensor given
-     *  its name under an optimization profile. These correspond to the values set using
-     *  IOptimizationProfile::setShapeValues when the engine was built.
-     * 
-     *  @param tensorName The name of an input tensor.
-     * 
-     *  @param profileIndex The profile index, which must be between 0 and getNbOptimizationProfiles()-1.
-     * 
-     *  @param select Whether to query the minimum, optimum, or maximum values for this input tensor.
-     * 
-     *  @return The minimum / optimum / maximum values for an input tensor in this profile. If the profileIndex is
-     *  invalid or the provided name does not map to an input tensor, or the tensor is not a shape binding, return
-     *  nullptr.
-     * 
-     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.11. Superseded by getProfileTensorValuesV2().
-     *  \warning If input shapes are set with setShapeValuesV2, getProfileTensorValues will return nullptr
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Const @Deprecated @NoException(true) IntPointer getProfileTensorValues(
-            String tensorName, int profileIndex, OptProfileSelector select);
-    public native @Const @Deprecated @NoException(true) IntBuffer getProfileTensorValues(
-            @Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
 
     /**
      *  \brief Determine what execution capability this engine has.
@@ -754,25 +658,7 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) IErrorRecorder getErrorRecorder();
-
-    /**
-     *  \brief Query whether the engine was built with an implicit batch dimension.
-     * 
-     *  @return Always false since TensorRT 10.0 does not support an implicit batch dimension.
-     * 
-     *  @see createNetworkV2
-     * 
-     *  @deprecated Deprecated in TensorRT 10.0. Implicit batch is no supported since TensorRT 10.0.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean hasImplicitBatchDimension();
 
     /**
      *  \brief return the tactic sources required by this engine.
@@ -919,116 +805,7 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
     public native @NoException(true) IHostMemory serializeWithConfig(@ByRef ISerializationConfig config);
-
-    /**
-     *  \brief Limit the maximum amount of GPU memory usable for network weights
-     *  in bytes.
-     * 
-     *  @param gpuMemoryBudget  This parameter may take on 3 types of values:
-     *   -1: Allows TensorRT to choose the budget according to the streamable weights size.
-     *       Free CUDA memory will be queried at createExecutionContext() and accordingly:
-     *        * If streamable weights all fit: weight streaming is not required and disabled.
-     *        * Otherwise: Budget is set to getMinimumWeightStreamingBudget
-     *    0: (default) Disables weight streaming. The execution may fail if the network is too large for GPU memory.
-     *   >0: The maximum bytes of GPU memory that weights can occupy. It must be bounded by
-     *       [getMinimumWeightStreamingBudget, free GPU memory)].
-     * 
-     *  By setting a weight limit, users can expect a GPU memory usage reduction
-     *  of (total bytes for network weights) - gpuMemoryBudget bytes. Maximum memory savings occur
-     *  when gpuMemoryBudget is set to getMinimumWeightStreamingBudget(). Creating additional
-     *  IExecutionContexts will increase memory usage by O(getMinimumStreamingBudget()).
-     * 
-     *  Streaming larger amounts of memory will likely result in lower performance
-     *  except in some boundary cases where streaming weights allows the user to
-     *  run larger batch sizes. The higher throughput offsets the increased
-     *  latency in these cases. Tuning the value of the memory limit is
-     *  recommended for best performance.
-     * 
-     *  \warning GPU memory for the weights is allocated in this call and will be deallocated by enabling weight
-     *           streaming or destroying the ICudaEngine.
-     * 
-     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
-     * 
-     *  \warning The weights streaming budget cannot be modified while there are active IExecutionContexts.
-     * 
-     *  @return true if the memory limit is valid and the call was successful, false otherwise.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by setWeightStreamingBudgetV2().
-     * 
-     *  @see BuilderFlag::kWEIGHT_STREAMING
-     *  @see getWeightStreamingBudget()
-     *  @see getMinimumWeightStreamingBudget()
-     *  @see getStreamableWeightsSize()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setWeightStreamingBudget(@Cast("int64_t") long gpuMemoryBudget);
-
-    /**
-     *  \brief Returns the current weight streaming device memory budget in bytes.
-     * 
-     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
-     * 
-     *  @return The weight streaming budget in bytes. Please see setWeightStreamingBudget() for the possible
-     *           values.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by getWeightStreamingBudgetV2().
-     * 
-     *  @see BuilderFlag::kWEIGHT_STREAMING,
-     *  @see setWeightStreamingBudget()
-     *  @see getMinimumWeightStreamingBudget()
-     *  @see getStreamableWeightsSize()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("int64_t") @Deprecated @NoException(true) long getWeightStreamingBudget();
-
-    /**
-     *  \brief The minimum number of bytes of GPU memory required by network
-     *  weights for successful weight streaming.
-     * 
-     *  This is a positive integer for engines with streamable weights because a
-     *  staging buffer on the GPU is required to temporarily hold the streamed
-     *  weights. The size of the staging buffer is determined by TensorRT and must
-     *  be at least as large as the size of the largest streamable weight in the
-     *  network.
-     * 
-     *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
-     * 
-     *  @return The minimum number of bytes of GPU memory required for streaming.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. The minimum budget is 0 in the V2 APIs.
-     * 
-     *  @see setWeightStreamingBudget()
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("int64_t") @Deprecated @NoException(true) long getMinimumWeightStreamingBudget();
 
     /**
      *  \brief Get the total size in bytes of all streamable weights.
@@ -1039,11 +816,10 @@ public class ICudaEngine extends INoCopy {
      *  @return The total size in bytes of all streamable weights.
      *           Returns 0 if BuilderFlag::kWEIGHT_STREAMING is unset during engine building.
      * 
-     *  @see setWeightStreamingBudget()
+     *  @see setWeightStreamingBudgetV2()
      *  */
     
     
-    //!
     //!
     //!
     //!
@@ -1082,9 +858,6 @@ public class ICudaEngine extends INoCopy {
      * 
      *  \warning The weights streaming budget cannot be modified while there are active IExecutionContexts.
      * 
-     *  \warning Using the V2 weight streaming APIs with V1 APIs (setWeightStreamingBudget(),
-     *           getWeightStreamingBudget(), getWeightStreamingMinimumBudget()) leads to undefined behavior.
-     * 
      *  @return true if the memory limit is valid and the call was successful, false otherwise.
      * 
      *  @see BuilderFlag::kWEIGHT_STREAMING
@@ -1111,8 +884,6 @@ public class ICudaEngine extends INoCopy {
      *           return values. Returns getStreamableWeightsSize() if weight streaming is disabled.
      * 
      *  @see BuilderFlag::kWEIGHT_STREAMING
-     *  @see setWeightStreamingBudget()
-     *  @see getMinimumWeightStreamingBudget()
      *  @see getStreamableWeightsSize()
      *  */
     
@@ -1138,8 +909,6 @@ public class ICudaEngine extends INoCopy {
      * 
      *  \warning The return value may change between TensorRT minor versions.
      * 
-     *  \warning Setting the returned budget with V1 APIs (setWeightStreamingBudget()) will lead to undefined behavior.
-     *  Please use V2 APIs.
      * 
      *  @return The weight streaming budget in bytes. Please set with setWeightStreamingBudgetV2().
      * 
@@ -1165,9 +934,7 @@ public class ICudaEngine extends INoCopy {
      *  will then allocate this additional memory or the user can provide the additional memory through
      *  getDeviceMemorySizeV2() and IExecutionContext::setDeviceMemoryV2().
      * 
-     *  The return value of this call depends on
-     *     1. setWeightStreamingBudget()
-     *     2. setWeightStreamingBudgetV2()
+     *  The return value of this call depends on setWeightStreamingBudgetV2().
      * 
      *  \warning BuilderFlag::kWEIGHT_STREAMING must be set during engine building.
      * 
@@ -1207,7 +974,6 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(String name);
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(@Cast("const char*") BytePointer name);
 
@@ -1227,8 +993,6 @@ public class ICudaEngine extends INoCopy {
      *  nullptr.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
-     * 
-     *  \warning If input shapes are set with setShapeValues, getProfileTensorValuesV2 will return nullptr
      *  */
     
     
@@ -1265,7 +1029,6 @@ public class ICudaEngine extends INoCopy {
      * 
      *  @see EngineStat
      *  @see BuilderFlag::kWEIGHT_STREAMING
-     *  @see setWeightStreamingBudget()
      *  @see getStreamableWeightsSize()
      *  */
     public native @Cast("int64_t") @NoException(true) long getEngineStat(EngineStat stat);

@@ -71,3 +71,19 @@ index d04c9cc1ef9..2bcc2fb3aab 100644
  
  #endif
  #endif
+diff --git a/modules/videostab/src/cuda/global_motion.cu b/modules/videostab/src/cuda/global_motion.cu
+index c20ccfc..678243b 100644
+--- a/modules/videostab/src/cuda/global_motion.cu
++++ b/modules/videostab/src/cuda/global_motion.cu
+@@ -63,10 +63,10 @@ int compactPoints(int N, float *points0, float *points1, const uchar *mask)
+     thrust::device_ptr<float2> dpoints1((float2*)points1);
+     thrust::device_ptr<const uchar> dmask(mask);
+ 
+-    return (int)(thrust::remove_if(thrust::make_zip_iterator(thrust::make_tuple(dpoints0, dpoints1)),
+-                             thrust::make_zip_iterator(thrust::make_tuple(dpoints0 + N, dpoints1 + N)),
++    return (int)(thrust::remove_if(thrust::make_zip_iterator(::cuda::std::make_tuple(dpoints0, dpoints1)),
++                             thrust::make_zip_iterator(::cuda::std::make_tuple(dpoints0 + N, dpoints1 + N)),
+                              dmask, is_zero())
+-           - thrust::make_zip_iterator(make_tuple(dpoints0, dpoints1)));
++           - thrust::make_zip_iterator(::cuda::std::make_tuple(dpoints0, dpoints1)));
+ }

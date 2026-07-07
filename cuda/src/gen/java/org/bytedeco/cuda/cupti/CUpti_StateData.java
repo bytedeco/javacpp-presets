@@ -18,7 +18,7 @@ import static org.bytedeco.cuda.global.cupti.*;
  *
  * Data passed into a State callback function as the \p cbdata argument
  * to \ref CUpti_CallbackFunc. The \p cbdata will be this type for \p
- * domain equal to CUPTI_CB_DOMAIN_STATE and callback Ids belonging to CUpti_CallbackIdState. 
+ * domain equal to CUPTI_CB_DOMAIN_STATE and callback Ids belonging to CUpti_CallbackIdState.
  * Unless otherwise noted, the callback data is valid only within the invocation of the callback
  * function that is passed the data. If you need to retain some data
  * for use outside of the callback, you must make a copy of that data.
@@ -42,7 +42,7 @@ public class CUpti_StateData extends Pointer {
     }
 
     /**
-     * Data passed along with the callback Ids 
+     * Data passed along with the callback Ids
      * Enum CUpti_CallbackIdState used to denote callback ids
      */
       /**

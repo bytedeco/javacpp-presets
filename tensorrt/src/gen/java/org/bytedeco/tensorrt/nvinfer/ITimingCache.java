@@ -35,20 +35,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ITimingCache extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public ITimingCache() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ITimingCache(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ITimingCache(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public ITimingCache position(long position) {
-        return (ITimingCache)super.position(position);
-    }
-    @Override public ITimingCache getPointer(long i) {
-        return new ITimingCache((Pointer)this).offsetAddress(i);
-    }
 
 
     /**

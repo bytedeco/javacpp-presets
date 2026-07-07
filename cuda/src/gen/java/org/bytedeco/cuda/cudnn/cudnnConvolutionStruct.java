@@ -16,6 +16,12 @@ import static org.bytedeco.cuda.global.cudnn.*;
 
 // #endif
 
+/**
+ * \brief Opaque descriptor for a convolution operation.
+ *
+ * @deprecated Since cuDNN 9.0.0. Use graph API instead.
+ * @since cuDNN 9.0.0
+ */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnConvolutionStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

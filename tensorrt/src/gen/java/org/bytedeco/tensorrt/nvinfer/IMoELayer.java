@@ -17,9 +17,11 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // namespace impl
 
-/**          ┌──────────────┐┌────────────────────────┐┌────────────────────────┐
+
+
+/** <pre>
+ *           ┌──────────────┐┌────────────────────────┐┌────────────────────────┐
  *           │ hiddenStates ││selectedExpertsForTokens││scoresForSelectedExperts│
  *           └──────────────┘└────────────────────────┘└────────────────────────┘
  *                   │                    │                    │
@@ -64,11 +66,13 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *                                ┌───────────────┐
  *                                │   moeOutput   │
  *                                └───────────────┘
+ *  </pre>
  *  \class IMoELayer
  * 
  *  \brief A MoE layer in a network definition.
- *  Mixture of Experts (MoE) is a collection of experts with each expert specializing in processing different subsets of input data.
- *  The key innovation lies in using a Router that selectively activates only the specific experts needed for a given input, rather than engaging the entire neural network for every task.
+ *  Mixture of Experts (MoE) is a collection of experts with each expert specializing in processing different subsets of
+ *  input data. The key innovation lies in using a Router that selectively activates only the specific experts needed
+ *  for a given input, rather than engaging the entire neural network for every task.
  * 
  *   Definition in the MoE layer:
  *  \p fcDown, \p fcGate, \p fcUp are three linear layers.
@@ -126,7 +130,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *     - Final output for the token: moeOutput = Σ(score_i * output_i)
  *  The output of MoE has the same shape as the input \p hiddenStates.
  * 
- *  \warning MoE is only supported on Thor. And performance is limited when seqLen > 16.
+ *  \warning MoE requires Blackwell or Thor GPU architecture (SM 10.x or SM 11.x). SM 12.x is not currently
+ *  supported. And performance is limited when seqLen > 16.
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
@@ -203,15 +208,18 @@ public class IMoELayer extends ILayer {
 
     /**
      *  \brief Configure static quantization after the mul op.
+     *  <pre>
      *                  ┌── fcGate ── activation ───┐
      *                  │                           │
      *  hiddenStates ───┤                           ├── mul ── {Q ── DQ} ── fcDown ── output
      *                  │                           │
      *                  └── fcUp ───────────────────┘
+     *  </pre>
      *  When using mul output static quantization, the user must provide:
      *  @param fcDownActivationScale: the scale tensor.
      *  @param dataType: the type that the activation is quantized to.
-     *  In addition, the user should also insert Q/DQ before the hiddenStates input of the MoE layer. The quantization method must be the same as the quantization method here.
+     *  In addition, the user should also insert Q/DQ before the hiddenStates input of the MoE layer. The quantization
+     *  method must be the same as the quantization method here.
      * 
      *  If setQuantizationDynamicDblQ is called, then previous calls to this function are overridden.
      *  If setQuantizationToType is called, previous parameters set by this function are overridden.
@@ -230,20 +238,24 @@ public class IMoELayer extends ILayer {
 
     /**
      *  \brief Configure dynamic quantization (with double quantization) after the mul op.
+     *  <pre>
      *                  ┌── fcGate ── activation ───┐             ┌──── DQ
      *                  │                           │             │      │
      *  hiddenStates ───┤                           ├── mul ── {DynQ ── DQ} ── fcDown ── output
      *                  │                           │
      *                  └── fcUp ───────────────────┘
+     *  </pre>
      *  When using mul output dynamic quantization (with double quantization), the user must provide:
      *  @param fcDownActivationDblQScale: the double quantization scale tensor.
      *  @param dataType: the type that the activation is quantized to.
      *  @param blockShape: the blockShape used in quantization.
      *  @param dynQOutputScaleType: the data type of the scale tensor.
-     *  In addition, the user should also insert DynQ/DQ/DQ before the hiddenStates input of the MoE layer. The quantization method must be the same as the quantization method here.
+     *  In addition, the user should also insert DynQ/DQ/DQ before the hiddenStates input of the MoE layer. The
+     *  quantization method must be the same as the quantization method here.
      * 
      *  If setQuantizationStatic is called, then previous calls to this function are overridden.
-     *  If setQuantizationToType, setQuantizationBlockShape or setDynQOutputScaleType is called, previous parameters set by this function are overridden.
+     *  If setQuantizationToType, setQuantizationBlockShape or setDynQOutputScaleType is called, previous parameters set
+     *  by this function are overridden.
      * 
      *  @see setQuantizationToType()
      *  @see getQuantizationToType()
@@ -302,8 +314,8 @@ public class IMoELayer extends ILayer {
      * 
      *  @param blockShape: the block shape for the quantization of the Mul output.
      * 
-     *  The shape must have rank 3 and the dimensions representing block sizes for Mul output dimensions (batchSize, seqLen, moeInterSize) respectively.
-     *  For example, a shape of [1, 1, 16] means block quantization on the last (moeInterSize) axis.
+     *  The shape must have rank 4 and the dimensions representing block sizes for Mul output dimensions (batchSize, seqLen, topK, moeInterSize) respectively.
+     *  For example, a shape of [1, 1, 1, 16] means block quantization on the last (moeInterSize) axis.
      *  -1 means a fully blocked dimension.
      * 
      *  @see getQuantizationBlockShape()

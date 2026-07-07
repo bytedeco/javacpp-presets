@@ -37,11 +37,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = {"NvInferPlugin.h", "NvInferPluginUtils.h"},
-            link = "nvinfer_plugin@.10"
+            link = "nvinfer_plugin@.11"
         ),
         @Platform(
             value = "windows-x86_64",
-            link = "nvinfer_plugin_10"
+            link = "nvinfer_plugin_11"
         )
     },
     target = "org.bytedeco.tensorrt.nvinfer_plugin",

@@ -47,7 +47,7 @@ public class IPluginV3OneRuntime extends IPluginCapability {
     //!
     //!
     //!
-    public native @NoException(true) int setTactic(int tactic);
+    public native @NoException(true) int setTactic(int arg0);
 
     /**
      *  \brief Called when a plugin is being prepared for execution for specific dimensions. This could

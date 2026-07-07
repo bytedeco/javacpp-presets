@@ -37,16 +37,6 @@ public class VRefitter extends VRoot {
     public native @NoException(true) int getAll(int size, @Cast("const char**") @ByPtrPtr BytePointer layerNames, @Cast("nvinfer1::WeightsRole*") IntPointer roles);
     public native @NoException(true) int getAll(int size, @Cast("const char**") @ByPtrPtr ByteBuffer layerNames, @Cast("nvinfer1::WeightsRole*") IntBuffer roles);
     public native @NoException(true) int getAll(int size, @Cast("const char**") @ByPtrPtr byte[] layerNames, @Cast("nvinfer1::WeightsRole*") int[] roles);
-    public native @Cast("bool") @NoException(true) boolean setDynamicRange(String tensorName, float min, float max);
-    public native @Cast("bool") @NoException(true) boolean setDynamicRange(@Cast("const char*") BytePointer tensorName, float min, float max);
-    public native @NoException(true) float getDynamicRangeMin(String tensorName);
-    public native @NoException(true) float getDynamicRangeMin(@Cast("const char*") BytePointer tensorName);
-    public native @NoException(true) float getDynamicRangeMax(String tensorName);
-    public native @NoException(true) float getDynamicRangeMax(@Cast("const char*") BytePointer tensorName);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") PointerPointer tensorNames);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr BytePointer tensorNames);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr ByteBuffer tensorNames);
-    public native @NoException(true) int getTensorsWithDynamicRange(int size, @Cast("const char**") @ByPtrPtr byte[] tensorNames);
     public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
     public native @NoException(true) IErrorRecorder getErrorRecorder();
     public native @Cast("bool") @NoException(true) boolean setNamedWeights(String name, @ByVal Weights weights);

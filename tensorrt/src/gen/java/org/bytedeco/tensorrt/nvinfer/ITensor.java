@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // namespace impl
+
 
 /**
  *  \class ITensor
@@ -114,12 +114,7 @@ public class ITensor extends INoCopy {
      *  */
     
     
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
+    
     //!
     //!
     //!
@@ -127,54 +122,13 @@ public class ITensor extends INoCopy {
     //!
     public native @ByVal @Cast("nvinfer1::Dims*") @NoException(true) Dims64 getDimensions();
 
-    /**
-     *  \brief Set the data type of a tensor.
-     * 
-     *  @param type The data type of the tensor when the type is not inferred.
-     * 
-     *  For strongly typed networks, this method should be used only for network inputs,
-     *  since the types of all other tensors are inferred. Setting the type of a network
-     *  output is tolerated if the type equals the inferred type, otherwise an error occurs
-     *  and the type is not updated.
-     * 
-     *  For weakly typed networks, this method can be used for network outputs too, but
-     *  the type merely has to be implicitly convertible from the inferred type to the
-     *  specified type. In this case it does not matter whether the type is set first
-     *  or the tensor is marked as an output first (via {@code INetworkDefinition::markOutput}
-     *  or {@code INetworkDefinition::markOutputForShapes}).
-     * 
-     *  However, marking it first has two advantages:
-     * 
-     *      * It avoids warnings that the tensor is not yet a network I/O tensor.
-     *      * It causes method {@code getType()} to return the type that was set instead of the inferred type.
-     * 
-     *  @see getType()
-     * 
-     *  \note This function does more than just set the type, so {@code t.setType(t.getType())} is not necessarily a no-op,
-     *  particularly for input and output tensors!
-     * 
-     *  \note Repeated consecutive applications of {@code t.setType(t.getType())}
-     *  would be idempotent, provided the state of the {@code ITensor} isn't changed between calls.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.12. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setType(DataType type);
-    public native @Deprecated @NoException(true) void setType(@Cast("nvinfer1::DataType") int type);
 
     /**
      *  \brief Get the data type of a tensor.
      * 
      *  @return The data type of the tensor.
      * 
-     *  The type is the type set by {@code setType} if the tensor is a network input or output.
-     *  Otherwise the type is the inferred type.
+     *  The type is the inferred type.
      * 
      *  @see setType()
      *  */
@@ -182,29 +136,7 @@ public class ITensor extends INoCopy {
     
     //!
     //!
-    //!
-    //!
-    //!
-    //!
     public native @NoException(true) DataType getType();
-
-    /**
-     *  \brief Set dynamic range for the tensor
-     * 
-     *  Currently, only symmetric ranges are supported.
-     *  Therefore, the larger of the absolute values of the provided bounds is used.
-     * 
-     *  @return Whether the dynamic range was set successfully.
-     * 
-     *  Requires that min and max be finite, and min <= max.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean setDynamicRange(float min, float max);
 
     /**
      *  \brief Whether the tensor is a network input.
@@ -299,6 +231,10 @@ public class ITensor extends INoCopy {
      *  */
     
     
+    
+    //!
+    //!
+    //!
     //!
     //!
     //!
@@ -306,56 +242,6 @@ public class ITensor extends INoCopy {
     public native @Deprecated @NoException(true) void setLocation(TensorLocation location);
     public native @Deprecated @NoException(true) void setLocation(@Cast("nvinfer1::TensorLocation") int location);
 
-    /**
-     *  \brief Query whether dynamic range is set.
-     * 
-     *  @return True if dynamic range is set, false otherwise.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.1. Superseded by explicit quantization.
-     *  */
-    
-    
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean dynamicRangeIsSet();
-
-    /**
-     *  \brief Undo effect of setDynamicRange.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @NoException(true) void resetDynamicRange();
-
-    /**
-     *  \brief Get minimum of dynamic range.
-     * 
-     *  @return Minimum of dynamic range, or quiet NaN if range was not set.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @NoException(true) float getDynamicRangeMin();
-
-    /**
-     *  \brief Get maximum of dynamic range.
-     * 
-     *  @return Maximum of dynamic range, or quiet NaN if range was not set.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @NoException(true) float getDynamicRangeMax();
 
     /**
      *  \brief Set allowed formats for an input or output tensor. By default all formats are allowed.

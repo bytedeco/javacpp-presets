@@ -29,20 +29,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ISerializationConfig extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public ISerializationConfig() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ISerializationConfig(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ISerializationConfig(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public ISerializationConfig position(long position) {
-        return (ISerializationConfig)super.position(position);
-    }
-    @Override public ISerializationConfig getPointer(long i) {
-        return new ISerializationConfig((Pointer)this).offsetAddress(i);
-    }
 
 
     /**

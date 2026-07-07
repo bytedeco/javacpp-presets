@@ -37,6 +37,6 @@ public class cudaMemLocation extends Pointer {
 
     /** Specifies the location type, which modifies the meaning of id. */
     public native @Cast("cudaMemLocationType") int type(); public native cudaMemLocation type(int setter);
-    /** identifier for a given this location's ::CUmemLocationType. */
-    public native int id(); public native cudaMemLocation id(int setter);
+        /** Identifier for cudaMemLocationType::cudaMemLocationTypeDevice, cudaMemLocationType::cudaMemLocationTypeHost, or cudaMemLocationType::cudaMemLocationTypeHostNuma. */
+        public native int id(); public native cudaMemLocation id(int setter);
 }

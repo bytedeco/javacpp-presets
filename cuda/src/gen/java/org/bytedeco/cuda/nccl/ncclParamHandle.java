@@ -27,9 +27,9 @@ import static org.bytedeco.cuda.global.nccl.*;
  * Handles represents parameters and are opaque (internal details hidden).
  */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nccl.class)
-public class ncclParamHandle_t extends Pointer {
+public class ncclParamHandle extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ncclParamHandle_t() { super((Pointer)null); }
+    public ncclParamHandle() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ncclParamHandle_t(Pointer p) { super(p); }
+    public ncclParamHandle(Pointer p) { super(p); }
 }

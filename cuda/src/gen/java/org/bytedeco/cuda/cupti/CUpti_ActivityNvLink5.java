@@ -19,7 +19,6 @@ import static org.bytedeco.cuda.global.cupti.*;
 * This structure gives capabilities of each logical NVLink connection between two devices,
 * gpu<->gpu or gpu<->CPU which can be used to understand the topology.
 */
-
 @Properties(inherit = org.bytedeco.cuda.presets.cupti.class)
 public class CUpti_ActivityNvLink5 extends Pointer {
     static { Loader.load(); }
@@ -59,35 +58,32 @@ public class CUpti_ActivityNvLink5 extends Pointer {
   public native @Cast("CUpti_DevType") int typeDev1(); public native CUpti_ActivityNvLink5 typeDev1(int setter);
 
   /**
-  * If typeDev0 is CUPTI_DEV_TYPE_GPU, UUID for device 0. \ref CUpti_ActivityDevice6.
-  * If typeDev0 is CUPTI_DEV_TYPE_NPU, struct npu for NPU.
-  */
+   * If typeDev0 is CUPTI_DEV_TYPE_GPU, UUID for device 0. \ref CUpti_ActivityDevice6.
+   * If typeDev0 is CUPTI_DEV_TYPE_NPU, struct npu for NPU.
+   */
+    /**
+     * If typeDev0 is CUPTI_DEV_TYPE_GPU, UUID for device 0. \ref CUpti_ActivityDevice6.
+     */
     @Name("idDev0.uuidDev") public native @ByRef CUuuid idDev0_uuidDev(); public native CUpti_ActivityNvLink5 idDev0_uuidDev(CUuuid setter);
-      /**
-       * Index of the NPU. First index will always be zero.
-       */
-      @Name("idDev0.npu.index") public native @Cast("uint32_t") int idDev0_npu_index(); public native CUpti_ActivityNvLink5 idDev0_npu_index(int setter);
 
-      /**
-       * Domain ID of NPU. On Linux, this can be queried using lspci.
-       */
-      @Name("idDev0.npu.domainId") public native @Cast("uint32_t") int idDev0_npu_domainId(); public native CUpti_ActivityNvLink5 idDev0_npu_domainId(int setter);
+    /**
+     * If typeDev0 is CUPTI_DEV_TYPE_NPU, struct npu for NPU.
+     */
+    @Name("idDev0.npu") public native @ByRef CUpti_ActivityNvLinkNpu idDev0_npu(); public native CUpti_ActivityNvLink5 idDev0_npu(CUpti_ActivityNvLinkNpu setter);
 
   /**
-  * If typeDev1 is CUPTI_DEV_TYPE_GPU, UUID for device 1. \ref CUpti_ActivityDevice6.
-  * If typeDev1 is CUPTI_DEV_TYPE_NPU, struct npu for NPU.
-  */
+   * If typeDev1 is CUPTI_DEV_TYPE_GPU, UUID for device 1. \ref CUpti_ActivityDevice6.
+   * If typeDev1 is CUPTI_DEV_TYPE_NPU, struct npu for NPU.
+   */
+    /**
+     * If typeDev1 is CUPTI_DEV_TYPE_GPU, UUID for device 1. \ref CUpti_ActivityDevice6.
+     */
     @Name("idDev1.uuidDev") public native @ByRef CUuuid idDev1_uuidDev(); public native CUpti_ActivityNvLink5 idDev1_uuidDev(CUuuid setter);
 
-      /**
-       * Index of the NPU. First index will always be zero.
-       */
-      @Name("idDev1.npu.index") public native @Cast("uint32_t") int idDev1_npu_index(); public native CUpti_ActivityNvLink5 idDev1_npu_index(int setter);
-
-      /**
-       * Domain ID of NPU. On Linux, this can be queried using lspci.
-       */
-      @Name("idDev1.npu.domainId") public native @Cast("uint32_t") int idDev1_npu_domainId(); public native CUpti_ActivityNvLink5 idDev1_npu_domainId(int setter);
+    /**
+     * If typeDev1 is CUPTI_DEV_TYPE_NPU, struct npu for NPU.
+     */
+    @Name("idDev1.npu") public native @ByRef CUpti_ActivityNvLinkNpu idDev1_npu(); public native CUpti_ActivityNvLink5 idDev1_npu(CUpti_ActivityNvLinkNpu setter);
 
   /**
    * Flag gives capabilities of the link @see CUpti_LinkFlag

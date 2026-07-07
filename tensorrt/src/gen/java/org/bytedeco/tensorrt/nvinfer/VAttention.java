@@ -36,8 +36,8 @@ public class VAttention extends VRoot {
     public native @Cast("bool") @NoException(true) boolean setNormalizationOperation(AttentionNormalizationOp op);
     public native @Cast("bool") @NoException(true) boolean setNormalizationOperation(@Cast("nvinfer1::AttentionNormalizationOp") int op);
     public native @NoException(true) AttentionNormalizationOp getNormalizationOperation();
-    public native @Cast("bool") @NoException(true) boolean setCausal(@Cast("bool") boolean isCausal);
-    public native @Cast("bool") @NoException(true) boolean getCausal();
+    public native @Cast("bool") @Deprecated @NoException(true) boolean setCausal(@Cast("bool") boolean isCausal);
+    public native @Cast("bool") @Deprecated @NoException(true) boolean getCausal();
     public native @Cast("bool") @NoException(true) boolean setMask(@ByRef ITensor mask);
     public native @NoException(true) ITensor getMask();
     public native @Cast("bool") @NoException(true) boolean setDecomposable(@Cast("bool") boolean decomposable);
@@ -52,4 +52,17 @@ public class VAttention extends VRoot {
     public native @NoException(true) String getMetadata();
     public native @Cast("bool") @NoException(true) boolean setNbRanks(int nbRanks);
     public native @NoException(true) int getNbRanks();
+    public native @Cast("bool") @NoException(true) boolean setCausalKind(CausalMaskKind kind);
+    public native @Cast("bool") @NoException(true) boolean setCausalKind(@Cast("nvinfer1::CausalMaskKind") int kind);
+    public native @NoException(true) CausalMaskKind getCausalKind();
+    public native @Cast("bool") @NoException(true) boolean setQueryForm(AttentionIOForm form);
+    public native @Cast("bool") @NoException(true) boolean setQueryForm(@Cast("nvinfer1::AttentionIOForm") int form);
+    public native @NoException(true) AttentionIOForm getQueryForm();
+    public native @Cast("bool") @NoException(true) boolean setKeyValueForm(AttentionIOForm form);
+    public native @Cast("bool") @NoException(true) boolean setKeyValueForm(@Cast("nvinfer1::AttentionIOForm") int form);
+    public native @NoException(true) AttentionIOForm getKeyValueForm();
+    public native @Cast("bool") @NoException(true) boolean setQueryLengths(ITensor lengths);
+    public native @NoException(true) ITensor getQueryLengths();
+    public native @Cast("bool") @NoException(true) boolean setKeyValueLengths(ITensor lengths);
+    public native @NoException(true) ITensor getKeyValueLengths();
 }

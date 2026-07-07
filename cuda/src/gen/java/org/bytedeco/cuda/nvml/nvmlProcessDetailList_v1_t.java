@@ -36,7 +36,7 @@ public class nvmlProcessDetailList_v1_t extends Pointer {
 
     /** Struct version, MUST be nvmlProcessDetailList_v1 */
     public native @Cast("unsigned int") int version(); public native nvmlProcessDetailList_v1_t version(int setter);
-    /** Process mode(Compute/Graphics/MPSCompute) */
+    /** Process mode, One of \ref nvmlProcessMode_t */
     public native @Cast("unsigned int") int mode(); public native nvmlProcessDetailList_v1_t mode(int setter);
     /** Number of process entries in procArray */
     public native @Cast("unsigned int") int numProcArrayEntries(); public native nvmlProcessDetailList_v1_t numProcArrayEntries(int setter);

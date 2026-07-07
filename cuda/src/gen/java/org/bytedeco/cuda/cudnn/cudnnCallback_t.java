@@ -15,6 +15,9 @@ import static org.bytedeco.cuda.global.cublas.*;
 import static org.bytedeco.cuda.global.cudnn.*;
 
 
+/** \brief Callback function type for cuDNN debug messages.
+ *  @since cuDNN 9.0.0
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnCallback_t extends FunctionPointer {
     static { Loader.load(); }

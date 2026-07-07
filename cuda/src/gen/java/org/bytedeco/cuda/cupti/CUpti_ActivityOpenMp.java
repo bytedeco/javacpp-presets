@@ -13,7 +13,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cupti.*;
 
 
-
 /**
  * \brief The base activity record for OpenMp records.
  *

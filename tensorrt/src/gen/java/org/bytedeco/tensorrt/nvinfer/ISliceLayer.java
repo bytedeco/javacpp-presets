@@ -58,8 +58,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  When the sampleMode is kCLAMP or kREFLECT, for each input dimension, if its size is 0 then the corresponding output
  *  dimension must be 0 too.
  * 
- *  When the sampleMode is kFILL, the fifth input to the slice layer is used to determine the value to fill in out-of-bound
- *  indices. It is an error to specify the fifth input in any other sampleMode.
+ *  When the sampleMode is kFILL, the fifth input to the slice layer is used to determine the value to fill in
+ *  out-of-bound indices. It is an error to specify the fifth input in any other sampleMode.
  * 
  *  A slice layer can produce a shape tensor if the following conditions are met:
  * 

@@ -19,7 +19,7 @@ import static org.bytedeco.cuda.global.cupti.*;
  * This activity record represents information about a green context
  * (CUPTI_ACTIVITY_KIND_GREEN_CONTEXT). This is an enhanced version of
  * \ref CUpti_ActivityGreenContext that adds work queue configuration fields.
- * 
+ *
  * The corresponding activity kind is CUPTI_ACTIVITY_KIND_GREEN_CONTEXT.
  *
  * Green contexts enable resource partitioning by allocating a subset of SMs

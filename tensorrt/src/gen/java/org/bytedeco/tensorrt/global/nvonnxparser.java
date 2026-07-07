@@ -25,12 +25,6 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
     static { Loader.load(); }
 
-// Targeting ../nvonnxparser/SubGraphCollection_t.java
-
-
-// Targeting ../nvonnxparser/SubGraph_t.java
-
-
 // Parsed from NvOnnxParser.h
 
 /*
@@ -54,14 +48,12 @@ public class nvonnxparser extends org.bytedeco.tensorrt.presets.nvonnxparser {
 // #define NV_ONNX_PARSER_H
 
 // #include "NvInfer.h"
+
+
+//!
+//!
+//!
 // #include <stddef.h>
-// #include <string>
-
-
-//!
-//!
-//!
-// #include <vector>
 
 /**
  *  \file NvOnnxParser.h
@@ -80,30 +72,6 @@ public static final int NV_ONNX_PARSER_PATCH = 0;
 //!
 @MemberGetter public static native int NV_ONNX_PARSER_VERSION();
 public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
-
-/**
- *  \typedef SubGraph_t
- * 
- *  \brief The data structure containing the parsing capability of
- *  a set of nodes in an ONNX graph.
- *  */
-
-
-//!
-//!
-//!
-
-/**
- *  \typedef SubGraphCollection_t
- * 
- *  \brief The data structure containing all SubGraph_t partitioned
- *  out of an ONNX graph.
- *  */
-
-
-//!
-//!
-//!
 
 /**
  *  \namespace nvonnxparser

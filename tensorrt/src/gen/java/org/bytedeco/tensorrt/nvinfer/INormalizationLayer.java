@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // class IReverseSequenceLayer
+
 
 /**
  *  \class INormalizationLayer
@@ -127,63 +127,12 @@ public class INormalizationLayer extends ILayer {
      *  */
     
     
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
+    
     //!
     //!
     //!
     public native @Cast("int64_t") @NoException(true) long getNbGroups();
 
-    /**
-     *  \brief Set the compute precision of this layer.
-     * 
-     *  @param type The datatype used for the compute precision of this layer.
-     * 
-     *  The method is used to avoid overflow errors by controlling the normalization computation in
-     *  mixed precision mode. The compute precision defaults to DataType::kFLOAT32.
-     *  To override this default, use this method to set the desired compute precision.
-     * 
-     *  For a weakly typed network:
-     * 
-     *  * Method setOutputType() can still be called to control the output data type.
-     * 
-     *  * Method setPrecision() can still be called. The input data is cast to that precision before
-     *    being cast to the compute precision.
-     * 
-     *  Strongly typed network rejects calls to this method since the compute precision is typically
-     *  controlled by casting the input tensors to the desired type.
-     * 
-     *  Only DataType::kFLOAT32 and DataType::kHALF are valid types for \p type.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.16. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) void setComputePrecision(DataType type);
-    public native @Deprecated @NoException(true) void setComputePrecision(@Cast("nvinfer1::DataType") int type);
-
-    /**
-     *  \brief Get the compute precision of this layer.
-     * 
-     *  @return The datatype used for the compute precision of this layer.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.16. Superseded by strong typing.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) DataType getComputePrecision();
 
     /**
      *  \brief Returns true if this layer was created through addNormalizationV2().

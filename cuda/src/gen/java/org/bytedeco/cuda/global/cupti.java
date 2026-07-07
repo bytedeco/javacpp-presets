@@ -163,7 +163,12 @@ public static final int
     CUPTI_ERROR_NOT_COMPATIBLE                          = 14,
     /**
      * CUPTI is unable to initialize its connection to the CUDA
-     * driver.
+     * driver. When returned from the profiling APIs (such as
+     * cuptiProfilerInitialize or cuptiProfilerHostInitialize), it may
+     * also indicate that CUPTI could not dynamically load the nvperf*
+     * libraries; ensure libnvperf_host.so and libnvperf_target.so,
+     * which ship alongside libcupti.so, are discoverable by the
+     * dynamic linker.
      */
     CUPTI_ERROR_NOT_INITIALIZED                         = 15,
     /**
@@ -395,7 +400,7 @@ public static native @Cast("CUptiResult") int cuptiGetErrorMessage(@Cast("CUptiR
 // Parsed from cupti_version.h
 
 /*
- * Copyright 2010-2025 NVIDIA Corporation.  All rights reserved.
+ * Copyright 2010-2026 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -521,8 +526,10 @@ public static native @Cast("CUptiResult") int cuptiGetErrorMessage(@Cast("CUptiR
  * v130101 : CUDA Toolkit 13.1 with CUPTI update 1
  * v130200 : CUDA Toolkit 13.2
  * v130201 : CUDA Toolkit 13.2 with CUPTI update 1
+ * v130300 : CUDA Toolkit 13.3
+ * v130301 : CUDA Toolkit 13.3 with CUPTI update 1
  */
-public static final int CUPTI_API_VERSION = 130201;
+public static final int CUPTI_API_VERSION = 130301;
 
 /**
  * \brief Get the CUPTI API version.
@@ -679,6 +686,7 @@ public static final int invalidNumaId = ((int) 0xFFFFFFFF);
  * @see CUpti_ActivityKernel9
  * @see CUpti_ActivityKernel10
  * @see CUpti_ActivityKernel11
+ * @see CUpti_ActivityKernel12
  * @see CUpti_ActivityCdpKernel
  * @see CUpti_ActivityPreemption
  * @see CUpti_ActivityMemcpy
@@ -770,7 +778,7 @@ public static final int
    * the overall performance characteristics of the application because all
    * kernel executions are serialized on the GPU. Other activity kind for kernel
    * CUPTI_ACTIVITY_KIND_CONCURRENT_KERNEL doesn't break kernel concurrency.
-   * The corresponding activity record structure is \ref CUpti_ActivityKernel11.
+   * The corresponding activity record structure is \ref CUpti_ActivityKernel12
    */
   CUPTI_ACTIVITY_KIND_KERNEL   = 3,
 
@@ -819,7 +827,7 @@ public static final int
   /**
    * A kernel executing on the GPU. This activity kind doesn't break
    * kernel concurrency. The corresponding activity record structure
-   * is \ref CUpti_ActivityKernel11.
+   * is \ref CUpti_ActivityKernel12.
    */
   CUPTI_ACTIVITY_KIND_CONCURRENT_KERNEL = 10,
 
@@ -2007,7 +2015,7 @@ public static final int
  * \brief Migration cause of the Unified Memory counter
  *
  * This is valid for \ref CUPTI_ACTIVITY_UNIFIED_MEMORY_COUNTER_KIND_BYTES_TRANSFER_HTOD and
- * \ref CUPTI_ACTIVITY_UNIFIED_MEMORY_COUNTER_KIND_BYTES_TRANSFER_DTOH
+ * \ref CUPTI_ACTIVITY_UNIFIED_MEMORY_COUNTER_KIND_BYTES_TRANSFER_DTOH and \ref CUPTI_ACTIVITY_UNIFIED_MEMORY_COUNTER_KIND_BYTES_TRANSFER_DTOD
  */
 /** enum CUpti_ActivityUnifiedMemoryMigrationCause */
 public static final int
@@ -3233,7 +3241,20 @@ public static final int
     CUPTI_FUNC_SHMEM_LIMIT_OPTIN                = 0x01,
 
     CUPTI_FUNC_SHMEM_LIMIT_FORCE_INT            = 0x7fffffff;
-// Targeting ../cupti/CUpti_ActivityKernel11.java
+
+/**
+ * \brief The execution model of a kernel function.
+ * This should be used to set executionModel field in kernel records.
+ */
+/** enum CUpti_FuncExecutionModel */
+public static final int
+    CUPTI_FUNC_EXECUTION_MODEL_UNKNOWN         = 0,
+    CUPTI_FUNC_EXECUTION_MODEL_SIMT            = 1,
+    CUPTI_FUNC_EXECUTION_MODEL_TILE            = 2,
+    // --- always add new constants to the end here ---
+    CUPTI_FUNC_EXECUTION_MODEL_SIZE = 3,
+    CUPTI_FUNC_EXECUTION_MODEL_FORCE_INT       = 0x7fffffff;
+// Targeting ../cupti/CUpti_ActivityKernel12.java
 
 
 
@@ -3542,9 +3563,16 @@ public static final int
   KERNEL_FIELD_LAUNCH_PRIORITY = 45,
 
   /**
+   * uint32_t executionModel;
+   * The execution model of the kernel function.
+   * @see CUpti_FuncExecutionModel for possible values.
+   */
+  KERNEL_FIELD_EXECUTION_MODEL = 46,
+
+  /**
    * Total number of defined fields.
    */
-  KERNEL_FIELD_MAX = 46;
+  KERNEL_FIELD_MAX = 47;
 // Targeting ../cupti/CUpti_ActivityCdpKernel.java
 
 
@@ -4204,9 +4232,72 @@ public static final int
    * Total number of defined fields.
    */
   OVERHEAD_FIELD_MAX = 8;
+// Targeting ../cupti/CUpti_ActivityEnvironmentSpeed.java
+
+
+// Targeting ../cupti/CUpti_ActivityEnvironmentTemperature.java
+
+
+// Targeting ../cupti/CUpti_ActivityEnvironmentPower.java
+
+
+// Targeting ../cupti/CUpti_ActivityEnvironmentCooling.java
+
+
 // Targeting ../cupti/CUpti_ActivityEnvironment.java
 
 
+
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityEnvironment.
+ *
+ * Each enum value corresponds to a field in CUpti_ActivityEnvironment
+ * and describes the data type and purpose of that field.
+ */
+/** enum CUpti_ActivityEnvironmentFieldIds */
+public static final int
+  /**
+   * CUpti_ActivityKind kind;
+   * Kind of activity record: CUPTI_ACTIVITY_KIND_ENVIRONMENT.
+   */
+  ENVIRONMENT_FIELD_KIND = 0,
+
+  /**
+   * uint32_t deviceId;
+   * The ID of the device
+   */
+  ENVIRONMENT_FIELD_DEVICE_ID = 1,
+
+  /**
+   * uint64_t timestamp;
+   * The timestamp when this sample was retrieved, in ns. A value of 0
+   * indicates that timestamp information could not be collected for
+   * the marker.
+   */
+  ENVIRONMENT_FIELD_TIMESTAMP = 2,
+
+  /**
+   * CUpti_ActivityEnvironmentKind environmentKind;
+   * The kind of data reported in this record.
+   */
+  ENVIRONMENT_FIELD_ENVIRONMENT_KIND = 3,
+
+  /**
+   * union data;
+   * Depending on the value of environmentKind, this field contains
+   * additional information about the environment.
+   * CUpti_ActivityEnvironmentSpeed speed if environmentKind is CUPTI_ACTIVITY_ENVIRONMENT_SPEED
+   * CUpti_ActivityEnvironmentTemperature temperature if environmentKind is CUPTI_ACTIVITY_ENVIRONMENT_TEMPERATURE
+   * CUpti_ActivityEnvironmentPower power if environmentKind is CUPTI_ACTIVITY_ENVIRONMENT_POWER
+   * CUpti_ActivityEnvironmentCooling cooling if environmentKind is CUPTI_ACTIVITY_ENVIRONMENT_COOLING
+   * The size of this field is determined by the largest structure among the possible types it can hold.
+   */
+  ENVIRONMENT_FIELD_ENVIRONMENT_KIND_DATA = 4,
+
+  /**
+   * Total number of defined fields.
+   */
+  ENVIRONMENT_FIELD_MAX = 5;
 // Targeting ../cupti/CUpti_ActivityInstructionExecution.java
 
 
@@ -4605,16 +4696,600 @@ public static final int
 // Targeting ../cupti/CUpti_ActivityOpenAccData.java
 
 
+
+
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityOpenAccData.
+ *
+ * Each enum value corresponds to a field in CUpti_ActivityOpenAccData
+ * and documents the exact meaning of that field.
+ */
+/** enum CUpti_ActivityOpenAccDataFieldIds */
+public static final int
+
+  /**
+   * CUpti_ActivityKind kind;
+   * The activity record kind. Must be CUPTI_ACTIVITY_KIND_OPENACC_DATA.
+   */
+  OPENACC_DATA_FIELD_KIND = 0,
+
+  /**
+   * CUpti_OpenAccEventKind eventKind;
+   * CUPTI OpenACC event kind.
+   */
+  OPENACC_DATA_FIELD_EVENT_KIND = 1,
+
+  /**
+   * CUpti_OpenAccConstructKind parentConstruct;
+   * Parent OpenACC construct kind.
+   * For PGI OpenACC runtime < 16.1, this is always
+   * CUPTI_OPENACC_CONSTRUCT_KIND_UNKNOWN.
+   */
+  OPENACC_DATA_FIELD_PARENT_CONSTRUCT = 2,
+
+  /**
+   * uint32_t version;
+   * Version number.
+   */
+  OPENACC_DATA_FIELD_VERSION = 3,
+
+  /**
+   * uint32_t implicit;
+   * 1 if this is an implicit event (e.g. implicit wait),
+   * 0 otherwise.
+   */
+  OPENACC_DATA_FIELD_IMPLICIT = 4,
+
+  /**
+   * uint32_t deviceType;
+   * OpenACC device type.
+   */
+  OPENACC_DATA_FIELD_DEVICE_TYPE = 5,
+
+  /**
+   * uint32_t deviceNumber;
+   * OpenACC device number.
+   */
+  OPENACC_DATA_FIELD_DEVICE_NUMBER = 6,
+
+  /**
+   * uint32_t threadId;
+   * Thread ID.
+   */
+  OPENACC_DATA_FIELD_THREAD_ID = 7,
+
+  /**
+   * uint64_t async;
+   * Value of the async() clause of the corresponding directive.
+   */
+  OPENACC_DATA_FIELD_ASYNC = 8,
+
+  /**
+   * uint64_t asyncMap;
+   * Internal asynchronous queue number used.
+   */
+  OPENACC_DATA_FIELD_ASYNC_MAP = 9,
+
+  /**
+   * uint32_t lineNo;
+   * Line number of the directive or construct start.
+   * A non-positive value indicates unknown.
+   */
+  OPENACC_DATA_FIELD_LINE_NO = 10,
+
+  /**
+   * uint32_t endLineNo;
+   * Line number of the end of the OpenACC construct.
+   * A non-positive value indicates unknown.
+   */
+  OPENACC_DATA_FIELD_END_LINE_NO = 11,
+
+  /**
+   * uint32_t funcLineNo;
+   * First line number of the function in which the event occurred.
+   * A non-positive value indicates unknown.
+   */
+  OPENACC_DATA_FIELD_FUNC_LINE_NO = 12,
+
+  /**
+   * uint32_t funcEndLineNo;
+   * Last line number of the function in which the event occurred.
+   * A non-positive value indicates unknown.
+   */
+  OPENACC_DATA_FIELD_FUNC_END_LINE_NO = 13,
+
+  /**
+   * uint64_t start;
+   * CUPTI start timestamp (in ns).
+   */
+  OPENACC_DATA_FIELD_START = 14,
+
+  /**
+   * uint64_t end;
+   * CUPTI end timestamp (in ns).
+   */
+  OPENACC_DATA_FIELD_END = 15,
+
+  /**
+   * uint32_t cuDeviceId;
+   * CUDA device ID.
+   * Valid only if deviceType is acc_device_nvidia.
+   */
+  OPENACC_DATA_FIELD_CU_DEVICE_ID = 16,
+
+  /**
+   * uint32_t cuContextId;
+   * CUDA context ID.
+   * Valid only if deviceType is acc_device_nvidia.
+   */
+  OPENACC_DATA_FIELD_CU_CONTEXT_ID = 17,
+
+  /**
+   * uint32_t cuStreamId;
+   * CUDA stream ID.
+   * Valid only if deviceType is acc_device_nvidia.
+   */
+  OPENACC_DATA_FIELD_CU_STREAM_ID = 18,
+
+  /**
+   * uint32_t cuProcessId;
+   * Process ID where the OpenACC activity is executing.
+   */
+  OPENACC_DATA_FIELD_CU_PROCESS_ID = 19,
+
+  /**
+   * uint64_t cuThreadId;
+   * Thread ID where the OpenACC activity is executing.
+   */
+  OPENACC_DATA_FIELD_CU_THREAD_ID = 20,
+
+  /**
+   * uint32_t externalId;
+   * OpenACC correlation ID.
+   * Matches the externalId from the corresponding
+   * CUPTI_EXTERNAL_CORRELATION_KIND_OPENACC record.
+   */
+  OPENACC_DATA_FIELD_EXTERNAL_ID = 21,
+
+  /**
+   * const char* srcFile;
+   * Pointer to a null-terminated string containing the source file name
+   * or path, if known.
+   */
+  OPENACC_DATA_FIELD_SRC_FILE = 22,
+
+  /**
+   * const char* funcName;
+   * Pointer to a null-terminated string containing the function name.
+   */
+  OPENACC_DATA_FIELD_FUNC_NAME = 23,
+
+  /**
+   * uint64_t bytes;
+   * Number of bytes involved in the operation.
+   */
+  OPENACC_DATA_FIELD_BYTES = 24,
+
+  /**
+   * uint64_t hostPtr;
+   * Host pointer, if available.
+   */
+  OPENACC_DATA_FIELD_HOST_PTR = 25,
+
+  /**
+   * uint64_t devicePtr;
+   * Device pointer, if available.
+   */
+  OPENACC_DATA_FIELD_DEVICE_PTR = 26,
+
+  /**
+   * const char* varName;
+   * Pointer to a null-terminated string containing the variable name
+   * for which this event is triggered.
+   */
+  OPENACC_DATA_FIELD_VAR_NAME = 27,
+
+  /**
+   * Total number of defined fields.
+   */
+  OPENACC_DATA_FIELD_MAX = 28;
 // Targeting ../cupti/CUpti_ActivityOpenAccLaunch.java
 
 
+
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityOpenAccLaunch.
+ *
+ * Each enum value corresponds to a field in CUpti_ActivityOpenAccLaunch
+ * and documents the exact meaning of that field.
+ */
+/** enum CUpti_ActivityOpenAccLaunchFieldIds */
+public static final int
+  /**
+   * CUpti_ActivityKind kind;
+   * The activity record kind, must be CUPTI_ACTIVITY_KIND_OPENACC_LAUNCH.
+   */
+  OPENACC_LAUNCH_FIELD_KIND = 0,
+
+  /**
+   * CUpti_OpenAccEventKind eventKind;
+   * CUPTI OpenACC event kind.
+   */
+  OPENACC_LAUNCH_FIELD_EVENT_KIND = 1,
+
+  /**
+   * CUpti_OpenAccConstructKind parentConstruct;
+   * CUPTI OpenACC parent construct kind.
+   */
+  OPENACC_LAUNCH_FIELD_PARENT_CONSTRUCT = 2,
+
+  /**
+   * uint32_t version;
+   * Version number.
+   */
+  OPENACC_LAUNCH_FIELD_VERSION = 3,
+
+  /**
+   * uint32_t implicit;
+   * 1 for implicit event, 0 otherwise.
+   */
+  OPENACC_LAUNCH_FIELD_IMPLICIT = 4,
+
+  /**
+   * uint32_t deviceType;
+   * Device type.
+   */
+  OPENACC_LAUNCH_FIELD_DEVICE_TYPE = 5,
+
+  /**
+   * uint32_t deviceNumber;
+   * Device number.
+   */
+  OPENACC_LAUNCH_FIELD_DEVICE_NUMBER = 6,
+
+  /**
+   * uint32_t threadId;
+   * Thread identifier.
+   */
+  OPENACC_LAUNCH_FIELD_THREAD_ID = 7,
+
+  /**
+   * uint64_t async;
+   * Value of async() clause of the corresponding directive.
+   */
+  OPENACC_LAUNCH_FIELD_ASYNC = 8,
+
+  /**
+   * uint64_t asyncMap;
+   * Internal asynchronous queue number used.
+   */
+  OPENACC_LAUNCH_FIELD_ASYNC_MAP = 9,
+
+  /**
+   * uint32_t lineNo;
+   * Line number of the directive or construct.
+   */
+  OPENACC_LAUNCH_FIELD_LINE_NO = 10,
+
+  /**
+   * uint32_t endLineNo;
+   * Line number of the end of the construct.
+   */
+  OPENACC_LAUNCH_FIELD_END_LINE_NO = 11,
+
+  /**
+   * uint32_t funcLineNo;
+   * Starting line number of the function.
+   */
+  OPENACC_LAUNCH_FIELD_FUNC_LINE_NO = 12,
+
+  /**
+   * uint32_t funcEndLineNo;
+   * Ending line number of the function.
+   */
+  OPENACC_LAUNCH_FIELD_FUNC_END_LINE_NO = 13,
+
+  /**
+   * uint64_t start;
+   * CUPTI start timestamp.
+   */
+  OPENACC_LAUNCH_FIELD_START = 14,
+
+  /**
+   * uint64_t end;
+   * CUPTI end timestamp.
+   */
+  OPENACC_LAUNCH_FIELD_END = 15,
+
+  /**
+   * uint32_t cuDeviceId;
+   * CUDA device id.
+   */
+  OPENACC_LAUNCH_FIELD_CU_DEVICE_ID = 16,
+
+  /**
+   * uint32_t cuContextId;
+   * CUDA context id.
+   */
+  OPENACC_LAUNCH_FIELD_CU_CONTEXT_ID = 17,
+
+  /**
+   * uint32_t cuStreamId;
+   * CUDA stream id.
+   */
+  OPENACC_LAUNCH_FIELD_CU_STREAM_ID = 18,
+
+  /**
+   * uint32_t cuProcessId;
+   * Process id where the activity is executing.
+   */
+  OPENACC_LAUNCH_FIELD_CU_PROCESS_ID = 19,
+
+  /**
+   * uint64_t cuThreadId;
+   * Thread id where the activity is executing.
+   */
+  OPENACC_LAUNCH_FIELD_CU_THREAD_ID = 20,
+
+  /**
+   * uint32_t externalId;
+   * OpenACC correlation id.
+   */
+  OPENACC_LAUNCH_FIELD_EXTERNAL_ID = 21,
+
+  /**
+   * const char *srcFile;
+   * Pointer to null-terminated string containing source file name or path.
+   */
+  OPENACC_LAUNCH_FIELD_SRC_FILE = 22,
+
+  /**
+   * const char *funcName;
+   * Pointer to null-terminated string containing function name.
+   */
+  OPENACC_LAUNCH_FIELD_FUNC_NAME = 23,
+
+  /**
+   * uint64_t numGangs;
+   * Number of gangs created for this kernel launch.
+   */
+  OPENACC_LAUNCH_FIELD_NUM_GANGS = 24,
+
+  /**
+   * uint64_t numWorkers;
+   * Number of workers created for this kernel launch.
+   */
+  OPENACC_LAUNCH_FIELD_NUM_WORKERS = 25,
+
+  /**
+   * uint64_t vectorLength;
+   * Number of vector lanes created for this kernel launch.
+   */
+  OPENACC_LAUNCH_FIELD_VECTOR_LENGTH = 26,
+
+  /**
+   * const char *kernelName;
+   * Pointer to null-terminated string containing kernel name.
+   */
+  OPENACC_LAUNCH_FIELD_KERNEL_NAME = 27,
+
+  /**
+   * Total number of defined fields.
+   */
+  OPENACC_LAUNCH_FIELD_MAX = 28;
 // Targeting ../cupti/CUpti_ActivityOpenAccOther.java
 
 
+
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityOpenAccOther.
+ *
+ * Each enum value corresponds to a field in CUpti_ActivityOpenAccOther
+ * and documents the exact meaning of that field.
+ */
+/** enum CUpti_ActivityOpenAccOtherFieldIds */
+public static final int
+  /**
+   * CUpti_ActivityKind kind;
+   * The activity record kind, must be CUPTI_ACTIVITY_KIND_OPENACC_OTHER.
+   */
+  OPENACC_OTHER_FIELD_KIND = 0,
+
+  /**
+   * CUpti_OpenAccEventKind eventKind;
+   * CUPTI OpenACC event kind.
+   */
+  OPENACC_OTHER_FIELD_EVENT_KIND = 1,
+
+  /**
+   * CUpti_OpenAccConstructKind parentConstruct;
+   * CUPTI OpenACC parent construct kind.
+   */
+  OPENACC_OTHER_FIELD_PARENT_CONSTRUCT = 2,
+
+  /**
+   * uint32_t version;
+   * Version number.
+   */
+  OPENACC_OTHER_FIELD_VERSION = 3,
+
+  /**
+   * uint32_t implicit;
+   * 1 for implicit event, 0 otherwise.
+   */
+  OPENACC_OTHER_FIELD_IMPLICIT = 4,
+
+  /**
+   * uint32_t deviceType;
+   * Device type.
+   */
+  OPENACC_OTHER_FIELD_DEVICE_TYPE = 5,
+
+  /**
+   * uint32_t deviceNumber;
+   * Device number.
+   */
+  OPENACC_OTHER_FIELD_DEVICE_NUMBER = 6,
+
+  /**
+   * uint32_t threadId;
+   * Thread identifier.
+   */
+  OPENACC_OTHER_FIELD_THREAD_ID = 7,
+
+  /**
+   * uint64_t async;
+   * Value of async() clause of the corresponding directive.
+   */
+  OPENACC_OTHER_FIELD_ASYNC = 8,
+
+  /**
+   * uint64_t asyncMap;
+   * Internal asynchronous queue number used.
+   */
+  OPENACC_OTHER_FIELD_ASYNC_MAP = 9,
+
+  /**
+   * uint32_t lineNo;
+   * Line number of the directive or construct.
+   */
+  OPENACC_OTHER_FIELD_LINE_NO = 10,
+
+  /**
+   * uint32_t endLineNo;
+   * Line number of the end of the construct.
+   */
+  OPENACC_OTHER_FIELD_END_LINE_NO = 11,
+
+  /**
+   * uint32_t funcLineNo;
+   * Starting line number of the function.
+   */
+  OPENACC_OTHER_FIELD_FUNC_LINE_NO = 12,
+
+  /**
+   * uint32_t funcEndLineNo;
+   * Ending line number of the function.
+   */
+  OPENACC_OTHER_FIELD_FUNC_END_LINE_NO = 13,
+
+  /**
+   * uint64_t start;
+   * CUPTI start timestamp.
+   */
+  OPENACC_OTHER_FIELD_START = 14,
+
+  /**
+   * uint64_t end;
+   * CUPTI end timestamp.
+   */
+  OPENACC_OTHER_FIELD_END = 15,
+
+  /**
+   * uint32_t cuDeviceId;
+   * CUDA device id.
+   */
+  OPENACC_OTHER_FIELD_CU_DEVICE_ID = 16,
+
+  /**
+   * uint32_t cuContextId;
+   * CUDA context id.
+   */
+  OPENACC_OTHER_FIELD_CU_CONTEXT_ID = 17,
+
+  /**
+   * uint32_t cuStreamId;
+   * CUDA stream id.
+   */
+  OPENACC_OTHER_FIELD_CU_STREAM_ID = 18,
+
+  /**
+   * uint32_t cuProcessId;
+   * Process id where the activity is executing.
+   */
+  OPENACC_OTHER_FIELD_CU_PROCESS_ID = 19,
+
+  /**
+   * uint64_t cuThreadId;
+   * Thread id where the activity is executing.
+   */
+  OPENACC_OTHER_FIELD_CU_THREAD_ID = 20,
+
+  /**
+   * uint32_t externalId;
+   * OpenACC correlation id.
+   */
+  OPENACC_OTHER_FIELD_EXTERNAL_ID = 21,
+
+  /**
+   * const char *srcFile;
+   * Pointer to null-terminated string containing source file name or path.
+   */
+  OPENACC_OTHER_FIELD_SRC_FILE = 22,
+
+  /**
+   * const char *funcName;
+   * Pointer to null-terminated string containing function name.
+   */
+  OPENACC_OTHER_FIELD_FUNC_NAME = 23,
+
+  /**
+   * Total number of defined fields.
+   */
+  OPENACC_OTHER_FIELD_MAX = 24;
 // Targeting ../cupti/CUpti_ActivityOpenMp.java
 
 
 
+
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityOpenMp.
+ *
+ * This activity record records OpenMP activity information.
+ */
+/** enum CUpti_ActivityOpenMpFieldIds */
+public static final int
+
+  /**
+   * CUpti_ActivityKind kind;
+   * Kind of this activity record. Always CUPTI_ACTIVITY_KIND_OPENMP.
+   */
+  OPENMP_FIELD_KIND = 0,
+
+  /**
+   * CUpti_OpenMpEventKind eventKind;
+   * CUPTI OpenMP event kind (@see CUpti_OpenMpEventKind)
+   */
+  OPENMP_FIELD_EVENT_KIND = 1,
+
+  /**
+   * uint64_t start;
+   * CUPTI start timestamp
+   */
+  OPENMP_FIELD_START = 2,
+
+  /**
+   * uint64_t end;
+   * CUPTI end timestamp
+   */
+  OPENMP_FIELD_END = 3,
+
+  /**
+   * uint64_t cuThreadId;
+   * The ID of the thread where the OpenMP activity is executing.
+   */
+  OPENMP_FIELD_CU_THREAD_ID = 4,
+
+  /**
+   * uint32_t cuProcessId;
+   * The ID of the process where the OpenMP activity is executing.
+   */
+  OPENMP_FIELD_CU_PROCESS_ID = 5,
+
+  /**
+   * Total number of defined fields.
+   */
+  OPENMP_FIELD_MAX = 6;
 
 /**
  * \brief The kind of external APIs supported for correlation.
@@ -4718,10 +5393,99 @@ public static final int
     CUPTI_DEV_TYPE_NPU = 2,
 
     CUPTI_DEV_TYPE_FORCE_INT = 0x7fffffff;
+// Targeting ../cupti/CUpti_ActivityNvLinkNpu.java
+
+
 // Targeting ../cupti/CUpti_ActivityNvLink5.java
 
 
 
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityNvLink5.
+ *
+ * Each enum value corresponds to a field in CUpti_ActivityNvLink5
+ * and describes the data type and purpose of that field.
+ */
+/** enum CUpti_ActivityNvLinkFieldIds */
+public static final int
+  /**
+   * CUpti_ActivityKind kind;
+   * Kind of activity record: CUPTI_ACTIVITY_KIND_NVLINK.
+   */
+  NVLINK_FIELD_KIND = 0,
+
+  /**
+   * uint32_t nvlinkVersion;
+   * NvLink version.
+   */
+  NVLINK_FIELD_NVLINK_VERSION = 1,
+
+  /**
+   * CUpti_DevType typeDev0;
+   * Type of device 0.
+   */
+  NVLINK_FIELD_TYPE_DEV0 = 2,
+
+  /**
+   * CUpti_DevType typeDev1;
+   * Type of device 1.
+   */
+  NVLINK_FIELD_TYPE_DEV1 = 3,
+
+  /**
+   * union idDev0;
+   * If typeDev0 is CUPTI_DEV_TYPE_GPU, UUID for device 0.
+   * If typeDev0 is CUPTI_DEV_TYPE_NPU, CUpti_ActivityNvLinkNpu for NPU.
+   */
+  NVLINK_FIELD_ID_DEV0 = 4,
+
+  /**
+   * union idDev1;
+   * If typeDev1 is CUPTI_DEV_TYPE_GPU, UUID for device 1.
+   * If typeDev1 is CUPTI_DEV_TYPE_NPU, CUpti_ActivityNvLinkNpu for NPU.
+   */
+  NVLINK_FIELD_ID_DEV1 = 5,
+
+  /**
+   * uint32_t flag;
+   * Flag gives capabilities of the link (CUpti_LinkFlag).
+   */
+  NVLINK_FIELD_FLAG = 6,
+
+  /**
+   * uint32_t physicalNvLinkCount;
+   * Number of physical NVLinks present between two devices.
+   */
+  NVLINK_FIELD_PHYSICAL_NVLINK_COUNT = 7,
+
+  /**
+   * uint32_t* portDev0;
+   * Port numbers for NVLinks connected to device 0.
+   */
+  NVLINK_FIELD_PORT_DEV0 = 8,
+
+  /**
+   * uint32_t* portDev1;
+   * Port numbers for NVLinks connected to device 1.
+   */
+  NVLINK_FIELD_PORT_DEV1 = 9,
+
+  /**
+   * uint64_t bandwidth;
+   * Bandwidth of NVLink in kbytes/sec.
+   */
+  NVLINK_FIELD_BANDWIDTH = 10,
+
+  /**
+   * uint8_t nvswitchConnected;
+   * NVSwitch is connected as an intermediate node.
+   */
+  NVLINK_FIELD_NVSWITCH_CONNECTED = 11,
+
+  /**
+   * Total number of defined fields.
+   */
+  NVLINK_FIELD_MAX = 12;
 
 public static final int CUPTI_MAX_GPUS = 32;
 /**
@@ -4741,9 +5505,90 @@ public static final int
     CUPTI_PCIE_DEVICE_TYPE_BRIDGE    = 1,
 
     CUPTI_PCIE_DEVICE_TYPE_FORCE_INT = 0x7fffffff;
+// Targeting ../cupti/CUpti_ActivityPcieGpuAttr.java
+
+
+// Targeting ../cupti/CUpti_ActivityPcieBridgeAttr.java
+
+
 // Targeting ../cupti/CUpti_ActivityPcie.java
 
 
+
+/**
+ * \brief Enum identifiers for fields in CUpti_ActivityPcie.
+ *
+ * Each enum value corresponds to a field in CUpti_ActivityPcie
+ * and describes the data type and purpose of that field.
+ */
+/** enum CUpti_ActivityPcieFieldIds */
+public static final int
+  /**
+   * CUpti_ActivityKind kind;
+   * Kind of activity record: CUPTI_ACTIVITY_KIND_PCIE.
+   */
+  PCIE_FIELD_KIND = 0,
+
+  /**
+   * CUpti_PcieDeviceType type;
+   * Type of device in topology, CUpti_PcieDeviceType.
+   */
+  PCIE_FIELD_TYPE = 1,
+
+  /**
+   * union id;
+   * A unique identifier for GPU or Bridge in Topology.
+   * CUdevice devId if type is CUPTI_PCIE_DEVICE_TYPE_GPU
+   * uint32_t bridgeId if type is CUPTI_PCIE_DEVICE_TYPE_BRIDGE
+   */
+  PCIE_FIELD_ID = 2,
+
+  /**
+   * uint32_t domain;
+   * Domain for the GPU or Bridge, required to identify which PCIE bus
+   * it belongs to in multiple NUMA systems.
+   */
+  PCIE_FIELD_DOMAIN = 3,
+
+  /**
+   * uint16_t pcieGeneration;
+   * PCIE Generation of GPU or Bridge.
+   */
+  PCIE_FIELD_PCIE_GENERATION = 4,
+
+  /**
+   * uint16_t linkRate;
+   * Link rate of the GPU or bridge in gigatransfers per second (GT/s).
+   */
+  PCIE_FIELD_LINK_RATE = 5,
+
+  /**
+   * uint16_t linkWidth;
+   * Link width of the GPU or bridge.
+   */
+  PCIE_FIELD_LINK_WIDTH = 6,
+
+  /**
+   * uint16_t upstreamBus;
+   * Upstream bus ID for the GPU or PCI bridge. Required to identify
+   * which bus it is connected to in the topology.
+   */
+  PCIE_FIELD_UPSTREAM_BUS = 7,
+
+  /**
+   * union attr;
+   * Attributes for more information about GPU (gpuAttr) or PCI Bridge (bridgeAttr).
+   * CUpti_ActivityPcieGpuAttr gpuAttr if type is CUPTI_PCIE_DEVICE_TYPE_GPU
+   * CUpti_ActivityPcieBridgeAttr bridgeAttr if type is CUPTI_PCIE_DEVICE_TYPE_BRIDGE
+   * The size of this field is determined by the largest structure among
+   * the possible types it can hold.
+   */
+  PCIE_FIELD_ATTR = 8,
+
+  /**
+   * Total number of defined fields.
+   */
+  PCIE_FIELD_MAX = 9;
 
 
 /**
@@ -5822,9 +6667,6 @@ public static final int
      *  Tutorial: https://docs.nvidia.com/cupti/tutorial/tutorial.html#tutorial-activity-user-defined-records
      *  Refer sample cupti_user_defined_records for usage.
      *
-     * NOTE: The CUPTI user-defined activity records feature is currently in beta.
-     * APIs and behavior may change in future releases.
-     *
      * The default value is 0 i.e. CUPTI will provide records with all fields.
      */
     CUPTI_ACTIVITY_ATTR_USER_DEFINED_RECORDS = 11,
@@ -5839,8 +6681,6 @@ public static final int
      * Note that this attribute cannot be set by cuptiActivitySetAttribute or cuptiActivitySetAttribute_v2.
      * It can however be queried using cuptiActivityGetAttribute_v2.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.
      */
     CUPTI_ACTIVITY_ATTR_MULTIPLE_SUBSCRIBER_STATE = 12,
 
@@ -5854,9 +6694,6 @@ public static final int
      * This attribute is not subscriber specific, and the subscriber parameter is ignored. All subscribers will share the same HES enabled flag.
      * However, this attribute must be set before enabling any activity kind by any subscriber. However, it can be queried using cuptiActivityGetAttribute_v2.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_HES = 13,
 
@@ -5868,9 +6705,6 @@ public static final int
      * If 1, allocation source library tracking is enabled.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      * Note that the cuptiActivityEnableAllocationSource API cannot be used when multiple subscribers are allowed.
-     *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
      *
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_ALLOCATION_SOURCE_TRACKING = 14,
@@ -5885,9 +6719,6 @@ public static final int
      * If 1, latency timestamp tracking is enabled.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_KERNEL_LATENCY_TIMESTAMPS = 15,
 
@@ -5898,9 +6729,6 @@ public static final int
      * This can be used to toggle collecting sync records for all synchronization operations (whether to include records for synchronization operations which return non-zero CUDA status).
      * By default, this flag is set to 0. If this flag is set to 1, sync records are collected for all synchronization operations (even if they return non-zero CUDA status).
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
-     *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
      *
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_ALL_SYNC_RECORDS = 16,
@@ -5913,9 +6741,6 @@ public static final int
      * By default, this flag is set to 0. If this flag is set to 1, event device timestamps are collected for CUDA event records.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_CUDA_EVENT_DEVICE_TIMESTAMPS = 17,
 
@@ -5927,9 +6752,6 @@ public static final int
      * By default, this flag is set to 0. If this flag is set to 1, launch attributes are collected for kernel records.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_KERNEL_LAUNCH_ATTRIBUTES = 18,
 
@@ -5941,9 +6763,6 @@ public static final int
      * By default, this flag is set to 0. If this flag is set to 1, device graph trace is collected for graph records.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
      */
     CUPTI_ACTIVITY_ATTR_ENABLE_DEVICE_GRAPH_TRACE = 19,
 
@@ -5964,11 +6783,8 @@ public static final int
      * However, this attribute must be set before enabling any activity kind by any subscriber.
      * This attribute is not subscriber specific, and the subscriber parameter is ignored. All subscribers will share the same multi-subscriber graph level trace enabled flag.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
      */
-    CUPTI_ACTIVITY_ATTR_ENABLE_MULTI_SUBSCRIBER_GRAPH_LEVEL_TRACE = 20,
+    CUPTI_ACTIVITY_ATTR_ENABLE_MULTI_SUBSCRIBER_GRAPH_TRACE = 20,
 
     /**
      * Get or set the thread ID type (for the specified subscriber).
@@ -5978,9 +6794,6 @@ public static final int
      * The default value is CUPTI_ACTIVITY_THREAD_ID_TYPE_DEFAULT.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
      */
     CUPTI_ACTIVITY_ATTR_THREAD_ID_TYPE = 21,
 
@@ -5992,24 +6805,23 @@ public static final int
      * The value can be NULL to unregister the callback.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2 for the specified subscriber.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
+     * \note This attribute is currently in beta.
+     * Current behavior is that this cannot be used when multiple subscribers are allowed.
+     * Behavior may change in future releases.
+     *
      */
     CUPTI_ACTIVITY_ATTR_TIMESTAMP_CALLBACK = 22,
 
     /**
      * Get or set the CIG (CUDA in Graphics) mode.
-     * The value is a uint8_t.
+     * The value is a uint8_t. 
      *
      * This attribute allows enabling or disabling the CIG mode.
      * Note that this attribute can be set by cuptiActivitySetAttribute_v2 and queried using cuptiActivityGetAttribute_v2.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.    
-     *     
+     *
      */
-    CUPTI_ACTIVITY_ATTR_CIG_MODE = 23,
+    CUPTI_ACTIVITY_ATTR_ENABLE_CIG_MODE = 23,
 
 
     CUPTI_ACTIVITY_ATTR_DEVICE_BUFFER_FORCE_INT                 = 0x7fffffff;
@@ -6063,6 +6875,25 @@ public static final int
 public static native @Cast("CUptiResult") int cuptiGetTimestamp(@Cast("uint64_t*") LongPointer timestamp);
 public static native @Cast("CUptiResult") int cuptiGetTimestamp(@Cast("uint64_t*") LongBuffer timestamp);
 public static native @Cast("CUptiResult") int cuptiGetTimestamp(@Cast("uint64_t*") long[] timestamp);
+
+/**
+ * \brief Get the CUPTI timestamp (API currently in beta). If a subscriber registers a particular timestamp callback, this API will use that callback to get the timestamp.
+ * In CUDA 13.3, this will fall back to cuptiGetTimestamp(). In future versions, this will provide
+ * the timestamp callback registered by the requesting subscriber, and fallback to cuptiGetTimestamp() if no callback is registered.
+ *
+ * Returns a timestamp normalized to correspond with the start and end
+ * timestamps reported in the CUPTI activity records. The timestamp is
+ * reported in nanoseconds.
+ *
+ * @param subscriber The subscriber handle
+ * @param timestamp Returns the CUPTI timestamp
+ *
+ * \retval CUPTI_SUCCESS
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if \p timestamp is NULL or \p subscriber is NULL
+ */
+ public static native @Cast("CUptiResult") int cuptiGetTimestamp_v2(@ByPtr CUpti_Subscriber_st subscriber, @Cast("uint64_t*") LongPointer timestamp);
+ public static native @Cast("CUptiResult") int cuptiGetTimestamp_v2(@ByPtr CUpti_Subscriber_st subscriber, @Cast("uint64_t*") LongBuffer timestamp);
+ public static native @Cast("CUptiResult") int cuptiGetTimestamp_v2(@ByPtr CUpti_Subscriber_st subscriber, @Cast("uint64_t*") long[] timestamp);
 
 /**
  * \brief Get the ID of a context.
@@ -6273,7 +7104,6 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableAndDump(@Cast("
 public static native @Cast("CUptiResult") int cuptiActivityDisable(@Cast("CUpti_ActivityKind") int kind);
 
 
-
 // #ifndef CUPTI_ACTIVITY_STRUCT_SIZE
 // #define CUPTI_ACTIVITY_STRUCT_SIZE(type_, lastfield_)                     (offsetof(type_, lastfield_) + sizeof(((type_*)0)->lastfield_))
 // Targeting ../cupti/CUpti_ActivityConfig.java
@@ -6359,7 +7189,6 @@ public static native @Cast("CUptiResult") int cuptiActivityDisable_v2(@ByPtr CUp
  */
  public static native @Cast("CUptiResult") int cuptiActivityEnableAndDump_v2(@ByPtr CUpti_Subscriber_st subscriber, @Cast("CUpti_ActivityKind") int kind, CUpti_ActivityConfig activityConfig);
 
-
 /**
  * \brief Get the enabled activity kinds for a subscriber.
  *
@@ -6399,15 +7228,18 @@ public static native @Cast("CUptiResult") int cuptiActivityGetEnabledKinds(@ByPt
 public static native @Cast("CUptiResult") int cuptiActivityGetStructSize(@Cast("CUpti_ActivityKind") int activityKind, @Cast("uint32_t") int version, @Cast("size_t*") SizeTPointer activityStructSize);
 
 /**
- * \brief Check whether a CUPTI tracing session is still running. Can be used to determine if it is safe to unload your CUPTI based tool.
- *
+ * \brief Check whether a CUPTI tracing session is still running. 
+ * This API returns true if a CUPTI library is already loaded by another CUPTI user by using any CUPTI API.
+ * This API returns false when CUPTI is finalized and there is no CUPTI currently loaded and active.
+ * Can be used to determine if it is safe to unload your CUPTI based tool.
+ * Note that this API itself does not load the CUPTI library, it merely checks if a CUPTI library is already loaded by another CUPTI user.
+ * 
  * @param isRunning Returns whether the tracing session is still running.
  *
  * \retval CUPTI_SUCCESS
  * \retval CUPTI_ERROR_INVALID_PARAMETER if \p isRunning is NULL.
  * \retval CUPTI_ERROR_UNKNOWN if an unknown error occurred.
  */
-
 
 
 /**
@@ -6476,6 +7308,27 @@ public static native @Cast("CUptiResult") int cuptiActivityGetNumDroppedRecords(
                                                        @Cast("size_t*") SizeTPointer dropped);
 
 /**
+ * \brief Get the number of dropped activity records for a specific subscriber.
+ *
+ * This is the per-subscriber version of \ref cuptiActivityGetNumDroppedRecords.
+ *
+ * @param subscriber The subscriber handle
+ * @param context CUDA context (reserved for future use)
+ * @param streamId Stream ID (reserved for future use)
+ * @param dropped Returns the number of dropped records
+ *
+ * \retval CUPTI_SUCCESS on success
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if \p subscriber or \p dropped is NULL
+ *
+ * \note This API resets the subscriber's dropped record count to 0 after reading.
+ */
+public static native @Cast("CUptiResult") int cuptiActivityGetNumDroppedRecords_v2(
+    @ByPtr CUpti_Subscriber_st subscriber,
+    CUctx_st context,
+    @Cast("uint32_t") int streamId,
+    @Cast("size_t*") SizeTPointer dropped);
+
+/**
  * \brief Iterate over the activity records in a buffer.
  *
  * This is a helper function to iterate over the activity records in a
@@ -6525,6 +7378,62 @@ public static native @Cast("CUptiResult") int cuptiActivityGetNextRecord(@Cast("
                                                 @ByPtrPtr CUpti_Activity record);
 public static native @Cast("CUptiResult") int cuptiActivityGetNextRecord(@Cast("uint8_t*") byte[] buffer, @Cast("size_t") long validBufferSizeBytes,
                                                 @ByPtrPtr CUpti_Activity record);
+
+/**
+ * \brief Iterate over the activity records in the supplied buffer.
+ *
+ * This function is similar to \ref cuptiActivityGetNextRecord and accepts a subscriber handle.
+ * It should be used instead of \ref cuptiActivityGetNextRecord when using subscriber-aware V2 APIs.
+ *
+ * An example of typical usage:
+ * <pre>{@code
+ * CUpti_Activity *record = NULL;
+ * CUptiResult status = CUPTI_SUCCESS;
+ *   do {
+ *      status = cuptiActivityGetNextRecord_v2(subscriber, buffer, validSize, &record);
+ *      if(status == CUPTI_SUCCESS) {
+ *           // Use record here...
+ *      }
+ *      else if (status == CUPTI_ERROR_MAX_LIMIT_REACHED)
+ *          break;
+ *      else if (status == CUPTI_ERROR_INVALID_KIND)
+ *          break;
+ *      else {
+ *          goto Error;
+ *      }
+ *    } while (1);
+ * }</pre>
+ *
+ * @param subscriber Handle to the subscriber whose record layout should be used.
+ * @param buffer The buffer containing activity records
+ * @param validBufferSizeBytes The number of valid bytes in the buffer.
+ * @param record Inputs the previous record returned by
+ * cuptiActivityGetNextRecord_v2 and returns the next activity record
+ * from the buffer. If input value is NULL, returns the first activity
+ * record in the buffer.
+ *
+ * \retval CUPTI_SUCCESS
+ * \retval CUPTI_ERROR_NOT_INITIALIZED
+ * \retval CUPTI_ERROR_MAX_LIMIT_REACHED if no more records in the buffer
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if \p subscriber, \p buffer or \p record is NULL.
+ * \retval CUPTI_ERROR_INVALID_KIND if activity record is either incomplete or invalid
+ */
+public static native @Cast("CUptiResult") int cuptiActivityGetNextRecord_v2(@ByPtr CUpti_Subscriber_st subscriber,
+                                                   @Cast("uint8_t*") BytePointer buffer,
+                                                   @Cast("size_t") long validBufferSizeBytes,
+                                                   @Cast("CUpti_Activity**") PointerPointer record);
+public static native @Cast("CUptiResult") int cuptiActivityGetNextRecord_v2(@ByPtr CUpti_Subscriber_st subscriber,
+                                                   @Cast("uint8_t*") BytePointer buffer,
+                                                   @Cast("size_t") long validBufferSizeBytes,
+                                                   @ByPtrPtr CUpti_Activity record);
+public static native @Cast("CUptiResult") int cuptiActivityGetNextRecord_v2(@ByPtr CUpti_Subscriber_st subscriber,
+                                                   @Cast("uint8_t*") ByteBuffer buffer,
+                                                   @Cast("size_t") long validBufferSizeBytes,
+                                                   @ByPtrPtr CUpti_Activity record);
+public static native @Cast("CUptiResult") int cuptiActivityGetNextRecord_v2(@ByPtr CUpti_Subscriber_st subscriber,
+                                                   @Cast("uint8_t*") byte[] buffer,
+                                                   @Cast("size_t") long validBufferSizeBytes,
+                                                   @ByPtrPtr CUpti_Activity record);
 // Targeting ../cupti/CUpti_BuffersCallbackRequestFunc.java
 
 
@@ -6654,6 +7563,9 @@ public static native @Cast("CUptiResult") int cuptiActivityFlush(CUctx_st contex
  *
  * Before calling this function, the buffer handling callback api must be activated
  * by calling cuptiActivityRegisterCallbacks.
+ *
+ * When multiple subscribers are allowed, the buffers of all subscribers are flushed with the same flag.
+ * It is not possible to flush the buffers of only a specific subscriber.
  *
  * @param flag The flag can be set to indicate a forced flush. See CUpti_ActivityFlag
  *
@@ -6842,6 +7754,7 @@ public static native @Cast("CUptiResult") int cuptiGetLastError();
  * Activity records having thread-id field contain the same value.
  * Thread id type must not be changed during the profiling session to
  * avoid thread-id value mismatch across activity records.
+ * This API is not supported when multiple subscribers are allowed. Use the corresponding attribute instead: CUPTI_ACTIVITY_ATTR_THREAD_ID_TYPE
  *
  * \retval CUPTI_SUCCESS
  * \retval CUPTI_ERROR_NOT_SUPPORTED if \p type is not supported on the platform
@@ -6852,6 +7765,7 @@ public static native @Cast("CUptiResult") int cuptiSetThreadIdType(@Cast("CUpti_
  * \brief Get the thread-id type
  *
  * Returns the thread-id type used in CUPTI
+ * This API is not supported when multiple subscribers are allowed. Use the corresponding attribute instead: CUPTI_ACTIVITY_ATTR_THREAD_ID_TYPE
  *
  * \retval CUPTI_SUCCESS
  * \retval CUPTI_ERROR_INVALID_PARAMETER if \p type is NULL
@@ -7015,10 +7929,55 @@ public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelatio
 public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelationId(@Cast("CUpti_ExternalCorrelationKind") int kind, @Cast("uint64_t*") long[] lastId);
 
 /**
+ * \brief Push an external correlation id for a specific subscriber.
+ *
+ * Subscriber aware V2 version of \ref cuptiActivityPushExternalCorrelationId.
+ * This allows each subscriber to maintain its own external correlation context.
+ *
+ * @param subscriber The subscriber handle.
+ * @param kind The kind of external API activities should be correlated with.
+ * @param id External correlation id.
+ *
+ * \retval CUPTI_SUCCESS
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if subscriber or kind is invalid.
+ */
+public static native @Cast("CUptiResult") int cuptiActivityPushExternalCorrelationId_v2(
+    @ByPtr CUpti_Subscriber_st subscriber,
+    @Cast("CUpti_ExternalCorrelationKind") int kind,
+    @Cast("uint64_t") long id);
+
+/**
+ * \brief Pop an external correlation id for a specific subscriber.
+ *
+ * Subscriber aware V2 version of \ref cuptiActivityPopExternalCorrelationId.
+ * This allows each subscriber to maintain its own external correlation context.
+ *
+ * @param subscriber The subscriber handle.
+ * @param kind The kind of external API to pop correlation for.
+ * @param lastId Returns the last external correlation id popped, can be NULL.
+ *
+ * \retval CUPTI_SUCCESS
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if subscriber or kind is invalid.
+ * \retval CUPTI_ERROR_QUEUE_EMPTY No external id is currently associated with \p kind for this subscriber.
+ */
+public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelationId_v2(
+    @ByPtr CUpti_Subscriber_st subscriber,
+    @Cast("CUpti_ExternalCorrelationKind") int kind,
+    @Cast("uint64_t*") LongPointer lastId);
+public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelationId_v2(
+    @ByPtr CUpti_Subscriber_st subscriber,
+    @Cast("CUpti_ExternalCorrelationKind") int kind,
+    @Cast("uint64_t*") LongBuffer lastId);
+public static native @Cast("CUptiResult") int cuptiActivityPopExternalCorrelationId_v2(
+    @ByPtr CUpti_Subscriber_st subscriber,
+    @Cast("CUpti_ExternalCorrelationKind") int kind,
+    @Cast("uint64_t*") long[] lastId);
+
+/**
  * \brief Controls the collection of queued and submitted timestamps for kernels.
  *
  * This API is used to control the collection of queued and submitted timestamps
- * for kernels whose records are provided through the struct \ref CUpti_ActivityKernel11.
+ * for kernels whose records are provided through the struct \ref CUpti_ActivityKernel12.
  * Default value is 0, i.e. these timestamps are not collected. This API needs
  * to be called before initialization of CUDA and this setting should not be
  * changed during the profiling session.
@@ -7065,7 +8024,7 @@ public static native @Cast("CUptiResult") int cuptiActivityFlushPeriod(@Cast("ui
  * \brief Controls the collection of launch attributes for kernels.
  *
  * This API is used to control the collection of launch attributes for kernels whose
- * records are provided through the struct \ref CUpti_ActivityKernel11.
+ * records are provided through the struct \ref CUpti_ActivityKernel12.
  * Default value is 0, i.e. these attributes are not collected.
  *
  * @param enable is a boolean denoting whether these launch attributes should be collected
@@ -7121,7 +8080,6 @@ public static native @Cast("CUptiResult") int cuptiActivityRegisterTimestampCall
  *
  * This API is used to control the collection of records for device launched graphs.
  * Default value is 0, i.e. these records are not collected.
- * Default value is 1 if HW trace is enabled using API cuptiActivityEnableHWTrace.
  * This API needs to be called before initialization of CUDA and this setting should not be
  * changed during the profiling session.
  *
@@ -7157,6 +8115,25 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableDeviceGraph(@Ca
 public static native @Cast("CUptiResult") int cuptiActivityEnableDriverApi(@Cast("CUpti_CallbackId") int cbid, @Cast("uint8_t") byte enable);
 
 /**
+ * \brief Controls the collection of activity records for specific CUDA Driver APIs
+ * for a given subscriber.
+ *
+ * This is the per-subscriber version of \ref cuptiActivityEnableDriverApi.
+ * It allows each subscriber to independently enable or disable tracing of specific
+ * CUDA Driver APIs.
+ *
+ * @param subscriber Handle to the subscriber. Must have been previously created
+ *   via \ref cuptiSubscribe_v2.
+ * @param cbid callback id of the CUDA Driver API.
+ * @param enable is a boolean, denoting whether to enable or disable the collection
+ *
+ * \retval CUPTI_SUCCESS
+ * \retval CUPTI_ERROR_NOT_INITIALIZED
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if the subscriber handle is invalid or cbid is out of range
+ */
+public static native @Cast("CUptiResult") int cuptiActivityEnableDriverApi_v2(@ByPtr CUpti_Subscriber_st subscriber, @Cast("CUpti_CallbackId") int cbid, @Cast("uint8_t") byte enable);
+
+/**
  * \brief Controls the collection of activity records for specific CUDA Runtime APIs.
  *
  * Activity kind CUPTI_ACTIVITY_KIND_RUNTIME controls the collection of either all
@@ -7180,6 +8157,25 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableDriverApi(@Cast
 public static native @Cast("CUptiResult") int cuptiActivityEnableRuntimeApi(@Cast("CUpti_CallbackId") int cbid, @Cast("uint8_t") byte enable);
 
 /**
+ * \brief Controls the collection of activity records for specific CUDA Runtime APIs
+ * for a given subscriber.
+ *
+ * This is the per-subscriber version of \ref cuptiActivityEnableRuntimeApi.
+ * It allows each subscriber to independently enable or disable tracing of specific
+ * CUDA Runtime APIs.
+ *
+ * @param subscriber Handle to the subscriber. Must have been previously created
+ *   via \ref cuptiSubscribe_v2.
+ * @param cbid callback id of the CUDA Runtime API.
+ * @param enable is a boolean, denoting whether to enable or disable the collection
+ *
+ * \retval CUPTI_SUCCESS
+ * \retval CUPTI_ERROR_NOT_INITIALIZED
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if the subscriber handle is invalid or cbid is out of range
+ */
+public static native @Cast("CUptiResult") int cuptiActivityEnableRuntimeApi_v2(@ByPtr CUpti_Subscriber_st subscriber, @Cast("CUpti_CallbackId") int cbid, @Cast("uint8_t") byte enable);
+
+/**
  * \brief Enables CUDA kernel timestamp collection via Hardware Event System (HES).
  *
  * This API enables hardware-based collection of CUDA kernel timestamps as an alternative
@@ -7189,13 +8185,16 @@ public static native @Cast("CUptiResult") int cuptiActivityEnableRuntimeApi(@Cas
  * This API must be called after CUDA driver initialization but before creating the CUDA context.
  * As a generic solution, this API can be called from the CUPTI_CBID_RESOURCE_CU_INIT_FINISHED callback.
  * Once enabled, HES-based tracing persists for the entire profiling session and cannot be disabled.
+ *
+ * This API can also be called before CUDA driver initialization. After driver initialization, CUPTI may
+ * switch to traditional semaphore-based tracing and return error through callback with domain CUPTI_CB_DOMAIN_STATE
+ * if HES-based tracing cannot be supported.
  <p>
  * \note This feature is only available on NVIDIA Blackwell architecture and later.
  *
  * @param enable is a boolean flag to enable (true) HES-based timestamp collection.
  *
  * \retval CUPTI_SUCCESS
- * \retval CUPTI_ERROR_NOT_INITIALIZED if CUPTI is not initialized or the CUDA driver is not initialized
  * \retval CUPTI_ERROR_NOT_SUPPORTED if HW trace cannot be enabled on the current platform
  * \retval CUPTI_ERROR_VIRTUALIZED_DEVICE_NOT_SUPPORTED
  * \retval CUPTI_ERROR_CONFIDENTIAL_COMPUTING_NOT_SUPPORTED
@@ -7569,14 +8568,13 @@ public static final int
   /**
    * Notification of fatal errors - high impact, non-recoverable
    * When encountered, CUPTI automatically invokes cuptiFinalize()
-   * User can control behavior of the application in future from 
+   * User can control behavior of the application in future from
    * receiving this callback - such as continuing without profiling, or
    * terminating the whole application.
    */
   CUPTI_CBID_STATE_FATAL_ERROR                    = 1,
   /**
    * Notification of non fatal errors - high impact, but recoverable
-   * This notification is not issued in the current release.
    */
   CUPTI_CBID_STATE_ERROR                          = 2,
   /**
@@ -7694,13 +8692,13 @@ public static native @Cast("CUptiResult") int cuptiSubscribe(@ByPtrPtr CUpti_Sub
                                     Pointer userdata);
 
 /**
- * The max size of the CUPTI subscriber name in bytes. The total size of the CUPTI subscriber name is 
+ * The max size of the CUPTI subscriber name in bytes. The total size of the CUPTI subscriber name is
  * 64 bytes. CUPTI adds a 10 byte prefix and a null terminator, leaving 53 bytes for the user supplied subscriber name.
  */
 public static final int CUPTI_SUBSCRIBER_NAME_MAX_LEN = 53;
 
 /**
- * The minimum size of the of the old subscriber name in bytes. 
+ * The minimum size of the of the old subscriber name in bytes.
  */
 public static final int CUPTI_OLD_SUBSCRIBER_NAME_MIN_LEN = 64;
 // Targeting ../cupti/CUpti_SubscriberParams.java
@@ -7738,9 +8736,9 @@ public static final int CUpti_SubscriberParams_STRUCT_SIZE = CUpti_SubscriberPar
  *
  * \retval CUPTI_SUCCESS on success
  * \retval CUPTI_ERROR_NOT_INITIALIZED if unable to initialize CUPTI
- * \retval CUPTI_ERROR_MULTIPLE_SUBSCRIBERS_NOT_SUPPORTED if there is already a CUPTI subscriber, 
+ * \retval CUPTI_ERROR_MULTIPLE_SUBSCRIBERS_NOT_SUPPORTED if there is already a CUPTI subscriber,
  *         or if the application is launched with NVIDIA tools like Nsight Systems, Nsight Compute, cuda-gdb and cuda-memcheck.
- * \retval CUPTI_ERROR_INVALID_PARAMETER if: 
+ * \retval CUPTI_ERROR_INVALID_PARAMETER if:
  * - \p pParams.structSize is not filled with the size of the structure
  */
 public static native @Cast("CUptiResult") int cuptiSubscribe_v2(@ByPtrPtr CUpti_Subscriber_st subscriber,
@@ -10331,7 +11329,6 @@ public static native @Cast("CUptiResult") int cuptiMetricGetValue2(@Cast("CUpti_
 
 // Parsed from cupti_driver_cbid.h
 
-
 // *************************************************************************
 //      Definitions of indices for API functions, unique across entire API
 // *************************************************************************
@@ -10808,12 +11805,12 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuStreamWriteValue32_ptsz                                      = 461,
     CUPTI_DRIVER_TRACE_CBID_cuStreamBatchMemOp                                             = 462,
     CUPTI_DRIVER_TRACE_CBID_cuStreamBatchMemOp_ptsz                                        = 463,
-    CUPTI_DRIVER_TRACE_CBID_cuNVNbufferGetPointer                                          = 464,
-    CUPTI_DRIVER_TRACE_CBID_cuNVNtextureGetArray                                           = 465,
+    CUPTI_DRIVER_TRACE_CBID_reserved464                                                    = 464,
+    CUPTI_DRIVER_TRACE_CBID_reserved465                                                    = 465,
     CUPTI_DRIVER_TRACE_CBID_cuNNSetAllocator                                               = 466,
     CUPTI_DRIVER_TRACE_CBID_cuMemPrefetchAsync                                             = 467,
     CUPTI_DRIVER_TRACE_CBID_cuMemPrefetchAsync_ptsz                                        = 468,
-    CUPTI_DRIVER_TRACE_CBID_cuEventCreateFromNVNSync                                       = 469,
+    CUPTI_DRIVER_TRACE_CBID_reserved469                                                    = 469,
     CUPTI_DRIVER_TRACE_CBID_cuEGLStreamConsumerConnectWithFlags                            = 470,
     CUPTI_DRIVER_TRACE_CBID_cuMemRangeGetAttribute                                         = 471,
     CUPTI_DRIVER_TRACE_CBID_cuMemRangeGetAttributes                                        = 472,
@@ -11130,15 +12127,15 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuStreamBeginCaptureToCig                                      = 783,
     CUPTI_DRIVER_TRACE_CBID_cuMemPrefetchBatchAsync                                        = 784,
     CUPTI_DRIVER_TRACE_CBID_cuMemPrefetchBatchAsync_ptsz                                   = 785,
-    CUPTI_DRIVER_TRACE_CBID_cuSemaphoreCreate                                              = 786,
-    CUPTI_DRIVER_TRACE_CBID_cuSemaphoreExport                                              = 787,
-    CUPTI_DRIVER_TRACE_CBID_cuSemaphoreDestroy                                             = 788,
+    CUPTI_DRIVER_TRACE_CBID_reserved786                                                    = 786,
+    CUPTI_DRIVER_TRACE_CBID_reserved787                                                    = 787,
+    CUPTI_DRIVER_TRACE_CBID_reserved788                                                    = 788,
     CUPTI_DRIVER_TRACE_CBID_cuMemDiscardBatchAsync                                         = 789,
     CUPTI_DRIVER_TRACE_CBID_cuMemDiscardBatchAsync_ptsz                                    = 790,
     CUPTI_DRIVER_TRACE_CBID_cuMemDiscardAndPrefetchBatchAsync                              = 791,
     CUPTI_DRIVER_TRACE_CBID_cuMemDiscardAndPrefetchBatchAsync_ptsz                         = 792,
-    CUPTI_DRIVER_TRACE_CBID_cuMultiKernelCooperativeDomainCreate                           = 793,
-    CUPTI_DRIVER_TRACE_CBID_cuMultiKernelCooperativeDomainDestroy                          = 794,
+    CUPTI_DRIVER_TRACE_CBID_reserved793                                                    = 793,
+    CUPTI_DRIVER_TRACE_CBID_reserved794                                                    = 794,
     CUPTI_DRIVER_TRACE_CBID_cuCtxGetDevice_v2                                              = 795,
     CUPTI_DRIVER_TRACE_CBID_cuMemcpyBatchAsync_v2                                          = 796,
     CUPTI_DRIVER_TRACE_CBID_cuMemcpyBatchAsync_v2_ptsz                                     = 797,
@@ -11150,7 +12147,7 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuMemSetMemPool                                                = 803,
     CUPTI_DRIVER_TRACE_CBID_cuDeviceGetP2PAtomicCapabilities                               = 804,
     CUPTI_DRIVER_TRACE_CBID_cuDeviceGetHostAtomicCapabilities                              = 805,
-    CUPTI_DRIVER_TRACE_CBID_cuDriverGetGpuCodeIsaVersion                                   = 806,
+    CUPTI_DRIVER_TRACE_CBID_reserved806                                                    = 806,
     CUPTI_DRIVER_TRACE_CBID_cuStreamGetDevResource                                         = 807,
     CUPTI_DRIVER_TRACE_CBID_cuStreamGetDevResource_ptsz                                    = 808,
     CUPTI_DRIVER_TRACE_CBID_cuGraphNodeGetContainingGraph                                  = 809,
@@ -11161,24 +12158,24 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuStreamBeginCaptureToCig_ptsz                                 = 814,
     CUPTI_DRIVER_TRACE_CBID_cuStreamEndCaptureToCig                                        = 815,
     CUPTI_DRIVER_TRACE_CBID_cuStreamEndCaptureToCig_ptsz                                   = 816,
-    CUPTI_DRIVER_TRACE_CBID_cuGraphCreateWithArguments                                     = 817,
-    CUPTI_DRIVER_TRACE_CBID_cuGraphNodeAddRelocation                                       = 818,
-    CUPTI_DRIVER_TRACE_CBID_cuGraphLaunchWithArguments                                     = 819,
+    CUPTI_DRIVER_TRACE_CBID_reserved817                                                    = 817,
+    CUPTI_DRIVER_TRACE_CBID_reserved818                                                    = 818,
+    CUPTI_DRIVER_TRACE_CBID_reserved819                                                    = 819,
     CUPTI_DRIVER_TRACE_CBID_cuMulticastBindMem_v2                                          = 820,
     CUPTI_DRIVER_TRACE_CBID_cuMulticastBindAddr_v2                                         = 821,
     CUPTI_DRIVER_TRACE_CBID_cuDevSmResourceSplit                                           = 822,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleCreate                                        = 823,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridWorkerGridCreate                                      = 824,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridWorksetCreate                                         = 825,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridCreate                                                = 826,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleFinalize                                      = 827,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleLaunch                                        = 828,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleLaunch_ptsz                                   = 829,
-    CUPTI_DRIVER_TRACE_CBID_cuSubgridScheduleDestroy                                       = 830,
+    CUPTI_DRIVER_TRACE_CBID_reserved823                                                    = 823,
+    CUPTI_DRIVER_TRACE_CBID_reserved824                                                    = 824,
+    CUPTI_DRIVER_TRACE_CBID_reserved825                                                    = 825,
+    CUPTI_DRIVER_TRACE_CBID_reserved826                                                    = 826,
+    CUPTI_DRIVER_TRACE_CBID_reserved827                                                    = 827,
+    CUPTI_DRIVER_TRACE_CBID_reserved828                                                    = 828,
+    CUPTI_DRIVER_TRACE_CBID_reserved829                                                    = 829,
+    CUPTI_DRIVER_TRACE_CBID_reserved830                                                    = 830,
     CUPTI_DRIVER_TRACE_CBID_cuLaunchHostFunc_v2                                            = 831,
     CUPTI_DRIVER_TRACE_CBID_cuLaunchHostFunc_v2_ptsz                                       = 832,
-    CUPTI_DRIVER_TRACE_CBID_cuFuncGetDeviceCodeInfo                                        = 833,
-    CUPTI_DRIVER_TRACE_CBID_cuKernelGetDeviceCodeInfo                                      = 834,
+    CUPTI_DRIVER_TRACE_CBID_reserved833                                                    = 833,
+    CUPTI_DRIVER_TRACE_CBID_reserved834                                                    = 834,
     CUPTI_DRIVER_TRACE_CBID_cuFuncGetParamCount                                            = 835,
     CUPTI_DRIVER_TRACE_CBID_cuKernelGetParamCount                                          = 836,
     CUPTI_DRIVER_TRACE_CBID_cuMemcpyWithAttributesAsync                                    = 837,
@@ -11190,7 +12187,21 @@ public static final int
     CUPTI_DRIVER_TRACE_CBID_cuCoredumpRegisterCompleteCallback                             = 843,
     CUPTI_DRIVER_TRACE_CBID_cuCoredumpDeregisterStartCallback                              = 844,
     CUPTI_DRIVER_TRACE_CBID_cuCoredumpDeregisterCompleteCallback                           = 845,
-    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 846,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamBeginRecaptureToGraph                                  = 846,
+    CUPTI_DRIVER_TRACE_CBID_cuStreamBeginRecaptureToGraph_ptsz                             = 847,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointIdReserve                                     = 848,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointIdRelease                                     = 849,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointCreate                                        = 850,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointAddDevice                                     = 851,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointDestroy                                       = 852,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointBindAddr                                      = 853,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointBindMem                                       = 854,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointUnbind                                        = 855,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointExport                                        = 856,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointImport                                        = 857,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointGetLimits                                     = 858,
+    CUPTI_DRIVER_TRACE_CBID_cuLogicalEndpointQuery                                         = 859,
+    CUPTI_DRIVER_TRACE_CBID_SIZE                                                           = 860,
     CUPTI_DRIVER_TRACE_CBID_FORCE_INT                                                      = 0x7fffffff;
 
 // #endif

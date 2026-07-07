@@ -30,19 +30,12 @@ public class VCudaEngine extends VRoot {
     public native @NoException(true) IHostMemory serialize();
     public native @NoException(true) IExecutionContext createExecutionContext(ExecutionContextAllocationStrategy strategy);
     public native @NoException(true) IExecutionContext createExecutionContext(@Cast("nvinfer1::ExecutionContextAllocationStrategy") int strategy);
-    public native @NoException(true) IExecutionContext createExecutionContextWithoutDeviceMemory();
-    public native @Cast("size_t") @NoException(true) long getDeviceMemorySize();
     public native @Cast("bool") @NoException(true) boolean isRefittable();
     public native @NoException(true) String getName();
     public native @NoException(true) int getNbOptimizationProfiles();
-    public native @Const @NoException(true) IntPointer getProfileTensorValues(
-            String tensorName, int profileIndex, OptProfileSelector select);
-    public native @Const @NoException(true) IntBuffer getProfileTensorValues(
-            @Cast("const char*") BytePointer tensorName, int profileIndex, @Cast("nvinfer1::OptProfileSelector") int select);
     public native @NoException(true) EngineCapability getEngineCapability();
     public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
     public native @NoException(true) IErrorRecorder getErrorRecorder();
-    public native @Cast("bool") @NoException(true) boolean hasImplicitBatchDimension();
     public native @Cast("nvinfer1::TacticSources") @NoException(true) int getTacticSources();
     public native @NoException(true) ProfilingVerbosity getProfilingVerbosity();
     public native @NoException(true) IEngineInspector createEngineInspector();
@@ -89,12 +82,8 @@ public class VCudaEngine extends VRoot {
     public native @NoException(true) ISerializationConfig createSerializationConfig();
     public native @NoException(true) IHostMemory serializeWithConfig(@ByRef ISerializationConfig config);
 
-    public native @Cast("size_t") @NoException(true) long getDeviceMemorySizeForProfile(int profileIndex);
     public native @NoException(true) IRefitter createRefitter(@ByRef ILogger logger);
 
-    public native @Cast("bool") @NoException(true) boolean setWeightStreamingBudget(@Cast("int64_t") long gpuMemoryBudget);
-    public native @Cast("int64_t") @NoException(true) long getWeightStreamingBudget();
-    public native @Cast("int64_t") @NoException(true) long getMinimumWeightStreamingBudget();
     public native @Cast("int64_t") @NoException(true) long getStreamableWeightsSize();
 
     public native @Cast("bool") @NoException(true) boolean isDebugTensor(String name);

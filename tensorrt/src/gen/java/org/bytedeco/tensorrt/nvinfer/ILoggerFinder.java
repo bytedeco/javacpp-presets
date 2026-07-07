@@ -26,11 +26,22 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  A pointer to an instance of this class is passed to a plugin shared library on initialization when that plugin
  *  is serialized as part of a version-compatible plan. See the plugin chapter in the developer guide for details.
  *  */
-@Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class ILoggerFinder extends Pointer {
+@Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
+public class ILoggerFinder extends IVersionedInterface {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILoggerFinder(Pointer p) { super(p); }
+
+    /**
+     *  \brief Return version information associated with this interface. Applications must not override this method.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal @NoException(true) InterfaceInfo getInterfaceInfo();
 
     /**
      *  \brief Get the logger used by the engine or execution context which called the plugin method.

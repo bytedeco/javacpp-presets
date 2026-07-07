@@ -83,9 +83,9 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 12;
-public static final int CUSPARSE_VER_MINOR = 7;
-public static final int CUSPARSE_VER_PATCH = 10;
-public static final int CUSPARSE_VER_BUILD = 1;
+public static final int CUSPARSE_VER_MINOR = 8;
+public static final int CUSPARSE_VER_PATCH = 2;
+public static final int CUSPARSE_VER_BUILD = 51;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -10638,6 +10638,16 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMV_preprocess(cuspa
                         @Cast("cudaDataType") int computeType,
                         @Cast("cusparseSpMVAlg_t") int alg,
                         Pointer externalBuffer);
+
+// #############################################################################
+// # SPARSE MATRIX-VECTOR MULTIPLICATION - CUSTOM EPILOGUE
+// #############################################################################
+// #ifdef CUSPARSE_ENABLE_EXPERIMENTAL_API
+/** enum cusparseSpMVOpAlg_t */
+public static final int
+    CUSPARSE_SPMVOP_ALG_DEFAULT = 0,
+    CUSPARSE_SPMVOP_ALG1 = 1,
+    CUSPARSE_SPMVOP_ALG2 = 2;
 // Targeting ../cusparse/cusparseSpMVOpDescr.java
 
 
@@ -10652,6 +10662,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_bufferSize(cus
                           @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecY,
                           @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecZ,
                           @Cast("cudaDataType") int computeType,
+                          @Cast("cusparseSpMVOpAlg_t") int alg,
                           @Cast("size_t*") SizeTPointer bufferSize);
 
 public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_createDescr(cusparseContext handle,
@@ -10662,6 +10673,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_createDescr(cu
                            @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecY,
                            @Cast("cusparseDnVecDescr_t") cusparseDnVecDescr vecZ,
                            @Cast("cudaDataType") int computeType,
+                           @Cast("cusparseSpMVOpAlg_t") int alg,
                            Pointer buffer);
 
 public static native @Cast("cusparseStatus_t") int cusparseSpMVOp_destroyDescr(cusparseSpMVOpDescr desc);
@@ -10981,6 +10993,60 @@ public static native @Cast("cusparseStatus_t") @Deprecated int cusparseSpGEMMreu
                             @Cast("cudaDataType") int computeType,
                             @Cast("cusparseSpGEMMAlg_t") int alg,
                             cusparseSpGEMMDescr spgemmDescr);
+
+// #############################################################################
+// # SPARSE MATRIX - SPARSE MATRIX ADDITION (SpGEAM)
+// #############################################################################
+/** enum cusparseSpGEAMAlg_t */
+public static final int
+    CUSPARSE_SPGEAM_ALG_DEFAULT = 0,
+    CUSPARSE_SPGEAM_ALG1 = 1;
+// Targeting ../cusparse/cusparseSpGEAMDescr.java
+
+
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEAM_createDescr(@ByPtrPtr cusparseSpGEAMDescr descr);
+public static native @Cast("cusparseStatus_t") int cusparseSpGEAM_destroyDescr(cusparseSpGEAMDescr descr);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEAM_bufferSize(cusparseContext handle,
+                          @Cast("cusparseOperation_t") int opA,
+                          @Cast("cusparseOperation_t") int opB,
+                          @Const Pointer alpha,
+                          @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matA,
+                          @Const Pointer beta,
+                          @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matB,
+                          @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matC,
+                          @Cast("cudaDataType") int computeType,
+                          @Cast("cusparseSpGEAMAlg_t") int alg,
+                          cusparseSpGEAMDescr spgeamDescr,
+                          @Cast("size_t*") SizeTPointer bufferSize);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEAM_nnz(cusparseContext handle,
+                   @Cast("cusparseOperation_t") int opA,
+                   @Cast("cusparseOperation_t") int opB,
+                   @Const Pointer alpha,
+                   @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matA,
+                   @Const Pointer beta,
+                   @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matB,
+                   @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matC,
+                   @Cast("cudaDataType") int computeType,
+                   @Cast("cusparseSpGEAMAlg_t") int alg,
+                   cusparseSpGEAMDescr spgeamDescr,
+                   Pointer externalBuffer);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpGEAM(cusparseContext handle,
+               @Cast("cusparseOperation_t") int opA,
+               @Cast("cusparseOperation_t") int opB,
+               @Const Pointer alpha,
+               @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matA,
+               @Const Pointer beta,
+               @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matB,
+               @Cast("cusparseSpMatDescr_t") cusparseSpMatDescr matC,
+               @Cast("cudaDataType") int computeType,
+               @Cast("cusparseSpGEAMAlg_t") int alg,
+               cusparseSpGEAMDescr spgeamDescr,
+               Pointer externalBuffer);
+
 
 // #############################################################################
 // # SAMPLED DENSE-DENSE MATRIX MULTIPLICATION

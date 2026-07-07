@@ -35,20 +35,20 @@ public class CUpti_SubscriberParams extends Pointer {
     }
 
     /**
-     * Size of the data structure. CUPTI client should set the size of the structure. 
-     * It will be used in CUPTI to check what fields are available in the structure. 
+     * Size of the data structure. CUPTI client should set the size of the structure.
+     * It will be used in CUPTI to check what fields are available in the structure.
      * Used to preserve backward compatibility.
      */
     public native @Cast("size_t") long structSize(); public native CUpti_SubscriberParams structSize(long setter);
 
     /**
-     * Name given to the subscriber. The subscriber name need not include the "CUPTI" prefix, as the CUPTI library automatically adds it as "CUPTI for <subscriberName>". 
+     * Name given to the subscriber. The subscriber name need not include the "CUPTI" prefix, as the CUPTI library automatically adds it as "CUPTI for <subscriberName>".
      * Can be NULL. An internal copy is created. Size must not exceed CUPTI_SUBSCRIBER_NAME_MAX_LEN to avoid truncation.
      */
     public native @Cast("const char*") BytePointer subscriberName(); public native CUpti_SubscriberParams subscriberName(BytePointer setter);
 
     /**
-     * In case of multiple subscribers not allowed, and a CUPTI_ERROR_MULTIPLE_SUBSCRIBERS_NOT_SUPPORTED return code, the name of the incompatible tool or the 
+     * In case of multiple subscribers not allowed, and a CUPTI_ERROR_MULTIPLE_SUBSCRIBERS_NOT_SUPPORTED return code, the name of the incompatible tool or the
      * existing CUPTI subscriber will be written to this location. Size should be greater than or equal to CUPTI_OLD_SUBSCRIBER_NAME_MIN_LEN to avoid truncation.
      * Can be NULL. If multiple subscribers are allowed, this will be the name of the first subscriber, but CUPTI_ERROR_MULTIPLE_SUBSCRIBERS_NOT_SUPPORTED will not be returned.
      */
@@ -66,8 +66,6 @@ public class CUpti_SubscriberParams extends Pointer {
      * Note that cuptiSubscribe_v2 will return CUPTI_ERROR_MULTIPLE_SUBSCRIBERS_NOT_SUPPORTED if the request cannot be fulfilled.
      * Note that support is currently only for CUPTI shared library and not for CUPTI static library, but static library will be supported in future releases.
      *
-     * \note The CUPTI multiple subscribers feature is currently in beta.
-     * APIs and behavior may change in future releases.
      */
     public native @Cast("uint8_t") byte allowMultipleSubscribers(); public native CUpti_SubscriberParams allowMultipleSubscribers(byte setter);
 

@@ -52,8 +52,8 @@ import org.bytedeco.cuda.presets.nvrtc;
                        "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h",
                        "NvInferPluginBase.h", "NvInferRuntimePlugin.h", /*, "NvUtils.h"*/},
             exclude = "NvInferRuntimeBase.h",
-            link = "nvinfer@.10",
-            preload = "nvinfer_builder_resource_ptx@.10.16.1"
+            link = "nvinfer@.11",
+            preload = "nvinfer_builder_resource_ptx@.11.1.0"
         ),
         @Platform(
             value = "linux-arm64",
@@ -72,8 +72,8 @@ import org.bytedeco.cuda.presets.nvrtc;
         ),
         @Platform(
             value = "windows-x86_64",
-            link = "nvinfer_10",
-            preload = "nvinfer_builder_resource_ptx_10",
+            link = "nvinfer_11",
+            preload = "nvinfer_builder_resource_ptx_11",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",
             linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/",
             preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/bin/"
@@ -98,7 +98,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
         if (platform.startsWith("windows")) {
             preloads.add(i++, "zlibwapi");
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "cudnn_ext", "nvrtc",
                          "cudnn_graph", "cudnn_engines_precompiled", "cudnn_engines_runtime_compiled",
                          "cudnn_engines_tensor_ir", "cudnn_heuristic", "cudnn_ops", "cudnn_adv", "cudnn_cnn"};
         for (String lib : libs) {
@@ -137,6 +137,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                .put(new Info("nvinfer1::EnumMax", "nvinfer1::EnumMaxImpl", "nvinfer1::v_1_0::IPluginResource::operator =").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IDimensionExpr", "nvinfer1::IExprBuilder", "nvinfer1::IOptimizationProfile", "nvinfer1::ITensor", "nvinfer1::ILayer",
+                             "nvinfer1::IBuilder", "nvinfer1::IBuilderConfig", "nvinfer1::ICudaEngine", "nvinfer1::IEngineInspector", "nvinfer1::IExecutionContext", "nvinfer1::IHostMemory",
+                             "nvinfer1::INetworkDefinition", "nvinfer1::IRefitter", "nvinfer1::IRuntime", "nvinfer1::IRuntimeConfig", "nvinfer1::ISerializationConfig", "nvinfer1::ITimingCache",
                              "nvinfer1::IConvolutionLayer", "nvinfer1::IFullyConnectedLayer", "nvinfer1::IActivationLayer", "nvinfer1::IPoolingLayer",
                              "nvinfer1::ILRNLayer", "nvinfer1::IScaleLayer", "nvinfer1::IPluginV2Layer", "nvinfer1::IUnaryLayer", "nvinfer1::IReduceLayer",
                              "nvinfer1::IPaddingLayer", "nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",

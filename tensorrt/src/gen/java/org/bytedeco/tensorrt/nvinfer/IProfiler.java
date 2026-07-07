@@ -18,11 +18,24 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
+
+/** DO NOT REFER TO namespace v_1_0 IN CODE. ALWAYS USE nvinfer1 INSTEAD.
+ *  The name v_1_0 may change in future versions of TensorRT. */
 @Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IProfiler extends Pointer {
+public class IProfiler extends IVersionedInterface {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IProfiler(Pointer p) { super(p); }
+
+    /**
+     *  \brief Return version information associated with this interface. Applications must not override this method.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @ByVal @NoException(true) InterfaceInfo getInterfaceInfo();
 
     /**
      *  \brief Layer time reporting callback.

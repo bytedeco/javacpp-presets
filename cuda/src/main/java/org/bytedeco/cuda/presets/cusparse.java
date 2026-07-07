@@ -66,6 +66,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseSpMVOpPlan_t").valueTypes("cusparseSpMVOpPlan").pointerTypes("@ByPtrPtr cusparseSpMVOpPlan"))
                .put(new Info("cusparseSpSVDescr_t").valueTypes("cusparseSpSVDescr").pointerTypes("@ByPtrPtr cusparseSpSVDescr"))
                .put(new Info("cusparseSpSMDescr_t").valueTypes("cusparseSpSMDescr").pointerTypes("@ByPtrPtr cusparseSpSMDescr"))
+               .put(new Info("cusparseSpGEAMDescr_t").valueTypes("cusparseSpGEAMDescr").pointerTypes("@ByPtrPtr cusparseSpGEAMDescr"))
                .put(new Info("cusparseSpGEMMDescr_t").valueTypes("cusparseSpGEMMDescr").pointerTypes("@ByPtrPtr cusparseSpGEMMDescr"))
                .put(new Info("cusparseSpMMOpPlan_t").valueTypes("cusparseSpMMOpPlan").pointerTypes("@ByPtrPtr cusparseSpMMOpPlan"))
                .put(new Info("cusparseBlockedEllGet", "cusparseCreateSpVec", "cusparseDestroySpVec", "cusparseSpVecGet", "cusparseSpVecGetIndexBase",

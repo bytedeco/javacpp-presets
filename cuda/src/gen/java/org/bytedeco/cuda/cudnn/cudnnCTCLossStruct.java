@@ -14,6 +14,8 @@ import static org.bytedeco.cuda.global.cublas.*;
 
 import static org.bytedeco.cuda.global.cudnn.*;
 
+
+/** \brief Opaque descriptor for a CTC loss function. @since cuDNN 9.0.0 */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnCTCLossStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

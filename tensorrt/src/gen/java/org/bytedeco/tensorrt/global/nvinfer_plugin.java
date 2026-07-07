@@ -72,7 +72,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 // Parsed from NvInferPluginUtils.h
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 1993-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-FileCopyrightText: Copyright (c) 1993-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,40 +113,10 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 // Targeting ../nvinfer_plugin/GridAnchorParameters.java
 
 
-
-/**
- *  \enum CodeTypeSSD
- * 
- *  \brief The type of encoding used for decoding the bounding boxes and loc_data.
- * 
- *  @deprecated Deprecated in TensorRT 10.0. DetectionOutput plugin is deprecated.
- *  */
-@Namespace("nvinfer1::plugin") public enum CodeTypeSSD {
-    /** Use box corners. */
-    CORNER(0),
-    /** Use box centers and size. */
-    CENTER_SIZE(1),
-    /** Use box centers and size. */
-    CORNER_SIZE(2),
-    /** Use box centers and size but flip x and y coordinates. */
-    TF_CENTER(3);
-
-    public final int value;
-    private CodeTypeSSD(int v) { this.value = v; }
-    private CodeTypeSSD(CodeTypeSSD e) { this.value = e.value; }
-    public CodeTypeSSD intern() { for (CodeTypeSSD e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../nvinfer_plugin/DetectionOutputParameters.java
-
-
 // Targeting ../nvinfer_plugin/softmaxTree.java
 
 
 // Targeting ../nvinfer_plugin/RegionParameters.java
-
-
-// Targeting ../nvinfer_plugin/NMSParameters.java
 
 
 

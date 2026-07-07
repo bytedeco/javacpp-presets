@@ -27,7 +27,6 @@ public class VRuntime extends VRoot {
 
     public native @NoException(true) IRuntime getPImpl();
     public native @NoException(true) ICudaEngine deserializeCudaEngine(@Const Pointer blob, @Cast("std::size_t") long size);
-    public native @NoException(true) ICudaEngine deserializeCudaEngine(@ByRef IStreamReader streamReader);
     public native @NoException(true) void setDLACore(int dlaCore);
     public native @NoException(true) int getDLACore();
     public native @NoException(true) int getNbDLACores();

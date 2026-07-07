@@ -34,7 +34,6 @@ public class CUmemLocation_v1 extends Pointer {
 
     /** Specifies the location type, which modifies the meaning of id. */
     public native @Cast("CUmemLocationType") int type(); public native CUmemLocation_v1 type(int setter);
-        // Identifier for CUmemLocationType::CU_MEM_LOCATION_TYPE_DEVICE,
-        // CUmemLocationType::CU_MEM_LOCATION_TYPE_HOST_NUMA.
+        /** Identifier for CUmemLocationType::CU_MEM_LOCATION_TYPE_DEVICE, CUmemLocationType::CU_MEM_LOCATION_TYPE_HOST, CUmemLocationType::CU_MEM_LOCATION_TYPE_HOST_NUMA. */
         public native int id(); public native CUmemLocation_v1 id(int setter);
 }

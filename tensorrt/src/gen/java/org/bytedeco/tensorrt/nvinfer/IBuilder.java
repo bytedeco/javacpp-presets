@@ -29,45 +29,9 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IBuilder extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public IBuilder() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IBuilder(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBuilder(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IBuilder position(long position) {
-        return (IBuilder)super.position(position);
-    }
-    @Override public IBuilder getPointer(long i) {
-        return new IBuilder((Pointer)this).offsetAddress(i);
-    }
 
-
-    /**
-     *  \brief Determine whether the platform has fast native fp16.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.5. Please query data type support from CUDA directly.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean platformHasFastFp16();
-
-    /**
-     *  \brief Determine whether the platform has fast native int8.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.5. Please query data type support from CUDA directly.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean platformHasFastInt8();
 
     /**
      *  \brief Get the maximum batch size DLA can support.
@@ -146,15 +110,15 @@ public class IBuilder extends INoCopy {
      * 
      *  CreateNetworkV2 supports dynamic shapes and explicit batch dimensions by default.
      * 
-     *  createNetworkV2 with NetworkDefinitionCreationFlag::kSTRONGLY_TYPED flag supports creating a strongly typed plan
-     *  where tensor data types are inferred from network input types and operator type specification.
+     *  The network is always strongly typed: tensor data types are inferred from network input types and
+     *  operator type specification. The kSTRONGLY_TYPED flag is deprecated and ignored.
      * 
      *  The caller owns the new INetworkDefinition, which must be destroyed with operator delete
      *  before this IBuilder is destroyed. Destroying this IBuilder before destroying the
      *  INetworkDefinition causes undefined behavior.
      * 
      *  @param flags Bitset of NetworkDefinitionCreationFlags specifying network properties combined with bitwise OR,
-     *               e.g., 1U << NetworkDefinitionCreationFlag::kSTRONGLY_TYPED.
+     *               e.g., 1U << NetworkDefinitionCreationFlag::kPREFER_JIT_PYTHON_PLUGINS.
      * 
      *  @see INetworkDefinition, NetworkDefinitionCreationFlags
      *  */
@@ -170,9 +134,9 @@ public class IBuilder extends INoCopy {
      *  \brief Create a new optimization profile.
      * 
      *  If the network has any dynamic input tensors, the appropriate calls to setDimensions() must be made.
-     *  Likewise, if there are any shape input tensors, the appropriate calls to setShapeValues() are required.
-     *  The builder retains ownership of the created optimization profile and returns a raw pointer, i.e. the users
-     *  must not attempt to delete the returned pointer.
+     *  Likewise, if there are any shape input tensors, the appropriate calls to \ref
+     *  IOptimizationProfile::setShapeValuesV2() are required. The builder retains ownership of the created optimization
+     *  profile and returns a raw pointer, i.e. the users must not attempt to delete the returned pointer.
      * 
      *  @see IOptimizationProfile
      *  */
@@ -233,23 +197,11 @@ public class IBuilder extends INoCopy {
     //!
     //!
     //!
+    //!
+    //!
+    //!
+    //!
     public native @NoException(true) void reset();
-
-    /**
-     *  \brief Determine whether the platform has TF32 support.
-     * 
-     *  @deprecated Deprecated in TensorRT 10.5. Please query data type support from CUDA directly.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") @Deprecated @NoException(true) boolean platformHasTf32();
 
     /**
      *  \brief Builds and serializes a network for the given INetworkDefinition and IBuilderConfig.

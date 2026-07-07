@@ -55,4 +55,5 @@ public class ncclConfig_t extends Pointer {
   public native int graphUsageMode(); public native ncclConfig_t graphUsageMode(int setter);
   public native int numRmaCtx(); public native ncclConfig_t numRmaCtx(int setter);
   public native int maxP2pPeers(); public native ncclConfig_t maxP2pPeers(int setter);
+  public native int graphStreamOrdering(); public native ncclConfig_t graphStreamOrdering(int setter);
 }

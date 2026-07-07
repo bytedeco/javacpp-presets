@@ -30,8 +30,6 @@ public class VBuilderConfig extends VRoot {
     public native @NoException(true) void setEngineCapability(EngineCapability capability);
     public native @NoException(true) void setEngineCapability(@Cast("nvinfer1::EngineCapability") int capability);
     public native @NoException(true) EngineCapability getEngineCapability();
-    public native @NoException(true) void setInt8Calibrator(IInt8Calibrator calibrator);
-    public native @NoException(true) IInt8Calibrator getInt8Calibrator();
     public native @NoException(true) void setFlags(@Cast("nvinfer1::BuilderFlags") int builderFlags);
     public native @Cast("nvinfer1::BuilderFlags") @NoException(true) int getFlags();
     public native @NoException(true) void clearFlag(BuilderFlag builderFlag);
@@ -59,18 +57,6 @@ public class VBuilderConfig extends VRoot {
     public native @NoException(true) void setProfilingVerbosity(ProfilingVerbosity verbosity);
     public native @NoException(true) void setProfilingVerbosity(@Cast("nvinfer1::ProfilingVerbosity") int verbosity);
     public native @NoException(true) ProfilingVerbosity getProfilingVerbosity();
-    public native @NoException(true) void setAlgorithmSelector(IAlgorithmSelector selector);
-    public native @NoException(true) IAlgorithmSelector getAlgorithmSelector();
-    public native @Cast("bool") @NoException(true) boolean setCalibrationProfile(@Const IOptimizationProfile profile);
-    public native @Const @NoException(true) IOptimizationProfile getCalibrationProfile();
-    public native @NoException(true) void setQuantizationFlags(@Cast("nvinfer1::QuantizationFlags") int flags);
-    public native @Cast("nvinfer1::QuantizationFlags") @NoException(true) int getQuantizationFlags();
-    public native @NoException(true) void clearQuantizationFlag(QuantizationFlag flag);
-    public native @NoException(true) void clearQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
-    public native @NoException(true) void setQuantizationFlag(QuantizationFlag flag);
-    public native @NoException(true) void setQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
-    public native @Cast("bool") @NoException(true) boolean getQuantizationFlag(QuantizationFlag flag);
-    public native @Cast("bool") @NoException(true) boolean getQuantizationFlag(@Cast("nvinfer1::QuantizationFlag") int flag);
     public native @Cast("bool") @NoException(true) boolean setTacticSources(@Cast("nvinfer1::TacticSources") int tacticSources);
     public native @Cast("nvinfer1::TacticSources") @NoException(true) int getTacticSources();
     public native @NoException(true) ITimingCache createTimingCache(@Const Pointer blob, @Cast("std::size_t") long size);
@@ -95,7 +81,7 @@ public class VBuilderConfig extends VRoot {
     public native @NoException(true) void setPluginsToSerialize(@Cast("const char*const*") @ByPtrPtr byte[] paths, int nbPaths);
     public native @NoException(true) String getPluginToSerialize(int index);
     public native @NoException(true) int getNbPluginsToSerialize();
-    public native @NoException(true) void setMaxAuxStreams(int nbStreams);
+    public native @Cast("bool") @NoException(true) boolean setMaxAuxStreams(int nbStreams);
     public native @NoException(true) int getMaxAuxStreams();
     public native @NoException(true) void setProgressMonitor(IProgressMonitor monitor);
     public native @NoException(true) IProgressMonitor getProgressMonitor();
@@ -112,4 +98,8 @@ public class VBuilderConfig extends VRoot {
     public native @Cast("bool") @NoException(true) boolean setRemoteAutoTuningConfig(String config);
     public native @Cast("bool") @NoException(true) boolean setRemoteAutoTuningConfig(@Cast("const char*") BytePointer config);
     public native @NoException(true) String getRemoteAutoTuningConfig();
+    public native @Cast("bool") @NoException(true) boolean setBuildRoute(String buildRoute);
+    public native @Cast("bool") @NoException(true) boolean setBuildRoute(@Cast("const char*") BytePointer buildRoute);
+    public native @NoException(true) String getBuildRoute();
+    public native @NoException(true) String getAllBuildRoutes();
 }

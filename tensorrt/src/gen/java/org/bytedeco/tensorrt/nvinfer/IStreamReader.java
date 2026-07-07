@@ -18,6 +18,9 @@ import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
+/**
+ *  @deprecated Deprecated in TensorRT 11.0. Superseded by IStreamReaderV2.
+ *  */
 @Namespace("nvinfer1::v_1_0") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IStreamReader extends IVersionedInterface {
     static { Loader.load(); }

@@ -17,7 +17,7 @@ import org.bytedeco.cuda.nvrtc.*;
 import static org.bytedeco.cuda.global.nvrtc.*;
 
 import static org.bytedeco.tensorrt.global.nvinfer.*;
- // class IDistCollectiveLayer
+
 
 /**
  *  \class INetworkDefinition
@@ -39,20 +39,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 @Namespace("nvinfer1") @NoOffset @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class INetworkDefinition extends INoCopy {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public INetworkDefinition() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public INetworkDefinition(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public INetworkDefinition(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public INetworkDefinition position(long position) {
-        return (INetworkDefinition)super.position(position);
-    }
-    @Override public INetworkDefinition getPointer(long i) {
-        return new INetworkDefinition((Pointer)this).offsetAddress(i);
-    }
 
 
     /**
@@ -1430,41 +1418,8 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) IAssertionLayer addAssertion(@ByRef ITensor condition, String message);
     public native @NoException(true) IAssertionLayer addAssertion(@ByRef ITensor condition, @Cast("const char*") BytePointer message);
-
-    /**
-     *  \brief Add a fill layer to the network.
-     * 
-     *  @param dimensions The output tensor dimensions if input 0 is missing.
-     *  @param op The fill operation that the layer applies.
-     * 
-     *  \warning For FillOperation::kLINSPACE, dimensions.nbDims must be 1 for static start/delta. If delta is provided
-     *  as a 1D tensor, the length of delta must match dimensions.nbDims.
-     * 
-     *  This layer is non-deterministic across subsequent calls as the same inputs will produce different
-     *  output tensors if \p op is either FillOperation::kRANDOM_UNIFORM or FillOperation::kRANDOM_NORMAL
-     *  due to random state being shared across calls. The output tensors generated are determinstic when
-     *  starting from the same initial state.
-     * 
-     *  @see IFillLayer
-     * 
-     *  @return The new fill layer, or nullptr if it could not be created.
-     * 
-     *  @deprecated Deprecated in TensorRT 9.0. Superseded by three-argument addFill.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) IFillLayer addFill(@Cast("const nvinfer1::Dims*") @ByRef Dims64 dimensions, FillOperation op);
-    public native @Deprecated @NoException(true) IFillLayer addFill(@Cast("const nvinfer1::Dims*") @ByRef Dims64 dimensions, @Cast("nvinfer1::FillOperation") int op);
 
     /**
      *  \brief Add a fill layer to the network.
@@ -1588,34 +1543,7 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) IErrorRecorder getErrorRecorder();
-
-    /**
-     *  \brief Add a dequantization layer to the network.
-     * 
-     *  @param input The input tensor to be quantized.
-     *  @param scale A tensor with the scale value.
-     * 
-     *  @see IDequantizeLayer
-     * 
-     *  \p input tensor data type must be DataType::kINT8 or DataType::kFP8.
-     *  \p scale tensor data type must be DataType::kFLOAT. The subgraph which terminates with the \p scale tensor must
-     *  be a build-time constant.
-     * 
-     *  @return The new quantization layer, or nullptr if it could not be created.
-     * 
-     *  @deprecated Deprecated in TensorRT 9.0. Superseded by three-argument addDequantize.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) IDequantizeLayer addDequantize(@ByRef ITensor input, @ByRef ITensor scale);
 
     /**
      *  \brief Add a dequantization layer to the network.
@@ -1669,35 +1597,8 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    //!
     public native @NoException(true) IScatterLayer addScatter(@ByRef ITensor data, @ByRef ITensor indices, @ByRef ITensor updates, ScatterMode mode);
     public native @NoException(true) IScatterLayer addScatter(@ByRef ITensor data, @ByRef ITensor indices, @ByRef ITensor updates, @Cast("nvinfer1::ScatterMode") int mode);
-
-    /**
-     *  \brief Add a quantization layer to the network.
-     * 
-     *  @param input The input tensor to be quantized.
-     *  @param scale A tensor with the scale value.
-     * 
-     *  @see IQuantizeLayer
-     * 
-     *  \p input tensor data type must be DataType::kFLOAT or DataType::kHALF.
-     *  \p scale tensor data type must be DataType::kFLOAT. The subgraph which terminates with the \p scale tensor must
-     *  be a build-time constant.
-     * 
-     *  @return The new quantization layer, or nullptr if it could not be created.
-     * 
-     *  @deprecated Deprecated in TensorRT 9.0. Superseded by three-argument addQuantize.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    //!
-    //!
-    public native @Deprecated @NoException(true) IQuantizeLayer addQuantize(@ByRef ITensor input, @ByRef ITensor scale);
 
     /**
      *  \brief Add a quantization layer to the network.
@@ -1983,21 +1884,23 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) ICumulativeLayer addCumulative(@ByRef ITensor input, @ByRef ITensor axis, CumulativeOperation operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
     public native @NoException(true) ICumulativeLayer addCumulative(@ByRef ITensor input, @ByRef ITensor axis, @Cast("nvinfer1::CumulativeOperation") int operation, @Cast("bool") boolean exclusive, @Cast("bool") boolean reverse);
 
     /**
      *  \brief Add an attention to the network.
      * 
-     *  @param query A 4d input query tensor to the layer.
-     *  @param key A 4d input key tensor to the layer.
-     *  @param value A 4d input value tensor to the layer.
+     *  @param query A 3D or 4D input query tensor to the layer.
+     *  @param key A 3D or 4D input key tensor to the layer.
+     *  @param value A 3D or 4D input value tensor to the layer.
      *  @param normOp The normalization operation to perform.
-     *  @param causal Use causual inference or not.
+     *  @param causal Use causal inference or not. When true, uses kUPPER_LEFT causal masking.
      * 
-     *  query must have shape [batchSize, numHeadsQuery, sequenceLengthQuery, dimHead].
-     *  key and value must have shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead].
-     *  pastKey and pastValue must have shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead].
+     *  For padded (BHND) form, query must have shape [batchSize, numHeadsQuery, sequenceLengthQuery, dimHead].
+     *  For packed (NHD) form, query must have shape [totalTokens, numHeadsQuery, dimHead].
+     *  key and value follow the same convention based on their form.
+     *  Use IAttention::setQueryForm() and IAttention::setKeyValueForm() to configure the tensor layout.
      *  normOp defaults to kSOFTMAX isCausal defaults to false.
      * 
      *  By default, IAttention is not decomposable and TensorRT will try to use a single fused kernel, which may be more
@@ -2005,6 +1908,46 @@ public class INetworkDefinition extends INoCopy {
      *  allow IAttention to be to use multiple kernels if no fused kernel support found.
      * 
      *  @see IAttention
+     * 
+     *  @deprecated Deprecated in TensorRT 10.16. Superseded by addAttentionV2 with CausalMaskKind parameter.
+     * 
+     *  @return The new attention, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Deprecated @NoException(true) IAttention addAttention(
+            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean causal);
+    public native @Deprecated @NoException(true) IAttention addAttention(
+            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean causal);
+
+    /**
+     *  \brief Add an attention to the network with explicit causal mask kind.
+     * 
+     *  @param query A 4d input query tensor to the layer.
+     *  @param key A 4d input key tensor to the layer.
+     *  @param value A 4d input value tensor to the layer.
+     *  @param normOp The normalization operation to perform.
+     *  @param causalKind The causal mask alignment orientation. Use kNONE for no causal masking,
+     *         kUPPER_LEFT for diagonal anchored at upper-left corner (legacy default),
+     *         or kLOWER_RIGHT for diagonal anchored at lower-right corner (for LLM generation with s_q != s_kv).
+     * 
+     *  query must have shape [batchSize, numHeadsQuery, sequenceLengthQuery, dimHead].
+     *  key and value must have shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead].
+     *  pastKey and pastValue must have shape [batchSize, numHeadsKeyValue, sequenceLengthKeyValue, dimHead].
+     *  normOp defaults to kSOFTMAX, causalKind defaults to kNONE.
+     * 
+     *  By default, IAttention is not decomposable and TensorRT will try to use a single fused kernel, which may be more
+     *  efficient than if the subgraph is expressed without IAttention. Setting the IAttention to decomposable=True can
+     *  allow IAttention to be to use multiple kernels if no fused kernel support found.
+     * 
+     *  @see IAttention, CausalMaskKind
      * 
      *  @return The new attention, or nullptr if it could not be created.
      *  */
@@ -2015,10 +1958,10 @@ public class INetworkDefinition extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) IAttention addAttention(
-            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp, @Cast("bool") boolean causal);
-    public native @NoException(true) IAttention addAttention(
-            @ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp, @Cast("bool") boolean causal);
+    public native @NoException(true) IAttention addAttentionV2(@ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, AttentionNormalizationOp normOp,
+            CausalMaskKind causalKind);
+    public native @NoException(true) IAttention addAttentionV2(@ByRef ITensor query, @ByRef ITensor key, @ByRef ITensor value, @Cast("nvinfer1::AttentionNormalizationOp") int normOp,
+            @Cast("nvinfer1::CausalMaskKind") int causalKind);
 
     /** \brief Add a Rotary Position Embedding (RoPE) layer to the network.
      * 
@@ -2101,9 +2044,11 @@ public class INetworkDefinition extends INoCopy {
      * 
      *  @see IMoELayer
      * 
-     *  \warning MoE is only supported on Thor. And performance is limited when seqLen > 16.
+     *  \warning MoE requires Blackwell or Thor GPU architecture (SM 10.x or SM 11.x). SM 12.x is not currently
+     *  supported. And performance is limited when seqLen > 16.
      * 
-     *  \warning The number of selected experts per token could be inferred from the input \p selectedExpertsForTokens and should be consistent with the topK in the \p scoresForSelectedExperts.
+     *  \warning The number of selected experts per token could be inferred from the input \p selectedExpertsForTokens
+     *  and should be consistent with the topK in the \p scoresForSelectedExperts.
      * 
      *  @return The new MoE layer, or nullptr if it could not be created.
      *  */
@@ -2124,10 +2069,14 @@ public class INetworkDefinition extends INoCopy {
      *  kREDUCE_SCATTER or kALL_REDUCE. See \ref ReduceOperation for valid values. Use ReduceOperation::kNONE for a
      *  CollectiveOperation which does not need a ReduceOperation
      *  @param root The root rank of the collective operation.
-     *  Some CollectiveOperations, such as kBROADCAST and kREDUCE require specifying a root rank, with the following
-     *  semantics:
+     *  Some CollectiveOperations require specifying a root rank, with the following semantics:
      *  - kBROADCAST: the root rank sends, all other ranks receive data
      *  - kREDUCE: the root rank receives reduced data, the other ranks send data
+     *  - kGATHER: the root rank receives data gathered from all ranks
+     *  - kSCATTER: the root rank distributes data to all ranks
+     *  For operations that do not use a root rank (kALL_REDUCE, kALL_GATHER, kREDUCE_SCATTER, kALL_TO_ALL),
+     *  the {@code root} parameter is ignored. Use {@code root = -1} as the recommended sentinel value when constructing
+     *  the layer to make this explicit.
      *  @param groups Pointer to a flat array of rank IDs in the communicator that defines a single group for this
      *  layer. The DistCollective runner treats this array as the ordered list of participating ranks; only those ranks
      *  take part in the collective, and the order defines the group-local rank (used to remap the root for root-based

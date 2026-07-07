@@ -37,7 +37,6 @@ public class VExecutionContext extends VRoot {
     public native @NoException(true) void setDeviceMemory(Pointer memory);
     public native @NoException(true) int getOptimizationProfile();
     public native @Cast("bool") @NoException(true) boolean allInputDimensionsSpecified();
-    public native @Cast("bool") @NoException(true) boolean allInputShapesSpecified();
     public native @NoException(true) void setErrorRecorder(IErrorRecorder recorder);
     public native @NoException(true) IErrorRecorder getErrorRecorder();
     public native @Cast("bool") @NoException(true) boolean executeV2(@Cast("void*const*") PointerPointer bindings);
@@ -95,8 +94,5 @@ public class VExecutionContext extends VRoot {
     public native @NoException(true) IRuntimeConfig getRuntimeConfig();
     public native @Cast("bool") @NoException(true) boolean setUnfusedTensorsDebugState(@Cast("bool") boolean flag);
     public native @Cast("bool") @NoException(true) boolean getUnfusedTensorsDebugState();
-// #if ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
-    public native @Cast("bool") @NoException(true) boolean isStreamCapturable(CUstream_st stream);
-// #endif // ENABLE_FEATURE_DISABLE_RUNTIME_ALLOCATION
     public native @Cast("bool") @NoException(true) boolean setCommunicator(Pointer communicator);
 }
