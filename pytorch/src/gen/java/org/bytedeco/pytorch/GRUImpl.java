@@ -44,8 +44,8 @@ public class GRUImpl extends GRUImplBase {
   public GRUImpl(@Const @ByRef GRUOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::GRUImpl>") private native void allocate(@Const @ByRef GRUOptions options_);
 
-  public native @ByVal T_TensorTensor_T forward(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
-  public native @ByVal T_TensorTensor_T forward(@Const @ByRef Tensor input);
+  public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
+  public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);
   public native @ByVal T_PackedSequenceTensor_T forward_with_packed_input(
         @Const @ByRef PackedSequence packed_input,
         @ByVal(nullValue = "torch::Tensor{}") Tensor hx);

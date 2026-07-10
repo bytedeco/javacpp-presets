@@ -50,6 +50,184 @@ mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
+# For local macOS builds, reuse Homebrew's libtorch instead of cloning and
+# rebuilding the full PyTorch source tree.
+if [[ "$PLATFORM" == macosx-* && "$EXTENSION" != *gpu && "${USE_SYSTEM_LIBTORCH:-1}" != "0" ]]; then
+    if [[ -z "${LIBTORCH_HOME:-}" ]] && command -v brew >/dev/null 2>&1; then
+        LIBTORCH_HOME="$(brew --prefix libtorch 2>/dev/null || brew --prefix pytorch 2>/dev/null || true)"
+    fi
+    LIBTORCH_HOME="${LIBTORCH_HOME:-/opt/homebrew/opt/pytorch}"
+
+    if [[ -f "$LIBTORCH_HOME/lib/libtorch.dylib" && -f "$LIBTORCH_HOME/lib/libtorch_cpu.dylib" && -f "$LIBTORCH_HOME/lib/libc10.dylib" && -d "$LIBTORCH_HOME/include" ]]; then
+        echo "Using Homebrew libtorch from $LIBTORCH_HOME"
+        rm -Rf include lib bin
+        mkdir -p include lib bin
+        cp -R -L "$LIBTORCH_HOME"/include/. include/
+
+        # Apply the same header fixes that the source-build path applies below,
+        # but only to the local copied headers.
+        sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' include/torch/csrc/api/include/torch/nn/options/pooling.h
+        sedinplace 's/TensorIndex(c10::nullopt_t.*)/TensorIndex(c10::nullopt_t none = None)/g' include/ATen/TensorIndexing.h
+        sedinplace 's/TensorIndex(std::nullopt_t.*)/TensorIndex(std::nullopt_t none = None)/g' include/ATen/TensorIndexing.h
+        sedinplace '/OptimizerParamGroup& operator=(const OptimizerParamGroup& param_group) =/{N;d;}' include/torch/csrc/api/include/torch/optim/optimizer.h
+        sedinplace '/OptimizerParamGroup& operator=(OptimizerParamGroup&& param_group)/i\
+  OptimizerParamGroup() {}\
+  OptimizerParamGroup& operator=(const OptimizerParamGroup& param_group) {\
+      params_ = param_group.params();\
+      if (param_group.has_options())\
+          options_ = param_group.options().clone();\
+      return *this;\
+  }\
+' include/torch/csrc/api/include/torch/optim/optimizer.h
+        sedinplace '/using ExampleType = ExampleType_;/a\
+  using BatchType = ChunkType;\
+  using DataType = ExampleType;\
+' include/torch/csrc/api/include/torch/data/datasets/chunk.h
+        sedinplace '/^};/a\
+TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
+' include/torch/csrc/api/include/torch/nn/module.h
+        if ! grep -q '^struct TORCH_API ASMoutput;' include/torch/csrc/api/include/torch/nn/module.h; then
+            sedinplace '/^namespace torch::nn {/a\
+struct TORCH_API ASMoutput;\
+' include/torch/csrc/api/include/torch/nn/module.h
+        fi
+        if ! grep -q '#include <tuple>' include/torch/csrc/api/include/torch/nn/module.h; then
+            sedinplace '/#include <type_traits>/a\
+#include <tuple>\
+' include/torch/csrc/api/include/torch/nn/module.h
+        fi
+        if ! grep -q 'Module::forward_tuple_tensor_tensor_attn(query, key, value' include/torch/csrc/api/include/torch/nn/module.h; then
+            sedinplace '/void apply(const ModuleApplyFunction& function);/i\
+  virtual Tensor forward_tensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tensor(input) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor2(const Tensor& input1, const Tensor& input2) { TORCH_CHECK(false, "Module::forward_tensor2(input1, input2) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor3(const Tensor& input1, const Tensor& input2, const Tensor& input3) { TORCH_CHECK(false, "Module::forward_tensor3(input1, input2, input3) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor4(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4) { TORCH_CHECK(false, "Module::forward_tensor4(input1, input2, input3, input4) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor6(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6) { TORCH_CHECK(false, "Module::forward_tensor6(input1..input6) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor8(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6, const Tensor& input7, const Tensor& input8) { TORCH_CHECK(false, "Module::forward_tensor8(input1..input8) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor_output_size(const Tensor& input, std::optional<at::IntArrayRef> output_size) { TORCH_CHECK(false, "Module::forward_tensor_output_size(input, output_size) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor_indices_output_size(const Tensor& input, const Tensor& indices, std::optional<std::vector<int64_t>> output_size) { TORCH_CHECK(false, "Module::forward_tensor_indices_output_size(input, indices, output_size) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, std::tuple<Tensor, Tensor>> forward_tuple_tensor_t_tensortensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tuple_tensor_t_tensortensor(input) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, std::tuple<Tensor, Tensor>> forward_tuple_tensor_t_tensortensor_opt(const Tensor& input, std::optional<std::tuple<Tensor, Tensor>> hx_opt) { TORCH_CHECK(false, "Module::forward_tuple_tensor_t_tensortensor_opt(input, hx_opt) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor(input) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor2(const Tensor& input1, const Tensor& input2) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor2(input1, input2) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor3(const Tensor& input1, const Tensor& input2, const Tensor& input3) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor3(input1, input2, input3) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor_opt(const Tensor& input, std::optional<std::tuple<Tensor, Tensor>> hx_opt) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor_opt(input, hx_opt) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor_attn(const Tensor& query, const Tensor& key, const Tensor& value, const Tensor& key_padding_mask, bool need_weights, const Tensor& attn_mask, bool average_attn_weights) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor_attn(query, key, value, ...) is not implemented for ", name()); }\
+  Tensor forward(const Tensor& input) { return forward_tensor(input); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2) { return forward_tensor2(input1, input2); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3) { return forward_tensor3(input1, input2, input3); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4) { return forward_tensor4(input1, input2, input3, input4); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6) { return forward_tensor6(input1, input2, input3, input4, input5, input6); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6, const Tensor& input7, const Tensor& input8) { return forward_tensor8(input1, input2, input3, input4, input5, input6, input7, input8); }\
+  Tensor forward(const Tensor& input, std::optional<at::IntArrayRef> output_size) { return forward_tensor_output_size(input, output_size); }\
+  Tensor forward(const Tensor& input, const Tensor& indices, std::optional<std::vector<int64_t>> output_size) { return forward_tensor_indices_output_size(input, indices, output_size); }\
+  size_t javacpp_module_object_id() const noexcept { return reinterpret_cast<size_t>(this); }\
+' include/torch/csrc/api/include/torch/nn/module.h
+        fi
+        if ! grep -q 'forward_method<ModuleType>' include/torch/csrc/api/include/torch/nn/modules/container/any.h; then
+            sedinplace '/^ private:$/a\
+  template <typename ModuleType>\
+  static auto forward_method() {\
+    using M = std::remove_cv_t<std::remove_reference_t<ModuleType>>;\
+    if constexpr (std::is_same_v<M, Module>) {\
+      return static_cast<Tensor (M::*)(const Tensor&)>(&M::forward_tensor);\
+    } else {\
+      return &M::forward;\
+    }\
+  }\
+' include/torch/csrc/api/include/torch/nn/modules/container/any.h
+            sedinplace 's/&std::remove_reference_t<ModuleType>::forward/forward_method<ModuleType>()/g' include/torch/csrc/api/include/torch/nn/modules/container/any.h
+            sedinplace 's/torch::detail::has_forward<ModuleType>::value,/torch::detail::has_forward<ModuleType>::value || std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, Module>,/g' include/torch/csrc/api/include/torch/nn/modules/container/any.h
+            sedinplace 's/torch::detail::has_forward<M>::value,/torch::detail::has_forward<M>::value || std::is_same_v<M, Module>,/g' include/torch/csrc/api/include/torch/nn/modules/container/any.h
+            sedinplace 's/return get_(&M::forward);/return get_(forward_method<ModuleType>());/g' include/torch/csrc/api/include/torch/nn/modules/container/any.h
+        fi
+        if ! grep -q 'module_->forward_tensor' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h; then
+            sedinplace 's/return AnyValue(module_->forward(std::forward<Ts>(ts)...));/if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, Module>) {\
+        return AnyValue(module_->forward_tensor(std::forward<Ts>(ts)...));\
+      } else {\
+        return AnyValue(module_->forward(std::forward<Ts>(ts)...));\
+      }/g' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+        fi
+        if ! grep -q 'JavaCPP OrderedDict<shared_ptr<Module>> ctor' include/torch/csrc/api/include/torch/nn/modules/container/sequential.h; then
+            sedinplace '/Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s\./i\
+  // JavaCPP OrderedDict<shared_ptr<Module>> ctor\
+  explicit SequentialImpl(torch::OrderedDict<std::string, std::shared_ptr<Module>>& ordered_dict) {\
+    modules_.reserve(ordered_dict.size());\
+    for (auto& item : ordered_dict) {\
+      push_back(item.key(), item.value());\
+    }\
+  }\
+\
+  explicit SequentialImpl(torch::OrderedDict<std::string, std::shared_ptr<Module>>&& ordered_dict) {\
+    modules_.reserve(ordered_dict.size());\
+    for (auto& item : ordered_dict) {\
+      push_back(item.key(), std::move(item.value()));\
+    }\
+  }\
+' include/torch/csrc/api/include/torch/nn/modules/container/sequential.h
+        fi
+        if ! grep -q 'JavaCPP OrderedDict<AnyModule> lvalue ctor' include/torch/csrc/api/include/torch/nn/modules/container/sequential.h; then
+            sedinplace '/Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s\./i\
+  // JavaCPP OrderedDict<AnyModule> lvalue ctor\
+  explicit SequentialImpl(\
+      torch::OrderedDict<std::string, AnyModule>& ordered_dict) {\
+    modules_.reserve(ordered_dict.size());\
+    for (auto& item : ordered_dict) {\
+      push_back(item.key(), item.value());\
+    }\
+  }\
+\
+' include/torch/csrc/api/include/torch/nn/modules/container/sequential.h
+        fi
+        sedinplace 's/if (module->_forward_has_default_args()) {/if (false \&\& module->_forward_has_default_args()) {/g' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+        # No header patches needed for javacpp-presets — the push_back
+        # for Module is done through the C++ helper `push_back_module`
+        # defined in torch.java preset's cppText, which wraps the user
+        # pointer in a ModuleHolder<Module> to avoid the
+        # has_forward<Module> static_assert in AnyModule.
+        sedinplace 's/char(\(.*\))/\1/g' include/torch/csrc/jit/serialization/pickler.h
+        sedinplace 's/const std::string& interface)/const std::string\& interface_name)/g' include/torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
+        sedinplace '/^ private:$/,/^  torch::OrderedDict<std::string, std::shared_ptr<Module>> modules_;$/s/^ private:$/ public:/' include/torch/csrc/api/include/torch/nn/modules/container/moduledict.h
+
+        for P in "$LIBTORCH_HOME"/lib/*.dylib; do
+            [[ -e "$P" ]] || continue
+            ln -sf "$P" "lib/$(basename "$P")"
+        done
+        if [[ -d "$LIBTORCH_HOME/bin" ]]; then
+            for P in "$LIBTORCH_HOME"/bin/*; do
+                [[ -e "$P" ]] || continue
+                ln -sf "$P" "bin/$(basename "$P")"
+            done
+        fi
+
+        # Homebrew installs ProcessGroupGloo.hpp but not the gloo headers it
+        # includes, so keep a matching copy of PyTorch's gloo submodule headers.
+        GLOO_COMMIT=3135b0b41b67dde590eef0938a0bf3d6238df5f7
+        if [[ ! -f gloo-src/gloo/algorithm.h ]]; then
+            rm -Rf gloo-src gloo.tar.gz
+            if declare -f download >/dev/null 2>&1; then
+                download "https://codeload.github.com/pytorch/gloo/tar.gz/$GLOO_COMMIT" gloo.tar.gz
+            else
+                curl -L "https://codeload.github.com/pytorch/gloo/tar.gz/$GLOO_COMMIT" -o gloo.tar.gz --fail
+            fi
+            mkdir gloo-src
+            tar xfz gloo.tar.gz -C gloo-src --strip-components=1
+        fi
+        rm -Rf include/gloo
+        ln -sf ../gloo-src/gloo include/gloo
+
+        if command -v brew >/dev/null 2>&1; then
+            LIBOMP_DYLIB="$(brew ls libomp 2>/dev/null | grep '/libomp.dylib$' | head -n 1 || true)"
+            if [[ -n "$LIBOMP_DYLIB" ]]; then
+                ln -sf "$LIBOMP_DYLIB" lib/libomp.dylib
+                ln -sf "$LIBOMP_DYLIB" lib/libiomp5.dylib
+            fi
+        fi
+
+        return 0
+    fi
+fi
+
 # Distributed needs libuv on Windows (on other platforms, it's included in tensorpipe)
 if [[ $PLATFORM == windows* ]]; then
     if [[ ! -d libuv ]]; then
@@ -87,8 +265,27 @@ git submodule foreach --recursive 'git reset --hard'
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
-OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+OPENBLAS_PATH="${OPENBLAS_PATH:-$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/}"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
+
+find_local_maven_openblas() {
+    local repo="$HOME/.m2/repository/org/bytedeco/openblas"
+    local jar
+    jar=$(find "$repo" -type f -name "openblas-*-${PLATFORM}.jar" 2>/dev/null | sort | tail -n 1)
+    if [[ -z "$jar" ]]; then
+        return 1
+    fi
+
+    local extracted="$INSTALL_PATH/.cache/openblas/$PLATFORM"
+    if [[ ! -f "$extracted/org/bytedeco/openblas/$PLATFORM/include/openblas_config.h" ]]; then
+        rm -Rf "$extracted"
+        mkdir -p "$extracted"
+        (cd "$extracted" && jar xf "$jar")
+    fi
+
+    OPENBLAS_PATH="$extracted/org/bytedeco/openblas/$PLATFORM"
+    return 0
+}
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
@@ -109,6 +306,8 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     done
     IFS="$PREVIFS"
 fi
+
+find_local_maven_openblas || true
 
 export OpenBLAS_HOME=$OPENBLAS_PATH
 
@@ -231,6 +430,100 @@ sedinplace '/using ExampleType = ExampleType_;/a\
 sedinplace '/^};/a\
 TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
 ' torch/csrc/api/include/torch/nn/module.h
+if ! grep -q '^struct TORCH_API ASMoutput;' torch/csrc/api/include/torch/nn/module.h; then
+    sedinplace '/^namespace torch::nn {/a\
+struct TORCH_API ASMoutput;\
+' torch/csrc/api/include/torch/nn/module.h
+fi
+if ! grep -q '#include <tuple>' torch/csrc/api/include/torch/nn/module.h; then
+    sedinplace '/#include <type_traits>/a\
+#include <tuple>\
+' torch/csrc/api/include/torch/nn/module.h
+fi
+if ! grep -q 'Module::forward_tuple_tensor_tensor_attn(query, key, value' torch/csrc/api/include/torch/nn/module.h; then
+    sedinplace '/void apply(const ModuleApplyFunction& function);/i\
+  virtual Tensor forward_tensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tensor(input) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor2(const Tensor& input1, const Tensor& input2) { TORCH_CHECK(false, "Module::forward_tensor2(input1, input2) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor3(const Tensor& input1, const Tensor& input2, const Tensor& input3) { TORCH_CHECK(false, "Module::forward_tensor3(input1, input2, input3) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor4(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4) { TORCH_CHECK(false, "Module::forward_tensor4(input1, input2, input3, input4) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor6(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6) { TORCH_CHECK(false, "Module::forward_tensor6(input1..input6) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor8(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6, const Tensor& input7, const Tensor& input8) { TORCH_CHECK(false, "Module::forward_tensor8(input1..input8) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor_output_size(const Tensor& input, std::optional<at::IntArrayRef> output_size) { TORCH_CHECK(false, "Module::forward_tensor_output_size(input, output_size) is not implemented for ", name()); }\
+  virtual Tensor forward_tensor_indices_output_size(const Tensor& input, const Tensor& indices, std::optional<std::vector<int64_t>> output_size) { TORCH_CHECK(false, "Module::forward_tensor_indices_output_size(input, indices, output_size) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, std::tuple<Tensor, Tensor>> forward_tuple_tensor_t_tensortensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tuple_tensor_t_tensortensor(input) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, std::tuple<Tensor, Tensor>> forward_tuple_tensor_t_tensortensor_opt(const Tensor& input, std::optional<std::tuple<Tensor, Tensor>> hx_opt) { TORCH_CHECK(false, "Module::forward_tuple_tensor_t_tensortensor_opt(input, hx_opt) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor(input) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor2(const Tensor& input1, const Tensor& input2) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor2(input1, input2) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor3(const Tensor& input1, const Tensor& input2, const Tensor& input3) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor3(input1, input2, input3) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor_opt(const Tensor& input, std::optional<std::tuple<Tensor, Tensor>> hx_opt) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor_opt(input, hx_opt) is not implemented for ", name()); }\
+  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor_attn(const Tensor& query, const Tensor& key, const Tensor& value, const Tensor& key_padding_mask, bool need_weights, const Tensor& attn_mask, bool average_attn_weights) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor_attn(query, key, value, ...) is not implemented for ", name()); }\
+  Tensor forward(const Tensor& input) { return forward_tensor(input); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2) { return forward_tensor2(input1, input2); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3) { return forward_tensor3(input1, input2, input3); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4) { return forward_tensor4(input1, input2, input3, input4); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6) { return forward_tensor6(input1, input2, input3, input4, input5, input6); }\
+  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6, const Tensor& input7, const Tensor& input8) { return forward_tensor8(input1, input2, input3, input4, input5, input6, input7, input8); }\
+  Tensor forward(const Tensor& input, std::optional<at::IntArrayRef> output_size) { return forward_tensor_output_size(input, output_size); }\
+  Tensor forward(const Tensor& input, const Tensor& indices, std::optional<std::vector<int64_t>> output_size) { return forward_tensor_indices_output_size(input, indices, output_size); }\
+  size_t javacpp_module_object_id() const noexcept { return reinterpret_cast<size_t>(this); }\
+' torch/csrc/api/include/torch/nn/module.h
+fi
+if ! grep -q 'forward_method<ModuleType>' torch/csrc/api/include/torch/nn/modules/container/any.h; then
+    sedinplace '/^ private:$/a\
+  template <typename ModuleType>\
+  static auto forward_method() {\
+    using M = std::remove_cv_t<std::remove_reference_t<ModuleType>>;\
+    if constexpr (std::is_same_v<M, Module>) {\
+      return static_cast<Tensor (M::*)(const Tensor&)>(&M::forward_tensor);\
+    } else {\
+      return &M::forward;\
+    }\
+  }\
+' torch/csrc/api/include/torch/nn/modules/container/any.h
+    sedinplace 's/&std::remove_reference_t<ModuleType>::forward/forward_method<ModuleType>()/g' torch/csrc/api/include/torch/nn/modules/container/any.h
+    sedinplace 's/torch::detail::has_forward<ModuleType>::value,/torch::detail::has_forward<ModuleType>::value || std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, Module>,/g' torch/csrc/api/include/torch/nn/modules/container/any.h
+    sedinplace 's/torch::detail::has_forward<M>::value,/torch::detail::has_forward<M>::value || std::is_same_v<M, Module>,/g' torch/csrc/api/include/torch/nn/modules/container/any.h
+    sedinplace 's/return get_(&M::forward);/return get_(forward_method<ModuleType>());/g' torch/csrc/api/include/torch/nn/modules/container/any.h
+fi
+if ! grep -q 'module_->forward_tensor' torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h; then
+    sedinplace 's/return AnyValue(module_->forward(std::forward<Ts>(ts)...));/if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, Module>) {\
+        return AnyValue(module_->forward_tensor(std::forward<Ts>(ts)...));\
+      } else {\
+        return AnyValue(module_->forward(std::forward<Ts>(ts)...));\
+      }/g' torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+fi
+if ! grep -q 'JavaCPP OrderedDict<shared_ptr<Module>> ctor' torch/csrc/api/include/torch/nn/modules/container/sequential.h; then
+    sedinplace '/Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s\./i\
+  // JavaCPP OrderedDict<shared_ptr<Module>> ctor\
+  explicit SequentialImpl(torch::OrderedDict<std::string, std::shared_ptr<Module>>& ordered_dict) {\
+    modules_.reserve(ordered_dict.size());\
+    for (auto& item : ordered_dict) {\
+      push_back(item.key(), item.value());\
+    }\
+  }\
+\
+  explicit SequentialImpl(torch::OrderedDict<std::string, std::shared_ptr<Module>>&& ordered_dict) {\
+    modules_.reserve(ordered_dict.size());\
+    for (auto& item : ordered_dict) {\
+      push_back(item.key(), std::move(item.value()));\
+    }\
+  }\
+' torch/csrc/api/include/torch/nn/modules/container/sequential.h
+fi
+if ! grep -q 'JavaCPP OrderedDict<AnyModule> lvalue ctor' torch/csrc/api/include/torch/nn/modules/container/sequential.h; then
+    sedinplace '/Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s\./i\
+  // JavaCPP OrderedDict<AnyModule> lvalue ctor\
+  explicit SequentialImpl(\
+      torch::OrderedDict<std::string, AnyModule>& ordered_dict) {\
+    modules_.reserve(ordered_dict.size());\
+    for (auto& item : ordered_dict) {\
+      push_back(item.key(), item.value());\
+    }\
+  }\
+\
+' torch/csrc/api/include/torch/nn/modules/container/sequential.h
+fi
+sedinplace 's/if (module->_forward_has_default_args()) {/if (false \&\& module->_forward_has_default_args()) {/g' torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
 sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
 # some windows header defines a macro named "interface"

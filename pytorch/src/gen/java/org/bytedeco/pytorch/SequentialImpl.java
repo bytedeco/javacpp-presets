@@ -90,24 +90,43 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SequentialImpl extends SequentialImplCloneable {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public SequentialImpl() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SequentialImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SequentialImpl(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public SequentialImpl position(long position) {
+        return (SequentialImpl)super.position(position);
+    }
+    @Override public SequentialImpl getPointer(long i) {
+        return new SequentialImpl((Pointer)this).offsetAddress(i);
+    }
 
 
-  public SequentialImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr @Name("std::make_shared<torch::nn::SequentialImpl>") private native void allocate();
+  
 
   /** Constructs the {@code Sequential} from a variadic list of modules. */
+  
+
+  // JavaCPP OrderedDict<shared_ptr<Module>> ctor
+  
+
+  
+
+  // JavaCPP OrderedDict<AnyModule> lvalue ctor
+  
+
 
   /** Constructs the {@code Sequential} from an {@code OrderedDict} of named {@code AnyModule}s. */
-  public SequentialImpl(
-        @ByRef(true) StringAnyModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }
-  @SharedPtr @Name("std::make_shared<torch::nn::SequentialImpl>") private native void allocate(
-        @ByRef(true) StringAnyModuleDict ordered_dict);
+  
 
   /** Constructs the {@code Sequential} from a braced-init-list of named {@code AnyModule}s.
    *  It enables the following use case:
    *  {@code Sequential sequential({{"m1", M(1)}, {"m2", M(2)}})} */
+  
 
   /** Special cloning function for {@code Sequential} because it does not use
    *  {@code reset()}. */
@@ -577,20 +596,35 @@ public class SequentialImpl extends SequentialImplCloneable {
   /** Iterates over the container and calls {@code push_back()} on each value. */
 
   /** Adds a type-erased {@code AnyModule} to the {@code Sequential}. */
-  public native void push_back(@ByVal AnyModule any_module);
+  public SequentialImpl(@ByRef(true) StringAnyModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }
+  @SharedPtr @Name("std::make_shared<torch::nn::SequentialImpl>") private native void allocate(@ByRef(true) StringAnyModuleDict ordered_dict);
+  public SequentialImpl(@ByRef(true) StringSharedModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }
+  @SharedPtr @Name("std::make_shared<torch::nn::SequentialImpl>") private native void allocate(@ByRef(true) StringSharedModuleDict ordered_dict);
+  public native @Name("push_back") void push_back(@ByVal AnyModule any_module);
+  public native @Name("push_back") void push_back(@StdString BytePointer name, @ByVal AnyModule any_module);
+  public native @Name("push_back") void push_back(@StdString String name, @ByVal AnyModule any_module);
+  public native @Name("push_back") void push_back(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  public native @Name("push_back") void push_back(@StdString String name, @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  public void push_back(@StdString BytePointer name, Module module) { push_back(name != null ? name.getString() : null, module); }
+  public native @ByVal @Cast("torch::nn::SequentialImpl::Iterator*") @Name("begin") AnyModuleVector.Iterator begin_any();
+  public native @ByVal @Cast("torch::nn::SequentialImpl::Iterator*") @Name("end") AnyModuleVector.Iterator end_any();
+  private transient SharedModuleVector sharedIteratorSnapshot;
+  public SharedModuleVector.Iterator begin() { sharedIteratorSnapshot = children(); return sharedIteratorSnapshot.begin(); }
+  public SharedModuleVector.Iterator end() { if (sharedIteratorSnapshot == null) { sharedIteratorSnapshot = children(); } return sharedIteratorSnapshot.end(); }
 
-  public native void push_back(@StdString BytePointer name, @ByVal AnyModule any_module);
-  public native void push_back(@StdString String name, @ByVal AnyModule any_module);
+  
 
   /** Returns an iterator to the start of the {@code Sequential}. */
-  public native @ByVal @Cast("torch::nn::SequentialImpl::Iterator*") AnyModuleVector.Iterator begin();
+  
 
   /** Returns a const iterator to the start of the {@code Sequential}. */
+  
 
   /** Returns an iterator to the end of the {@code Sequential}. */
-  public native @ByVal @Cast("torch::nn::SequentialImpl::Iterator*") AnyModuleVector.Iterator end();
+  
 
   /** Returns a const iterator to the end of the {@code Sequential}. */
+  
 
   /** Attempts to return the module at the given index as the requested type.
    *  Throws an exception if the index is out of bounds or the types do not

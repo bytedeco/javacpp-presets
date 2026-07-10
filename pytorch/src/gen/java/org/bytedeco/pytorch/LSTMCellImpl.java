@@ -44,10 +44,10 @@ public class LSTMCellImpl extends LSTMCellImplBase {
   public LSTMCellImpl(@Const @ByRef LSTMCellOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::LSTMCellImpl>") private native void allocate(@Const @ByRef LSTMCellOptions options_);
 
-  public native @ByVal T_TensorTensor_T forward(
+  public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(
         @Const @ByRef Tensor input,
         @Optional T_TensorTensor_T hx_opt/*={}*/);
-  public native @ByVal T_TensorTensor_T forward(
+  public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(
         @Const @ByRef Tensor input);
   public native @ByRef LSTMCellOptions options(); public native LSTMCellImpl options(LSTMCellOptions setter);
 }
