@@ -266,66 +266,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         infoMap.put(new Info("torch::nn::" + name + "Impl")) // Ensure qualified name is in Info when Cloneable<XImpl> inheritance is parsed (and before class XImpl is finished parsing)
                .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr", "@Name(\"std::make_shared<torch::nn::" + name + "Impl>\")"))
                .put(new Info("torch::nn::Cloneable<torch::nn::" + name + "Impl>").pointerTypes(name + "ImplCloneable").purify())
-               .put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
-               .put(new Info("torch::nn::" + name).skip())
                .put(new Info("torch::nn::Module::as<torch::nn::" + name + "Impl,int>").javaNames("as" + name));
-
-        if ("Embedding".equals(name)) {
-            infoMap.put(new Info("torch::nn::EmbeddingImpl").javaText(
-                "public static EmbeddingImpl from_pretrained(@Const @ByRef Tensor embeddings) {\n" +
-                "    return from_pretrained(embeddings, new EmbeddingFromPretrainedOptions());\n" +
-                "}\n" +
-                "public static EmbeddingImpl from_pretrained(@Const @ByRef Tensor embeddings, @Const @ByRef EmbeddingFromPretrainedOptions options) {\n" +
-                "    if (embeddings.dim() != 2) {\n" +
-                "        throw new IllegalArgumentException(\"Embeddings parameter is expected to be 2-dimensional\");\n" +
-                "    }\n" +
-                "    long rows = embeddings.size(0);\n" +
-                "    long cols = embeddings.size(1);\n" +
-                "    EmbeddingOptions embeddingOptions = new EmbeddingOptions(rows, cols);\n" +
-                "    if (options.padding_idx().has_value()) {\n" +
-                "        embeddingOptions.padding_idx().put(options.padding_idx().get());\n" +
-                "    }\n" +
-                "    if (options.max_norm().has_value()) {\n" +
-                "        embeddingOptions.max_norm().put(options.max_norm().get());\n" +
-                "    }\n" +
-                "    embeddingOptions.norm_type().put(options.norm_type().get());\n" +
-                "    embeddingOptions.scale_grad_by_freq().put(options.scale_grad_by_freq().get());\n" +
-                "    embeddingOptions.sparse().put(options.sparse().get());\n" +
-                "    embeddingOptions._weight().put(embeddings);\n" +
-                "    EmbeddingImpl embedding = new EmbeddingImpl(embeddingOptions);\n" +
-                "    embedding.weight().set_requires_grad(!options.freeze().get());\n" +
-                "    return embedding;\n" +
-                "}\n"
-            ));
-        } else if ("EmbeddingBag".equals(name)) {
-            infoMap.put(new Info("torch::nn::EmbeddingBagImpl").javaText(
-                "public static EmbeddingBagImpl from_pretrained(@Const @ByRef Tensor embeddings) {\n" +
-                "    return from_pretrained(embeddings, new EmbeddingBagFromPretrainedOptions());\n" +
-                "}\n" +
-                "public static EmbeddingBagImpl from_pretrained(@Const @ByRef Tensor embeddings, @Const @ByRef EmbeddingBagFromPretrainedOptions options) {\n" +
-                "    if (embeddings.dim() != 2) {\n" +
-                "        throw new IllegalArgumentException(\"Embeddings parameter is expected to be 2-dimensional\");\n" +
-                "    }\n" +
-                "    long rows = embeddings.size(0);\n" +
-                "    long cols = embeddings.size(1);\n" +
-                "    EmbeddingBagOptions embeddingBagOptions = new EmbeddingBagOptions(rows, cols);\n" +
-                "    if (options.padding_idx().has_value()) {\n" +
-                "        embeddingBagOptions.padding_idx().put(options.padding_idx().get());\n" +
-                "    }\n" +
-                "    if (options.max_norm().has_value()) {\n" +
-                "        embeddingBagOptions.max_norm().put(options.max_norm().get());\n" +
-                "    }\n" +
-                "    embeddingBagOptions.norm_type().put(options.norm_type().get());\n" +
-                "    embeddingBagOptions.scale_grad_by_freq().put(options.scale_grad_by_freq().get());\n" +
-                "    embeddingBagOptions.mode().put(options.mode());\n" +
-                "    embeddingBagOptions.sparse().put(options.sparse().get());\n" +
-                "    embeddingBagOptions._weight().put(embeddings);\n" +
-                "    EmbeddingBagImpl embeddingBag = new EmbeddingBagImpl(embeddingBagOptions);\n" +
-                "    embeddingBag.weight().set_requires_grad(!options.freeze().get());\n" +
-                "    return embeddingBag;\n" +
-                "}\n"
-            ));
-        }
+        infoMap.put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
+               .put(new Info("torch::nn::" + name).skip());
 
         // ModuleHolder<Module> is the one we DO need to expose to
         // Java — it's how the generic push_back(Module) gets routed
@@ -584,6 +527,31 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         sharedMap(infoMap);
 
         infoMap
+            .put(new Info("torch::nn::EmbeddingBagImpl::forward_with_offsets").javaNames("forward"))
+            .put(new Info("c10::DispatchKeyExtractor").annotations("@NoOffset").javaText(
+                "@Namespace(\"c10\") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)\n" +
+                "public class DispatchKeyExtractor extends Pointer {\n" +
+                "    static { Loader.load(); }\n" +
+                "    public DispatchKeyExtractor(Pointer p) { super(p); }\n" +
+                "    public static native @ByVal DispatchKeyExtractor make(@Const @ByRef FunctionSchema schema);\n" +
+                "    public static native @ByVal DispatchKeyExtractor makeUninitialized();\n" +
+                "    public native void registerSchema(@Const @ByRef FunctionSchema schema);\n" +
+                "    public native void deregisterSchema();\n" +
+                "    public native @ByVal DispatchKeySet getDispatchKeySetBoxed(@Const IValueVector stack);\n" +
+                "    public native void setOperatorHasFallthroughForKey(DispatchKey k, @Cast(\"bool\") boolean has_fallthrough);\n" +
+                "    public native void setOperatorHasFallthroughForKey(@Cast(\"c10::DispatchKey\") short k, @Cast(\"bool\") boolean has_fallthrough);\n" +
+                "    public native @StdString BytePointer dumpState();\n" +
+                "    public native void checkInvariants(@Const @ByRef FunctionSchema schema);\n" +
+                "}\n"
+            ))
+            .put(new Info("caffe2::TypeIdentifier").javaText(
+                "@Namespace(\"caffe2\") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)\n" +
+                "public class TypeIdentifier extends Pointer {\n" +
+                "    static { Loader.load(); }\n" +
+                "    public TypeIdentifier(Pointer p) { super(p); }\n" +
+                "    public static native @Const @ByVal TypeIdentifier uninitialized();\n" +
+                "}\n"
+            ))
             .put(new Info("ArrayRef.h").linePatterns("using IntList.*", ".*ArrayRef<int64_t>;").skip())
             .put(new Info("model_container_runner.h").linePatterns("using CreateAOTIModelRunnerFunc.*", "}*;").skip())
             .put(new Info("ordered_dict.h").linePatterns(".*class Item;.*").skip())
@@ -1272,6 +1240,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// Other std stuff
         infoMap
             .put(new Info("std::type_index").pointerTypes("@Cast(\"std::type_index*\") Pointer"))
+            .put(new Info("c10::utils::bitset", "c10::util::type_index").skip())
             .put(new Info("std::deque<torch::Tensor>").pointerTypes("TensorDeque").define())
             .put(new Info("std::bitset<64>", "std::bitset<at::kVmapNumLevels>", "std::bitset<dim_bitset_size>",
                 "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").valueTypes("long"))

@@ -62,4 +62,10 @@ public class EmbeddingImpl extends EmbeddingImplCloneable {
 
   /** The embedding table. */
   public native @ByRef Tensor weight(); public native EmbeddingImpl weight(Tensor setter);
+
+  // JavaCPP from_pretrained adapters
+  public static native @SharedPtr EmbeddingImpl from_pretrained(
+        @Const @ByRef Tensor embeddings, @Const @ByRef(nullValue = "torch::nn::EmbeddingFromPretrainedOptions{}") EmbeddingFromPretrainedOptions options);
+  public static native @SharedPtr EmbeddingImpl from_pretrained(
+        @Const @ByRef Tensor embeddings);
 }

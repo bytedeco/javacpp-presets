@@ -46,6 +46,53 @@ PYTORCH_VERSION=2.12.0
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
 
+patch_embedding_from_pretrained() {
+    local header="$1/torch/csrc/api/include/torch/nn/modules/embedding.h"
+    if [[ ! -f "$header" ]] || grep -q 'JavaCPP from_pretrained adapters' "$header"; then
+        return
+    fi
+
+    perl -i -ne '
+        if (/^class TORCH_API EmbeddingImpl/) { $impl = "embedding"; }
+        if (/^class TORCH_API EmbeddingBagImpl/) { $impl = "embedding_bag"; }
+        if ($impl eq "embedding" && /  Tensor weight;/) {
+            print;
+            print "\n  // JavaCPP from_pretrained adapters\n";
+            print "  static std::shared_ptr<EmbeddingImpl> from_pretrained(\n";
+            print "      const Tensor& embeddings, const EmbeddingFromPretrainedOptions& options = {});\n";
+            next;
+        }
+        if ($impl eq "embedding_bag" && /^  Tensor forward\(/) {
+            print "\n  // JavaCPP from_pretrained adapters\n";
+            print "  static std::shared_ptr<EmbeddingBagImpl> from_pretrained(\n";
+            print "      const Tensor& embeddings, const EmbeddingBagFromPretrainedOptions& options = {});\n";
+            print "  Tensor forward_with_offsets(const Tensor& input, const Tensor& offsets);\n\n";
+        }
+        if (/^class Embedding :/) { $holder = "embedding"; }
+        if (/^class EmbeddingBag :/) { $holder = "embedding_bag"; }
+        print;
+        if ($holder eq "embedding" && /^};$/) {
+            print "\ninline std::shared_ptr<EmbeddingImpl> EmbeddingImpl::from_pretrained(\n";
+            print "    const Tensor& embeddings, const EmbeddingFromPretrainedOptions& options) {\n";
+            print "  return Embedding::from_pretrained(embeddings, options).ptr();\n";
+            print "}\n";
+            $holder = "";
+        }
+        if ($holder eq "embedding_bag" && /^};$/) {
+            print "\ninline std::shared_ptr<EmbeddingBagImpl> EmbeddingBagImpl::from_pretrained(\n";
+            print "    const Tensor& embeddings, const EmbeddingBagFromPretrainedOptions& options) {\n";
+            print "  return EmbeddingBag::from_pretrained(embeddings, options).ptr();\n";
+            print "}\n";
+            print "\ninline Tensor EmbeddingBagImpl::forward_with_offsets(\n";
+            print "    const Tensor& input, const Tensor& offsets) {\n";
+            print "  return forward(input, offsets, Tensor{});\n";
+            print "}\n";
+            $holder = "";
+        }
+        if ($impl ne "" && /^};$/) { $impl = ""; }
+    ' "$header"
+}
+
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
@@ -63,10 +110,13 @@ if [[ "$PLATFORM" == macosx-* && "$EXTENSION" != *gpu && "${USE_SYSTEM_LIBTORCH:
         rm -Rf include lib bin
         mkdir -p include lib bin
         cp -R -L "$LIBTORCH_HOME"/include/. include/
+        patch_embedding_from_pretrained include
 
         # Apply the same header fixes that the source-build path applies below,
         # but only to the local copied headers.
-        sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' include/torch/csrc/api/include/torch/nn/options/pooling.h
+        if [[ -f include/torch/csrc/api/include/torch/nn/options/pooling.h ]]; then
+            sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' include/torch/csrc/api/include/torch/nn/options/pooling.h
+        fi
         sedinplace 's/TensorIndex(c10::nullopt_t.*)/TensorIndex(c10::nullopt_t none = None)/g' include/ATen/TensorIndexing.h
         sedinplace 's/TensorIndex(std::nullopt_t.*)/TensorIndex(std::nullopt_t none = None)/g' include/ATen/TensorIndexing.h
         sedinplace '/OptimizerParamGroup& operator=(const OptimizerParamGroup& param_group) =/{N;d;}' include/torch/csrc/api/include/torch/optim/optimizer.h
