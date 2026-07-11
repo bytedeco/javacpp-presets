@@ -39,4 +39,10 @@ public class FoldOptions extends Pointer {
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer dilation();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer padding();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer stride();
+
+  public native @ByRef @NoException(true) FoldOptions output_size(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) FoldOptions kernel_size(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) FoldOptions dilation(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) FoldOptions padding(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) FoldOptions stride(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
 }

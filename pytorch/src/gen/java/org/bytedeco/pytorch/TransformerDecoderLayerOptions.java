@@ -41,4 +41,10 @@ public class TransformerDecoderLayerOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim_feedforward();
   public native @ByRef @NoException(true) DoublePointer dropout();
   public native @ByRef @NoException(true) TransformerActivation activation();
+
+  public native @ByRef @NoException(true) TransformerDecoderLayerOptions d_model(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerDecoderLayerOptions nhead(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerDecoderLayerOptions dim_feedforward(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerDecoderLayerOptions dropout(double setter);
+  public native @ByRef @NoException(true) TransformerDecoderLayerOptions activation(@ByVal TransformerActivation setter);
 }

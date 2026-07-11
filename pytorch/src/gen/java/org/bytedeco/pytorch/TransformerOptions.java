@@ -67,4 +67,14 @@ public class TransformerOptions extends Pointer {
   public native @ByRef @NoException(true) TransformerActivation activation();
   public native @ByRef @NoException(true) AnyModule custom_encoder();
   public native @ByRef @NoException(true) AnyModule custom_decoder();
+
+  public native @ByRef @NoException(true) TransformerOptions d_model(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerOptions nhead(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerOptions num_encoder_layers(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerOptions num_decoder_layers(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerOptions dim_feedforward(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerOptions dropout(double setter);
+  public native @ByRef @NoException(true) TransformerOptions activation(@ByVal TransformerActivation setter);
+  public native @ByRef @NoException(true) TransformerOptions custom_encoder(@ByVal AnyModule setter);
+  public native @ByRef @NoException(true) TransformerOptions custom_decoder(@ByVal AnyModule setter);
 }

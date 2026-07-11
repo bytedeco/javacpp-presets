@@ -36,4 +36,8 @@ public class LSTMCellOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer input_size();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer hidden_size();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
+
+  public native @ByRef @NoException(true) LSTMCellOptions input_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LSTMCellOptions hidden_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LSTMCellOptions bias(@Cast("bool") boolean setter);
 }

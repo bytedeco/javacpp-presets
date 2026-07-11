@@ -48,4 +48,6 @@ public class MarginRankingLossOptions extends Pointer {
 
   public native @ByRef @NoException(true) DoublePointer margin();
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) MarginRankingLossOptions reduction(@ByVal LossReduction setter);
 }

@@ -34,4 +34,6 @@ public class PixelShuffleOptions extends Pointer {
   public PixelShuffleOptions(@Cast("int64_t") long upscale_factor) { super((Pointer)null); allocate(upscale_factor); }
   private native void allocate(@Cast("int64_t") long upscale_factor);
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer upscale_factor();
+
+  public native @ByRef @NoException(true) PixelShuffleOptions upscale_factor(@Cast("int64_t") long setter);
 }

@@ -47,4 +47,7 @@ public class GumbelSoftmaxFuncOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer tau();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer hard();
   public native @ByRef @NoException(true) IntPointer dim();
+
+  public native @ByRef @NoException(true) GumbelSoftmaxFuncOptions hard(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) GumbelSoftmaxFuncOptions dim(int setter);
 }

@@ -30,4 +30,9 @@ public class MaxUnpool2dFuncOptions extends Pointer {
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer stride();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer padding();
   public native @ByRef @NoException(true) LongVectorOptional output_size();
+
+  public native @ByRef @NoException(true) MaxUnpool2dFuncOptions kernel_size(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxUnpool2dFuncOptions stride(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxUnpool2dFuncOptions padding(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxUnpool2dFuncOptions output_size(@ByVal LongVectorOptional setter);
 }

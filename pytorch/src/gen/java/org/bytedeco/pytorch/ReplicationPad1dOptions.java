@@ -31,4 +31,6 @@ public class ReplicationPad1dOptions extends Pointer {
   public ReplicationPad1dOptions(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding);
   public native @Cast("torch::ExpandingArray<1*2>*") @ByRef @NoException(true) LongPointer padding();
+
+  public native @ByRef @NoException(true) ReplicationPad1dOptions padding(@Cast("torch::ExpandingArray<1*2>*") @ByVal LongPointer setter);
 }

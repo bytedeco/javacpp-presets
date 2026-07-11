@@ -60,4 +60,7 @@ public class KLDivLossOptions extends Pointer {
   private native void allocate(@ByVal kMean reduction);
   public native @ByRef @NoException(true) KLDivLossReduction reduction();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer log_target();
+
+  public native @ByRef @NoException(true) KLDivLossOptions reduction(@ByVal KLDivLossReduction setter);
+  public native @ByRef @NoException(true) KLDivLossOptions log_target(@Cast("bool") boolean setter);
 }

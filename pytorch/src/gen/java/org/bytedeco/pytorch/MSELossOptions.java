@@ -52,4 +52,6 @@ public class MSELossOptions extends Pointer {
   public MSELossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
   private native void allocate(@ByVal kSum reduction);
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) MSELossOptions reduction(@ByVal LossReduction setter);
 }

@@ -48,4 +48,12 @@ public class EmbeddingBagFromPretrainedOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer sparse();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer include_last_offset();
   public native @ByRef @NoException(true) LongOptional padding_idx();
+
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions max_norm(@ByVal DoubleOptional setter);
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions norm_type(double setter);
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions scale_grad_by_freq(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions mode(@ByVal EmbeddingBagMode setter);
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions sparse(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions include_last_offset(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingBagFromPretrainedOptions padding_idx(@ByVal LongOptional setter);
 }

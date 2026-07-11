@@ -56,4 +56,7 @@ public class HuberLossOptions extends Pointer {
   private native void allocate(@ByVal kSum reduction);
   public native @ByRef @NoException(true) LossReduction reduction();
   public native @ByRef @NoException(true) DoublePointer delta();
+
+  public native @ByRef @NoException(true) HuberLossOptions reduction(@ByVal LossReduction setter);
+  public native @ByRef @NoException(true) HuberLossOptions delta(double setter);
 }

@@ -32,4 +32,11 @@ public class AvgPool3dOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer ceil_mode();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer count_include_pad();
   public native @ByRef @NoException(true) LongOptional divisor_override();
+
+  public native @ByRef @NoException(true) AvgPool3dOptions kernel_size(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) AvgPool3dOptions stride(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) AvgPool3dOptions padding(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) AvgPool3dOptions ceil_mode(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) AvgPool3dOptions count_include_pad(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) AvgPool3dOptions divisor_override(@ByVal LongOptional setter);
 }

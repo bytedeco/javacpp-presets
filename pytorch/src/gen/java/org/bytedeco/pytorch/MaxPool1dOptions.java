@@ -35,4 +35,10 @@ public class MaxPool1dOptions extends Pointer {
   public native @Cast("torch::ExpandingArray<1>*") @ByRef @NoException(true) LongPointer padding();
   public native @Cast("torch::ExpandingArray<1>*") @ByRef @NoException(true) LongPointer dilation();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer ceil_mode();
+
+  public native @ByRef @NoException(true) MaxPool1dOptions kernel_size(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxPool1dOptions stride(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxPool1dOptions padding(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxPool1dOptions dilation(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) MaxPool1dOptions ceil_mode(@Cast("bool") boolean setter);
 }

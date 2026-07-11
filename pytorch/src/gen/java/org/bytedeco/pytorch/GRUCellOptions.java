@@ -36,4 +36,8 @@ public class GRUCellOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer input_size();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer hidden_size();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
+
+  public native @ByRef @NoException(true) GRUCellOptions input_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GRUCellOptions hidden_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GRUCellOptions bias(@Cast("bool") boolean setter);
 }

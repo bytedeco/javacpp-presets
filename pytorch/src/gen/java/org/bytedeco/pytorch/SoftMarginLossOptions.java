@@ -55,4 +55,6 @@ public class SoftMarginLossOptions extends Pointer {
   public SoftMarginLossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
   private native void allocate(@ByVal kSum reduction);
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) SoftMarginLossOptions reduction(@ByVal LossReduction setter);
 }

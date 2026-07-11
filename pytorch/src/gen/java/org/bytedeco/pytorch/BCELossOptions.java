@@ -47,4 +47,6 @@ public class BCELossOptions extends Pointer {
 
   public native @ByRef @NoException(true) Tensor weight();
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) BCELossOptions reduction(@ByVal LossReduction setter);
 }

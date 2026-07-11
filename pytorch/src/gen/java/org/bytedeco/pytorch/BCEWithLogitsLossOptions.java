@@ -49,4 +49,7 @@ public class BCEWithLogitsLossOptions extends Pointer {
   public native @ByRef @NoException(true) Tensor weight();
   public native @ByRef @NoException(true) LossReduction reduction();
   public native @ByRef @NoException(true) Tensor pos_weight();
+
+  public native @ByRef @NoException(true) BCEWithLogitsLossOptions reduction(@ByVal LossReduction setter);
+  public native @ByRef @NoException(true) BCEWithLogitsLossOptions pos_weight(@ByVal Tensor setter);
 }

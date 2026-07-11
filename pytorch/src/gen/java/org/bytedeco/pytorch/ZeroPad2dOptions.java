@@ -28,4 +28,6 @@ public class ZeroPad2dOptions extends Pointer {
   public ZeroPad2dOptions(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding);
   public native @Cast("torch::ExpandingArray<2*2>*") @ByRef @NoException(true) LongPointer padding();
+
+  public native @ByRef @NoException(true) ZeroPad2dOptions padding(@Cast("torch::ExpandingArray<2*2>*") @ByVal LongPointer setter);
 }

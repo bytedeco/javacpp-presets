@@ -50,4 +50,9 @@ public class EmbeddingFuncOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer norm_type();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer scale_grad_by_freq();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer sparse();
+
+  public native @ByRef @NoException(true) EmbeddingFuncOptions max_norm(@ByVal DoubleOptional setter);
+  public native @ByRef @NoException(true) EmbeddingFuncOptions norm_type(double setter);
+  public native @ByRef @NoException(true) EmbeddingFuncOptions scale_grad_by_freq(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingFuncOptions sparse(@Cast("bool") boolean setter);
 }

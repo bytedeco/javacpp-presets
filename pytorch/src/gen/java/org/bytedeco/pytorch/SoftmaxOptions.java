@@ -36,4 +36,6 @@ public class SoftmaxOptions extends Pointer {
   public SoftmaxOptions(@Cast("int64_t") long dim) { super((Pointer)null); allocate(dim); }
   private native void allocate(@Cast("int64_t") long dim);
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim();
+
+  public native @ByRef @NoException(true) SoftmaxOptions dim(@Cast("int64_t") long setter);
 }

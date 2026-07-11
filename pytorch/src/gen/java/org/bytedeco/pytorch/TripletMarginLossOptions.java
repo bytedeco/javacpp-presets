@@ -51,4 +51,9 @@ public class TripletMarginLossOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer eps();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer swap();
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) TripletMarginLossOptions p(double setter);
+  public native @ByRef @NoException(true) TripletMarginLossOptions eps(double setter);
+  public native @ByRef @NoException(true) TripletMarginLossOptions swap(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) TripletMarginLossOptions reduction(@ByVal LossReduction setter);
 }

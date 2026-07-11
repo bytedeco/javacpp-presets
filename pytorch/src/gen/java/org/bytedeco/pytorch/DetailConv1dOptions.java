@@ -45,4 +45,16 @@ public class DetailConv1dOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer groups();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
   public native @ByRef @NoException(true) ConvPaddingMode padding_mode();
+
+  public native @ByRef @NoException(true) DetailConv1dOptions in_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions out_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions kernel_size(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions stride(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions padding(@ByVal Conv1dPadding setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions dilation(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions transposed(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions output_padding(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions groups(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) DetailConv1dOptions padding_mode(@ByVal ConvPaddingMode setter);
 }

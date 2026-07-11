@@ -50,4 +50,8 @@ public class CrossEntropyLossOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer ignore_index();
   public native @ByRef @NoException(true) LossReduction reduction();
   public native @ByRef @NoException(true) DoublePointer label_smoothing();
+
+  public native @ByRef @NoException(true) CrossEntropyLossOptions ignore_index(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) CrossEntropyLossOptions reduction(@ByVal LossReduction setter);
+  public native @ByRef @NoException(true) CrossEntropyLossOptions label_smoothing(double setter);
 }

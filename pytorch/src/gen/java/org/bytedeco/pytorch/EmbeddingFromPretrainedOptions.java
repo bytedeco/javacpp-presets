@@ -46,4 +46,10 @@ public class EmbeddingFromPretrainedOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer norm_type();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer scale_grad_by_freq();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer sparse();
+
+  public native @ByRef @NoException(true) EmbeddingFromPretrainedOptions padding_idx(@ByVal LongOptional setter);
+  public native @ByRef @NoException(true) EmbeddingFromPretrainedOptions max_norm(@ByVal DoubleOptional setter);
+  public native @ByRef @NoException(true) EmbeddingFromPretrainedOptions norm_type(double setter);
+  public native @ByRef @NoException(true) EmbeddingFromPretrainedOptions scale_grad_by_freq(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingFromPretrainedOptions sparse(@Cast("bool") boolean setter);
 }

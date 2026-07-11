@@ -30,4 +30,9 @@ public class LPPool2dOptions extends Pointer {
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer kernel_size();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer stride();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer ceil_mode();
+
+  public native @ByRef @NoException(true) LPPool2dOptions norm_type(double setter);
+  public native @ByRef @NoException(true) LPPool2dOptions kernel_size(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) LPPool2dOptions stride(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) LPPool2dOptions ceil_mode(@Cast("bool") boolean setter);
 }

@@ -39,4 +39,9 @@ public class RNNCellOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer hidden_size();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
   public native @ByRef @NoException(true) RNNNonlinearity nonlinearity();
+
+  public native @ByRef @NoException(true) RNNCellOptions input_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) RNNCellOptions hidden_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) RNNCellOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) RNNCellOptions nonlinearity(@ByVal RNNNonlinearity setter);
 }

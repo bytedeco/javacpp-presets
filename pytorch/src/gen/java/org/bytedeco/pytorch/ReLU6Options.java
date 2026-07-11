@@ -47,4 +47,6 @@ private native void allocate(@Cast("bool") boolean inplace/*=false*/);
 public ReLU6Options() { super((Pointer)null); allocate(); }
 private native void allocate();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) ReLU6Options inplace(@Cast("bool") boolean setter);
 }

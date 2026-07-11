@@ -47,4 +47,6 @@ public class CELUOptions extends Pointer {
 
   public native @ByRef @NoException(true) DoublePointer alpha();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) CELUOptions inplace(@Cast("bool") boolean setter);
 }

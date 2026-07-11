@@ -37,4 +37,7 @@ public DropoutOptions() { super((Pointer)null); allocate(); }
 private native void allocate();
   public native @ByRef @NoException(true) DoublePointer p();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) DropoutOptions p(double setter);
+  public native @ByRef @NoException(true) DropoutOptions inplace(@Cast("bool") boolean setter);
 }

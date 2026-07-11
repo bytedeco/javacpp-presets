@@ -36,4 +36,8 @@ public class LinearOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer in_features();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer out_features();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
+
+  public native @ByRef @NoException(true) LinearOptions in_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LinearOptions out_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LinearOptions bias(@Cast("bool") boolean setter);
 }

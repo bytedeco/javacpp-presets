@@ -44,4 +44,15 @@ public class EmbeddingBagOptions extends Pointer {
   public native @ByRef @NoException(true) Tensor _weight();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer include_last_offset();
   public native @ByRef @NoException(true) LongOptional padding_idx();
+
+  public native @ByRef @NoException(true) EmbeddingBagOptions num_embeddings(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions embedding_dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions max_norm(@ByVal DoubleOptional setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions norm_type(double setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions scale_grad_by_freq(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions mode(@ByVal EmbeddingBagMode setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions sparse(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions _weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions include_last_offset(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingBagOptions padding_idx(@ByVal LongOptional setter);
 }

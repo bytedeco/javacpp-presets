@@ -42,4 +42,13 @@ public class LSTMOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer dropout();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bidirectional();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer proj_size();
+
+  public native @ByRef @NoException(true) LSTMOptions input_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LSTMOptions hidden_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LSTMOptions num_layers(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LSTMOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) LSTMOptions batch_first(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) LSTMOptions dropout(double setter);
+  public native @ByRef @NoException(true) LSTMOptions bidirectional(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) LSTMOptions proj_size(@Cast("int64_t") long setter);
 }

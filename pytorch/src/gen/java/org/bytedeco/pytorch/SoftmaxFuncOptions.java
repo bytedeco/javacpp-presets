@@ -36,4 +36,7 @@ public class SoftmaxFuncOptions extends Pointer {
   private native void allocate(@Cast("int64_t") long dim);
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim();
   public native @ByRef @NoException(true) ScalarTypeOptional dtype();
+
+  public native @ByRef @NoException(true) SoftmaxFuncOptions dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) SoftmaxFuncOptions dtype(@ByVal ScalarTypeOptional setter);
 }
