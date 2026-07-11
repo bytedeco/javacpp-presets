@@ -7,15 +7,7 @@ import org.bytedeco.pytorch.EmbeddingImpl;
 import org.bytedeco.pytorch.Tensor;
 
 import static org.bytedeco.pytorch.global.torch.*;
-/*
-//   1. SequentialImpl 支持 insert push_back 任意的继承自Module的复杂类了 和构造函数 参数字典支持Module，这个需要把cpp libtorch 的 sequential.h any.h 可能需要部分修改，可以追加到 cppbuild.h
-     2. Module 支持 大部分forward 虚方法了，可以直接在ModuleDict ModuleList 不用强转实际类型调用forward，不过对7个layer的forward造成冲突破坏，被迫重命名
-     3. Module 支持 as 强转 任意实际类型的 layer model
-     4. ModuleDict 支持 insert 继承自 Module任意复杂layer，这个需要把cpp libtorch 的 ModuleDict.h private 修改为public, 可以追加到 cppbuild.h
-     5. Embedding EmbeddingBag 支持 from_pretrained
-     6. ModuleDict ModuleList 支持 forward 直接调用子module的forward
 
-*/
 public class BenchmarkEmbeddingFromPretrained {
     private static Tensor deterministicMatrix(long rows, long cols, long offset) {
         Tensor x = arange(new org.bytedeco.pytorch.Scalar(offset), new org.bytedeco.pytorch.Scalar(offset + rows * cols));
