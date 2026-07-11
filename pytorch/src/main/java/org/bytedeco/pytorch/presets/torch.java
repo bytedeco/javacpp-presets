@@ -528,30 +528,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
         infoMap
             .put(new Info("torch::nn::EmbeddingBagImpl::forward_with_offsets").javaNames("forward"))
-            .put(new Info("c10::DispatchKeyExtractor").annotations("@NoOffset").javaText(
-                "@Namespace(\"c10\") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)\n" +
-                "public class DispatchKeyExtractor extends Pointer {\n" +
-                "    static { Loader.load(); }\n" +
-                "    public DispatchKeyExtractor(Pointer p) { super(p); }\n" +
-                "    public static native @ByVal DispatchKeyExtractor make(@Const @ByRef FunctionSchema schema);\n" +
-                "    public static native @ByVal DispatchKeyExtractor makeUninitialized();\n" +
-                "    public native void registerSchema(@Const @ByRef FunctionSchema schema);\n" +
-                "    public native void deregisterSchema();\n" +
-                "    public native @ByVal DispatchKeySet getDispatchKeySetBoxed(@Const IValueVector stack);\n" +
-                "    public native void setOperatorHasFallthroughForKey(DispatchKey k, @Cast(\"bool\") boolean has_fallthrough);\n" +
-                "    public native void setOperatorHasFallthroughForKey(@Cast(\"c10::DispatchKey\") short k, @Cast(\"bool\") boolean has_fallthrough);\n" +
-                "    public native @StdString BytePointer dumpState();\n" +
-                "    public native void checkInvariants(@Const @ByRef FunctionSchema schema);\n" +
-                "}\n"
-            ))
-            .put(new Info("caffe2::TypeIdentifier").javaText(
-                "@Namespace(\"caffe2\") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)\n" +
-                "public class TypeIdentifier extends Pointer {\n" +
-                "    static { Loader.load(); }\n" +
-                "    public TypeIdentifier(Pointer p) { super(p); }\n" +
-                "    public static native @Const @ByVal TypeIdentifier uninitialized();\n" +
-                "}\n"
-            ))
+            .put(new Info("c10::DispatchKeyExtractor").annotations("@NoOffset").purify())
+            .put(new Info("caffe2::TypeIdentifier").base("Pointer").purify())
             .put(new Info("ArrayRef.h").linePatterns("using IntList.*", ".*ArrayRef<int64_t>;").skip())
             .put(new Info("model_container_runner.h").linePatterns("using CreateAOTIModelRunnerFunc.*", "}*;").skip())
             .put(new Info("ordered_dict.h").linePatterns(".*class Item;.*").skip())

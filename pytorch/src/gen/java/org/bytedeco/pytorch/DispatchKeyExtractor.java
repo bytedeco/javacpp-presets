@@ -34,18 +34,25 @@ import static org.bytedeco.pytorch.global.torch.*;
  *
  *   Note - this should maintain identical impl to the py dispatcher key
  * extraction logic at pytorch/torch/dispatcher.py
- */@Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+ */
+@NoOffset @Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class DispatchKeyExtractor extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DispatchKeyExtractor(Pointer p) { super(p); }
-    public static native @ByVal DispatchKeyExtractor make(@Const @ByRef FunctionSchema schema);
-    public static native @ByVal DispatchKeyExtractor makeUninitialized();
-    public native void registerSchema(@Const @ByRef FunctionSchema schema);
-    public native void deregisterSchema();
-    public native @ByVal DispatchKeySet getDispatchKeySetBoxed(@Const IValueVector stack);
-    public native void setOperatorHasFallthroughForKey(DispatchKey k, @Cast("bool") boolean has_fallthrough);
-    public native void setOperatorHasFallthroughForKey(@Cast("c10::DispatchKey") short k, @Cast("bool") boolean has_fallthrough);
-    public native @StdString BytePointer dumpState();
-    public native void checkInvariants(@Const @ByRef FunctionSchema schema);
-}
 
+  public static native @NoOffset @ByVal DispatchKeyExtractor make(@Const @ByRef FunctionSchema schema);
+
+  public static native @NoOffset @ByVal DispatchKeyExtractor makeUninitialized();
+
+  public native void registerSchema(@Const @ByRef FunctionSchema schema);
+  public native void deregisterSchema();
+
+  public native @ByVal DispatchKeySet getDispatchKeySetBoxed(@Const IValueVector stack);
+
+  public native void setOperatorHasFallthroughForKey(DispatchKey k, @Cast("bool") boolean has_fallthrough);
+  public native void setOperatorHasFallthroughForKey(@Cast("c10::DispatchKey") short k, @Cast("bool") boolean has_fallthrough);
+
+  public native @StdString BytePointer dumpState();
+  public native void checkInvariants(@Const @ByRef FunctionSchema schema);
+}
