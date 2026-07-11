@@ -47,4 +47,9 @@ public class ChunkDatasetOptions extends Pointer {
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer batch_size();
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer cache_size();
   public native @Cast("size_t*") @ByRef @NoException(true) SizeTPointer cross_chunk_shuffle_count();
+
+  public native @ByRef @NoException(true) ChunkDatasetOptions preloader_count(@Cast("size_t") long setter);
+  public native @ByRef @NoException(true) ChunkDatasetOptions batch_size(@Cast("size_t") long setter);
+  public native @ByRef @NoException(true) ChunkDatasetOptions cache_size(@Cast("size_t") long setter);
+  public native @ByRef @NoException(true) ChunkDatasetOptions cross_chunk_shuffle_count(@Cast("size_t") long setter);
 }

@@ -36,4 +36,11 @@ private native void allocate(@Cast("size_t") long batch_size);
   public native @Optional @NoException(true) Milliseconds timeout();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer enforce_ordering();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer drop_last();
+
+  public native @ByRef @NoException(true) DataLoaderOptions batch_size(@Cast("size_t") long setter);
+  public native @ByRef @NoException(true) DataLoaderOptions workers(@Cast("size_t") long setter);
+  public native @ByRef @NoException(true) DataLoaderOptions max_jobs(@ByVal SizeTOptional setter);
+  public native @ByRef @NoException(true) DataLoaderOptions timeout(@Optional Milliseconds setter);
+  public native @ByRef @NoException(true) DataLoaderOptions enforce_ordering(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) DataLoaderOptions drop_last(@Cast("bool") boolean setter);
 }

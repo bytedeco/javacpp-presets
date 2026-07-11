@@ -40,4 +40,10 @@ public class SGDOptions extends OptimizerCloneableSGDOptions {
   public boolean equals(SGDOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
+
+  public native @ByRef @NoException(true) SGDOptions lr(double setter);
+  public native @ByRef @NoException(true) SGDOptions momentum(double setter);
+  public native @ByRef @NoException(true) SGDOptions dampening(double setter);
+  public native @ByRef @NoException(true) SGDOptions weight_decay(double setter);
+  public native @ByRef @NoException(true) SGDOptions nesterov(@Cast("bool") boolean setter);
 }

@@ -44,4 +44,12 @@ public class LBFGSOptions extends OptimizerCloneableLBFGSOptions {
   public boolean equals(LBFGSOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
+
+  public native @ByRef @NoException(true) LBFGSOptions lr(double setter);
+  public native @ByRef @NoException(true) LBFGSOptions max_iter(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LBFGSOptions max_eval(@ByVal LongOptional setter);
+  public native @ByRef @NoException(true) LBFGSOptions tolerance_grad(double setter);
+  public native @ByRef @NoException(true) LBFGSOptions tolerance_change(double setter);
+  public native @ByRef @NoException(true) LBFGSOptions history_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LBFGSOptions line_search_fn(@ByVal StringOptional setter);
 }

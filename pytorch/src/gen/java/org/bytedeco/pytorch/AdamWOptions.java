@@ -42,4 +42,10 @@ public class AdamWOptions extends OptimizerCloneableAdamWOptions {
   public boolean equals(AdamWOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
+
+  public native @ByRef @NoException(true) AdamWOptions lr(double setter);
+  public native @ByRef @NoException(true) AdamWOptions betas(@Cast("std::tuple<double,double>*") @ByVal DoublePointer setter);
+  public native @ByRef @NoException(true) AdamWOptions eps(double setter);
+  public native @ByRef @NoException(true) AdamWOptions weight_decay(double setter);
+  public native @ByRef @NoException(true) AdamWOptions amsgrad(@Cast("bool") boolean setter);
 }

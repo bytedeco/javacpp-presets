@@ -42,4 +42,10 @@ public class AdagradOptions extends OptimizerCloneableAdagradOptions {
   public boolean equals(AdagradOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
+
+  public native @ByRef @NoException(true) AdagradOptions lr(double setter);
+  public native @ByRef @NoException(true) AdagradOptions lr_decay(double setter);
+  public native @ByRef @NoException(true) AdagradOptions weight_decay(double setter);
+  public native @ByRef @NoException(true) AdagradOptions initial_accumulator_value(double setter);
+  public native @ByRef @NoException(true) AdagradOptions eps(double setter);
 }
