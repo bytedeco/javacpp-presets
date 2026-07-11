@@ -55,6 +55,7 @@ public class EmbeddingBagFuncOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer include_last_offset();
   public native @ByRef @NoException(true) LongOptional padding_idx();
 
+  public native @ByRef @NoException(true) EmbeddingBagFuncOptions offsets(@ByVal Tensor setter);
   public native @ByRef @NoException(true) EmbeddingBagFuncOptions max_norm(@ByVal DoubleOptional setter);
   public native @ByRef @NoException(true) EmbeddingBagFuncOptions norm_type(double setter);
   public native @ByRef @NoException(true) EmbeddingBagFuncOptions scale_grad_by_freq(@Cast("bool") boolean setter);

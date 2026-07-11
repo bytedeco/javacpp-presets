@@ -48,6 +48,7 @@ public class DropoutFuncOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer training();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
 
+  public native @ByRef @NoException(true) DropoutFuncOptions p(double setter);
   public native @ByRef @NoException(true) DropoutFuncOptions training(@Cast("bool") boolean setter);
   public native @ByRef @NoException(true) DropoutFuncOptions inplace(@Cast("bool") boolean setter);
 }

@@ -50,6 +50,7 @@ public class PairwiseDistanceOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer eps();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer keepdim();
 
+  public native @ByRef @NoException(true) PairwiseDistanceOptions p(double setter);
   public native @ByRef @NoException(true) PairwiseDistanceOptions eps(double setter);
   public native @ByRef @NoException(true) PairwiseDistanceOptions keepdim(@Cast("bool") boolean setter);
 }

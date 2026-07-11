@@ -44,6 +44,7 @@ public class Conv1dFuncOptions extends Pointer {
   public native @Cast("torch::ExpandingArray<1>*") @ByRef @NoException(true) LongPointer dilation();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer groups();
 
+  public native @ByRef @NoException(true) Conv1dFuncOptions bias(@ByVal Tensor setter);
   public native @ByRef @NoException(true) Conv1dFuncOptions stride(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
   public native @ByRef @NoException(true) Conv1dFuncOptions padding(@ByVal Conv1dPadding setter);
   public native @ByRef @NoException(true) Conv1dFuncOptions dilation(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);

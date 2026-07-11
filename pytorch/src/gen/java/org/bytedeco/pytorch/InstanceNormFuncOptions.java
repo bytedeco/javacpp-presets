@@ -53,6 +53,7 @@ public class InstanceNormFuncOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer momentum();
   public native @ByRef @NoException(true) DoublePointer eps();
 
+  public native @ByRef @NoException(true) InstanceNormFuncOptions running_mean(@ByVal Tensor setter);
   public native @ByRef @NoException(true) InstanceNormFuncOptions running_var(@ByVal Tensor setter);
   public native @ByRef @NoException(true) InstanceNormFuncOptions weight(@ByVal Tensor setter);
   public native @ByRef @NoException(true) InstanceNormFuncOptions bias(@ByVal Tensor setter);

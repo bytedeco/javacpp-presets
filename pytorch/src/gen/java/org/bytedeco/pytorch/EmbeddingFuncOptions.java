@@ -51,6 +51,7 @@ public class EmbeddingFuncOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer scale_grad_by_freq();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer sparse();
 
+  public native @ByRef @NoException(true) EmbeddingFuncOptions padding_idx(@ByVal LongOptional setter);
   public native @ByRef @NoException(true) EmbeddingFuncOptions max_norm(@ByVal DoubleOptional setter);
   public native @ByRef @NoException(true) EmbeddingFuncOptions norm_type(double setter);
   public native @ByRef @NoException(true) EmbeddingFuncOptions scale_grad_by_freq(@Cast("bool") boolean setter);

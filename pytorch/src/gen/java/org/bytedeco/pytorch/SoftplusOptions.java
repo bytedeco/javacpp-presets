@@ -48,5 +48,6 @@ public class SoftplusOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer beta();
   public native @ByRef @NoException(true) DoublePointer threshold();
 
+  public native @ByRef @NoException(true) SoftplusOptions beta(double setter);
   public native @ByRef @NoException(true) SoftplusOptions threshold(double setter);
 }

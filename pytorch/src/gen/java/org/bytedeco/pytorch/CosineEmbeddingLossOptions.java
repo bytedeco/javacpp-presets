@@ -48,5 +48,6 @@ public class CosineEmbeddingLossOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer margin();
   public native @ByRef @NoException(true) LossReduction reduction();
 
+  public native @ByRef @NoException(true) CosineEmbeddingLossOptions margin(double setter);
   public native @ByRef @NoException(true) CosineEmbeddingLossOptions reduction(@ByVal LossReduction setter);
 }

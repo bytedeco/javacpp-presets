@@ -52,6 +52,7 @@ public class InterpolateFuncOptions extends Pointer {
   public native @ByRef @NoException(true) BoolOptional recompute_scale_factor();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer antialias();
 
+  public native @ByRef @NoException(true) InterpolateFuncOptions size(@ByVal LongVectorOptional setter);
   public native @ByRef @NoException(true) InterpolateFuncOptions scale_factor(@ByVal DoubleVectorOptional setter);
   public native @ByRef @NoException(true) InterpolateFuncOptions mode(@ByVal InterpolateMode setter);
   public native @ByRef @NoException(true) InterpolateFuncOptions align_corners(@ByVal BoolOptional setter);

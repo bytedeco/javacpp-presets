@@ -49,6 +49,7 @@ public class FeatureAlphaDropoutFuncOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer training();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
 
+  public native @ByRef @NoException(true) FeatureAlphaDropoutFuncOptions p(double setter);
   public native @ByRef @NoException(true) FeatureAlphaDropoutFuncOptions training(@Cast("bool") boolean setter);
   public native @ByRef @NoException(true) FeatureAlphaDropoutFuncOptions inplace(@Cast("bool") boolean setter);
 }

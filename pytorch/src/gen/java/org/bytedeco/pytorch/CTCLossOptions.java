@@ -50,6 +50,7 @@ public class CTCLossOptions extends Pointer {
   public native @ByRef @NoException(true) LossReduction reduction();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer zero_infinity();
 
+  public native @ByRef @NoException(true) CTCLossOptions blank(@Cast("int64_t") long setter);
   public native @ByRef @NoException(true) CTCLossOptions reduction(@ByVal LossReduction setter);
   public native @ByRef @NoException(true) CTCLossOptions zero_infinity(@Cast("bool") boolean setter);
 }

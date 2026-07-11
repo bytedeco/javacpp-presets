@@ -49,6 +49,7 @@ public class NormalizeFuncOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer eps();
   public native @ByRef @NoException(true) TensorOptional out();
 
+  public native @ByRef @NoException(true) NormalizeFuncOptions p(double setter);
   public native @ByRef @NoException(true) NormalizeFuncOptions dim(@Cast("int64_t") long setter);
   public native @ByRef @NoException(true) NormalizeFuncOptions eps(double setter);
   public native @ByRef @NoException(true) NormalizeFuncOptions out(@ByVal TensorOptional setter);
