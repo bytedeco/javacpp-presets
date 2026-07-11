@@ -17,13 +17,16 @@ diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
 index f2cf1ac9fa..136fd7f2b7 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -148,9 +148,9 @@ if(onnxruntime_BUILD_SHARED_LIB)
+@@ -140,12 +140,12 @@ if(onnxruntime_BUILD_SHARED_LIB)
  
    if(UNIX)
      if (APPLE)
 -      target_link_options(onnxruntime PRIVATE "LINKER:-dead_strip")
 +      target_link_options(onnxruntime PRIVATE "LINKER:-L/usr/local/lib")
-     elseif(NOT CMAKE_SYSTEM_NAME MATCHES "AIX")
+     elseif(CMAKE_SYSTEM_NAME MATCHES "AIX")
+       set_property(TARGET onnxruntime PROPERTY AIX_EXPORT_ALL_SYMBOLS OFF)
+       target_link_options(onnxruntime PRIVATE "LINKER:-bE:${SYMBOL_FILE}")
+     else()
 -      target_link_options(onnxruntime PRIVATE  "LINKER:--version-script=${SYMBOL_FILE}" "LINKER:--no-undefined" "LINKER:--gc-sections" "LINKER:-z,noexecstack")
 +      target_link_options(onnxruntime PRIVATE "LINKER:--no-undefined" "LINKER:-z,noexecstack")
      endif()

@@ -233,10 +233,10 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Triton Inference Server 2.70.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
- * ONNX 1.20.x  https://github.com/onnx/onnx
+ * ONNX 1.22.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * OpenVINO 2026.1.x  https://github.com/openvinotoolkit/openvino
- * ONNX Runtime 1.26.x  https://github.com/microsoft/onnxruntime
+ * OpenVINO 2026.2.x  https://github.com/openvinotoolkit/openvino
+ * ONNX Runtime 1.27.x  https://github.com/microsoft/onnxruntime
  * TVM 0.18.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

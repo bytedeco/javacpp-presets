@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -131,4 +133,12 @@ public class SessionImpl extends ConstSessionImpl {
   public native void FinalizeModelEditorSession(@Const @ByRef Model model, @Const @ByRef SessionOptions options,
                                     OrtPrepackedWeightsContainer prepacked_weights_container/*=nullptr*/);
   public native void FinalizeModelEditorSession(@Const @ByRef Model model, @Const @ByRef SessionOptions options);
+
+  /** \brief Release a previously captured graph.
+   *
+   * Wraps OrtApi::SessionReleaseCapturedGraph
+   *
+   * @param graph_annotation_id [in] The annotation ID of the captured graph to release.
+   */
+  public native void ReleaseCapturedGraph(int graph_annotation_id);
 }

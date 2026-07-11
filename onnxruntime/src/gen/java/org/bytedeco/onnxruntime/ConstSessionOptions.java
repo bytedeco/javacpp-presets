@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -46,4 +48,9 @@ public class ConstSessionOptions extends BaseConstSessionOptions {
   public native @Cast("bool") boolean HasConfigEntry(String config_key);
   public native @StdString BytePointer GetConfigEntryOrDefault(@Cast("const char*") BytePointer config_key, @StdString BytePointer def);
   public native @StdString String GetConfigEntryOrDefault(String config_key, @StdString String def);
+
+  /** Wraps OrtApi::GetMemPatternEnabled */
+  public native @Cast("bool") boolean GetMemPatternEnabled();
+  /** Wraps OrtApi::GetSessionExecutionMode */
+  public native @Cast("ExecutionMode") int GetExecutionMode();
 }

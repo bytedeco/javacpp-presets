@@ -124,7 +124,7 @@ public class onnx implements InfoMapper {
 //               .put(new Info("std::map<std::string,std::shared_ptr<onnx::optimization::Pass> >").pointerTypes("StringPassMap").define())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::multimap<std::string,const onnx::FunctionProto*>").skip())
-               .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
+               .put(new Info("std::filesystem::path", "std::runtime_error").cast().pointerTypes("Pointer"))
                .put(new Info("onnx::version_conversion::BaseVersionConverter::registerAdapter").skip())
 //               .put(new Info("onnx::Node::Value", "onnx::Graph::Value", "onnx::AttributeValue", "onnx::Value").skip())
                .put(new Info("std::iterator_traits<onnx::generic_graph_node_list_iterator<T> >").skip())

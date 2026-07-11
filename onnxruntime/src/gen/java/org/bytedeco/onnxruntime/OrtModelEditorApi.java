@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -220,7 +222,12 @@ public class OrtModelEditorApi extends Pointer {
   /** \brief Set the inputs for the OrtGraph.
    *
    * Set the graph inputs. This will replace any existing inputs with the new values.
-   * The OrtGraph takes ownership of the OrtValueInfo instances and you should NOT call ReleaseOrtValueInfo.
+   *
+   * Atomicity / all-or-nothing: on success, the OrtGraph takes ownership of every OrtValueInfo in
+   * {@code inputs}, and each entry in the array is reset to nullptr to make the transfer explicit. On any
+   * failure, the graph's previous inputs are preserved and ownership of NONE of the OrtValueInfo
+   * instances is transferred -- the caller remains responsible for releasing them. Calling
+   * OrtApi::ReleaseValueInfo on an entry whose array slot has been nulled out would cause a double-free.
    *
    * @param graph [in] The OrtGraph instance to update.
    * @param inputs [in] The input OrtValueInfo instances.
@@ -238,7 +245,12 @@ public class OrtModelEditorApi extends Pointer {
   /** \brief Set the outputs for the OrtGraph.
    *
    * Set the graph outputs. This will replace any existing outputs with the new values.
-   * The OrtGraph takes ownership of the OrtValueInfo instances provided and you should NOT call ReleaseOrtValueInfo.
+   *
+   * Atomicity / all-or-nothing: on success, the OrtGraph takes ownership of every OrtValueInfo in
+   * {@code outputs}, and each entry in the array is reset to nullptr to make the transfer explicit. On any
+   * failure, the graph's previous outputs are preserved and ownership of NONE of the OrtValueInfo
+   * instances is transferred -- the caller remains responsible for releasing them. Calling
+   * OrtApi::ReleaseValueInfo on an entry whose array slot has been nulled out would cause a double-free.
    *
    * @param graph [in] The OrtGraph instance to update.
    * @param outputs [in] The output OrtValueInfo instances.
@@ -255,27 +267,33 @@ public class OrtModelEditorApi extends Pointer {
 
   /** \brief Add an initializer to the OrtGraph
    *
-   * ORT will take ownership of the OrtValue and you should NOT call ReleaseOrtValue.
+   * Atomicity / all-or-nothing: on success, the OrtGraph takes ownership of {@code tensor} and the caller
+   * must NOT call OrtApi::ReleaseValue on it. On any failure, ownership is NOT transferred and the caller
+   * remains responsible for releasing the OrtValue. Calling OrtApi::ReleaseValue after a successful
+   * transfer would cause a double-free.
+   * Adding the same OrtValue pointer twice (under any name) is rejected with ORT_INVALID_ARGUMENT.
+   * Adding a duplicate initializer name is also rejected. The Model Editor API does not currently
+   * support removing or replacing an initializer once it has been added.
    *
    * Two options:
    *
    * Allocated memory:
-   *    Use CreateTensorAsOrtValue (allocates memory) and populate the tensor with the data.
+   *    Use OrtApi::CreateTensorAsOrtValue (allocates memory) and populate the tensor with the data.
    *    Set {@code data_is_external} to false.
    *
    * Pre-existing memory:
-   *    Use CreateTensorWithDataAsOrtValue or CreateTensorWithDataAndDeleterAsOrtValue to create an OrtValue
+   *    Use OrtApi::CreateTensorWithDataAsOrtValue or OrtApi::CreateTensorWithDataAndDeleterAsOrtValue to create an OrtValue
    *    with a tensor that contains a pointer to the existing data.
    *    Set {@code data_is_external} to true.
    *
    *    The pointer must remain valid for the duration of the inference session.
-   *    If using CreateTensorWithDataAsOrtValue you are responsible for freeing the memory after the inference session
+   *    If using OrtApi::CreateTensorWithDataAsOrtValue you are responsible for freeing the memory after the inference session
    *    is released.
-   *    If using CreateTensorWithDataAndDeleterAsOrtValue, ORT will free the memory using the provided deleter as
+   *    If using OrtApi::CreateTensorWithDataAndDeleterAsOrtValue, ORT will free the memory using the provided deleter as
    *    soon as the OrtValue is no longer in use.
    *
    *    NOTE: A tensor containing pre-existing memory MUST have 128 bytes of data or more.
-   *          For smaller tensors use CreateTensorAsOrtValue.
+   *          For smaller tensors use OrtApi::CreateTensorAsOrtValue.
    *
    *          ONNX shape inferencing does not support external data. An initializer involved in shape inferencing is
    *          typically small (a single value or limited by the rank of a tensor) and uses less than 128 bytes of
@@ -298,7 +316,11 @@ public class OrtModelEditorApi extends Pointer {
 
   /** \brief Add an OrtNode to an OrtGraph
    *
-   * Add the node to the graph. The OrtGraph will take ownership of OrtNode and you should NOT call ReleaseOrtNode.
+   * Atomicity / all-or-nothing: on success, the OrtGraph takes ownership of {@code node} and the caller
+   * must NOT call OrtApi::ReleaseNode. On any failure, ownership is NOT transferred and the caller remains
+   * responsible for releasing the OrtNode. Calling OrtApi::ReleaseNode after a successful transfer would
+   * cause a double-free.
+   * Adding the same OrtNode pointer twice is rejected with ORT_INVALID_ARGUMENT.
    *
    * @param graph [in] The OrtGraph instance to update.
    * @param node [in] The OrtNode instance to add to the graph.
@@ -350,9 +372,13 @@ public class OrtModelEditorApi extends Pointer {
 
   /** \brief Add an OrtGraph to an OrtModel.
    *
-   * Add the graph to a model. This should be called once when creating a new model.
+   * Add the graph to a model. Each OrtModel may hold at most one OrtGraph; a second call is rejected
+   * with ORT_INVALID_ARGUMENT.
    *
-   * The OrtModel takes ownership of the OrtGraph and you should NOT call ReleaseOrtGraph.
+   * Atomicity / all-or-nothing: on success, the OrtModel takes ownership of {@code graph} and the caller
+   * must NOT call OrtApi::ReleaseGraph. On any failure, ownership is NOT transferred and the caller
+   * remains responsible for releasing the OrtGraph. Calling OrtApi::ReleaseGraph after a successful
+   * transfer would cause a double-free.
    *
    * @param model [in] The OrtModel instance to update.
    * @param graph [in] The OrtGraph instance to add to the model.
@@ -370,7 +396,7 @@ public class OrtModelEditorApi extends Pointer {
    * and SetGraphOutputs must have been called.
    * This will validate the model, run optimizers, and prepare the session for inferencing.
    *
-   * ReleaseOrtModel must be called to free the OrtModel after session creation.
+   * OrtApi::ReleaseModel must be called to free the OrtModel after session creation.
    *
    * @param env [in] The OrtEnv instance.
    * @param model [in] The OrtModel instance.
@@ -392,13 +418,13 @@ public class OrtModelEditorApi extends Pointer {
    * Nodes can be added before or after the existing nodes in the model. ONNX Runtime will connect the nodes when the
    * model is finalized.
    *
-   * To add nodes and initializers to the existing model, first create an OrtModel using CreateModel.
-   * Add nodes and initializers to the OrtModel using AddNodeToGraph and AddInitializerToGraph.
-   * Graph inputs/outputs should be updated with SetGraphInputs and SetGraphOutputs as needed to reflect changes made
+   * To add nodes and initializers to the existing model, first create an OrtModel using CreateModel().
+   * Add nodes and initializers to the OrtModel using AddNodeToGraph() and AddInitializerToGraph().
+   * Graph inputs/outputs should be updated with SetGraphInputs() and SetGraphOutputs() as needed to reflect changes made
    * by the new nodes. The list of graph inputs/outputs should be for the overall model and not just the new nodes.
    *
-   * Add the new information from the OrtModel to the original model using ApplyModelToSession, and prepare the
-   * session for inferencing by calling FinalizeModelEditorSession.
+   * Add the new information from the OrtModel to the original model using ApplyModelToSession(), and prepare the
+   * session for inferencing by calling FinalizeModelEditorSession().
    *
    * @param {in} env The OrtEnv instance.
    * @param {in} model_path The path to the existing ONNX model to augment.
@@ -421,13 +447,13 @@ public class OrtModelEditorApi extends Pointer {
    * Nodes can be added before or after the existing nodes in the model. ONNX Runtime will connect the nodes when the
    * model is finalized.
    *
-   * To add nodes and initializers to the existing model, first create an OrtModel using CreateModel.
-   * Add nodes and initializers to the OrtModel using AddNodeToGraph and AddInitializerToGraph.
-   * Graph inputs/outputs should be updated with SetGraphInputs and SetGraphOutputs as needed to reflect changes made
+   * To add nodes and initializers to the existing model, first create an OrtModel using CreateModel().
+   * Add nodes and initializers to the OrtModel using AddNodeToGraph() and AddInitializerToGraph().
+   * Graph inputs/outputs should be updated with SetGraphInputs() and SetGraphOutputs() as needed to reflect changes made
    * by the new nodes. The list of graph inputs/outputs should be for the overall model and not just the new nodes.
    *
-   * Add the new information from the OrtModel to the original model using ApplyModelToSession, and prepare the
-   * session for inferencing by calling FinalizeModelEditorSession.
+   * Add the new information from the OrtModel to the original model using ApplyModelToSession(), and prepare the
+   * session for inferencing by calling FinalizeModelEditorSession().
    *
    * @param {in} env The OrtEnv instance.
    * @param {in} model_data The model data for the existing model to augment.

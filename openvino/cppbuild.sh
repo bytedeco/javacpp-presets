@@ -7,9 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENVINO_VERSION=2026.1.0
-OPENVINO_BUILD=21367.63e31528c62
-OPENVINO_PACKAGES_URL=https://storage.openvinotoolkit.org/repositories/openvino/packages/2026.1
+OPENVINO_VERSION=2026.2.1.21919.ede283a88e3
+OPENVINO_PACKAGES_URL=https://storage.openvinotoolkit.org/repositories/openvino/packages/2026.2.1
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
@@ -20,17 +19,17 @@ archive_root=
 
 case $PLATFORM in
     linux-x86_64)
-        archive_name=openvino_toolkit_ubuntu22_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.tgz
+        archive_name=openvino_toolkit_ubuntu22_${OPENVINO_VERSION}_x86_64.tgz
         archive_platform=linux
         archive_root=${archive_name%.tgz}
         ;;
     macosx-arm64)
-        archive_name=openvino_toolkit_macos_12_6_${OPENVINO_VERSION}.${OPENVINO_BUILD}_arm64.tgz
+        archive_name=openvino_toolkit_macos_12_6_${OPENVINO_VERSION}_arm64.tgz
         archive_platform=macos
         archive_root=${archive_name%.tgz}
         ;;
     windows-x86_64)
-        archive_name=openvino_toolkit_windows_${OPENVINO_VERSION}.${OPENVINO_BUILD}_x86_64.zip
+        archive_name=openvino_toolkit_windows_${OPENVINO_VERSION}_x86_64.zip
         archive_platform=windows
         archive_root=${archive_name%.zip}
         ;;

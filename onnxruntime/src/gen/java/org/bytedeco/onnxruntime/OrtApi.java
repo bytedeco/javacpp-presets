@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -7649,5 +7651,50 @@ public class OrtApi extends Pointer {
   public native OrtStatus SetPerSessionThreadPoolCallbacks( OrtEnv env,
                     @Const OrtThreadPoolCallbacksConfig config);
 
-  /** \} */
+  /** \}
+  <p>
+  /** \brief Check if the memory pattern optimization is enabled in the session options.
+   *
+   * @param options [in]
+   * @param out [out] Set to 1 if the memory pattern optimization is enabled, 0 otherwise.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.27.
+   *
+   * @see OrtApi::EnableMemPattern, OrtApi::DisableMemPattern
+   */
+  public native OrtStatus GetMemPatternEnabled( @Const OrtSessionOptions options, IntPointer out);
+  public native OrtStatus GetMemPatternEnabled( @Const OrtSessionOptions options, IntBuffer out);
+  public native OrtStatus GetMemPatternEnabled( @Const OrtSessionOptions options, int[] out);
+
+  /** \brief Get the current execution mode setting.
+   *
+   * @param options [in]
+   * @param out [out] Set to the current execution mode (ORT_SEQUENTIAL or ORT_PARALLEL).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.27.
+   *
+   * @see OrtApi::SetSessionExecutionMode
+   */
+  public native OrtStatus GetSessionExecutionMode( @Const OrtSessionOptions options, @Cast("ExecutionMode*") IntPointer out);
+  public native OrtStatus GetSessionExecutionMode( @Const OrtSessionOptions options, @Cast("ExecutionMode*") IntBuffer out);
+  public native OrtStatus GetSessionExecutionMode( @Const OrtSessionOptions options, @Cast("ExecutionMode*") int[] out);
+
+  /** \brief Release a previously captured graph and its associated resources.
+   *
+   * When graph capture is enabled, the EP records information during initial runs (e.g., GPU commands)
+   * and replays them on subsequent runs. This function releases the captured resources for a specific
+   * graph annotation ID, freeing memory.
+   *
+   * @param session [in] The OrtSession instance.
+   * @param graph_annotation_id [in] The annotation ID of the captured graph to release.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.27.
+   */
+  public native OrtStatus SessionReleaseCapturedGraph( OrtSession session, int graph_annotation_id);
 }

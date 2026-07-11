@@ -122,7 +122,7 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 
 
 
-// #define fail_schema(...) ONNX_THROW_EX(ONNX_NAMESPACE::SchemaError(ONNX_NAMESPACE::MakeString(__VA_ARGS__)));
+// #define fail_schema(...) ONNX_THROW_EX(ONNX_NAMESPACE::SchemaError(ONNX_NAMESPACE::MakeString(__VA_ARGS__)))
 
 // Type constraint map. Key is type string. Value is data type set and
 // description.
@@ -159,6 +159,9 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // #define ONNX_TRAINING_OPERATOR_SET_SCHEMA(name, ver, impl)
 //   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxTraining, AI_ONNX_TRAINING_DOMAIN, ver, true, impl)
 
+// #define ONNX_PREVIEW_OPERATOR_SET_SCHEMA(name, ver, impl)
+//   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxPreview, AI_ONNX_PREVIEW_DOMAIN, ver, true, impl)
+
 // #define ONNX_PREVIEW_TRAINING_OPERATOR_SET_SCHEMA(name, ver, impl)
 //   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxPreview, AI_ONNX_PREVIEW_TRAINING_DOMAIN, ver, true, impl)
 
@@ -188,7 +191,7 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 //   ONNX_API OpSchema GetOpSchema<ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)>() {
 //     return impl.SetName(#name).SetDomain(domain_str).SinceVersion(ver).SetLocation(__FILE__, __LINE__);
 //   }
-//   ONNX_OPERATOR_SET_SCHEMA_DEBUG_VARIABLE(domain, ver, name, dbg_included_in_static_opset)
+//   ONNX_OPERATOR_SET_SCHEMA_DEBUG_VARIABLE(name, domain, ver, dbg_included_in_static_opset)
 // #ifndef NDEBUG
 // #define ONNX_DBG_GET_COUNT_IN_OPSETS() DbgOperatorSetTracker::Instance().GetCount()
 
@@ -2171,6 +2174,18 @@ support).
 // Targeting ../OpSet_Onnx_ver26.java
 
 
+// Targeting ../CausalConvWithState_Onnx_ver27.java
+
+
+// Targeting ../LinearAttention_Onnx_ver27.java
+
+
+// Targeting ../Range_Onnx_ver27.java
+
+
+// Targeting ../OpSet_Onnx_ver27.java
+
+
 
 @Namespace("onnx") public static native void RegisterOnnxOperatorSetSchema();
 
@@ -2200,9 +2215,9 @@ support).
 
 // Parsed from onnx/defs/operator_sets_ml.h
 
-/*
- * SPDX-License-Identifier: Apache-2.0
- */
+// Copyright (c) ONNX Project Contributors
+//
+// SPDX-License-Identifier: Apache-2.0
 
 // #pragma once
 
@@ -2396,6 +2411,14 @@ support).
 // This no-op data propagation function is used for operators without a defined data propagator
 @Namespace("onnx") public static native void dummyDataPropagationFunction(@ByRef DataPropagationContext arg0);
 
+// Throws InferenceError if the attribute is missing. Returning by reference
+// prevents callers from accidentally skipping the null check.
+@Namespace("onnx") public static native @Const @ByRef AttributeProto getRequiredAttribute(@Const @ByRef InferenceContext ctx, @StdString BytePointer name);
+@Namespace("onnx") public static native @Const @ByRef AttributeProto getRequiredAttribute(@Const @ByRef InferenceContext ctx, @StdString String name);
+
+@Namespace("onnx") public static native @Cast("int64_t") long getRequiredAttributeInt(@Const @ByRef InferenceContext ctx, @StdString BytePointer name);
+@Namespace("onnx") public static native @Cast("int64_t") long getRequiredAttributeInt(@Const @ByRef InferenceContext ctx, @StdString String name);
+
 @Namespace("onnx") public static native @Cast("int64_t") long getAttribute(@Const @ByRef InferenceContext ctx, @StdString BytePointer attributeName, @Cast("int64_t") long defaultValue);
 @Namespace("onnx") public static native @Cast("int64_t") long getAttribute(@Const @ByRef InferenceContext ctx, @StdString String attributeName, @Cast("int64_t") long defaultValue);
 
@@ -2414,6 +2437,10 @@ support).
 @Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(@Const @ByRef Dimension dim1, @Cast("int64_t") long dim2);
 
 @Namespace("onnx") public static native @ByVal @Name("operator /") Dimension divide(@Const @ByRef Dimension dim1, @Cast("int64_t") long dim2);
+
+@Namespace("onnx") public static native @ByVal @Name("operator +") Dimension add(@Const @ByRef Dimension dim1, @Cast("int64_t") long dim2);
+
+@Namespace("onnx") public static native @ByVal @Name("operator -") Dimension subtract(@Const @ByRef Dimension dim1, @Cast("int64_t") long dim2);
 
 // if from >= upto_exclusive, return 1.
 // Caller must make sure upto_exclusive is less than or equal to shape.size()
@@ -2609,8 +2636,9 @@ Fail if there are mismatches in number of dimensions or dimension values.
 // beginning.
 @Namespace("onnx") public static native @ByVal TypeProto RemoveDimensionsFromShape(@Const @ByRef TypeProto proto, int num_dimensions);
 
-// copied from GSL:
-// https://github.com/microsoft/GSL/blob/main/include/gsl/util
+// Checked narrowing cast — throws InferenceError on lossy conversion
+// (sign change or truncation). Matches gsl::narrow:
+// https://github.com/microsoft/GSL/blob/main/include/gsl/narrow
 
 @Namespace("onnx") public static native void checkInputRank(@Const @ByRef InferenceContext ctx, @Cast("size_t") long input_index, int expected_rank);
 
@@ -2630,6 +2658,12 @@ Fail if there are mismatches in number of dimensions or dimension values.
 // duplication in-place to preserve error message content.
 
 @Namespace("onnx") public static native void unifyInputDim(@Const @ByRef InferenceContext ctx, @Cast("size_t") long input_index, int dim_index, @Cast("onnx::Dim*") @ByRef Dimension dim);
+
+// unifyInputShape: unifies all dimensions of an input with the given dim references.
+// Requires the input to have rank exactly equal to the number of dims provided.
+
+// unifyInputShapePrefix: unifies the first N dimensions of an input with the given dim references.
+// Requires the input to have rank at least equal to the number of dims provided.
 
 // unifyDim: unifies a dimension with a constant value. If the dimension
 // already has a value, we check for equality of new value with old value.
@@ -7560,6 +7594,7 @@ public static final int
 
 // #pragma once
 
+// #include <filesystem>
 // #include <stdexcept>
 // #include <string>
 // #include <unordered_map>
@@ -7573,8 +7608,7 @@ public static final int
 
 
 
-// #define fail_check(...)
-//   ONNX_THROW_EX(ONNX_NAMESPACE::checker::ValidationError(ONNX_NAMESPACE::MakeString(__VA_ARGS__)));
+// #define fail_check(...) ONNX_THROW_EX(ONNX_NAMESPACE::checker::ValidationError(ONNX_NAMESPACE::MakeString(__VA_ARGS__)))
 // Targeting ../CheckerContext.java
 
 
@@ -7607,6 +7641,10 @@ public static final int
 // Checks all model local functions present in ModelProto
 @Namespace("onnx::checker") public static native void check_model_local_functions(@Const @ByRef ModelProto model, @Const @ByRef CheckerContext ctx, @Const @ByRef LexicalScopeContext parent_lex);
 
+// Checks for cycles in model-local function call graph.
+// Throws ValidationError if any function directly or indirectly references itself.
+@Namespace("onnx::checker") public static native void check_function_call_cycles(@Const @ByRef ModelProto model);
+
 @Namespace("onnx::checker") public static native void check_model(
     @Const @ByRef ModelProto model,
     @Cast("bool") boolean full_check/*=false*/,
@@ -7628,14 +7666,26 @@ public static final int
     @Cast("bool") boolean check_custom_domain/*=false*/);
 @Namespace("onnx::checker") public static native void check_model(
     @StdString String model_path);
-@Namespace("onnx::checker") public static native @StdString BytePointer resolve_external_data_location(
+@Namespace("onnx::checker") public static native @ByVal @Cast("std::filesystem::path*") Pointer resolve_external_data_location(
     @StdString BytePointer base_dir,
     @StdString BytePointer location,
     @StdString BytePointer tensor_name);
-@Namespace("onnx::checker") public static native @StdString String resolve_external_data_location(
+@Namespace("onnx::checker") public static native @ByVal @Cast("std::filesystem::path*") Pointer resolve_external_data_location(
     @StdString String base_dir,
     @StdString String location,
     @StdString String tensor_name);
+// Returns a CRT file descriptor on all platforms.
+// The caller owns the fd and must close it.
+@Namespace("onnx::checker") public static native @Cast("int64_t") long open_external_data(
+    @StdString BytePointer base_dir,
+    @StdString BytePointer location,
+    @StdString BytePointer tensor_name,
+    @Cast("bool") boolean read_only);
+@Namespace("onnx::checker") public static native @Cast("int64_t") long open_external_data(
+    @StdString String base_dir,
+    @StdString String location,
+    @StdString String tensor_name,
+    @Cast("bool") boolean read_only);
 @Namespace("onnx::checker") public static native @Cast("bool") boolean check_is_experimental_op(@Const @ByRef NodeProto node);
 
  // namespace checker
@@ -7811,13 +7861,12 @@ public static final int
 // #pragma once
 
 // #include <cmath>
-// #include <functional>
-// #include <numeric>
 // #include <string>
 // #include <utility>
 // #include <vector>
 
 // #include "onnx/common/assertions.h"
+// #include "onnx/common/safe_math.h"
 // #include "onnx/onnx_pb.h"
 // Targeting ../Tensor.java
 
@@ -8103,7 +8152,7 @@ public static final byte
 
 
 
-// #define fail_convert(...) ONNX_THROW_EX(ConvertError(MakeString(__VA_ARGS__)));
+// #define fail_convert(...) ONNX_THROW_EX(ConvertError(MakeString(__VA_ARGS__)))
 
 @Namespace("onnx") public static native void ExportModelProto(ModelProto p_m, @SharedPtr Graph g);
 
@@ -8153,9 +8202,12 @@ public static final byte
 
 // #pragma once
 
+// #include <cstdint>
 // #include <vector>
 
+// #include "onnx/common/assertions.h"
 // #include "onnx/common/ir.h"
+// #include "onnx/defs/tensor_util.h"
 @Namespace("onnx::version_conversion") public static native int check_numpy_unibroadcastable_and_require_broadcast(
     @StdVector DimensionIR input1_sizes,
     @StdVector DimensionIR input2_sizes);
@@ -8165,6 +8217,9 @@ public static final byte
     @StdVector DimensionIR input2_sizes);
 
 @Namespace("onnx::version_conversion") public static native void assertNotParams(@StdVector DimensionIR sizes);
+
+// Decode an INT64 tensor; rejects mismatched element type or dims/raw byte length.
+@Namespace("onnx::version_conversion") public static native @ByVal LongVector ReadInt64Tensor(@Const @ByRef Tensor tensor);
  // namespace version_conversion
  // namespace ONNX_NAMESPACE
 
@@ -8239,6 +8294,7 @@ public static final byte
 // #include "onnx/version_converter/adapters/no_previous_version.h"
 // #include "onnx/version_converter/adapters/pad_10_11.h"
 // #include "onnx/version_converter/adapters/q_dq_21_20.h"
+// #include "onnx/version_converter/adapters/range_27_26.h"
 // #include "onnx/version_converter/adapters/reshape_4_5.h"
 // #include "onnx/version_converter/adapters/reshape_5_4.h"
 // #include "onnx/version_converter/adapters/resize_10_11.h"

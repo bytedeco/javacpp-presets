@@ -13,6 +13,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
     static { Loader.load(); }
@@ -92,7 +94,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 26;
+public static final int ORT_API_VERSION = 27;
 
 // #ifdef __cplusplus
 // #endif
@@ -144,8 +146,15 @@ public static final int ORT_API_VERSION = 26;
 // #define ORT_MUST_USE_RESULT
 // #define ORTCHAR_T wchar_t
 // #else
-// To make symbols visible on macOS/iOS
-// #ifdef __APPLE__
+// Make symbols visible on non-Windows platforms. The visibility attribute is
+// needed when ORT is built as a shared library without a version script
+// (e.g. when compiled within another project's build system). On non-Apple
+// platforms, the default ORT build uses a generated version script
+// (tools/ci_build/gen_def.py) that exports the needed symbols, so this was
+// previously only enabled for __APPLE__. Expanding to __GNUC__ (GCC/Clang)
+// covers additional embedding scenarios while remaining harmless when a
+// version script is also in use.
+// #if defined(__GNUC__)
 // #define ORT_EXPORT __attribute__((visibility("default")))
 // #else
 // #define ORT_EXPORT
@@ -265,7 +274,9 @@ public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT4E2M1 = 23,  // maps to a pair of packed float4 values (size == 1 byte)
   // Int2 types were introduced in ONNX 1.20. See https://onnx.ai/onnx/technical/int2.html
   ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT2 = 24,  // maps to 4 packed uint2 values (size == 1 byte)
-  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT2 = 25;   // maps to 4 packed int2 values (size == 1 byte)
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT2 = 25,   // maps to 4 packed int2 values (size == 1 byte)
+  // Float8E8M0 type introduced in ONNX 1.21. 8-bit float with 8 exponent bits, 0 mantissa bits, no sign bit.
+  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT8E8M0 = 26;  // Non-IEEE floating-point format, all values are powers of two
 
 // Synced with onnx TypeProto oneof
 /** enum ONNXType */

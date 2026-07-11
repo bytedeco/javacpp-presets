@@ -3,13 +3,13 @@
  * Add missing mappings for `c10::ArrayRef<double>` in presets for PyTorch ([issue #1770](https://github.com/bytedeco/javacpp-presets/issues/1770))
  * Reduce overhead of `Tensor` factory methods `create()`, `createBuffer()`, and `createIndexer()` for PyTorch ([issue #1770](https://github.com/bytedeco/javacpp-presets/issues/1770))
  * Enable support for OpenVINO in presets for ONNX Runtime ([pull #1769](https://github.com/bytedeco/javacpp-presets/pull/1769))
- * Add presets for OpenVINO 2026.1.0 ([pull #1752](https://github.com/bytedeco/javacpp-presets/pull/1752))
+ * Add presets for OpenVINO 2026.2.1 ([pull #1752](https://github.com/bytedeco/javacpp-presets/pull/1752))
  * Allow creating new `std::vector<torch::optim::OptimizerParamGroup>` in presets for PyTorch ([issue #1756](https://github.com/bytedeco/javacpp-presets/issues/1756))
  * Add V4L2 Request API hwaccels in presets for FFmpeg ([pull #1755](https://github.com/bytedeco/javacpp-presets/pull/1755))
  * Add new `SampleOnnxMNIST` in samples for TensorRT ([pull #1742](https://github.com/bytedeco/javacpp-presets/pull/1742))
  * Fix loading issues with `libomp.dylib` and `libiomp5.dylib` for DNNL and PyTorch on Mac
  * Include `model_package_loader.h` header file in presets for PyTorch ([issue #1729](https://github.com/bytedeco/javacpp-presets/issues/1729))
- * Upgrade presets for FFmpeg 8.1.1, MKL 2026.0.0, DNNL 3.12.1, OpenBLAS 0.3.33, CUDA 13.3.1, cuDNN 9.24.0.43, NCCL 2.30.7, nvCOMP 5.2.0.10, NVIDIA Video Codec SDK 13.1.15, OpenCL 3.1.1, FFTW 3.3.11, CPython 3.14.6, NumPy 2.5.0, SciPy 1.18.0, LLVM 22.1.7, PyTorch 2.12.0, TensorFlow Lite 2.21.0, TensorRT 11.1.0.106, Triton Inference Server 2.70.0, ONNX 1.21.0, ONNX Runtime 1.26.0 ([pull #1753](https://github.com/bytedeco/javacpp-presets/pull/1753)), and their dependencies
+ * Upgrade presets for FFmpeg 8.1.1, MKL 2026.0.0, DNNL 3.12.2, OpenBLAS 0.3.33, CUDA 13.3.1, cuDNN 9.24.0.43, NCCL 2.30.7, nvCOMP 5.2.0.10, NVIDIA Video Codec SDK 13.1.15, OpenCL 3.1.1, FFTW 3.3.11, CPython 3.14.6, NumPy 2.5.0, SciPy 1.18.0, LLVM 22.1.7, PyTorch 2.12.0, TensorFlow Lite 2.21.0, TensorRT 11.1.0.106, Triton Inference Server 2.70.0, ONNX 1.22.0, ONNX Runtime 1.27.0 ([pull #1753](https://github.com/bytedeco/javacpp-presets/pull/1753)), and their dependencies
  * Compile classes with `parameters` bumping minimum requirements to Java SE 8 and Android 7.0 ([issue #1739](https://github.com/bytedeco/javacpp-presets/issues/1739))
 
 ### February 22, 2026 version 1.5.13
