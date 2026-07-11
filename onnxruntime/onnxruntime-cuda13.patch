@@ -156,10 +156,10 @@ index acbbe0d94d..b340ccc912 100644
  
      // CPU/GPU sync!
 diff --git a/cmake/patches/abseil/absl_cuda_warnings.patch b/cmake/patches/abseil/absl_cuda_warnings.patch
-index 144b9f904b..609b3dee26 100644
+index e80384705e..ad3443b07d 100644
 --- a/cmake/patches/abseil/absl_cuda_warnings.patch
 +++ b/cmake/patches/abseil/absl_cuda_warnings.patch
-@@ -38,3 +38,90 @@ index 1234567..abcdefg 100644
+@@ -56,3 +56,64 @@ index 1234567..abcdefg 100644
     seed += uint16_t{0xad53};
     return seed;
   }
@@ -224,29 +224,3 @@ index 144b9f904b..609b3dee26 100644
 +           class... Args),                                                      \
 +       std::enable_if_t<!std::is_convertible<K, const_iterator>::value, int> =  \
 +           0>                                                                   \
-+diff --git a/absl/hash/internal/hash.h b/absl/hash/internal/hash.h
-+index 1234567..abcdefg 100644
-+--- a/absl/hash/internal/hash.h
-++++ b/absl/hash/internal/hash.h
-+@@ -1265,7 +1265,7 @@ class ABSL_DLL MixingHashState : public HashStateBase<MixingHashState> {
-+   }
-+
-+  private:
-+-  friend class MixingHashState::HashStateBase;
-++  friend class HashStateBase<MixingHashState>;
-+   template <typename H>
-+   friend H absl::hash_internal::hash_weakly_mixed_integer(H,
-+                                                           WeaklyMixedInteger);
-+diff --git a/absl/hash/hash.h b/absl/hash/hash.h
-+index 1234567..abcdefg 100644
-+--- a/absl/hash/hash.h
-++++ b/absl/hash/hash.h
-+@@ -368,7 +369,7 @@ class HashState : public hash_internal::HashStateBase<HashState> {
-+  private:
-+   HashState() = default;
-+
-+-  friend class HashState::HashStateBase;
-++  friend class hash_internal::HashStateBase<HashState>;
-+   friend struct hash_internal::CombineRaw;
-+
-+   template <typename T>

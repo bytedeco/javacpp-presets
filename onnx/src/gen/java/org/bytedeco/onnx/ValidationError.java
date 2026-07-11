@@ -10,6 +10,8 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.onnx.global.onnx.*;
 
+// std::string member means copy may throw when allocation fails
+// NOLINTNEXTLINE(bugprone-exception-copy-constructor-throws)
 @Namespace("onnx::checker") @NoOffset @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
 public class ValidationError extends Pointer {
     static { Loader.load(); }

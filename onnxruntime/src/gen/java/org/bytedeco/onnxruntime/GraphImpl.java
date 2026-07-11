@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -35,14 +37,22 @@ public class GraphImpl extends ConstGraphImpl {
 
 
 // #if !defined(ORT_MINIMAL_BUILD)
-  // <Wraps GetModelEditorApi().SetGraphInputs()
+  /** <Wraps GetModelEditorApi().SetGraphInputs(). Strong exception safety: on success the Graph
+   *  takes ownership of every ValueInfo in {@code inputs} and each element is reset to nullptr; on
+   *  failure (an exception is thrown) the Graph state and every element of {@code inputs} are unchanged. */
   public native void SetInputs(@ByRef ValueInfoVector inputs);
-  // <Wraps GetModelEditorApi().SetGraphOutputs()
+  /** <Wraps GetModelEditorApi().SetGraphOutputs(). Strong exception safety: on success the Graph
+   *  takes ownership of every ValueInfo in {@code outputs} and each element is reset to nullptr; on
+   *  failure (an exception is thrown) the Graph state and every element of {@code outputs} are unchanged. */
   public native void SetOutputs(@ByRef ValueInfoVector outputs);
-  // <Wraps GetModelEditorApi().AddInitializerToGraph()
+  /** <Wraps GetModelEditorApi().AddInitializerToGraph(). Strong exception safety: on success the
+   *  Graph takes ownership of {@code initializer} (which is reset to nullptr); on failure (an exception
+   *  is thrown) {@code initializer} is unchanged and still owned by the caller. */
   public native void AddInitializer(@StdString BytePointer name, @ByRef Value initializer, @Cast("bool") boolean data_is_external);
   public native void AddInitializer(@StdString String name, @ByRef Value initializer, @Cast("bool") boolean data_is_external);  // Graph takes ownership of Value
-  // <Wraps GetModelEditorApi().AddNodeToGraph()
+  /** <Wraps GetModelEditorApi().AddNodeToGraph(). Strong exception safety: on success the Graph
+   *  takes ownership of {@code node} (which is reset to nullptr); on failure (an exception is thrown)
+   *  {@code node} is unchanged and still owned by the caller. */
   public native void AddNode(@ByRef Node node);  // Graph takes ownership of Node
 // #endif                       // !defined(ORT_MINIMAL_BUILD)
 }

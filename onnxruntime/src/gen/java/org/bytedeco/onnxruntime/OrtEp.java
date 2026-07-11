@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -569,4 +571,85 @@ public class OrtEp extends Pointer {
    * @since Version 1.26.
    */
   public native OrtStatus GetAvailableResource( @Const OrtEp this_ptr, OrtResourceCount available);
+
+  /** \brief Called by ORT when session initialization is complete.
+   *
+   * This provides an opportunity for execution providers to optionally synchronize and
+   * clean up temporary resources to reduce memory usage and ensure the first inference run is fast.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   *
+   * \note Implementation of this function is optional. If set to NULL, ORT assumes no
+   *       post-initialization work is needed and treats it as a no-op success.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.27.
+   */
+  public native OrtStatus OnSessionInitializationEnd( OrtEp this_ptr);
+
+  /** \brief Get the EP's default memory device.
+   *
+   * The EP's default memory device identifies the hardware the EP operates on. ORT uses it to:
+   * - Determine if data copies are needed between EPs (inserting memcpy nodes at EP boundaries)
+   * - Determine if the EP is CPU-based (which affects synchronization and data transfer decisions)
+   * - Bind execution streams to the correct device
+   *
+   * If the implementation allows an EP to be created with multiple EpDevices this should return the OrtMemoryDevice
+   * that ORT should consider as default for this EP instance.
+   *
+   * An OrtMemoryDevice is obtained from an OrtMemoryInfo via {@code OrtEpApi::MemoryInfo_GetMemoryDevice()}.
+   * Typically, an EP creates OrtMemoryInfo instances and registers them with its OrtEpDevice(s) via
+   * {@code OrtEpApi::EpDevice_AddAllocatorInfo()}. The OrtMemoryDevice returned here must correspond to an
+   * OrtMemoryInfo registered as an {@code OrtDeviceAllocator} entry (either {@code OrtDeviceMemoryType_DEFAULT} or
+   * {@code OrtDeviceMemoryType_HOST_ACCESSIBLE}). An OrtMemoryDevice from an {@code OrtReadOnlyAllocator} entry is
+   * not accepted as the EP's default/identity device.
+   *
+   * The returned pointer must remain valid for the lifetime of the OrtEp instance
+   * (typically by storing the parent OrtMemoryInfo as a member of the EP).
+   *
+   * If this function is not implemented (NULL), or if it sets {@code device} to NULL, ORT infers
+   * the default memory device from the first OrtEpDevice's {@code OrtDeviceAllocator} entry with
+   * {@code OrtDeviceMemoryType_DEFAULT} registered via {@code EpDevice_AddAllocatorInfo}. EPs created against
+   * multiple OrtEpDevices whose default memory devices differ should implement this function to
+   * disambiguate; otherwise the first OrtEpDevice's default memory device is used and the others
+   * are ignored for identity purposes. If no such allocator entry is registered, the EP defaults
+   * to a CPU memory device.
+   *
+   * @param this_ptr [in] The OrtEp instance.
+   * @param device [out] Set to the EP's default OrtMemoryDevice, or NULL to use the default behavior (described above).
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional. If set to NULL (not implemented), ORT
+   *       infers the default memory device using the default behavior described above.
+   *
+   * @since Version 1.27.
+   */
+  public native OrtStatus GetDefaultMemoryDevice( @Const OrtEp this_ptr,
+                    @Cast("const OrtMemoryDevice**") PointerPointer device);
+  public native OrtStatus GetDefaultMemoryDevice( @Const OrtEp this_ptr,
+                    @Const @ByPtrPtr OrtMemoryDevice device);
+
+  /** \brief Release a previously captured graph and its associated resources.
+   *
+   * Called when the caller no longer needs the captured graph for the given annotation ID.
+   * This allows the EP to free buffers and other resources tied to this graph.
+   *
+   * @param this_ptr [in] The EP instance.
+   * @param graph_annotation_id [in] The annotation ID of the graph to release.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \note Implementation of this function is optional. If set to NULL, ORT assumes
+   *       no captured graph release is needed and treats it as a no-op success.
+   *
+   * \note Thread safety: For EPs that support concurrent Run() calls, this method may be
+   *       called concurrently with Run(). The EP is responsible for ensuring thread safety
+   *       of its own state in that case. For non-concurrent EPs, the session serializes
+   *       calls via its internal mutex.
+   *
+   * @since Version 1.27.
+   */
+  public native OrtStatus ReleaseCapturedGraph( OrtEp this_ptr, int graph_annotation_id);
 }

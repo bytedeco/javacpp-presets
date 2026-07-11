@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
@@ -34,7 +36,9 @@ public class ModelImpl extends BaseModel {
 
 
 // #if !defined(ORT_MINIMAL_BUILD)
-  // <Wraps GetModelEditorApi().AddGraphToModel()
+  /** <Wraps GetModelEditorApi().AddGraphToModel(). Strong exception safety: on success the Model
+   *  takes ownership of {@code graph} (which is reset to nullptr); on failure (an exception is thrown)
+   *  {@code graph} is unchanged and still owned by the caller. */
   public native void AddGraph(@ByRef Graph graph);
 // #endif
 }

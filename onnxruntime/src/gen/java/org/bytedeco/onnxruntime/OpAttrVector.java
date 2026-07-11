@@ -11,6 +11,8 @@ import org.bytedeco.opencl.*;
 import static org.bytedeco.opencl.global.OpenCL.*;
 import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
+import org.bytedeco.openvino.*;
+import static org.bytedeco.openvino.global.openvino.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
