@@ -156,6 +156,31 @@
               </arguments>
             </configuration>
           </execution>
+          <execution>
+            <!-- JavaCPP fix: strip @Virtual(method="forward" | method="forwardT_*") from
+                 src/gen/java/.../Module.java after the parser regenerates it. The
+                 captured-member-pointer InvokeForward dispatch in
+                 any_module_holder.h already routes nn::Sequential -> *Impl::forward
+                 correctly; letting JavaCPP treat every forward_tensorN overload
+                 as a Java-side virtual makes its vtable dispatch pick the wrong
+                 arity (forward_tensor2 on a DropoutImpl in a Sequential), which
+                 hits Module::forward_tensor2's TORCH_CHECK and crashes. With
+                 these annotations stripped, Module.forward(...) falls through
+                 to its Java shim which uses ModuleAsHelper.recover + hasForwardOverride
+                 to call the concrete subclass's forward() native directly. -->
+            <id>strip-forward-virtual-annotations</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>/bin/sh</executable>
+              <arguments>
+                <argument>-c</argument>
+                <argument>sed -i '' -E 's/@Virtual\(method="forward(T_[A-Za-z_]*)?"\)//g' '${basedir}/src/gen/java/org/bytedeco/pytorch/Module.java'</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>

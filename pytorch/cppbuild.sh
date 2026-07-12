@@ -198,6 +198,53 @@ struct TORCH_API ASMoutput;\
         return AnyValue(module_->forward(std::forward<Ts>(ts)...));\
       }/g' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
         fi
+        # JavaCPP fix: capture forward_method<ModuleType>() as a member
+        # pointer at AnyModuleHolder construction time. Dispatch then
+        # goes through (module_->*forward_)(...) directly — bypassing
+        # the C++ name-hiding trap on derived `forward(Tensor)` (which
+        # only ever declares a single by-value overload) and the
+        # throwing `Module::forward_tensorN(...)` virtuals that the
+        # *Impl classes never override. This is what makes
+        # nn::Sequential usable from JavaCPP for DropoutImpl,
+        # ReLUImpl, ELUImpl, SELUImpl, HardshrinkImpl, TanhshrinkImpl,
+        # SoftsignImpl, SoftplusImpl, PReLUImpl, RReLUImpl, CELUImpl,
+        # GLUImpl, SoftminImpl, SoftmaxImpl, LogSoftmaxImpl,
+        # LogSigmoidImpl, HardtanhImpl, the Functional Lambda shim, etc.
+        if ! grep -q 'JavaCPP captured-forward-dispatch fix' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h; then
+            perl -i -0pe 's{struct InvokeForward \{[\s\S]*?std::shared_ptr<ModuleType>& module_;\s*\};}{struct InvokeForward {
+    // JavaCPP captured-forward-dispatch fix.
+    // For concrete *Impl classes we capture &ModuleType::forward once at
+    // construction time so dispatch goes through (module_.get()->*forward_)(...)
+    // - this bypasses both the C++ name-hiding trap on derived forward(Tensor)
+    // and the throwing Module::forward_tensorN virtuals that *Impl classes
+    // never override. Module::forward is an overloaded set so we explicitly
+    // specialise forward_member_ptr_t for it instead of writing &Module::forward.
+    // For the Module base class the dispatch path uses module_->forward_tensor
+    // directly via virtual dispatch (so we do not need to take the
+    // address of Module::forward_tensor, which would force any_module_holder.h
+    // to see Module's full definition).
+    template <typename T> struct forward_member_ptr_t { using type = decltype(\&T::forward); };
+    template <> struct forward_member_ptr_t<torch::nn::Module> { using type = Tensor (torch::nn::Module::*)(const Tensor\&); };
+    template <typename T>
+    using forward_member_ptr = typename forward_member_ptr_t<std::remove_cv_t<std::remove_reference_t<T>>>::type;
+    InvokeForward(std::shared_ptr<ModuleType>\& m) : module_(m) {
+      if constexpr (!std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, torch::nn::Module>) {
+        forward_ = \&ModuleType::forward;
+      }
+    }
+    template <typename... Ts>
+    AnyValue operator()(Ts\&\&... ts) {
+      if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, torch::nn::Module>) {
+        return AnyValue(module_->forward_tensor(std::forward<Ts>(ts)...));
+      } else {
+        return AnyValue((module_.get()->*forward_)(std::forward<Ts>(ts)...));
+      }
+    }
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::shared_ptr<ModuleType>\& module_;
+    forward_member_ptr<ModuleType> forward_;
+  };}s' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+        fi
         if ! grep -q 'JavaCPP OrderedDict<shared_ptr<Module>> ctor' include/torch/csrc/api/include/torch/nn/modules/container/sequential.h; then
             sedinplace '/Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s\./i\
   // JavaCPP OrderedDict<shared_ptr<Module>> ctor\
@@ -541,6 +588,52 @@ if ! grep -q 'module_->forward_tensor' torch/csrc/api/include/torch/nn/modules/c
       } else {\
         return AnyValue(module_->forward(std::forward<Ts>(ts)...));\
       }/g' torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+fi
+# JavaCPP fix: capture forward_method<ModuleType>() as a member pointer
+# at AnyModuleHolder construction time. Dispatch then goes through
+# (module_->*forward_)(...) directly — bypassing the C++ name-hiding
+# trap on derived `forward(Tensor)` (which only ever declares a single
+# by-value overload) and the throwing `Module::forward_tensorN(...)`
+# virtuals that the *Impl classes never override. This is what makes
+# nn::Sequential usable from JavaCPP for DropoutImpl, ReLUImpl,
+# ELUImpl, SELUImpl, HardshrinkImpl, TanhshrinkImpl, SoftsignImpl,
+# SoftplusImpl, PReLUImpl, RReLUImpl, CELUImpl, GLUImpl, SoftminImpl,
+# SoftmaxImpl, LogSoftmaxImpl, LogSigmoidImpl, HardtanhImpl, the
+# Functional Lambda shim, etc.
+if ! grep -q 'JavaCPP captured-forward-dispatch fix' torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h; then
+    perl -i -0pe 's{struct InvokeForward \{[\s\S]*?std::shared_ptr<ModuleType>& module_;\s*\};}{struct InvokeForward {
+    // JavaCPP captured-forward-dispatch fix.
+    // For concrete *Impl classes we capture &ModuleType::forward once at
+    // construction time so dispatch goes through (module_.get()->*forward_)(...)
+    // - this bypasses both the C++ name-hiding trap on derived forward(Tensor)
+    // and the throwing Module::forward_tensorN virtuals that *Impl classes
+    // never override. Module::forward is an overloaded set so we explicitly
+    // specialise forward_member_ptr_t for it instead of writing &Module::forward.
+    // For the Module base class the dispatch path uses module_->forward_tensor
+    // directly via virtual dispatch (so we do not need to take the
+    // address of Module::forward_tensor, which would force any_module_holder.h
+    // to see Module's full definition).
+    template <typename T> struct forward_member_ptr_t { using type = decltype(\&T::forward); };
+    template <> struct forward_member_ptr_t<torch::nn::Module> { using type = Tensor (torch::nn::Module::*)(const Tensor\&); };
+    template <typename T>
+    using forward_member_ptr = typename forward_member_ptr_t<std::remove_cv_t<std::remove_reference_t<T>>>::type;
+    InvokeForward(std::shared_ptr<ModuleType>\& m) : module_(m) {
+      if constexpr (!std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, torch::nn::Module>) {
+        forward_ = \&ModuleType::forward;
+      }
+    }
+    template <typename... Ts>
+    AnyValue operator()(Ts\&\&... ts) {
+      if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, torch::nn::Module>) {
+        return AnyValue(module_->forward_tensor(std::forward<Ts>(ts)...));
+      } else {
+        return AnyValue((module_.get()->*forward_)(std::forward<Ts>(ts)...));
+      }
+    }
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::shared_ptr<ModuleType>\& module_;
+    forward_member_ptr<ModuleType> forward_;
+  };}s' torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
 fi
 if ! grep -q 'JavaCPP OrderedDict<shared_ptr<Module>> ctor' torch/csrc/api/include/torch/nn/modules/container/sequential.h; then
     sedinplace '/Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s\./i\

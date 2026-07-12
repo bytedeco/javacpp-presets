@@ -149,25 +149,25 @@ public class Module extends Pointer {
   public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
   public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
   public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_attn(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
-  private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(@Const @ByRef Tensor input);
+  private native @ByVal @Name("forward_tensor")  Tensor _forward_tensor(@Const @ByRef Tensor input);
   public @ByVal Tensor forward(@Const @ByRef Tensor input) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class) ? m.forward(input) : _forward_tensor(input); }
-  private native @ByVal @Name("forward_tensor2") @Virtual(method="forward") Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  private native @ByVal @Name("forward_tensor2")  Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
   public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class) ? m.forward(input1, input2) : _forward_tensor2(input1, input2); }
-  private native @ByVal @Name("forward_tensor3") @Virtual(method="forward") Tensor _forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  private native @ByVal @Name("forward_tensor3")  Tensor _forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
   public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class, Tensor.class) ? m.forward(input1, input2, input3) : _forward_tensor3(input1, input2, input3); }
-  public native @ByVal @Name("forward_tensor4") @Virtual(method="forward") Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
-  public native @ByVal @Name("forward_tensor6") @Virtual(method="forward") Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
-  public native @ByVal @Name("forward_tensor8") @Virtual(method="forward") Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
+  public native @ByVal @Name("forward_tensor4")  Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
+  public native @ByVal @Name("forward_tensor6")  Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
+  public native @ByVal @Name("forward_tensor8")  Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
   public native @ByVal @Name("forward_tensor_output_size") Tensor forward(@Const @ByRef Tensor input, @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
   public native @ByVal @Name("forward_tensor_output_size") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
   public native @ByVal @Name("forward_tensor_indices_output_size") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
-  public native @ByVal @Name("forward_tuple_tensor_t_tensortensor") @Virtual(method="forwardT_TensorT_TensorTensor_T_T") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input);
-  public native @ByVal @Name("forward_tuple_tensor_t_tensortensor_opt") @Virtual(method="forwardT_TensorT_TensorTensor_T_T") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);
-  public native @ByVal @Name("forward_tuple_tensor_tensor") @Virtual(method="forwardT_TensorTensor_T") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);
-  public native @ByVal @Name("forward_tuple_tensor_tensor2") @Virtual(method="forwardT_TensorTensor_T") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
-  public native @ByVal @Name("forward_tuple_tensor_tensor3") @Virtual(method="forwardT_TensorTensor_T") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
-  public native @ByVal @Name("forward_tuple_tensor_tensor_opt") @Virtual(method="forwardT_TensorTensor_T") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);
-  public native @ByVal @Name("forward_tuple_tensor_tensor_attn") @Virtual(method="forwardT_TensorTensor_T") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
+  public native @ByVal @Name("forward_tuple_tensor_t_tensortensor")  T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input);
+  public native @ByVal @Name("forward_tuple_tensor_t_tensortensor_opt")  T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);
+  public native @ByVal @Name("forward_tuple_tensor_tensor")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);
+  public native @ByVal @Name("forward_tuple_tensor_tensor2")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public native @ByVal @Name("forward_tuple_tensor_tensor3")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public native @ByVal @Name("forward_tuple_tensor_tensor_opt")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);
+  public native @ByVal @Name("forward_tuple_tensor_tensor_attn")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
   public native @Cast("size_t") @NoException(true) long javacpp_module_object_id();
 
   
