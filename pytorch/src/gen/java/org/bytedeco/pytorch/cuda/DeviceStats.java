@@ -63,6 +63,9 @@ public class DeviceStats extends Pointer {
   public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat allocated_bytes(); public native DeviceStats allocated_bytes(Stat setter);
   // SUM: bytes reserved by this memory allocator (both free and used)
   public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat reserved_bytes(); public native DeviceStats reserved_bytes(Stat setter);
+  // SUM: bytes reserved in each private memory pool (e.g. CUDA graph pools).
+  // current drops to 0 when a pool is deleted, while peak/allocated/freed are
+  // preserved until reset.
   // SUM: bytes within active memory blocks
   public native @ByRef @Cast("c10::CachingAllocator::StatArray*") Stat active_bytes(); public native DeviceStats active_bytes(Stat setter);
   // SUM: bytes within inactive, split memory blocks

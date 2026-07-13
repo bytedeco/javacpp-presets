@@ -68,6 +68,13 @@ public class TensorIteratorBase extends MetaBase {
   public native ScalarType dtype(@Cast("int64_t") long arg/*=0*/);
   public native ScalarType dtype();
   public native ScalarType common_dtype();
+  // common_dtype() is populated whenever TensorIterator could infer a single
+  // computation dtype -- this includes both the promotion flags and the
+  // simpler case where every input already shares a dtype. nullopt means
+  // "no single dtype was inferred", not "promotion was not requested".
+  // Callers that don't know whether a common dtype was inferred can use
+  // this predicate instead of catching the assertion above.
+  public native @ByVal ScalarTypeOptional maybe_common_dtype();
   public native ScalarType input_dtype(@Cast("int64_t") long arg/*=0*/);
   public native ScalarType input_dtype();
   public native @ByVal Device device(@Cast("int64_t") long arg/*=0*/);
@@ -154,11 +161,10 @@ public class TensorIteratorBase extends MetaBase {
   public native void _unsafe_set_arg_strides(@Cast("const int64_t") long arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
   public native void _unsafe_set_arg_data(@Cast("const int64_t") long arg, Pointer data);
 
-  // Helper functions for custom device, custom device can get OperandInfo and
-  // NameVector in their side.
+  // Helper functions for custom device, custom device can get OperandInfo in
+  // their side.
   public native @ByRef OperandInfo operand(int arg/*=0*/);
   public native @ByRef OperandInfo operand();
-  public native @Cast("at::NameVector*") @ByRef SymDimVector get_dim_names();
 
   /** true if the stride computation can use 32-bit arithmetic. Used by GPU
    *  kernels */
@@ -183,14 +189,12 @@ public class TensorIteratorBase extends MetaBase {
         @Cast("int64_t") long output_idx,
         @ByVal LongArrayRef sizes,
         @ByVal LongArrayRef strides,
-        @ByVal TensorOptions options,
-        @ByVal DimnameArrayRef names);
+        @ByVal TensorOptions options);
   public native void set_output_raw_strided(
         @Cast("int64_t") long output_idx,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
-        @ByVal TensorOptions options,
-        @ByVal DimnameVector names);
+        @ByVal TensorOptions options);
 
 // #define TORCH_DISALLOW_TEMPORARIES_IMPL(methodname, maybestatic)
 //   maybestatic void methodname(

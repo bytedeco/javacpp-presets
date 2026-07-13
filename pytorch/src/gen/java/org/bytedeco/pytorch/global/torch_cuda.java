@@ -75,6 +75,7 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 
 // Parsed from c10/util/ArrayRef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 //===--- ArrayRef.h - Array Reference Wrapper -------------------*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure
@@ -162,16 +163,17 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 
 /** Construct an ArrayRef from a C array. */
 
-// WARNING: Template instantiation will NOT be willing to do an implicit
-// conversions to get you to an c10::ArrayRef, which is why we need so
-// many overloads.
-
 
  // namespace c10
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/cudnn/cudnn-wrapper.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cudnn.h>
@@ -189,18 +191,28 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // #undef STRINGIFY
 // #undef STRING
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/GPUTrace.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/PyInterpreter.h>
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDAMacros.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #ifndef C10_USING_CUSTOM_GENERATED_MACROS
@@ -245,9 +257,14 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #else
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDADeviceAssertionHost.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/cuda/CUDAMacros.h>
@@ -259,7 +276,7 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <utility>
 // #include <vector>
 
-// #if defined(USE_CUDA) || defined(USE_ROCM)
+// #if (defined(USE_CUDA) || defined(USE_ROCM)) && !defined(TORCH_USE_CUDA_DSA)
 // #define TORCH_USE_CUDA_DSA
 // #endif
 
@@ -295,9 +312,14 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // function
 // #define TORCH_DSA_KERNEL_ARGS_PASS assertions_data, assertion_caller_id
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDAMiscFunctions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // this file is to avoid circular dependency between CUDAFunctions.h and
 // CUDAExceptions.h
@@ -309,11 +331,18 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <string>
 @Namespace("c10::cuda") public static native @StdString @NoException(true) BytePointer get_cuda_error_help(@Cast("cudaError_t") int arg0);
 @Namespace("c10::cuda") public static native @NoException(true) @Cast("const char*") BytePointer get_cuda_check_suffix();
+@Namespace("c10::cuda") public static native @NoException(true) @Cast("const char*") BytePointer get_cuda_async_error_suffix(
+    @Cast("cudaError_t") int error);
  // namespace c10::cuda
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/cuda/CUDAException.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/cuda/CUDADeviceAssertionHost.h>
@@ -414,9 +443,14 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 
  // namespace c10::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDAFunctions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // This header provides C++ wrappers around commonly used CUDA API functions.
@@ -504,9 +538,14 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #ifdef USE_ROCM
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cuda/CUDAContextLight.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // Light-weight version of CUDAContext.h with fewer transitive includes
 
@@ -518,8 +557,6 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #include <cusparse.h>
 // #include <cublas_v2.h>
 
-// cublasLT was introduced in CUDA 10.1 but we enable only for 11.1 that also
-// added bf16 support
 // #include <cublasLt.h>
 
 // #ifdef CUDART_VERSION
@@ -592,6 +629,10 @@ manage their own state. There is only a single CUDA context/state.
 
 @Namespace("at::cuda") public static native @Cast("size_t") long getCUDABlasLtWorkspaceSize();
 @Namespace("at::cuda") public static native Pointer getCUDABlasLtWorkspace();
+@Namespace("at::cuda") public static native void setChosenWorkspaceSize(@Cast("size_t") long size);
+@Namespace("at::cuda") public static native void setCUDABlasLtWorkspaceSize(@Cast("size_t") long size);
+@Namespace("at::cuda") public static native void resetChosenWorkspaceSize();
+@Namespace("at::cuda") public static native void resetCUDABlasLtWorkspaceSize();
 
 @Namespace("at::cuda") public static native cusolverDnContext getCurrentCUDASolverDnHandle();
 
@@ -600,9 +641,14 @@ manage their own state. There is only a single CUDA context/state.
 
  // namespace at::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDAStream.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cuda_runtime_api.h>
@@ -715,7 +761,9 @@ manage their own state. There is only a single CUDA context/state.
  */
 @Namespace("c10::cuda") public static native void setCurrentCUDAStream(@ByVal CUDAStream stream);
 
-@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Const @ByRef CUDAStream s);
+@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer stream,
+    @Const @ByRef CUDAStream s);
 
  // namespace c10::cuda
 
@@ -724,9 +772,14 @@ manage their own state. There is only a single CUDA context/state.
 // #endif
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cuda/Exceptions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cublas_v2.h>
@@ -785,8 +838,6 @@ manage their own state. There is only a single CUDA context/state.
 //                 at::cuda::blas::_cublasGetErrorEnum(__err),
 //                 " when calling `" #EXPR "`");
 //   } while (0)
-
-public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Cast("cusparseStatus_t") int status);
 
 // #define TORCH_CUDASPARSE_CHECK(EXPR)
 //   do {
@@ -882,9 +933,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //     }
 //   } while (0)
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cuda/CUDAContext.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/cuda/CUDAContextLight.h>
@@ -895,9 +951,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <c10/util/Logging.h>
 // #include <ATen/cuda/Exceptions.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cuda/ATenCUDAGeneral.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cuda.h>
@@ -908,9 +969,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 // Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cudnn/Handle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/cuda/ATenCUDAGeneral.h>
@@ -919,9 +985,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 @Namespace("at::native") public static native cudnnContext getCudnnHandle();
  // namespace at::native
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cudnn/Utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
@@ -937,9 +1008,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace at::native
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDAGraphsC10Utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
@@ -974,14 +1050,20 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace c10::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/CachingDeviceAllocator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
 // #include <c10/core/Stream.h>
 // #include <c10/util/ApproximateClock.h>
+// #include <c10/util/flat_hash_map.h>
 // Targeting ../cuda/DeviceStats.java
 
 
@@ -1031,9 +1113,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDACachingAllocator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/AllocatorConfig.h>
@@ -1155,6 +1242,8 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @StdMove DataPtr allocateWithAddress(@Cast("size_t") long size, Pointer addr);
+
 // CUDAGraph interactions
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void beginAllocateToPool(
     byte device,
@@ -1162,6 +1251,10 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
     @ByVal StreamFilter filter);
 
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void endAllocateToPool(byte device, @ByVal LongPair mempool_id);
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void markCaptureBegin(byte device);
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void markCaptureEnd(byte device);
 
 
 
@@ -1219,9 +1312,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Keep BC only
  // namespace c10::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/impl/CUDAGuardImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/DeviceGuardImplInterface.h>
@@ -1244,9 +1342,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace c10::cuda::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/cuda/CUDAGuard.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DeviceType.h>
@@ -1272,9 +1375,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace c10::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cudnn/Types.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Tensor.h>
@@ -1287,9 +1395,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace at::native
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cudnn/Descriptors.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <string>
@@ -1368,9 +1481,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cuda/CUDAEvent.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/cuda/ATenCUDAGeneral.h>
@@ -1379,9 +1497,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <c10/cuda/CUDAEvent.h>
 // #include <c10/cuda/CUDAGuard.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/cuda/MemPool.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
@@ -1396,9 +1519,14 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace at::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
 // #pragma once
 
@@ -1410,6 +1538,10 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
  // namespace torch::inductor
 // #endif
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 }

@@ -46,6 +46,9 @@ public class PythonTorchFunctionTLS extends Pointer {
   public static native @Const @SharedPtr("c10::SafePyObject") @ByRef SafePyObject get_stack_at(@Cast("int64_t") long idx);
   public static native @Cast("int64_t") long stack_len();
 
+  public static native @Cast("bool") boolean exchange_skip_next(@Cast("bool") boolean arg0);
+  public static native @Cast("bool") boolean peek_skip_next();
+
   public static native @Const @ByRef PythonTorchFunctionTLS get_state();
   public static native void set_state(@Const @ByRef PythonTorchFunctionTLS state);
 }

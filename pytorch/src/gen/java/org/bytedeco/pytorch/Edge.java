@@ -38,8 +38,8 @@ public class Edge extends Pointer {
   public Edge() { super((Pointer)null); allocate(); }
   @NoException(true) private native void allocate();
 
-  public Edge(@SharedPtr Node function_, @Cast("uint32_t") int input_nr_) { super((Pointer)null); allocate(function_, input_nr_); }
-  @NoException(true) private native void allocate(@SharedPtr Node function_, @Cast("uint32_t") int input_nr_);
+  public Edge(@IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node function_, @Cast("uint32_t") int input_nr_) { super((Pointer)null); allocate(function_, input_nr_); }
+  @NoException(true) private native void allocate(@IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node function_, @Cast("uint32_t") int input_nr_);
 
   /** Convenience method to test if an edge is valid. */
   public native @Cast("bool") @NoException(true) boolean is_valid();
@@ -50,7 +50,7 @@ public class Edge extends Pointer {
   public native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@Const @ByRef Edge other);
 
   /** The function this {@code Edge} points to. */
-  public native @SharedPtr Node function(); public native Edge function(Node setter);
+  public native @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node function(); public native Edge function(Node setter);
 
   /** The identifier of a particular input to the function. */
   public native @Cast("uint32_t") int input_nr(); public native Edge input_nr(int setter);

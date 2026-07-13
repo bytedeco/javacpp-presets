@@ -19,12 +19,17 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-/** See Node::is_traceable() for definition. */
-@Namespace("torch::autograd") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TraceableFunction extends Node {
+// Pluggable one-shot materialization hook for StorageImpl.
+// Called on write-path access before returning a mutable pointer.
+// The hook is cleared only after successful invocation; if it throws, the hook
+// remains installed and the next write will retry. Hooks must not trigger
+// re-entrant materialization on the same storage.
+@Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class MaterializeFn extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TraceableFunction(Pointer p) { super(p); }
-
-  public native @Cast("bool") boolean is_traceable();
+    public    MaterializeFn(Pointer p) { super(p); }
+    protected MaterializeFn() { allocate(); }
+    private native void allocate();
+    public native void call(StorageImpl arg0);
 }

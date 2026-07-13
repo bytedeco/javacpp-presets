@@ -381,6 +381,8 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_meta();
 
+  public native @Cast("bool") boolean is_fake();
+
   public native @Cast("bool") boolean is_cpu();
 
   public native @Cast("bool") boolean is_cuda();
@@ -507,6 +509,27 @@ public class TensorImpl extends Pointer {
    * Whether or not the imaginary part of the tensor should be negated
    */
   public native @Cast("bool") boolean is_conj();
+
+  /**
+   * Transmute this meta tensor into a fake tensor
+   * The underlying device_opt_ stays as Meta for dispatch routing
+   * and fake device is stored in ExtraMeta and returned by device()
+   * via the device_policy_ mechanism
+   * also converting backend key from Meta to Fake and adding Fake key
+   * to DispatchKeySet
+   */
+
+  // this is the fast path: caller guarantees fake_device already has a valid
+  // index
+  public native void set_fake_device(@ByVal Device fake_device);
+
+  // Normalizes the device index then calls set_fake_device.
+  // use when the device might lack an index ("cuda" vs "cuda:0").
+  public native void set_and_normalize_fake_device(@ByVal Device fake_device);
+
+  public native void set_fake_tensor_mode(@SharedPtr FakeTensorMode mode);
+
+  public native @SharedPtr FakeTensorMode fake_tensor_mode();
 
   /**
    * Set whether or not to take the conjugate of the tensor (flip the imaginary
@@ -756,23 +779,9 @@ public class TensorImpl extends Pointer {
    */
   public native AutogradMetaInterface autograd_meta();
 
-  /**
-   * Set the pointer to named tensor metadata.
-   */
-  public native void set_named_tensor_meta(
-        @UniquePtr NamedTensorMetaInterface named_tensor_meta);
-
   public native void set_python_dispatch(@Cast("bool") boolean k);
 
   public native @Cast("bool") boolean is_python_dispatch();
-
-  /**
-   * Return the pointer to named tensor metadata.
-   */
-
-  public native NamedTensorMetaInterface named_tensor_meta();
-
-  public native @Cast("bool") boolean has_named_tensor_meta();
 
   // NOTE [ TensorImpl Shallow-Copying ]
   //
@@ -856,9 +865,7 @@ public class TensorImpl extends Pointer {
   public native @Cast("c10::impl::PyObjectSlot*") Pointer pyobj_slot();
 
   public native @NoException(true) void incref_pyobject();
-
   public native @NoException(true) void decref_pyobject();
-
   public native @Cast("bool") @NoException(true) boolean try_incref_pyobject();
   /**
    * The device type of a Tensor, e.g., DeviceType::CPU or DeviceType::CUDA.

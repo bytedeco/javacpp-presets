@@ -19,8 +19,6 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// NB: dummy argument to suppress "ISO C++11 requires at least one argument
-// for the "..." in a variadic macro"
 @Namespace("at") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class HIPHooksArgs extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

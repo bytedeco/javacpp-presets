@@ -19,6 +19,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
+// Deprecated: no longer used internally, kept for ABI compatibility.
 @Namespace("at") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class IPUHooksArgs extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

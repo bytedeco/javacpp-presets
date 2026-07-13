@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** TransformerEncoderLayer module.
  *  See
  *  https://pytorch.org/docs/main/generated/torch.nn.TransformerEncoderLayer.html
- *  to learn abouut the exact behavior of this encoder layer model
+ *  to learn about the exact behavior of this encoder layer model
  * 
  *  See the documentation for {@code torch::nn::TransformerEncoderLayer} class to
  *  learn what constructor arguments are supported for this encoder layer model
@@ -68,8 +68,8 @@ public class TransformerEncoderLayerImpl extends TransformerEncoderLayerImplClon
   /** feedforward second linear layer */
 
   /** pre feedforward, normalization layer */
-  /** post feedfastward, normalization layer */
+  /** post feedforward, normalization layer */
 
-  /** pre feedfastward, dropout layer */
-  /** post feedfastward, dropout layer */
+  /** pre feedforward, dropout layer */
+  /** post feedforward, dropout layer */
 }

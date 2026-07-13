@@ -175,7 +175,6 @@ public class KernelFunction extends Pointer {
 
   public static native @ByVal KernelFunction makeFallthrough();
   public static native @ByVal KernelFunction makeAmbiguousAutogradOther();
-  public static native @ByVal KernelFunction makeNamedNotSupported();
 
   /**
    * Create a KernelFunction from an unboxed lambda.

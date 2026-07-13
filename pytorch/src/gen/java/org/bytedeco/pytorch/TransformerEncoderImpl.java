@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** TransformerEncoder module.
  *  See
  *  https://pytorch.org/docs/main/generated/torch.nn.TransformerEncoder.html
- *  to learn abouut the exact behavior of this encoder layer module.
+ *  to learn about the exact behavior of this encoder layer module.
  * 
  *  See the documentation for {@code torch::nn::TransformerEncoder} class to learn
  *  what constructor arguments are supported for this encoder module.

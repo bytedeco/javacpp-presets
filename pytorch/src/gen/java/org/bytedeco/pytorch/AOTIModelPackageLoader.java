@@ -74,16 +74,27 @@ public class AOTIModelPackageLoader extends Pointer {
         @ByRef(true) TensorVector inputs);
 
   public native @ByVal StringVector get_call_spec();
+  // When allow_h2d_copy is true, CPU tensors in constants_map are silently
+  // copied to the model's device. allow_h2d_copy is incompatible with
+  // user_managed.
   public native void load_constants(
         @ByRef StringTensorUMap constants_map,
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean check_full_update,
-        @Cast("bool") boolean user_managed/*=false*/);
+        @Cast("bool") boolean user_managed/*=false*/,
+        @Cast("bool") boolean allow_h2d_copy/*=false*/);
   public native void load_constants(
         @ByRef StringTensorUMap constants_map,
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean check_full_update);
   public native @ByVal StringVector get_constant_fqns();
+
+  // Returns the torchbind custom-class constants embedded in this model
+  // package. The IValue payloads alias the live entries inside the runner's
+  // proxy executor: downcasting to a CustomClassHolder subclass and mutating
+  // its state will affect subsequent run() invocations. Returns empty when
+  // the model has no torchbind constants.
+  public native @ByVal StringIValueMap get_custom_objs();
 
   public native void update_constant_buffer(
         @ByRef StringTensorUMap tensor_map,

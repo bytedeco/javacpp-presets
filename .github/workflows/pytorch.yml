@@ -52,14 +52,16 @@ jobs:
       matrix:
         ext: ["", -gpu]
     env:
-        BUILD_DIR: C:\build
+        BUILD_DIR: D:\build
         CI_DEPLOY_OPTIONS: -Djavacpp.parser.skip
+        TEMP: D:\temp
+        TMP: D:\temp
     steps:
       - uses: al-cheb/configure-pagefile-action@v1.3
         with:
-          minimum-size: 16GB
-          maximum-size: 32GB
-          disk-root: "C:"
+          minimum-size: 32GB
+          maximum-size: 64GB
+          disk-root: "D:"
       - uses: bytedeco/cache@always
         with:
           key: ${{ github.workflow }}-${{ github.job }}${{ matrix.ext }}@${{ github.run_id }}-${{ github.run_attempt }}

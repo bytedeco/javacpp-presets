@@ -18,21 +18,21 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("std::vector<at::Dimname>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DimnameVector extends Pointer {
+@Name("std::vector<c10::Device>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class DeviceVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DimnameVector(Pointer p) { super(p); }
-    public DimnameVector()       { allocate();  }
+    public DeviceVector(Pointer p) { super(p); }
+    public DeviceVector()       { allocate();  }
     private native void allocate();
 
 
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    public Dimname front() { return get(0); }
-    public Dimname back() { return get(size() - 1); }
-    @Index(function = "at") public native @ByRef Dimname get(@Cast("size_t") long i);
+    public Device front() { return get(0); }
+    public Device back() { return get(size() - 1); }
+    @Index(function = "at") public native @ByRef Device get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -42,7 +42,7 @@ public class DimnameVector extends Pointer {
 
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator *") @ByRef @Const Dimname get();
+        public native @Name("operator *") @ByRef @Const Device get();
     }
 }
 

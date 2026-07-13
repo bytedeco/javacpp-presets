@@ -47,7 +47,8 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean record_python_gc_info/*=false*/,
         @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString BytePointer custom_profiler_config/*=""*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps); }
+        @Cast("bool") boolean adjust_timestamps/*=false*/,
+        @Cast("bool") boolean trace_only/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps, trace_only); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
@@ -61,7 +62,8 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean record_python_gc_info/*=false*/,
         @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString BytePointer custom_profiler_config/*=""*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/);
+        @Cast("bool") boolean adjust_timestamps/*=false*/,
+        @Cast("bool") boolean trace_only/*=false*/);
   public ExperimentalConfig() { super((Pointer)null); allocate(); }
   private native void allocate();
   public ExperimentalConfig(
@@ -77,7 +79,8 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean record_python_gc_info/*=false*/,
         @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString String custom_profiler_config/*=""*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps); }
+        @Cast("bool") boolean adjust_timestamps/*=false*/,
+        @Cast("bool") boolean trace_only/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_profiler_step, disable_external_correlation, profile_all_threads, capture_overload_names, record_python_gc_info, expose_kineto_event_metadata, custom_profiler_config, adjust_timestamps, trace_only); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
@@ -91,7 +94,8 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean record_python_gc_info/*=false*/,
         @Cast("bool") boolean expose_kineto_event_metadata/*=false*/,
         @StdString String custom_profiler_config/*=""*/,
-        @Cast("bool") boolean adjust_timestamps/*=false*/);
+        @Cast("bool") boolean adjust_timestamps/*=false*/,
+        @Cast("bool") boolean trace_only/*=false*/);
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 
   public native @ByRef StringVector profiler_metrics(); public native ExperimentalConfig profiler_metrics(StringVector setter);
@@ -157,4 +161,9 @@ public class ExperimentalConfig extends Pointer {
    * information instead of the original information.
    */
   public native @Cast("bool") boolean adjust_timestamps(); public native ExperimentalConfig adjust_timestamps(boolean setter);
+
+  // When true, __exit__ skips TransferEvents, build_tree, and
+  // materializeOpEvents. Only export_chrome_trace / save() will work;
+  // accessing events() raises an error.
+  public native @Cast("bool") boolean trace_only(); public native ExperimentalConfig trace_only(boolean setter);
 }

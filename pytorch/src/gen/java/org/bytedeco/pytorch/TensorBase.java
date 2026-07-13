@@ -140,10 +140,6 @@ public class TensorBase extends AbstractTensor {
   public native @ByVal SymIntArrayRef sym_sizes();
   public native @ByVal SymIntArrayRef sym_strides();
   public native @ByVal LongArrayRef strides();
-  // See impl::get_opt_names in ATen/NamedTensor.h for docs.
-  public native @ByVal DimnameListOptional opt_names();
-  // See impl::get_names in ATen/NamedTensor.h for docs.
-  public native @ByVal DimnameArrayRef names();
   public native @Cast("int64_t") long ndimension();
 
   public native @Cast("bool") boolean is_contiguous(@ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
@@ -304,6 +300,8 @@ public class TensorBase extends AbstractTensor {
    *  also have other designations. */
   public native @Cast("bool") boolean is_meta();
 
+  public native @Cast("bool") boolean is_fake();
+
   /** Returns if a {@code Tensor} is an inference tensor. */
   public native @Cast("bool") boolean is_inference();
 
@@ -313,13 +311,6 @@ public class TensorBase extends AbstractTensor {
   /** If a tensor is a quantized tensor, returns its quantizer
    *  TODO: it's not in native_functions.yaml yet as it's not exposed to python */
   public native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer quantizer();
-
-  /** Returns if a {@code Tensor} has any dimension names */
-  public native @Cast("bool") boolean has_names();
-
-  /** Returns a {@code Tensor}'s dimension names data structure */
-
-  public native NamedTensorMeta get_named_tensor_meta();
 
   /** Returns the {@code TensorOptions} corresponding to this {@code Tensor}. Defined in
    *  TensorOptions.h. */
@@ -518,7 +509,7 @@ public class TensorBase extends AbstractTensor {
    *  Gets the up-to-date grad_fn. If the shared data or base was modified, we
    *  re-create the grad_fn to express the up-to-date view relationship between
    *  this and the base Variable. */
-  public native @SharedPtr Node grad_fn();
+  public native @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node grad_fn();
 
   // Hooks
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
