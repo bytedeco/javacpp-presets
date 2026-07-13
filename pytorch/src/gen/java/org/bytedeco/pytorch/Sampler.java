@@ -41,4 +41,8 @@ public class Sampler extends Pointer {
 
   /** Deserializes the {@code Sampler} from the {@code archive}. */
   public native void load(@ByRef InputArchive archive);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link SamplerPrinter}. */
+  @Override public String toString() { return SamplerPrinter.format(this); }
 }
