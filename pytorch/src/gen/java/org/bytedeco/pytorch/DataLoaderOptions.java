@@ -43,4 +43,8 @@ private native void allocate(@Cast("size_t") long batch_size);
   public native @ByRef @NoException(true) DataLoaderOptions timeout(@Optional Milliseconds setter);
   public native @ByRef @NoException(true) DataLoaderOptions enforce_ordering(@Cast("bool") boolean setter);
   public native @ByRef @NoException(true) DataLoaderOptions drop_last(@Cast("bool") boolean setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link DataLoaderConfigPrinter}. */
+  @Override public String toString() { return DataLoaderConfigPrinter.format(this); }
 }

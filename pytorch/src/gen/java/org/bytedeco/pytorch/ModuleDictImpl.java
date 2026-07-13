@@ -177,4 +177,8 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
   public void insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(key, module); }
   private native @Name("insert") void _insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module);
   public void insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(key, module); }
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link ModulePrinter}. */
+  @Override public String toString() { return ModulePrinter.format(this); }
 }

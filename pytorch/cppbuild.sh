@@ -112,6 +112,20 @@ if [[ "$PLATFORM" == macosx-* && "$EXTENSION" != *gpu && "${USE_SYSTEM_LIBTORCH:
         cp -R -L "$LIBTORCH_HOME"/include/. include/
         patch_embedding_from_pretrained include
 
+        # JavaCPP fix: libtorch 2.13 (cf30153c4c13) renamed
+        # c10/util/AlignOf.h to c10/core/alignment.h. Anything in the
+        # rest of the headers (or downstream parsers) still #includes
+        # the old path; create a shim that just includes the new one.
+        if [[ ! -f include/c10/util/AlignOf.h && -f include/c10/core/alignment.h ]]; then
+            mkdir -p include/c10/util
+            cat > include/c10/util/AlignOf.h <<'SHIM'
+// JavaCPP fix (libtorch 2.13 rename shim):
+//   c10/util/AlignOf.h was renamed to c10/core/alignment.h.
+#pragma once
+#include <c10/core/alignment.h>
+SHIM
+        fi
+
         # Apply the same header fixes that the source-build path applies below,
         # but only to the local copied headers.
         if [[ -f include/torch/csrc/api/include/torch/nn/options/pooling.h ]]; then
@@ -222,7 +236,7 @@ struct TORCH_API ASMoutput;\
     // For the Module base class the dispatch path uses module_->forward_tensor
     // directly via virtual dispatch (so we do not need to take the
     // address of Module::forward_tensor, which would force any_module_holder.h
-    // to see Module's full definition).
+    // to see Module full definition).
     template <typename T> struct forward_member_ptr_t { using type = decltype(\&T::forward); };
     template <> struct forward_member_ptr_t<torch::nn::Module> { using type = Tensor (torch::nn::Module::*)(const Tensor\&); };
     template <typename T>
@@ -285,6 +299,50 @@ struct TORCH_API ASMoutput;\
         sedinplace 's/char(\(.*\))/\1/g' include/torch/csrc/jit/serialization/pickler.h
         sedinplace 's/const std::string& interface)/const std::string\& interface_name)/g' include/torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
         sedinplace '/^ private:$/,/^  torch::OrderedDict<std::string, std::shared_ptr<Module>> modules_;$/s/^ private:$/ public:/' include/torch/csrc/api/include/torch/nn/modules/container/moduledict.h
+
+        # JavaCPP fix: libtorch 2.13 renamed c10/util/AlignOf.h to
+        # c10/core/alignment.h. Provide a shim so anything still #including
+        # the old path (downstream parsers / generator caches) compiles.
+        if [[ ! -f include/c10/util/AlignOf.h && -f include/c10/core/alignment.h ]]; then
+            mkdir -p include/c10/util
+            cat > include/c10/util/AlignOf.h <<'SHIM'
+// JavaCPP fix (libtorch 2.13 rename shim):
+//   c10/util/AlignOf.h was renamed to c10/core/alignment.h.
+#pragma once
+#include <c10/core/alignment.h>
+SHIM
+        fi
+
+        # JavaCPP fix: c10/core/AutogradState.h uses C++20 bitfield default
+        # initializers (e.g. `bool x : 1 = false;`). JavaCPP's parser is
+        # C++17-only and rejects them with "Unexpected token '='". Strip
+        # the initializers from the bitfield declarations (the C++ side
+        # defaults to value-initialized bits which is 0/false — same effect).
+        if [[ -f include/c10/core/AutogradState.h ]]; then
+            sedinplace -E 's/(bool [a-zA-Z_]+ : [0-9]+) = (false|true);/\1;/g' include/c10/core/AutogradState.h
+        fi
+
+        # JavaCPP fix: libtorch 2.13 renamed c10/util/AlignOf.h to
+        # c10/core/alignment.h. Provide a shim so anything still #including
+        # the old path (downstream parsers / generator caches) compiles.
+        if [[ ! -f include/c10/util/AlignOf.h && -f include/c10/core/alignment.h ]]; then
+            mkdir -p include/c10/util
+            cat > include/c10/util/AlignOf.h <<'SHIM'
+// JavaCPP fix (libtorch 2.13 rename shim):
+//   c10/util/AlignOf.h was renamed to c10/core/alignment.h.
+#pragma once
+#include <c10/core/alignment.h>
+SHIM
+        fi
+
+        # JavaCPP fix: c10/core/AutogradState.h uses C++20 bitfield default
+        # initializers (e.g. `bool x : 1 = false;`). JavaCPP's parser is
+        # C++17-only and rejects them with "Unexpected token '='". Strip
+        # the initializers from the bitfield declarations (the C++ side
+        # defaults to value-initialized bits which is 0/false — same effect).
+        if [[ -f include/c10/core/AutogradState.h ]]; then
+            sedinplace -E 's/(bool [a-zA-Z_]+ : [0-9]+) = (false|true);/\1;/g' include/c10/core/AutogradState.h
+        fi
 
         for P in "$LIBTORCH_HOME"/lib/*.dylib; do
             [[ -e "$P" ]] || continue
@@ -612,7 +670,7 @@ if ! grep -q 'JavaCPP captured-forward-dispatch fix' torch/csrc/api/include/torc
     // For the Module base class the dispatch path uses module_->forward_tensor
     // directly via virtual dispatch (so we do not need to take the
     // address of Module::forward_tensor, which would force any_module_holder.h
-    // to see Module's full definition).
+    // to see Module full definition).
     template <typename T> struct forward_member_ptr_t { using type = decltype(\&T::forward); };
     template <> struct forward_member_ptr_t<torch::nn::Module> { using type = Tensor (torch::nn::Module::*)(const Tensor\&); };
     template <typename T>

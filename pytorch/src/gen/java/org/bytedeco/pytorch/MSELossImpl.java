@@ -53,4 +53,8 @@ public class MSELossImpl extends MSELossImplCloneable {
 
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef MSELossOptions options(); public native MSELossImpl options(MSELossOptions setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link LossPrinter}. */
+  @Override public String toString() { return LossPrinter.format(this); }
 }

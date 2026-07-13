@@ -667,8 +667,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<std::optional<c10::SymInt> >").pointerTypes("SymIntOptionalVector").define())
             .put(new Info("std::optional<at::IValue>").pointerTypes("IValueOptional").define())
             .put(new Info("std::optional<at::DimVector>").pointerTypes("DimVectorOptional").define())
-            .put(new Info("std::optional<at::Dimname>").pointerTypes("DimnameOptional").define())
-            .put(new Info("std::optional<at::DimnameList>").pointerTypes("DimnameListOptional").define())
             .put(new Info("std::optional<at::Generator>").pointerTypes("GeneratorOptional").define())
             .put(new Info("std::optional<at::Tensor>", "std::optional<torch::Tensor>", "std::optional<at::Tensor>", "std::optional<torch::TensorBase>", "std::optional<torch::autograd::Variable>").pointerTypes("TensorOptional").define())
             .put(new Info("const std::optional<torch::autograd::InputMetadata>",
@@ -886,7 +884,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<std::shared_ptr<c10::ClassType> >", "std::vector<c10::ClassTypePtr>").pointerTypes("SharedClassTypeVector").define())
             .put(new Info("std::vector<c10::Type::SingletonOrSharedTypePtr<c10::Type> >", "std::vector<c10::TypePtr>",
                 "std::vector<c10::Type::TypePtr>", "c10::AliasTypeSet").pointerTypes("TypeVector").define())
-            .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").pointerTypes("DimnameVector").define())
             .put(new Info("std::vector<c10::Stride>").pointerTypes("StrideVector").define())
             .put(new Info("std::vector<c10::ShapeSymbol>").pointerTypes("ShapeSymbolVector").define())
             .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
@@ -948,7 +945,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("Bool").itPointerType("BoolPointer").elementTypes("bool", "c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>",
                                                                                     "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").elementValueType("boolean"),
             new ArrayInfo("Byte").itPointerType("BytePointer").elementTypes("jbyte", "int8_t", "uint8_t").elementValueType("byte"),
-            new ArrayInfo("Dimname").otherCppNames("at::DimnameList").elementTypes("at::Dimname").otherPointerTypes("DimnameVector"),
             new ArrayInfo("Double").itPointerType("DoublePointer").elementTypes("double").elementValueType("double"),
             new ArrayInfo("DoubleComplex") /*.itPointertype("DoublePointer") */.elementTypes("c10::complex<double>"),
             new ArrayInfo("EnumNameValue").elementTypes("c10::EnumNameValue"),

@@ -1704,4 +1704,8 @@ public class Tensor extends TensorBase {
 
   public native @Const @ByRef Tensor requires_grad_(@Cast("bool") boolean _requires_grad/*=true*/);
   public native @Const @ByRef Tensor requires_grad_();
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link TensorPrinter}. */
+  @Override public String toString() { return TensorPrinter.format(this); }
 }

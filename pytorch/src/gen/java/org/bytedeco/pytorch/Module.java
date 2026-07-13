@@ -1644,4 +1644,8 @@ public class Module extends Pointer {
         @Cast("std::ostream*") @ByRef Pointer stream,
         @Const @ByRef Module module);
   public Pointer shiftLeft(Pointer stream) { return shiftLeft(stream, this); }
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link ModulePrinter}. */
+  @Override public String toString() { return ModulePrinter.format(this); }
 }

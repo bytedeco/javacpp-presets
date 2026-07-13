@@ -176,8 +176,7 @@
             <configuration>
               <executable>/bin/sh</executable>
               <arguments>
-                <argument>-c</argument>
-                <argument>sed -i '' -E 's/@Virtual\(method="forward(T_[A-Za-z_]*)?"\)//g' '${basedir}/src/gen/java/org/bytedeco/pytorch/Module.java'</argument>
+                <argument>${basedir}/src/main/java/org/bytedeco/pytorch/presets/strip_module_forward.sh</argument>
               </arguments>
             </configuration>
           </execution>

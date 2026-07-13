@@ -53,4 +53,8 @@ public class BCELossImpl extends BCELossImplCloneable {
 
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef BCELossOptions options(); public native BCELossImpl options(BCELossOptions setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link LossPrinter}. */
+  @Override public String toString() { return LossPrinter.format(this); }
 }

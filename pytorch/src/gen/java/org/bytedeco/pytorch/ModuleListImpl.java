@@ -145,4 +145,8 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** inserts a new {@code Module} to the {@code ModuleList} container, moving or copying
    *  it into a {@code shared_ptr} internally. This method allows passing value types,
    *  and letting the container deal with the boxing. */
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link ModulePrinter}. */
+  @Override public String toString() { return ModulePrinter.format(this); }
 }
