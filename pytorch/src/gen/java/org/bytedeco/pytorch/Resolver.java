@@ -22,7 +22,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /**
  * class Resolver
  *
- * Represents an "outer environment" in which we an look up names and return
+ * Represents an "outer environment" in which we can look up names and return
  * a corresponding SugaredValue. This is used during compilation to resolve
  * references to names which are not defined internal to the graph.
  *

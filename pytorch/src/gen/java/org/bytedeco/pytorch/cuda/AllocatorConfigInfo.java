@@ -57,4 +57,6 @@ public class AllocatorConfigInfo extends Pointer {
   public native @Cast("bool") boolean graph_capture_record_stream_reuse(); public native AllocatorConfigInfo graph_capture_record_stream_reuse(boolean setter);
   public native @StdString BytePointer last_allocator_settings(); public native AllocatorConfigInfo last_allocator_settings(BytePointer setter);
   public native @ByRef @Cast("std::vector<size_t>*") SizeTVector roundup_power2_divisions(); public native AllocatorConfigInfo roundup_power2_divisions(SizeTVector setter);
+  public native @Cast("size_t") long max_round_threshold(); public native AllocatorConfigInfo max_round_threshold(long setter);
+  public native @Cast("size_t") long max_cached_size(); public native AllocatorConfigInfo max_cached_size(long setter);
 }

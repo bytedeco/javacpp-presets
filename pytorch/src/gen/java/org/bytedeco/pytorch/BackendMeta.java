@@ -17,7 +17,7 @@ import org.bytedeco.javacpp.chrono.*;
 import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
-
+ // namespace impl
 
 // For ease of copy pasting
 // #if 0

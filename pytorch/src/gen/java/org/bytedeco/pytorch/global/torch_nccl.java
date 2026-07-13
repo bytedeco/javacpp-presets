@@ -45,6 +45,7 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 
 // Parsed from torch/csrc/distributed/c10d/NCCLUtils.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #ifdef USE_C10D_NCCL
@@ -65,60 +66,16 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 
 @MemberGetter public static native @Cast("const int64_t") long kCommInitBusyWaitMillis();
 
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 14, 0)
-// #define NCCL_HAS_COMM_NONBLOCKING
-// #endif
-
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 18, 0)
-// #define NCCL_HAS_COMM_SPLIT
-// #endif
-
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 23, 0)
-// #define NCCL_HAS_INIT_RANK_SCALABLE
-// #endif
-
-// ncclGetLastError() is enabled only for NCCL versions 2.13+
-// ncclRemoteError only exists in NCCL versions 2.13+
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 13, 0)
-// #define ENABLE_NCCL_GET_LAST_ERROR
-// #define NCCL_REMOTE_ERROR
-// #endif
-// The following macros represent features supported prior to NCCL 2.7,
-// therefore we can define them unconditionally, given the static_assert above.
-// TODO: remove these macros from code.
-// #define ENABLE_NCCL_ERROR_CHECKING
-// #define ENABLE_NCCL_P2P_SUPPORT
-// End of macros for NCCL 2.7 and below.
-
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 11, 0)
-// #define ENABLE_NCCL_PREMUL_SUM_SUPPORT
-// #endif
-
-// Note: the first version that supports ncclConfig_t is 2.14. Here we
-// fast-forward the version requirement to 2.17 where ncclConfig_t has CTA and
-// CGA fields because they have already been pybinded out.
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 17, 0)
-// #define NCCL_HAS_CONFIG
-// #endif
-
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 19, 0)
-// #define NCCL_HAS_COMM_REGISTER
-// #endif
-
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 27, 0)
-// #define NCCL_HAS_COMM_WINDOW_REGISTER
-// #endif
-
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 19, 0)
-// #define NCCL_HAS_MEM_ALLOC
+// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 24, 0)
+// #define NCCL_SUPPORTS_FP8
 // #endif
 
 // #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 26, 0)
 // #define NCCL_HAS_QOS
 // #endif
 
-// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 24, 0)
-// #define NCCL_SUPPORTS_FP8
+// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 27, 0)
+// #define NCCL_HAS_COMM_WINDOW_REGISTER
 // #endif
 
 // #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 27, 0)
@@ -139,6 +96,10 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 
 // #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 29, 7)
 // #define NCCL_HAS_COMM_OFFLOAD
+// #endif
+
+// #if NCCL_VERSION_CODE >= NCCL_VERSION(2, 30, 0)
+// #define NCCL_HAS_MAX_P2P_PEERS
 // #endif
 
 // Macro to throw on a non-successful NCCL return value.
@@ -291,9 +252,14 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 
 // #endif // USE_C10D_NCCL
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #ifdef USE_C10D_NCCL
@@ -312,6 +278,7 @@ public class torch_nccl extends org.bytedeco.pytorch.presets.torch_nccl {
 // #include <iostream>
 // #include <list>
 // #include <mutex>
+// #include <optional>
 // #include <thread>
 // #include <unordered_map>
 
@@ -494,6 +461,10 @@ public static final int
  // namespace c10d
 
 // #endif // USE_C10D_NCCL
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 }

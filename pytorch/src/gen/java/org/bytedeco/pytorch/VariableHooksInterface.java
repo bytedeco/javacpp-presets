@@ -27,7 +27,7 @@ public class VariableHooksInterface extends Pointer {
 
   public native @ByVal TensorBase tensor_data(@Const @ByRef TensorBase arg0);
   public native @ByVal TensorBase variable_data(@Const @ByRef TensorBase arg0);
-  public native @SharedPtr Node grad_fn(
+  public native @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node grad_fn(
         @Const @ByRef TensorBase arg0);
   
   public native void remove_hook(@Const @ByRef TensorBase arg0, @Cast("unsigned") int pos);

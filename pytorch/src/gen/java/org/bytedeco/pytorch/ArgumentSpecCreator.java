@@ -38,7 +38,7 @@ public class ArgumentSpecCreator extends Pointer {
     ENTER_OBJECT((byte)(1)), // same as ENTER_TUPLE, but the input is a class
     LEAVE((byte)(2)), // pop the top-most list from the stack
     SKIP((byte)(3)), // consume an element from the top-most list, and discard
-    SPECIALIZE_OPTIONAL_TENSOR((byte)(4)), // consume a optional tensor for the top-most
+    SPECIALIZE_OPTIONAL_TENSOR((byte)(4)), // consume an optional tensor for the top-most
                                 // list, and add it to the ArgSpec key being
                                 // created
     SPECIALIZE_TENSOR((byte)(5)), // consume a tensor for the top-most

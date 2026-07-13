@@ -111,7 +111,7 @@ public class Future extends Pointer {
 
   public native @Const @ByRef Type.TypePtr elementType();
 
-  public native @StdVector Device devices();
+  public native @Const @ByRef DeviceVector devices();
 
   // This method should be used when one intends to manually create a child
   // future, for example when implementing a customized version of then().

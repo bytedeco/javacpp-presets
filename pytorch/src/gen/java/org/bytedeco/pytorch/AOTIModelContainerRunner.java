@@ -48,7 +48,7 @@ public class AOTIModelContainerRunner extends Pointer {
 
   public native @Const @ByVal StringTensorUMap extract_constants_map(
         @Cast("bool") boolean use_inactive);
-  public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map);
+  public native void update_inactive_constant_buffer(@Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map);
   public native void update_constant_buffer(
         @ByRef StringTensorUMap tensor_map,
         @Cast("bool") boolean use_inactive,
@@ -59,12 +59,22 @@ public class AOTIModelContainerRunner extends Pointer {
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean validate_full_updates);
   public native void update_constant_buffer(
-        @Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map,
+        @Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map,
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean validate_full_updates,
         @Cast("bool") boolean user_managed/*=false*/);
   public native void update_constant_buffer(
-        @Cast("const torch::inductor::TensorConstantMap*") @ByRef SizeTStringMap const_map,
+        @Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map,
+        @Cast("bool") boolean use_inactive,
+        @Cast("bool") boolean validate_full_updates);
+  // Update constants from CPU tensors. CPU tensors are silently copied to the
+  // model's device.
+  public native void update_constant_buffer_from_cpu(
+        @ByRef StringTensorUMap tensor_map,
+        @Cast("bool") boolean use_inactive,
+        @Cast("bool") boolean validate_full_updates);
+  public native void update_constant_buffer_from_cpu(
+        @Cast("const torch::inductor::TensorConstantMap*") @ByRef HashAliasedIValueMap const_map,
         @Cast("bool") boolean use_inactive,
         @Cast("bool") boolean validate_full_updates);
   public native void run_const_fold(
@@ -75,4 +85,11 @@ public class AOTIModelContainerRunner extends Pointer {
   public native void update_constant_buffer_from_blob(@StdString String weights_path);
 
   public native @ByVal StringVector get_call_spec();
+
+  // Returns the torchbind custom-class constants embedded in the loaded
+  // model. The IValue payloads alias the live entries inside the proxy
+  // executor: downcasting to a CustomClassHolder subclass and mutating
+  // its state will affect subsequent run() invocations. Returns empty when
+  // the model has no torchbind constants.
+  public native @ByVal StringIValueMap get_custom_objs();
 }

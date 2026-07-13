@@ -43,8 +43,7 @@ public class ThreadLocalDebugInfo extends Pointer {
         return new ThreadLocalDebugInfo((Pointer)this).offsetAddress(i);
     }
 
-  public static native DebugInfoBase get(DebugInfoKind kind);
-  public static native DebugInfoBase get(@Cast("c10::DebugInfoKind") byte kind);
+  public static native DebugInfoBase get(@ByVal DebugInfoKind kind);
 
   // Get current ThreadLocalDebugInfo
   public static native @SharedPtr ThreadLocalDebugInfo current();
@@ -53,14 +52,11 @@ public class ThreadLocalDebugInfo extends Pointer {
   
 
   // Push debug info struct of a given kind
-  public static native void _push(DebugInfoKind kind, @SharedPtr DebugInfoBase info);
-  public static native void _push(@Cast("c10::DebugInfoKind") byte kind, @SharedPtr DebugInfoBase info);
+  public static native void _push(@ByVal DebugInfoKind kind, @SharedPtr DebugInfoBase info);
   // Pop debug info, throws in case the last pushed
   // debug info is not of a given kind
-  public static native @SharedPtr DebugInfoBase _pop(DebugInfoKind kind);
-  public static native @SharedPtr DebugInfoBase _pop(@Cast("c10::DebugInfoKind") byte kind);
+  public static native @SharedPtr DebugInfoBase _pop(@ByVal DebugInfoKind kind);
   // Peek debug info, throws in case the last pushed debug info is not of the
   // given kind
-  public static native @SharedPtr DebugInfoBase _peek(DebugInfoKind kind);
-  public static native @SharedPtr DebugInfoBase _peek(@Cast("c10::DebugInfoKind") byte kind);
+  public static native @SharedPtr DebugInfoBase _peek(@ByVal DebugInfoKind kind);
 }

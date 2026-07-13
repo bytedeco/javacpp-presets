@@ -62,7 +62,7 @@ public class Work extends CustomClassHolder {
   // Returns exception if isSuccess() returned false.
   public native @ByVal @Cast("std::exception_ptr*") Pointer exception();
 
-  // Returns source rank if this objects represents a recv-from-any.
+  // Returns source rank if this object represents a recv-from-any.
   public native int sourceRank();
 
   // Returns result tensors, if applicable.

@@ -37,12 +37,12 @@ public class ParameterListImpl extends ParameterListImplCloneable {
   /** Pretty prints the {@code ParameterList} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
-  /** push the a given parameter at the end of the list */
+  /** push a given parameter at the end of the list */
   public native void append(@ByRef(true) Tensor param);
 
-  /** push the a given parameter at the end of the list */
+  /** push a given parameter at the end of the list */
 
-  /** push the a given parameter at the end of the list
+  /** push a given parameter at the end of the list
    *  And the key of the pair will be discarded, only the value
    *  will be added into the {@code ParameterList} */
   public native void append(@Const @ByRef StringTensorDictItem pair);

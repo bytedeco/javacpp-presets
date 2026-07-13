@@ -61,6 +61,7 @@ public class MPSHooksInterface extends AcceleratorHooksInterface {
   public native @Cast("size_t") long getCurrentAllocatedMemory();
   public native @Cast("size_t") long getDriverAllocatedMemory();
   public native @Cast("size_t") long getRecommendedMaxMemory();
+  public native @Cast("size_t") long getMaxBufferLength();
   public native void setMemoryFraction(double arg0);
   public native void profilerStartTrace(@StdString BytePointer mode, @Cast("bool") boolean waitUntilCompleted);
   public native void profilerStartTrace(@StdString String mode, @Cast("bool") boolean waitUntilCompleted);

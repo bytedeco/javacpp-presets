@@ -22,15 +22,15 @@ import static org.bytedeco.pytorch.global.torch.*;
 // Supplementary data specific to NCCL PREMUL_SUM
 // The point of use in ProcessGroupNCCL knows how to unpack it.
 @Namespace("c10d") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class NCCLPreMulSumSupplement extends _SupplementBase {
+public class PreMulSumSupplement extends _SupplementBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public NCCLPreMulSumSupplement(Pointer p) { super(p); }
+    public PreMulSumSupplement(Pointer p) { super(p); }
 
-  public native double double_factor(); public native NCCLPreMulSumSupplement double_factor(double setter);
-  public native @ByRef Tensor tensor_factor(); public native NCCLPreMulSumSupplement tensor_factor(Tensor setter);
-  public NCCLPreMulSumSupplement(double f) { super((Pointer)null); allocate(f); }
+  public native double double_factor(); public native PreMulSumSupplement double_factor(double setter);
+  public native @ByRef Tensor tensor_factor(); public native PreMulSumSupplement tensor_factor(Tensor setter);
+  public PreMulSumSupplement(double f) { super((Pointer)null); allocate(f); }
   private native void allocate(double f);
-  public NCCLPreMulSumSupplement(@ByVal Tensor t) { super((Pointer)null); allocate(t); }
+  public PreMulSumSupplement(@ByVal Tensor t) { super((Pointer)null); allocate(t); }
   private native void allocate(@ByVal Tensor t);
 }

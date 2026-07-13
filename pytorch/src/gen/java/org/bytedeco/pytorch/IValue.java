@@ -450,12 +450,6 @@ public class IValue extends Pointer {
 
   public native @ByVal QScheme toQScheme();
 
-  // Dimname
-  public IValue(@ByVal Dimname dimname) { super((Pointer)null); allocate(dimname); }
-  private native void allocate(@ByVal Dimname dimname);
-
-  public native @ByVal Dimname toDimname();
-
   // Generator
   public IValue(@ByVal Generator g) { super((Pointer)null); allocate(g); }
   private native void allocate(@ByVal Generator g);

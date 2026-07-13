@@ -52,8 +52,6 @@ public class ncclRedOpRAII extends Pointer {
   
   public ncclRedOpRAII(@ByRef(true) ncclRedOpRAII tmp) { super((Pointer)null); allocate(tmp); }
   @NoException(true) private native void allocate(@ByRef(true) ncclRedOpRAII tmp);
-// #if defined(ENABLE_NCCL_PREMUL_SUM_SUPPORT)
-// #endif // ENABLE_NCCL_PREMUL_SUM_SUPPORT
   public native @Cast("ncclRedOp_t") @Name("operator ncclRedOp_t") int asInt();
   public native @Cast("ncclRedOp_t") int op_(); public native ncclRedOpRAII op_(int setter);
   public native ncclComm comm_(); public native ncclRedOpRAII comm_(ncclComm setter);

@@ -66,15 +66,7 @@ public class CppFunction extends Pointer {
    *  immediately redispatch to the next available dispatch key,
    *  but are implemented more efficiently than a hand written
    *  function done in the same way. */
-  
-  ///
   public static native @ByVal CppFunction makeFallthrough();
-
-  /** \private
-   * 
-   *  Creates a function that raises an error saying that named tensors
-   *  are not supported when called. */
-  public static native @ByVal CppFunction makeNamedNotSupported();
 
   /** Create a function from a boxed kernel function with signature
    *  {@code void(const OperatorHandle&, Stack*)}; i.e., they receive a

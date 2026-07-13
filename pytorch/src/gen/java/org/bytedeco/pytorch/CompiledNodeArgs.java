@@ -39,7 +39,7 @@ public class CompiledNodeArgs extends Pointer {
   public native void collect(@StdString BytePointer t);
   public native void collect(@StdString String t);
   public native void collect(@Const @ByRef TypeMeta t);
-  public native void collect(@Cast({"", "const std::shared_ptr<torch::autograd::Node>"}) @SharedPtr Node t);
+  public native void collect(@IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node t);
   public native void collect(@Const @ByRef NodeCall t);
   public native void collect(@Const @ByRef Edge t);
   public native void collect(@Const @ByRef InputMetadata t);

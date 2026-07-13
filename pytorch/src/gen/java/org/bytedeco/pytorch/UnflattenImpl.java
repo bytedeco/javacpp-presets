@@ -32,7 +32,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  Example:
  *  <pre>{@code
  *  Unflatten model(UnflattenOptions(0, {2, 2}));
- *  Unflatten model(UnflattenOptions("B", {{"B1", 2}, {"B2", 2}}));
  *  }</pre> */
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class UnflattenImpl extends UnflattenImplCloneable {
@@ -42,10 +41,6 @@ public class UnflattenImpl extends UnflattenImplCloneable {
 
   public UnflattenImpl(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes) { super((Pointer)null); allocate(dim, sizes); }
   @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes);
-  public UnflattenImpl(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape) { super((Pointer)null); allocate(dimname, namedshape); }
-  @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
-  public UnflattenImpl(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape) { super((Pointer)null); allocate(dimname, namedshape); }
-  @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
   public UnflattenImpl(@ByVal UnflattenOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@ByVal UnflattenOptions options_);
 

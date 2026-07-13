@@ -18,19 +18,10 @@ import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("std::optional<at::Dimname>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DimnameOptional extends Pointer {
-    static { Loader.load(); }
+@Namespace("libkineto") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class ITraceActivity extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ITraceActivity() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DimnameOptional(Pointer p) { super(p); }
-    public DimnameOptional(Dimname value) { this(); put(value); }
-    public DimnameOptional()       { allocate();  }
-    private native void allocate();
-    public native @Name("operator =") @ByRef DimnameOptional put(@ByRef DimnameOptional x);
-
-    public native boolean has_value();
-    public native void reset();
-    public native @Name("value") @ByRef Dimname get();
-    @ValueSetter public native DimnameOptional put(@ByRef Dimname value);
+    public ITraceActivity(Pointer p) { super(p); }
 }
-

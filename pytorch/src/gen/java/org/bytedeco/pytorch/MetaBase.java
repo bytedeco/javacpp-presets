@@ -67,17 +67,7 @@ public class MetaBase extends Pointer {
   public native void set_output_contiguous(
         @Cast("int64_t") long output_idx,
         @ByVal LongArrayRef sizes,
-        @ByVal TensorOptions options,
-        @ByVal(nullValue = "at::DimnameList{}") DimnameArrayRef names);
-  public native void set_output_contiguous(
-        @Cast("int64_t") long output_idx,
-        @ByVal LongArrayRef sizes,
         @ByVal TensorOptions options);
-  public native void set_output_contiguous(
-        @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-        @ByVal TensorOptions options,
-        @ByVal(nullValue = "at::DimnameList{}") DimnameVector names);
   public native void set_output_contiguous(
         @Cast("int64_t") long output_idx,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,

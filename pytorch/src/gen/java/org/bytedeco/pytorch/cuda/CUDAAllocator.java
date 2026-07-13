@@ -62,6 +62,13 @@ public class CUDAAllocator extends DeviceAllocator {
   public native void endAllocateToPool(
         byte device,
         @ByVal LongPair mempool_id);
+  // Notify the allocator that a CUDA stream capture has actually started /
+  // ended. Distinct from begin/endAllocateToPool, which only routes
+  // allocations into a private mempool and can be invoked without an active
+  // cudaStreamBeginCapture (e.g. from torch.cuda.use_mem_pool, NCCL
+  // registration, or inductor cudagraph_trees warmup).
+  public native void markCaptureBegin(byte arg0);
+  public native void markCaptureEnd(byte arg0);
   public native void releasePool(byte device, @ByVal LongPair mempool_id);
   public native int getPoolUseCount(
         byte arg0,
@@ -151,6 +158,7 @@ public class CUDAAllocator extends DeviceAllocator {
   public native @ByVal CheckpointDelta setCheckpointPoolState(
         byte device,
         @SharedPtr("c10::cuda::CUDACachingAllocator::AllocatorState") @ByVal AllocatorState pps);
+  public native @StdMove DataPtr allocateWithAddress(@Cast("size_t") long size, Pointer addr);
   public native @StdString BytePointer name();
   public native @ByVal SizeTPair getMemoryInfo(byte device);
 }

@@ -25,13 +25,13 @@ public class NodeCall extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeCall(Pointer p) { super(p); }
 
-  public NodeCall(@Cast("uint32_t") int id_, @SharedPtr Node node_) { super((Pointer)null); allocate(id_, node_); }
-  private native void allocate(@Cast("uint32_t") int id_, @SharedPtr Node node_);
+  public NodeCall(@Cast("uint32_t") int id_, @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node node_) { super((Pointer)null); allocate(id_, node_); }
+  private native void allocate(@Cast("uint32_t") int id_, @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node node_);
 
   public native void mark_output(int input_nr, int output_idx);
 
   public native @Cast("uint32_t") int id(); public native NodeCall id(int setter);
-  public native @SharedPtr Node node(); public native NodeCall node(Node setter);
+  public native @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node node(); public native NodeCall node(Node setter);
   public native @ByRef IntPairVector tensor_pre_hooks(); public native NodeCall tensor_pre_hooks(IntPairVector setter);
   public native @ByRef IntPairVector cpp_tensor_pre_hooks(); public native NodeCall cpp_tensor_pre_hooks(IntPairVector setter);
   public native @StdVector IntPointer pre_hooks(); public native NodeCall pre_hooks(IntPointer setter);

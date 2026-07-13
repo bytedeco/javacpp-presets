@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** TransformerDecoder is a stack of N decoder layers.
  *  See
  *  https://pytorch.org/docs/main/generated/torch.nn.TransformerDecoder.html
- *  to learn abouut the exact behavior of this decoder module
+ *  to learn about the exact behavior of this decoder module
  * 
  *  See the documentation for {@code torch::nn::TransformerDecoderOptions} class to
  *  learn what constructor arguments are supported for this decoder module

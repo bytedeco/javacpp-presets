@@ -17,7 +17,7 @@ import org.bytedeco.javacpp.chrono.*;
 import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
-
+ // namespace impl::cow
 
 // A storage represents the underlying backing data buffer for a
 // tensor.  This concept was inherited from the original Torch7
@@ -92,9 +92,7 @@ public class StorageImpl extends Pointer {
   public native void release_resources();
 
   public native @NoException(true) void incref_pyobject();
-
   public native @NoException(true) void decref_pyobject();
-
   public native @Cast("bool") @NoException(true) boolean try_incref_pyobject();
 
   public native @Cast("size_t") long nbytes();
@@ -178,4 +176,11 @@ public class StorageImpl extends Pointer {
   public native void set_throw_on_mutable_data_ptr();
 
   public native void set_warn_deprecated_on_mutable_data_ptr();
+
+  // One materializer at a time.
+  public native void set_materializer(MaterializeFn fn);
+
+  public native void clear_materializer();
+
+  public native @Cast("bool") boolean has_materializer();
 }

@@ -127,7 +127,19 @@ private native void allocate();
   /** \}
    *  \name Expensive Operations
    *  \{ */
+  
+  ///
   public native @StdVector BFloat16 vec();
 
+  /** \}
+   *  \name Equality operators
+   *  \{
+   * 
+   *  When migrating these over from ArrayRef.h, we changed these from
+   *  free functions outside the class to be hidden friends which is the
+   *  modern C++ recommendation for various reasons including being more
+   *  precisely scoped and being non-templates after class instantiation. */
+  
+  
   /** \} */
 }

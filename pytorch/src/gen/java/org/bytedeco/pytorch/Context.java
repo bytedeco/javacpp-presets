@@ -116,6 +116,10 @@ public class Context extends Pointer {
   public native @Cast("bool") boolean userEnabledNNPACK();
   public native void setUserEnabledNNPACK(@Cast("bool") boolean e);
 
+  public native CuDNNDepthwiseKernel cudnnDepthwiseKernel();
+  public native void setCuDNNDepthwiseKernel(CuDNNDepthwiseKernel k);
+  public native void setCuDNNDepthwiseKernel(@Cast("at::CuDNNDepthwiseKernel") int k);
+
   // Note [Disabling Fused SDP Kernels]
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // Flash and Memory Efficient SDP kernels are enabled by default.
@@ -155,6 +159,7 @@ public class Context extends Pointer {
   public native void setLinalgPreferredBackend(LinalgBackend arg0);
   public native void setLinalgPreferredBackend(@Cast("at::LinalgBackend") byte arg0);
 
+  public native BlasBackend blasDefaultBackend();
   public native BlasBackend blasPreferredBackend();
   public native void setBlasPreferredBackend(BlasBackend arg0);
   public native void setBlasPreferredBackend(@Cast("at::BlasBackend") byte arg0);
@@ -304,6 +309,9 @@ public class Context extends Pointer {
 
   public native void setWarnOnAccumulateGradStreamMismatch(@Cast("bool") boolean enabled);
   public native @Cast("bool") boolean warnOnAccumulateGradStreamMismatch();
+
+  public native void setOverrideStaleCaptureStream(@Cast("bool") boolean enabled);
+  public native @Cast("bool") boolean overrideStaleCaptureStream();
 
   public native @Cast("bool") boolean isDefaultMobileCPUAllocatorSet();
   public native void setDefaultMobileCPUAllocator();

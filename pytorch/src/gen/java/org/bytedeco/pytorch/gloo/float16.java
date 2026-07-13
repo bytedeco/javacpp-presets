@@ -43,7 +43,7 @@ public class float16 extends Pointer {
 
   public native @ByRef @Name("operator =") float16 put(int rhs);
 
-  public native @ByRef @Name("operator =") float16 put(@Const @ByRef float16 rhs);
+  public native @ByRef @Name("operator =") float16 put(@Const @ByRef float16 arg0);
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef float16 rhs);
 
