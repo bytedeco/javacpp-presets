@@ -39,4 +39,9 @@ public class CrossMapLRN2dOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer alpha();
   public native @ByRef @NoException(true) DoublePointer beta();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer k();
+
+  public native @ByRef @NoException(true) CrossMapLRN2dOptions size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) CrossMapLRN2dOptions alpha(double setter);
+  public native @ByRef @NoException(true) CrossMapLRN2dOptions beta(double setter);
+  public native @ByRef @NoException(true) CrossMapLRN2dOptions k(@Cast("int64_t") long setter);
 }

@@ -169,4 +169,16 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
   /** Updated the {@code ModuleDict} with key-value pairs from {@code OrderedDict} or
    *  {@code ModuleDict}. */
   /** Private {@code OrderedDict} holding the key-Module pairs. */
+  public native @ByRef StringSharedModuleDict modules_(); public native ModuleDictImpl modules_(StringSharedModuleDict setter);
+
+  /** Insert a key-module pair by overwriting existing keys,
+   *  and register or replace the {@code Module}. */
+  private native @Name("insert") void _insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public void insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(key, module); }
+  private native @Name("insert") void _insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public void insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(key, module); }
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link ModulePrinter}. */
+  @Override public String toString() { return ModulePrinter.format(this); }
 }

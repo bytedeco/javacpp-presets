@@ -43,4 +43,11 @@ public class RMSpropOptions extends OptimizerCloneableRMSpropOptions {
   public boolean equals(RMSpropOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
+
+  public native @ByRef @NoException(true) RMSpropOptions lr(double setter);
+  public native @ByRef @NoException(true) RMSpropOptions alpha(double setter);
+  public native @ByRef @NoException(true) RMSpropOptions eps(double setter);
+  public native @ByRef @NoException(true) RMSpropOptions weight_decay(double setter);
+  public native @ByRef @NoException(true) RMSpropOptions momentum(double setter);
+  public native @ByRef @NoException(true) RMSpropOptions centered(@Cast("bool") boolean setter);
 }

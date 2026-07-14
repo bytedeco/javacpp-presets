@@ -44,4 +44,15 @@ public class ConvTranspose2dOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer dilation();
   public native @ByRef @NoException(true) ConvPaddingMode padding_mode();
+
+  public native @ByRef @NoException(true) ConvTranspose2dOptions in_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions out_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions kernel_size(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions stride(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions padding(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions output_padding(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions groups(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions dilation(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose2dOptions padding_mode(@ByVal ConvPaddingMode setter);
 }

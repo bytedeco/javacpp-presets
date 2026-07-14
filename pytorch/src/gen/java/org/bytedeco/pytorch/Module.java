@@ -19,6 +19,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
+
 /** The base class for all modules in PyTorch.
  * 
  *  \rst
@@ -132,6 +133,43 @@ public class Module extends Pointer {
    *     });
    * 
    *  \endrst */
+  public native @ByVal Tensor forward_tensor(@Const @ByRef Tensor input);
+  public native @ByVal Tensor forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public native @ByVal Tensor forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public native @ByVal Tensor forward_tensor4(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
+  public native @ByVal Tensor forward_tensor6(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
+  public native @ByVal Tensor forward_tensor8(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
+  public native @ByVal Tensor forward_tensor_output_size(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size);
+  public native @ByVal Tensor forward_tensor_output_size(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+  public native @ByVal Tensor forward_tensor_indices_output_size(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @ByVal LongVectorOptional output_size);
+  public native @ByVal T_TensorT_TensorTensor_T_T forward_tuple_tensor_t_tensortensor(@Const @ByRef Tensor input);
+  public native @ByVal T_TensorT_TensorTensor_T_T forward_tuple_tensor_t_tensortensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor(@Const @ByRef Tensor input);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_attn(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
+  private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(@Const @ByRef Tensor input);
+  public @ByVal Tensor forward(@Const @ByRef Tensor input) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class) ? m.forward(input) : _forward_tensor(input); }
+  private native @ByVal @Name("forward_tensor2")  Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class) ? m.forward(input1, input2) : _forward_tensor2(input1, input2); }
+  private native @ByVal @Name("forward_tensor3")  Tensor _forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class, Tensor.class) ? m.forward(input1, input2, input3) : _forward_tensor3(input1, input2, input3); }
+  public native @ByVal @Name("forward_tensor4")  Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
+  public native @ByVal @Name("forward_tensor6")  Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
+  public native @ByVal @Name("forward_tensor8")  Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
+  public native @ByVal @Name("forward_tensor_output_size") Tensor forward(@Const @ByRef Tensor input, @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+  public native @ByVal @Name("forward_tensor_output_size") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef(nullValue = "std::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);
+  public native @ByVal @Name("forward_tensor_indices_output_size") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @Const @ByRef(nullValue = "std::optional<std::vector<int64_t> >(c10::nullopt)") LongVectorOptional output_size);
+  public native @ByVal @Name("forward_tuple_tensor_t_tensortensor")  T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input);
+  public native @ByVal @Name("forward_tuple_tensor_t_tensortensor_opt")  T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);
+  public native @ByVal @Name("forward_tuple_tensor_tensor")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);
+  public native @ByVal @Name("forward_tuple_tensor_tensor2")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public native @ByVal @Name("forward_tuple_tensor_tensor3")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public native @ByVal @Name("forward_tuple_tensor_tensor_opt")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);
+  public native @ByVal @Name("forward_tuple_tensor_tensor_attn")  T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
+  public native @Cast("size_t") @NoException(true) long javacpp_module_object_id();
+
   
   ///
   ///
@@ -306,7 +344,96 @@ public class Module extends Pointer {
   public native @ByVal StringSharedModuleDict named_children();
 
   /** Enables "training" mode. */
-  public native @Virtual(subclasses=false, method="train") void train(@Cast("bool") boolean on/*=true*/);
+  public native @Virtual(subclasses=false, method="train") void train(@Cast("bool") boolean on);
+  native @Name("javacpp_module_object_id") @Cast("size_t") long moduleObjectId();
+  { ModuleAsHelper.remember(this); }
+  /**
+   * Attempts to cast this {@link Module} to any subclass passed via
+   * {@code moduleClass}. For the 80+ built-in {@code *Impl} classes
+   * this dispatches to the corresponding {@code asXxx()} method via
+   * reflection so the C++ {@code dynamic_cast} actually verifies
+   * the underlying object. For user-defined subclasses (custom
+   * modules, complex wrapper classes that compose several layers,
+   * …) the pointer is wrapped as-is: registration via
+   * {@link #registerCppType(Class, String)} is optional but lets
+   * the cast be type-checked when the user knows the C++ typeid of
+   * their module.
+   *
+   * @param moduleClass non-null Java class extending {@link Module}.
+   * @return a fresh instance of {@code moduleClass} wrapping this
+   *         {@code Module}'s native pointer, or {@code null} when
+   *         the underlying C++ object is not of the requested type.
+   */
+  public <M extends Module> M as(Class<M> moduleClass) {
+      if (moduleClass == null) {
+          throw new NullPointerException("moduleClass");
+      }
+      if (moduleClass.isInstance(this)) {
+          return moduleClass.cast(this);
+      }
+      String className = moduleClass.getSimpleName();
+      if (className.endsWith("Impl")) {
+          String asMethodName = "as" + className.substring(0, className.length() - 4);
+          try {
+              java.lang.reflect.Method asMethod = Module.class.getMethod(asMethodName);
+              Object module = asMethod.invoke(this);
+              // Guard: the typed asXxx() returns a non-null wrapper only when
+              // the underlying C++ object is actually of the requested type.
+              // If moduleClass isn't a Java supertype of the returned wrapper,
+              // surface that as a no-match instead of throwing ClassCastException.
+              if (module == null) {
+                  return null;
+              }
+              return moduleClass.cast(module);
+          } catch (NoSuchMethodException e) {
+              // Fall through to the generic Module pointer wrapper below.
+          } catch (IllegalAccessException e) {
+              throw new RuntimeException(e);
+          } catch (java.lang.reflect.InvocationTargetException e) {
+              Throwable cause = e.getCause();
+              if (cause instanceof RuntimeException) {
+                  throw (RuntimeException) cause;
+              }
+              throw new RuntimeException(cause);
+          } catch (ClassCastException e) {
+              // The asXxx() returned something that isn't a moduleClass
+              // (e.g. user asked for FancyMLP but the underlying object
+              // is a built-in layer). Treat as a no-match.
+              return null;
+          }
+      }
+      // Custom (non-*Impl) subclass: wrap the raw Module pointer.
+      // The caller is responsible for knowing what they are doing;
+      // if they want C++ typeid verification they should call
+      // registerCppType() first.
+      return ModuleAsHelper.wrap(this, moduleClass);
+  }
+  /**
+   * Static registry mapping Java {@link Module} subclasses to fully
+   * qualified C++ typeid names. Can be extended at runtime via
+   * {@link #registerCppType(Class, String)} so custom user modules
+   * can be type-checked at runtime as well.
+   */
+  private static final java.util.Map<Class<? extends Module>, String> CPP_TYPE_REGISTRY =
+          new java.util.concurrent.ConcurrentHashMap<Class<? extends Module>, String>();
+  /** Look up the C++ typeid registered for {@code javaClass}, if any. */
+  public static String cppTypeName(Class<? extends Module> javaClass) {
+      return CPP_TYPE_REGISTRY.get(javaClass);
+  }
+  /**
+   * Register a custom Java {@link Module} subclass so that
+   * {@link #as(Class)} can later look up the C++ typeid. Calling this
+   * is optional — without it {@code as(Class)} will still return a
+   * wrapper, just without typeid verification. {@code cppTypeName}
+   * must be the fully qualified C++ type name, e.g.
+   * {@code "torch::nn::LinearImpl"}.
+   */
+  public static <M extends Module> void registerCppType(Class<M> javaClass, String cppTypeName) {
+      if (javaClass == null || cppTypeName == null) {
+          throw new IllegalArgumentException("javaClass and cppTypeName must be non-null");
+      }
+      CPP_TYPE_REGISTRY.put(javaClass, cppTypeName);
+  }
 
   /** Calls train(false) to enable "eval" mode.
    *  Do not override this method, override {@code train()} instead. */
@@ -1468,9 +1595,9 @@ public class Module extends Pointer {
   ///
   ///
   private native @Name("register_module<torch::nn::Module>") void _register_module(@StdString BytePointer name, @SharedPtr @ByVal Module module);
-  public <M extends Module> M register_module(BytePointer name, M module) { _register_module(name, module); return module; }
+  public <M extends Module> M register_module(BytePointer name, M module) { ModuleAsHelper.remember(module); _register_module(name, module); return module; }
   private native @Name("register_module<torch::nn::Module>") void _register_module(@StdString String name, @SharedPtr @ByVal Module module);
-  public <M extends Module> M register_module(String name, M module) { _register_module(name, module); return module; }
+  public <M extends Module> M register_module(String name, M module) { ModuleAsHelper.remember(module); _register_module(name, module); return module; }
 
   /** Registers a submodule with this {@code Module}.
    * 
@@ -1517,4 +1644,8 @@ public class Module extends Pointer {
         @Cast("std::ostream*") @ByRef Pointer stream,
         @Const @ByRef Module module);
   public Pointer shiftLeft(Pointer stream) { return shiftLeft(stream, this); }
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link ModulePrinter}. */
+  @Override public String toString() { return ModulePrinter.format(this); }
 }

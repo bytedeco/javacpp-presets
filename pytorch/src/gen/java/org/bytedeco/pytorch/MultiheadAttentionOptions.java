@@ -43,4 +43,13 @@ public class MultiheadAttentionOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer add_zero_attn();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer kdim();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer vdim();
+
+  public native @ByRef @NoException(true) MultiheadAttentionOptions embed_dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions num_heads(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions dropout(double setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions add_bias_kv(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions add_zero_attn(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions kdim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) MultiheadAttentionOptions vdim(@Cast("int64_t") long setter);
 }

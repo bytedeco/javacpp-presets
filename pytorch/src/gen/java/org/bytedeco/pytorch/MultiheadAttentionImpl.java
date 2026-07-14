@@ -43,7 +43,7 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
   public MultiheadAttentionImpl(@Const @ByRef MultiheadAttentionOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::MultiheadAttentionImpl>") private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
 
-  public native @ByVal T_TensorTensor_T forward(
+  public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(
         @Const @ByRef Tensor query,
         @Const @ByRef Tensor key,
         @Const @ByRef Tensor value,
@@ -51,7 +51,7 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
         @Cast("bool") boolean need_weights/*=true*/,
         @Const @ByRef(nullValue = "torch::Tensor{}") Tensor attn_mask,
         @Cast("bool") boolean average_attn_weights/*=true*/);
-  public native @ByVal T_TensorTensor_T forward(
+  public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(
         @Const @ByRef Tensor query,
         @Const @ByRef Tensor key,
         @Const @ByRef Tensor value);

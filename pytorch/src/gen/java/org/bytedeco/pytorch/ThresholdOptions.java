@@ -38,4 +38,8 @@ public class ThresholdOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer threshold();
   public native @ByRef @NoException(true) DoublePointer value();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) ThresholdOptions threshold(double setter);
+  public native @ByRef @NoException(true) ThresholdOptions value(double setter);
+  public native @ByRef @NoException(true) ThresholdOptions inplace(@Cast("bool") boolean setter);
 }

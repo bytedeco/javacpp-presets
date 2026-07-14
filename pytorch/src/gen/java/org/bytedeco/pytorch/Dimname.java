@@ -37,5 +37,5 @@ public class Dimname extends Pointer {
   public native @Cast("bool") boolean isWildcard();
 
   public native @Cast("bool") boolean matches(@ByVal Dimname other);
-  public native @ByVal DimnameOptional unify(@ByVal Dimname other);
+  public native @Optional Dimname unify(@ByVal Dimname other);
 }

@@ -69,4 +69,26 @@ public class MultiheadAttentionForwardFuncOptions extends Pointer {
   public native @ByRef @NoException(true) Tensor static_k();
   public native @ByRef @NoException(true) Tensor static_v();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer average_attn_weights();
+
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions embed_dim_to_check(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions num_heads(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions in_proj_weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions in_proj_bias(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions bias_k(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions bias_v(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions add_zero_attn(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions dropout_p(double setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions out_proj_weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions out_proj_bias(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions training(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions key_padding_mask(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions need_weights(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions attn_mask(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions use_separate_proj_weight(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions q_proj_weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions k_proj_weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions v_proj_weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions static_k(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions static_v(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) MultiheadAttentionForwardFuncOptions average_attn_weights(@Cast("bool") boolean setter);
 }

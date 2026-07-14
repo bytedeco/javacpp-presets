@@ -35,15 +35,15 @@ import static org.bytedeco.pytorch.global.torch.*;
  *   Note - this should maintain identical impl to the py dispatcher key
  * extraction logic at pytorch/torch/dispatcher.py
  */
-@Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@NoOffset @Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class DispatchKeyExtractor extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DispatchKeyExtractor(Pointer p) { super(p); }
 
-  public static native @ByVal DispatchKeyExtractor make(@Const @ByRef FunctionSchema schema);
+  public static native @NoOffset @ByVal DispatchKeyExtractor make(@Const @ByRef FunctionSchema schema);
 
-  public static native @ByVal DispatchKeyExtractor makeUninitialized();
+  public static native @NoOffset @ByVal DispatchKeyExtractor makeUninitialized();
 
   public native void registerSchema(@Const @ByRef FunctionSchema schema);
   public native void deregisterSchema();

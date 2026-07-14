@@ -101,4 +101,8 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
   /** Returns the value associated with the given {@code key}. Throws an exception if
    *  no such key is stored in the {@code ParameterDict}. Check contains(key) before
    *  for a non-throwing way of access */
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link ModulePrinter}. */
+  @Override public String toString() { return ModulePrinter.format(this); }
 }

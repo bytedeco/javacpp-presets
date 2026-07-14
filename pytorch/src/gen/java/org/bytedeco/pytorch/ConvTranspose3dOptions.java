@@ -44,4 +44,15 @@ public class ConvTranspose3dOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
   public native @Cast("torch::ExpandingArray<3>*") @ByRef @NoException(true) LongPointer dilation();
   public native @ByRef @NoException(true) ConvPaddingMode padding_mode();
+
+  public native @ByRef @NoException(true) ConvTranspose3dOptions in_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions out_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions kernel_size(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions stride(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions padding(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions output_padding(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions groups(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions dilation(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConvTranspose3dOptions padding_mode(@ByVal ConvPaddingMode setter);
 }

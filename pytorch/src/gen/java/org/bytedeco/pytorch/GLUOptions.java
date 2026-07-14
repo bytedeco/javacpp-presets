@@ -38,4 +38,6 @@ private native void allocate(@Cast("int64_t") long dim/*=-1*/);
 public GLUOptions() { super((Pointer)null); allocate(); }
 private native void allocate();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim();
+
+  public native @ByRef @NoException(true) GLUOptions dim(@Cast("int64_t") long setter);
 }

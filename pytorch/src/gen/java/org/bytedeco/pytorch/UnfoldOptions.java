@@ -39,4 +39,9 @@ public class UnfoldOptions extends Pointer {
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer dilation();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer padding();
   public native @Cast("torch::ExpandingArray<2>*") @ByRef @NoException(true) LongPointer stride();
+
+  public native @ByRef @NoException(true) UnfoldOptions kernel_size(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) UnfoldOptions dilation(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) UnfoldOptions padding(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) UnfoldOptions stride(@Cast("torch::ExpandingArray<2>*") @ByVal LongPointer setter);
 }

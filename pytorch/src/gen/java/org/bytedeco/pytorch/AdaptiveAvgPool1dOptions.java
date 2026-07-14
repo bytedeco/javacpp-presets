@@ -31,4 +31,6 @@ public class AdaptiveAvgPool1dOptions extends Pointer {
   public AdaptiveAvgPool1dOptions(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
   public native @Cast("torch::ExpandingArray<1>*") @ByRef @NoException(true) LongPointer output_size();
+
+  public native @ByRef @NoException(true) AdaptiveAvgPool1dOptions output_size(@Cast("torch::ExpandingArray<1>*") @ByVal LongPointer setter);
 }

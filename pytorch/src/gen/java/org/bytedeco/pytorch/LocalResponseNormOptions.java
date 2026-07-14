@@ -40,4 +40,9 @@ private native void allocate(@Cast("int64_t") long size);
   public native @ByRef @NoException(true) DoublePointer alpha();
   public native @ByRef @NoException(true) DoublePointer beta();
   public native @ByRef @NoException(true) DoublePointer k();
+
+  public native @ByRef @NoException(true) LocalResponseNormOptions size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) LocalResponseNormOptions alpha(double setter);
+  public native @ByRef @NoException(true) LocalResponseNormOptions beta(double setter);
+  public native @ByRef @NoException(true) LocalResponseNormOptions k(double setter);
 }

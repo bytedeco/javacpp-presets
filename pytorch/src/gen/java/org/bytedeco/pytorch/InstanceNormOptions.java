@@ -33,4 +33,10 @@ private native void allocate(@Cast("int64_t") long num_features);
   public native @ByRef @NoException(true) DoublePointer momentum();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer affine();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer track_running_stats();
+
+  public native @ByRef @NoException(true) InstanceNormOptions num_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) InstanceNormOptions eps(double setter);
+  public native @ByRef @NoException(true) InstanceNormOptions momentum(double setter);
+  public native @ByRef @NoException(true) InstanceNormOptions affine(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) InstanceNormOptions track_running_stats(@Cast("bool") boolean setter);
 }

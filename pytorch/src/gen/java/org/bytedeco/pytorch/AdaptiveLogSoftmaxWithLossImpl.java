@@ -57,7 +57,7 @@ public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossIm
   @SharedPtr @Name("std::make_shared<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") private native void allocate(
         @ByVal AdaptiveLogSoftmaxWithLossOptions options_);
 
-  public native @ByVal ASMoutput forward(@Const @ByRef Tensor input, @Const @ByRef Tensor target);
+  public native @ByVal @Name("forward") ASMoutput forwardASMoutput(@Const @ByRef Tensor input, @Const @ByRef Tensor target);
 
   public native void reset();
 

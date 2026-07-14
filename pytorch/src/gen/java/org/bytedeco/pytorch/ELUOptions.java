@@ -45,4 +45,7 @@ public class ELUOptions extends Pointer {
 
   public native @ByRef @NoException(true) DoublePointer alpha();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) ELUOptions alpha(double setter);
+  public native @ByRef @NoException(true) ELUOptions inplace(@Cast("bool") boolean setter);
 }

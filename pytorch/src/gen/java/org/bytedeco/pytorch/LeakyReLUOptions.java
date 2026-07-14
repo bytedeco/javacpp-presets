@@ -47,4 +47,7 @@ public class LeakyReLUOptions extends Pointer {
 
   public native @ByRef @NoException(true) DoublePointer negative_slope();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) LeakyReLUOptions negative_slope(double setter);
+  public native @ByRef @NoException(true) LeakyReLUOptions inplace(@Cast("bool") boolean setter);
 }

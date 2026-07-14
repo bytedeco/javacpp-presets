@@ -42,4 +42,13 @@ public class EmbeddingOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer scale_grad_by_freq();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer sparse();
   public native @ByRef @NoException(true) Tensor _weight();
+
+  public native @ByRef @NoException(true) EmbeddingOptions num_embeddings(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) EmbeddingOptions embedding_dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) EmbeddingOptions padding_idx(@ByVal LongOptional setter);
+  public native @ByRef @NoException(true) EmbeddingOptions max_norm(@ByVal DoubleOptional setter);
+  public native @ByRef @NoException(true) EmbeddingOptions norm_type(double setter);
+  public native @ByRef @NoException(true) EmbeddingOptions scale_grad_by_freq(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingOptions sparse(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) EmbeddingOptions _weight(@ByVal Tensor setter);
 }

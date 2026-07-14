@@ -47,4 +47,7 @@ public class FlattenOptions extends Pointer {
 
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer start_dim();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer end_dim();
+
+  public native @ByRef @NoException(true) FlattenOptions start_dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) FlattenOptions end_dim(@Cast("int64_t") long setter);
 }

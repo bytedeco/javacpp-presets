@@ -38,4 +38,9 @@ private native void allocate(@Cast("int64_t") long num_groups);
   public native @ByRef @NoException(true) Tensor weight();
   public native @ByRef @NoException(true) Tensor bias();
   public native @ByRef @NoException(true) DoublePointer eps();
+
+  public native @ByRef @NoException(true) GroupNormFuncOptions num_groups(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GroupNormFuncOptions weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) GroupNormFuncOptions bias(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) GroupNormFuncOptions eps(double setter);
 }

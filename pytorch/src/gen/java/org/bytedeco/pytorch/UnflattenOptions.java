@@ -45,6 +45,12 @@ public class UnflattenOptions extends Pointer {
   private native void allocate(String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim();
   public native @StdString @ByRef @NoException(true) BytePointer dimname();
+  public native @ByRef @NoException(true) UnflattenOptions dimname(@StdString BytePointer setter);
+  public native @ByRef @NoException(true) UnflattenOptions dimname(@StdString String setter);
   public native @Cast("std::vector<int64_t>*") @ByRef @NoException(true) LongVector sizes();
   public native @Cast("torch::nn::UnflattenOptions::namedshape_t*") @ByRef @NoException(true) StringLongVector namedshape();
+
+  public native @ByRef @NoException(true) UnflattenOptions dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) UnflattenOptions sizes(@Cast("std::vector<int64_t>*") @ByVal LongVector setter);
+  public native @ByRef @NoException(true) UnflattenOptions namedshape(@Cast("torch::nn::UnflattenOptions::namedshape_t*") @ByVal StringLongVector setter);
 }

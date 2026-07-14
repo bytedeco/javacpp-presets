@@ -45,4 +45,7 @@ public class CosineSimilarityOptions extends Pointer {
 
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim();
   public native @ByRef @NoException(true) DoublePointer eps();
+
+  public native @ByRef @NoException(true) CosineSimilarityOptions dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) CosineSimilarityOptions eps(double setter);
 }

@@ -46,4 +46,7 @@ public class TransformerDecoderOptions extends Pointer {
         @Cast("int64_t") long num_layers);
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer num_layers();
   public native @ByRef @NoException(true) AnyModule norm();
+
+  public native @ByRef @NoException(true) TransformerDecoderOptions num_layers(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerDecoderOptions norm(@ByVal AnyModule setter);
 }

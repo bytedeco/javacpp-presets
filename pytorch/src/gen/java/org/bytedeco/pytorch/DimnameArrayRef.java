@@ -25,10 +25,10 @@ public class DimnameArrayRef extends DimnameHeaderOnlyArrayRef {
 
    public DimnameArrayRef() { super((Pointer)null); allocate(); }
   private native void allocate();
-    public DimnameArrayRef(@Const Dimname data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }
-    private native void allocate(@Const Dimname data, @Cast("size_t") long length);
-    public DimnameArrayRef(@Const Dimname begin, @Const Dimname end) { super((Pointer)null); allocate(begin, end); }
-    private native void allocate(@Const Dimname begin, @Const Dimname end);
+    public DimnameArrayRef(IntPointer data, long length) { super((Pointer)null); allocate(data, length); }
+    private native void allocate(@Cast("const at::Dimname*") IntPointer data, @Cast("size_t") long length);
+    public DimnameArrayRef(IntPointer begin, IntPointer end) { super((Pointer)null); allocate(begin, end); }
+    private native void allocate(@Cast("const at::Dimname*") IntPointer begin, @Cast("const at::Dimname*") IntPointer end);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DimnameArrayRef(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */

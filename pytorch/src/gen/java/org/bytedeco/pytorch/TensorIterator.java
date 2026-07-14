@@ -69,11 +69,11 @@ public class TensorIterator extends TensorIteratorBase {
         @ByVal LongArrayRef sizes,
         @ByVal LongArrayRef strides,
         @ByVal TensorOptions options,
-        @ByVal DimnameArrayRef names);
+        @ByVal @Cast("at::DimnameList*") ArgumentArrayRef names);
   public native void set_output_raw_strided(
         @Cast("int64_t") long output_idx,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
         @ByVal TensorOptions options,
-        @ByVal DimnameVector names);
+        @ByVal @Cast("at::DimnameList*") ArgumentArrayRef names);
 }

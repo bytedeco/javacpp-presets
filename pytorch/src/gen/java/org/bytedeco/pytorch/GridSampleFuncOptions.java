@@ -48,4 +48,8 @@ public class GridSampleFuncOptions extends Pointer {
   public native @ByRef @NoException(true) GridSampleMode mode();
   public native @ByRef @NoException(true) GridSamplePaddingMode padding_mode();
   public native @ByRef @NoException(true) BoolOptional align_corners();
+
+  public native @ByRef @NoException(true) GridSampleFuncOptions mode(@ByVal GridSampleMode setter);
+  public native @ByRef @NoException(true) GridSampleFuncOptions padding_mode(@ByVal GridSamplePaddingMode setter);
+  public native @ByRef @NoException(true) GridSampleFuncOptions align_corners(@ByVal BoolOptional setter);
 }

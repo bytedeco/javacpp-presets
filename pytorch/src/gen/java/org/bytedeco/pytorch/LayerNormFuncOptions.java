@@ -38,4 +38,9 @@ private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector no
   public native @ByRef @NoException(true) Tensor weight();
   public native @ByRef @NoException(true) Tensor bias();
   public native @ByRef @NoException(true) DoublePointer eps();
+
+  public native @ByRef @NoException(true) LayerNormFuncOptions normalized_shape(@Cast("std::vector<int64_t>*") @ByVal LongVector setter);
+  public native @ByRef @NoException(true) LayerNormFuncOptions weight(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) LayerNormFuncOptions bias(@ByVal Tensor setter);
+  public native @ByRef @NoException(true) LayerNormFuncOptions eps(double setter);
 }

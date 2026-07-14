@@ -48,4 +48,8 @@ public class RReLUOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer lower();
   public native @ByRef @NoException(true) DoublePointer upper();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) RReLUOptions lower(double setter);
+  public native @ByRef @NoException(true) RReLUOptions upper(double setter);
+  public native @ByRef @NoException(true) RReLUOptions inplace(@Cast("bool") boolean setter);
 }

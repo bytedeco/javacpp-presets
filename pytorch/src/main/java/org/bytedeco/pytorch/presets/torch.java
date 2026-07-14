@@ -266,9 +266,23 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         infoMap.put(new Info("torch::nn::" + name + "Impl")) // Ensure qualified name is in Info when Cloneable<XImpl> inheritance is parsed (and before class XImpl is finished parsing)
                .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr", "@Name(\"std::make_shared<torch::nn::" + name + "Impl>\")"))
                .put(new Info("torch::nn::Cloneable<torch::nn::" + name + "Impl>").pointerTypes(name + "ImplCloneable").purify())
-               .put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
-               .put(new Info("torch::nn::" + name).skip())
                .put(new Info("torch::nn::Module::as<torch::nn::" + name + "Impl,int>").javaNames("as" + name));
+        infoMap.put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
+               .put(new Info("torch::nn::" + name).skip());
+
+        // ModuleHolder<Module> is the one we DO need to expose to
+        // Java — it's how the generic push_back(Module) gets routed
+        // through the C++ push_back(const ModuleHolder<M>&) template,
+        // which is the only template path that does NOT trigger the
+        // has_forward<Module> static_assert in AnyModule. The
+        // instantiations above skipped every ModuleHolder<*Impl>, so
+        // we add a separate Info mapping that lets JavaCPP map the
+        // C++ class template instantiation into a Java Pointer
+        // wrapper. The push_back_module helper defined elsewhere
+        // in this preset's cppText instantiates the template on
+        // the C++ side, so the JNI proxy can construct an instance
+        // from a Java Module pointer.
+        infoMap.put(new Info("torch::nn::ModuleHolder<torch::nn::Module>").pointerTypes("ModuleHolder"));
 
         if (anyModuleCompatible) {
             infoMap
@@ -285,6 +299,166 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             ;
         }
     }
+
+    /**
+     * Generates the C++ source for the free {@code torch::nn::push_back_module}
+     * helper that backs the generic
+     * {@link SequentialImpl#push_back(Module)} Java method. The helper walks
+     * the recognised 80+ built-in {@code *Impl} classes in turn and uses
+     * {@code dynamic_cast} to dispatch to the typed
+     * {@code push_back<Impl>(name, shared_ptr<Impl>)} overload. This is the
+     * only way to avoid the compile-time {@code has_forward<Module>} check
+     * in {@code AnyModule}, which forbids putting a base {@code Module}
+     * reference directly into an {@code AnyModule}.
+     *
+     * <p>Built programmatically so adding a new {@code *Impl} to the
+     * preset is just a matter of adding the C++ class name to {@link
+     * #PUSH_BACK_DISPATCH_TYPES} below.
+     */
+    static String buildPushBackModuleCppText() {
+        // The generic push_back(Module) entry point is provided
+        // by the Java-side helper ModuleAsHelper. The C++ side does
+        // not need any extra helper code — the typed push_back<Impl>
+        // overloads (378 of them) are reached via the existing
+        // asXxx() walk in ModuleAsHelper. This avoids the
+        // has_forward<Module> static_assert that any direct
+        // push_back<Module> instantiation would trigger in AnyModule.
+        return "";
+    }
+
+    /**
+     * Fully qualified C++ class names of all built-in {@code *Impl} layers
+     * that the generic {@code push_back(Module)} can dispatch to via
+     * {@code dynamic_cast}. Add new entries here when the preset learns
+     * about new built-in layers.
+     */
+    private static final String[] PUSH_BACK_DISPATCH_TYPES = {
+        "torch::nn::LinearImpl",
+        "torch::nn::Conv1dImpl",
+        "torch::nn::Conv2dImpl",
+        "torch::nn::Conv3dImpl",
+        "torch::nn::ConvTranspose1dImpl",
+        "torch::nn::ConvTranspose2dImpl",
+        "torch::nn::ConvTranspose3dImpl",
+        "torch::nn::BatchNorm1dImpl",
+        "torch::nn::BatchNorm2dImpl",
+        "torch::nn::BatchNorm3dImpl",
+        "torch::nn::InstanceNorm1dImpl",
+        "torch::nn::InstanceNorm2dImpl",
+        "torch::nn::InstanceNorm3dImpl",
+        "torch::nn::GroupNormImpl",
+        "torch::nn::LayerNormImpl",
+        "torch::nn::LocalResponseNormImpl",
+        "torch::nn::CrossMapLRN2dImpl",
+        "torch::nn::DropoutImpl",
+        "torch::nn::Dropout2dImpl",
+        "torch::nn::Dropout3dImpl",
+        "torch::nn::AlphaDropoutImpl",
+        "torch::nn::FeatureAlphaDropoutImpl",
+        "torch::nn::ReLUImpl",
+        "torch::nn::ReLU6Impl",
+        "torch::nn::LeakyReLUImpl",
+        "torch::nn::ELUImpl",
+        "torch::nn::SELUImpl",
+        "torch::nn::CELUImpl",
+        "torch::nn::GELUImpl",
+        "torch::nn::GLUImpl",
+        "torch::nn::HardshrinkImpl",
+        "torch::nn::HardtanhImpl",
+        "torch::nn::LogSigmoidImpl",
+        "torch::nn::MishImpl",
+        "torch::nn::PReLUImpl",
+        "torch::nn::RReLUImpl",
+        "torch::nn::SigmoidImpl",
+        "torch::nn::SiLUImpl",
+        "torch::nn::SoftmaxImpl",
+        "torch::nn::Softmax2dImpl",
+        "torch::nn::SoftminImpl",
+        "torch::nn::SoftplusImpl",
+        "torch::nn::SoftshrinkImpl",
+        "torch::nn::SoftsignImpl",
+        "torch::nn::TanhImpl",
+        "torch::nn::TanhshrinkImpl",
+        "torch::nn::ThresholdImpl",
+        "torch::nn::AvgPool1dImpl",
+        "torch::nn::AvgPool2dImpl",
+        "torch::nn::AvgPool3dImpl",
+        "torch::nn::AdaptiveAvgPool1dImpl",
+        "torch::nn::AdaptiveAvgPool2dImpl",
+        "torch::nn::AdaptiveAvgPool3dImpl",
+        "torch::nn::MaxPool1dImpl",
+        "torch::nn::MaxPool2dImpl",
+        "torch::nn::MaxPool3dImpl",
+        "torch::nn::AdaptiveMaxPool1dImpl",
+        "torch::nn::AdaptiveMaxPool2dImpl",
+        "torch::nn::AdaptiveMaxPool3dImpl",
+        "torch::nn::MaxUnpool1dImpl",
+        "torch::nn::MaxUnpool2dImpl",
+        "torch::nn::MaxUnpool3dImpl",
+        "torch::nn::FractionalMaxPool2dImpl",
+        "torch::nn::FractionalMaxPool3dImpl",
+        "torch::nn::LPPool1dImpl",
+        "torch::nn::LPPool2dImpl",
+        "torch::nn::LPPool3dImpl",
+        "torch::nn::ReflectionPad1dImpl",
+        "torch::nn::ReflectionPad2dImpl",
+        "torch::nn::ReflectionPad3dImpl",
+        "torch::nn::ReplicationPad1dImpl",
+        "torch::nn::ReplicationPad2dImpl",
+        "torch::nn::ReplicationPad3dImpl",
+        "torch::nn::ConstantPad1dImpl",
+        "torch::nn::ConstantPad2dImpl",
+        "torch::nn::ConstantPad3dImpl",
+        "torch::nn::ZeroPad1dImpl",
+        "torch::nn::ZeroPad2dImpl",
+        "torch::nn::ZeroPad3dImpl",
+        "torch::nn::UpsampleImpl",
+        "torch::nn::PixelShuffleImpl",
+        "torch::nn::PixelUnshuffleImpl",
+        "torch::nn::FlattenImpl",
+        "torch::nn::UnflattenImpl",
+        "torch::nn::BilinearImpl",
+        "torch::nn::IdentityImpl",
+        "torch::nn::FoldImpl",
+        "torch::nn::UnfoldImpl",
+        "torch::nn::EmbeddingImpl",
+        "torch::nn::EmbeddingBagImpl",
+        "torch::nn::CosineSimilarityImpl",
+        "torch::nn::PairwiseDistanceImpl",
+        "torch::nn::MultiheadAttentionImpl",
+        "torch::nn::TransformerImpl",
+        "torch::nn::TransformerEncoderImpl",
+        "torch::nn::TransformerDecoderImpl",
+        "torch::nn::TransformerEncoderLayerImpl",
+        "torch::nn::TransformerDecoderLayerImpl",
+        "torch::nn::RNNImpl",
+        "torch::nn::LSTMImpl",
+        "torch::nn::GRUImpl",
+        "torch::nn::RNNCellImpl",
+        "torch::nn::LSTMCellImpl",
+        "torch::nn::GRUCellImpl",
+        "torch::nn::AdaptiveLogSoftmaxWithLossImpl",
+        "torch::nn::L1LossImpl",
+        "torch::nn::MSELossImpl",
+        "torch::nn::BCELossImpl",
+        "torch::nn::BCEWithLogitsLossImpl",
+        "torch::nn::NLLLossImpl",
+        "torch::nn::CrossEntropyLossImpl",
+        "torch::nn::CTCLossImpl",
+        "torch::nn::PoissonNLLLossImpl",
+        "torch::nn::HingeEmbeddingLossImpl",
+        "torch::nn::HuberLossImpl",
+        "torch::nn::SmoothL1LossImpl",
+        "torch::nn::KLDivLossImpl",
+        "torch::nn::MarginRankingLossImpl",
+        "torch::nn::SoftMarginLossImpl",
+        "torch::nn::MultiLabelMarginLossImpl",
+        "torch::nn::MultiLabelSoftMarginLossImpl",
+        "torch::nn::MultiMarginLossImpl",
+        "torch::nn::CosineEmbeddingLossImpl",
+        "torch::nn::TripletMarginLossImpl",
+        "torch::nn::TripletMarginWithDistanceLossImpl"
+    };
 
     public static void sharedMap(InfoMap infoMap) {
         infoMap
@@ -353,6 +527,9 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         sharedMap(infoMap);
 
         infoMap
+            .put(new Info("torch::nn::EmbeddingBagImpl::forward_with_offsets").javaNames("forward"))
+            .put(new Info("c10::DispatchKeyExtractor").annotations("@NoOffset").purify())
+            .put(new Info("caffe2::TypeIdentifier").base("Pointer").purify())
             .put(new Info("ArrayRef.h").linePatterns("using IntList.*", ".*ArrayRef<int64_t>;").skip())
             .put(new Info("model_container_runner.h").linePatterns("using CreateAOTIModelRunnerFunc.*", "}*;").skip())
             .put(new Info("ordered_dict.h").linePatterns(".*class Item;.*").skip())
@@ -490,8 +667,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<std::optional<c10::SymInt> >").pointerTypes("SymIntOptionalVector").define())
             .put(new Info("std::optional<at::IValue>").pointerTypes("IValueOptional").define())
             .put(new Info("std::optional<at::DimVector>").pointerTypes("DimVectorOptional").define())
-            .put(new Info("std::optional<at::Dimname>").pointerTypes("DimnameOptional").define())
-            .put(new Info("std::optional<at::DimnameList>").pointerTypes("DimnameListOptional").define())
             .put(new Info("std::optional<at::Generator>").pointerTypes("GeneratorOptional").define())
             .put(new Info("std::optional<at::Tensor>", "std::optional<torch::Tensor>", "std::optional<at::Tensor>", "std::optional<torch::TensorBase>", "std::optional<torch::autograd::Variable>").pointerTypes("TensorOptional").define())
             .put(new Info("const std::optional<torch::autograd::InputMetadata>",
@@ -709,7 +884,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<std::shared_ptr<c10::ClassType> >", "std::vector<c10::ClassTypePtr>").pointerTypes("SharedClassTypeVector").define())
             .put(new Info("std::vector<c10::Type::SingletonOrSharedTypePtr<c10::Type> >", "std::vector<c10::TypePtr>",
                 "std::vector<c10::Type::TypePtr>", "c10::AliasTypeSet").pointerTypes("TypeVector").define())
-            .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").pointerTypes("DimnameVector").define())
             .put(new Info("std::vector<c10::Stride>").pointerTypes("StrideVector").define())
             .put(new Info("std::vector<c10::ShapeSymbol>").pointerTypes("ShapeSymbolVector").define())
             .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
@@ -771,7 +945,6 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             new ArrayInfo("Bool").itPointerType("BoolPointer").elementTypes("bool", "c10::impl::ScalarTypeToCPPTypeT<c10::ScalarType::Bool>",
                                                                                     "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").elementValueType("boolean"),
             new ArrayInfo("Byte").itPointerType("BytePointer").elementTypes("jbyte", "int8_t", "uint8_t").elementValueType("byte"),
-            new ArrayInfo("Dimname").otherCppNames("at::DimnameList").elementTypes("at::Dimname").otherPointerTypes("DimnameVector"),
             new ArrayInfo("Double").itPointerType("DoublePointer").elementTypes("double").elementValueType("double"),
             new ArrayInfo("DoubleComplex") /*.itPointertype("DoublePointer") */.elementTypes("c10::complex<double>"),
             new ArrayInfo("EnumNameValue").elementTypes("c10::EnumNameValue"),
@@ -1041,6 +1214,7 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// Other std stuff
         infoMap
             .put(new Info("std::type_index").pointerTypes("@Cast(\"std::type_index*\") Pointer"))
+            .put(new Info("c10::utils::bitset", "c10::util::type_index").skip())
             .put(new Info("std::deque<torch::Tensor>").pointerTypes("TensorDeque").define())
             .put(new Info("std::bitset<64>", "std::bitset<at::kVmapNumLevels>", "std::bitset<dim_bitset_size>",
                 "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").valueTypes("long"))
@@ -1719,19 +1893,359 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
 
         //// Modules
         infoMap
+            .put(new Info("torch::nn::Module::asModuleUnchecked").define().cppText(
+                "namespace torch { namespace nn { inline Module* asModuleUnchecked(Module* module) noexcept { return module ? module->as<Module>() : nullptr; } }}"
+            ).javaText(
+                "private native @Name(\"asModuleUnchecked\") @Namespace(\"torch::nn\") @NoException(true) Module asModuleUnchecked();\n" +
+                "public <M extends Module> M as(Class<M> moduleClass) {\n" +
+                "    if (moduleClass == null) {\n" +
+                "        throw new NullPointerException(\"moduleClass\");\n" +
+                "    }\n" +
+                "    if (moduleClass.isInstance(this)) {\n" +
+                "        return moduleClass.cast(this);\n" +
+                "    }\n" +
+                "    String className = moduleClass.getSimpleName();\n" +
+                "    if (className.endsWith(\"Impl\")) {\n" +
+                "        String asMethodName = \"as\" + className.substring(0, className.length() - 4);\n" +
+                "        try {\n" +
+                "            java.lang.reflect.Method asMethod = Module.class.getMethod(asMethodName);\n" +
+                "            Object module = asMethod.invoke(this);\n" +
+                "            return moduleClass.cast(module);\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            // Fall through to the generic Module pointer wrapper below.\n" +
+                "        } catch (IllegalAccessException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        } catch (java.lang.reflect.InvocationTargetException e) {\n" +
+                "            Throwable cause = e.getCause();\n" +
+                "            if (cause instanceof RuntimeException) {\n" +
+                "                throw (RuntimeException)cause;\n" +
+                "            }\n" +
+                "            throw new RuntimeException(cause);\n" +
+                "        }\n" +
+                "    }\n" +
+                "    Module module = asModuleUnchecked();\n" +
+                "    if (module == null) {\n" +
+                "        return null;\n" +
+                "    }\n" +
+                "    try {\n" +
+                "        return moduleClass.getConstructor(Pointer.class).newInstance(module);\n" +
+                "    } catch (NoSuchMethodException e) {\n" +
+                "        throw new IllegalArgumentException(moduleClass.getName() + \" must expose a public constructor accepting org.bytedeco.javacpp.Pointer\", e);\n" +
+                "    } catch (InstantiationException | IllegalAccessException e) {\n" +
+                "        throw new RuntimeException(e);\n" +
+                "    } catch (java.lang.reflect.InvocationTargetException e) {\n" +
+                "        Throwable cause = e.getCause();\n" +
+                "        if (cause instanceof RuntimeException) {\n" +
+                "            throw (RuntimeException)cause;\n" +
+                "        }\n" +
+                "        throw new RuntimeException(cause);\n" +
+                "    }\n" +
+                "}\n" +
+                // The static registry below lets us know whether a given Java class
+                // maps to a known C++ typeid so we can verify the dynamic_cast at
+                // runtime. It is built lazily and can be extended by users via
+                // registerCppType().
+                "private static final java.util.Map<Class<? extends Module>, String> CPP_TYPE_REGISTRY =\n" +
+                "        new java.util.concurrent.ConcurrentHashMap<Class<? extends Module>, String>();\n" +
+                "static {\n" +
+                "    java.lang.reflect.Field[] fields = Module.class.getDeclaredFields();\n" +
+                "    java.lang.reflect.Method registerMethod;\n" +
+                "    try {\n" +
+                "        registerMethod = Module.class.getDeclaredMethod(\n" +
+                "            \"registerCppType\", Class.class, String.class);\n" +
+                "    } catch (NoSuchMethodException e) {\n" +
+                "        throw new ExceptionInInitializerError(e);\n" +
+                "    }\n" +
+                "    registerMethod.setAccessible(true);\n" +
+                "    try {\n" +
+                "        for (java.lang.reflect.Field f : fields) {\n" +
+                "            if (java.lang.reflect.Modifier.isStatic(f.getModifiers())\n" +
+                "                    && f.getType() == String.class\n" +
+                "                    && f.getName().startsWith(\"CPP_TYPE_\")) {\n" +
+                "                String cppName = (String) f.get(null);\n" +
+                "                String javaName = f.getName().substring(\"CPP_TYPE_\".length());\n" +
+                "                try {\n" +
+                "                    Class<?> implClass = Class.forName(\n" +
+                "                        \"org.bytedeco.pytorch.\" + javaName);\n" +
+                "                    @SuppressWarnings(\"unchecked\")\n" +
+                "                    Class<? extends Module> moduleClass =\n" +
+                "                        (Class<? extends Module>) implClass;\n" +
+                "                    registerMethod.invoke(null, moduleClass, cppName);\n" +
+                "                } catch (ClassNotFoundException ignored) {\n" +
+                "                    // Impl class not on classpath; skip.\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "    } catch (IllegalAccessException | java.lang.reflect.InvocationTargetException e) {\n" +
+                "        throw new ExceptionInInitializerError(e);\n" +
+                "    }\n" +
+                "}\n" +
+                "private static final String CPP_TYPE_LinearImpl = \"torch::nn::LinearImpl\";\n" +
+                "private static final String CPP_TYPE_Conv1dImpl = \"torch::nn::Conv1dImpl\";\n" +
+                "private static final String CPP_TYPE_Conv2dImpl = \"torch::nn::Conv2dImpl\";\n" +
+                "private static final String CPP_TYPE_Conv3dImpl = \"torch::nn::Conv3dImpl\";\n" +
+                "private static final String CPP_TYPE_BatchNorm1dImpl = \"torch::nn::BatchNorm1dImpl\";\n" +
+                "private static final String CPP_TYPE_BatchNorm2dImpl = \"torch::nn::BatchNorm2dImpl\";\n" +
+                "private static final String CPP_TYPE_BatchNorm3dImpl = \"torch::nn::BatchNorm3dImpl\";\n" +
+                "private static final String CPP_TYPE_DropoutImpl = \"torch::nn::DropoutImpl\";\n" +
+                "private static final String CPP_TYPE_Dropout2dImpl = \"torch::nn::Dropout2dImpl\";\n" +
+                "private static final String CPP_TYPE_Dropout3dImpl = \"torch::nn::Dropout3dImpl\";\n" +
+                "private static final String CPP_TYPE_ReLUImpl = \"torch::nn::ReLUImpl\";\n" +
+                "private static final String CPP_TYPE_LeakyReLUImpl = \"torch::nn::LeakyReLUImpl\";\n" +
+                "private static final String CPP_TYPE_ELUImpl = \"torch::nn::ELUImpl\";\n" +
+                "private static final String CPP_TYPE_SELUImpl = \"torch::nn::SELUImpl\";\n" +
+                "private static final String CPP_TYPE_GELUImpl = \"torch::nn::GELUImpl\";\n" +
+                "private static final String CPP_TYPE_SigmoidImpl = \"torch::nn::SigmoidImpl\";\n" +
+                "private static final String CPP_TYPE_TanhImpl = \"torch::nn::TanhImpl\";\n" +
+                "private static final String CPP_TYPE_SoftmaxImpl = \"torch::nn::SoftmaxImpl\";\n" +
+                "private static final String CPP_TYPE_LogSoftmaxImpl = \"torch::nn::LogSoftmaxImpl\";\n" +
+                "private static final String CPP_TYPE_LayerNormImpl = \"torch::nn::LayerNormImpl\";\n" +
+                "private static final String CPP_TYPE_GroupNormImpl = \"torch::nn::GroupNormImpl\";\n" +
+                "private static final String CPP_TYPE_InstanceNorm1dImpl = \"torch::nn::InstanceNorm1dImpl\";\n" +
+                "private static final String CPP_TYPE_InstanceNorm2dImpl = \"torch::nn::InstanceNorm2dImpl\";\n" +
+                "private static final String CPP_TYPE_InstanceNorm3dImpl = \"torch::nn::InstanceNorm3dImpl\";\n" +
+                "private static final String CPP_TYPE_MaxPool1dImpl = \"torch::nn::MaxPool1dImpl\";\n" +
+                "private static final String CPP_TYPE_MaxPool2dImpl = \"torch::nn::MaxPool2dImpl\";\n" +
+                "private static final String CPP_TYPE_MaxPool3dImpl = \"torch::nn::MaxPool3dImpl\";\n" +
+                "private static final String CPP_TYPE_AvgPool1dImpl = \"torch::nn::AvgPool1dImpl\";\n" +
+                "private static final String CPP_TYPE_AvgPool2dImpl = \"torch::nn::AvgPool2dImpl\";\n" +
+                "private static final String CPP_TYPE_AvgPool3dImpl = \"torch::nn::AvgPool3dImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveAvgPool1dImpl = \"torch::nn::AdaptiveAvgPool1dImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveAvgPool2dImpl = \"torch::nn::AdaptiveAvgPool2dImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveAvgPool3dImpl = \"torch::nn::AdaptiveAvgPool3dImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveMaxPool1dImpl = \"torch::nn::AdaptiveMaxPool1dImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveMaxPool2dImpl = \"torch::nn::AdaptiveMaxPool2dImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveMaxPool3dImpl = \"torch::nn::AdaptiveMaxPool3dImpl\";\n" +
+                "private static final String CPP_TYPE_EmbeddingImpl = \"torch::nn::EmbeddingImpl\";\n" +
+                "private static final String CPP_TYPE_EmbeddingBagImpl = \"torch::nn::EmbeddingBagImpl\";\n" +
+                "private static final String CPP_TYPE_FlattenImpl = \"torch::nn::FlattenImpl\";\n" +
+                "private static final String CPP_TYPE_UnflattenImpl = \"torch::nn::UnflattenImpl\";\n" +
+                "private static final String CPP_TYPE_BilinearImpl = \"torch::nn::BilinearImpl\";\n" +
+                "private static final String CPP_TYPE_IdentityImpl = \"torch::nn::IdentityImpl\";\n" +
+                "private static final String CPP_TYPE_FoldImpl = \"torch::nn::FoldImpl\";\n" +
+                "private static final String CPP_TYPE_UnfoldImpl = \"torch::nn::UnfoldImpl\";\n" +
+                "private static final String CPP_TYPE_MultiheadAttentionImpl = \"torch::nn::MultiheadAttentionImpl\";\n" +
+                "private static final String CPP_TYPE_TransformerImpl = \"torch::nn::TransformerImpl\";\n" +
+                "private static final String CPP_TYPE_TransformerEncoderImpl = \"torch::nn::TransformerEncoderImpl\";\n" +
+                "private static final String CPP_TYPE_TransformerDecoderImpl = \"torch::nn::TransformerDecoderImpl\";\n" +
+                "private static final String CPP_TYPE_TransformerEncoderLayerImpl = \"torch::nn::TransformerEncoderLayerImpl\";\n" +
+                "private static final String CPP_TYPE_TransformerDecoderLayerImpl = \"torch::nn::TransformerDecoderLayerImpl\";\n" +
+                "private static final String CPP_TYPE_RNNImpl = \"torch::nn::RNNImpl\";\n" +
+                "private static final String CPP_TYPE_LSTMImpl = \"torch::nn::LSTMImpl\";\n" +
+                "private static final String CPP_TYPE_GRUImpl = \"torch::nn::GRUImpl\";\n" +
+                "private static final String CPP_TYPE_RNNCellImpl = \"torch::nn::RNNCellImpl\";\n" +
+                "private static final String CPP_TYPE_LSTMCellImpl = \"torch::nn::LSTMCellImpl\";\n" +
+                "private static final String CPP_TYPE_GRUCellImpl = \"torch::nn::GRUCellImpl\";\n" +
+                "private static final String CPP_TYPE_L1LossImpl = \"torch::nn::L1LossImpl\";\n" +
+                "private static final String CPP_TYPE_MSELossImpl = \"torch::nn::MSELossImpl\";\n" +
+                "private static final String CPP_TYPE_BCELossImpl = \"torch::nn::BCELossImpl\";\n" +
+                "private static final String CPP_TYPE_BCEWithLogitsLossImpl = \"torch::nn::BCEWithLogitsLossImpl\";\n" +
+                "private static final String CPP_TYPE_NLLLossImpl = \"torch::nn::NLLLossImpl\";\n" +
+                "private static final String CPP_TYPE_CrossEntropyLossImpl = \"torch::nn::CrossEntropyLossImpl\";\n" +
+                "private static final String CPP_TYPE_CTCLossImpl = \"torch::nn::CTCLossImpl\";\n" +
+                "private static final String CPP_TYPE_PoissonNLLLossImpl = \"torch::nn::PoissonNLLLossImpl\";\n" +
+                "private static final String CPP_TYPE_HingeEmbeddingLossImpl = \"torch::nn::HingeEmbeddingLossImpl\";\n" +
+                "private static final String CPP_TYPE_HuberLossImpl = \"torch::nn::HuberLossImpl\";\n" +
+                "private static final String CPP_TYPE_SmoothL1LossImpl = \"torch::nn::SmoothL1LossImpl\";\n" +
+                "private static final String CPP_TYPE_KLDivLossImpl = \"torch::nn::KLDivLossImpl\";\n" +
+                "private static final String CPP_TYPE_MarginRankingLossImpl = \"torch::nn::MarginRankingLossImpl\";\n" +
+                "private static final String CPP_TYPE_SoftMarginLossImpl = \"torch::nn::SoftMarginLossImpl\";\n" +
+                "private static final String CPP_TYPE_MultiLabelMarginLossImpl = \"torch::nn::MultiLabelMarginLossImpl\";\n" +
+                "private static final String CPP_TYPE_MultiLabelSoftMarginLossImpl = \"torch::nn::MultiLabelSoftMarginLossImpl\";\n" +
+                "private static final String CPP_TYPE_MultiMarginLossImpl = \"torch::nn::MultiMarginLossImpl\";\n" +
+                "private static final String CPP_TYPE_CosineEmbeddingLossImpl = \"torch::nn::CosineEmbeddingLossImpl\";\n" +
+                "private static final String CPP_TYPE_TripletMarginLossImpl = \"torch::nn::TripletMarginLossImpl\";\n" +
+                "private static final String CPP_TYPE_TripletMarginWithDistanceLossImpl = \"torch::nn::TripletMarginWithDistanceLossImpl\";\n" +
+                "private static final String CPP_TYPE_PairwiseDistanceImpl = \"torch::nn::PairwiseDistanceImpl\";\n" +
+                "private static final String CPP_TYPE_CosineSimilarityImpl = \"torch::nn::CosineSimilarityImpl\";\n" +
+                "private static final String CPP_TYPE_ReflectionPad1dImpl = \"torch::nn::ReflectionPad1dImpl\";\n" +
+                "private static final String CPP_TYPE_ReflectionPad2dImpl = \"torch::nn::ReflectionPad2dImpl\";\n" +
+                "private static final String CPP_TYPE_ReflectionPad3dImpl = \"torch::nn::ReflectionPad3dImpl\";\n" +
+                "private static final String CPP_TYPE_ReplicationPad1dImpl = \"torch::nn::ReplicationPad1dImpl\";\n" +
+                "private static final String CPP_TYPE_ReplicationPad2dImpl = \"torch::nn::ReplicationPad2dImpl\";\n" +
+                "private static final String CPP_TYPE_ReplicationPad3dImpl = \"torch::nn::ReplicationPad3dImpl\";\n" +
+                "private static final String CPP_TYPE_ConstantPad1dImpl = \"torch::nn::ConstantPad1dImpl\";\n" +
+                "private static final String CPP_TYPE_ConstantPad2dImpl = \"torch::nn::ConstantPad2dImpl\";\n" +
+                "private static final String CPP_TYPE_ConstantPad3dImpl = \"torch::nn::ConstantPad3dImpl\";\n" +
+                "private static final String CPP_TYPE_ZeroPad1dImpl = \"torch::nn::ZeroPad1dImpl\";\n" +
+                "private static final String CPP_TYPE_ZeroPad2dImpl = \"torch::nn::ZeroPad2dImpl\";\n" +
+                "private static final String CPP_TYPE_ZeroPad3dImpl = \"torch::nn::ZeroPad3dImpl\";\n" +
+                "private static final String CPP_TYPE_PReLUImpl = \"torch::nn::PReLUImpl\";\n" +
+                "private static final String CPP_TYPE_ReLU6Impl = \"torch::nn::ReLU6Impl\";\n" +
+                "private static final String CPP_TYPE_RReLUImpl = \"torch::nn::RReLUImpl\";\n" +
+                "private static final String CPP_TYPE_HardtanhImpl = \"torch::nn::HardtanhImpl\";\n" +
+                "private static final String CPP_TYPE_LeakyReLU6Impl = \"torch::nn::LeakyReLUImpl\";\n" +
+                "private static final String CPP_TYPE_LogSigmoidImpl = \"torch::nn::LogSigmoidImpl\";\n" +
+                "private static final String CPP_TYPE_SoftplusImpl = \"torch::nn::SoftplusImpl\";\n" +
+                "private static final String CPP_TYPE_SoftsignImpl = \"torch::nn::SoftsignImpl\";\n" +
+                "private static final String CPP_TYPE_SoftshrinkImpl = \"torch::nn::SoftshrinkImpl\";\n" +
+                "private static final String CPP_TYPE_HardshrinkImpl = \"torch::nn::HardshrinkImpl\";\n" +
+                "private static final String CPP_TYPE_ThresholdImpl = \"torch::nn::ThresholdImpl\";\n" +
+                "private static final String CPP_TYPE_GLUImpl = \"torch::nn::GLUImpl\";\n" +
+                "private static final String CPP_TYPE_MishImpl = \"torch::nn::MishImpl\";\n" +
+                "private static final String CPP_TYPE_SiLUImpl = \"torch::nn::SiLUImpl\";\n" +
+                "private static final String CPP_TYPE_PixelShuffleImpl = \"torch::nn::PixelShuffleImpl\";\n" +
+                "private static final String CPP_TYPE_PixelUnshuffleImpl = \"torch::nn::PixelUnshuffleImpl\";\n" +
+                "private static final String CPP_TYPE_UpsampleImpl = \"torch::nn::UpsampleImpl\";\n" +
+                "private static final String CPP_TYPE_Softmax2dImpl = \"torch::nn::Softmax2dImpl\";\n" +
+                "private static final String CPP_TYPE_SoftminImpl = \"torch::nn::SoftminImpl\";\n" +
+                "private static final String CPP_TYPE_TanhshrinkImpl = \"torch::nn::TanhshrinkImpl\";\n" +
+                "private static final String CPP_TYPE_CELUImpl = \"torch::nn::CELUImpl\";\n" +
+                "private static final String CPP_TYPE_AlphaDropoutImpl = \"torch::nn::AlphaDropoutImpl\";\n" +
+                "private static final String CPP_TYPE_FeatureAlphaDropoutImpl = \"torch::nn::FeatureAlphaDropoutImpl\";\n" +
+                "private static final String CPP_TYPE_LPPool1dImpl = \"torch::nn::LPPool1dImpl\";\n" +
+                "private static final String CPP_TYPE_LPPool2dImpl = \"torch::nn::LPPool2dImpl\";\n" +
+                "private static final String CPP_TYPE_LPPool3dImpl = \"torch::nn::LPPool3dImpl\";\n" +
+                "private static final String CPP_TYPE_FractionalMaxPool2dImpl = \"torch::nn::FractionalMaxPool2dImpl\";\n" +
+                "private static final String CPP_TYPE_FractionalMaxPool3dImpl = \"torch::nn::FractionalMaxPool3dImpl\";\n" +
+                "private static final String CPP_TYPE_MaxUnpool1dImpl = \"torch::nn::MaxUnpool1dImpl\";\n" +
+                "private static final String CPP_TYPE_MaxUnpool2dImpl = \"torch::nn::MaxUnpool2dImpl\";\n" +
+                "private static final String CPP_TYPE_MaxUnpool3dImpl = \"torch::nn::MaxUnpool3dImpl\";\n" +
+                "private static final String CPP_TYPE_CrossMapLRN2dImpl = \"torch::nn::CrossMapLRN2dImpl\";\n" +
+                "private static final String CPP_TYPE_LocalResponseNormImpl = \"torch::nn::LocalResponseNormImpl\";\n" +
+                "private static final String CPP_TYPE_AdaptiveLogSoftmaxWithLossImpl = \"torch::nn::AdaptiveLogSoftmaxWithLossImpl\";\n" +
+                "private static final String CPP_TYPE_ConvTranspose1dImpl = \"torch::nn::ConvTranspose1dImpl\";\n" +
+                "private static final String CPP_TYPE_ConvTranspose2dImpl = \"torch::nn::ConvTranspose2dImpl\";\n" +
+                "private static final String CPP_TYPE_ConvTranspose3dImpl = \"torch::nn::ConvTranspose3dImpl\";\n" +
+                "private static final String CPP_TYPE_SequentialImpl = \"torch::nn::SequentialImpl\";\n" +
+                "private static final String CPP_TYPE_ModuleListImpl = \"torch::nn::ModuleListImpl\";\n" +
+                "private static final String CPP_TYPE_ModuleDictImpl = \"torch::nn::ModuleDictImpl\";\n" +
+                "private static final String CPP_TYPE_ParameterListImpl = \"torch::nn::ParameterListImpl\";\n" +
+                "private static final String CPP_TYPE_ParameterDictImpl = \"torch::nn::ParameterDictImpl\";\n" +
+                "/**\n" +
+                " * Register a custom Java {@link Module} subclass so that\n" +
+                " * {@link #as(Class)} can verify the underlying C++ object via\n" +
+                " * {@code dynamic_cast} before wrapping the pointer. {@code cppTypeName}\n" +
+                " * must be the fully qualified C++ type name as reported by\n" +
+                " * {@code typeid(...).name()}, e.g. {@code \"my::app::MyModuleImpl\"}.\n" +
+                " */\n" +
+                "public static <M extends Module> void registerCppType(Class<M> javaClass, String cppTypeName) {\n" +
+                "    if (javaClass == null || cppTypeName == null) {\n" +
+                "        throw new IllegalArgumentException(\"javaClass and cppTypeName must be non-null\");\n" +
+                "    }\n" +
+                "    CPP_TYPE_REGISTRY.put(javaClass, cppTypeName);\n" +
+                "}\n" +
+                "/**\n" +
+                " * Look up the C++ typeid registered for {@code javaClass}, if any.\n" +
+                " */\n" +
+                "public static String cppTypeName(Class<? extends Module> javaClass) {\n" +
+                "    return CPP_TYPE_REGISTRY.get(javaClass);\n" +
+                "}\n"
+            ))
             // Mimic C++ register_module and return the subclass instance. Also keep API compatibility with
             // presets before 2.0.1 where register_module template was instantiated for all known
             // native subclasses.
             .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaText(
                 "private native @Name(\"register_module<torch::nn::Module>\") void _register_module(@StdString BytePointer name, @SharedPtr @ByVal Module module);\n" +
-                "public <M extends Module> M register_module(BytePointer name, M module) { _register_module(name, module); return module; }\n" +
+                "public <M extends Module> M register_module(BytePointer name, M module) { ModuleAsHelper.remember(module); _register_module(name, module); return module; }\n" +
                 "private native @Name(\"register_module<torch::nn::Module>\") void _register_module(@StdString String name, @SharedPtr @ByVal Module module);\n" +
-                "public <M extends Module> M register_module(String name, M module) { _register_module(name, module); return module; }"
+                "public <M extends Module> M register_module(String name, M module) { ModuleAsHelper.remember(module); _register_module(name, module); return module; }"
             ))
         ;
         String[] virtuals = {"train", "is_training", "to", "zero_grad", "save", "load", "pretty_print", "is_serializable"};
         for (String m : virtuals)
             infoMap.put(new Info("torch::nn::Module::" + m).virtualize().annotations("@Virtual(subclasses=false, method=\"" + m + "\")"));
+
+        // Inject the generic Module.as(Class<M>) cast through a real method
+        // declaration that the parser will see in module.h. The `as(Class)`
+        // helper is too useful to gate on a 100+ line `javaText` block, and
+        // it would be erased by the parser anyway because the synthetic
+        // `asModuleUnchecked` symbol lives in cppText only.
+        infoMap.putFirst(new Info("torch::nn::Module::train")
+            .virtualize()
+            .annotations("@Virtual(subclasses=false, method=\"train\")")
+            .javaText(
+                "public native @Virtual(subclasses=false, method=\"train\") void train(@Cast(\"bool\") boolean on);\n" +
+                "native @Name(\"javacpp_module_object_id\") @Cast(\"size_t\") long moduleObjectId();\n" +
+                "{ ModuleAsHelper.remember(this); }\n" +
+                "/**\n" +
+                " * Attempts to cast this {@link Module} to any subclass passed via\n" +
+                " * {@code moduleClass}. For the 80+ built-in {@code *Impl} classes\n" +
+                " * this dispatches to the corresponding {@code asXxx()} method via\n" +
+                " * reflection so the C++ {@code dynamic_cast} actually verifies\n" +
+                " * the underlying object. For user-defined subclasses (custom\n" +
+                " * modules, complex wrapper classes that compose several layers,\n" +
+                " * …) the pointer is wrapped as-is: registration via\n" +
+                " * {@link #registerCppType(Class, String)} is optional but lets\n" +
+                " * the cast be type-checked when the user knows the C++ typeid of\n" +
+                " * their module.\n" +
+                " *\n" +
+                " * @param moduleClass non-null Java class extending {@link Module}.\n" +
+                " * @return a fresh instance of {@code moduleClass} wrapping this\n" +
+                " *         {@code Module}'s native pointer, or {@code null} when\n" +
+                " *         the underlying C++ object is not of the requested type.\n" +
+                " */\n" +
+                "public <M extends Module> M as(Class<M> moduleClass) {\n" +
+                "    if (moduleClass == null) {\n" +
+                "        throw new NullPointerException(\"moduleClass\");\n" +
+                "    }\n" +
+                "    if (moduleClass.isInstance(this)) {\n" +
+                "        return moduleClass.cast(this);\n" +
+                "    }\n" +
+                "    String className = moduleClass.getSimpleName();\n" +
+                "    if (className.endsWith(\"Impl\")) {\n" +
+                "        String asMethodName = \"as\" + className.substring(0, className.length() - 4);\n" +
+                "        try {\n" +
+                "            java.lang.reflect.Method asMethod = Module.class.getMethod(asMethodName);\n" +
+                "            Object module = asMethod.invoke(this);\n" +
+                "            // Guard: the typed asXxx() returns a non-null wrapper only when\n" +
+                "            // the underlying C++ object is actually of the requested type.\n" +
+                "            // If moduleClass isn't a Java supertype of the returned wrapper,\n" +
+                "            // surface that as a no-match instead of throwing ClassCastException.\n" +
+                "            if (module == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            return moduleClass.cast(module);\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            // Fall through to the generic Module pointer wrapper below.\n" +
+                "        } catch (IllegalAccessException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        } catch (java.lang.reflect.InvocationTargetException e) {\n" +
+                "            Throwable cause = e.getCause();\n" +
+                "            if (cause instanceof RuntimeException) {\n" +
+                "                throw (RuntimeException) cause;\n" +
+                "            }\n" +
+                "            throw new RuntimeException(cause);\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            // The asXxx() returned something that isn't a moduleClass\n" +
+                "            // (e.g. user asked for FancyMLP but the underlying object\n" +
+                "            // is a built-in layer). Treat as a no-match.\n" +
+                "            return null;\n" +
+                "        }\n" +
+                "    }\n" +
+                "    // Custom (non-*Impl) subclass: wrap the raw Module pointer.\n" +
+                "    // The caller is responsible for knowing what they are doing;\n" +
+                "    // if they want C++ typeid verification they should call\n" +
+                "    // registerCppType() first.\n" +
+                "    return ModuleAsHelper.wrap(this, moduleClass);\n" +
+                "}\n" +
+                "/**\n" +
+                " * Static registry mapping Java {@link Module} subclasses to fully\n" +
+                " * qualified C++ typeid names. Can be extended at runtime via\n" +
+                " * {@link #registerCppType(Class, String)} so custom user modules\n" +
+                " * can be type-checked at runtime as well.\n" +
+                " */\n" +
+                "private static final java.util.Map<Class<? extends Module>, String> CPP_TYPE_REGISTRY =\n" +
+                "        new java.util.concurrent.ConcurrentHashMap<Class<? extends Module>, String>();\n" +
+                "/** Look up the C++ typeid registered for {@code javaClass}, if any. */\n" +
+                "public static String cppTypeName(Class<? extends Module> javaClass) {\n" +
+                "    return CPP_TYPE_REGISTRY.get(javaClass);\n" +
+                "}\n" +
+                "/**\n" +
+                " * Register a custom Java {@link Module} subclass so that\n" +
+                " * {@link #as(Class)} can later look up the C++ typeid. Calling this\n" +
+                " * is optional — without it {@code as(Class)} will still return a\n" +
+                " * wrapper, just without typeid verification. {@code cppTypeName}\n" +
+                " * must be the fully qualified C++ type name, e.g.\n" +
+                " * {@code \"torch::nn::LinearImpl\"}.\n" +
+                " */\n" +
+                "public static <M extends Module> void registerCppType(Class<M> javaClass, String cppTypeName) {\n" +
+                "    if (javaClass == null || cppTypeName == null) {\n" +
+                "        throw new IllegalArgumentException(\"javaClass and cppTypeName must be non-null\");\n" +
+                "    }\n" +
+                "    CPP_TYPE_REGISTRY.put(javaClass, cppTypeName);\n" +
+                "}"
+            ));
 
         // clone returns a std::shared_ptr<Module> and not a Module.
         // This cast is normally added automatically by Parser but the info on shared_ptr<Module> prevents this (issue #670)
@@ -1865,9 +2379,111 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         mapModule(infoMap, "TransformerDecoder");
         mapModule(infoMap, "Transformer");
 
+        infoMap.put(new Info("torch::nn::Module::forward").javaText(
+            "private native @ByVal @Name(\"forward_tensor\") @Virtual(method=\"forward\") Tensor _forward_tensor(@Const @ByRef Tensor input);\n" +
+            "public @ByVal Tensor forward(@Const @ByRef Tensor input) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class) ? m.forward(input) : _forward_tensor(input); }\n" +
+            "private native @ByVal @Name(\"forward_tensor2\") @Virtual(method=\"forward\") Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);\n" +
+            "public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class) ? m.forward(input1, input2) : _forward_tensor2(input1, input2); }\n" +
+            "private native @ByVal @Name(\"forward_tensor3\") @Virtual(method=\"forward\") Tensor _forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);\n" +
+            "public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class, Tensor.class) ? m.forward(input1, input2, input3) : _forward_tensor3(input1, input2, input3); }\n" +
+            "public native @ByVal @Name(\"forward_tensor4\") @Virtual(method=\"forward\") Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);\n" +
+            "public native @ByVal @Name(\"forward_tensor6\") @Virtual(method=\"forward\") Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);\n" +
+            "public native @ByVal @Name(\"forward_tensor8\") @Virtual(method=\"forward\") Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);\n" +
+            "public native @ByVal @Name(\"forward_tensor_output_size\") Tensor forward(@Const @ByRef Tensor input, @ByRef(nullValue = \"std::optional<at::IntArrayRef>(c10::nullopt)\") @Cast({\"int64_t*\", \"c10::ArrayRef<int64_t>\", \"std::vector<int64_t>&\"}) @StdVector long... output_size);\n" +
+            "public native @ByVal @Name(\"forward_tensor_output_size\") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef(nullValue = \"std::optional<at::IntArrayRef>(c10::nullopt)\") LongArrayRefOptional output_size);\n" +
+            "public native @ByVal @Name(\"forward_tensor_indices_output_size\") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @Const @ByRef(nullValue = \"std::optional<std::vector<int64_t> >(c10::nullopt)\") LongVectorOptional output_size);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_t_tensortensor\") @Virtual(method=\"forwardT_TensorT_TensorTensor_T_T\") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_t_tensortensor_opt\") @Virtual(method=\"forwardT_TensorT_TensorTensor_T_T\") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_tensor\") @Virtual(method=\"forwardT_TensorTensor_T\") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_tensor2\") @Virtual(method=\"forwardT_TensorTensor_T\") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_tensor3\") @Virtual(method=\"forwardT_TensorTensor_T\") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_tensor_opt\") @Virtual(method=\"forwardT_TensorTensor_T\") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input, @ByVal T_TensorTensor_TOptional hx_opt);\n" +
+            "public native @ByVal @Name(\"forward_tuple_tensor_tensor_attn\") @Virtual(method=\"forwardT_TensorTensor_T\") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast(\"bool\") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast(\"bool\") boolean average_attn_weights);\n"
+        ));
+        infoMap
+            .put(new Info("torch::nn::RNNImpl::forward").javaNames("forwardT_TensorTensor_T"))
+            .put(new Info("torch::nn::GRUImpl::forward").javaNames("forwardT_TensorTensor_T"))
+            .put(new Info("torch::nn::LSTMImpl::forward").javaNames("forwardT_TensorT_TensorTensor_T_T"))
+            .put(new Info("torch::nn::LSTMCellImpl::forward").javaNames("forwardT_TensorTensor_T"))
+            .put(new Info("torch::nn::MultiheadAttentionImpl::forward").javaNames("forwardT_TensorTensor_T"))
+            .put(new Info("torch::nn::AdaptiveLogSoftmaxWithLossImpl::forward").javaNames("forwardASMoutput"));
+
+        infoMap
+            .put(new Info("torch::nn::ModuleListImpl::push_back").javaText(
+                "private native @Name(\"push_back\") void _push_back(@SharedPtr(\"torch::nn::Module\") @ByVal Module module);\n" +
+                "public void push_back(@SharedPtr(\"torch::nn::Module\") @ByVal Module module) { ModuleAsHelper.remember(module); _push_back(module); }"
+            ))
+            .put(new Info("torch::nn::ModuleListImpl::insert").javaText(
+                "private native @Name(\"insert\") void _insert(@Cast(\"size_t\") long index, @SharedPtr(\"torch::nn::Module\") @ByVal Module module);\n" +
+                "public void insert(@Cast(\"size_t\") long index, @SharedPtr(\"torch::nn::Module\") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(index, module); }"
+            ))
+            .put(new Info("torch::nn::ModuleListImpl::operator[]").javaText(
+                "private native @SharedPtr(\"torch::nn::Module\") @ByVal @Name(\"operator []\") Module _get(@Cast(\"size_t\") long index);\n" +
+                "public @SharedPtr(\"torch::nn::Module\") @ByVal Module get(@Cast(\"size_t\") long index) { return ModuleAsHelper.recover(_get(index)); }"
+            ))
+            .put(new Info("torch::nn::ModuleDictImpl::insert").javaText(
+                "private native @Name(\"insert\") void _insert(@StdString BytePointer key, @SharedPtr(\"torch::nn::Module\") @ByVal Module module);\n" +
+                "public void insert(@StdString BytePointer key, @SharedPtr(\"torch::nn::Module\") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(key, module); }\n" +
+                "private native @Name(\"insert\") void _insert(@StdString String key, @SharedPtr(\"torch::nn::Module\") @ByVal Module module);\n" +
+                "public void insert(@StdString String key, @SharedPtr(\"torch::nn::Module\") @ByVal Module module) { ModuleAsHelper.remember(module); _insert(key, module); }"
+            ))
+            .put(new Info("torch::nn::ModuleDictImpl::operator[]").javaText(
+                "private native @SharedPtr(\"torch::nn::Module\") @ByVal @Name(\"operator []\") Module _get(@StdString BytePointer key);\n" +
+                "public @SharedPtr(\"torch::nn::Module\") @ByVal Module get(@StdString BytePointer key) { return ModuleAsHelper.recover(_get(key)); }\n" +
+                "private native @SharedPtr(\"torch::nn::Module\") @ByVal @Name(\"operator []\") Module _get(@StdString String key);\n" +
+                "public @SharedPtr(\"torch::nn::Module\") @ByVal Module get(@StdString String key) { return ModuleAsHelper.recover(_get(key)); }"
+            ));
+
 
         //// AnyModule, AnyValue and Sequential
         infoMap
+            .put(new Info("torch::nn::AnyModule::ptr").javaText(
+                "public AnyModule(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module module) { super((Pointer)null); allocate(module); }\n" +
+                "private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module module);\n" +
+                "public static AnyModule from_module(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module module) { return new AnyModule(module); }\n" +
+                "public native @SharedPtr(\"torch::nn::Module\") @ByVal Module ptr();\n" +
+                "public Module toModule() { return ModuleAsHelper.recover(ptr()); }\n"
+            ))
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl(torch::OrderedDict<std::string,torch::nn::AnyModule>&)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl(torch::OrderedDict<std::string, torch::nn::AnyModule>&)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl(torch::OrderedDict<std::string, torch::nn::AnyModule> &)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl(torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,torch::nn::AnyModule>&)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl(torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, torch::nn::AnyModule>&)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl(torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, torch::nn::AnyModule> &)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::string,torch::nn::AnyModule>&>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::string, torch::nn::AnyModule>&>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::string, torch::nn::AnyModule> &>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::string,torch::nn::AnyModule> &>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,torch::nn::AnyModule>&>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, torch::nn::AnyModule>&>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, torch::nn::AnyModule> &>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::SequentialImpl<torch::OrderedDict<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,torch::nn::AnyModule> &>").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::begin").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::end").skip())
+            // Module now has concrete forward() overloads, so AnyModule can
+            // store a Module-typed handle directly. Expose the normal AnyModule
+            // and Module push_back overloads with stable names.
+            .putFirst(new Info("torch::nn::SequentialImpl::push_back(std::string, torch::nn::AnyModule)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, torch::nn::AnyModule)").skip())
+            .putFirst(new Info("torch::nn::SequentialImpl::push_back(torch::nn::AnyModule)")
+                .define()
+                .javaText(
+                    "public SequentialImpl(@ByRef(true) StringAnyModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }\n" +
+                    "@SharedPtr @Name(\"std::make_shared<torch::nn::SequentialImpl>\") private native void allocate(@ByRef(true) StringAnyModuleDict ordered_dict);\n" +
+                    "public SequentialImpl(@ByRef(true) StringSharedModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }\n" +
+                    "@SharedPtr @Name(\"std::make_shared<torch::nn::SequentialImpl>\") private native void allocate(@ByRef(true) StringSharedModuleDict ordered_dict);\n" +
+                    "public native @Name(\"push_back\") void push_back(@ByVal AnyModule any_module);\n" +
+                    "public native @Name(\"push_back\") void push_back(@StdString BytePointer name, @ByVal AnyModule any_module);\n" +
+                    "public native @Name(\"push_back\") void push_back(@StdString String name, @ByVal AnyModule any_module);\n" +
+                    "public native @Name(\"push_back\") void push_back(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module module);\n" +
+                    "public native @Name(\"push_back\") void push_back(@StdString String name, @SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::Module>\"}) Module module);\n" +
+                    "public void push_back(@StdString BytePointer name, Module module) { push_back(name != null ? name.getString() : null, module); }\n" +
+                    "public native @ByVal @Cast(\"torch::nn::SequentialImpl::Iterator*\") @Name(\"begin\") AnyModuleVector.Iterator begin_any();\n" +
+                    "public native @ByVal @Cast(\"torch::nn::SequentialImpl::Iterator*\") @Name(\"end\") AnyModuleVector.Iterator end_any();\n" +
+                    "private transient SharedModuleVector sharedIteratorSnapshot;\n" +
+                    "public SharedModuleVector.Iterator begin() { sharedIteratorSnapshot = children(); return sharedIteratorSnapshot.begin(); }\n" +
+                    "public SharedModuleVector.Iterator end() { if (sharedIteratorSnapshot == null) { sharedIteratorSnapshot = children(); } return sharedIteratorSnapshot.end(); }\n"
+                ))
             // All forward variants of native modules
             .put(new Info("torch::nn::AnyModule::any_forward").javaText(
                 "public native @ByVal AnyValue any_forward(@Const @ByRef AnyValue input);\n" +
@@ -2745,6 +3361,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("torch::dynamo::autograd::AutogradCompilerCall::lifted_ivalue_args").javaText("@MemberGetter public native @ByRef LiftedIValueArgs lifted_ivalue_args();"))
             .put(new Info("torch::jit::ProfileOp::getCallback()", "torch::jit::ProfileIValueOp::getCallback()").javaText(
                 "public native @ByVal @Cast(\"std::function<void(std::vector<c10::IValue>&)>*\") Pointer getCallback();"))
+            .put(new Info("torch::nn::UnflattenOptions::dimname").javaText(
+                "public native @StdString @ByRef @NoException(true) BytePointer dimname();\n"
+                + "public native @ByRef @NoException(true) UnflattenOptions dimname(@StdString BytePointer setter);\n"
+                + "public native @ByRef @NoException(true) UnflattenOptions dimname(@StdString String setter);"))
             .put(new Info("torch::nn::GELUOptions::approximate").javaText(
                 "public native @StdString @ByRef @NoException(true) BytePointer approximate();\n"
                 + "public native @ByRef @NoException(true) GELUOptions approximate(@StdString BytePointer setter);\n"

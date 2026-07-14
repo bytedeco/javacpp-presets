@@ -45,4 +45,10 @@ private native void allocate(
   public native @Cast("std::vector<int64_t>*") @ByRef @NoException(true) LongVector cutoffs();
   public native @ByRef @NoException(true) DoublePointer div_value();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer head_bias();
+
+  public native @ByRef @NoException(true) AdaptiveLogSoftmaxWithLossOptions in_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) AdaptiveLogSoftmaxWithLossOptions n_classes(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) AdaptiveLogSoftmaxWithLossOptions cutoffs(@Cast("std::vector<int64_t>*") @ByVal LongVector setter);
+  public native @ByRef @NoException(true) AdaptiveLogSoftmaxWithLossOptions div_value(double setter);
+  public native @ByRef @NoException(true) AdaptiveLogSoftmaxWithLossOptions head_bias(@Cast("bool") boolean setter);
 }

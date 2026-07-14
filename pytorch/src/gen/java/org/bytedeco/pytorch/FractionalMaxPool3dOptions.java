@@ -30,4 +30,9 @@ public class FractionalMaxPool3dOptions extends Pointer {
   public native @Cast("std::optional<torch::ExpandingArray<3> >*") @ByRef @NoException(true) LongExpandingArrayOptional output_size();
   public native @Cast("std::optional<torch::nn::FractionalMaxPoolOptions<3>::ExpandingArrayDouble>*") @ByRef @NoException(true) DoubleExpandingArrayOptional output_ratio();
   public native @ByRef @NoException(true) Tensor _random_samples();
+
+  public native @ByRef @NoException(true) FractionalMaxPool3dOptions kernel_size(@Cast("torch::ExpandingArray<3>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) FractionalMaxPool3dOptions output_size(@Cast("std::optional<torch::ExpandingArray<3> >*") @ByVal LongExpandingArrayOptional setter);
+  public native @ByRef @NoException(true) FractionalMaxPool3dOptions output_ratio(@Cast("std::optional<torch::nn::FractionalMaxPoolOptions<3>::ExpandingArrayDouble>*") @ByVal DoubleExpandingArrayOptional setter);
+  public native @ByRef @NoException(true) FractionalMaxPool3dOptions _random_samples(@ByVal Tensor setter);
 }

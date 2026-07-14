@@ -44,10 +44,10 @@ public class LSTMImpl extends LSTMImplBase {
   public LSTMImpl(@Const @ByRef LSTMOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::LSTMImpl>") private native void allocate(@Const @ByRef LSTMOptions options_);
 
-  public native @ByVal T_TensorT_TensorTensor_T_T forward(
+  public native @ByVal @Name("forward") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(
         @Const @ByRef Tensor input,
         @Optional T_TensorTensor_T hx_opt/*={}*/);
-  public native @ByVal T_TensorT_TensorTensor_T_T forward(
+  public native @ByVal @Name("forward") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(
         @Const @ByRef Tensor input);
   public native @ByVal T_PackedSequenceT_TensorTensor_T_T forward_with_packed_input(
         @Const @ByRef PackedSequence packed_input,

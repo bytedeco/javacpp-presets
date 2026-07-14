@@ -39,4 +39,9 @@ private native void allocate(@Cast("int64_t") long num_groups, @Cast("int64_t") 
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer num_channels();
   public native @ByRef @NoException(true) DoublePointer eps();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer affine();
+
+  public native @ByRef @NoException(true) GroupNormOptions num_groups(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GroupNormOptions num_channels(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GroupNormOptions eps(double setter);
+  public native @ByRef @NoException(true) GroupNormOptions affine(@Cast("bool") boolean setter);
 }

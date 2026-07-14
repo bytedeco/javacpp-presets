@@ -39,5 +39,9 @@ public class LossReduction extends Pointer {
     public @ByRef kSum get2() { return get2(this); }
     @Namespace @Name("std::get<2>") public static native @ByRef kSum get2(@ByRef LossReduction container);
     @ValueSetter public native LossReduction put(@ByRef kSum value);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link LossReductionPrinter}. */
+  @Override public String toString() { return LossReductionPrinter.format(this); }
 }
 

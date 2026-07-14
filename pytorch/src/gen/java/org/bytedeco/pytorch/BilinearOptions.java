@@ -45,4 +45,9 @@ public class BilinearOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer in2_features();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer out_features();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
+
+  public native @ByRef @NoException(true) BilinearOptions in1_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) BilinearOptions in2_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) BilinearOptions out_features(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) BilinearOptions bias(@Cast("bool") boolean setter);
 }

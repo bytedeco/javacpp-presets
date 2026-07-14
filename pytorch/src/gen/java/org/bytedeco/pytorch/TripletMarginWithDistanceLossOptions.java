@@ -50,4 +50,9 @@ public class TripletMarginWithDistanceLossOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer margin();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer swap();
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) TripletMarginWithDistanceLossOptions distance_function(@Cast("std::optional<torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t>*") @ByVal Pointer setter);
+  public native @ByRef @NoException(true) TripletMarginWithDistanceLossOptions margin(double setter);
+  public native @ByRef @NoException(true) TripletMarginWithDistanceLossOptions swap(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) TripletMarginWithDistanceLossOptions reduction(@ByVal LossReduction setter);
 }

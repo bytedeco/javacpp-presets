@@ -51,8 +51,8 @@ public class Half extends Pointer {
 // #if defined(__aarch64__) && !defined(__CUDACC__)
 // #else
   public Half(float value) { super((Pointer)null); allocate(value); }
-  private native void allocate(float value);
-  public native @Name("operator float") float asFloat();
+  private native void allocate(@Cast("float16_t") float value);
+  public native @Name("operator float16_t") @Cast("float") float asFloat();
 // #endif
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)

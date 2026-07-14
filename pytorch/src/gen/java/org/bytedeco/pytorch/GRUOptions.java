@@ -41,4 +41,12 @@ public class GRUOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer batch_first();
   public native @ByRef @NoException(true) DoublePointer dropout();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bidirectional();
+
+  public native @ByRef @NoException(true) GRUOptions input_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GRUOptions hidden_size(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GRUOptions num_layers(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) GRUOptions bias(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) GRUOptions batch_first(@Cast("bool") boolean setter);
+  public native @ByRef @NoException(true) GRUOptions dropout(double setter);
+  public native @ByRef @NoException(true) GRUOptions bidirectional(@Cast("bool") boolean setter);
 }

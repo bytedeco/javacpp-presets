@@ -58,6 +58,14 @@ public class EmbeddingBagImpl extends EmbeddingBagImplCloneable {
   /** The embedding table. */
   public native @ByRef Tensor weight(); public native EmbeddingBagImpl weight(Tensor setter);
 
+
+  // JavaCPP from_pretrained adapters
+  public static native @SharedPtr EmbeddingBagImpl from_pretrained(
+        @Const @ByRef Tensor embeddings, @Const @ByRef(nullValue = "torch::nn::EmbeddingBagFromPretrainedOptions{}") EmbeddingBagFromPretrainedOptions options);
+  public static native @SharedPtr EmbeddingBagImpl from_pretrained(
+        @Const @ByRef Tensor embeddings);
+  public native @ByVal @Name("forward_with_offsets") Tensor forward(@Const @ByRef Tensor input, @Const @ByRef Tensor offsets);
+
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef(nullValue = "torch::Tensor{}") Tensor offsets,

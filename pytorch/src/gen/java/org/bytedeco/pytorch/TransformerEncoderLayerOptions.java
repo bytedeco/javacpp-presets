@@ -38,4 +38,10 @@ private native void allocate(@Cast("int64_t") long d_model, @Cast("int64_t") lon
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim_feedforward();
   public native @ByRef @NoException(true) DoublePointer dropout();
   public native @ByRef @NoException(true) TransformerActivation activation();
+
+  public native @ByRef @NoException(true) TransformerEncoderLayerOptions d_model(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerEncoderLayerOptions nhead(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerEncoderLayerOptions dim_feedforward(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) TransformerEncoderLayerOptions dropout(double setter);
+  public native @ByRef @NoException(true) TransformerEncoderLayerOptions activation(@ByVal TransformerActivation setter);
 }

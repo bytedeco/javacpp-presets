@@ -27,4 +27,6 @@ public class AdaptiveAvgPool2dOptions extends Pointer {
   public AdaptiveAvgPool2dOptions(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
   public native @Cast("torch::ExpandingArrayWithOptionalElem<2>*") @ByRef @NoException(true) LongOptional output_size();
+
+  public native @ByRef @NoException(true) AdaptiveAvgPool2dOptions output_size(@Cast("torch::ExpandingArrayWithOptionalElem<2>*") @ByVal LongOptional setter);
 }

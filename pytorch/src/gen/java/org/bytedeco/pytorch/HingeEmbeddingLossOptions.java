@@ -48,4 +48,7 @@ public class HingeEmbeddingLossOptions extends Pointer {
 
   public native @ByRef @NoException(true) DoublePointer margin();
   public native @ByRef @NoException(true) LossReduction reduction();
+
+  public native @ByRef @NoException(true) HingeEmbeddingLossOptions margin(double setter);
+  public native @ByRef @NoException(true) HingeEmbeddingLossOptions reduction(@ByVal LossReduction setter);
 }

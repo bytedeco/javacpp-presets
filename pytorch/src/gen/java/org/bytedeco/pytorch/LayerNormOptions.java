@@ -37,4 +37,8 @@ private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector no
   public native @Cast("std::vector<int64_t>*") @ByRef @NoException(true) LongVector normalized_shape();
   public native @ByRef @NoException(true) DoublePointer eps();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer elementwise_affine();
+
+  public native @ByRef @NoException(true) LayerNormOptions normalized_shape(@Cast("std::vector<int64_t>*") @ByVal LongVector setter);
+  public native @ByRef @NoException(true) LayerNormOptions eps(double setter);
+  public native @ByRef @NoException(true) LayerNormOptions elementwise_affine(@Cast("bool") boolean setter);
 }

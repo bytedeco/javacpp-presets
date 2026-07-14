@@ -41,4 +41,8 @@ public class TensorDataset extends TensorDatasetBase {
   public native @ByVal SizeTOptional size();
 
   public native @ByRef Tensor tensor(); public native TensorDataset tensor(Tensor setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link TensorDatasetPrinter}. */
+  @Override public String toString() { return TensorDatasetPrinter.format(this); }
 }

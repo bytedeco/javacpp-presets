@@ -28,4 +28,7 @@ public class ConstantPad3dOptions extends Pointer {
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<3*2>*") LongPointer padding, double value);
   public native @Cast("torch::ExpandingArray<3*2>*") @ByRef @NoException(true) LongPointer padding();
   public native @ByRef @NoException(true) DoublePointer value();
+
+  public native @ByRef @NoException(true) ConstantPad3dOptions padding(@Cast("torch::ExpandingArray<3*2>*") @ByVal LongPointer setter);
+  public native @ByRef @NoException(true) ConstantPad3dOptions value(double setter);
 }

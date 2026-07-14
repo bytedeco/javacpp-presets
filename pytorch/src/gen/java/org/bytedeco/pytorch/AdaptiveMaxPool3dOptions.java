@@ -27,4 +27,6 @@ public class AdaptiveMaxPool3dOptions extends Pointer {
   public AdaptiveMaxPool3dOptions(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
   public native @Cast("torch::ExpandingArrayWithOptionalElem<3>*") @ByRef @NoException(true) LongOptional output_size();
+
+  public native @ByRef @NoException(true) AdaptiveMaxPool3dOptions output_size(@Cast("torch::ExpandingArrayWithOptionalElem<3>*") @ByVal LongOptional setter);
 }

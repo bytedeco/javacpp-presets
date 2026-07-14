@@ -56,4 +56,8 @@ public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
 
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef SmoothL1LossOptions options(); public native SmoothL1LossImpl options(SmoothL1LossOptions setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link LossPrinter}. */
+  @Override public String toString() { return LossPrinter.format(this); }
 }

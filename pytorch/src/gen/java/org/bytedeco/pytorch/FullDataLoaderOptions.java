@@ -40,4 +40,8 @@ public class FullDataLoaderOptions extends Pointer {
   public native @Optional Milliseconds timeout(); public native FullDataLoaderOptions timeout(Milliseconds setter);
   public native @Cast("bool") boolean enforce_ordering(); public native FullDataLoaderOptions enforce_ordering(boolean setter);
   public native @Cast("bool") boolean drop_last(); public native FullDataLoaderOptions drop_last(boolean setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link FullDataLoaderOptionsPrinter}. */
+  @Override public String toString() { return FullDataLoaderOptionsPrinter.format(this); }
 }

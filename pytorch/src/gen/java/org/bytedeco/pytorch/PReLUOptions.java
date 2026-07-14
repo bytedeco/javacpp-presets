@@ -47,4 +47,7 @@ public class PReLUOptions extends Pointer {
 
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer num_parameters();
   public native @ByRef @NoException(true) DoublePointer init();
+
+  public native @ByRef @NoException(true) PReLUOptions num_parameters(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) PReLUOptions init(double setter);
 }

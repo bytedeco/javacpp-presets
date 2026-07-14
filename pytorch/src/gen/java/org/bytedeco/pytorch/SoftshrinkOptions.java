@@ -38,4 +38,6 @@ private native void allocate(double lambda/*=0.5*/);
 public SoftshrinkOptions() { super((Pointer)null); allocate(); }
 private native void allocate();
   public native @ByRef @NoException(true) DoublePointer lambda();
+
+  public native @ByRef @NoException(true) SoftshrinkOptions lambda(double setter);
 }

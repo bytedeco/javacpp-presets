@@ -49,4 +49,8 @@ public class HardtanhOptions extends Pointer {
   public native @ByRef @NoException(true) DoublePointer min_val();
   public native @ByRef @NoException(true) DoublePointer max_val();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer inplace();
+
+  public native @ByRef @NoException(true) HardtanhOptions min_val(double setter);
+  public native @ByRef @NoException(true) HardtanhOptions max_val(double setter);
+  public native @ByRef @NoException(true) HardtanhOptions inplace(@Cast("bool") boolean setter);
 }

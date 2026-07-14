@@ -56,4 +56,8 @@ public class NLLLossImpl extends NLLLossImplCloneable {
 
   /** A manual rescaling weight given to each class. */
   public native @ByRef Tensor weight(); public native NLLLossImpl weight(Tensor setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link LossPrinter}. */
+  @Override public String toString() { return LossPrinter.format(this); }
 }
