@@ -42,6 +42,6 @@ public class FullDataLoaderOptions extends Pointer {
   public native @Cast("bool") boolean drop_last(); public native FullDataLoaderOptions drop_last(boolean setter);
 
   /** Debug-friendly string representation, mirroring Python PyTorch's
-   *  {@code print(...)} behavior. See {@link DataLoaderConfigPrinter}. */
-  @Override public String toString() { return DataLoaderConfigPrinter.format(this); }
+   *  {@code print(...)} behavior. See {@link FullDataLoaderOptionsPrinter}. */
+  @Override public String toString() { return FullDataLoaderOptionsPrinter.format(this); }
 }

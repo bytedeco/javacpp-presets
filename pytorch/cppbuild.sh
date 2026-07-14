@@ -205,13 +205,6 @@ struct TORCH_API ASMoutput;\
             sedinplace 's/torch::detail::has_forward<M>::value,/torch::detail::has_forward<M>::value || std::is_same_v<M, Module>,/g' include/torch/csrc/api/include/torch/nn/modules/container/any.h
             sedinplace 's/return get_(&M::forward);/return get_(forward_method<ModuleType>());/g' include/torch/csrc/api/include/torch/nn/modules/container/any.h
         fi
-        if ! grep -q 'module_->forward_tensor' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h; then
-            sedinplace 's/return AnyValue(module_->forward(std::forward<Ts>(ts)...));/if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, Module>) {\
-        return AnyValue(module_->forward_tensor(std::forward<Ts>(ts)...));\
-      } else {\
-        return AnyValue(module_->forward(std::forward<Ts>(ts)...));\
-      }/g' include/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
-        fi
         # JavaCPP fix: capture forward_method<ModuleType>() as a member
         # pointer at AnyModuleHolder construction time. Dispatch then
         # goes through (module_->*forward_)(...) directly — bypassing

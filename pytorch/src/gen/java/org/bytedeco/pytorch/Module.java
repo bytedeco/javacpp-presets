@@ -149,7 +149,7 @@ public class Module extends Pointer {
   public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
   public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
   public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_attn(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
-  private native @ByVal @Name("forward_tensor")  Tensor _forward_tensor(@Const @ByRef Tensor input);
+  private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(@Const @ByRef Tensor input);
   public @ByVal Tensor forward(@Const @ByRef Tensor input) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class) ? m.forward(input) : _forward_tensor(input); }
   private native @ByVal @Name("forward_tensor2")  Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
   public @ByVal Tensor forward(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2) { Module m = ModuleAsHelper.recover(this); return ModuleAsHelper.hasForwardOverride(m, Tensor.class, Tensor.class) ? m.forward(input1, input2) : _forward_tensor2(input1, input2); }

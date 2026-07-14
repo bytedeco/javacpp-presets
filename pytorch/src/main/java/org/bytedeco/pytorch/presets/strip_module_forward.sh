@@ -37,10 +37,138 @@
 set -e
 GEN_DIR="${1:-src/gen/java/org/bytedeco/pytorch}"
 
+# JavaCPP parser bug (libtorch 2.12+): when ArrayRef<at::Dimname> is
+# encountered in a struct from the at::namedinference namespace
+# (TensorName / TensorNames), the parser mis-categorizes the typed
+# ArrayRef class DimnameArrayRef in two distinct ways:
+#
+#   1) The @Name annotation on the class itself gets set to
+#      @Name("DimnameArrayRef") (just the Java class name) instead of
+#      the proper C++ type @Name("c10::ArrayRef<at::Dimname>"). The
+#      JNI generator then embeds the bare Java class name in the
+#      bridge code (e.g. `DimnameArrayRef* rptr = new DimnameArrayRef[...]`)
+#      which fails to compile because there's no such C++ type.
+#   2) When the same ArrayRef<at::Dimname> appears as a parameter type
+#      in the constructors, the parser emits
+#      `c10::ArrayRef<at::Dimname>` directly instead of the typed
+#      DimnameArrayRef class. After the c10:: strip below reduces
+#      that to `ArrayRef<at.Dimname>`, the result is invalid Java.
+#   3) The class's own native constructors take `@Const Dimname` (a
+#      Java class) as the data element. The JNI generator doesn't
+#      apply the @Name mapping in the bridge code when this is the
+#      case, producing `DimnameArrayRef* rptr = ...` instead of the
+#      @Name-mapped `c10::ArrayRef<at::Dimname>* rptr = ...`. Rewrite
+#      to `@Cast("const at::Dimname*") IntPointer` (primitive pointer)
+#      which makes the JNI generator apply @Name correctly.
+# All three are needed for libtorch 2.12+ with the homebrew libtorch
+# headers. Order matters: apply the @Name fix LAST so the c10::→
+# DimnameArrayRef sed doesn't accidentally rewrite it back.
+if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
+    sed -i '' -E '
+        s/public DimnameArrayRef\(@Const Dimname data, @Cast\("size_t"\) long length\)/public DimnameArrayRef(IntPointer data, long length)/g;
+        s/private native void allocate\(@Const Dimname data, @Cast\("size_t"\) long length\)/private native void allocate(@Cast("const at::Dimname*") IntPointer data, @Cast("size_t") long length)/g;
+        s/public DimnameArrayRef\(@Const Dimname begin, @Const Dimname end\)/public DimnameArrayRef(IntPointer begin, IntPointer end)/g;
+        s/private native void allocate\(@Const Dimname begin, @Const Dimname end\)/private native void allocate(@Cast("const at::Dimname*") IntPointer begin, @Cast("const at::Dimname*") IntPointer end)/g;
+    ' "$GEN_DIR/DimnameArrayRef.java"
+fi
+for f in $(grep -rl 'c10::ArrayRef<at::Dimname>' "$GEN_DIR" 2>/dev/null); do
+    sed -i '' 's/c10::ArrayRef<at::Dimname>/DimnameArrayRef/g; s/c10::HeaderOnlyArrayRef<at::Dimname>/DimnameHeaderOnlyArrayRef/g' "$f"
+done
+# Apply the @Name fix LAST so the c10::→DimnameArrayRef sed above doesn't
+# accidentally rewrite the just-fixed @Name back to bare DimnameArrayRef.
+if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
+    sed -i '' 's/@Name("DimnameArrayRef")/@Name("c10::ArrayRef<at::Dimname>")/g' "$GEN_DIR/DimnameArrayRef.java"
+fi
+
+# JavaCPP parser bug (libtorch 2.12+): when ArrayRef<at::Dimname> is
+# encountered in a struct from the at::namedinference namespace
+# (TensorName / TensorNames), the parser mis-categorizes the typed
+# ArrayRef class DimnameArrayRef in two distinct ways:
+#
+#   1) The @Name annotation on the class itself gets set to
+#      @Name("DimnameArrayRef") (just the Java class name) instead of
+#      the proper C++ type @Name("c10::ArrayRef<at::Dimname>"). The
+#      JNI generator then embeds the bare Java class name in the
+#      bridge code (e.g. `DimnameArrayRef* rptr = new DimnameArrayRef[...]`)
+#      which fails to compile because there's no such C++ type.
+#   2) When the same ArrayRef<at::Dimname> appears as a parameter type
+#      in the constructors, the parser emits
+#      `c10::ArrayRef<at::Dimname>` directly instead of the typed
+#      DimnameArrayRef class. After the c10:: strip below reduces
+#      that to `ArrayRef<at.Dimname>`, the result is invalid Java.
+#   3) The class's own native constructors take `@Const Dimname` (a
+#      Java class) as the data element. The JNI generator doesn't
+#      apply the @Name mapping in the bridge code when this is the
+#      case, producing `DimnameArrayRef* rptr = ...` instead of the
+#      @Name-mapped `c10::ArrayRef<at::Dimname>* rptr = ...`. Rewrite
+#      to `@Cast("const at::Dimname*") IntPointer` (primitive pointer)
+#      which makes the JNI generator apply @Name correctly.
+# All three are needed for libtorch 2.12+ with the homebrew libtorch
+# headers. Order matters: apply the constructor fix and @Name fix
+# BEFORE the @Name-rewriting sed below would otherwise revert it.
+if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
+    sed -i '' -E '
+        s/public DimnameArrayRef\(@Const Dimname data, @Cast\("size_t"\) long length\)/public DimnameArrayRef(IntPointer data, long length)/g;
+        s/private native void allocate\(@Const Dimname data, @Cast\("size_t"\) long length\)/private native void allocate(@Cast("const at::Dimname*") IntPointer data, @Cast("size_t") long length)/g;
+        s/public DimnameArrayRef\(@Const Dimname begin, @Const Dimname end\)/public DimnameArrayRef(IntPointer begin, IntPointer end)/g;
+        s/private native void allocate\(@Const Dimname begin, @Const Dimname end\)/private native void allocate(@Cast("const at::Dimname*") IntPointer begin, @Cast("const at::Dimname*") IntPointer end)/g;
+    ' "$GEN_DIR/DimnameArrayRef.java"
+fi
+for f in $(grep -rl 'c10::ArrayRef<at::Dimname>' "$GEN_DIR" 2>/dev/null); do
+    sed -i '' 's/c10::ArrayRef<at::Dimname>/DimnameArrayRef/g; s/c10::HeaderOnlyArrayRef<at::Dimname>/DimnameHeaderOnlyArrayRef/g' "$f"
+done
+# Apply the @Name fix LAST so the previous sed doesn't accidentally
+# rewrite the just-fixed @Name back to bare DimnameArrayRef.
+if [ -f "$GEN_DIR/DimnameArrayRef.java" ]; then
+    sed -i '' 's/@Name("DimnameArrayRef")/@Name("c10::ArrayRef<at::Dimname>")/g' "$GEN_DIR/DimnameArrayRef.java"
+fi
+
 # 1) Strip @Virtual(method="forward(T_[A-Za-z_]*)?") on Module.java.
+# Removing these (multi-arg forward_tensorN @Virtuals) avoids the
+# arity-mismatch crash where JavaCPP's vtable dispatch picks the wrong
+# forward_tensorN overload on a built-in *Impl inside a Sequential.
 if [ -f "$GEN_DIR/Module.java" ]; then
     sed -i '' -E 's/@Virtual\(method="forward(T_[A-Za-z_]*)?"\)//g' "$GEN_DIR/Module.java"
 fi
+# 1b) Re-add @Virtual(method="forward") to the 1-arg _forward_tensor ONLY.
+# This is the callback the C++ AnyModuleHolder<Module>::forward path needs:
+# when a user-defined Java subclass of Module (e.g. samples/example/
+# TestSequentialPushBack.java's InputStem) is pushed into a SequentialImpl,
+# C++ calls torch::nn::Module::forward_tensor on the module's C++ peer.
+# forward_tensor is a C++ virtual (see the module.h patch in cppbuild.sh),
+# so JavaCPP's @Virtual trampoline (generated because subclasses defaults
+# to true) overrides it and, via method="forward", calls back into the Java
+# `forward(Tensor)` shim - which dispatches to the user's override via
+# ModuleAsHelper.hasForwardOverride. Without this, the call hits the base
+# Module::forward_tensor that throws "not implemented for <Module>".
+# Only the 1-arg overload is re-enabled; multi-arg forward_tensorN stay
+# stripped to keep the arity-mismatch protection for built-in *Impl layers.
+if [ -f "$GEN_DIR/Module.java" ]; then
+    sed -i '' 's/private native @ByVal @Name("forward_tensor")  Tensor _forward_tensor(/private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(/' "$GEN_DIR/Module.java"
+fi
+
+# 1c) libtorch 2.12+ removed the std::vector<Dimname>&& overloads of
+# NamedTensorMeta::set_names / NamedTensorMeta ctor / internal_set_names_inplace
+# in favor of DimnameList (= ArrayRef<Dimname>). The parser still emits
+# @StdVector Dimname overloads whose JNI passes a VectorAdapter<Dimname>,
+# which matches NEITHER the DimnameList nor the std::vector<Dimname>&&
+# C++ candidate -> "no matching member function / constructor" compile
+# errors. Delete those broken overloads; the DimnameList (ArrayRef) overloads
+# (which compile) remain, and a DimnameVector still binds to them via the
+# DimnameArrayRef(DimnameVector) constructor. Files affected:
+# NamedTensorMeta.java, global/torch.java.
+for f in "$GEN_DIR/NamedTensorMeta.java" "$GEN_DIR/global/torch.java"; do
+    [ -f "$f" ] || continue
+    sed -i '' \
+        -e '/public NamedTensorMeta(HAS_NON_WILDCARD arg0, @StdVector Dimname names)/d' \
+        -e '/public NamedTensorMeta(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdVector Dimname names)/d' \
+        -e '/private native void allocate(HAS_NON_WILDCARD arg0, @StdVector Dimname names)/d' \
+        -e '/private native void allocate(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdVector Dimname names)/d' \
+        -e '/public native void set_names(HAS_NON_WILDCARD arg0, @StdVector Dimname new_names)/d' \
+        -e '/public native void set_names(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdVector Dimname new_names)/d' \
+        -e '/internal_set_names_inplace.*@StdVector Dimname/d' \
+        "$f"
+done
 
 # 2) Inject toString() override at the end of each target file.
 # Idempotent: skip injection if either (a) our prior inject exists, OR

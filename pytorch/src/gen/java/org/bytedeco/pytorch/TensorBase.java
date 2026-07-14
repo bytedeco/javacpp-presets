@@ -141,9 +141,9 @@ public class TensorBase extends AbstractTensor {
   public native @ByVal SymIntArrayRef sym_strides();
   public native @ByVal LongArrayRef strides();
   // See impl::get_opt_names in ATen/NamedTensor.h for docs.
-  public native @ByVal DimnameListOptional opt_names();
+  public native @Cast("at::DimnameList*") @Optional ArgumentArrayRef opt_names();
   // See impl::get_names in ATen/NamedTensor.h for docs.
-  public native @ByVal DimnameArrayRef names();
+  public native @ByVal @Cast("at::DimnameList*") ArgumentArrayRef names();
   public native @Cast("int64_t") long ndimension();
 
   public native @Cast("bool") boolean is_contiguous(@ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
