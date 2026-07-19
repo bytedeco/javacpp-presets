@@ -65,6 +65,14 @@ public class Backend extends CustomClassHolder {
     public native @StdString BytePointer group_name(); public native Options group_name(BytePointer setter);
     public native @StdString BytePointer group_desc(); public native Options group_desc(BytePointer setter);
     public native @Cast("uint64_t*") @StdVector LongPointer global_ranks_in_group(); public native Options global_ranks_in_group(LongPointer setter);
+
+    // When true, symmetric memory rendezvous exchanges metadata via this
+    // PG's allgather instead of TCPStore, which gets overloaded at large
+    // rank counts. This will lazily create the backend communicator if it
+    // doesn't already exist. If this PG is only used for symmetric memory
+    // (no regular collectives), consider calling abort() after rendezvous
+    // to release the communicator.
+    public native @Cast("bool") boolean use_pg_for_symm_mem_rendezvous(); public native Options use_pg_for_symm_mem_rendezvous(boolean setter);
   }
 
   public native int getRank();
@@ -74,6 +82,10 @@ public class Backend extends CustomClassHolder {
   // Returns an unique opaque ID of this backend that can be used to correlate
   // with its collectives.
   public native @Cast("int64_t") long getID();
+
+  public native @Cast("bool") boolean getUsePgForSymmMemRendezvous();
+
+  public native void setUsePgForSymmMemRendezvous(@Cast("bool") boolean value);
 
   public native @Cast("bool") boolean supportsSplitting();
 

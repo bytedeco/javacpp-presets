@@ -60,8 +60,6 @@ public class Symbol extends Pointer {
   public static native @ByVal Symbol user(@StdString String s);
   public static native @ByVal Symbol caffe2(@StdString BytePointer s);
   public static native @ByVal Symbol caffe2(@StdString String s);
-  public static native @ByVal Symbol dimname(@StdString BytePointer s);
-  public static native @ByVal Symbol dimname(@StdString String s);
   // TODO: eliminate me
   public static native @ByVal Symbol scope(@StdString BytePointer s);
   public static native @ByVal Symbol scope(@StdString String s);
@@ -75,7 +73,6 @@ public class Symbol extends Pointer {
   public native @Cast("bool") boolean is_onnx();
   public native @Cast("bool") boolean is_user();
   public native @Cast("bool") boolean is_caffe2();
-  public native @Cast("bool") boolean is_dimname();
 
   // So we can switch on this
   public native @Cast("c10::unique_t") @Name("operator c10::unique_t") @NoException(true) int asInt();

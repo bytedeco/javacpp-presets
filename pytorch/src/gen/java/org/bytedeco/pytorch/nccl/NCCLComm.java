@@ -59,11 +59,24 @@ public class NCCLComm extends Pointer {
         @ByVal ncclUniqueId commId,
         byte deviceIndex);
 
-// #ifdef NCCL_HAS_CONFIG
-// #endif // NCCL_HAS_CONFIG
+  public static native @SharedPtr("c10d::NCCLComm") @ByVal NCCLComm create(
+        int numRanks,
+        int rank,
+        @ByVal ncclUniqueId commId,
+        byte deviceIndex,
+        @ByRef ncclConfig_t config);
+  public static native @SharedPtr("c10d::NCCLComm") @ByVal NCCLComm create_scalable(
+        int numRanks,
+        int rank,
+        @StdVector ncclUniqueId commIds,
+        byte deviceIndex,
+        @ByRef ncclConfig_t config);
 
-// #ifdef NCCL_HAS_COMM_SPLIT
-// #endif // NCCL_HAS_COMM_SPLIT
+  public static native @SharedPtr("c10d::NCCLComm") @ByVal NCCLComm split(
+        NCCLComm source,
+        int color_id,
+        int rank,
+        @ByRef ncclConfig_t config);
 
 // #ifdef NCCL_HAS_COMM_SHRINK
 // #endif // NCCL_HAS_COMM_SHRINK

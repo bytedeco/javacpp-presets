@@ -43,6 +43,8 @@ public class ThreadLocalPythonObjects extends Pointer {
   public static native @Const @SharedPtr("c10::SafePyObject") @ByRef SafePyObject get(@StdString String key);
   public static native @Cast("bool") boolean contains(@StdString BytePointer key);
   public static native @Cast("bool") boolean contains(@StdString String key);
+  public static native void erase(@StdString BytePointer key);
+  public static native void erase(@StdString String key);
 
   public static native @Const @ByRef ThreadLocalPythonObjects get_state();
   public static native void set_state(@ByVal ThreadLocalPythonObjects state);

@@ -34,7 +34,7 @@ public class TransformerDecoderOptions extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformerDecoderOptions(Pointer p) { super(p); }
 
-  // This constructor will keep the a ref of passed in decoder_layer,
+  // This constructor will keep a ref of passed in decoder_layer,
   // so it keeps all the data in decoder_layer.
   // This constructor will create a new TransformerDecoderLayer obj,
   // based on passed in decoder_layer_options.

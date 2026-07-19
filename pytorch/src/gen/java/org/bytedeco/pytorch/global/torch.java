@@ -45,7 +45,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../ActivityTypeSet.java
 
 
-// Targeting ../DimnameVector.java
+// Targeting ../DeviceVector.java
 
 
 // Targeting ../InputMetadataOptionalVector.java
@@ -276,6 +276,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../LongPair.java
 
 
+// Targeting ../StringViewPair.java
+
+
 // Targeting ../T_DataPtrSizeT_T.java
 
 
@@ -354,9 +357,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../NodeNodeCallMap.java
 
 
-// Targeting ../SizeTStringMap.java
-
-
 // Targeting ../HashAliasedIValueMap.java
 
 
@@ -397,6 +397,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../StringIntMap.java
+
+
+// Targeting ../SizeTStringMap.java
 
 
 // Targeting ../HashIdentityIValueMap.java
@@ -561,12 +564,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../DimVectorOptional.java
 
 
-// Targeting ../DimnameOptional.java
-
-
-// Targeting ../DimnameListOptional.java
-
-
 // Targeting ../GeneratorOptional.java
 
 
@@ -713,7 +710,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 // Parsed from torch/csrc/utils/python_stub.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from torch/headeronly/macros/cmake_macros.h
@@ -1427,9 +1429,6 @@ public static final int C10_RETURN_MOVE_IF_OLD_COMPILER = 1;
 
 
 // Targeting ../ByteHeaderOnlyArrayRef.java
-
-
-// Targeting ../DimnameHeaderOnlyArrayRef.java
 
 
 // Targeting ../DoubleHeaderOnlyArrayRef.java
@@ -3446,18 +3445,20 @@ public static final int C10_X86_F16 = 1;
     dynamic_output_shape(3),
     flexible_layout(4),
     generated(5),
-    inplace_view(6),
-    maybe_aliasing_or_mutating(7),
-    needs_contiguous_strides(8),
-    needs_exact_strides(9),
-    needs_fixed_stride_order(10),
-    nondeterministic_bitwise(11),
-    nondeterministic_seeded(12),
-    out_variant(13),
-    pointwise(14),
-    pt2_compliant_tag(15),
-    reduction(16),
-    view_copy(17);
+    inplace(6),
+    inplace_view(7),
+    maybe_aliasing_or_mutating(8),
+    needs_contiguous_strides(9),
+    needs_exact_strides(10),
+    needs_fixed_stride_order(11),
+    nondeterministic_bitwise(12),
+    nondeterministic_seeded(13),
+    out(14),
+    out_variant(15),
+    pointwise(16),
+    pt2_compliant_tag(17),
+    reduction(18),
+    view_copy(19);
 
     public final int value;
     private Tag(int v) { this.value = v; }
@@ -3474,20 +3475,31 @@ public static final int C10_X86_F16 = 1;
 
 // Parsed from c10/macros/cmake_macros.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // This file exists for backwards compatibility and has been moved to
 // torch/headeronly/macros/cmake_macros.h.in. No end user library should be
 // including this file directly anyway (cuz they should be including
 // Macros.h instead).
 // #include <torch/headeronly/macros/cmake_macros.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/macros/Export.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/macros/Export.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from torch/csrc/Export.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
@@ -3498,14 +3510,24 @@ public static final int C10_X86_F16 = 1;
 // #define TORCH_PYTHON_API C10_IMPORT
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/macros/Macros.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/macros/Macros.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Lazy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <atomic>
@@ -3535,9 +3557,14 @@ public static final int C10_X86_F16 = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Backtrace.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_BACKTRACE_H_
 // #define C10_UTIL_BACKTRACE_H_
 
@@ -3569,9 +3596,14 @@ public static final int C10_X86_F16 = 1;
 
 // #endif // C10_UTIL_BACKTRACE_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/DeviceType.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
@@ -3605,15 +3637,25 @@ public static final int C10_X86_F16 = 1;
 // NOLINTNEXTLINE(misc-unused-using-decls)
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Deprecated.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <torch/headeronly/util/Deprecated.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/StringUtil.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_STRINGUTIL_H_
 // #define C10_UTIL_STRINGUTIL_H_
 
@@ -3707,9 +3749,14 @@ public static final int C10_X86_F16 = 1;
 
 // #endif // C10_UTIL_STRINGUTIL_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Exception.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // @allow-raw-throw
 // #ifndef C10_UTIL_EXCEPTION_H_
 // #define C10_UTIL_EXCEPTION_H_
@@ -3724,6 +3771,7 @@ public static final int C10_X86_F16 = 1;
 // #include <exception>
 // #include <memory>
 // #include <string>
+// #include <utility>
 // #include <variant>
 // #include <vector>
 
@@ -4102,9 +4150,19 @@ public static final int C10_X86_F16 = 1;
 // #define TORCH_INTERNAL_ASSERT_DEBUG_ONLY(...)
 //   while (false)
 //   C10_EXPAND_MSVC_WORKAROUND(TORCH_INTERNAL_ASSERT(__VA_ARGS__))
+// In release: TORCH_INTERNAL_ASSERT_DEBUG_ONLY is a no-op, so return
+// __VA_ARGS__ as a fallback. In debug: crashes via
+// TORCH_INTERNAL_ASSERT(false), so no return is emitted (avoids
+// -Wunreachable-code-return).
+// #define TORCH_INTERNAL_ASSERT_FALSE_OR_RETURN(...)
+//   do {
+//     return __VA_ARGS__;
+//   } while (0)
 // #else
 // #define TORCH_INTERNAL_ASSERT_DEBUG_ONLY(...)
 //   C10_EXPAND_MSVC_WORKAROUND(TORCH_INTERNAL_ASSERT(__VA_ARGS__))
+// #define TORCH_INTERNAL_ASSERT_FALSE_OR_RETURN(...)
+//   C10_EXPAND_MSVC_WORKAROUND(TORCH_INTERNAL_ASSERT(false))
 // #endif
 
 // TODO: We're going to get a lot of similar looking string literals
@@ -4355,9 +4413,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // #endif // C10_UTIL_EXCEPTION_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/Device.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DeviceType.h>
@@ -4383,9 +4446,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
  // namespace c10
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/DeviceCapability.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -4462,9 +4530,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #undef DEFINE_SCALAR_TYPE
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/DispatchKey.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DeviceType.h>
@@ -4705,12 +4778,12 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   // correct backend.
   BackendSelect((short)(Undefined.value + 11)),
 
-  Python((short)(Undefined.value + 12)),
+  // Fake dispatch key for C++ FakeTensor mode. Must be BELOW Python so that
+  // TorchDispatchModes (e.g. ProxyTorchDispatchMode, FakeTensorMode) fire
+  // first, matching the Python FakeTensor dispatch order.
+  Fake((short)(Undefined.value + 12)),
 
-  // Out-of-core key for Fake Tensor in torchdistx.
-  // See https://pytorch.org/torchdistx/latest/fake_tensor.html
-  // TODO: delete this in favor of Python-implemented fake tensor
-  Fake((short)(Undefined.value + 13)),
+  Python((short)(Undefined.value + 13)),
   // See Note [Out-of-tree vmap+grad prototype]. The purpose of this key
   // is to insert code after the "autograd subsystem" runs, so this key should
   // be directly after ADInplaceOrView and all of the autograd keys.
@@ -4723,32 +4796,17 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   // See Note [Functionalization Pass In Core] for details.
   Functionalize((short)(Undefined.value + 15)),
 
-  // The named dispatch key is set for any tensors with named dimensions.
-  // Although we have a dispatch key for named tensors, for historical reasons,
-  // this dispatch key doesn't do any of the substantive functionality for named
-  // tensor (though, hypothetically, it could!)  At the moment, it's just
-  // responsible for letting us give good error messages when operations
-  // don't support named tensors.
-  //
-  // NB: If you ever consider moving named tensor functionality into
-  // this dispatch key, note that it might be necessary add another dispatch
-  // key that triggers before composite operators, in case a composite operator
-  // has named dimension propagation that doesn't match that of its
-  // constituent parts.
-  // TODO: delete this once torchdim lands in functorch
-  Named((short)(Undefined.value + 16)),
-
   // The Conjugate dispatch key is set for any tensors that need to perform
   // conjugation
   // This is implemented at a dispatch level right before any backends run
-  Conjugate((short)(Undefined.value + 17)),
+  Conjugate((short)(Undefined.value + 16)),
 
   // The Negative dispatch key is set for any tensors that need to perform
   // negation
   // This is implemented at a dispatch level right before any backends run
-  Negative((short)(Undefined.value + 18)),
+  Negative((short)(Undefined.value + 17)),
 
-  ZeroTensor((short)(Undefined.value + 19)), // registered at build/aten/src/ATen/RegisterZeroTensor.cpp
+  ZeroTensor((short)(Undefined.value + 18)), // registered at build/aten/src/ATen/RegisterZeroTensor.cpp
 
   // Note [ADInplaceOrView key]
   // ADInplaceOrView key is used by inplace or view ops to register a kernel
@@ -4785,7 +4843,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   // `at::AutoDispatchBelowADInplaceOrView` guard of functional ops
   // up to the `VariableType` kernel. Thus we only add the extra dispatch
   // to view/inplace ops to minimize its perf impact to real models.
-  ADInplaceOrView((short)(Undefined.value + 20)),
+  ADInplaceOrView((short)(Undefined.value + 19)),
   // Note [Alias Dispatch Key : Autograd]
   // All backends are oblivious to autograd; autograd is handled as a
   // layer which happens on top of all backends. It inspects the autograd
@@ -4811,10 +4869,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   // reserved user-defined backends. All other in-tree backends share the
   // AutogradOther key. We can add specific autograd key for those backends
   // upon request.
-  AutogradOther((short)(Undefined.value + 21)),
+  AutogradOther((short)(Undefined.value + 20)),
 
   // See [Note: Per-Backend Functionality Dispatch Keys]
-  AutogradFunctionality((short)(Undefined.value + 22)),
+  AutogradFunctionality((short)(Undefined.value + 21)),
 
   // NestedTensor is an example of something that isn't a "real backend"
   // (because it mostly consists of redispatching kernels)
@@ -4823,67 +4881,67 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   // exclusively for handling autograd for NestedTensor.
   // lives out of tree at
   // https://github.com/pytorch/nestedtensor
-  AutogradNestedTensor((short)(Undefined.value + 23)),
+  AutogradNestedTensor((short)(Undefined.value + 22)),
 
-  Tracer((short)(Undefined.value + 24)),
+  Tracer((short)(Undefined.value + 23)),
 
   // TODO: make Autocast a functionality key
   // Autocasting precedes VariableTypeId, to ensure casts are autograd-exposed
   // and inputs are saved for backward in the post-autocast type.
-  AutocastCPU((short)(Undefined.value + 25)),
-  AutocastMTIA((short)(Undefined.value + 26)),
-  AutocastMAIA((short)(Undefined.value + 27)),
-  AutocastXPU((short)(Undefined.value + 28)),
-  AutocastIPU((short)(Undefined.value + 29)),
-  AutocastHPU((short)(Undefined.value + 30)),
-  AutocastXLA((short)(Undefined.value + 31)),
+  AutocastCPU((short)(Undefined.value + 24)),
+  AutocastMTIA((short)(Undefined.value + 25)),
+  AutocastMAIA((short)(Undefined.value + 26)),
+  AutocastXPU((short)(Undefined.value + 27)),
+  AutocastIPU((short)(Undefined.value + 28)),
+  AutocastHPU((short)(Undefined.value + 29)),
+  AutocastXLA((short)(Undefined.value + 30)),
   // AutocastXLA is only being used for TPUs. XLA GPUs continue to use
   // AutocastCUDA.
-  AutocastMPS((short)(Undefined.value + 32)),
-  AutocastCUDA((short)(Undefined.value + 33)),
-  AutocastPrivateUse1((short)(Undefined.value + 34)),
+  AutocastMPS((short)(Undefined.value + 31)),
+  AutocastCUDA((short)(Undefined.value + 32)),
+  AutocastPrivateUse1((short)(Undefined.value + 33)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ WRAPPERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   // There are a number of alternative modes which may want to handle before
   // autograd; for example, error checking, tracing, profiling or vmap.  They
   // go here.
 
-  FuncTorchBatched((short)(Undefined.value + 35)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchBatched((short)(Undefined.value + 34)), // See Note [Out-of-tree vmap+grad prototype]
 
   // Dispatch key for BatchedTensorImpl wrapping a nested tensor.
-  BatchedNestedTensor((short)(Undefined.value + 36)),
+  BatchedNestedTensor((short)(Undefined.value + 35)),
 
-  FuncTorchVmapMode((short)(Undefined.value + 37)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchVmapMode((short)(Undefined.value + 36)), // See Note [Out-of-tree vmap+grad prototype]
 
   // This is the dispatch key for BatchedTensorImpl, which is used to implement
   // batching rules for vmap.
-  Batched((short)(Undefined.value + 38)),
+  Batched((short)(Undefined.value + 37)),
 
   // When we are inside a vmap, all tensors dispatch on this key.
   // See Note: [DispatchKey::VmapMode usage] for more details.
-  VmapMode((short)(Undefined.value + 39)),
+  VmapMode((short)(Undefined.value + 38)),
 
-  FuncTorchGradWrapper((short)(Undefined.value + 40)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchGradWrapper((short)(Undefined.value + 39)), // See Note [Out-of-tree vmap+grad prototype]
 
   // Out-of-core key for Deferred Module Initialization in torchdistx.
   // See https://pytorch.org/torchdistx/latest/deferred_init.html
-  DeferredInit((short)(Undefined.value + 41)),
+  DeferredInit((short)(Undefined.value + 40)),
 
   // Used by Python key logic to know the set of tls on entry to the dispatcher
   // This kernel assumes it is the top-most non-functorch-related DispatchKey.
   // If you add a key above, make sure to update the fallback implementation for
   // this.
-  PythonTLSSnapshot((short)(Undefined.value + 42)),
+  PythonTLSSnapshot((short)(Undefined.value + 41)),
 
   // This key should be at the very top of the dispatcher
-  FuncTorchDynamicLayerFrontMode((short)(Undefined.value + 43)), // See Note [Out-of-tree vmap+grad prototype]
+  FuncTorchDynamicLayerFrontMode((short)(Undefined.value + 42)), // See Note [Out-of-tree vmap+grad prototype]
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a single
   // process test.  Use it by creating a TensorImpl with this DispatchKey, and
   // then registering operators to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp for a usage example.
-  TESTING_ONLY_GenericWrapper((short)(Undefined.value + 44)),
+  TESTING_ONLY_GenericWrapper((short)(Undefined.value + 43)),
 
   // TESTING: This is intended to be a generic testing tensor type id.
   // Don't use it for anything real; its only acceptable use is within a ingle
@@ -4892,53 +4950,53 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
   // to operate on this type id.  See
   // aten/src/ATen/core/dispatch/backend_fallback_test.cpp
   // for a usage example
-  TESTING_ONLY_GenericMode((short)(Undefined.value + 45)),
+  TESTING_ONLY_GenericMode((short)(Undefined.value + 44)),
 
   // This key is used for pre-dispatch tracing in make_fx.
   // It has lower priority than the PythonDispatcher key
   // because we use the PythonDispatcher to intercept the key from python,
   // and avoid having to implement it in C++.
-  PreDispatch((short)(Undefined.value + 46)),
+  PreDispatch((short)(Undefined.value + 45)),
 
   // This is a bypass that allows you to skip running the C++ dispatcher
   // entirely
-  PythonDispatcher((short)(Undefined.value + 47)),
+  PythonDispatcher((short)(Undefined.value + 46)),
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-  EndOfFunctionalityKeys((short)(Undefined.value + 48)),
+  EndOfFunctionalityKeys((short)(Undefined.value + 47)),
 
-  StartOfDenseBackends((short)(Undefined.value + 49)),
-      CPU((short)(Undefined.value + 50)),
+  StartOfDenseBackends((short)(Undefined.value + 48)),
+      CPU((short)(Undefined.value + 49)),
           
-  CUDA((short)(Undefined.value + 51)),
+  CUDA((short)(Undefined.value + 50)),
           
-  HIP((short)(Undefined.value + 52)),
+  HIP((short)(Undefined.value + 51)),
           
-  XLA((short)(Undefined.value + 53)),
+  XLA((short)(Undefined.value + 52)),
           
-  MPS((short)(Undefined.value + 54)),
+  MPS((short)(Undefined.value + 53)),
           
-  IPU((short)(Undefined.value + 55)),
+  IPU((short)(Undefined.value + 54)),
           
-  XPU((short)(Undefined.value + 56)),
+  XPU((short)(Undefined.value + 55)),
           
-  HPU((short)(Undefined.value + 57)),
+  HPU((short)(Undefined.value + 56)),
           
-  VE((short)(Undefined.value + 58)),
+  VE((short)(Undefined.value + 57)),
           
-  Lazy((short)(Undefined.value + 59)),
+  Lazy((short)(Undefined.value + 58)),
           
-  MTIA((short)(Undefined.value + 60)),
+  MTIA((short)(Undefined.value + 59)),
           
-  MAIA((short)(Undefined.value + 61)),
+  MAIA((short)(Undefined.value + 60)),
           
-  PrivateUse1((short)(Undefined.value + 62)),
+  PrivateUse1((short)(Undefined.value + 61)),
           
-  PrivateUse2((short)(Undefined.value + 63)),
+  PrivateUse2((short)(Undefined.value + 62)),
           
-  PrivateUse3((short)(Undefined.value + 64)),
+  PrivateUse3((short)(Undefined.value + 63)),
           
-  Meta((short)(Undefined.value + 65)),
+  Meta((short)(Undefined.value + 64)),
           EndOfDenseBackends((short)(0)),
   StartOfQuantizedBackends((short)(1)),
       QuantizedCPU((short)(2)),
@@ -5289,24 +5347,44 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // to be pretty small so a regular array should be acceptable.
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/TypeTraits.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/TypeTraits.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/TypeList.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/TypeList.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/bit_cast.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/bit_cast.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/DispatchKeySet.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/core/DispatchKey.h>
 // #include <c10/macros/Export.h>
@@ -5455,10 +5533,15 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // this type to JIT, revisit the usage of this type alias.
  // namespace c10
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/Backend.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DeviceType.h>
@@ -5548,10 +5631,15 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/Layout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Backend.h>
@@ -5565,80 +5653,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
-
-// Parsed from c10/util/AlignOf.h
-
-//===--- AlignOf.h - Portable calculation of type alignment -----*- C++ -*-===//
-//
-//                     The LLVM Compiler Infrastructure
-//
-// This file is distributed under the University of Illinois Open Source
-// License. See LICENSE.TXT for details.
-//
-//===----------------------------------------------------------------------===//
-//
-// This file defines the AlignedCharArray and AlignedCharArrayUnion classes.
-//
-//===----------------------------------------------------------------------===//
-
-// ATen: modified from llvm::AlignOf
-// replaced LLVM_ALIGNAS with alignas
-
-// #pragma once
-
-// #include <cstddef>
-
-/** \struct AlignedCharArray
- *  \brief Helper for building an aligned character array type.
- * 
- *  This template is used to explicitly build up a collection of aligned
- *  character array types. We have to build these up using a macro and explicit
- *  specialization to cope with MSVC (at least till 2015) where only an
- *  integer literal can be used to specify an alignment constraint. Once built
- *  up here, we can then begin to indirect between these using normal C++
- *  template parameters. */
-
-// MSVC requires special handling here.
-// #ifndef _MSC_VER
-
-// #else // _MSC_VER
-
-/** \brief Create a type with an aligned char buffer. */
-
-// We provide special variations of this template for the most common
-// alignments because __declspec(align(...)) doesn't actually work when it is
-// a member of a by-value function argument in MSVC, even if the alignment
-// request is something reasonably like 8-byte or 16-byte. Note that we can't
-// even include the declspec with the union that forces the alignment because
-// MSVC warns on the existence of the declspec despite the union member forcing
-// proper alignment.
-
-// The rest of these are provided with a __declspec(align(...)) and we simply
-// can't pass them by-value as function arguments on MSVC.
-
-// #define AT_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT(x)
-//   template <size_t Size>
-//   struct AlignedCharArray<x, Size> {
-//     __declspec(align(x)) char buffer[Size];
-//   };
-
-// #undef AT_ALIGNEDCHARARRAY_TEMPLATE_ALIGNMENT
-
-// #endif // _MSC_VER
- // end namespace detail
-
-/** \brief This union template exposes a suitably aligned and sized character
- *  array member which can hold elements of any of up to ten types.
- * 
- *  These types may be arrays, structs, or any other types. The goal is to
- *  expose a char array buffer member which can be used as suitable storage for
- *  a placement new of any of these types. Support for more than ten types can
- *  be added at the cost of more boilerplate. */
- // end namespace c10
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/SmallVector.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 //===- llvm/ADT/SmallVector.h - 'Normally small' vectors --------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -5663,7 +5685,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #pragma once
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/AlignOf.h>
 
 // #include <algorithm>
 // #include <cassert>
@@ -5757,9 +5778,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // end namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ArrayRef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 //===--- ArrayRef.h - Array Reference Wrapper -------------------*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure
@@ -5806,9 +5832,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 
 // Targeting ../ByteArrayRef.java
-
-
-// Targeting ../DimnameArrayRef.java
 
 
 // Targeting ../DoubleArrayRef.java
@@ -5949,16 +5972,17 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 /** Construct an ArrayRef from a C array. */
 
-// WARNING: Template instantiation will NOT be willing to do an implicit
-// conversions to get you to an c10::ArrayRef, which is why we need so
-// many overloads.
-
 
  // namespace c10
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/MemoryFormat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/ArrayRef.h>
@@ -6065,9 +6089,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/QScheme.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -6101,10 +6130,15 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/Stream.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -6136,56 +6170,106 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
  // namespace c10
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/OptionalRef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/BFloat16.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/BFloat16.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/BFloat16-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/BFloat16.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/TypeSafeSignMath.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/TypeSafeSignMath.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/floating_point_utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/floating_point_utils.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e4m3fn-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e4m3fn.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e4m3fn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e4m3fn.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e4m3fnuz-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e4m3fnuz.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e4m3fnuz.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e4m3fnuz.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/complex_math.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
 // #error
 //     "c10/util/complex_math.h is not meant to be individually included. Include c10/util/complex.h instead."
@@ -6323,9 +6407,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/complex_utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
 // #error
 //     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
@@ -6340,9 +6429,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/complex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <complex>
@@ -6386,14 +6480,24 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <c10/util/complex_utils.h> // IWYU pragma: keep
 // #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Half-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Half.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Half.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Half.h>
 
 // need to keep the following for BC because the APIs in here were exposed
@@ -6403,64 +6507,124 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <ATen/cpu/vec/vec_half.h>
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Float8_e5m2-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e5m2.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e5m2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e5m2.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e5m2fnuz-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e5m2fnuz.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e5m2fnuz.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e5m2fnuz.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/Float8_e8m0fnu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/Float8_e8m0fnu.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/bits.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/bits.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/qint32.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/qint32.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/qint8.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/qint8.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/quint2x4.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/quint2x4.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/quint4x2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/quint4x2.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/quint8.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/util/quint8.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/ScalarType.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/BFloat16.h>
@@ -6484,6 +6648,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #include <cstddef>
 // #include <limits>
 // #include <ostream>
+// #include <string_view>
 // #include <type_traits>
 // #include <unordered_map>
 
@@ -6582,18 +6747,25 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // Returns a pair of strings representing the names for each dtype.
 // The returned pair is (name, legacy_name_if_applicable)
-@Namespace("c10") public static native @ByVal StringPair getDtypeNames(
+@Namespace("c10") public static native @ByVal StringViewPair getDtypeNames(
     ScalarType scalarType);
+
+@Namespace("c10") public static native @StringView @Cast("const char*") BytePointer getScalarTypeAbbr(ScalarType scalarType);
 
 // Returns a map of string name to dtype.
 @Namespace("c10") public static native @Const @ByRef StringScalarTypeMap getStringToDtypeMap();
 
  // namespace c10
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/MaybeOwned.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -6622,9 +6794,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SymNodeImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 // #pragma once
 
@@ -6642,9 +6819,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SymFloat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SymBool.h>
@@ -6665,9 +6847,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef SymFloat s);
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SymBool.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 // #pragma once
 
@@ -6781,9 +6968,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SymInt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SymBool.h>
@@ -6957,9 +7149,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/TypeCast.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/macros/Macros.h>
 // #include <c10/util/BFloat16.h>
@@ -6979,24 +7176,16 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
 // #endif
 
-// Note: deliberately ignores undefined behavior, consistent with NumPy.
-// PyTorch's type conversions can cause a variety of undefined behavior,
-// including float to integral overflow and signed to unsigned integer overflow.
-// Some of this undefined behavior is addressed below.
+// Float -> integer is UB on out-of-range/NaN values; we keep the
+// platform-defined result for NumPy compatibility and suppress UBSan only
+// here, so the dispatching template below stays UBSan-clean.
 
 // Partial template specialization for casting to bool.
 // Need to handle complex types separately, as we don't
 // simply want to cast the real part to bool.
 
-// Partial template instantiation for casting to uint8.
-// Note: Converting from negative float values to unsigned integer types is
-// undefined behavior in C++, and current CPU and GPU compilers exhibit
-// divergent behavior. Casting from negative float values to signed
-// integer types and then to unsigned integer types is not undefined,
-// however, so this cast improves the consistency of type conversions
-// to uint8 across compilers.
-// Further note: Type conversions across compilers still have other undefined
-// and divergent behavior.
+// Route float -> uint8 via int64 to get consistent results across CPU/GPU
+// compilers; float -> unsigned directly is UB and platform-divergent.
 
 // TODO(#146647): Can we make all these template specialization happen
 // based off our apply macros?
@@ -7009,9 +7198,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // Trigger tests for D25440771. TODO: Remove this line any time you want.
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/Scalar.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -7068,9 +7262,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/IdWrapper.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstddef>
@@ -7106,9 +7305,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 //   };
 //   }
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Type.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_TYPE_H_
 // #define C10_UTIL_TYPE_H_
 
@@ -7130,9 +7334,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 
 // #endif // C10_UTIL_TYPE_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ConstexprCrc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -7168,9 +7377,14 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")]]
 // Allow usage of crc64_t in std::unordered_set
   
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/TypeIndex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/ConstexprCrc.h>
@@ -7207,9 +7421,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
  // namespace c10::util
   
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/irange.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // Copyright 2004-present Facebook. All Rights Reserved.
 
 // #pragma once
@@ -7233,9 +7452,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/typeid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <array>
@@ -7541,9 +7765,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace caffe2
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/ScalarTypeToTypeMeta.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -7583,32 +7812,25 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ThreadLocalDebugInfo.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
+// #include <c10/util/Exception.h>
 
-// #include <cstdint>
+// #include <iosfwd>
 // #include <memory>
+// #include <string_view>
+// Targeting ../DebugInfoKind.java
 
-@Namespace("c10") public enum DebugInfoKind {
-  PRODUCER_INFO((byte)(0)),
-  MOBILE_RUNTIME_INFO((byte)(1)),
-  PROFILER_STATE((byte)(2)),
-  INFERENCE_CONTEXT((byte)(3)), // for inference usage
-  PARAM_COMMS_INFO((byte)(4)),
 
-  TEST_INFO((byte)(5)), // used only in tests
-  TEST_INFO_2((byte)(6));// used only in tests
-
-    public final byte value;
-    private DebugInfoKind(byte v) { this.value = v; }
-    private DebugInfoKind(DebugInfoKind e) { this.value = e.value; }
-    public DebugInfoKind intern() { for (DebugInfoKind e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 // Targeting ../DebugInfoBase.java
 
 
@@ -7621,9 +7843,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/UniqueVoidPtr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <cstddef>
 // #include <memory>
@@ -7664,9 +7891,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
  // namespace detail
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/Allocator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <array>
@@ -7787,52 +8019,48 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
  // namespace CachingAllocator
  // namespace c10
 
-
-// Parsed from c10/core/impl/COW.h
-
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/intrusive_ptr.h>
- // namespace c10
-
-// Creates a Copy-on-write (COW) clone of the given storage. This will also
-// convert the given storage into a COW storage if it is not COW already.
-//
-// Converting the storage into a COW storage will not be successful if the
-// storage's DataPtr has some context (`DataPtr::get_context()`) which is not
-// equal to the data pointer (`DataPtr::get()`). In this case, a nullptr is
-// returned.
-@Namespace("c10::impl::cow") public static native @IntrusivePtr("c10::StorageImpl") @Cast({"", "c10::intrusive_ptr<c10::StorageImpl>&"}) StorageImpl lazy_clone_storage(
-    @ByRef StorageImpl storage);
-
-// Check if a storage has a simple DataPtr with no abnormal context
-@Namespace("c10::impl::cow") public static native @Cast("bool") boolean has_simple_data_ptr(@Const @ByRef StorageImpl storage);
-
-// Check if a DataPtr is COW
-@Namespace("c10::impl::cow") public static native @Cast("bool") boolean is_cow_data_ptr(@StdMove DataPtr data_ptr);
-
-// Eagerly copies a COW storage's data, turning it into a non-COW storage.
-@Namespace("c10::impl::cow") public static native void materialize_cow_storage(@ByRef StorageImpl storage);
-
- // namespace c10::impl::cow
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/python_stub.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
+
+// Parsed from c10/core/StorageMaterializer.h
+
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+// #pragma once
+
+// #include <c10/macros/Export.h>
+// Targeting ../MaterializeFn.java
+
+
+
+ // namespace c10
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/StorageImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
 // #include <c10/core/Device.h>
 // #include <c10/core/DeviceType.h>
+// #include <c10/core/StorageMaterializer.h>
 // #include <c10/core/SymInt.h>
-// #include <c10/core/impl/COW.h>
-// #include <c10/core/impl/COWDeleter.h>
 // #include <c10/core/impl/PyObjectSlot.h>
 // #include <c10/macros/Export.h>
 // #include <c10/util/Exception.h>
@@ -7845,6 +8073,8 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 @Namespace("c10") public static native void warnDeprecatedDataPtr();
 // Targeting ../StorageExtraMeta.java
 
+
+@Namespace("c10::impl::cow") public static native void materialize_cow(StorageImpl storage);
 
 // Targeting ../StorageImpl.java
 
@@ -7871,9 +8101,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ExclusivelyOwned.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <utility>
@@ -7927,9 +8162,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/Storage.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
@@ -7955,9 +8195,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/AutogradState.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SafePyObject.h>
@@ -7969,9 +8214,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Registry.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_REGISTRY_H_
 // #define C10_UTIL_REGISTRY_H_
 
@@ -8156,9 +8406,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
 // #endif // C10_UTIL_REGISTRY_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Flags.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_FLAGS_H_
 // #define C10_UTIL_FLAGS_H_
 
@@ -8379,9 +8634,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
 // #endif // C10_UTIL_FLAGS_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/LocalDispatchKeySet.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DispatchKeySet.h>
@@ -8454,9 +8714,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/InferenceMode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/AutogradState.h>
@@ -8469,9 +8734,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SymIntArrayRef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SymInt.h>
@@ -8525,9 +8795,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/DefaultDtype.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -8539,9 +8814,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 @Namespace("c10") public static native @Const @ByVal TypeMeta get_default_complex_dtype();
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/TensorOptions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Backend.h>
@@ -8740,23 +9020,15 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10
 
+// #else
 
-
-// Parsed from c10/core/impl/HermeticPyObjectTLS.h
-
-// #pragma once
-
-// #include <c10/macros/Export.h>
-// #include <atomic>
-// Targeting ../HermeticPyObjectTLS.java
-
-
-
- // namespace c10::impl
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/impl/PyInterpreter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -8786,12 +9058,16 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/PyObjectSlot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
-// #include <c10/core/impl/HermeticPyObjectTLS.h>
 // #include <c10/core/impl/PyInterpreter.h>
 // #include <c10/core/impl/PyInterpreterHooks.h>
 // #include <c10/util/python_stub.h>
@@ -8805,9 +9081,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 1;
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/SizesAndStrides.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <algorithm>
@@ -8824,9 +9105,14 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/DimVector.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SymInt.h>
@@ -8841,9 +9127,14 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SymbolicShapeMeta.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/core/MemoryFormat.h>
 // #include <c10/core/SymBool.h>
@@ -8862,9 +9153,14 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/WrapDimMinimal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SymInt.h>
@@ -8894,9 +9190,14 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Logging.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_LOGGING_H_
 // #define C10_UTIL_LOGGING_H_
 
@@ -9222,9 +9523,14 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 // #endif // C10_UTIL_LOGGING_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/accumulate.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // Copyright 2004-present Facebook. All Rights Reserved.
 
 // #pragma once
@@ -9258,9 +9564,14 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/safe_numerics.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/macros/Macros.h>
 
@@ -9287,9 +9598,14 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/TensorImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
@@ -9300,6 +9616,7 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <c10/core/InferenceMode.h>
 // #include <c10/core/Layout.h>
 // #include <c10/core/MemoryFormat.h>
+// #include <c10/core/SafePyObject.h>
 // #include <c10/core/ScalarType.h>
 // #include <c10/core/ScalarTypeToTypeMeta.h>
 // #include <c10/core/Storage.h>
@@ -9389,10 +9706,10 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
  // namespace c10
 
 
-// Targeting ../NamedTensorMetaInterface.java
-
-
 // Targeting ../BackendMeta.java
+
+
+// Targeting ../FakeTensorMode.java
 
 
 // Targeting ../VariableVersion.java
@@ -9454,7 +9771,6 @@ public static final long CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 //    weak refcount
 //    storage pointer
 //    autograd metadata pointer
-//    named tensor metadata pointer
 //    version counter pointer
 //    PyObjectSlot
 //    SizesAndStrides size/pointer
@@ -9530,10 +9846,15 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace c10
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/core/UndefinedTensorImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/MemoryFormat.h>
@@ -9548,9 +9869,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/CheckMemoryFormat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <c10/core/TensorOptions.h>
 
 @Namespace("c10::impl") public static native @ByVal MemoryFormatOptional check_tensor_options_and_extract_memory_format(
@@ -9559,9 +9885,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace impl namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/GeneratorImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -9624,9 +9955,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Generator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -9677,9 +10013,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/symbol.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/macros/Export.h>
 // #include <cstdint>
@@ -9738,102 +10079,19 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 
-
  // namespace c10
 
 // make symbol behave like an integer in hash tables
 
 
-
-// Parsed from ATen/core/Dimname.h
-
-// #pragma once
-
-// #include <ATen/core/symbol.h>
-// #include <c10/util/ArrayRef.h>
-// #include <optional>
-// #include <ostream>
-
-@Namespace("at") public enum NameType { BASIC((byte)(0)), WILDCARD((byte)(1));
-
-    public final byte value;
-    private NameType(byte v) { this.value = v; }
-    private NameType(NameType e) { this.value = e.value; }
-    public NameType intern() { for (NameType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-// Targeting ../Dimname.java
-
-
-
-@Namespace("at") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Dimname dimname);
-
-@Namespace("at") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Dimname lhs, @Const @ByRef Dimname rhs);
-
-@Namespace("at") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Dimname lhs, @Const @ByRef Dimname rhs);
-
- // namespace at
-
-
-// Parsed from ATen/core/NamedTensor.h
-
-// #pragma once
-
-// #include <ATen/core/Dimname.h>
-// #include <c10/core/TensorImpl.h>
-// Targeting ../NamedTensorMeta.java
-
-
-// Targeting ../NamesMode.java
-
-
-// Targeting ../NoNamesGuard.java
-
-
-
-
-
-
-// Sets the names of `tensor` to be `names`.
-@Namespace("at") public static native @Const @ByRef TensorBase internal_set_names_inplace(@Const @ByRef TensorBase tensor, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @Const @ByRef TensorBase internal_set_names_inplace(@Const @ByRef TensorBase tensor, @ByRef(true) DimnameVector names, @Cast("bool") boolean validate_names);
-
-@Namespace("at") @MemberGetter public static native @Cast("const size_t") long kMaxNamedTensorDim();
-
-
-
-// Some helper functions on TensorImpl. Useful for working with names in TH.
-// XXX: Ideally these would exist as methods on TensorImpl
-@Namespace("at::impl") public static native void internal_set_names_inplace(TensorImpl impl, @ByVal DimnameListOptional names, @Cast("bool") boolean validate_names);
-@Namespace("at::impl") public static native void internal_set_names_inplace(TensorImpl impl, @ByRef(true) DimnameVector names, @Cast("bool") boolean validate_names);
-
-
-
-// Returns true if the tensor's names exist and are not all 'None'.
-// Returns false if the tensor's names don't exist (were not allocated),
-// or if all names are 'None'.
-// We treat not-allocated-names the same as allocated names that are all 'None'.
-@Namespace("at::impl") public static native @Cast("bool") boolean has_names(@Const TensorImpl impl);
-
-// Returns the names of the tensor's dimensions.
-// Unnamed tensors are treated as having 'None' in all dimension; this method
-// would return a DimnameList of all 'None's for an unnamed tensor.
-@Namespace("at::impl") public static native @ByVal DimnameArrayRef get_names(@Const TensorImpl impl);
-
-// This is more of an implementation detail; one should use impl::get_names /
-// Tensor::names() whenever possible because it provides a cleaner API.
-// Returns the names of the tensor if they have been allocated; returns nullopt
-// instead if the haven't been. The names of a tensor are not allocated if a
-// tensor is constructed with names=None.
-@Namespace("at::impl") public static native @ByVal DimnameListOptional get_opt_names(@Const TensorImpl impl);
-
- // namespace impl
-
- // namespace at
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/core/QuantizerBase.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -9848,9 +10106,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/TensorAccessor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/headeronly/core/TensorAccessor.h>
@@ -9873,9 +10136,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #undef AT_X
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ExclusivelyOwnedTensorTraits.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/TensorImpl.h>
@@ -9886,9 +10154,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // at::TensorBase.
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/StorageUtils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Storage.h>
@@ -9938,9 +10211,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/TensorBase.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // See https://github.com/pytorch/pytorch/issues/161660
@@ -9974,10 +10252,12 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <optional>
 // #include <c10/util/intrusive_ptr.h>
 
-// #include <ATen/core/NamedTensor.h>
 // #include <ATen/core/QuantizerBase.h>
 // #include <ATen/core/TensorAccessor.h>
 // #include <ATen/StorageUtils.h>
+
+// Targeting ../Node.java
+
 
 
  // namespace torch::autograd
@@ -10015,9 +10295,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/MethodOperators.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from MethodOperators.h
@@ -10080,8 +10365,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/addr_ops.h>
 // #include <ATen/ops/adjoint_ops.h>
 // #include <ATen/ops/alias_ops.h>
-// #include <ATen/ops/align_as_ops.h>
-// #include <ATen/ops/align_to_ops.h>
 // #include <ATen/ops/all_ops.h>
 // #include <ATen/ops/allclose_ops.h>
 // #include <ATen/ops/amax_ops.h>
@@ -10354,10 +10637,8 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/ravel_ops.h>
 // #include <ATen/ops/reciprocal_ops.h>
 // #include <ATen/ops/record_stream_ops.h>
-// #include <ATen/ops/refine_names_ops.h>
 // #include <ATen/ops/relu_ops.h>
 // #include <ATen/ops/remainder_ops.h>
-// #include <ATen/ops/rename_ops.h>
 // #include <ATen/ops/renorm_ops.h>
 // #include <ATen/ops/repeat_interleave_ops.h>
 // #include <ATen/ops/repeat_ops.h>
@@ -10391,7 +10672,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/sin_ops.h>
 // #include <ATen/ops/sinc_ops.h>
 // #include <ATen/ops/sinh_ops.h>
-// #include <ATen/ops/size_ops.h>
 // #include <ATen/ops/slice_inverse_ops.h>
 // #include <ATen/ops/slice_ops.h>
 // #include <ATen/ops/slice_scatter_ops.h>
@@ -10412,7 +10692,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/ops/std_ops.h>
 // #include <ATen/ops/stft_ops.h>
 // #include <ATen/ops/storage_offset_ops.h>
-// #include <ATen/ops/stride_ops.h>
 // #include <ATen/ops/sub_ops.h>
 // #include <ATen/ops/subtract_ops.h>
 // #include <ATen/ops/sum_ops.h>
@@ -10467,9 +10746,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
  // namespace _ops
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/TensorBody.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #ifdef TORCH_ASSERT_NO_OPERATORS
@@ -10504,7 +10788,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #include <ATen/core/CheckMemoryFormat.h>
 // #include <ATen/core/DeprecatedTypePropertiesRegistry.h>
 // #include <ATen/core/DeprecatedTypeProperties.h>
-// #include <ATen/core/NamedTensor.h>
 // #include <ATen/core/QuantizerBase.h>
 // #include <c10/core/SymInt.h>
 // #include <ATen/core/TensorAccessor.h>
@@ -10557,24 +10840,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::_fw_primal(Tensor(a) self, int level) -> Tensor(a)
-
-
-// aten::rename_(Tensor(a!) self, Dimname[]? names) -> Tensor(a!)
-
-
-// aten::rename(Tensor(a) self, Dimname[]? names) -> Tensor(a)
-
-
-// aten::align_to(Tensor(a) self, Dimname[] names) -> Tensor(a)
-
-
-// aten::align_to.ellipsis_idx(Tensor(a) self, Dimname[] order, int ellipsis_idx) -> Tensor(a)
-
-
-// aten::align_as(Tensor self, Tensor other) -> Tensor
-
-
-// aten::refine_names(Tensor(a) self, Dimname[] names) -> Tensor(a)
 
 
 // aten::abs(Tensor self) -> Tensor
@@ -10673,9 +10938,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::all.dims(Tensor self, int[]? dim=None, bool keepdim=False) -> Tensor
 
 
-// aten::all.dimname(Tensor self, Dimname dim, bool keepdim=False) -> Tensor
-
-
 // aten::allclose(Tensor self, Tensor other, float rtol=1e-05, float atol=1e-08, bool equal_nan=False) -> bool
 
 
@@ -10683,9 +10945,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::any.dims(Tensor self, int[]? dim=None, bool keepdim=False) -> Tensor
-
-
-// aten::any.dimname(Tensor self, Dimname dim, bool keepdim=False) -> Tensor
 
 
 // aten::argmax(Tensor self, int? dim=None, bool keepdim=False) -> Tensor
@@ -10952,13 +11211,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::cummax(Tensor self, int dim) -> (Tensor values, Tensor indices)
 
 
-// aten::cummax.dimname(Tensor self, Dimname dim) -> (Tensor values, Tensor indices)
-
-
 // aten::cummin(Tensor self, int dim) -> (Tensor values, Tensor indices)
-
-
-// aten::cummin.dimname(Tensor self, Dimname dim) -> (Tensor values, Tensor indices)
 
 
 // aten::cumprod(Tensor self, int dim, *, ScalarType? dtype=None) -> Tensor
@@ -10967,22 +11220,10 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::cumprod_(Tensor(a!) self, int dim, *, ScalarType? dtype=None) -> Tensor(a!)
 
 
-// aten::cumprod.dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-
-
-// aten::cumprod_.dimname(Tensor(a!) self, Dimname dim, *, ScalarType? dtype=None) -> Tensor(a!)
-
-
 // aten::cumsum(Tensor self, int dim, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::cumsum_(Tensor(a!) self, int dim, *, ScalarType? dtype=None) -> Tensor(a!)
-
-
-// aten::cumsum.dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-
-
-// aten::cumsum_.dimname(Tensor(a!) self, Dimname dim, *, ScalarType? dtype=None) -> Tensor(a!)
 
 
 // aten::diag_embed(Tensor self, int offset=0, int dim1=-2, int dim2=-1) -> Tensor
@@ -10992,9 +11233,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::diagonal(Tensor(a) self, int offset=0, int dim1=0, int dim2=1) -> Tensor(a)
-
-
-// aten::diagonal.Dimname(Tensor(a) self, *, Dimname outdim, Dimname dim1, Dimname dim2, int offset=0) -> Tensor(a)
 
 
 // aten::fill_diagonal_(Tensor(a!) self, Scalar fill_value, bool wrap=False) -> Tensor(a!)
@@ -11177,25 +11415,10 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::flatten.using_ints(Tensor(a) self, int start_dim=0, int end_dim=-1) -> Tensor(a)
 
 
-// aten::flatten.named_out_dim(Tensor(a) self, int start_dim, int end_dim, Dimname out_dim) -> Tensor(a)
-
-
-// aten::flatten.using_names(Tensor(a) self, Dimname start_dim, Dimname end_dim, Dimname out_dim) -> Tensor(a)
-
-
-// aten::flatten.DimnameList(Tensor(a) self, Dimname[] dims, Dimname out_dim) -> Tensor(a)
-
-
 // aten::unflatten.int(Tensor(a) self, int dim, SymInt[] sizes) -> Tensor(a)
 
 
 // aten::unflatten.int(Tensor(a) self, int dim, SymInt[] sizes) -> Tensor(a)
-
-
-// aten::unflatten.Dimname(Tensor(a) self, Dimname dim, SymInt[] sizes, Dimname[] names) -> Tensor(a)
-
-
-// aten::unflatten.Dimname(Tensor(a) self, Dimname dim, SymInt[] sizes, Dimname[] names) -> Tensor(a)
 
 
 // aten::fill_.Scalar(Tensor(a!) self, Scalar value) -> Tensor(a!)
@@ -11247,12 +11470,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::index_copy(Tensor self, int dim, Tensor index, Tensor source) -> Tensor
-
-
-// aten::index_copy_.dimname(Tensor(a!) self, Dimname dim, Tensor index, Tensor source) -> Tensor(a!)
-
-
-// aten::index_copy.dimname(Tensor self, Dimname dim, Tensor index, Tensor source) -> Tensor
 
 
 // aten::index_put_(Tensor(a!) self, Tensor?[] indices, Tensor values, bool accumulate=False) -> Tensor(a!)
@@ -11327,12 +11544,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::kthvalue(Tensor self, SymInt k, int dim=-1, bool keepdim=False) -> (Tensor values, Tensor indices)
 
 
-// aten::kthvalue.dimname(Tensor self, SymInt k, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
-// aten::kthvalue.dimname(Tensor self, SymInt k, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
 // aten::nan_to_num(Tensor self, float? nan=None, float? posinf=None, float? neginf=None) -> Tensor
 
 
@@ -11390,19 +11601,10 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::log_softmax.int(Tensor self, int dim, ScalarType? dtype=None) -> Tensor
 
 
-// aten::log_softmax.Dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-
-
 // aten::logcumsumexp(Tensor self, int dim) -> Tensor
 
 
-// aten::logcumsumexp.dimname(Tensor self, Dimname dim) -> Tensor
-
-
 // aten::logsumexp(Tensor self, int[1] dim, bool keepdim=False) -> Tensor
-
-
-// aten::logsumexp.names(Tensor self, Dimname[1] dim, bool keepdim=False) -> Tensor
 
 
 // aten::matmul(Tensor self, Tensor other) -> Tensor
@@ -11420,9 +11622,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::max.dim(Tensor self, int dim, bool keepdim=False) -> (Tensor values, Tensor indices)
 
 
-// aten::max.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
 // aten::amax(Tensor self, int[1] dim=[], bool keepdim=False) -> Tensor
 
 
@@ -11430,9 +11629,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::mean.dim(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-
-
-// aten::mean.names_dim(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::nanmean(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
@@ -11444,22 +11640,13 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::median.dim(Tensor self, int dim, bool keepdim=False) -> (Tensor values, Tensor indices)
 
 
-// aten::median.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
 // aten::nanmedian(Tensor self) -> Tensor
 
 
 // aten::nanmedian.dim(Tensor self, int dim, bool keepdim=False) -> (Tensor values, Tensor indices)
 
 
-// aten::nanmedian.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
 // aten::min.dim(Tensor self, int dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
-// aten::min.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
 
 
 // aten::amin(Tensor self, int[1] dim=[], bool keepdim=False) -> Tensor
@@ -11469,9 +11656,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::mode(Tensor self, int dim=-1, bool keepdim=False) -> (Tensor values, Tensor indices)
-
-
-// aten::mode.dimname(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
 
 
 // aten::mul.Tensor(Tensor self, Tensor other) -> Tensor
@@ -11663,9 +11847,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::rsqrt_(Tensor(a!) self) -> Tensor(a!)
 
 
-// aten::select.Dimname(Tensor(a) self, Dimname dim, int index) -> Tensor(a)
-
-
 // aten::select.int(Tensor(a) self, int dim, SymInt index) -> Tensor(a)
 
 
@@ -11708,9 +11889,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::detach_(Tensor(a!) self) -> Tensor(a!)
 
 
-// aten::size.Dimname(Tensor self, Dimname dim) -> int
-
-
 // aten::slice.Tensor(Tensor(a) self, int dim=0, SymInt? start=None, SymInt? end=None, SymInt step=1) -> Tensor(a)
 
 
@@ -11748,9 +11926,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::softmax.int(Tensor self, int dim, ScalarType? dtype=None) -> Tensor
-
-
-// aten::softmax.Dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::unsafe_split.Tensor(Tensor self, SymInt split_size, int dim=0) -> Tensor[]
@@ -11807,9 +11982,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::squeeze.dim(Tensor(a) self, int dim) -> Tensor(a)
 
 
-// aten::squeeze.dimname(Tensor(a) self, Dimname dim) -> Tensor(a)
-
-
 // aten::squeeze.dims(Tensor(a) self, int[] dim) -> Tensor(a)
 
 
@@ -11820,9 +11992,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::squeeze_.dims(Tensor(a!) self, int[] dim) -> Tensor(a!)
-
-
-// aten::squeeze_.dimname(Tensor(a!) self, Dimname dim) -> Tensor(a!)
 
 
 // aten::sspaddmm(Tensor self, Tensor mat1, Tensor mat2, *, Scalar beta=1, Scalar alpha=1) -> Tensor
@@ -11837,16 +12006,10 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::istft(Tensor self, int n_fft, int? hop_length=None, int? win_length=None, Tensor? window=None, bool center=True, bool normalized=False, bool? onesided=None, int? length=None, bool return_complex=False) -> Tensor
 
 
-// aten::stride.Dimname(Tensor self, Dimname dim) -> int
-
-
 // aten::sum(Tensor self, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::sum.dim_IntList(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-
-
-// aten::sum.dim_DimnameList(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::nansum(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
@@ -11882,19 +12045,10 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::std.correction(Tensor self, int[1]? dim=None, *, Scalar? correction=None, bool keepdim=False) -> Tensor
 
 
-// aten::std.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
-
-
-// aten::std.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> Tensor
-
-
 // aten::prod(Tensor self, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::prod.dim_int(Tensor self, int dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-
-
-// aten::prod.dim_Dimname(Tensor self, Dimname dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 
 
 // aten::t(Tensor(a) self) -> Tensor(a)
@@ -11922,9 +12076,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::transpose.int(Tensor(a) self, int dim0, int dim1) -> Tensor(a)
-
-
-// aten::transpose.Dimname(Tensor(a) self, Dimname dim0, Dimname dim1) -> Tensor(a)
 
 
 // aten::transpose_(Tensor(a!) self, int dim0, int dim1) -> Tensor(a!)
@@ -11987,12 +12138,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::var.correction(Tensor self, int[1]? dim=None, *, Scalar? correction=None, bool keepdim=False) -> Tensor
 
 
-// aten::var.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
-
-
-// aten::var.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> Tensor
-
-
 // aten::view_as(Tensor(a) self, Tensor other) -> Tensor(a)
 
 
@@ -12018,12 +12163,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::norm.ScalarOpt_dim(Tensor self, Scalar? p, int[1] dim, bool keepdim=False) -> Tensor
-
-
-// aten::norm.names_ScalarOpt_dim_dtype(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype) -> Tensor
-
-
-// aten::norm.names_ScalarOpt_dim(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False) -> Tensor
 
 
 // aten::frexp.Tensor(Tensor self) -> (Tensor mantissa, Tensor exponent)
@@ -12150,9 +12289,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::unbind.int(Tensor(a -> *) self, int dim=0) -> Tensor(a)[]
-
-
-// aten::unbind.Dimname(Tensor(a -> *) self, Dimname dim) -> Tensor(a)[]
 
 
 // aten::to_sparse.sparse_dim(Tensor self, int sparse_dim) -> Tensor
@@ -12305,9 +12441,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::index_add(Tensor self, int dim, Tensor index, Tensor source, *, Scalar alpha=1) -> Tensor
 
 
-// aten::index_add.dimname(Tensor self, Dimname dim, Tensor index, Tensor source, *, Scalar alpha=1) -> Tensor
-
-
 // aten::index_reduce_(Tensor(a!) self, int dim, Tensor index, Tensor source, str reduce, *, bool include_self=True) -> Tensor(a!)
 
 
@@ -12324,18 +12457,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::index_fill.int_Tensor(Tensor self, int dim, Tensor index, Tensor value) -> Tensor
-
-
-// aten::index_fill_.Dimname_Scalar(Tensor(a!) self, Dimname dim, Tensor index, Scalar value) -> Tensor(a!)
-
-
-// aten::index_fill_.Dimname_Tensor(Tensor(a!) self, Dimname dim, Tensor index, Tensor value) -> Tensor(a!)
-
-
-// aten::index_fill.Dimname_Scalar(Tensor self, Dimname dim, Tensor index, Scalar value) -> Tensor
-
-
-// aten::index_fill.Dimname_Tensor(Tensor self, Dimname dim, Tensor index, Tensor value) -> Tensor
 
 
 // aten::scatter.src(Tensor self, int dim, Tensor index, Tensor src) -> Tensor
@@ -12362,19 +12483,10 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::scatter_.value_reduce(Tensor(a!) self, int dim, Tensor index, Scalar value, *, str reduce) -> Tensor(a!)
 
 
-// aten::scatter.dimname_src(Tensor self, Dimname dim, Tensor index, Tensor src) -> Tensor
-
-
-// aten::scatter.dimname_value(Tensor self, Dimname dim, Tensor index, Scalar value) -> Tensor
-
-
 // aten::scatter_add(Tensor self, int dim, Tensor index, Tensor src) -> Tensor
 
 
 // aten::scatter_add_(Tensor(a!) self, int dim, Tensor index, Tensor src) -> Tensor(a!)
-
-
-// aten::scatter_add.dimname(Tensor self, Dimname dim, Tensor index, Tensor src) -> Tensor
 
 
 // aten::scatter_reduce.two(Tensor self, int dim, Tensor index, Tensor src, str reduce, *, bool include_self=True) -> Tensor
@@ -12716,9 +12828,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::index_select(Tensor self, int dim, Tensor index) -> Tensor
 
 
-// aten::index_select.dimname(Tensor self, Dimname dim, Tensor index) -> Tensor
-
-
 // aten::masked_select(Tensor self, Tensor mask) -> Tensor
 
 
@@ -12738,9 +12847,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::gather(Tensor self, int dim, Tensor index, *, bool sparse_grad=False) -> Tensor
-
-
-// aten::gather.dimname(Tensor self, Dimname dim, Tensor index, *, bool sparse_grad=False) -> Tensor
 
 
 // aten::addcmul(Tensor self, Tensor tensor1, Tensor tensor2, *, Scalar value=1) -> Tensor
@@ -12959,12 +13065,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // aten::sort.stable(Tensor self, *, bool? stable, int dim=-1, bool descending=False) -> (Tensor values, Tensor indices)
 
 
-// aten::sort.dimname(Tensor self, Dimname dim, bool descending=False) -> (Tensor values, Tensor indices)
-
-
-// aten::sort.dimname_stable(Tensor self, *, bool? stable, Dimname dim, bool descending=False) -> (Tensor values, Tensor indices)
-
-
 // aten::msort(Tensor self) -> Tensor
 
 
@@ -12972,9 +13072,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 // aten::argsort.stable(Tensor self, *, bool stable, int dim=-1, bool descending=False) -> Tensor
-
-
-// aten::argsort.dimname(Tensor self, Dimname dim, bool descending=False) -> Tensor
 
 
 // aten::topk(Tensor self, SymInt k, int dim=-1, bool largest=True, bool sorted=True) -> (Tensor values, Tensor indices)
@@ -13080,9 +13177,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/TensorBody.h>
@@ -13098,16 +13200,26 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/function_hook.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Tensor.h>
@@ -13129,9 +13241,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/cpp_hook.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <torch/csrc/autograd/function_hook.h>
 // #include <functional>
@@ -13139,9 +13256,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/hash.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -13233,16 +13355,21 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/edge.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
 // #include <functional>
-// #include <memory>
 
 // #include <c10/util/hash.h>
+// #include <c10/util/intrusive_ptr.h>
 // Targeting ../Edge.java
 
 
@@ -13254,9 +13381,14 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // See http://en.cppreference.com/w/cpp/utility/hash for more information.
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/forward_grad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
@@ -13362,14 +13494,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
  // namespace torch::autograd
 
-
-// Parsed from ATen/NamedTensor.h
-
-// #include <ATen/core/NamedTensor.h>
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/core/ivalue_to.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <string>
@@ -13381,9 +13513,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  // namespace detail
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/qualified_name.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/ArrayRef.h>
@@ -13397,9 +13534,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  // namespace c10
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/type_ptr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <memory>
@@ -13479,9 +13621,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/jit_type_base.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <functional>
@@ -13650,9 +13797,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
  // namespace c10
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/DimVector.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/DimVector.h>
 
@@ -13662,9 +13814,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/blob.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <type_traits>
@@ -13682,9 +13839,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
  // namespace caffe2
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/custom_class.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <typeindex>
@@ -13698,9 +13860,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dynamic_type.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -13829,9 +13996,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/type_factory.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <type_traits>
@@ -13845,9 +14017,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/order_preserving_flat_hash_map.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // Taken from
 // https://github.com/skarupke/flat_hash_map/blob/2c4687431f978f02a3780e24b8b701d22aa32d9c/flat_hash_map.hpp
 // with fixes applied:
@@ -13900,9 +14077,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace ska_ordered
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Dict_inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -13962,9 +14144,14 @@ public static final byte min_lookups = min_lookups();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Dict.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -14011,9 +14198,14 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/Dict_inl.h>  // IWYU pragma: keep
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/functional.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <vector>
@@ -14034,9 +14226,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/jit_type.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/custom_class.h>
@@ -14387,9 +14584,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/rref_interface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/intrusive_ptr.h>
@@ -14400,9 +14602,14 @@ public static final byte min_lookups = min_lookups();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/DeviceGuardImplInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -14490,9 +14697,14 @@ public static final byte min_lookups = min_lookups();
  // namespace impl
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/VirtualGuardImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/DeviceGuardImplInterface.h>
@@ -14504,9 +14716,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/InlineDeviceGuard.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // This file provides implementations of InlineDeviceGuard and
@@ -14572,9 +14789,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/DeviceGuard.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -14615,9 +14837,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/InlineEvent.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DeviceType.h>
@@ -14627,9 +14854,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/Event.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -14673,9 +14905,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/InlineStreamGuard.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/InlineDeviceGuard.h>
@@ -14699,9 +14936,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/StreamGuard.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -14737,9 +14979,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/FunctionRef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 //===- llvm/ADT/STLExtras.h - Useful STL related functions ------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -14773,9 +15020,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/ivalue_inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <condition_variable>
@@ -15140,10 +15392,15 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/core/ivalue.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/DimVector.h>
@@ -15267,9 +15524,14 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/ivalue_inl.h> // IWYU pragma: keep
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/List_inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/jit_type_base.h>
@@ -15383,9 +15645,14 @@ public static final byte min_lookups = min_lookups();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/List.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue_to.h>
@@ -15495,9 +15762,14 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/List_inl.h>  // IWYU pragma: keep
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/IListRef_inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/List.h>
@@ -15545,9 +15817,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/IListRef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue_to.h>
@@ -15900,396 +16177,19 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/IListRef_inl.h>
 
-
-// Parsed from ATen/WrapDimUtils.h
-
-// #pragma once
-
-// #include <ATen/core/IListRef.h>
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/TensorImpl.h>
-// #include <c10/core/WrapDimMinimal.h>
-// #include <c10/util/irange.h>
-
-// if dim_post_expr is 0 and wrap_scalar is true, then dim must be in the
-// range [-1, 0]. This is a special case for scalar tensors and manifests in
-// e.g. torch.sum(scalar_tensor, 0) Otherwise, dim should be in the range
-// [-dim_post_expr, dim_post_expr-1].
-
-@Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, TensorImpl tensor);
-
-@Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, @ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, @ByVal TensorVector tensors);
-
-@Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(
-    @Cast("int64_t") long dim,
-    @Cast("std::vector<int64_t>*") @StdVector LongVector tensor_sizes);
-
-// Given an array of dimensions `dims` of length `ndims`, this function "Wraps"
-// each dim in-place for a tensor of rank `dim_post_expr`, allowing dims to be
-// specified using negative indices.
-//
-// Additionally, if `wrap_scalar` is true then scalar tensors with rank 0, will
-// allow dimensions in the range [-1, 0]. Otherwise, an IndexError is raised for
-// dimensions not in the range [-dim_post_expr, dim_post_expr).
-@Namespace("at") public static native void maybe_wrap_dims_n(
-    @Cast("int64_t*") LongPointer dims,
-    @Cast("int64_t") long ndims,
-    @Cast("int64_t") long dim_post_expr,
-    @Cast("bool") boolean wrap_scalars/*=true*/);
-@Namespace("at") public static native void maybe_wrap_dims_n(
-    @Cast("int64_t*") LongPointer dims,
-    @Cast("int64_t") long ndims,
-    @Cast("int64_t") long dim_post_expr);
-@Namespace("at") public static native void maybe_wrap_dims_n(
-    @Cast("int64_t*") LongBuffer dims,
-    @Cast("int64_t") long ndims,
-    @Cast("int64_t") long dim_post_expr,
-    @Cast("bool") boolean wrap_scalars/*=true*/);
-@Namespace("at") public static native void maybe_wrap_dims_n(
-    @Cast("int64_t*") LongBuffer dims,
-    @Cast("int64_t") long ndims,
-    @Cast("int64_t") long dim_post_expr);
-@Namespace("at") public static native void maybe_wrap_dims_n(
-    @Cast("int64_t*") long[] dims,
-    @Cast("int64_t") long ndims,
-    @Cast("int64_t") long dim_post_expr,
-    @Cast("bool") boolean wrap_scalars/*=true*/);
-@Namespace("at") public static native void maybe_wrap_dims_n(
-    @Cast("int64_t*") long[] dims,
-    @Cast("int64_t") long ndims,
-    @Cast("int64_t") long dim_post_expr);
-
-// Given a contiguous container of dimensions `dims`, this function "Wraps"
-// each dim in-place for a tensor of rank `dim_post_expr`, allowing dims to be
-// specified using negative indices.
-//
-// Additionally, if `wrap_scalar` is true then scalar tensors with rank 0, will
-// allow dimensions in the range [-1, 0]. Otherwise, an IndexError is raised for
-// dimensions not in the range [-dim_post_expr, dim_post_expr).
-
-// previously, size [0] tensors were the only possible empty tensors; thus, it
-// wasn't possible to cat empty tensors unless all the other tensors were
-// 1-dimensional, so we allowed these tensors to be "skipped" (both for wrap
-// dimension behavior and dimension size checking). We maintain this behavior
-// for backwards compatibility, but only for this specific size (i.e. other
-// empty sizes are not skipped).
-@Namespace("at") public static native @Cast("int64_t") long legacy_cat_wrap_dim(
-    @Cast("int64_t") long dim,
-    @Cast("std::vector<int64_t>*") @StdVector LongVector tensor_sizes);
-
-@Namespace("at") public static native @Cast("int64_t") long legacy_cat_wrap_dim_symint(
-    @Cast("int64_t") long dim,
-    @StdVector SymIntVector tensor_sizes);
-
-// wrap negative dims in a vector
-@Namespace("at") public static native void wrap_all_dims(
-    @Cast("std::vector<int64_t>*") @ByRef LongVector dims_to_wrap,
-    @Cast("int64_t") long tensor_total_dims);
-
- // namespace at
-
-
-// Parsed from ATen/TensorNames.h
-
-// #pragma once
-
-// #include <ATen/WrapDimUtils.h>
-// Targeting ../TensorName.java
-
-
-// Targeting ../TensorNames.java
-
-
-
- // namespace at::namedinference
-
-
-// Parsed from ATen/NamedTensorUtils.h
-
-// #pragma once
-// #include <ATen/NamedTensor.h>
-// #include <ATen/TensorNames.h>
-// #include <ATen/WrapDimUtilsMulti.h>
-
-// #include <ATen/core/DimVector.h>
-// #include <ATen/core/Tensor.h>
-
-@Namespace("at") public static native @Cast("bool") boolean has_names(@Const @ByRef TensorArrayRef tensors);
-@Namespace("at") public static native @Cast("bool") boolean has_names(@Const @ByRef TensorVector tensors);
-
-// Converts dim to an positional index. Errors if `dim` cannot be used to
-// refer to any dimension of tensor.
-@Namespace("at") public static native @Cast("int64_t") long dimname_to_position(@Const @ByRef Tensor tensor, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector dimnames_to_positions(
-    @Const @ByRef Tensor tensor,
-    @ByVal DimnameArrayRef dims);
-@Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector dimnames_to_positions(
-    @Const @ByRef Tensor tensor,
-    @ByVal DimnameVector dims);
-
-// Unifies two DimnameList to produce a third. This is useful for implementing
-// the named inference rule for binary broadcasting operations like add.
-//
-// There are three main constraints:
-// 1) Check matching: Names must match positionally from the right.
-// 2) Check misaligned: If a name `n` is in `names`, then it must appear at
-//    the same index from the right in other.
-// 3) The output names are obtained by unifying the names individually from the
-// right.
-@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
-    @ByVal DimnameArrayRef names,
-    @ByVal DimnameArrayRef other,
-    @Cast("const char*") BytePointer action/*="broadcast"*/);
-@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
-    @ByVal DimnameArrayRef names,
-    @ByVal DimnameArrayRef other);
-@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
-    @ByVal DimnameVector names,
-    @ByVal DimnameVector other,
-    String action/*="broadcast"*/);
-@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
-    @ByVal DimnameVector names,
-    @ByVal DimnameVector other);
-@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
-    @ByVal DimnameVector names,
-    @ByVal DimnameVector other,
-    @Cast("const char*") BytePointer action/*="broadcast"*/);
-@Namespace("at") public static native @ByVal DimnameVector unify_from_right(
-    @ByVal DimnameArrayRef names,
-    @ByVal DimnameArrayRef other,
-    String action/*="broadcast"*/);
-
-@Namespace("at") public static native void reportNYIDimnameOverload(@Cast("const char*") BytePointer op_name);
-@Namespace("at") public static native void reportNYIDimnameOverload(String op_name);
-
-// [NOTE] Writing name inference rules
-//
-// Operators that support named tensors are either composed of operations that
-// support named tensors or implement some name inference rule. An op that
-// implements its own name inference rule generally looks like the following:
-//
-// Tensor op(...) {
-//   perform_shape_checks(...);
-//   # (1)
-//   auto maybe_outnames = compute_outnames(...);
-//   auto result = [&]() {
-//     NoNamesGuard guard;
-//     return op_impl(...);
-//   }();
-//   # (2)
-//   propagate_names_if_nonempty(result, maybe_outnames);
-//
-// Each op has (1) a compute outnames step and (2) a propagate names step.
-//
-// compute_outnames is responsible for checking that input names match and
-// determining what the output names should be. It returns either:
-// - {} (if the inputs tensors are all unnamed)
-// - non-empty outnames.
-//
-// propagate_names_if_nonempty propagates the outnames if they exist to the
-// result tensors.
-//
-// The {} case is an optimization; if the user does not use named tensors they
-// pay no perf cost for it.
-
-
-// Propagates `names` to `result` if `names` is not empty.
-// `names` can be empty; see [NOTE] Writing name inference rules
-// If `names` is not empty, `names.size()` should equal `result.dim()`.
-// When in doubt, use this overload instead of the others.
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameArrayRef maybe_names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameArrayRef maybe_names);
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameVector maybe_names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameVector maybe_names);
-
-// Propagates `names` to `result`. Only use this if we are certain that there
-// are names to propagate (that names is not empty).
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameArrayRef names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameArrayRef names);
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameVector names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
-    @Const @ByRef Tensor result,
-    @ByVal DimnameVector names);
-
-// Propagates all names from src to result.
-@Namespace("at::namedinference") public static native void propagate_names(@Const @ByRef Tensor result, @Const @ByRef Tensor src);
-
-// Propagates all names except for those at the excluded_idxs.
-@Namespace("at::namedinference") public static native void propagate_names_except(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor src,
-    @ByVal LongArrayRef excluded_idxs);
-@Namespace("at::namedinference") public static native void propagate_names_except(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor src,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... excluded_idxs);
-
-// Used for reduction ops that have a `keepdim` arg.
-@Namespace("at::namedinference") public static native void propagate_names_for_reduction(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor src,
-    @ByVal LongArrayRef excluded_idxs,
-    @Cast("bool") boolean keepdim);
-@Namespace("at::namedinference") public static native void propagate_names_for_reduction(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor src,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] excluded_idxs,
-    @Cast("bool") boolean keepdim);
-
-@Namespace("at::namedinference") public static native void propagate_names_for_expand(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor self);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_broadcast_outnames(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector broadcast_to_outnames(
-    @Const @ByRef Tensor tensor,
-    @Const @ByRef Tensor reference_tensor,
-    @Cast("const char*") BytePointer op_name);
-@Namespace("at::namedinference") public static native @ByVal DimnameVector broadcast_to_outnames(
-    @Const @ByRef Tensor tensor,
-    @Const @ByRef Tensor reference_tensor,
-    String op_name);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_matmul_outnames(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_cdist_outnames(
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_bmm_outnames(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_squeeze_outnames(@Const @ByRef Tensor tensor);
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_squeeze_outnames(
-    @Const @ByRef Tensor tensor,
-    long dims);
-
-
-
-// TensorImpl* overloads for Legacy TH/THC code. Use these sparingly.
-
-@Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
-    TensorImpl result,
-    @ByVal DimnameArrayRef maybe_names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
-    TensorImpl result,
-    @ByVal DimnameArrayRef maybe_names);
-@Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
-    TensorImpl result,
-    @ByVal DimnameVector maybe_names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
-    TensorImpl result,
-    @ByVal DimnameVector maybe_names);
-
-@Namespace("at::namedinference") public static native TensorImpl propagate_names(
-    TensorImpl result,
-    @ByVal DimnameArrayRef names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native TensorImpl propagate_names(
-    TensorImpl result,
-    @ByVal DimnameArrayRef names);
-@Namespace("at::namedinference") public static native TensorImpl propagate_names(
-    TensorImpl result,
-    @ByVal DimnameVector names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native TensorImpl propagate_names(
-    TensorImpl result,
-    @ByVal DimnameVector names);
-
-@Namespace("at::namedinference") public static native void propagate_names(TensorImpl result, TensorImpl src);
-
-@Namespace("at::namedinference") public static native void propagate_names(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameArrayRef names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native void propagate_names(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameArrayRef names);
-@Namespace("at::namedinference") public static native void propagate_names(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameVector names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native void propagate_names(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameVector names);
-
-@Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameArrayRef names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameArrayRef names);
-@Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameVector names,
-    @Cast("bool") boolean validate_names/*=false*/);
-@Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
-    @Const @ByRef TensorBase result,
-    @ByVal DimnameVector names);
-
-@Namespace("at::namedinference") public static native void propagate_names(@Const @ByRef TensorBase result, @Const @ByRef TensorBase src);
-
-// result = m1 @ m2 + bias
-@Namespace("at::namedinference") public static native @ByVal DimnameVector propagate_names_for_addmm(
-    @Const @ByRef Tensor m1,
-    @Const @ByRef Tensor m2,
-    @Const @ByRef Tensor bias);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector propagate_names_for_addmv(
-    @Const @ByRef Tensor mat,
-    @Const @ByRef Tensor vec,
-    @Const @ByRef Tensor bias);
-
-@Namespace("at::namedinference") public static native void check_names_for_dot(TensorImpl vec1, TensorImpl vec2);
-
-@Namespace("at::namedinference") public static native @ByVal DimnameVector compute_baddbmm_outnames(
-    @Const @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @Const @ByRef Tensor other,
-    @Const @ByRef Tensor bias);
-
-@Namespace("at::namedinference") public static native @Cast("bool") boolean are_names_equal(TensorImpl self, TensorImpl other);
-
- // namespace namedinference
-
- // namespace at
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/core/VariableHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
 // #include <c10/macros/Export.h>
+// #include <c10/util/intrusive_ptr.h>
 
 // A little explanation about why this file exists at all.  We have
 // a few methods on Tensor class which require access to reified access to
@@ -16328,9 +16228,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/variable.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/utils/python_stub.h>
@@ -16340,8 +16245,8 @@ public static final byte min_lookups = min_lookups();
 // #include <torch/csrc/autograd/edge.h>
 // #include <torch/csrc/autograd/forward_grad.h>
 // #include <torch/csrc/autograd/function_hook.h>
+// #include <torch/csrc/autograd/node.h>
 
-// #include <ATen/NamedTensorUtils.h>
 // #include <ATen/core/Tensor.h>
 // #include <ATen/core/VariableHooksInterface.h>
 // #include <c10/util/Exception.h>
@@ -16371,9 +16276,14 @@ public static final byte min_lookups = min_lookups();
 
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/autograd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/autograd/variable.h>
@@ -16414,7 +16324,7 @@ public static final byte min_lookups = min_lookups();
  *      compute param {@code tensors}. */
 //      When inputs are provided and a given input is not a leaf,
 //      the current implementation will call its grad_fn (even though it is not
-//      strictly needed to get this gradients). It is an implementation detail
+//      strictly needed to get these gradients). It is an implementation detail
 //      on which the user should not rely. See
 //      https://github.com/pytorch/pytorch/pull/60521#issuecomment-867061780 for
 //      more details.
@@ -16483,9 +16393,14 @@ public static final byte min_lookups = min_lookups();
  // namespace forward_ad
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/alias_info.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <set>
 // #include <string>
@@ -16505,9 +16420,14 @@ public static final byte min_lookups = min_lookups();
  // namespace c10
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/operator_name.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -16537,9 +16457,14 @@ public static final byte min_lookups = min_lookups();
  // namespace c10
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dispatch/OperatorOptions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -16563,9 +16488,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/function_schema.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/StringUtil.h>
@@ -16624,9 +16554,14 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/function_schema_inl.h>  // IWYU pragma: keep
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/function_schema_inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ostream>
 // #include <sstream>
@@ -16637,9 +16572,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/op_registration/infer_schema.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 /**
@@ -16680,9 +16620,14 @@ public static final byte min_lookups = min_lookups();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/op_registration/op_allowlist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // TODO: unify to C10_MOBILE. In theory this header could be used in OSS.
@@ -16792,9 +16737,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/SequenceNumber.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
@@ -16808,9 +16758,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at::sequence_number
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/OperatorKernel.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/intrusive_ptr.h>
 // Targeting ../OperatorKernel.java
@@ -16819,9 +16774,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/BoxedKernel.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/boxing/OperatorKernel.h>
@@ -16883,19 +16843,6 @@ public static final byte min_lookups = min_lookups();
     @ByVal DispatchKeySet arg2,
     @Cast("c10::Stack*") IValueVector arg3);
 
-// Note [named_not_supported_kernel]
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// This kernel implements reporting an error message saying that named tensor is
-// not supported.  This kernel doesn't rely on the Stack, and so it is special
-// cased in the dispatcher to be triggered before we attempt boxing (so we can
-// give a good error message in cases when boxing is not supported).  When
-// boxing is universally supported this can be removed.
-@Namespace("c10") public static native void named_not_supported_kernel(
-    OperatorKernel arg0,
-    @Const @ByRef OperatorHandle arg1,
-    @ByVal DispatchKeySet arg2,
-    @Cast("c10::Stack*") IValueVector arg3);
-
 /**
  * BoxedKernel is similar to a std::function storing a boxed kernel.
  */
@@ -16904,12 +16851,15 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/boxing/BoxedKernel_impl.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/BoxedKernel_impl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
-
-
 
 
 
@@ -16940,12 +16890,19 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/stack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
+// #include <tuple>
 // #include <type_traits>
+// #include <utility>
 
 // #include <ATen/core/ivalue.h>
 // #include <c10/util/Deprecated.h>
@@ -16984,25 +16941,19 @@ public static final byte min_lookups = min_lookups();
 @Namespace("torch::jit") public static native @ByVal IValue pop(@ByRef IValueVector stack);
 @Namespace("torch::jit") public static native @ByVal IValueVector pop(@ByRef IValueVector stack, @Cast("size_t") long n);
 
-// variadic pop:
-// int64_t a; at::Tensor b;
-// pop(stack, a, b);
-// equivalent to:
-// b = pop(stack).toTensor();
-// a = pop(stack).toInt();
-
-@Namespace("torch::jit") public static native void push_one(@ByRef IValueVector stack, @ByVal TensorOptions options);
-
-// The packer here is carefully written not to make any unnecessary
-// copies.
 
 // pack takes the return values of aten functions pushes them onto the stack
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/impl/boxing.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // This file contains boxing (not unboxing) logic,
@@ -17120,9 +17071,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/impl/make_boxed_from_unboxed_functor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/IListRef.h>
@@ -17261,9 +17217,14 @@ public static final byte min_lookups = min_lookups();
  // namespace c10
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/CompileTimeFunctionPointer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/TypeTraits.h>
@@ -17303,9 +17264,14 @@ public static final byte min_lookups = min_lookups();
 //       func>
 // #define TORCH_FN(func) TORCH_FN_TYPE(func)()
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/impl/WrapFunctionIntoFunctor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/CompileTimeFunctionPointer.h>
@@ -17318,9 +17284,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/impl/WrapFunctionIntoRuntimeFunctor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/TypeTraits.h>
@@ -17334,9 +17305,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/KernelFunction.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ATen_fwd.h>
@@ -17363,9 +17339,14 @@ public static final byte min_lookups = min_lookups();
 
 // #include <ATen/core/boxing/KernelFunction_impl.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/boxing/KernelFunction_impl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <ATen/core/boxing/impl/WrapFunctionIntoFunctor.h>
 // #include <ATen/core/boxing/impl/WrapFunctionIntoRuntimeFunctor.h>
 // #include <ATen/core/boxing/impl/boxing.h>
@@ -17436,13 +17417,16 @@ public static final byte min_lookups = min_lookups();
 
 
 
-
-
  // namespace c10
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from c10/util/flat_hash_map.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // Taken from
 // https://github.com/skarupke/flat_hash_map/blob/2c4687431f978f02a3780e24b8b701d22aa32d9c/flat_hash_map.hpp
 // with fixes applied:
@@ -17498,13 +17482,19 @@ public static final byte min_lookups = min_lookups();
 // #pragma warning(pop)
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/PyHandleCache.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/PyInterpreter.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/DeadlockDetection.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/python_stub.h>
 
@@ -17539,9 +17529,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/SafePyObject.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/PyInterpreter.h>
@@ -17560,9 +17555,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Bitset.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstddef>
@@ -17576,9 +17576,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Variadic.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <utility>
@@ -17597,9 +17602,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dispatch/DispatchKeyExtractor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Variadic.h>
@@ -17636,9 +17646,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dispatch/OperatorEntry.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/boxing/KernelFunction.h>
@@ -17683,9 +17698,14 @@ public static final byte min_lookups = min_lookups();
  // namespace impl
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/record_function.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -17968,9 +17988,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Synchronized.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <mutex>
@@ -17991,9 +18016,14 @@ public static final byte min_lookups = min_lookups();
  */
  // end namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/GradMode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/AutogradState.h>
@@ -18013,18 +18043,28 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/grad_mode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
 // #include <c10/core/GradMode.h>
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dispatch/Dispatcher.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/SequenceNumber.h>
@@ -18115,9 +18155,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dispatch/CppSignature.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/DispatchKeySet.h>
@@ -18133,9 +18178,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/dispatch/RegistrationHandleRAII.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <functional>
@@ -18145,17 +18195,27 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/enum_tag.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // at::Tag is now generated into torch/headeronly
 // #include <torch/headeronly/core/enum_tag.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/ATenOpList.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
@@ -18165,9 +18225,14 @@ public static final byte min_lookups = min_lookups();
 @Namespace("at") public static native @Cast("bool") boolean is_custom_op(@Const @ByRef OperatorName opName);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/op_registration/op_registration.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 /**
@@ -18199,9 +18264,14 @@ public static final byte min_lookups = min_lookups();
   // Old-style API
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/function.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/function_schema.h>
@@ -18224,9 +18294,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/class_type.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <memory>
@@ -18262,9 +18337,14 @@ public static final byte min_lookups = min_lookups();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/library.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 ///
 ///
@@ -18661,9 +18741,14 @@ public static final byte min_lookups = min_lookups();
 
 // #include <torch/custom_class.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/autograd_not_implemented_fallback.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/library.h>
@@ -18702,13 +18787,18 @@ public static final byte min_lookups = min_lookups();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/anomaly_mode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
+// #include <c10/util/intrusive_ptr.h>
 // #include <torch/csrc/Export.h>
-// #include <memory>
 // #include <string>
 // Targeting ../AnomalyMode.java
 
@@ -18722,9 +18812,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/grad_mode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/grad_mode.h>
@@ -18732,9 +18827,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/FuncTorchTLS.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -18755,9 +18855,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at::functorch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/PythonTorchFunctionTLS.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SafePyObject.h>
@@ -18781,9 +18886,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/SavedTensorHooks.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SafePyObject.h>
@@ -18805,9 +18915,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ThreadLocalPythonObjects.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SafePyObject.h>
@@ -18819,9 +18934,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/PythonDispatcherTLS.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/PyInterpreter.h>
@@ -18835,9 +18955,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/impl/TorchDispatchModeTLS.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SafePyObject.h>
@@ -18866,9 +18991,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace c10::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ThreadLocalState.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/InferenceMode.h>
@@ -18892,9 +19022,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ThreadLocal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -18978,9 +19113,14 @@ public static final byte min_lookups = min_lookups();
 
 // #endif // defined(C10_PREFER_CUSTOM_THREAD_LOCAL_STORAGE)
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/input_buffer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // The InputBuffer class accumulates a list of Variables for use by a
@@ -18995,11 +19135,35 @@ public static final byte min_lookups = min_lookups();
 // #include <torch/csrc/autograd/variable.h>
 // #include <optional>
 
+// Detect and handle stale non-capturing stream references during CUDA graph
+// capture. Autograd nodes snapshot the current stream at construction time.
+// If a node was created on a non-capturing stream (e.g. during warmup) but
+// backward runs under capture on a different stream, the engine would issue
+// cudaStreamWaitEvent on the stale stream, pulling it into the capture.
+//
+// Three possible outcomes, depending on global state:
+//   1. If overrideStaleCaptureStream() is true, returns capturing_stream
+//      (the caller should use it in place of node_stream).
+//   2. If node_stream refers to the default stream (id == 0), throws a
+//      c10::Error with actionable guidance; this case always invalidates
+//      the capture, so failing fast is better than the opaque CUDA error.
+//   3. Otherwise, returns node_stream unchanged.
+//
+// Preconditions (asserted): node_stream is set and non-capturing;
+// capturing_stream is set and capturing. Intended as an internal helper,
+// not part of the stable C++ ABI.
+
+
  // namespace torch::autograd
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from torch/csrc/autograd/utils/warnings.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/Exception.h>
 
@@ -19012,9 +19176,14 @@ public static final byte min_lookups = min_lookups();
 
  // namespace torch::autograd::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/graph_task.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/ThreadLocalState.h>
 // #include <ATen/core/Tensor.h>
@@ -19041,9 +19210,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/BlasBackend.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -19093,9 +19267,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/MT19937RNGEngine.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -19126,9 +19305,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/CPUGeneratorImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Generator.h>
@@ -19147,9 +19331,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/AcceleratorHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Generator.h>
@@ -19163,10 +19352,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/detail/MTIAHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/CachingDeviceAllocator.h>
@@ -19187,15 +19381,22 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../MTIAHooksInterface.java
 
 
+
+// Deprecated: no longer used internally, kept for ABI compatibility.
 // #define REGISTER_MTIA_HOOKS(clsname) C10_REGISTER_CLASS(MTIAHooksRegistry, clsname, clsname)
 @Namespace("at::detail") public static native @Const @ByRef MTIAHooksInterface getMTIAHooks();
 @Namespace("at::detail") public static native @Cast("bool") boolean isMTIAHooksBuilt();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/DeviceAccelerator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/CachingDeviceAllocator.h>
@@ -19285,9 +19486,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Keep BC only
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/LinalgBackend.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -19313,9 +19519,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ROCmFABackend.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -19341,9 +19552,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/SDPBackend.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <cstdint>
 
@@ -19365,16 +19581,26 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/ATenGeneral.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/LegacyTypeDispatch.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // The legacy mechanism for dispatching operators in ATen is a Type
@@ -19400,9 +19626,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/CUDAHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
@@ -19431,9 +19662,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/HIPHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Allocator.h>
@@ -19456,9 +19692,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/IPUHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/detail/AcceleratorHooksInterface.h>
@@ -19478,9 +19719,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/MPSHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 //  Copyright © 2022 Apple Inc.
 
 // #pragma once
@@ -19505,9 +19751,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/MAIAHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -19527,9 +19778,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/detail/PrivateUse1HooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/GeneratorForPrivateuseone.h>
@@ -19557,10 +19813,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/detail/XPUHooksInterface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -19584,9 +19845,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/QEngine.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -19616,9 +19882,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/CallOnce.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -19634,9 +19905,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/env.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
@@ -19680,9 +19956,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace c10::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Context.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/BlasBackend.h>
@@ -19755,12 +20036,24 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     public Float32Op intern() { for (Float32Op e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
-@Namespace("at") public enum Float32Precision { NONE(0), IEEE(1), TF32(2), BF16(3);
+// DEFAULT is an internal-only sentinel meaning "use legacy backend default
+// unless a parent setting overrides it". NONE means "explicitly set to
+// inherit/no-op".
+@Namespace("at") public enum Float32Precision { NONE(0), IEEE(1), TF32(2), BF16(3), DEFAULT(4);
 
     public final int value;
     private Float32Precision(int v) { this.value = v; }
     private Float32Precision(Float32Precision e) { this.value = e.value; }
     public Float32Precision intern() { for (Float32Precision e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("at") public enum CuDNNDepthwiseKernel { AUTO(0), CUDNN(1), NATIVE(2);
+
+    public final int value;
+    private CuDNNDepthwiseKernel(int v) { this.value = v; }
+    private CuDNNDepthwiseKernel(CuDNNDepthwiseKernel e) { this.value = e.value; }
+    public CuDNNDepthwiseKernel intern() { for (CuDNNDepthwiseKernel e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -19772,6 +20065,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @Cast("at::Float32Precision") int str2precision(@StdString String name);
 @Namespace("at") public static native @StdString BytePointer precision2str(Float32Precision prec);
 @Namespace("at") public static native @StdString String precision2str(@Cast("at::Float32Precision") int prec);
+@Namespace("at") public static native CuDNNDepthwiseKernel str2cudnn_depthwise(@StdString BytePointer name);
+@Namespace("at") public static native @Cast("at::CuDNNDepthwiseKernel") int str2cudnn_depthwise(@StdString String name);
+@Namespace("at") public static native @StdString BytePointer cudnn_depthwise2str(CuDNNDepthwiseKernel k);
+@Namespace("at") public static native @StdString String cudnn_depthwise2str(@Cast("at::CuDNNDepthwiseKernel") int k);
 // Targeting ../Context.java
 
 
@@ -19826,9 +20123,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/DeviceGuard.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/IListRef.h>
@@ -19856,15 +20158,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/DimVector.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/DimVector.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/EmptyTensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/TensorBase.h>
 
@@ -20127,9 +20439,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at::detail
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TensorGeometry.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/TensorBase.h>
@@ -20148,9 +20465,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Formatting.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ostream>
@@ -20170,15 +20492,29 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native void print(@Const @ByRef Tensor t, @Cast("int64_t") long linesize/*=80*/);
 @Namespace("at") public static native void print(@Const @ByRef Tensor t);
 
+// API to control scientific notation in tensor printing
+@Namespace("at") public static native void set_printoption_sci_mode(@Cast("bool") boolean enabled);
+
+ // namespace at
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/Formatting.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <ATen/core/Formatting.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/Utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/EmptyTensor.h>
@@ -20232,9 +20568,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TensorUtils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/DimVector.h>
@@ -20511,9 +20852,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace detail
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TracerMode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/LocalDispatchKeySet.h>
@@ -20633,9 +20979,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at::tracer::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Reduction.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // NB: Keep this in sync with Reduction class in torch/nn/_reduction.py
@@ -20655,9 +21006,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 }
  // namespace at::Reduction
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/abs.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20694,9 +21050,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/absolute.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20730,9 +21091,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/acos.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20769,9 +21135,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/acosh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20808,9 +21179,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_avg_pool1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20847,9 +21223,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_avg_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20902,9 +21283,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_avg_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20957,9 +21343,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_avg_pool3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -20990,9 +21381,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_max_pool1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21022,9 +21418,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_max_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21061,9 +21462,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_max_pool2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21097,9 +21503,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_max_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21136,9 +21547,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adaptive_max_pool3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21172,9 +21588,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/add.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21220,9 +21641,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/addbmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21258,9 +21684,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/addcdiv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21296,9 +21727,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/addcmul.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21334,9 +21770,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/addmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21382,9 +21823,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/addmv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21424,9 +21870,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/addr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21462,9 +21913,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/adjoint.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21493,9 +21949,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/affine_grid_generator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21548,9 +22009,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/affine_grid_generator_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21585,9 +22051,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/alias.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21616,9 +22087,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/alias_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21652,99 +22128,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
-
-// Parsed from ATen/ops/align_as.h
-
-// #pragma once
-
-// @generated by torchgen/gen.py from Function.h
-
-// #include <ATen/Context.h>
-// #include <ATen/DeviceGuard.h>
-// #include <ATen/TensorUtils.h>
-// #include <ATen/TracerMode.h>
-// #include <ATen/core/Generator.h>
-// #include <ATen/core/Reduction.h>
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/Scalar.h>
-// #include <c10/core/Storage.h>
-// #include <c10/core/TensorOptions.h>
-// #include <c10/util/Deprecated.h>
-// #include <optional>
-// #include <string_view>
-
-
-
-// #include <ATen/ops/align_as_ops.h>
-
-
-
-
-
-
-// Parsed from ATen/ops/align_tensors.h
-
-// #pragma once
-
-// @generated by torchgen/gen.py from Function.h
-
-// #include <ATen/Context.h>
-// #include <ATen/DeviceGuard.h>
-// #include <ATen/TensorUtils.h>
-// #include <ATen/TracerMode.h>
-// #include <ATen/core/Generator.h>
-// #include <ATen/core/Reduction.h>
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/Scalar.h>
-// #include <c10/core/Storage.h>
-// #include <c10/core/TensorOptions.h>
-// #include <c10/util/Deprecated.h>
-// #include <optional>
-// #include <string_view>
-
-
-
-// #include <ATen/ops/align_tensors_ops.h>
-
-
-// aten::align_tensors(Tensor[] tensors) -> Tensor[]
-@Namespace("at") public static native @ByVal TensorVector align_tensors(@ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @ByVal TensorVector align_tensors(@ByVal TensorVector tensors);
-
-
-
-
-// Parsed from ATen/ops/align_to.h
-
-// #pragma once
-
-// @generated by torchgen/gen.py from Function.h
-
-// #include <ATen/Context.h>
-// #include <ATen/DeviceGuard.h>
-// #include <ATen/TensorUtils.h>
-// #include <ATen/TracerMode.h>
-// #include <ATen/core/Generator.h>
-// #include <ATen/core/Reduction.h>
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/Scalar.h>
-// #include <c10/core/Storage.h>
-// #include <c10/core/TensorOptions.h>
-// #include <c10/util/Deprecated.h>
-// #include <optional>
-// #include <string_view>
-
-
-
-// #include <ATen/ops/align_to_ops.h>
-
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/all.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21793,16 +22184,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor all_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor all_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
-// aten::all.dimname(Tensor self, Dimname dim, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor all(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor all(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::all.dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor all_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor all_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::all.dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor all_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-
 // aten::all(Tensor self) -> Tensor
 @Namespace("at") public static native @ByVal Tensor all(@Const @ByRef Tensor self);
 
@@ -21813,9 +22194,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/allclose.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21845,9 +22231,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/alpha_dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21879,9 +22270,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/amax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21920,9 +22316,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/amin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21961,9 +22362,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/aminmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -21999,9 +22405,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/and.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22033,9 +22444,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/angle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22069,9 +22485,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/any.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22120,16 +22541,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor any_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor any_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
-// aten::any.dimname(Tensor self, Dimname dim, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor any(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor any(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::any.dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor any_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor any_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::any.dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor any_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-
 // aten::any(Tensor self) -> Tensor
 @Namespace("at") public static native @ByVal Tensor any(@Const @ByRef Tensor self);
 
@@ -22140,9 +22551,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arange.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22196,9 +22612,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arccos.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22235,9 +22656,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arccosh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22274,9 +22700,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arcsin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22313,9 +22744,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arcsinh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22352,9 +22788,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arctan.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22391,9 +22832,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arctan2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22427,9 +22873,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/arctanh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22466,9 +22917,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/argmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22504,9 +22960,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/argmin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22542,9 +23003,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/argsort.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22582,15 +23048,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::argsort.stable_out(Tensor self, *, bool stable, int dim=-1, bool descending=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor argsort_outf(@Const @ByRef Tensor self, @Cast("bool") boolean stable, @Cast("int64_t") long dim, @Cast("bool") boolean descending, @ByRef Tensor out);
 
-// aten::argsort.dimname(Tensor self, Dimname dim, bool descending=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
-@Namespace("at") public static native @ByVal Tensor argsort(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/argwhere.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22619,9 +23086,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/as_strided.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22671,9 +23143,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/as_strided_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22732,9 +23209,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/as_strided_scatter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22793,9 +23275,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/asin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22832,9 +23319,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/asinh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22871,9 +23363,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/atan.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22910,9 +23407,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/atan2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22946,9 +23448,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/atanh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -22985,9 +23492,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/atleast_1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23020,9 +23532,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/atleast_2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23055,9 +23572,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/atleast_3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23090,9 +23612,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/avg_pool1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23133,9 +23660,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/avg_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23176,9 +23708,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/avg_pool2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23215,9 +23752,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/avg_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23258,9 +23800,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/avg_pool3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23297,9 +23844,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/baddbmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23345,9 +23897,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bartlett_window.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23395,9 +23952,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23426,9 +23988,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23457,9 +24024,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_backward_elemt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23493,9 +24065,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_backward_reduce.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23529,9 +24106,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_elemt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23565,9 +24147,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_gather_stats.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23601,9 +24188,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_gather_stats_with_counts.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23637,9 +24229,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_stats.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23673,9 +24270,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/batch_norm_update_stats.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23709,9 +24311,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bernoulli.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23764,9 +24371,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bilinear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23796,9 +24408,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/binary_cross_entropy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23834,9 +24451,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/binary_cross_entropy_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23872,9 +24494,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/binary_cross_entropy_with_logits.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23910,9 +24537,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bincount.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -23966,9 +24598,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/binomial.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24004,9 +24641,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bitwise_and.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24056,9 +24698,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bitwise_left_shift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24108,9 +24755,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bitwise_not.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24144,9 +24796,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bitwise_or.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24196,9 +24853,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bitwise_right_shift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24248,9 +24910,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bitwise_xor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24300,9 +24967,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/blackman_window.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24350,9 +25022,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/block_diag.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24389,9 +25066,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24433,9 +25115,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/broadcast_tensors.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24465,9 +25152,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/broadcast_to.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24502,9 +25194,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/bucketize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24550,9 +25247,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/can_cast.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24581,9 +25283,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cartesian_prod.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24613,9 +25320,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24654,22 +25366,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor cat_outf(@Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor cat_outf(@Const @ByRef TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
-// aten::cat.names(Tensor[] tensors, Dimname dim) -> Tensor
-@Namespace("at") public static native @ByVal Tensor cat(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal Tensor cat(@ByVal TensorVector tensors, @ByVal Dimname dim);
-
-// aten::cat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @ByVal Dimname dim);
-@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @ByVal TensorVector tensors, @ByVal Dimname dim);
-// aten::cat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor cat_outf(@ByVal TensorArrayRef tensors, @ByVal Dimname dim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor cat_outf(@ByVal TensorVector tensors, @ByVal Dimname dim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/cauchy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24705,9 +25411,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ccol_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24734,9 +25445,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ccol_indices_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24770,9 +25486,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cdist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24802,9 +25523,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ceil.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24841,9 +25567,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/celu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24883,9 +25614,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/chain_matmul.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24922,9 +25658,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/chalf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -24951,9 +25692,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/channel_shuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25003,9 +25749,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cholesky.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25041,9 +25792,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cholesky_inverse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25079,9 +25835,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cholesky_solve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25117,9 +25878,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/choose_qparams_optimized.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25148,9 +25914,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/chunk.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25180,9 +25951,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/clamp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25236,9 +26012,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/clamp_max.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25286,9 +26067,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/clamp_min.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25336,9 +26122,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/clip.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25392,9 +26183,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/clone.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25430,9 +26226,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/coalesce.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25459,9 +26260,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/col2im.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25517,9 +26323,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/col_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25546,9 +26357,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/col_indices_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25582,9 +26398,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/column_stack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25621,9 +26442,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/combinations.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25653,9 +26479,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/complex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25689,9 +26520,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/concat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25730,22 +26566,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
-// aten::concat.names(Tensor[] tensors, Dimname dim) -> Tensor
-@Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorVector tensors, @ByVal Dimname dim);
-
-// aten::concat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @ByVal Dimname dim);
-@Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorVector tensors, @ByVal Dimname dim);
-// aten::concat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorArrayRef tensors, @ByVal Dimname dim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorVector tensors, @ByVal Dimname dim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/concatenate.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25784,22 +26614,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
-// aten::concatenate.names(Tensor[] tensors, Dimname dim) -> Tensor
-@Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
-@Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorVector tensors, @ByVal Dimname dim);
-
-// aten::concatenate.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @ByVal Dimname dim);
-@Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorVector tensors, @ByVal Dimname dim);
-// aten::concatenate.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorArrayRef tensors, @ByVal Dimname dim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorVector tensors, @ByVal Dimname dim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/conj.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25828,9 +26652,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conj_physical.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25867,9 +26696,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/constant_pad_nd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25928,9 +26762,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/contiguous.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -25957,9 +26796,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26014,9 +26858,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26071,9 +26920,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26128,9 +26982,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv_depthwise3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26183,9 +27042,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv_tbc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26221,9 +27085,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv_tbc_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26252,9 +27121,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv_transpose1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26291,9 +27165,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv_transpose2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26330,9 +27209,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/conv_transpose3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26369,9 +27253,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/convolution.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26424,9 +27313,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/convolution_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26485,9 +27379,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/convolution_backward_overrideable.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26540,9 +27439,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/convolution_overrideable.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26595,9 +27499,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26633,9 +27542,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/copy_sparse_to_sparse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26675,9 +27589,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/copysign.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26719,9 +27638,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/corrcoef.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26750,9 +27674,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cos.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26789,9 +27718,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cosh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26828,9 +27762,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cosine_embedding_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26860,9 +27799,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cosine_similarity.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26892,9 +27836,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/count_nonzero.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26941,9 +27890,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cov.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -26973,9 +27927,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cross.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27011,9 +27970,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cross_entropy_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27049,9 +28013,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/crow_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27078,9 +28047,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/crow_indices_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27114,9 +28088,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ctc_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27152,9 +28131,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_affine_grid_generator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27188,9 +28172,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_affine_grid_generator_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27224,9 +28213,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_batch_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27260,9 +28254,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_batch_norm_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27296,9 +28295,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_convolution.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27351,9 +28355,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_convolution_add_relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27406,9 +28415,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_convolution_relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27461,9 +28475,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_convolution_transpose.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27516,9 +28535,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_grid_sampler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27552,9 +28576,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_grid_sampler_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27588,9 +28617,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cudnn_is_acceptable.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27619,9 +28653,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cummax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27653,19 +28692,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::cummax.out(Tensor self, int dim, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T cummax_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByRef Tensor values, @ByRef Tensor indices);
 
-// aten::cummax.dimname(Tensor self, Dimname dim) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T cummax(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::cummax.dimname_out(Tensor self, Dimname dim, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T cummax_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::cummax.dimname_out(Tensor self, Dimname dim, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T cummax_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByRef Tensor values, @ByRef Tensor indices);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/cummaxmin_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27694,9 +28730,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cummin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27728,19 +28769,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::cummin.out(Tensor self, int dim, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T cummin_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByRef Tensor values, @ByRef Tensor indices);
 
-// aten::cummin.dimname(Tensor self, Dimname dim) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T cummin(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::cummin.dimname_out(Tensor self, Dimname dim, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T cummin_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::cummin.dimname_out(Tensor self, Dimname dim, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T cummin_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByRef Tensor values, @ByRef Tensor indices);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/cumprod.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27774,21 +28812,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::cumprod.out(Tensor self, int dim, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor cumprod_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::cumprod.dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor cumprod(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor cumprod(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::cumprod.dimname_out(Tensor self, Dimname dim, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor cumprod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor cumprod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::cumprod.dimname_out(Tensor self, Dimname dim, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor cumprod_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/cumprod_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27817,9 +28850,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/cumsum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27853,21 +28891,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::cumsum.out(Tensor self, int dim, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor cumsum_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::cumsum.dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor cumsum(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor cumsum(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::cumsum.dimname_out(Tensor self, Dimname dim, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor cumsum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor cumsum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::cumsum.dimname_out(Tensor self, Dimname dim, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor cumsum_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/cumulative_trapezoid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27901,9 +28934,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/data.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27930,9 +28968,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/deg2rad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27969,9 +29012,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dense_dim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -27998,9 +29046,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dequantize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28045,9 +29098,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/det.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28076,9 +29134,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/detach.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28110,9 +29173,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/detach_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28146,9 +29214,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diag.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28184,9 +29257,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diag_embed.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28222,9 +29300,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diagflat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28254,9 +29337,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diagonal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28284,15 +29372,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor diagonal(@Const @ByRef Tensor self, @Cast("int64_t") long offset/*=0*/, @Cast("int64_t") long dim1/*=0*/, @Cast("int64_t") long dim2/*=1*/);
 @Namespace("at") public static native @ByVal Tensor diagonal(@Const @ByRef Tensor self);
 
-// aten::diagonal.Dimname(Tensor(a) self, *, Dimname outdim, Dimname dim1, Dimname dim2, int offset=0) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor diagonal(@Const @ByRef Tensor self, @ByVal Dimname outdim, @ByVal Dimname dim1, @ByVal Dimname dim2, @Cast("int64_t") long offset/*=0*/);
-@Namespace("at") public static native @ByVal Tensor diagonal(@Const @ByRef Tensor self, @ByVal Dimname outdim, @ByVal Dimname dim1, @ByVal Dimname dim2);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/diagonal_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28345,9 +29434,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diagonal_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28383,9 +29477,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diagonal_scatter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28421,9 +29520,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/diff.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28459,9 +29563,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/digamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28495,9 +29604,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28533,9 +29647,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/div.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28593,9 +29712,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/divide.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28643,9 +29767,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28679,9 +29808,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28713,9 +29847,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dsplit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28748,9 +29887,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/dstack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28787,9 +29931,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/einsum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28825,9 +29974,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/elu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28867,9 +30021,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/elu_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28903,9 +30062,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/embedding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28959,9 +30123,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/embedding_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -28995,9 +30164,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/embedding_bag.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29030,9 +30204,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/embedding_dense_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29082,9 +30261,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/embedding_renorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29121,9 +30305,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/embedding_sparse_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29152,9 +30341,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/empty.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29177,15 +30371,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <ATen/ops/empty_ops.h>
 
-
-// aten::empty.names(int[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-// aten::empty.names(int[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByVal Tensor empty(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory, @ByVal MemoryFormatOptional memory_format);
 
 // aten::empty.memory_format(SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None, MemoryFormat? memory_format=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor empty(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
@@ -29229,20 +30414,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor empty_symint_outf(@ByVal SymIntArrayRef size, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 
-// aten::empty.names_out(int[] size, *, Dimname[]? names, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("at") public static native @ByRef Tensor empty_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-// aten::empty.names_out(int[] size, *, Dimname[]? names, MemoryFormat? memory_format=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor empty_outf(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor empty_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal MemoryFormatOptional memory_format, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/empty_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29280,9 +30461,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/empty_permuted.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29352,9 +30538,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/empty_quantized.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29398,9 +30589,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/empty_strided.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29465,9 +30661,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/eq.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29509,9 +30710,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/equal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29540,9 +30746,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/erf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29579,9 +30790,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/erfc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29618,9 +30834,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/erfinv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29654,9 +30875,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/exp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29693,9 +30919,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/exp2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29732,9 +30963,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/expand.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29761,9 +30997,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/expand_as.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29790,9 +31031,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/expand_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29851,9 +31097,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/expm1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29890,9 +31141,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/exponential.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -29928,9 +31184,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/eye.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30024,9 +31285,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fake_quantize_per_channel_affine.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30055,9 +31321,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fake_quantize_per_channel_affine_cachemask.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30091,9 +31362,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fake_quantize_per_channel_affine_cachemask_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30122,9 +31398,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fake_quantize_per_tensor_affine.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30156,9 +31437,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fake_quantize_per_tensor_affine_cachemask.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30192,9 +31478,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fake_quantize_per_tensor_affine_cachemask_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30223,9 +31514,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_linear_fp16_weight.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30257,9 +31553,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_linear_fp16_weight_fp32_activation.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30291,9 +31592,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_linear_int8_weight.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30322,9 +31628,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_linear_int8_weight_fp32_activation.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30353,9 +31664,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_linear_quantize_weight.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30384,9 +31700,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_pack_gemm_matrix_fp16.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30415,9 +31736,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fbgemm_pack_quantized_matrix.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30449,9 +31775,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/feature_alpha_dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30483,9 +31814,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/feature_dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30517,9 +31853,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_fft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30573,9 +31914,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_fft2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30641,9 +31987,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_fftfreq.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30681,9 +32032,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_fftn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30743,9 +32099,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_fftshift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30776,9 +32137,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_hfft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30832,9 +32198,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_hfft2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30900,9 +32271,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_hfftn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -30962,9 +32338,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ifft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31018,9 +32399,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ifft2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31086,9 +32472,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ifftn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31148,9 +32539,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ifftshift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31181,9 +32577,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ihfft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31237,9 +32638,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ihfft2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31305,9 +32711,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_ihfftn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31367,9 +32778,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_irfft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31423,9 +32839,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_irfft2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31491,9 +32912,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_irfftn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31553,9 +32979,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_rfft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31609,9 +33040,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_rfft2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31677,9 +33113,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_rfftfreq.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31717,9 +33158,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fft_rfftn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31779,9 +33225,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fill.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31829,9 +33280,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fill_diagonal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31858,9 +33314,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fix.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31897,9 +33358,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/flatten.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31927,21 +33393,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @Cast("int64_t") long start_dim/*=0*/, @Cast("int64_t") long end_dim/*=-1*/);
 @Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self);
 
-// aten::flatten.named_out_dim(Tensor(a) self, int start_dim, int end_dim, Dimname out_dim) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @Cast("int64_t") long start_dim, @Cast("int64_t") long end_dim, @ByVal Dimname out_dim);
-
-// aten::flatten.using_names(Tensor(a) self, Dimname start_dim, Dimname end_dim, Dimname out_dim) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal Dimname start_dim, @ByVal Dimname end_dim, @ByVal Dimname out_dim);
-
-// aten::flatten.DimnameList(Tensor(a) self, Dimname[] dims, Dimname out_dim) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dims, @ByVal Dimname out_dim);
-@Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal DimnameVector dims, @ByVal Dimname out_dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/flatten_dense_tensors.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -31971,9 +33432,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/flip.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32010,9 +33476,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fliplr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32041,9 +33512,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/flipud.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32072,9 +33548,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/float_power.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32124,9 +33605,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/floor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32163,9 +33649,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/floor_divide.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32207,9 +33698,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32243,9 +33739,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fmin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32279,9 +33780,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fmod.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32323,9 +33829,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/frac.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32362,9 +33873,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fractional_max_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32401,9 +33917,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fractional_max_pool2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32440,9 +33961,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fractional_max_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32479,9 +34005,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fractional_max_pool3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32518,9 +34049,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/frexp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32554,9 +34090,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/frobenius_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32597,9 +34138,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/from_blob.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/Tensor.h>
 
@@ -32724,9 +34270,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/from_file.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32770,9 +34321,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/full.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32795,15 +34351,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <ATen/ops/full_ops.h>
 
-
-// aten::full.names(int[] size, Scalar fill_value, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
-// aten::full.names(int[] size, Scalar fill_value, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 
 // aten::full(SymInt[] size, Scalar fill_value, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -32844,18 +34391,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor full_symint_outf(@ByVal SymIntArrayRef size, @Const @ByRef Scalar fill_value, @ByRef Tensor out);
 
 
-// aten::full.names_out(int[] size, Scalar fill_value, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor full_out(@ByRef Tensor out, @ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor full_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
-// aten::full.names_out(int[] size, Scalar fill_value, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor full_outf(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor full_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/full_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32893,9 +34438,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/fused_moving_avg_obs_fake_quant.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32925,9 +34475,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gather.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -32961,21 +34516,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor gather(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Cast("bool") boolean sparse_grad/*=false*/);
 @Namespace("at") public static native @ByVal Tensor gather(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index);
 
-// aten::gather.dimname_out(Tensor self, Dimname dim, Tensor index, *, bool sparse_grad=False, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gather_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Cast("bool") boolean sparse_grad/*=false*/);
-@Namespace("at") public static native @ByRef Tensor gather_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index);
-// aten::gather.dimname_out(Tensor self, Dimname dim, Tensor index, *, bool sparse_grad=False, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gather_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Cast("bool") boolean sparse_grad, @ByRef Tensor out);
-
-// aten::gather.dimname(Tensor self, Dimname dim, Tensor index, *, bool sparse_grad=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor gather(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Cast("bool") boolean sparse_grad/*=false*/);
-@Namespace("at") public static native @ByVal Tensor gather(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/gather_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33004,9 +34554,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gcd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33043,9 +34598,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ge.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33087,9 +34647,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gelu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33133,9 +34698,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gelu_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33174,9 +34744,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/geometric.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33212,9 +34787,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/geqrf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33248,9 +34828,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ger.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33284,9 +34869,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/glu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33322,9 +34912,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/glu_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33358,9 +34953,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/glu_backward_jvp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33394,9 +34994,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/glu_jvp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33430,9 +35035,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gradient.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33496,9 +35106,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/greater.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33540,9 +35155,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/greater_equal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33584,9 +35204,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/grid_sampler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33615,9 +35240,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/grid_sampler_2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33651,9 +35281,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/grid_sampler_2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33687,9 +35322,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/grid_sampler_3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33723,9 +35363,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/grid_sampler_3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33759,9 +35404,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/group_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33791,9 +35441,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gru.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33827,9 +35482,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gru_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33859,9 +35519,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/gt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33903,9 +35568,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hamming_window.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -33975,9 +35645,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hann_window.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34025,9 +35700,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardshrink.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34063,9 +35743,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardshrink_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34099,9 +35784,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardsigmoid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34138,9 +35828,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardsigmoid_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34174,9 +35869,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardswish.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34213,9 +35913,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardswish_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34249,9 +35954,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardtanh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34291,9 +36001,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hardtanh_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34327,9 +36042,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/heaviside.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34363,9 +36083,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hinge_embedding_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34395,9 +36120,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/histc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34433,9 +36163,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/histogram.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34484,9 +36219,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/histogramdd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34533,9 +36273,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hsplit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34568,9 +36313,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hspmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34604,9 +36354,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hstack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34643,9 +36398,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/huber_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34681,9 +36441,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/huber_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34717,9 +36482,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/hypot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34753,9 +36523,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/i0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34792,9 +36567,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/igamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34828,9 +36608,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/igammac.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34864,9 +36649,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/im2col.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34903,9 +36693,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/imag.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34934,9 +36729,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/index.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -34970,9 +36770,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/index_add.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35006,15 +36811,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
 @Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
 
-// aten::index_add.dimname(Tensor self, Dimname dim, Tensor index, Tensor source, *, Scalar alpha=1) -> Tensor
-@Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar alpha);
-@Namespace("at") public static native @ByVal Tensor index_add(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/index_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35046,14 +36852,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::index_copy(Tensor self, int dim, Tensor index, Tensor source) -> Tensor
 @Namespace("at") public static native @ByVal Tensor index_copy(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
 
-// aten::index_copy.dimname(Tensor self, Dimname dim, Tensor index, Tensor source) -> Tensor
-@Namespace("at") public static native @ByVal Tensor index_copy(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/index_fill.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35083,12 +36891,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::index_fill.int_Tensor(Tensor self, int dim, Tensor index, Tensor value) -> Tensor
 @Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor value);
 
-// aten::index_fill.Dimname_Scalar(Tensor self, Dimname dim, Tensor index, Scalar value) -> Tensor
-@Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
-
-// aten::index_fill.Dimname_Tensor(Tensor self, Dimname dim, Tensor index, Tensor value) -> Tensor
-@Namespace("at") public static native @ByVal Tensor index_fill(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor value);
-
 // aten::index_fill.int_Scalar_out(Tensor self, int dim, Tensor index, Scalar value, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor index_fill_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
 // aten::index_fill.int_Scalar_out(Tensor self, int dim, Tensor index, Scalar value, *, Tensor(a!) out) -> Tensor(a!)
@@ -35101,9 +36903,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/index_put.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35143,9 +36950,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/index_reduce.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35186,9 +36998,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/index_select.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35220,19 +37037,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::index_select(Tensor self, int dim, Tensor index) -> Tensor
 @Namespace("at") public static native @ByVal Tensor index_select(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index);
 
-// aten::index_select.dimname_out(Tensor self, Dimname dim, Tensor index, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor index_select_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index);
-// aten::index_select.dimname_out(Tensor self, Dimname dim, Tensor index, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor index_select_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @ByRef Tensor out);
-
-// aten::index_select.dimname(Tensor self, Dimname dim, Tensor index) -> Tensor
-@Namespace("at") public static native @ByVal Tensor index_select(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/index_select_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35267,9 +37081,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35296,9 +37115,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/indices_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35332,9 +37156,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/infinitely_differentiable_gelu_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35363,9 +37192,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/inner.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35399,9 +37233,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/instance_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35430,9 +37269,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/int_repr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35466,9 +37310,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/inverse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35502,9 +37351,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_coalesced.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35531,9 +37385,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_complex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35562,9 +37421,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_conj.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35593,9 +37457,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_distributed.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35624,9 +37493,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_floating_point.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35655,9 +37529,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_inference.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35686,9 +37565,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_leaf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35715,9 +37599,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_neg.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35746,9 +37635,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_nonzero.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35777,9 +37671,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_pinned.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35806,9 +37705,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_same_size.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35837,9 +37741,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_set_to.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35866,9 +37775,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_signed.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35897,9 +37811,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/is_vulkan_available.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35928,9 +37847,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isclose.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35960,9 +37884,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isfinite.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -35991,9 +37920,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36049,9 +37983,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isinf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36085,9 +38024,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isnan.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36121,9 +38065,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isneginf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36157,9 +38106,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isposinf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36193,9 +38147,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/isreal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36224,9 +38183,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/istft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36256,9 +38220,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/item.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36285,9 +38254,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/kaiser_window.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36346,9 +38320,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/kl_div.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36378,9 +38357,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/kron.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36414,9 +38398,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/kthvalue.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36468,39 +38457,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt k, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
 
 
-// aten::kthvalue.dimname(Tensor self, SymInt k, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue(@Const @ByRef Tensor self, @Cast("int64_t") long k, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue(@Const @ByRef Tensor self, @Cast("int64_t") long k, @ByVal Dimname dim);
 
 
-// aten::kthvalue.dimname(Tensor self, SymInt k, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_symint(@Const @ByRef Tensor self, @ByVal SymInt k, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_symint(@Const @ByRef Tensor self, @ByVal SymInt k, @ByVal Dimname dim);
-
-
-// aten::kthvalue.dimname_out(Tensor self, SymInt k, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @Cast("int64_t") long k, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @Cast("int64_t") long k, @ByVal Dimname dim);
-
-
-// aten::kthvalue.dimname_out(Tensor self, SymInt k, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_outf(@Const @ByRef Tensor self, @Cast("int64_t") long k, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
-
-
-// aten::kthvalue.dimname_out(Tensor self, SymInt k, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_symint_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal SymInt k, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_symint_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal SymInt k, @ByVal Dimname dim);
-
-
-// aten::kthvalue.dimname_out(Tensor self, SymInt k, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T kthvalue_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt k, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/l1_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36530,9 +38496,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/layer_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36570,9 +38541,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lcm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36609,9 +38585,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ldexp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36648,9 +38629,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/le.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36692,9 +38678,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/leaky_relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36734,9 +38725,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/leaky_relu_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36770,9 +38766,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lerp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36814,9 +38815,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/less.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36858,9 +38864,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/less_equal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36902,9 +38913,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lgamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36938,9 +38954,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -36974,9 +38995,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lift_fresh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37005,9 +39031,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lift_fresh_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37041,9 +39072,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_cholesky.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37079,9 +39115,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_cholesky_ex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37117,9 +39158,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_cond.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37166,9 +39212,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_cross.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37204,9 +39255,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_det.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37240,9 +39296,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_diagonal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37272,9 +39333,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_eig.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37308,9 +39374,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_eigh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37349,9 +39420,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_eigvals.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37385,9 +39461,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_eigvalsh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37426,9 +39507,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_householder_product.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37462,9 +39548,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_inv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37498,9 +39589,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_inv_ex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37536,9 +39632,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_ldl_factor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37574,9 +39675,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_ldl_factor_ex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37612,9 +39718,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_ldl_solve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37650,9 +39761,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_lstsq.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37688,9 +39804,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_lu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37726,9 +39847,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_lu_factor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37764,9 +39890,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_lu_factor_ex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37802,9 +39933,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_lu_solve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37840,9 +39976,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_matmul.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37876,9 +40017,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_matrix_exp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37912,9 +40058,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_matrix_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -37972,9 +40123,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_matrix_power.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38008,9 +40164,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_matrix_rank.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38076,9 +40237,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_multi_dot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38115,9 +40281,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38171,9 +40342,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_pinv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38239,9 +40415,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_qr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38280,9 +40461,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_slogdet.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38316,9 +40502,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_solve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38354,9 +40545,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_solve_ex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38392,9 +40588,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_solve_triangular.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38430,9 +40631,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_svd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38468,9 +40674,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_svdvals.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38506,9 +40717,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_tensorinv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38544,9 +40760,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_tensorsolve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38585,9 +40806,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_vander.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38623,9 +40849,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_vecdot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38661,9 +40892,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linalg_vector_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38702,9 +40938,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38740,9 +40981,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linear_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38776,9 +41022,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/linspace.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38848,9 +41099,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38887,9 +41143,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log10.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38926,9 +41187,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log1p.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -38965,9 +41231,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39004,9 +41275,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log_normal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39042,9 +41318,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log_sigmoid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39078,9 +41359,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log_sigmoid_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39114,9 +41400,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log_sigmoid_forward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39150,9 +41441,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/log_softmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39186,15 +41482,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::log_softmax.int_out(Tensor self, int dim, ScalarType? dtype=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor log_softmax_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::log_softmax.Dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor log_softmax(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor log_softmax(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/logaddexp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39228,9 +41525,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logaddexp2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39264,9 +41566,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logcumsumexp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39298,19 +41605,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::logcumsumexp.out(Tensor self, int dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor logcumsumexp_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByRef Tensor out);
 
-// aten::logcumsumexp.dimname(Tensor self, Dimname dim) -> Tensor
-@Namespace("at") public static native @ByVal Tensor logcumsumexp(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::logcumsumexp.dimname_out(Tensor self, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor logcumsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::logcumsumexp.dimname_out(Tensor self, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor logcumsumexp_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/logdet.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39339,9 +41643,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logical_and.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39375,9 +41684,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logical_not.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39411,9 +41725,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logical_or.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39447,9 +41766,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logical_xor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39483,9 +41807,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39525,9 +41854,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logit_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39563,9 +41897,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logspace.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39639,9 +41978,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/logsumexp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39680,26 +42024,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor logsumexp_outf(@Const @ByRef Tensor self, @ByVal LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor logsumexp_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
-// aten::logsumexp.names(Tensor self, Dimname[1] dim, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
-// aten::logsumexp.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
-// aten::logsumexp.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor logsumexp_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor logsumexp_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/lshift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39741,9 +42075,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lstm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39777,9 +42116,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lstm_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39811,9 +42155,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lstm_mps_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39850,9 +42199,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39894,9 +42248,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lu_solve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39930,9 +42289,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/lu_unpack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39968,9 +42332,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mH.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -39997,9 +42366,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mT.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40026,9 +42400,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/margin_ranking_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40058,9 +42437,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/masked_fill.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40102,9 +42486,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/masked_scatter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40138,9 +42527,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/masked_scatter_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40175,9 +42569,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/masked_select.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40211,9 +42610,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/masked_select_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40242,9 +42646,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/matmul.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40278,9 +42687,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/matmul_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40314,9 +42728,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/matrix_H.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40343,9 +42762,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/matrix_exp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40374,9 +42798,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/matrix_exp_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40405,9 +42834,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/matrix_power.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40441,9 +42875,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40477,16 +42916,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::max.dim_max(Tensor self, int dim, bool keepdim=False, *, Tensor(a!) max, Tensor(b!) max_values) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T max_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor max, @ByRef Tensor max_values);
 
-// aten::max.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T max(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T max(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::max.names_dim_max(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) max, Tensor(b!) max_values) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T max_out(@ByRef Tensor max, @ByRef Tensor max_values, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T max_out(@ByRef Tensor max, @ByRef Tensor max_values, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::max.names_dim_max(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) max, Tensor(b!) max_values) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T max_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor max, @ByRef Tensor max_values);
-
 // aten::max(Tensor self) -> Tensor
 @Namespace("at") public static native @ByVal Tensor max(@Const @ByRef Tensor self);
 
@@ -40505,9 +42934,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40539,9 +42973,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool1d_with_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40573,9 +43012,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40607,9 +43051,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40650,9 +43099,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool2d_with_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40693,9 +43147,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool2d_with_indices_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40732,9 +43191,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40766,9 +43230,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool3d_with_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40809,9 +43278,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_pool3d_with_indices_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40848,9 +43322,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_unpool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40903,9 +43382,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/max_unpool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40961,9 +43445,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/maximum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -40997,9 +43486,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mean.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41048,26 +43542,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::mean.names_dim(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
-// aten::mean.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
-// aten::mean.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/median.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41104,16 +43588,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::median.dim_values(Tensor self, int dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T median_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
 
-// aten::median.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T median(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T median(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::median.names_dim_values(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T median_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T median_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::median.names_dim_values(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T median_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
-
 // aten::median.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor median_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::median.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
@@ -41121,9 +43595,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/meshgrid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41159,9 +43638,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/min.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41195,16 +43679,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::min.dim_min(Tensor self, int dim, bool keepdim=False, *, Tensor(a!) min, Tensor(b!) min_indices) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T min_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor min, @ByRef Tensor min_indices);
 
-// aten::min.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T min(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T min(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::min.names_dim_min(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) min, Tensor(b!) min_indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T min_out(@ByRef Tensor min, @ByRef Tensor min_indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T min_out(@ByRef Tensor min, @ByRef Tensor min_indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::min.names_dim_min(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) min, Tensor(b!) min_indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T min_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor min, @ByRef Tensor min_indices);
-
 // aten::min(Tensor self) -> Tensor
 @Namespace("at") public static native @ByVal Tensor min(@Const @ByRef Tensor self);
 
@@ -41223,9 +43697,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/minimum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41259,9 +43738,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_batch_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41295,9 +43779,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_batch_norm_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41331,9 +43820,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_convolution.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41386,9 +43880,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_convolution_add_relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41423,9 +43922,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_convolution_relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41460,9 +43964,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_convolution_transpose.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41515,9 +44024,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_depthwise_convolution.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41570,9 +44084,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_rnn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41609,9 +44128,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/miopen_rnn_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41648,9 +44172,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mish.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41687,9 +44216,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mish_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41718,9 +44252,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_adaptive_avg_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41757,9 +44296,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_adaptive_avg_pool2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41793,9 +44337,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_convolution.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41848,9 +44397,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_linear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41886,9 +44440,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_linear_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41922,9 +44481,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_linear_backward_input.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41961,9 +44525,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_linear_backward_weights.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -41997,9 +44566,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_max_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42040,9 +44614,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_max_pool2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42083,9 +44662,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_max_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42126,9 +44710,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_max_pool3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42169,9 +44758,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_reorder_conv2d_weight.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42234,9 +44828,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_reorder_conv3d_weight.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42299,9 +44898,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_rnn_layer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42338,9 +44942,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mkldnn_rnn_layer_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42377,9 +44986,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42421,9 +45035,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42457,21 +45076,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::mode.values(Tensor self, int dim=-1, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T mode_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
 
-// aten::mode.dimname(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T mode(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T mode(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::mode.dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T mode_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T mode_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::mode.dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T mode_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/moveaxis.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42504,9 +45118,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/movedim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42539,9 +45158,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mps_convolution_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42594,9 +45218,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mps_convolution_transpose_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42649,9 +45278,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mse_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42687,9 +45321,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mse_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42723,9 +45362,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/msort.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42759,9 +45403,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mul.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42803,9 +45452,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multi_margin_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42841,9 +45495,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multi_margin_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42879,9 +45538,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multilabel_margin_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42917,9 +45581,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multilabel_margin_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42953,9 +45622,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multilabel_margin_loss_forward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -42989,9 +45663,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multinomial.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43045,9 +45724,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/multiply.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43084,9 +45768,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43120,9 +45809,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/mvlgamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43156,9 +45850,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nan_to_num.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43198,9 +45897,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nanmean.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43239,9 +45943,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nanmedian.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43278,16 +45987,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::nanmedian.dim_values(Tensor self, int dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
 @Namespace("at") public static native @ByVal T_TensorTensor_T nanmedian_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
 
-// aten::nanmedian.names_dim(Tensor self, Dimname dim, bool keepdim=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T nanmedian(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T nanmedian(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::nanmedian.names_dim_values(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T nanmedian_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T nanmedian_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::nanmedian.names_dim_values(Tensor self, Dimname dim, bool keepdim=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T nanmedian_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByRef Tensor values, @ByRef Tensor indices);
-
 // aten::nanmedian.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor nanmedian_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::nanmedian.out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
@@ -43295,9 +45994,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nanquantile.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43349,9 +46053,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nansum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43390,9 +46099,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/narrow.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43434,9 +46148,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/narrow_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43486,9 +46205,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_batch_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43522,9 +46246,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_batch_norm_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43558,9 +46287,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_channel_shuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43594,9 +46328,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43630,9 +46369,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_dropout_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43666,9 +46410,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_group_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43718,9 +46467,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_group_norm_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43770,9 +46524,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_layer_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43825,9 +46584,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_layer_norm_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43880,9 +46644,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/native_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43929,9 +46698,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ne.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -43973,9 +46747,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/neg.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44012,9 +46791,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/negative.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44051,9 +46835,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nested_to_padded_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44084,9 +46873,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/new_empty.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44133,9 +46927,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/new_empty_strided.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44182,9 +46981,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/new_full.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44231,9 +47035,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/new_ones.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44280,9 +47089,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/new_zeros.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44329,9 +47143,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nextafter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44365,9 +47184,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44421,9 +47245,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44477,9 +47306,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44529,9 +47363,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss2d_forward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44581,9 +47420,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44633,9 +47477,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss_forward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44685,9 +47534,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nll_loss_nd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44723,9 +47577,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nonzero.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44759,9 +47618,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nonzero_numpy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44790,9 +47654,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nonzero_static.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44846,9 +47715,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44905,32 +47779,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal LongArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
-// aten::norm.names_ScalarOpt_dim_dtype(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype) -> Tensor
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-
-// aten::norm.names_ScalarOpt_dim(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim);
-
-// aten::norm.names_dtype_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, ScalarType dtype);
-// aten::norm.names_dtype_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
-
-// aten::norm.names_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim);
-// aten::norm.names_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-
 // aten::norm.ScalarOpt_dtype_out(Tensor self, Scalar? p, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, ScalarType dtype);
 // aten::norm.ScalarOpt_dtype_out(Tensor self, Scalar? p, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
@@ -44944,9 +47792,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/norm_except_dim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -44976,9 +47829,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/normal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45082,9 +47940,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/not_equal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45126,9 +47989,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/nuclear_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45179,9 +48047,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/numpy_T.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45208,9 +48081,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/one_hot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45240,9 +48118,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ones.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45265,15 +48148,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <ATen/ops/ones_ops.h>
 
-
-// aten::ones.names(int[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-// aten::ones.names(int[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor ones(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 
 // aten::ones(SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor ones(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -45314,18 +48188,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor ones_symint_outf(@ByVal SymIntArrayRef size, @ByRef Tensor out);
 
 
-// aten::ones.names_out(int[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor ones_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor ones_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-// aten::ones.names_out(int[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor ones_outf(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor ones_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/ones_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45363,9 +48235,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/or.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45397,9 +48274,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/orgqr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45433,9 +48315,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ormqr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45471,9 +48358,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/outer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45507,9 +48399,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/output_nr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45536,9 +48433,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45579,9 +48481,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pad_sequence.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45615,9 +48522,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pairwise_distance.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45647,9 +48559,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pdist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45679,9 +48596,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/permute.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45711,9 +48633,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/permute_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45750,9 +48677,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pin_memory.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45779,9 +48711,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pinverse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45811,9 +48748,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pixel_shuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45847,9 +48789,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pixel_unshuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45883,9 +48830,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/poisson.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45921,9 +48873,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/poisson_nll_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45952,9 +48909,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/polar.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -45988,9 +48950,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/polygamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46024,9 +48991,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/positive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46055,9 +49027,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/pow.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46107,9 +49084,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/prelu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46138,9 +49120,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/prod.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46178,16 +49165,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::prod.int_out(Tensor self, int dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor prod_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::prod.dim_Dimname(Tensor self, Dimname dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor prod(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor prod(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::prod.Dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor prod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor prod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::prod.Dimname_out(Tensor self, Dimname dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor prod_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-
 // aten::prod.out(Tensor self, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor prod_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor prod_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -46196,9 +49173,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/promote_types.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46227,9 +49209,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/put.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46265,9 +49252,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/q_per_channel_axis.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46296,9 +49288,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/q_per_channel_scales.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46332,9 +49329,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/q_per_channel_zero_points.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46368,9 +49370,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/q_scale.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46399,9 +49406,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/q_zero_point.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46430,9 +49442,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/qr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46468,9 +49485,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/qscheme.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46497,9 +49519,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantile.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46551,9 +49578,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantize_per_channel.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46587,9 +49619,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantize_per_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46642,9 +49679,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantize_per_tensor_dynamic.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46678,9 +49720,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_batch_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46714,9 +49761,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_gru_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46745,9 +49797,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_lstm_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46777,9 +49834,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_max_pool1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46820,9 +49882,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_max_pool2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46863,9 +49930,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_max_pool3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46906,9 +49978,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_rnn_relu_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46937,9 +50014,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/quantized_rnn_tanh_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -46968,9 +50050,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rad2deg.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47007,9 +50094,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rand.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47031,48 +50123,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // #include <ATen/ops/rand_ops.h>
-
-
-// aten::rand.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-
-
-// aten::rand.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
-// aten::rand.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand_symint(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor rand_symint(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names);
-
-
-// aten::rand.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand_symint(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
-// aten::rand.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::rand.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
-// aten::rand.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor rand_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::rand.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor rand_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 
 
 // aten::rand(SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
@@ -47153,47 +50203,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor rand_symint_outf(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
 
 
-// aten::rand.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor rand_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
 
 
-// aten::rand.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_outf(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor rand_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-// aten::rand.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_symint_out(@ByRef Tensor out, @ByVal SymIntArrayRef size, @ByVal DimnameListOptional names);
-
-
-// aten::rand.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_symint_outf(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-// aten::rand.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor rand_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::rand.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_outf(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor rand_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-// aten::rand.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_symint_out(@ByRef Tensor out, @ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::rand.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor rand_symint_outf(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/rand_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47243,9 +50262,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/randint.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47427,9 +50451,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/randint_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47623,9 +50652,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/randn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47691,48 +50725,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 
 
-// aten::randn.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-
-
-// aten::randn.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
-// aten::randn.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names);
-
-
-// aten::randn.names(SymInt[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
-// aten::randn.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::randn.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
-// aten::randn.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::randn.generator_with_names(SymInt[] size, *, Generator? generator, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor randn_symint(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-
-
 // aten::randn.out(SymInt[] size, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal LongArrayRef size);
 @Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... size);
@@ -47769,47 +50761,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor randn_symint_outf(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByRef Tensor out);
 
 
-// aten::randn.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
 
 
-// aten::randn.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_outf(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor randn_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-// aten::randn.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_symint_out(@ByRef Tensor out, @ByVal SymIntArrayRef size, @ByVal DimnameListOptional names);
-
-
-// aten::randn.names_out(SymInt[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_symint_outf(@ByVal SymIntArrayRef size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-// aten::randn.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor randn_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::randn.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_outf(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor randn_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-// aten::randn.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_symint_out(@ByRef Tensor out, @ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-
-
-// aten::randn.generator_with_names_out(SymInt[] size, *, Generator? generator, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor randn_symint_outf(@ByVal SymIntArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByRef Tensor out);
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/randn_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47859,9 +50820,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/random.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -47917,9 +50883,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/randperm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48013,9 +50984,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/range.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48061,9 +51037,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/ravel.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48092,9 +51073,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/real.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48123,9 +51109,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reciprocal.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48162,9 +51153,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/record_stream.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48191,38 +51187,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
-
-// Parsed from ATen/ops/refine_names.h
-
-// #pragma once
-
-// @generated by torchgen/gen.py from Function.h
-
-// #include <ATen/Context.h>
-// #include <ATen/DeviceGuard.h>
-// #include <ATen/TensorUtils.h>
-// #include <ATen/TracerMode.h>
-// #include <ATen/core/Generator.h>
-// #include <ATen/core/Reduction.h>
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/Scalar.h>
-// #include <c10/core/Storage.h>
-// #include <c10/core/TensorOptions.h>
-// #include <c10/util/Deprecated.h>
-// #include <optional>
-// #include <string_view>
-
-
-
-// #include <ATen/ops/refine_names_ops.h>
-
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/reflection_pad1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48275,9 +51247,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reflection_pad1d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48330,9 +51307,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reflection_pad2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48385,9 +51367,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reflection_pad2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48440,9 +51427,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reflection_pad3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48495,9 +51487,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reflection_pad3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48550,9 +51547,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48589,9 +51591,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/relu6.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48623,9 +51630,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/remainder.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48675,38 +51687,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
-
-// Parsed from ATen/ops/rename.h
-
-// #pragma once
-
-// @generated by torchgen/gen.py from Function.h
-
-// #include <ATen/Context.h>
-// #include <ATen/DeviceGuard.h>
-// #include <ATen/TensorUtils.h>
-// #include <ATen/TracerMode.h>
-// #include <ATen/core/Generator.h>
-// #include <ATen/core/Reduction.h>
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/Scalar.h>
-// #include <c10/core/Storage.h>
-// #include <c10/core/TensorOptions.h>
-// #include <c10/util/Deprecated.h>
-// #include <optional>
-// #include <string_view>
-
-
-
-// #include <ATen/ops/rename_ops.h>
-
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/renorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48740,9 +51728,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/repeat.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48787,9 +51780,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/repeat_interleave.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48863,9 +51861,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/replication_pad1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48918,9 +51921,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/replication_pad1d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -48973,9 +51981,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/replication_pad2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49028,9 +52041,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/replication_pad2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49083,9 +52101,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/replication_pad3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49138,9 +52161,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/replication_pad3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49193,9 +52221,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/requires_grad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49222,9 +52255,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reshape.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49259,9 +52297,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/reshape_as.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49288,9 +52331,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/resize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49350,9 +52398,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/resize_as.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49392,9 +52445,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/resize_as_sparse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49431,9 +52489,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/resolve_conj.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49462,9 +52525,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/resolve_neg.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49493,9 +52561,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/result_type.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49533,9 +52606,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/retain_grad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49562,9 +52640,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/retains_grad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49591,9 +52674,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rms_norm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49631,9 +52719,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rnn_relu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49667,9 +52760,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rnn_relu_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49699,9 +52797,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rnn_tanh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49735,9 +52838,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rnn_tanh_cell.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49767,9 +52875,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/roll.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49831,9 +52944,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rot90.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49872,9 +52990,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/round.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49922,9 +53045,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/row_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49951,9 +53079,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/row_indices_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -49987,9 +53120,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/row_stack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50026,9 +53164,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rrelu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50062,9 +53205,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rrelu_with_noise.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50108,9 +53256,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rrelu_with_noise_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50144,9 +53297,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rshift.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50188,9 +53346,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rsqrt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50227,9 +53390,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/rsub.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50275,9 +53443,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/scalar_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50314,9 +53487,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/scaled_dot_product_attention.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50346,9 +53524,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/scatter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50410,17 +53593,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView BytePointer reduce, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView String reduce, @ByRef Tensor out);
 
-// aten::scatter.dimname_src(Tensor self, Dimname dim, Tensor index, Tensor src) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
-
-// aten::scatter.dimname_value(Tensor self, Dimname dim, Tensor index, Scalar value) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/scatter_add.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50452,14 +53634,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::scatter_add.out(Tensor self, int dim, Tensor index, Tensor src, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor scatter_add_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByRef Tensor out);
 
-// aten::scatter_add.dimname(Tensor self, Dimname dim, Tensor index, Tensor src) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scatter_add(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/scatter_reduce.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50500,9 +53684,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/searchsorted.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50548,9 +53737,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/segment_reduce.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50591,9 +53785,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/select.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50617,9 +53816,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/select_ops.h>
 
 
-// aten::select.Dimname(Tensor(a) self, Dimname dim, int index) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor select(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("int64_t") long index);
-
 // aten::select.int(Tensor(a) self, int dim, SymInt index) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor select(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Cast("int64_t") long index);
 
@@ -50630,9 +53826,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/select_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50685,9 +53886,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/select_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50737,9 +53943,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/select_scatter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50789,9 +54000,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/selu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50823,9 +54039,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/set.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50911,9 +54132,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/set_data.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50940,9 +54166,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sgn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -50976,9 +54207,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sigmoid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51015,9 +54251,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sigmoid_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51051,9 +54292,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sign.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51087,9 +54333,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/signbit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51123,9 +54374,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/silu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51162,9 +54418,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/silu_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51198,9 +54459,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sin.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51237,9 +54503,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sinc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51276,9 +54547,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sinh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51315,9 +54591,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/size.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51344,14 +54625,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::size.int(Tensor self, int dim) -> int
 @Namespace("at") public static native @Cast("int64_t") long __dispatch_size(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 
-// aten::size.Dimname(Tensor self, Dimname dim) -> int
-@Namespace("at") public static native @Cast("int64_t") long size(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/slice.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51387,9 +54670,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slice_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51442,9 +54730,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slice_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51498,9 +54791,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slice_inverse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51536,9 +54834,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slice_scatter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51592,9 +54895,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slogdet.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51628,9 +54936,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slow_conv3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51689,9 +55002,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slow_conv3d_forward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51744,9 +55062,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slow_conv_dilated2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51805,9 +55128,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slow_conv_dilated3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51866,9 +55194,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slow_conv_transpose2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51927,9 +55260,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/slow_conv_transpose3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -51988,9 +55326,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/smm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52019,9 +55362,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/smooth_l1_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52057,9 +55405,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/smooth_l1_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52093,9 +55446,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/soft_margin_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52131,9 +55489,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/soft_margin_loss_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52167,9 +55530,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/softmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52203,15 +55571,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::softmax.int_out(Tensor self, int dim, ScalarType? dtype=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor softmax_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::softmax.Dimname(Tensor self, Dimname dim, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor softmax(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor softmax(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/softplus.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52247,9 +55616,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/softplus_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52283,9 +55657,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/softshrink.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52321,9 +55700,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/softshrink_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52357,9 +55741,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sort.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52403,31 +55792,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal T_TensorTensor_T sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @Cast("int64_t") long dim/*=-1*/, @Cast("bool") boolean descending/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable);
 
-// aten::sort.dimname_values(Tensor self, Dimname dim, bool descending=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal Dimname dim);
-// aten::sort.dimname_values(Tensor self, Dimname dim, bool descending=False, *, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort_outf(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending, @ByRef Tensor values, @ByRef Tensor indices);
-
-// aten::sort.dimname_values_stable(Tensor self, *, bool? stable, Dimname dim, bool descending=False, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort_out(@ByRef Tensor values, @ByRef Tensor indices, @Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim);
-// aten::sort.dimname_values_stable(Tensor self, *, bool? stable, Dimname dim, bool descending=False, Tensor(a!) values, Tensor(b!) indices) -> (Tensor(a!) values, Tensor(b!) indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort_outf(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim, @Cast("bool") boolean descending, @ByRef Tensor values, @ByRef Tensor indices);
-
-// aten::sort.dimname(Tensor self, Dimname dim, bool descending=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort(@Const @ByRef Tensor self, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
-// aten::sort.dimname_stable(Tensor self, *, bool? stable, Dimname dim, bool descending=False) -> (Tensor values, Tensor indices)
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim, @Cast("bool") boolean descending/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T sort(@Const @ByRef Tensor self, @ByVal BoolOptional stable, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/sparse_bsc_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52465,9 +55839,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_bsr_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52505,9 +55884,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_compressed_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52556,9 +55940,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_coo_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52613,9 +56002,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_csc_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52653,9 +56047,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_csr_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52693,9 +56092,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_dim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52722,9 +56126,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_mask.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52755,9 +56164,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_resize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52794,9 +56208,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_resize_and_clear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52833,9 +56252,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sparse_sampled_addmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52871,9 +56295,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_airy_ai.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52907,9 +56336,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_bessel_j0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52943,9 +56377,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_bessel_j1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -52979,9 +56418,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_bessel_y0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53015,9 +56459,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_bessel_y1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53051,9 +56500,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_chebyshev_polynomial_t.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53103,9 +56557,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_chebyshev_polynomial_u.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53155,9 +56614,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_chebyshev_polynomial_v.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53207,9 +56671,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_chebyshev_polynomial_w.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53259,9 +56728,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_digamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53295,9 +56769,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_entr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53331,9 +56810,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_erf.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53367,9 +56851,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_erfc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53403,9 +56892,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_erfcx.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53439,9 +56933,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_erfinv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53475,9 +56974,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_exp2.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53511,9 +57015,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_expit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53547,9 +57056,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_expm1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53583,9 +57097,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_gammainc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53619,9 +57138,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_gammaincc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53655,9 +57179,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_gammaln.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53691,9 +57220,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_hermite_polynomial_h.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53743,9 +57277,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_hermite_polynomial_he.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53795,9 +57334,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_i0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53831,9 +57375,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_i0e.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53867,9 +57416,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_i1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53903,9 +57457,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_i1e.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53939,9 +57498,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_laguerre_polynomial_l.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -53991,9 +57555,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_legendre_polynomial_p.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54043,9 +57612,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_log1p.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54079,9 +57653,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_log_ndtr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54115,9 +57694,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_log_softmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54147,9 +57731,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_logit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54185,9 +57774,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_logsumexp.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54228,9 +57822,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_modified_bessel_i0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54264,9 +57863,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_modified_bessel_i1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54300,9 +57904,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_modified_bessel_k0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54336,9 +57945,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_modified_bessel_k1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54372,9 +57986,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_multigammaln.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54408,9 +58027,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_ndtr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54444,9 +58068,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_ndtri.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54480,9 +58109,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_polygamma.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54516,9 +58150,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_psi.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54552,9 +58191,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_round.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54590,9 +58234,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_scaled_modified_bessel_k0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54626,9 +58275,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_scaled_modified_bessel_k1.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54662,9 +58316,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_shifted_chebyshev_polynomial_t.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54714,9 +58373,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_shifted_chebyshev_polynomial_u.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54766,9 +58430,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_shifted_chebyshev_polynomial_v.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54818,9 +58487,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_shifted_chebyshev_polynomial_w.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54870,9 +58544,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_sinc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54906,9 +58585,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_softmax.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54938,9 +58622,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_spherical_bessel_j0.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -54974,9 +58663,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_xlog1py.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55026,9 +58720,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_xlogy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55078,9 +58777,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/special_zeta.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55130,9 +58834,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/split.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55180,9 +58889,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/split_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55242,9 +58956,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/split_with_sizes.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55282,9 +59001,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/split_with_sizes_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55346,9 +59070,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sqrt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55385,9 +59114,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/square.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55424,9 +59158,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/squeeze.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55456,18 +59195,20 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::squeeze.dim(Tensor(a) self, int dim) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 
-// aten::squeeze.dimname(Tensor(a) self, Dimname dim) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self, @ByVal Dimname dim);
-
 // aten::squeeze.dims(Tensor(a) self, int[] dim) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self, @ByVal LongArrayRef dim);
 @Namespace("at") public static native @ByVal Tensor squeeze(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/squeeze_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55520,9 +59261,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sspaddmm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55558,9 +59304,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/stack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55601,9 +59352,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/std.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55658,41 +59414,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
-// aten::std.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
-
-// aten::std.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
-// aten::std.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-
-// aten::std.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
-// aten::std.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
-// aten::std.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/std_mean.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55730,18 +59461,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(::std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 
-// aten::std_mean.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
-
-// aten::std_mean.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> (Tensor, Tensor)
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
 // aten::std_mean.correction_out(Tensor self, int[1]? dim=None, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(::std::nullopt)") LongArrayRefOptional dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self);
@@ -55752,9 +59471,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/stft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55787,9 +59511,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/stride.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55816,14 +59545,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::stride.int(Tensor self, int dim) -> int
 @Namespace("at") public static native @Cast("int64_t") long __dispatch_stride(@Const @ByRef Tensor self, @Cast("int64_t") long dim);
 
-// aten::stride.Dimname(Tensor self, Dimname dim) -> int
-@Namespace("at") public static native @Cast("int64_t") long stride(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/sub.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55869,9 +59600,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/subtract.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55911,9 +59647,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -55947,12 +59688,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
-// aten::sum.dim_DimnameList(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
 // aten::sum.IntList_out(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
@@ -55962,15 +59697,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
-// aten::sum.DimnameList_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
-// aten::sum.DimnameList_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-
 // aten::sum.out(Tensor self, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "std::optional<at::ScalarType>(::std::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -55979,9 +59705,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sum_to_size.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56008,9 +59739,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/svd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56046,9 +59782,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/swapaxes.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56077,9 +59818,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/swapdims.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56108,9 +59854,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sym_constrain_range.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56140,9 +59891,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sym_constrain_range_for_size.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56172,9 +59928,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sym_numel.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56203,9 +59964,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sym_size.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56234,9 +60000,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sym_storage_offset.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56265,9 +60036,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/sym_stride.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56296,9 +60072,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/t.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56327,9 +60108,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/t_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56363,9 +60149,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/take.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56399,9 +60190,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/take_along_dim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56437,9 +60233,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tan.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56476,9 +60277,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tanh.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56515,9 +60321,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tanh_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56551,9 +60362,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tensor_split.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56605,9 +60421,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/Tensor.h>
 // #include <c10/core/ScalarType.h>
@@ -56691,9 +60512,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
   // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tensordot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56730,9 +60556,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/thnn_conv2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56791,9 +60622,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/threshold.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56830,9 +60666,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/threshold_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56866,9 +60707,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tile.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56903,9 +60749,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56932,9 +60783,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_dense.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56961,9 +60817,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_dense_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -56993,9 +60854,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_mkldnn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57027,9 +60893,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_mkldnn_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57058,9 +60929,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_padded_tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57107,9 +60983,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_sparse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57136,9 +61017,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_sparse_bsc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57165,9 +61051,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_sparse_bsr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57194,9 +61085,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_sparse_csc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57223,9 +61119,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/to_sparse_csr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57252,9 +61153,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/topk.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57308,9 +61214,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/trace.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57344,9 +61255,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/trace_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57381,9 +61297,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/transpose.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57410,14 +61331,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::transpose.int(Tensor(a) self, int dim0, int dim1) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor transpose(@Const @ByRef Tensor self, @Cast("int64_t") long dim0, @Cast("int64_t") long dim1);
 
-// aten::transpose.Dimname(Tensor(a) self, Dimname dim0, Dimname dim1) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor transpose(@Const @ByRef Tensor self, @ByVal Dimname dim0, @ByVal Dimname dim1);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/transpose_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57451,9 +61374,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/trapezoid.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57487,9 +61415,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/trapz.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57523,9 +61456,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/triangular_solve.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57561,9 +61499,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tril.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57618,9 +61561,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/tril_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57658,9 +61606,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/triplet_margin_loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57690,9 +61643,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/triu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57747,9 +61705,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/triu_indices.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57787,9 +61750,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/true_divide.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57826,9 +61794,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/trunc.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57865,9 +61838,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/type_as.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57894,9 +61872,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unbind.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57924,14 +61907,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal TensorVector unbind(@Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal TensorVector unbind(@Const @ByRef Tensor self);
 
-// aten::unbind.Dimname(Tensor(a -> *) self, Dimname dim) -> Tensor(a)[]
-@Namespace("at") public static native @ByVal TensorVector unbind(@Const @ByRef Tensor self, @ByVal Dimname dim);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/unbind_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -57970,9 +61955,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unflatten.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58005,21 +61995,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor unflatten_symint(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal SymIntArrayRef sizes);
 
 
-// aten::unflatten.Dimname(Tensor(a) self, Dimname dim, SymInt[] sizes, Dimname[] names) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor unflatten(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal LongArrayRef sizes, @ByVal DimnameArrayRef names);
-@Namespace("at") public static native @ByVal Tensor unflatten(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes, @ByVal DimnameVector names);
 
 
-// aten::unflatten.Dimname(Tensor(a) self, Dimname dim, SymInt[] sizes, Dimname[] names) -> Tensor(a)
-@Namespace("at") public static native @ByVal Tensor unflatten_symint(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal SymIntArrayRef sizes, @ByVal DimnameArrayRef names);
-@Namespace("at") public static native @ByVal Tensor unflatten_symint(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal SymIntArrayRef sizes, @ByVal DimnameVector names);
-
-
-
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/unflatten_dense_tensors.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58049,9 +62034,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unfold.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58078,9 +62068,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unfold_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58133,9 +62128,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unfold_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58169,9 +62169,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/uniform.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58207,9 +62212,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unique_consecutive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58245,9 +62255,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unique_dim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58283,9 +62298,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unique_dim_consecutive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58321,9 +62341,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unsafe_chunk.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58353,9 +62378,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unsafe_split.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58415,9 +62445,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unsafe_split_with_sizes.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58479,9 +62514,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unsqueeze.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58510,9 +62550,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/unsqueeze_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58546,9 +62591,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_bicubic2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58617,9 +62667,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_bicubic2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58678,9 +62733,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_bilinear2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58769,9 +62829,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_bilinear2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58830,9 +62895,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_linear1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58901,9 +62971,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_linear1d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -58962,9 +63037,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_nearest1d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59033,9 +63113,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_nearest1d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59094,9 +63179,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_nearest2d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59185,9 +63275,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_nearest2d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59246,9 +63341,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_nearest3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59317,9 +63417,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_nearest3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59378,9 +63483,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_trilinear3d.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59449,9 +63559,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/upsample_trilinear3d_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59510,9 +63625,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/value_selecting_reduction_backward.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59547,9 +63667,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/values.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59576,9 +63701,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/values_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59612,9 +63742,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/vander.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59644,9 +63779,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/var.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59701,41 +63841,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
-// aten::var.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
-
-// aten::var.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
-// aten::var.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-
-// aten::var.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> Tensor
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
-// aten::var.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
-// aten::var.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/var_mean.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59773,18 +63888,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self);
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(::std::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 
-// aten::var_mean.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
-
-// aten::var_mean.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> (Tensor, Tensor)
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
-
 // aten::var_mean.correction_out(Tensor self, int[1]? dim=None, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(::std::nullopt)") LongArrayRefOptional dim, @Const @ByRef(nullValue = "std::optional<at::Scalar>(::std::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self);
@@ -59795,9 +63898,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/vdot.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59831,9 +63939,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59860,9 +63973,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view_as.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59889,9 +64007,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view_as_complex.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59920,9 +64043,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view_as_complex_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59956,9 +64084,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view_as_real.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -59987,9 +64120,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view_as_real_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60023,9 +64161,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/view_copy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60086,9 +64229,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/vsplit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60121,9 +64269,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/vstack.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60160,9 +64313,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/where.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60208,9 +64366,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/xlogy.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60266,9 +64429,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/xor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60300,9 +64468,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/zero.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60339,9 +64512,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ops/zeros.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60364,15 +64542,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <ATen/ops/zeros_ops.h>
 
-
-// aten::zeros.names(int[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-// aten::zeros.names(int[] size, *, Dimname[]? names, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
-@Namespace("at") public static native @ByVal Tensor zeros(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 
 // aten::zeros(SymInt[] size, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor zeros(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -60413,18 +64582,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor zeros_symint_outf(@ByVal SymIntArrayRef size, @ByRef Tensor out);
 
 
-// aten::zeros.names_out(int[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor zeros_out(@ByRef Tensor out, @ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("at") public static native @ByRef Tensor zeros_out(@ByRef Tensor out, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-// aten::zeros.names_out(int[] size, *, Dimname[]? names, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor zeros_outf(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor zeros_outf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByRef Tensor out);
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/ops/zeros_like.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Function.h
@@ -60462,9 +64629,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Functions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from Functions.h
@@ -60670,6 +64842,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_foreach_max.h>
 // #include <ATen/ops/_foreach_maximum.h>
 // #include <ATen/ops/_foreach_minimum.h>
+// #include <ATen/ops/_foreach_mm.h>
 // #include <ATen/ops/_foreach_mul.h>
 // #include <ATen/ops/_foreach_neg.h>
 // #include <ATen/ops/_foreach_norm.h>
@@ -60972,9 +65145,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/affine_grid_generator_backward.h>
 // #include <ATen/ops/alias.h>
 // #include <ATen/ops/alias_copy.h>
-// #include <ATen/ops/align_as.h>
-// #include <ATen/ops/align_tensors.h>
-// #include <ATen/ops/align_to.h>
 // #include <ATen/ops/all.h>
 // #include <ATen/ops/allclose.h>
 // #include <ATen/ops/alpha_dropout.h>
@@ -61603,7 +65773,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/real.h>
 // #include <ATen/ops/reciprocal.h>
 // #include <ATen/ops/record_stream.h>
-// #include <ATen/ops/refine_names.h>
 // #include <ATen/ops/reflection_pad1d.h>
 // #include <ATen/ops/reflection_pad1d_backward.h>
 // #include <ATen/ops/reflection_pad2d.h>
@@ -61613,7 +65782,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/relu.h>
 // #include <ATen/ops/relu6.h>
 // #include <ATen/ops/remainder.h>
-// #include <ATen/ops/rename.h>
 // #include <ATen/ops/renorm.h>
 // #include <ATen/ops/repeat.h>
 // #include <ATen/ops/repeat_interleave.h>
@@ -61922,9 +66090,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ExpandUtils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #ifndef AT_PER_OPERATOR_HEADERS
@@ -61936,6 +66109,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // #include <ATen/Tensor.h>
 // #include <ATen/core/DimVector.h>
+// #include <c10/core/SymBool.h>
 // #include <c10/util/Exception.h>
 // #include <c10/util/MaybeOwned.h>
 // #include <c10/util/irange.h>
@@ -62160,9 +66334,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/MemoryOverlap.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Export.h>
@@ -62212,9 +66391,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/NestedTensorImpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/MemoryOverlap.h>
 // #include <ATen/Tensor.h>
@@ -62243,9 +66427,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at::native
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/input_metadata.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ExpandUtils.h>
@@ -62271,9 +66460,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/saved_variable_hooks.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
@@ -62284,14 +66478,20 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/saved_variable.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/SafePyObject.h>
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/autograd/forward_grad.h>
+// #include <torch/csrc/autograd/node.h>
 // #include <torch/csrc/autograd/saved_variable_hooks.h>
 
 // #include <ATen/core/Tensor.h>
@@ -62305,9 +66505,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  *  enough information to reconstruct a variable from a certain point in time. */
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/utils/variadic.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
@@ -62337,53 +66542,26 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/function.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
-// #include <torch/csrc/autograd/anomaly_mode.h>
-// #include <torch/csrc/autograd/edge.h>
-// #include <torch/csrc/autograd/grad_mode.h>
 // #include <torch/csrc/autograd/graph_task.h>
-// #include <torch/csrc/autograd/input_metadata.h>
+// #include <torch/csrc/autograd/node.h>
 // #include <torch/csrc/autograd/saved_variable.h>
 // #include <torch/csrc/autograd/variable.h>
-// #include <torch/csrc/utils/python_stub.h>
 // #include <torch/csrc/utils/variadic.h>
 
-// #include <ATen/SequenceNumber.h>
-// #include <ATen/core/Tensor.h>
-// #include <ATen/record_function.h>
-// #include <c10/util/Exception.h>
-// #include <c10/util/irange.h>
-
-// #include <algorithm>
-// #include <cstdint>
-// #include <initializer_list>
-// #include <memory>
-// #include <string>
-// #include <utility>
-// #include <vector>
-
-// Custom deleter to prevent stack overflows.
-@Namespace("torch::autograd") public static native void deleteNode(Node function);
-
-// Guard that sets and restores the evaluating node
-
-// Return the Node currently being evaluated (if any)
-// This is only set during the backward pass while a Node is being
-// executed.
-@Namespace("torch::autograd") public static native @SharedPtr Node get_current_node();
-// Targeting ../Node.java
-
-
-// Targeting ../TraceableFunction.java
-
-
+// #include <c10/util/intrusive_ptr.h>
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                       Associated Free Nodes
+//                       Associated Free Functions
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Implementation of `collect_next_edges` (see below).
  // namespace detail
@@ -62401,7 +66579,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  *  {@code set_gradient_edge} directly. */
 @Namespace("torch::autograd") public static native void create_gradient_edge(
     @ByRef Tensor variable,
-    @SharedPtr Node function);
+    @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node function);
 
 /** Return true if any of the variables in the list require a gradient. */
 @Namespace("torch::autograd") public static native @Cast("bool") boolean any_variable_requires_grad(@Const @ByRef TensorVector variables);
@@ -62410,9 +66588,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/variable_info.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/autograd/variable.h>
@@ -62422,9 +66605,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/utils/torch_dispatch_mode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/impl/TorchDispatchModeTLS.h>
@@ -62437,9 +66625,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::torch_dispatch_mode
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/dynamo/compiled_autograd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/TensorGeometry.h>
 // #include <ATen/core/ivalue.h>
@@ -62542,9 +66735,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::dynamo::autograd
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/custom_function.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -62603,20 +66801,32 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+
+
  // namespace torch::autograd
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from torch/csrc/api/include/torch/autograd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/autograd/autograd.h>
 // #include <torch/csrc/autograd/autograd_not_implemented_fallback.h>
 // #include <torch/csrc/autograd/custom_function.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/cuda.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -62645,9 +66855,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace torch::cuda
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/arg.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <utility>
@@ -62672,15 +66887,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //  private:
 //   T name##_ /* NOLINT */
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Device.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/core/Device.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/Dispatch.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -63461,9 +67686,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //           AT_PRIVATE_CASE_TYPE_USING_HINT(
 //               at::ScalarType::Long, index_t, __VA_ARGS__))
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ScalarOps.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Tensor.h>
@@ -63507,9 +67737,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at::native
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/strides.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/ArrayRef.h>
 // #include <c10/util/DimVector.h>
@@ -63521,13 +67756,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TensorMeta.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/DimVector.h>
-// #include <ATen/core/Dimname.h>
 // #include <c10/core/TensorOptions.h>
 // #include <c10/util/strides.h>
 
@@ -63584,9 +67823,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Range.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -63596,9 +67840,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
   // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/Load.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/macros/Macros.h>
 // #include <cstring>
@@ -63607,9 +67856,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/core/DynamicCast.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -63862,13 +68116,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TensorIterator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/TensorMeta.h>
-// #include <ATen/core/Dimname.h>
 // #include <ATen/core/Range.h>
 // #include <ATen/core/TensorBase.h>
 // #include <c10/core/DynamicCast.h>
@@ -63968,9 +68226,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/NativeFunctions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated by torchgen/gen.py from NativeFunctions.h
@@ -64130,6 +68393,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/_foreach_max_native.h>
 // #include <ATen/ops/_foreach_maximum_native.h>
 // #include <ATen/ops/_foreach_minimum_native.h>
+// #include <ATen/ops/_foreach_mm_native.h>
 // #include <ATen/ops/_foreach_mul_native.h>
 // #include <ATen/ops/_foreach_neg_native.h>
 // #include <ATen/ops/_foreach_norm_native.h>
@@ -64432,9 +68696,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/affine_grid_generator_backward_native.h>
 // #include <ATen/ops/alias_native.h>
 // #include <ATen/ops/alias_copy_native.h>
-// #include <ATen/ops/align_as_native.h>
-// #include <ATen/ops/align_tensors_native.h>
-// #include <ATen/ops/align_to_native.h>
 // #include <ATen/ops/all_native.h>
 // #include <ATen/ops/allclose_native.h>
 // #include <ATen/ops/alpha_dropout_native.h>
@@ -65063,7 +69324,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/real_native.h>
 // #include <ATen/ops/reciprocal_native.h>
 // #include <ATen/ops/record_stream_native.h>
-// #include <ATen/ops/refine_names_native.h>
 // #include <ATen/ops/reflection_pad1d_native.h>
 // #include <ATen/ops/reflection_pad1d_backward_native.h>
 // #include <ATen/ops/reflection_pad2d_native.h>
@@ -65073,7 +69333,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/ops/relu_native.h>
 // #include <ATen/ops/relu6_native.h>
 // #include <ATen/ops/remainder_native.h>
-// #include <ATen/ops/rename_native.h>
 // #include <ATen/ops/renorm_native.h>
 // #include <ATen/ops/repeat_native.h>
 // #include <ATen/ops/repeat_interleave_native.h>
@@ -65350,9 +69609,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TensorIndexing.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ExpandUtils.h>
@@ -65635,9 +69899,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at::indexing
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/TensorOperators.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/Tensor.h>
@@ -65720,9 +69989,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Version.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <ATen/Context.h>
 
 /** Returns a detailed string describing the configuration PyTorch. */
@@ -65740,14 +70014,24 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/Scalar.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <c10/core/Scalar.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from ATen/core/UnsafeFromTH.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/Tensor.h>
 
@@ -65757,9 +70041,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/ATen.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #if !defined(_MSC_VER) && __cplusplus < 201703L
@@ -65773,7 +70062,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <ATen/Dispatch.h>
 // #include <ATen/Formatting.h>
 // #include <ATen/Functions.h>
-// #include <ATen/NamedTensor.h>
 // #include <ATen/ScalarOps.h>
 // #include <ATen/Tensor.h>
 // #include <ATen/TensorGeometry.h>
@@ -65798,9 +70086,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // There is some back story, see https://github.com/pytorch/pytorch/issues/48684
 // #include <ATen/NativeFunctions.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/autocast_mode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -66468,21 +70761,15 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #define AT_FORALL_FP32_SET_OPT_DTYPE(_)
 //   _(prod)
 //   _(prod, dim_int)
-//   _(prod, dim_Dimname)
 //   _(softmax, int)
-//   _(softmax, Dimname)
 //   _(log_softmax, int)
-//   _(log_softmax, Dimname)
 //   _(cumprod)
-//   _(cumprod, dimname)
 //   _(cumsum)
-//   _(cumsum, dimname)
 //   _(linalg_vector_norm)
 //   _(linalg_matrix_norm)
 //   _(linalg_matrix_norm, str_ord)
 //   _(sum)
 //   _(sum, dim_IntList)
-//   _(sum, dim_DimnameList)
 
 // #define AT_FORALL_DIFFERENT_REDISPATCH_SIGNATURE(_)
 //   _(ADD_NS(norm),
@@ -66500,16 +70787,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 //         bool,
 //         ScalarType),
 //     fp32_append_dtype)
-//   _(ADD_NS(norm),
-//     "norm.names_ScalarOpt_dim",
-//     Tensor(const Tensor&, const std::optional<Scalar>&, DimnameList, bool),
-//     Tensor(
-//         const Tensor&,
-//         const std::optional<Scalar>&,
-//         DimnameList,
-//         bool,
-//         ScalarType),
-//     fp32_append_dtype)
 
 // #define AT_FORALL_PROMOTE(_)
 //   _(addcdiv)
@@ -66524,9 +70801,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 //   _(tensordot)
 //   _(scatter_add)
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/detail/TensorDataContainer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Dispatch.h>
@@ -66623,9 +70905,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::detail
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/generated/variable_factories.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // @generated from ../tools/autograd/templates/variable_factories.h
@@ -66652,7 +70939,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #include <ATen/ops/blackman_window.h>
 // #include <ATen/ops/blackman_window.h>
 // #include <ATen/ops/empty.h>
-// #include <ATen/ops/empty.h>
 // #include <ATen/ops/empty_permuted.h>
 // #include <ATen/ops/_empty_affine_quantized.h>
 // #include <ATen/ops/_empty_per_channel_affine_quantized.h>
@@ -66661,7 +70947,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #include <ATen/ops/empty_strided.h>
 // #include <ATen/ops/eye.h>
 // #include <ATen/ops/eye.h>
-// #include <ATen/ops/full.h>
 // #include <ATen/ops/full.h>
 // #include <ATen/ops/full_like.h>
 // #include <ATen/ops/from_file.h>
@@ -66683,13 +70968,10 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #include <ATen/ops/logspace.h>
 // #include <ATen/ops/logspace.h>
 // #include <ATen/ops/ones.h>
-// #include <ATen/ops/ones.h>
 // #include <ATen/ops/ones_like.h>
 // #include <ATen/ops/scalar_tensor.h>
 // #include <ATen/ops/rand.h>
 // #include <ATen/ops/rand.h>
-// #include <ATen/ops/rand.h>
-// #include <ATen/ops/rand.h>
 // #include <ATen/ops/rand_like.h>
 // #include <ATen/ops/rand_like.h>
 // #include <ATen/ops/randint.h>
@@ -66704,15 +70986,12 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 // #include <ATen/ops/randint_like.h>
 // #include <ATen/ops/randn.h>
 // #include <ATen/ops/randn.h>
-// #include <ATen/ops/randn.h>
-// #include <ATen/ops/randn.h>
 // #include <ATen/ops/randn_like.h>
 // #include <ATen/ops/randn_like.h>
 // #include <ATen/ops/randperm.h>
 // #include <ATen/ops/randperm.h>
 // #include <ATen/ops/range.h>
 // #include <ATen/ops/range.h>
-// #include <ATen/ops/zeros.h>
 // #include <ATen/ops/_efficientzerotensor.h>
 // #include <ATen/ops/zeros.h>
 // #include <ATen/ops/zeros_like.h>
@@ -66839,10 +71118,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("blackman_window") Tensor torch_blackman_window(@Cast("int64_t") long window_length);
 @Namespace("torch") public static native @ByVal @Name("blackman_window") Tensor torch_blackman_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("blackman_window") Tensor torch_blackman_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic);
-@Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
-@Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("empty") Tensor torch_empty(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
@@ -66873,10 +71148,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("eye") Tensor torch_eye(@Cast("int64_t") long n);
 @Namespace("torch") public static native @ByVal @Name("eye") Tensor torch_eye(@Cast("int64_t") long n, @Cast("int64_t") long m, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("eye") Tensor torch_eye(@Cast("int64_t") long n, @Cast("int64_t") long m);
-@Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal LongArrayRef size, @Const @ByRef Scalar fill_value);
 @Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -66921,10 +71192,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("logspace") Tensor torch_logspace(@Const @ByRef Tensor start, @Const @ByRef Scalar end, @Cast("int64_t") long steps);
 @Namespace("torch") public static native @ByVal @Name("logspace") Tensor torch_logspace(@Const @ByRef Scalar start, @Const @ByRef Tensor end, @Cast("int64_t") long steps, double base/*=10.0*/, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("logspace") Tensor torch_logspace(@Const @ByRef Scalar start, @Const @ByRef Tensor end, @Cast("int64_t") long steps);
-@Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("ones") Tensor torch_ones(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -66933,14 +71200,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("ones_like") Tensor torch_ones_like(@Const @ByRef Tensor self);
 @Namespace("torch") public static native @ByVal @Name("scalar_tensor") Tensor torch_scalar_tensor(@Const @ByRef Scalar s, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("scalar_tensor") Tensor torch_scalar_tensor(@Const @ByRef Scalar s);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("rand") Tensor torch_rand(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -66989,14 +71248,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal LongArrayRef size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("randn") Tensor torch_randn(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal GeneratorOptional generator, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self);
 @Namespace("torch") public static native @ByVal @Name("randn_like") Tensor torch_randn_like(@Const @ByRef Tensor self, @ByVal GeneratorOptional generator, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "std::optional<at::MemoryFormat>(::std::nullopt)") MemoryFormatOptional memory_format);
@@ -67007,10 +71258,6 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 @Namespace("torch") public static native @ByVal @Name("randperm") Tensor torch_randperm(@Cast("int64_t") long n, @ByVal GeneratorOptional generator);
 @Namespace("torch") public static native @ByVal @Name("range") Tensor torch_range(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @Const @ByRef(nullValue = "at::Scalar(1)") Scalar step, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("range") Tensor torch_range(@Const @ByRef Scalar start, @Const @ByRef Scalar end, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("zeros") Tensor torch_zeros(@ByVal LongArrayRef size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("zeros") Tensor torch_zeros(@ByVal LongArrayRef size, @ByVal DimnameListOptional names);
-@Namespace("torch") public static native @ByVal @Name("zeros") Tensor torch_zeros(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("zeros") Tensor torch_zeros(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal DimnameListOptional names);
 @Namespace("torch") public static native @ByVal @Name("_efficientzerotensor") Tensor torch__efficientzerotensor(@ByVal LongArrayRef size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("_efficientzerotensor") Tensor torch__efficientzerotensor(@ByVal LongArrayRef size);
 @Namespace("torch") public static native @ByVal @Name("_efficientzerotensor") Tensor torch__efficientzerotensor(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -67101,9 +71348,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/function_schema_parser.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/function_schema.h>
@@ -67132,9 +71384,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/types.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -67177,9 +71434,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 /** Rust-style short dtypes. */
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/dataloader_options.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -67195,9 +71457,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/detail/queue.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/types.h>
@@ -67221,9 +71488,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
  *  applicable to more general uses. */
  // namespace torch::data::detail
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/detail/data_shuttle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/detail/queue.h>
@@ -67247,9 +71519,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::detail
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/detail/sequencers.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/types.h>
@@ -67287,9 +71564,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
  *  would cause a collision in the fixed-size buffer) will not yet be scheduled. */
  // namespace torch::data::detail::sequencers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/iterator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/utils/variadic.h>
@@ -67326,9 +71608,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/base.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -67347,9 +71634,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/random.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -67364,9 +71656,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/worker_exception.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <exception>
@@ -67379,9 +71676,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/dataloader/base.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/dataloader_options.h>
@@ -67450,9 +71752,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/dataloader/stateful.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -67475,9 +71782,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/dataloader/stateless.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/dataloader/base.h>
@@ -67524,9 +71836,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/dataloader.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/dataloader/stateful.h>
@@ -67551,9 +71868,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 /** Creates a {@code DataLoader} for a stateful {@code dataset} and some {@code options}. */
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/example.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/types.h>
@@ -67574,9 +71896,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
  *  type, and work both for labeled and unlabeled datasets. */
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/base.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/example.h>
@@ -67654,9 +71981,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
  *  yields that many elements from the stream. */
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/stateful.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/datasets/base.h>
@@ -67684,9 +72016,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/custom_batch_request.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -67696,9 +72033,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/distributed.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -67719,9 +72061,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/sequential.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -67737,9 +72084,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/imethod.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/ivalue.h>
 // #include <vector>
@@ -67749,9 +72101,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/ir/attributes.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/Tensor.h>
 // #include <string>
@@ -67799,9 +72156,14 @@ copy pasted in from VariableTypeEverything.cpp with appropriate substitutions.
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/ir/graph_node_list.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -67854,9 +72216,14 @@ public static final int kPrevDirection = kPrevDirection();
 
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/source_range.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/Exception.h>
 // #include <optional>
@@ -67901,9 +72268,14 @@ public static final int kPrevDirection = kPrevDirection();
  // namespace torch::jit
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/ir/scope.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/jit_type.h>
 // #include <ATen/core/symbol.h>
@@ -67970,9 +72342,14 @@ public static final int kPrevDirection = kPrevDirection();
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const size_t") long kDebugInfoTupleInlinedCSIndex();
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/ir/constants.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/ivalue.h>
 // #include <ATen/core/jit_type.h>
@@ -68023,9 +72400,14 @@ public static final int kPrevDirection = kPrevDirection();
 // same rules as the interpreter
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/ir/named_value.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/ivalue.h>
 // #include <torch/csrc/jit/frontend/source_range.h>
@@ -68037,18 +72419,28 @@ public static final int kPrevDirection = kPrevDirection();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/runtime/operator_options.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/dispatch/OperatorOptions.h>
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/runtime/operator.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // in memory description of all ATen Ops similar to Caffe2 schema
 // once C10 exists this can be removed, or stubbed out, but we need
 // it now to implement correct semantic checking for script
@@ -68090,8 +72482,8 @@ public static final int kPrevDirection = kPrevDirection();
 @Namespace("torch::jit") public static native @ByVal OperatorVector getAllSortedOperatorsFor(
     @ByVal Symbol name);
 
-// given a operator with an overload name, find the specific operator related to
-// it, may return nullptr if no operator exists.
+// given an operator with an overload name, find the specific operator related
+// to it, may return nullptr if no operator exists.
 @Namespace("torch::jit") public static native @SharedPtr("torch::jit::Operator") @ByVal Operator findOperatorFor(
     @Const @ByRef OperatorName full_name);
 
@@ -68123,9 +72515,14 @@ public static final int kPrevDirection = kPrevDirection();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/utils/schema_info.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/jit/frontend/function_schema_parser.h>
@@ -68135,9 +72532,14 @@ public static final int kPrevDirection = kPrevDirection();
 
  // namespace torch::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/core/enum_type.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -68149,9 +72551,14 @@ public static final int kPrevDirection = kPrevDirection();
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/ir/ir.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/jit/ir/attributes.h>
@@ -68352,18 +72759,28 @@ public static final int kPrevDirection = kPrevDirection();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/python/update_graph_executor_opt.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <torch/csrc/Export.h>
 @Namespace("torch::jit") public static native void setGraphExecutorOptimize(@Cast("bool") boolean o);
 @Namespace("torch::jit") public static native @Cast("bool") boolean getGraphExecutorOptimize();
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/runtime/argument_spec.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/jit_type.h>
@@ -68413,10 +72830,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
  // namespace torch::jit
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from torch/csrc/jit/runtime/interpreter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <memory>
 // #include <optional>
@@ -68466,9 +72887,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/runtime/variable_tensor_list.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/Tensor.h>
 
@@ -68477,9 +72903,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/runtime/graph_executor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <atomic>
@@ -68561,9 +72992,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/api/function_impl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/function.h>
@@ -68579,9 +73015,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
  // namespace torch::jit
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/api/method.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/function.h>
@@ -68598,9 +73039,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/api/object.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/functional.h>
@@ -68620,9 +73066,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
  // namespace script
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/ordered_dict.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstdint>
@@ -68720,9 +73171,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/name_mangler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/qualified_name.h>
@@ -68733,9 +73189,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/api/compilation_unit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/function.h>
 // #include <c10/util/Exception.h>
@@ -68774,9 +73235,14 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
  // namespace script
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/api/module.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/Exception.h>
 // #include <torch/csrc/autograd/variable.h>
@@ -68964,9 +73430,14 @@ apis for specific fusers.
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/serialize/input-archive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/Device.h>
@@ -68987,9 +73458,14 @@ apis for specific fusers.
 
  // namespace torch::serialize
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/serialize/output-archive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -69007,17 +73483,27 @@ apis for specific fusers.
 
  // namespace torch::serialize
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/serialize/archive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/serialize/input-archive.h>
 // #include <torch/serialize/output-archive.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/serialize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/samplers/base.h>
@@ -69027,9 +73513,14 @@ apis for specific fusers.
 /** Deserializes a {@code Sampler} from an {@code InputArchive}. */
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers/stream.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -69048,9 +73539,14 @@ apis for specific fusers.
 
  // namespace torch::data::samplers
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/samplers.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/samplers/base.h>
@@ -69061,9 +73557,14 @@ apis for specific fusers.
 // #include <torch/data/samplers/serialize.h>
 // #include <torch/data/samplers/stream.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/serialize/tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/serialize/archive.h>
@@ -69077,9 +73578,14 @@ apis for specific fusers.
     @ByRef Tensor tensor);
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/serialize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -69192,9 +73698,14 @@ apis for specific fusers.
  *  \endrst */
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/chunk.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -69229,9 +73740,14 @@ apis for specific fusers.
 
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/map.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/datasets/base.h>
@@ -69257,9 +73773,14 @@ apis for specific fusers.
 
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/mnist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/datasets/base.h>
@@ -69275,9 +73796,14 @@ apis for specific fusers.
 
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/shared.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/datasets/base.h>
@@ -69296,9 +73822,14 @@ apis for specific fusers.
  *  {@code make_shared<UnderlyingDataset>}. */
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets/tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/datasets/base.h>
@@ -69313,9 +73844,14 @@ apis for specific fusers.
 
  // namespace torch::data::datasets
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/datasets.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/datasets/base.h>
@@ -69326,9 +73862,14 @@ apis for specific fusers.
 // #include <torch/data/datasets/stateful.h>
 // #include <torch/data/datasets/tensor.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/transforms/base.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/types.h>
@@ -69350,9 +73891,14 @@ apis for specific fusers.
  *  in terms of the example-level transform, though this can be customized. */
  // namespace torch::data::transforms
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/transforms/lambda.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/transforms/base.h>
@@ -69367,9 +73913,14 @@ apis for specific fusers.
 
  // namespace torch::data::transforms
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/transforms/collate.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/example.h>
@@ -69399,9 +73950,14 @@ apis for specific fusers.
  *  \endrst */
  // namespace torch::data::transforms
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/transforms/tensor.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/example.h>
@@ -69421,9 +73977,14 @@ apis for specific fusers.
  *  the given standard deviation. */
  // namespace torch::data::transforms
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data/transforms.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/transforms/base.h>
@@ -69432,9 +73993,14 @@ apis for specific fusers.
 // #include <torch/data/transforms/stack.h>
 // #include <torch/data/transforms/tensor.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/data.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/data/dataloader.h>
@@ -69445,9 +74011,14 @@ apis for specific fusers.
 // Some "exports". // NOLINT // NOLINT
  // namespace torch::data
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/enum.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <string>
@@ -69671,9 +74242,14 @@ apis for specific fusers.
 
  // namespace torch::enumtype
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/fft.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -70256,9 +74832,14 @@ apis for specific fusers.
 
  // namespace torch::fft
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/jit.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -70293,9 +74874,14 @@ apis for specific fusers.
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/mps.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -70330,9 +74916,14 @@ apis for specific fusers.
 
  // namespace torch::mps
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nested.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -70414,9 +75005,14 @@ apis for specific fusers.
 
  // namespace torch::nested
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/detail/static.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/utils/variadic.h>
@@ -70434,9 +75030,14 @@ apis for specific fusers.
 /** A type trait whose {@code value} member is true if {@code M} derives from {@code Module}. */
  // namespace torch::detail
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/pimpl-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // This class exists  only to do SFINAE on abstract types `T` that are really
 // `ModuleHolder<ModuleType>`, because there's no good way to say that `T` is a
 // `ModuleHolder` over some unknown type `ModuleType`. With this, you can do
@@ -70471,9 +75072,14 @@ apis for specific fusers.
 // `forward()` method, but only if a module actually has a `forward()` method,
 // and otherwise deduces to the type `void`.
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/pimpl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -70525,9 +75131,14 @@ apis for specific fusers.
 /** Like {@code TORCH_MODULE_IMPL}, but defaults the {@code ImplType} name to {@code <Name>Impl}. */
 // #define TORCH_MODULE(Name) TORCH_MODULE_IMPL(Name, Name##Impl)
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/any_value.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/types.h>
@@ -70542,9 +75153,14 @@ apis for specific fusers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/utils/variadic.h>
@@ -70565,9 +75181,14 @@ apis for specific fusers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/module.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/modules/container/any_module_holder.h>
@@ -70623,9 +75244,14 @@ apis for specific fusers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Config.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // Test these using #if AT_MKL_ENABLED(), not #ifdef, so that it's
@@ -70650,9 +75276,14 @@ public static final int AT_PARALLEL_NATIVE = 0;
 // #define AT_KLEIDIAI_ENABLED() 0
 // #define AT_USE_EIGEN_SPARSE() 0
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Parallel-inl.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Exception.h>
@@ -70661,9 +75292,14 @@ public static final int AT_PARALLEL_NATIVE = 0;
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/Parallel.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/Config.h>
 // #include <c10/macros/Macros.h>
@@ -70784,9 +75420,14 @@ body of your function, only data pointers.
 
 // #include <ATen/Parallel-inl.h> // IWYU pragma: keep
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/profiler/orchestration/observer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/record_function.h>
@@ -70869,9 +75510,14 @@ body of your function, only data pointers.
 
  // namespace torch::profiler::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/profiler/api.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/profiler/orchestration/observer.h>
@@ -70880,9 +75526,14 @@ body of your function, only data pointers.
 // we have to mirror them in the old autograd namespace.
  // namespace torch::autograd::profiler
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/profiler/events.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <array>
@@ -70896,9 +75547,14 @@ body of your function, only data pointers.
 @Namespace("torch::profiler") @MemberGetter public static native @Const @ByRef PointerPointer<BytePointer> ProfilerPerfEvents();
  // namespace torch::profiler
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/profiler/stubs/base.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <functional>
@@ -70914,9 +75570,14 @@ body of your function, only data pointers.
 
  // namespace torch::profiler::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/profiler/util.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstddef>
@@ -71037,9 +75698,14 @@ body of your function, only data pointers.
 
  // namespace torch::profiler::impl
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/profiler_kineto.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <string>
@@ -71049,6 +75715,10 @@ body of your function, only data pointers.
 // #include <torch/csrc/profiler/events.h>
 // #include <torch/csrc/profiler/stubs/base.h>
 // #include <torch/csrc/profiler/util.h>
+// Targeting ../ITraceActivity.java
+
+
+
 // Targeting ../Result.java
 
 
@@ -71119,7 +75789,7 @@ body of your function, only data pointers.
 @Namespace("torch::autograd::profiler") public static native void prepareProfiler(
     @Const @ByRef ProfilerConfig config,
     @Const @ByRef ActivityTypeSet activities,
-    @Cast("const torch::autograd::profiler::ActivityFilter*") @ByRef(nullValue = "torch::autograd::profiler::ActivityFilter{}") SizeTStringMap activity_filter);
+    @Cast("const torch::autograd::profiler::ActivityFilter*") @ByRef(nullValue = "torch::autograd::profiler::ActivityFilter{}") HashAliasedIValueMap activity_filter);
 @Namespace("torch::autograd::profiler") public static native void prepareProfiler(
     @Const @ByRef ProfilerConfig config,
     @Const @ByRef ActivityTypeSet activities);
@@ -71164,17 +75834,27 @@ body of your function, only data pointers.
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/profiler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/autograd/profiler_kineto.h>
 // #include <torch/csrc/autograd/profiler_legacy.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Parallel.h>
@@ -71269,9 +75949,14 @@ body of your function, only data pointers.
  // namespace torch
 // NOLINTEND(misc-unused-using-decls)
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/cloneable.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -71679,9 +76364,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/batchnorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -71728,9 +76418,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/batchnorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -71765,9 +76460,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/conv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -71945,9 +76645,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/conv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/conv.h>
@@ -72095,9 +76800,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/distance.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72135,9 +76845,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/distance.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/distance.h>
@@ -72197,9 +76912,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72276,9 +76996,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/dropout.h>
@@ -72412,9 +77137,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/embedding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72455,9 +77185,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/embedding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/embedding.h>
@@ -72512,9 +77247,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/fold.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72552,9 +77292,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/fold.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/fold.h>
@@ -72600,9 +77345,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/instancenorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72648,9 +77398,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/instancenorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/instancenorm.h>
@@ -72679,9 +77434,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/linear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/types.h>
@@ -72701,9 +77461,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/activation.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72957,9 +77722,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/linear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -72980,9 +77750,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/activation.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Dispatch.h>
@@ -73415,9 +78190,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -73723,9 +78503,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ExpandUtils.h>
@@ -74300,9 +79085,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from ATen/PadNd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 @Namespace("at") public enum padding_mode {
@@ -74320,9 +79110,14 @@ body of your function, only data pointers.
 
  // namespace at
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/padding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -74476,9 +79271,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/padding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/PadNd.h>
@@ -74504,9 +79304,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/ArrayRef.h>
@@ -74536,9 +79341,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::modules::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/pooling.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -74998,9 +79808,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/pooling.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -75602,9 +80417,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/normalization.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -75658,9 +80478,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/normalization.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/functional/padding.h>
@@ -75764,9 +80589,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/pixelshuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -75806,9 +80636,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/pixelshuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/pixelshuffle.h>
@@ -75838,9 +80673,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/upsampling.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -75861,9 +80701,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/upsampling.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -75904,9 +80749,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/vision.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -75919,9 +80769,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional/vision.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/vision.h>
@@ -75973,9 +80828,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functional
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/functional.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/functional/batchnorm.h>
@@ -75994,9 +80854,14 @@ body of your function, only data pointers.
 // #include <torch/nn/functional/upsampling.h>
 // #include <torch/nn/functional/vision.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/init.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -76111,9 +80976,14 @@ body of your function, only data pointers.
 
  // namespace torch
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/common.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 ///
 ///
@@ -76220,9 +81090,14 @@ body of your function, only data pointers.
 //     return ret;
 //   }
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/any.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -76281,9 +81156,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/moduledict.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76301,9 +81181,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/modulelist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -76323,9 +81208,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/named_any.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/modules/container/any.h>
@@ -76359,9 +81249,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/parameterdict.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76375,9 +81270,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/parameterlist.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76389,9 +81289,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/container/sequential.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/detail/static.h>
@@ -76421,9 +81326,14 @@ body of your function, only data pointers.
  *  module storage semantics. */
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/linear.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76483,9 +81393,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/activation.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76732,9 +81647,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/adaptive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -76746,9 +81666,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/adaptive.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76776,9 +81701,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/batchnorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76844,9 +81774,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/conv.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -76949,9 +81884,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/distance.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -76982,9 +81922,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/dropout.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -77058,9 +82003,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/embedding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -77091,9 +82041,14 @@ body of your function, only data pointers.
  *  to learn about PyTorch's module storage semantics. */
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/fold.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/expanding_array.h>
@@ -77123,9 +82078,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/instancenorm.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/functional/instancenorm.h>
@@ -77170,9 +82130,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/loss.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/expanding_array.h>
@@ -77371,9 +82336,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/_functions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/autograd/custom_function.h>
@@ -77383,9 +82353,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::functions
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/normalization.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -77437,9 +82412,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/padding.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/expanding_array.h>
@@ -77594,9 +82574,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/pixelshuffle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -77625,9 +82610,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/pooling.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/expanding_array.h>
@@ -77874,9 +82864,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/rnn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -77914,9 +82909,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/utils/rnn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -78085,9 +83085,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::utils::rnn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/rnn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -78185,9 +83190,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/transformerlayer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -78206,9 +83216,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/transformer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -78224,9 +83239,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/transformer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -78251,9 +83271,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/transformerlayer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -78290,9 +83315,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options/transformercoder.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/arg.h>
@@ -78311,9 +83341,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/transformercoder.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -78350,9 +83385,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules/upsampling.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -78377,9 +83417,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/modules.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // Common
@@ -78417,9 +83462,14 @@ body of your function, only data pointers.
 // #include <torch/nn/modules/transformerlayer.h>
 // #include <torch/nn/modules/upsampling.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/options.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/options/batchnorm.h>
@@ -78439,9 +83489,14 @@ body of your function, only data pointers.
 // #include <torch/nn/options/upsampling.h>
 // #include <torch/nn/options/vision.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/utils/clip_grad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -78500,9 +83555,14 @@ body of your function, only data pointers.
 
  // namespace torch::nn::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/utils/convert_parameters.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -78527,18 +83587,28 @@ body of your function, only data pointers.
 
  // namespace torch::nn::utils
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn/utils.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/utils/clip_grad.h>
 // #include <torch/nn/utils/convert_parameters.h>
 // #include <torch/nn/utils/rnn.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/nn.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/cloneable.h>
@@ -78550,9 +83620,14 @@ body of your function, only data pointers.
 // #include <torch/nn/pimpl.h>
 // #include <torch/nn/utils.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/optimizer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/Tensor.h>
@@ -78650,9 +83725,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/serialize.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/irange.h>
@@ -78764,9 +83844,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/adagrad.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/pimpl.h>
@@ -78789,9 +83874,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/adam.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -78812,9 +83902,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/adamw.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -78835,9 +83930,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/lbfgs.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -78861,9 +83961,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/rmsprop.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -78889,9 +83994,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/sgd.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/nn/module.h>
@@ -78915,9 +84025,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/schedulers/lr_scheduler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/optim/optimizer.h>
@@ -78928,9 +84043,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/schedulers/reduce_on_plateau_scheduler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/optim/optimizer.h>
@@ -78944,9 +84064,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim/schedulers/step_lr.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/optim/schedulers/lr_scheduler.h>
@@ -78955,9 +84080,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::optim
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/optim.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/optim/adagrad.h>
@@ -78972,16 +84102,26 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 // #include <torch/optim/schedulers/reduce_on_plateau_scheduler.h>
 // #include <torch/optim/schedulers/step_lr.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/sparse.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/special.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -80121,14 +85261,24 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 @Namespace("torch::special") public static native @ByRef Tensor spherical_bessel_j0_out(@ByRef Tensor y, @Const @ByRef Tensor x);
  // namespace torch::special
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/api/include/torch/version.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #include <torch/headeronly/version.h>
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from torch/csrc/api/include/torch/xpu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/Export.h>
@@ -80153,9 +85303,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::xpu
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/autograd/InferenceMode.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/InferenceMode.h>
@@ -80163,9 +85318,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
 
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from caffe2/serialize/read_adapter_interface.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstddef>
@@ -80178,9 +85338,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace caffe2::serialize
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from caffe2/serialize/istream_adapter.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <istream>
@@ -80193,9 +85358,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace caffe2::serialize
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from caffe2/serialize/versions.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <cstdint>
 
@@ -80326,9 +85496,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace caffe2::serialize
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/serialization/unpickler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -80349,9 +85524,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/script_type_parser.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <ATen/core/jit_type.h>
 // #include <torch/csrc/Export.h>
@@ -80362,9 +85542,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/resolver.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/jit_type.h>
@@ -80380,9 +85565,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 @Namespace("torch::jit") public static native @SharedPtr NativeResolver nativeResolver();
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/sugared_value.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <memory>
 // #include <optional>
@@ -80485,9 +85675,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/error_report.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/jit/frontend/tree.h>
@@ -80498,9 +85693,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/tree.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <functional>
@@ -80546,9 +85746,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/lexer.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Exception.h>
@@ -80791,9 +85996,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from caffe2/serialize/inline_container.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cerrno>
@@ -80903,9 +86113,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace caffe2::serialize
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/serialization/import.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -81162,9 +86377,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/FbcodeMaps.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #ifndef C10_UTIL_FBCODEMAPS_H_
 // #define C10_UTIL_FBCODEMAPS_H_
 
@@ -81185,9 +86405,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
 // #endif // C10_UTIL_FBCODEMAPS_H_
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/serialization/pickler.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <string>
@@ -81210,16 +86435,26 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/parser_constants.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 @Namespace("torch::jit") @MemberGetter public static native @Cast("const char*") BytePointer valid_single_char_tokens();
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/strtod.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/macros/Macros.h>
@@ -81241,9 +86476,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/schema_matching.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <torch/csrc/Export.h>
 // #include <torch/csrc/jit/ir/ir.h>
@@ -81330,9 +86570,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
     @Cast("bool") boolean allow_conversions);
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/versioned_symbols.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <caffe2/serialize/versions.h>
@@ -81350,9 +86595,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 @Namespace("torch::jit") public static native @Cast("uint64_t") long get_min_version_for_kind(@Cast("const torch::jit::NodeKind*") @ByRef Symbol kind);
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/frontend/tree_views.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <torch/csrc/jit/frontend/error_report.h>
 // #include <torch/csrc/jit/frontend/strtod.h>
@@ -81593,9 +86843,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace std
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/jit/serialization/pickle.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/core/ivalue.h>
@@ -81788,9 +87043,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 // #endif
  // namespace torch::jit
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
 // #pragma once
 
@@ -81809,9 +87069,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
  // namespace torch::inductor
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
 // #pragma once
 
@@ -81823,9 +87088,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
  // namespace torch::inductor
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/inductor/aoti_package/model_package_loader.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #if !defined(C10_MOBILE) && !defined(ANDROID)
 // #pragma once
 
@@ -81839,9 +87109,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
  // namespace torch::inductor
 // #endif
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/Store.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <chrono>
@@ -81863,9 +87138,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/Types.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/distributed/c10d/Store.hpp>
@@ -81881,9 +87161,10 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 // Targeting ../_SupplementBase.java
 
 
-// Targeting ../NCCLPreMulSumSupplement.java
+// Targeting ../PreMulSumSupplement.java
 
 
+// Keep for BC only
 // Targeting ../ReduceOp.java
 
 
@@ -81925,9 +87206,14 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/Utils.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -82090,6 +87376,42 @@ public static final int C10D_ENV_NOT_SET = -2;
     @Cast("int64_t") long rank,
     @Cast("int64_t") long size);
 
+@Namespace("c10d") public static native void assertGatherOutputTensorList(
+    @Const @ByRef StringConsumer fn,
+    @StdVector TensorVector outputTensors,
+    @Cast("int64_t") long size);
+
+@Namespace("c10d") public static native void assertScatterInputTensorList(
+    @Const @ByRef StringConsumer fn,
+    @StdVector TensorVector inputTensors,
+    @Cast("int64_t") long size);
+
+@Namespace("c10d") public static native void assertNonEmptyInputTensorList(
+    @Const @ByRef StringConsumer fn,
+    @Cast("size_t") long inputTensorListSize);
+
+@Namespace("c10d") public static native void assertInputOutputTensorListsSameSize(
+    @Const @ByRef StringConsumer fn,
+    @Cast("size_t") long outputTensorListSize,
+    @Cast("size_t") long inputTensorListSize);
+
+@Namespace("c10d") public static native void assertInputTensorListSizeEqualsWorldSize(
+    @Const @ByRef StringConsumer fn,
+    @Cast("size_t") long inputTensorListSize,
+    @Cast("int64_t") long worldSize);
+
+@Namespace("c10d") public static native void assertAllgatherCoalescedOutputTensorLists(
+    @Const @ByRef StringConsumer fn,
+    @StdVector TensorVector outputTensorLists,
+    @Cast("size_t") long inputTensorListSize,
+    @Cast("int64_t") long worldSize);
+
+@Namespace("c10d") public static native void assertAllToAllTensorListSizes(
+    @Const @ByRef StringConsumer fn,
+    @Cast("size_t") long outputTensorListSize,
+    @Cast("size_t") long inputTensorListSize,
+    @Cast("int64_t") long worldSize);
+
 @Namespace("c10d") public static native void assertDense(
     @Const @ByRef StringConsumer fn,
     @Const @ByVal TensorArrayRef tensors);
@@ -82232,9 +87554,14 @@ public static final int C10D_ENV_NOT_SET = -2;
  // namespace tcputil
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/Work.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -82310,9 +87637,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/debug.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // Copyright (c) Meta Platforms, Inc. and its affiliates.
 // All rights reserved.
 //
@@ -82343,9 +87675,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/Backend.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <memory>
@@ -82384,9 +87721,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/ProcessGroup.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/distributed/c10d/Backend.hpp>
@@ -82399,6 +87741,7 @@ public static final int C10D_ENV_NOT_SET = -2;
 // #include <ATen/ATen.h>
 // #include <ATen/core/dispatch/Dispatcher.h>
 // #include <c10/macros/Macros.h>
+// #include <c10/util/Deprecated.h>
 
 // *************************************************************************
 // PROCESS GROUP collective communication API IS BEING CHANGED BETWEEN
@@ -82441,9 +87784,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/comm.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <ATen/ATen.h>
@@ -82487,9 +87835,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/default_comm_hooks.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/distributed/c10d/ProcessGroup.hpp>
@@ -82514,9 +87867,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from c10/util/ApproximateClock.h
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // Copyright 2023-present Facebook. All Rights Reserved.
 
 // #pragma once
@@ -82572,9 +87930,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/reducer_timer.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 // #include <c10/util/ApproximateClock.h>
 // #include <torch/csrc/autograd/profiler.h>
@@ -82586,9 +87949,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/reducer.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/core/ScalarType.h>
@@ -82652,9 +88020,14 @@ public static final int C10D_ENV_NOT_SET = -2;
     @Const @ByRef LoggerOptional logger);
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #ifdef USE_C10D_GLOO
@@ -82698,9 +88071,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
 // #endif // USE_C10D_GLOO
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/PrefixStore.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <torch/csrc/distributed/c10d/Store.hpp>
@@ -82710,9 +88088,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/FileStore.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <sys/types.h>
@@ -82727,9 +88110,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/TCPStore.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <cstddef>
@@ -82757,9 +88145,14 @@ public static final int C10D_ENV_NOT_SET = -2;
 
  // namespace c10d
 
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
 
 // Parsed from torch/csrc/distributed/c10d/logger.hpp
 
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 // #pragma once
 
 // #include <c10/util/Logging.h>
@@ -82780,6 +88173,10 @@ public static final int C10D_ENV_NOT_SET = -2;
 
 
  // namespace c10d
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
 // Parsed from datasets.h

@@ -40,5 +40,5 @@ public class AnomalyMetadata extends Pointer {
   public native void store_stack();
   public native void print_stack(@StdString BytePointer current_node_name);
   public native void print_stack(@StdString String current_node_name);
-  public native void assign_parent(@SharedPtr Node parent_node);
+  public native void assign_parent(@IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node parent_node);
 }

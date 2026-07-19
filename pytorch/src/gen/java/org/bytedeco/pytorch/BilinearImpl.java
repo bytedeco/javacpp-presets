@@ -21,7 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Bilinear ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/** Applies a billinear transformation with optional bias.
+/** Applies a bilinear transformation with optional bias.
  *  See https://pytorch.org/docs/main/generated/torch.nn.Bilinear.html to
  *  learn about the exact behavior of this module.
  * 

@@ -258,8 +258,8 @@ public class ProcessGroupNCCL extends Backend {
     // Schedule NCCL operations on high priority CUDA streams
     public native @Cast("bool") boolean is_high_priority_stream(); public native Options is_high_priority_stream(boolean setter);
 
-// #ifdef NCCL_HAS_CONFIG
-// #endif
+    // Configure ranks
+    public native @ByRef ncclConfig_t config(); public native Options config(ncclConfig_t setter);
 
     // Optional "parent" backend and color to create communicators from
     // via `ncclCommSplit`
@@ -275,13 +275,7 @@ public class ProcessGroupNCCL extends Backend {
     // must be within the numerical range of C++ int. Otherwise, Python will
     // raise a RuntimeError saying type is incompatible. See also
     // `_process_group_color` in `distributed_c10d.py`.
-// #ifdef NCCL_HAS_COMM_SPLIT
-// #else
-    // [Note 3]: for older NCCL versions, NCCL_SPLIT_NOCOLOR is not defined. But
-    // `split_color` is pybinded to Python, so we need to define it. So we use
-    // the int value of `NCCL_SPLIT_NOCOLOR` (-1) instead.
     public native int split_color(); public native Options split_color(int setter);
-// #endif
   }
 
   // Helper class related to TORCH_NCCL_DESYNC_DEBUG

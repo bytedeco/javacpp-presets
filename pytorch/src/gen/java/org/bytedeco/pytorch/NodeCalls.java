@@ -37,7 +37,7 @@ public class NodeCalls extends NodeNodeCallMap {
         return new NodeCalls((Pointer)this).offsetAddress(i);
     }
 
-  public native @ByRef NodeCall lookup(@SharedPtr Node function);
+  public native @ByRef NodeCall lookup(@IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node function);
 
   public native @Const @ByRef NodeCall lookup(@Cast("uint32_t") int id);
 

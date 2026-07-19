@@ -41,7 +41,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=2.12.0
+PYTORCH_VERSION=2.13.0
 
 export PYTORCH_BUILD_VERSION="$PYTORCH_VERSION"
 export PYTORCH_BUILD_NUMBER=1
@@ -84,6 +84,9 @@ git submodule foreach --recursive 'git reset --hard'
 
 # https://github.com/pytorch/pytorch/pull/164570
 #patch -Np1 < ../../../pytorch-cuda.patch
+
+# https://github.com/pytorch/pytorch/pull/189704
+patch -Np1 < ../../../pytorch-macosx.patch
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
@@ -165,7 +168,10 @@ case $PLATFORM in
     macosx-x86_64)
         export CC="clang"
         export CXX="clang++"
+        export LDFLAGS="-undefined dynamic_lookup"
         export USE_MKLDNN=OFF
+        sedinplace '/CHECK_FUNCTION_EXISTS(malloc_usable_size HAVE_MALLOC_USABLE_SIZE)/d' cmake/Dependencies.cmake aten/src/ATen/CMakeLists.txt
+        sedinplace '/CHECK_FUNCTION_EXISTS(posix_fallocate HAVE_POSIX_FALLOCATE)/d' cmake/Dependencies.cmake aten/src/ATen/CMakeLists.txt
         # export PATH=$(brew --prefix llvm@18)/bin:$PATH # Use brew LLVM instead of Xcode LLVM 14
         ;;
     windows-x86_64)
@@ -264,6 +270,7 @@ fi
 ln -sf pytorch/torch/include ../include
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
+rm -f ../lib/libomp.dylib
 
 case $PLATFORM in
     macosx-arm64)

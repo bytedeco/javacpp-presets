@@ -177,12 +177,22 @@ public class ProcessGroup extends CustomClassHolder {
   // Gathers a single tensor inputBuffer into a single buffer outputBuffer that
   // is interpreted as a contiguous collection of size inputBuffer * WORLD_SIZE.
   // For implementers of ProcessGroup API and advanced users only.
-  // Note: this function will be deprecated in near future.
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _allgather_base(
+  // Named after the torchcomms backend naming scheme.
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work all_gather_single(
         @ByRef Tensor outputBuffer,
         @ByRef Tensor inputBuffer,
         @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _allgather_base(
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work all_gather_single(
+        @ByRef Tensor outputBuffer,
+        @ByRef Tensor inputBuffer);
+
+  // Deprecated: use all_gather_single instead. Kept as an alias for backward
+  // compatibility.
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _allgather_base(
+        @ByRef Tensor outputBuffer,
+        @ByRef Tensor inputBuffer,
+        @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _allgather_base(
         @ByRef Tensor outputBuffer,
         @ByRef Tensor inputBuffer);
 
@@ -198,14 +208,24 @@ public class ProcessGroup extends CustomClassHolder {
         @StdVector TensorVector outputTensorLists,
         @ByRef TensorVector inputTensors);
 
-  // This function is a coalesced version of `allgather_into_tensor` (currently
-  // still named as `_allgather_base`). Each tensor in the vector corresponds to
-  // an input/output of one `allgather_into_tensor` operation.
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work allgather_into_tensor_coalesced(
+  // Coalesced version of all_gather_single. Each tensor in the vector
+  // corresponds to an input/output of one all_gather_single operation.
+  // Named after the torchcomms backend naming scheme.
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work all_gather_single_coalesced(
         @ByRef TensorVector outputTensors,
         @ByRef TensorVector inputTensors,
         @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work allgather_into_tensor_coalesced(
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work all_gather_single_coalesced(
+        @ByRef TensorVector outputTensors,
+        @ByRef TensorVector inputTensors);
+
+  // Deprecated: use all_gather_single_coalesced instead. Kept as an alias for
+  // backward compatibility.
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work allgather_into_tensor_coalesced(
+        @ByRef TensorVector outputTensors,
+        @ByRef TensorVector inputTensors,
+        @Const @ByRef(nullValue = "c10d::AllgatherOptions()") AllgatherOptions opts);
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work allgather_into_tensor_coalesced(
         @ByRef TensorVector outputTensors,
         @ByRef TensorVector inputTensors);
 
@@ -233,32 +253,68 @@ public class ProcessGroup extends CustomClassHolder {
         @ByRef TensorVector outputTensors,
         @StdVector TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _reduce_scatter_base(
+  // Named after the torchcomms backend naming scheme.
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_single(
         @ByRef Tensor outputBuffer,
         @ByRef Tensor inputBuffer,
         @Const @ByRef(nullValue = "c10d::ReduceScatterOptions()") ReduceScatterOptions opts);
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _reduce_scatter_base(
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_single(
         @ByRef Tensor outputBuffer,
         @ByRef Tensor inputBuffer);
 
-  // This function is a coalesced version of `reduce_scatter_tensor` (currently
-  // still named as `_reduce_scatter_base`). Each tensor in the vector
-  // corresponds to an input/output of one `reduce_scatter_tensor` operation.
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_tensor_coalesced(
+  // Deprecated: use reduce_scatter_single instead. Kept as an alias for
+  // backward compatibility.
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _reduce_scatter_base(
+        @ByRef Tensor outputBuffer,
+        @ByRef Tensor inputBuffer,
+        @Const @ByRef(nullValue = "c10d::ReduceScatterOptions()") ReduceScatterOptions opts);
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work _reduce_scatter_base(
+        @ByRef Tensor outputBuffer,
+        @ByRef Tensor inputBuffer);
+
+  // Coalesced version of reduce_scatter_single. Each tensor in the vector
+  // corresponds to an input/output of one reduce_scatter_single operation.
+  // Named after the torchcomms backend naming scheme.
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_single_coalesced(
         @ByRef TensorVector outputTensors,
         @ByRef TensorVector inputTensors,
         @Const @ByRef(nullValue = "c10d::ReduceScatterOptions()") ReduceScatterOptions opts);
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_tensor_coalesced(
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_single_coalesced(
         @ByRef TensorVector outputTensors,
         @ByRef TensorVector inputTensors);
 
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work alltoall_base(
+  // Deprecated: use reduce_scatter_single_coalesced instead. Kept as an alias
+  // for backward compatibility.
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_tensor_coalesced(
+        @ByRef TensorVector outputTensors,
+        @ByRef TensorVector inputTensors,
+        @Const @ByRef(nullValue = "c10d::ReduceScatterOptions()") ReduceScatterOptions opts);
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work reduce_scatter_tensor_coalesced(
+        @ByRef TensorVector outputTensors,
+        @ByRef TensorVector inputTensors);
+
+  // Named after the torchcomms backend naming scheme.
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work all_to_all_single(
         @ByRef Tensor outputBuffer,
         @ByRef Tensor inputBuffer,
         @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes,
         @Cast("std::vector<int64_t>*") @ByRef LongVector inputSplitSizes,
         @Const @ByRef(nullValue = "c10d::AllToAllOptions()") AllToAllOptions opts);
-  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work alltoall_base(
+  public native @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work all_to_all_single(
+        @ByRef Tensor outputBuffer,
+        @ByRef Tensor inputBuffer,
+        @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes,
+        @Cast("std::vector<int64_t>*") @ByRef LongVector inputSplitSizes);
+
+  // Deprecated: use all_to_all_single instead. Kept as an alias for backward
+  // compatibility.
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work alltoall_base(
+        @ByRef Tensor outputBuffer,
+        @ByRef Tensor inputBuffer,
+        @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes,
+        @Cast("std::vector<int64_t>*") @ByRef LongVector inputSplitSizes,
+        @Const @ByRef(nullValue = "c10d::AllToAllOptions()") AllToAllOptions opts);
+  public native @Deprecated @IntrusivePtr("c10d::Work") @Cast({"", "c10::intrusive_ptr<c10d::Work>&"}) Work alltoall_base(
         @ByRef Tensor outputBuffer,
         @ByRef Tensor inputBuffer,
         @Cast("std::vector<int64_t>*") @ByRef LongVector outputSplitSizes,
@@ -308,6 +364,9 @@ public class ProcessGroup extends CustomClassHolder {
 
   public native @Cast("bool") boolean hasBackends();
 
+  public native @Cast("bool") boolean hasBackendForDeviceType(DeviceType deviceType);
+  public native @Cast("bool") boolean hasBackendForDeviceType(@Cast("c10::DeviceType") byte deviceType);
+
   public native void setBackend(
         DeviceType deviceType,
         BackendType backendType,
@@ -334,7 +393,7 @@ public class ProcessGroup extends CustomClassHolder {
   // Note: the return type is `Device` rather than `DeviceType` for the purpose
   // of easy comparison at Python level. The `Device` will have default index
   // (-1).
-  public native @StdVector Device getDeviceTypes();
+  public native @ByVal DeviceVector getDeviceTypes();
 
   public native void registerOnCompletionHook(
         @ByRef(true) WorkInfoConsumer hook);
@@ -368,8 +427,19 @@ public class ProcessGroup extends CustomClassHolder {
 
   public native void setBoundDeviceId(@ByVal DeviceOptional device);
 
+  public native @Cast("bool") boolean getUsePgForSymmMemRendezvous();
+
+  public native void setUsePgForSymmMemRendezvous(@Cast("bool") boolean value);
+
   // This creates a new subgroup using the specified ranks.
   // The current rank must be included in the list of new_ranks.
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
+        @StdVector IntPointer ranks,
+        @Optional Milliseconds timeout,
+        @Const @ByRef BackendOptionsOptional opts,
+        @Const @ByRef StringOptional name,
+        @Const @ByRef StringOptional groupDesc,
+        @Optional DeviceVector devices/*=std::nullopt*/);
   public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
         @StdVector IntPointer ranks,
         @Optional Milliseconds timeout,
@@ -381,7 +451,21 @@ public class ProcessGroup extends CustomClassHolder {
         @Optional Milliseconds timeout,
         @Const @ByRef BackendOptionsOptional opts,
         @Const @ByRef StringOptional name,
+        @Const @ByRef StringOptional groupDesc,
+        @Optional DeviceVector devices/*=std::nullopt*/);
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
+        @StdVector IntBuffer ranks,
+        @Optional Milliseconds timeout,
+        @Const @ByRef BackendOptionsOptional opts,
+        @Const @ByRef StringOptional name,
         @Const @ByRef StringOptional groupDesc);
+  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
+        @StdVector int[] ranks,
+        @Optional Milliseconds timeout,
+        @Const @ByRef BackendOptionsOptional opts,
+        @Const @ByRef StringOptional name,
+        @Const @ByRef StringOptional groupDesc,
+        @Optional DeviceVector devices/*=std::nullopt*/);
   public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
         @StdVector int[] ranks,
         @Optional Milliseconds timeout,

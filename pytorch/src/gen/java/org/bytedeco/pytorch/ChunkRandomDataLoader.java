@@ -21,7 +21,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** A dataloader for stateful datasets.
  * 
- *  A dataloader for stateful datatasets differs from one for stateless
+ *  A dataloader for stateful datasets differs from one for stateless
  *  datasets one in that the dataset is shared among worker threads, and that
  *  this dataset is itself responsible for producing batches rather than
  *  depending on a sampler. The statefulness here actually refers to the

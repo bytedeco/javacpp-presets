@@ -51,6 +51,8 @@ public class AutogradState extends Pointer {
 
   public native void set_view_replay_enabled(@Cast("bool") boolean view_replay_enabled);
 
+  public native void set_grad_layout_enforcement_enabled(@Cast("bool") boolean enabled);
+
   public native void set_graph_exec_group(@Optional SafePyObject group);
 
   public native @Cast("bool") boolean get_grad_mode();
@@ -62,6 +64,8 @@ public class AutogradState extends Pointer {
   public native @Cast("bool") boolean get_multithreading_enabled();
 
   public native @Cast("bool") boolean get_view_replay_enabled();
+
+  public native @Cast("bool") boolean get_grad_layout_enforcement_enabled();
 
   public native @Optional SafePyObject get_graph_exec_group();
 }
