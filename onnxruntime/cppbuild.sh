@@ -28,7 +28,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda --nvcc_threads 1"
 fi
 
-ONNXRUNTIME=1.27.0
+ONNXRUNTIME=1.27.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
