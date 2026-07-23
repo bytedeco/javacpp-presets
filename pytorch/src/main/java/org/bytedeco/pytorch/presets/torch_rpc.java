@@ -99,6 +99,21 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         torch.sharedMap(infoMap);
 
+        //--- Cross-package pointer types -----------------------------------------
+        // Rpc class hierarchies (RRef, RRefContext, ...) reference c10::TypePtr
+        // and other parent-package types. Torch.sharedMap(...) doesn't include
+        // the full torch.map(); add the entries the parent torch preset applies
+        // for these types so the parser can resolve them. The torch preset
+        // declares TypePtr as an inner class of `Type` (Type.TypePtr) — qualify
+        // it explicitly so the rpc-package generated files can resolve it.
+        infoMap
+            .put(new Info("c10::Type::SingletonOrSharedTypePtr<c10::Type>",
+                          "c10::TypePtr", "c10::Type::TypePtr", "at::TypePtr",
+                          "torch::jit::TypeAttr::ConstructorType",
+                          "torch::jit::TypeAttr::ValueType")
+                    .pointerTypes("Type.TypePtr"))
+        ;
+
         //--- Scalar id types -------------------------------------------------------
         infoMap
             .put(new Info("torch::distributed::rpc::worker_id_t").valueTypes("short").pointerTypes("ShortPointer"))
@@ -108,7 +123,12 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
             //--- Enumerations ------------------------------------------------------
             .put(new Info("torch::distributed::rpc::RPCErrorType").enumerate().valueTypes("RPCErrorType"))
             .put(new Info("torch::distributed::rpc::MessageTypeFlags").enumerate().valueTypes("MessageTypeFlags"))
-            .put(new Info("torch::distributed::rpc::MessageType").enumerate().valueTypes("MessageType"))
+            // NOTE: torch::distributed::rpc::MessageType is fully overridden via
+            // .javaText() below (search for "MessageType: parser emits bare
+            // REQUEST_TYPE"). Do NOT add an .enumerate() entry here — the
+            // InfoMap returns the FIRST matching Info on lookup, and a bare
+            // .enumerate() entry would shadow the javaText override and the
+            // parser would emit its own (broken) MessageType enum.
 
             //--- POD structs -------------------------------------------------------
             .put(new Info("torch::distributed::rpc::RpcBackendOptions").purify().pointerTypes("RpcBackendOptions"))
@@ -136,6 +156,58 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
                           "torch::distributed::rpc::PythonRemoteCall").skip())
             .put(new Info("torch::distributed::rpc::PythonRRefFetchCall",
                           "torch::distributed::rpc::PythonRRefFetchRet").skip())
+
+            //--- MessageType: parser emits bare REQUEST_TYPE / RESPONSE_TYPE
+            //    which aren't imported in torch_rpc's global class. Provide a
+            //    hand-written enum that uses the qualified MessageTypeFlags.X.
+            //--- MessageType -------------------------------------------------
+            //    The parser translates `MessageTypeFlags::REQUEST_TYPE` to
+            //    `MessageTypeFlags.REQUEST_TYPE` but stops short of adding
+            //    `.ordinal()` — so the generated constructor args are bare
+            //    `REQUEST_TYPE` identifiers that don't exist in scope.
+            //    Skip the parser-generated MessageType enum and inject a
+            //    hand-written one via the null-keyed InfoList emit path.
+            .put(new Info("torch::distributed::rpc::MessageType").skip())
+            .put(new Info((String) null).javaText(
+                "@Namespace(\"torch::distributed::rpc\") public enum MessageType {\n"
+                + "  SCRIPT_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  SCRIPT_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  PYTHON_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  PYTHON_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  SCRIPT_REMOTE_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  PYTHON_REMOTE_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  REMOTE_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  SCRIPT_RREF_FETCH_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  PYTHON_RREF_FETCH_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  SCRIPT_RREF_FETCH_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  PYTHON_RREF_FETCH_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  RREF_USER_DELETE(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  RREF_FORK_REQUEST(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  RREF_CHILD_ACCEPT(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  RREF_ACK(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  FORWARD_AUTOGRAD_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  FORWARD_AUTOGRAD_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  BACKWARD_AUTOGRAD_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  BACKWARD_AUTOGRAD_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  CLEANUP_AUTOGRAD_CONTEXT_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  CLEANUP_AUTOGRAD_CONTEXT_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  RUN_WITH_PROFILING_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  RUN_WITH_PROFILING_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  RREF_BACKWARD_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),\n"
+                + "  RREF_BACKWARD_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  EXCEPTION(MessageTypeFlags.RESPONSE_TYPE.ordinal()),\n"
+                + "  UNKNOWN(0x3c);\n"
+                + "  public final int value;\n"
+                + "  private MessageType(int v) { this.value = v; }\n"
+                + "  private MessageType(MessageType e) { this.value = e.value; }\n"
+                + "  public MessageType intern() { for (MessageType e : values()) if (e.value == value) return e; return this; }\n"
+                + "  @Override public String toString() { return intern().name(); }\n"
+                + "}"
+            ))
+
+            // RequestCallbackImpl::runPythonFunction references pybind11::object
+            // (the `object` parameter); pybind is out of scope here.
+            .put(new Info("torch::distributed::rpc::RequestCallbackImpl::runPythonFunction").skip())
         ;
 
         //--- Skip transitive free functions from utils.h / agent_utils.h --------
@@ -216,10 +288,30 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
             .put(new Info("torch::distributed::rpc::UserRRef").purify().pointerTypes("UserRRef").virtualize())
             .put(new Info("torch::distributed::rpc::OwnerRRef").purify().pointerTypes("OwnerRRef").virtualize())
             .put(new Info("torch::distributed::rpc::RRef::operator <<").skip())
+            // Skip the constructors / factories that take c10::TypePtr — the
+            // Java-side equivalent goes through Module factories in torch,
+            // and resolving Type.TypePtr across packages is awkward.
+            .put(new Info("torch::distributed::rpc::UserRRef::UserRRef").skip())
+            .put(new Info("torch::distributed::rpc::OwnerRRef::OwnerRRef").skip())
+            // RRef::type() returns TypePtr (cross-package type, see above).
+            .put(new Info("torch::distributed::rpc::RRef::type").skip())
+            // RRefContext::getOrCreateRRef / createUserRRef / createOwnerRRef /
+            // getOrCreateOwnerRRef take TypePtr and produce intrusive_ptr<RRef>.
+            .put(new Info("torch::distributed::rpc::RRefContext::getOrCreateRRef").skip())
+            .put(new Info("torch::distributed::rpc::RRefContext::createUserRRef").skip())
+            .put(new Info("torch::distributed::rpc::RRefContext::getOrCreateOwnerRRef").skip())
+            .put(new Info("torch::distributed::rpc::RRefContext::createOwnerRRef").skip())
             .put(new Info("torch::distributed::rpc::RRefContext").purify().pointerTypes("RRefContext").virtualize())
             // destroyInstance returns std::vector<c10::intrusive_ptr<RRef>>; we
             // don't bind vector-of-intrusive_ptr combinations, skip the helper.
-            .put(new Info("torch::distributed::rpc::RRefContext::destroyInstance").skip())
+            // Match the parser's normalized key (templates stripped, const stripped).
+            .put(new Info("torch::distributed::rpc::RRefContext::destroyInstance(bool)").skip())
+
+            // withStorages is a free function (inline in message.h) returning
+            // std::tuple<intrusive_ptr<Message>, vector<weak_intrusive_ptr<StorageImpl>>>.
+            // Not worth binding vector-of-weak_intrusive_ptr in the parent's
+            // pointer types — skip the helper.
+            .put(new Info("torch::distributed::rpc::withStorages(c10::intrusive_ptr<torch::distributed::rpc::Message>)").skip())
         ;
 
         //--- RpcAgent hierarchy --------------------------------------------------

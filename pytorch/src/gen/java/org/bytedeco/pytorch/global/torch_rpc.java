@@ -18,6 +18,40 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 public class torch_rpc extends org.bytedeco.pytorch.presets.torch_rpc {
     static { Loader.load(); }
+@Namespace("torch::distributed::rpc") public enum MessageType {
+  SCRIPT_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  SCRIPT_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  PYTHON_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  PYTHON_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  SCRIPT_REMOTE_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  PYTHON_REMOTE_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  REMOTE_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  SCRIPT_RREF_FETCH_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  PYTHON_RREF_FETCH_CALL(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  SCRIPT_RREF_FETCH_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  PYTHON_RREF_FETCH_RET(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  RREF_USER_DELETE(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  RREF_FORK_REQUEST(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  RREF_CHILD_ACCEPT(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  RREF_ACK(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  FORWARD_AUTOGRAD_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  FORWARD_AUTOGRAD_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  BACKWARD_AUTOGRAD_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  BACKWARD_AUTOGRAD_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  CLEANUP_AUTOGRAD_CONTEXT_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  CLEANUP_AUTOGRAD_CONTEXT_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  RUN_WITH_PROFILING_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  RUN_WITH_PROFILING_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  RREF_BACKWARD_REQ(MessageTypeFlags.REQUEST_TYPE.ordinal()),
+  RREF_BACKWARD_RESP(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  EXCEPTION(MessageTypeFlags.RESPONSE_TYPE.ordinal()),
+  UNKNOWN(0x3c);
+  public final int value;
+  private MessageType(int v) { this.value = v; }
+  private MessageType(MessageType e) { this.value = e.value; }
+  public MessageType intern() { for (MessageType e : values()) if (e.value == value) return e; return this; }
+  @Override public String toString() { return intern().name(); }
+}
 
 // Parsed from torch/csrc/distributed/rpc/types.h
 
@@ -38,79 +72,6 @@ public class torch_rpc extends org.bytedeco.pytorch.presets.torch_rpc {
     @Const @ByRef GloballyUniqueId globalId);
 // Targeting ../rpc/SerializedPyObj.java
 
-
-
- // namespace torch::distributed::rpc
-
-// #else
-// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
-// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
-
-
-// Parsed from torch/csrc/distributed/rpc/utils.h
-
-// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
-// #pragma once
-
-// #include <c10/core/Device.h>
-// #include <c10/core/Event.h>
-// #include <c10/core/Stream.h>
-// #include <torch/csrc/autograd/profiler.h>
-// #include <torch/csrc/distributed/rpc/rpc_command_base.h>
-// #include <torch/csrc/jit/serialization/pickle.h>
-// #include <torch/csrc/utils/byte_order.h>
-
-// Parse error message and return RPCErrorType based on the message.
-
-// Create an error string given the error description and error type
-
-
-// Given an RPC message received as a request over the wire, deserialize it into
-// the appropriate 'RpcCommandBase' type.
-
-
-// Given an RPC message received as a response over the wire, deserialize it
-// into the appropriate 'RpcCommandBase' type, if the response is
-// FORWARD_AUTOGRAD_RESP type, unwrap it, attach recvBackward() functions
-// to received tensors and set the wrappedMsgType to its wrapped message type.
-
-
-// Given an RPC message received as a response over the wire, deserialize it
-// into the valid IValue if the message is for a script rpc result,
-// otherwise deserialize it into dummy none ivalue that will never be used.
-// In this deserialization, we also attach recv rpc backward functions if
-// needed.
-
-
-
-// Note: format is subject to change and intended for RPCs.
-// For saving persistently to disk, use torch::save().
-
-
-
-
-// We use vector<char> as the type of blobs because it's what rpc::Message uses
-// for its payload, even though it has the disadvantage that it cannot be
-// allocated with uninitialized memory: it is always zeroed out.
-
-// Some Tensors are effectively views of larger Tensors, where only a small
-// subset of the Storage data is referenced. This normally is good and avoids
-// copies when kept locally, but if we naively push the whole Storage over the
-// wire, we'll end up with excess network traffic. This change clones tensors if
-// we'd save at least half the data, and over a minimum hurdle.
-
-
-// Combines an original payload and wrapped payload into the original payload.
-// Used to generate the overall payload for the wrapped RPC.
-
-
-// Reads the additional, wrapped payload from a wrapped RPC off of the input
-// payload. After this, payload will contain the payload of the original,
-// un-wrapped RPC.
-
-
-// Takes a list of events from autograd profiler and populates them into
-// profiledEvents to be carried over RPC.
 
 
  // namespace torch::distributed::rpc
@@ -180,65 +141,7 @@ public class torch_rpc extends org.bytedeco.pytorch.presets.torch_rpc {
 
 // Message types must have values between 0x00 to 0xff
 // NOLINTNEXTLINE(performance-enum-size)
-@Namespace("torch::distributed::rpc") public enum MessageType {
-  // messages for dist.rpc on builtin operators
-  SCRIPT_CALL(REQUEST_TYPE),
-  SCRIPT_RET(RESPONSE_TYPE),
 
-  // messages for dist.rpc on Python UDF
-  PYTHON_CALL(REQUEST_TYPE),
-  PYTHON_RET(RESPONSE_TYPE),
-
-  // messages for dist.remote on builtin operators and Python UDF
-  SCRIPT_REMOTE_CALL(REQUEST_TYPE), // A remote call on a builtin operator
-  PYTHON_REMOTE_CALL(REQUEST_TYPE), // A remote call on a Python UDF
-  REMOTE_RET(RESPONSE_TYPE), // Response for remote calls for
-                                              // UDF, builtin, or script
-
-  // RRef related internal messages
-  SCRIPT_RREF_FETCH_CALL(REQUEST_TYPE), // A UserRRef<IValue> fetches value
-                                             // from owner
-  PYTHON_RREF_FETCH_CALL(REQUEST_TYPE), // A UserRRef<py::object> fetches
-                                             // value from owner
-  SCRIPT_RREF_FETCH_RET(RESPONSE_TYPE), // An OwnerRRef sends ivalue to user
-  PYTHON_RREF_FETCH_RET(RESPONSE_TYPE), // An OwnerRRef sends py::object to user
-  RREF_USER_DELETE(REQUEST_TYPE), // A UserRRef tells the owner to deref
-  RREF_FORK_REQUEST(REQUEST_TYPE), // A child UserRRef tells the owner
-                                             // about itself
-  RREF_CHILD_ACCEPT(REQUEST_TYPE), // A child UserRRef tells parent
-                                             // that owner knows it
-  RREF_ACK(RESPONSE_TYPE), // ACK to internal RRef messages
-
-  // Messages with autograd info
-  FORWARD_AUTOGRAD_REQ(REQUEST_TYPE),
-  FORWARD_AUTOGRAD_RESP(RESPONSE_TYPE),
-
-  // Messages to propagate gradients on the backward pass.
-  BACKWARD_AUTOGRAD_REQ(REQUEST_TYPE),
-  BACKWARD_AUTOGRAD_RESP(RESPONSE_TYPE),
-
-  // Messages to tell workers to clean up their autograd context.
-  CLEANUP_AUTOGRAD_CONTEXT_REQ(REQUEST_TYPE),
-  CLEANUP_AUTOGRAD_CONTEXT_RESP(RESPONSE_TYPE),
-
-  // Messages that tell workers to run requests with profiling enabled.
-  RUN_WITH_PROFILING_REQ(REQUEST_TYPE),
-  RUN_WITH_PROFILING_RESP(RESPONSE_TYPE),
-
-  // Messages to support RRef.backward().
-  RREF_BACKWARD_REQ(REQUEST_TYPE),
-  RREF_BACKWARD_RESP(RESPONSE_TYPE),
-
-  // Other internal message types
-  EXCEPTION(RESPONSE_TYPE),
-  UNKNOWN(0x3c);
-
-    public final int value;
-    private MessageType(int v) { this.value = v; }
-    private MessageType(MessageType e) { this.value = e.value; }
-    public MessageType intern() { for (MessageType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 // Targeting ../rpc/Message.java
 
 
@@ -255,72 +158,7 @@ public class torch_rpc extends org.bytedeco.pytorch.presets.torch_rpc {
 // be provided for matching requests/responses.
 
 
-@Namespace("torch::distributed::rpc") public static native @ByVal std::tuple<c10::intrusive_ptr<torch::distributed::rpc::Message>,std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> > > withStorages(@IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message message);
 
- // namespace torch::distributed::rpc
-
-// #else
-// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
-// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
-
-
-// Parsed from torch/csrc/distributed/rpc/agent_utils.h
-
-// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
-// #pragma once
-
-// #include <torch/csrc/distributed/c10d/PrefixStore.hpp>
-// #include <torch/csrc/distributed/rpc/utils.h>
-
-// All RPC peers should call into this function at the same time. Each peer
-// provides its own id and name, and this function uses the given Store to
-// gather global name-to-id mapping on all peers.
-@Namespace("torch::distributed::rpc") public static native @ByVal std::unordered_map<std::string,torch::distributed::rpc::worker_id_t> collectNames(
-    @ByVal PrefixStore store,
-    short selfId,
-    @StdString BytePointer selfName,
-    int worldSize);
-@Namespace("torch::distributed::rpc") public static native @ByVal std::unordered_map<std::string,torch::distributed::rpc::worker_id_t> collectNames(
-    @ByVal PrefixStore store,
-    short selfId,
-    @StdString String selfName,
-    int worldSize);
-
-// Ranks in dynamic RPC groups will initially call into this to establish the
-// name-to-id mapping for the current peers in the group. The current rank will
-// put its own worker info in the store and discover all the ranks that came
-// before it. NOTE: This needs to be called with the Dynamic RPC group
-// membership management token held.
-@Namespace("torch::distributed::rpc") public static native @ByVal std::unordered_map<std::string,torch::distributed::rpc::worker_id_t> collectCurrentNames(
-    @ByVal PrefixStore store,
-    short selfId,
-    @StdString BytePointer selfName);
-@Namespace("torch::distributed::rpc") public static native @ByVal std::unordered_map<std::string,torch::distributed::rpc::worker_id_t> collectCurrentNames(
-    @ByVal PrefixStore store,
-    short selfId,
-    @StdString String selfName);
-
-// Remove name from Store, used in dynamic RPC groups.
-// NOTE: This needs to be called with the Dynamic RPC group
-// membership management token held.
-@Namespace("torch::distributed::rpc") public static native void removeCurrentName(
-    @ByVal PrefixStore store,
-    short selfId,
-    @StdString BytePointer selfName);
-@Namespace("torch::distributed::rpc") public static native void removeCurrentName(
-    @ByVal PrefixStore store,
-    short selfId,
-    @StdString String selfName);
-
-// This performs a synchronization of all call counts by using store.
-// All RPC peers wait for others to join to exit at the same time.
-@Namespace("torch::distributed::rpc") public static native int syncCallCount(
-    @ByVal PrefixStore store,
-    int worldSize,
-    int activeCalls/*=0*/);
-@Namespace("torch::distributed::rpc") public static native int syncCallCount(
-    @ByVal PrefixStore store,
-    int worldSize);
 
  // namespace torch::distributed::rpc
 
