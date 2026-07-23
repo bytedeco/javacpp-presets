@@ -88150,6 +88150,27 @@ public static final int C10D_ENV_NOT_SET = -2;
 // #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
+// Parsed from torch/csrc/distributed/c10d/HashStore.hpp
+
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+// #pragma once
+
+// #include <condition_variable>
+// #include <mutex>
+// #include <unordered_map>
+
+// #include <torch/csrc/distributed/c10d/Store.hpp>
+// Targeting ../HashStore.java
+
+
+
+ // namespace c10d
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
+
 // Parsed from torch/csrc/distributed/c10d/logger.hpp
 
 // #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)

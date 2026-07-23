@@ -73,6 +73,7 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
                 "torch/csrc/distributed/c10d/FileStore.hpp",
                 "torch/csrc/distributed/c10d/TCPStore.hpp",
+                "torch/csrc/distributed/c10d/HashStore.hpp",
                 "torch/csrc/distributed/c10d/logger.hpp",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
@@ -2166,6 +2167,12 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "at::Tensor::type()",
             "at::Tensor::is_variable()",
             "c10d::Store::watchKey"
+        ).skip());
+        infoMap.put(new Info(
+            "c10d::HashStore::map_",
+            "c10d::HashStore::queues_",
+            "c10d::HashStore::m_",
+            "c10d::HashStore::cv_"
         ).skip());
 
         //// Function returning object by value, and copy constructor was deleted. Any way to get around this ?

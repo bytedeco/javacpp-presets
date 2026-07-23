@@ -32,16 +32,7 @@ public class UserRRef extends RRef {
   
   
 
-  public UserRRef(
-        short ownerId,
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId,
-        @ByVal TypePtr type) { super((Pointer)null); allocate(ownerId, rrefId, forkId, type); }
-  private native void allocate(
-        short ownerId,
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId,
-        @ByVal TypePtr type);
+  
 
   public native @Cast("bool") boolean isOwner();
 

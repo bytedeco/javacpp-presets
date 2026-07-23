@@ -54,16 +54,12 @@ public class RRefContext extends Pointer {
   public native @SharedPtr RpcAgent agent();
 
   // create a ``UserRRef`` owned by the worker ``ownerId``
-  public native @IntrusivePtr("torch::distributed::rpc::RpcCommandBase") UserRRef createUserRRef(
-        short ownerId,
-        @Const @ByRef TypePtr type);
+  
 
   // Convert an RRefForkData into an RRef. This RRef could be user or owner.
   // This RRef could have already existed before, or could be created in this
   // method, we pass type here to validate or help the rref creation.
-  public native @IntrusivePtr("torch::distributed::rpc::RpcCommandBase") RRef getOrCreateRRef(
-        @Const @ByRef RRefForkData rfd,
-        @Const @ByRef TypePtr type);
+  
 
   // Get the ``OwnerRRef`` of id ``rrefId``. If it does not exist, create a new
   // one. This function is called in two places:
@@ -73,9 +69,7 @@ public class RRefContext extends Pointer {
   // What's common in these two cases are, 1) the RRefId is already generated
   // 2) the TypePtr is presented. So it can always create the ``OwnerRRef`` if
   // it is not yet available.
-  public native @IntrusivePtr("torch::distributed::rpc::RpcCommandBase") OwnerRRef getOrCreateOwnerRRef(
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @Const @ByRef TypePtr type);
+  
 
   // Create an empty owner rref of type.
   // This method is called to first time generate an ``OwnerRRef``, e.g.,
@@ -83,7 +77,7 @@ public class RRefContext extends Pointer {
   // 2) create the ``OwnerRRef`` on `rpc.remote()` caller side.
   // What's common in these two cases are, 1) the RRefId hasn't been generated
   // 2) the TypePtr is presented.
-  public native @IntrusivePtr("torch::distributed::rpc::RpcCommandBase") OwnerRRef createOwnerRRef(@Const @ByRef TypePtr type);
+  
 
   // Returns a Future of the OwnerRRef, which will be marked completed when
   // ``OwnerRRef`` is created. This method is used when the TypePtr is not

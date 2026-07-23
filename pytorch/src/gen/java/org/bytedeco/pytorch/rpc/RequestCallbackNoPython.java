@@ -27,9 +27,6 @@ public class RequestCallbackNoPython extends RequestCallback {
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processMessage(
         @ByRef Message request,
         @StdVector Stream streams);
-  @Virtual protected native @Cast({"torch::distributed::rpc::RpcCommandBase*", "std::unique_ptr<torch::distributed::rpc::RpcCommandBase>"}) @UniquePtr @Const({false, false, true}) RpcCommandBase deserializePythonRpcCommand(
-        @Cast({"torch::distributed::rpc::RpcCommandBase*", "std::unique_ptr<torch::distributed::rpc::RpcCommandBase>"}) @UniquePtr RpcCommandBase rpc,
-        @Const @ByRef MessageType messageType);
 
   @Virtual protected native @IntrusivePtr("c10::ivalue::Future") @Const({false, false, true}) @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processScriptCall(
         @ByRef RpcCommandBase rpc,
@@ -51,11 +48,6 @@ public class RequestCallbackNoPython extends RequestCallback {
         @ByRef RpcCommandBase rpc);
 
   @Virtual protected native @Const({false, false, true}) void handleRRefDelete(@Cast({"torch::distributed::rpc::RRef*", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) @IntrusivePtr("torch::distributed::rpc::RpcCommandBase") RRef rref);
-
-  @Virtual protected native @IntrusivePtr("c10::ivalue::Future") @Const({false, false, true}) @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processRpcWithErrors(
-        @ByRef RpcCommandBase rpc,
-        @Const @ByRef MessageType messageType,
-        @Cast({"c10::Stream*", "const std::vector<c10::Stream>&"}) @StdVector Stream streams);
 
   @Virtual protected native @Cast("bool") @Const({false, false, true}) boolean cudaAvailable();
 

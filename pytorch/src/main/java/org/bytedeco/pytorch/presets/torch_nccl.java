@@ -33,16 +33,24 @@ import org.bytedeco.javacpp.tools.*;
  */
 @Properties(
     inherit = {nccl.class, torch_cuda.class},
-    value = @Platform(
-        value = {"linux"}, //// Not on Mac or Windows
-        extension = "-gpu",
-        define = "USE_C10D_NCCL",
-        include = {
-            //"torch/csrc/distributed/c10d/cuda/CUDAEventCache.hpp",
-            "torch/csrc/distributed/c10d/NCCLUtils.hpp",
-            "torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp",
-        }
-    ),
+    value = {
+        // Java glue for NCCL is generated on all platforms (shared sources).
+        // Native jnitorch_nccl is only produced on linux-gpu via library/link below.
+        @Platform(
+            value = {"linux", "macosx", "windows"},
+            define = "USE_C10D_NCCL",
+            include = {
+                //"torch/csrc/distributed/c10d/cuda/CUDAEventCache.hpp",
+                "torch/csrc/distributed/c10d/NCCLUtils.hpp",
+                "torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp",
+            }
+        ),
+        @Platform(
+            value = "linux",
+            extension = "-gpu",
+            link = { "c10", "torch", "c10_cuda", "torch_cuda", "nccl" }
+        )
+    },
     target = "org.bytedeco.pytorch.nccl",
     global = "org.bytedeco.pytorch.global.torch_nccl"
 )
@@ -50,7 +58,18 @@ public class torch_nccl implements LoadEnabled, InfoMapper {
 
     @Override
     public void init(ClassProperties properties) {
+        // Always parse NCCL headers so Java glue is generated on every OS.
+        // Clear platform.library on non linux-gpu builds so javacpp does NOT
+        // compile jnitorch_nccl.dylib/.so on macOS/Windows CPU.
         torch.initIncludes(getClass(), properties);
+        String platform = properties.getProperty("platform");
+        String extension = properties.getProperty("platform.extension");
+        boolean nativeNccl = platform != null && platform.startsWith("linux")
+                && extension != null && extension.endsWith("-gpu");
+        if (!nativeNccl) {
+            properties.setProperty("platform.library", "");
+            properties.put("platform.link", new java.util.ArrayList<String>());
+        }
     }
 
     @Override

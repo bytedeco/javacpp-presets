@@ -30,29 +30,9 @@ public class OwnerRRef extends RRef {
   
   
 
-  public OwnerRRef(
-        short ownerId,
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @ByVal TypePtr type,
-        @ByVal DeviceVector devices) { super((Pointer)null); allocate(ownerId, rrefId, type, devices); }
-  private native void allocate(
-        short ownerId,
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @ByVal TypePtr type,
-        @ByVal DeviceVector devices);
+  
 
-  public OwnerRRef(
-        short ownerId,
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @ByVal TypePtr type,
-        @Optional IValue value,
-        @ByVal DeviceVector devices) { super((Pointer)null); allocate(ownerId, rrefId, type, value, devices); }
-  private native void allocate(
-        short ownerId,
-        @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
-        @ByVal TypePtr type,
-        @Optional IValue value,
-        @ByVal DeviceVector devices);
+  
 
   public native @Cast("bool") boolean isOwner();
 

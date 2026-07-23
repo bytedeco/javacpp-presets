@@ -185,7 +185,7 @@ public class RRef extends RRefInterface {
   public native @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId();
 
   public native @Cast("bool") boolean isPyObj();
-  public native @Const @ByVal TypePtr type();
+  
 
   // Save the future corresponding to the creation of this RRef on a remote
   // node. Note that this is only set when processing requests invoked with

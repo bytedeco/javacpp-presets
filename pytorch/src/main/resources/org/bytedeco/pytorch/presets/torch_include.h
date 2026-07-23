@@ -1510,6 +1510,7 @@
 #include "torch/csrc/distributed/c10d/PrefixStore.hpp"
 #include "torch/csrc/distributed/c10d/FileStore.hpp"
 #include "torch/csrc/distributed/c10d/TCPStore.hpp"
+#include "torch/csrc/distributed/c10d/HashStore.hpp"
 #include "torch/csrc/distributed/c10d/logger.hpp"
 
 #include "datasets.h"

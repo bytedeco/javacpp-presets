@@ -23,9 +23,6 @@ public class RequestCallbackImpl extends RequestCallbackNoPython {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RequestCallbackImpl(Pointer p) { super(p); }
 
-  public native @UniquePtr RpcCommandBase deserializePythonRpcCommand(
-        @UniquePtr RpcCommandBase rpc,
-        MessageType messageType);
 
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processPythonCall(
         @ByRef RpcCommandBase rpc,
@@ -48,11 +45,6 @@ public class RequestCallbackImpl extends RequestCallbackNoPython {
 
   public native void handleRRefDelete(@IntrusivePtr("torch::distributed::rpc::RpcCommandBase") RRef rref);
 
-  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processRpcWithErrors(
-        @ByRef RpcCommandBase rpc,
-        MessageType messageType,
-        @StdVector Stream streams);
-
   public native @Cast("bool") boolean cudaAvailable();
 
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processRRefBackward(
@@ -66,8 +58,5 @@ public class RequestCallbackImpl extends RequestCallbackNoPython {
         @StdVector Stream streams,
         @Cast("bool") boolean isAsyncExecution);
 
-  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future runPythonFunction(
-        @Const @ByRef object function,
-        @StdVector Stream streams,
-        @Cast("bool") boolean isAsyncExecution);
+  
 }

@@ -39,6 +39,35 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
 @Properties(
     inherit = {torch.class, cudnn.class, cusparse.class, cusolver.class, cupti.class},
     value = {
+        // Stub platform so torch_cuda global class is generated even when
+        // -gpu extension is not active. Without this, presets that inherit
+        // from torch_cuda (e.g. torch_nccl) generate `import static
+        // org.bytedeco.pytorch.global.torch_cuda.*;` lines that fail to
+        // compile.
+        //
+        // We include every CUDA-related header the GPU @Platform uses, so that
+        // every InfoMap-bound symbol (DeviceStats, MemPool, CUDAKernelLaunchInfo,
+        // DeviceAssertionsData, TraceEntry, CUDAAllocator, ...) resolves to a
+        // real declaration during the parent torch preset's parse pass.
+        @Platform(
+            value = {"linux", "macosx", "windows"},
+            include = {
+                "ATen/cudnn/Types.h",
+                "ATen/cudnn/Descriptors.h",
+                "ATen/cuda/CUDAEvent.h",
+                "ATen/cuda/MemPool.h",
+                "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
+                "ATen/cuda/CUDAGeneratorImpl.h",
+                // Types referenced by torch.java / torch_nccl even on CPU parse:
+                "c10/core/CachingDeviceAllocator.h",
+                "c10/cuda/CUDADeviceAssertionHost.h",
+                "c10/cuda/CUDACachingAllocator.h",
+            },
+            exclude = {
+                "<cublas.h>",
+                "<driver_functions.h>"
+            }
+        ),
         @Platform(
             extension = "-gpu",
             // define = "USE_C10D_NCCL", // Not on Windows
@@ -75,9 +104,16 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
     @Override
     public void init(ClassProperties properties) {
+        // Always load torch_cuda_include.h so CUDA Java types (DeviceStats,
+        // MemPool, CUDAAllocator, ...) are generated on every platform.
+        // But only keep platform.library for -gpu builds; otherwise javacpp
+        // tries to compile jnitorch_cuda and fails without cudnn.h on macOS CPU.
+        torch.initIncludes(getClass(), properties);
         String extension = properties.getProperty("platform.extension");
-        if (extension != null && extension.endsWith("-gpu"))
-          torch.initIncludes(getClass(), properties);
+        if (extension == null || !extension.endsWith("-gpu")) {
+            properties.setProperty("platform.library", "");
+            properties.put("platform.link", new java.util.ArrayList<String>());
+        }
     }
 
     @Override
