@@ -142,6 +142,7 @@ public class torch_gloo extends org.bytedeco.pytorch.presets.torch_gloo {
 // #pragma once
 
 // #include <memory>
+// #include <string>
 
 // #include "gloo/common/logging.h"
 // #include "gloo/transport/address.h"

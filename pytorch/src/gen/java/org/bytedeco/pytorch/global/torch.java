@@ -729,7 +729,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #define C10_BUILD_SHARED_LIBS
 /* #undef C10_USE_GLOG */
 /* #undef C10_USE_GFLAGS */
-// #define C10_USE_NUMA
+/* #undef C10_USE_NUMA */
 /* #undef C10_USE_MSVC_STATIC_RUNTIME */
 /* #undef C10_USE_ROCM_KERNEL_ASSERT */
 
@@ -75260,7 +75260,7 @@ apis for specific fusers.
 //
 // DO NOT put the macros for CUDA libraries in this file; they belong in cuda/CUDAConfig.h
 
-// #define AT_MKLDNN_ENABLED() 1
+// #define AT_MKLDNN_ENABLED() 0
 // #define AT_MKLDNN_ACL_ENABLED() 0
 // #define AT_MKL_ENABLED() 0
 // #define AT_MKL_SEQUENTIAL() 0
@@ -75271,9 +75271,9 @@ apis for specific fusers.
 // #define AT_BUILD_WITH_LAPACK() 1
 public static final int AT_PARALLEL_OPENMP = 1;
 public static final int AT_PARALLEL_NATIVE = 0;
-// #define AT_BLAS_F2C() 0
+// #define AT_BLAS_F2C() 1
 // #define AT_BLAS_USE_CBLAS_DOT() 1
-// #define AT_KLEIDIAI_ENABLED() 0
+// #define AT_KLEIDIAI_ENABLED() 1
 // #define AT_USE_EIGEN_SPARSE() 0
 
 // #else
