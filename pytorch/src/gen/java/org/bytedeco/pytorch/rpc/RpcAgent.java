@@ -55,8 +55,11 @@ public class RpcAgent extends Pointer {
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future send(
         @Const @ByRef WorkerInfo to,
         @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message message,
-        @Const float rpcTimeoutSeconds/*=torch::distributed::rpc::kUnsetRpcTimeout*/,
+        float rpcTimeoutSeconds/*=torch::distributed::rpc::kUnsetRpcTimeout*/,
         @Cast("const torch::distributed::rpc::DeviceMap*") @ByRef(nullValue = "torch::distributed::rpc::DeviceMap{}") HashAliasedIValueMap deviceMap);
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future send(
+        @Const @ByRef WorkerInfo to,
+        @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message message);
 
   // Retries sending the message up to maxRetries times until an ACK is
   // received. The duration between consecutive sends is increased over
@@ -82,16 +85,17 @@ public class RpcAgent extends Pointer {
   // NB: not using ``std::optional<const std::string&>`` here because we might
   // need to create a separate RPC API lib and avoid forcing all ``RpcAgent``
   // implementations to depend on libtorch.
-  // C++ method is non-virtual; do not mark @Virtual or JNI will emit a bogus override.
-  public native @Const({true, false, true}) @ByRef WorkerInfo getWorkerInfo();
+  public native @Const @ByRef WorkerInfo getWorkerInfo();
 
   // Return a reference to the ``WorkerInfo`` of the given ``workerName``.
-  @Virtual(true) public native @Const({true, false, true}) @ByRef WorkerInfo getWorkerInfo(
-        @Const @StdString @ByRef BytePointer workerName);
+  public native @Const @ByRef WorkerInfo getWorkerInfo(
+        @StdString BytePointer workerName);
+  public native @Const @ByRef WorkerInfo getWorkerInfo(
+        @StdString String workerName);
 
-  @Virtual(true) public native @Const({true, false, true}) @ByRef WorkerInfo getWorkerInfo(short id);
+  public native @Const @ByRef WorkerInfo getWorkerInfo(short id);
 
-  @Virtual(true) public native @Cast({"torch::distributed::rpc::WorkerInfo*", "std::vector<torch::distributed::rpc::WorkerInfo>"}) @StdVector @Const({false, false, true}) WorkerInfo getWorkerInfos();
+  public native @StdVector WorkerInfo getWorkerInfos();
 
   // Retrieve the timeout for all RPCs.
   public native @ByVal Milliseconds getRpcTimeout();
@@ -101,11 +105,12 @@ public class RpcAgent extends Pointer {
 
   // Call sync and join all internal threads. This method should be called
   // before every RPC process exits.
-  @Virtual(true) public native void join(@Cast("bool") boolean shutdown/*=false*/, float timeout/*=0*/);
+  public native void join(@Cast("bool") boolean shutdown/*=false*/, float timeout/*=0*/);
+  public native void join();
 
   // Synchronize this process with other ``RpcAgent`` processes. Block until
   // all ``RpcAgent``s reach this method and send all pending messages.
-  @Virtual(true) public native void sync();
+  public native void sync();
 
   // Sets up backend-agnostic state for accepting requests. Currently, this
   // entails setting rpcAgentRunning_ to true, creating the retry thread, and
@@ -115,7 +120,7 @@ public class RpcAgent extends Pointer {
   // Derived classes must override this function to start accepting requests.
   // This is used to initialize any backend-specific state. Users must call
   // start, not startImpl, to initialize the RPC Agent.
-  @Virtual(true) public native void startImpl();
+  public native void startImpl();
 
   // Stop accepting requests and shutdown the RPC framework as soon as possible
   // by terminating all RPC threads.
@@ -124,22 +129,22 @@ public class RpcAgent extends Pointer {
   // Derived classes must override this function to start accepting requests.
   // THis is used to clean up any backend-specific state. Users must call
   // shutdown, not shutdownImpl, to shutdown the RPC Agent.
-  @Virtual(true) public native void shutdownImpl();
+  public native void shutdownImpl();
 
   // Check if current RPC agent is set.
   public static native @Cast("bool") boolean isCurrentRpcAgentSet();
 
-  // Retrieve the valid current RPC agent. (static member of RpcAgent)
-  public static native @SharedPtr RpcAgent getCurrentRpcAgent();
+  // Retrieve the valid current RPC agent.
+  public static native @SharedPtr("torch::distributed::rpc::RpcAgent") @ByVal RpcAgent getCurrentRpcAgent();
 
-  // Set the current RPC agent. (static member of RpcAgent)
-  public static native void setCurrentRpcAgent(@SharedPtr RpcAgent agent);
+  // Set the current RPC agent.
+  public static native void setCurrentRpcAgent(@SharedPtr("torch::distributed::rpc::RpcAgent") @ByVal RpcAgent rpcAgent);
 
   // Retrieve metrics as KV map
-  @Virtual(true) public native @ByVal ExtraFilesMap getMetrics();
+  public native @ByVal ExtraFilesMap getMetrics();
 
   // Retrieve debug info in addition to metrics as KV map
-  @Virtual public native @ByVal ExtraFilesMap getDebugInfo();
+  public native @ByVal ExtraFilesMap getDebugInfo();
 
   // Flag to control whether GIL wait times
   // should be profiled or not.
@@ -156,9 +161,11 @@ public class RpcAgent extends Pointer {
   
 
   // Retrieves the device map for the provided destination worker.
-  @Virtual public native @ByVal @Cast("torch::distributed::rpc::DeviceMap*") @Const({false, false, true}) HashAliasedIValueMap getDeviceMap(@Const @ByRef WorkerInfo dst);
+  public native @ByVal @Cast("torch::distributed::rpc::DeviceMap*") HashAliasedIValueMap getDeviceMap(@Const @ByRef WorkerInfo dst);
 
   // Retrieve the (non-CPU) devices that are supported by the agent.
-  @Virtual public native @Const({true, false, true}) @ByRef DeviceVector getDevices();
-  @Virtual(true) public native void addGilWaitTime(@Const @ByVal Microseconds gilWaitTime);
+  public native @Const @ByRef DeviceVector getDevices();
+  // javacpp: made public for JNI virtualization
+  // Add GIL wait time data point to metrics
+  public native void addGilWaitTime(@Const @ByVal Microseconds gilWaitTime);
 }

@@ -44,7 +44,7 @@ public class RequestCallbackImpl extends RequestCallbackNoPython {
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future processPythonRRefFetchCall(
         @ByRef RpcCommandBase rpc);
 
-  public native void handleRRefDelete(@IntrusivePtr("torch::distributed::rpc::RRef") RRef rref);
+  public native void handleRRefDelete(@IntrusivePtr("torch::distributed::rpc::RRef") @ByRef RRef rref);
 
   public native @Cast("bool") boolean cudaAvailable();
 

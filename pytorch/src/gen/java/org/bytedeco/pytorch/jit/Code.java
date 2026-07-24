@@ -4,6 +4,8 @@ package org.bytedeco.pytorch.jit;
 
 import org.bytedeco.pytorch.autograd.*;
 
+import org.bytedeco.pytorch.nn.modules.*;
+
 import org.bytedeco.pytorch.nn.*;
 
 import org.bytedeco.pytorch.*;

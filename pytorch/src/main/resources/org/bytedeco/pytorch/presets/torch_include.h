@@ -2,6 +2,8 @@
 // #include <torch/torch.h>
 // #include <torch/script.h>
 // #include <torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h>
+// #include <aoti_model_container_runner_mps_java.h>  // MPS parse shim
+// #include <aoti_model_container_runner_xpu_java.h>  // SYCL-free XPU shim
 // torch/csrc/distributed/c10d/ProcessGroupGloo.hpp
 // torch/csrc/distributed/c10d/PrefixStore.hpp
 // torch/csrc/distributed/c10d/logger.hpp
@@ -153,6 +155,9 @@
 // #include "ATen/core/Dimname.h"
 // #include "ATen/core/NamedTensor.h"
 #include "ATen/core/QuantizerBase.h"
+// Concrete quantizer peers (PerTensorAffineQuantizer, PerChannelAffineQuantizer, …)
+// — not pulled transitively by torch/torch.h. Relocated to .quantizer package.
+#include "ATen/quantized/Quantizer.h"
 #include "ATen/core/TensorAccessor.h"
 #include "c10/util/ExclusivelyOwnedTensorTraits.h"
 #include "ATen/StorageUtils.h"
@@ -1482,6 +1487,12 @@
 #include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
 #include "torch/csrc/inductor/aoti_package/model_package_loader.h"
+// MPS / XPU AOTI runners via parse shims:
+//  - MPS real header is #if __APPLE__ (Parser may not define that)
+//  - XPU real header pulls c10/xpu/XPUStream → SYCL
+// Peers land in org.bytedeco.pytorch.inductor via relocate_packages.py.
+#include "aoti_model_container_runner_mps_java.h"
+#include "aoti_model_container_runner_xpu_java.h"
 // CUDA AOTI runner needs cuda_runtime_api.h — parsed only via torch_cuda_include.h (-gpu).
 // #include "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h"
 

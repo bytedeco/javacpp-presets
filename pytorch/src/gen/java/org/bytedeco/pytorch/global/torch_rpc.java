@@ -493,9 +493,6 @@ public class torch_rpc extends org.bytedeco.pytorch.presets.torch_rpc {
 
 // Forward-declare the TensorPipe classes we need, to avoid including its
 // headers in PyTorch's ones and thus have it become a public dependency.
-// Targeting ../rpc/Context.java
-
-
  // namespace transport
  // namespace channel
 

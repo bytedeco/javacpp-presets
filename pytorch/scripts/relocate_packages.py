@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 Relocate JavaCPP-generated peer classes for torch::{data,nn,jit,optim,serialize,
-inductor,profiler,enumtype}, c10d (ProcessGroup/Store/…), and uncommon c10 types
-into subpackages, and strip the "Java" prefix from javacpp:: adapter types.
+inductor,profiler,enumtype}, c10d (ProcessGroup/Store/…), ATen quantizers, and
+uncommon c10 types into subpackages, and strip the "Java" prefix from javacpp::
+adapter types.
 
 Why this exists
 ---------------
@@ -10,13 +11,20 @@ JavaCPP's Parser always writes top-level classes into a single ``target``
 package (see Parser.java: targetHeader + targetDir). Fully-qualified
 pointerTypes only affect *references*, not the package of the generated
 file. To put peers under org.bytedeco.pytorch.{data,nn,jit,optim,serialize,
-distributed,inductor,profiler,enumtype,c10} we must post-process after parse.
+distributed,inductor,profiler,enumtype,quantizer,c10} we must post-process
+after parse.
 
 Rules
 -----
-1. data     – torch::data::… / javacpp Dataset adapters / DATA_NAMES
-2. nn       – torch::nn::… / NN_NAMES / ModuleApply* helpers (not Jit*)
-3. jit      – torch::jit::…  (c10 types stay root unless uncommon; JitModuleApplyFunction → jit)
+1. data     – torch::data::… / javacpp Dataset adapters / DATA_NAMES, then
+              refined into data / data.datasets / data.dataloader / data.sampler /
+              data.transforms / data.options by classify_data_subpackage
+              (Dataset itself stays in data root)
+2. nn       – torch::nn::… / NN_NAMES / ModuleApply* helpers (not Jit*), then
+              refined into nn / nn.options / nn.modules / nn.modules.container /
+              nn.functions by classify_nn_subpackage (suffix + allowlists)
+3. jit      – torch::jit::… / JitModule / NamedJitModule / BuiltinModule /
+              JitModuleApplyFunction (c10 types stay root unless uncommon)
 4. optim    – torch::optim::… / OPTIM_NAMES
 5. serialize– torch::serialize::… / SERIALIZE_NAMES
 6. distributed – c10d::… / c10d::detail::… / ProcessGroup* / Store* / DIST_NAMES
@@ -24,12 +32,13 @@ Rules
 7. inductor – torch::inductor::… / AOTI* / INDUCTOR_NAMES
 8. profiler – torch::profiler::… / PROFILER_NAMES
 9. enumtype – torch::enumtype::… / k* enum structs / *Mode/*PaddingMode helpers
-10. c10     – uncommon c10::… types (NOT Tensor/Scalar/ScalarType/Device/Stream/…)
-11. Classes whose @Name is "javacpp::Dataset<...>" etc. are renamed from
+10. quantizer – at::Quantizer hierarchy (Quantizer, PerTensorAffineQuantizer, …)
+11. c10     – uncommon c10::… types (NOT Tensor/Scalar/ScalarType/Device/Stream/…)
+12. Classes whose @Name is "javacpp::Dataset<...>" etc. are renamed from
     JavaXxx -> Xxx in both the file and all references across the gen tree.
-12. Manual helpers under src/main/java are also moved/rewritten.
-13. Already-relocated files are left alone except for rename/import rewrites.
-14. Preserved subpackages (cuda/nccl/gloo/rpc/onnx/global) are never collapsed.
+13. Manual helpers under src/main/java are also moved/rewritten.
+14. Already-relocated files are left alone except for rename/import rewrites.
+15. Preserved subpackages (cuda/nccl/gloo/rpc/onnx/global) are never collapsed.
 
 Usage
 -----
@@ -48,7 +57,17 @@ from typing import Dict, List, Optional, Set, Tuple
 
 ROOT_PKG = "org.bytedeco.pytorch"
 DATA_PKG = f"{ROOT_PKG}.data"
+DATA_DATASETS_PKG = f"{DATA_PKG}.datasets"
+DATA_DATALOADER_PKG = f"{DATA_PKG}.dataloader"
+DATA_SAMPLER_PKG = f"{DATA_PKG}.sampler"
+DATA_TRANSFORMS_PKG = f"{DATA_PKG}.transforms"
+# Data *Options → org.bytedeco.pytorch.data.options
+DATA_OPTIONS_PKG = f"{DATA_PKG}.options"
 NN_PKG = f"{ROOT_PKG}.nn"
+NN_OPTIONS_PKG = f"{NN_PKG}.options"
+NN_MODULES_PKG = f"{NN_PKG}.modules"
+NN_CONTAINER_PKG = f"{NN_PKG}.modules.container"
+NN_FUNCTIONS_PKG = f"{NN_PKG}.functions"
 JIT_PKG = f"{ROOT_PKG}.jit"
 OPTIM_PKG = f"{ROOT_PKG}.optim"
 SERIALIZE_PKG = f"{ROOT_PKG}.serialize"
@@ -56,13 +75,17 @@ DISTRIBUTED_PKG = f"{ROOT_PKG}.distributed"
 INDUCTOR_PKG = f"{ROOT_PKG}.inductor"
 PROFILER_PKG = f"{ROOT_PKG}.profiler"
 ENUMTYPE_PKG = f"{ROOT_PKG}.enumtype"
+QUANTIZER_PKG = f"{ROOT_PKG}.quantizer"
 C10_PKG = f"{ROOT_PKG}.c10"
 AUTOGRAD_PKG = f"{ROOT_PKG}.autograd"
 
 ALL_SUBPKGS = (
-    DATA_PKG, NN_PKG, JIT_PKG, OPTIM_PKG, SERIALIZE_PKG,
+    DATA_PKG, DATA_DATASETS_PKG, DATA_DATALOADER_PKG, DATA_SAMPLER_PKG,
+    DATA_TRANSFORMS_PKG, DATA_OPTIONS_PKG,
+    NN_PKG, NN_OPTIONS_PKG, NN_MODULES_PKG, NN_CONTAINER_PKG,
+    NN_FUNCTIONS_PKG, JIT_PKG, OPTIM_PKG, SERIALIZE_PKG,
     DISTRIBUTED_PKG, INDUCTOR_PKG, PROFILER_PKG,
-    ENUMTYPE_PKG, C10_PKG, AUTOGRAD_PKG,
+    ENUMTYPE_PKG, QUANTIZER_PKG, C10_PKG, AUTOGRAD_PKG,
 )
 
 # Adapter class renames: JavaXxx -> Xxx (only for javacpp:: Dataset/DataLoader adapters)
@@ -140,6 +163,37 @@ DATA_NAMES: Set[str] = {
     "TensorExampleBatchTransform", "TensorExampleTransform",
 }
 
+# data subpackage refinement (after first-stage "data").
+# Order in classify_data_subpackage: options → sampler → dataloader → transforms → datasets → core data.
+DATA_OPTIONS_NAMES: Set[str] = {
+    "DataLoaderOptions", "FullDataLoaderOptions", "ChunkDatasetOptions",
+}
+DATA_SAMPLER_NAMES: Set[str] = {
+    "Sampler", "RandomSampler", "SequentialSampler", "StreamSampler",
+    "DistributedSampler", "DistributedRandomSampler", "DistributedSequentialSampler",
+    "BatchSizeSampler",
+}
+DATA_TRANSFORMS_NAMES: Set[str] = {
+    "BatchTransform", "Transform", "BatchLambda", "Lambda",
+    "TensorTransform", "TensorLambda", "Normalize",
+    "Collation", "Stack",
+    "ExampleBatchTransform", "ExampleTransform", "ExampleBatchLambda", "ExampleLambda",
+    "ExampleCollation", "ExampleStack",
+    "TensorExampleBatchTransform", "TensorExampleTransform",
+    "TensorExampleCollation", "TensorExampleStack",
+}
+# Explicit core data types that stay in org.bytedeco.pytorch.data
+# Dataset (javacpp::Dataset peer) stays at data root — not data.datasets.
+DATA_KEEP_NAMES: Set[str] = {
+    "Dataset",
+    "BatchSize", "BatchSizeOptional", "CustomBatchRequest",
+    "Example", "ExampleIterator", "ExampleOptional",
+    "ExampleVector", "ExampleVectorIterator", "ExampleVectorOptional",
+    "TensorExample", "TensorExampleIterator", "TensorExampleOptional",
+    "TensorExampleVector", "TensorExampleVectorIterator", "TensorExampleVectorOptional",
+    "WorkerException", "NoTarget",
+}
+
 NN_NAME_SUFFIXES = (
     "Impl", "ImplBase", "ImplBaseBase", "ImplCloneable",
     "Options", "FuncOptions",
@@ -168,6 +222,45 @@ NN_NAMES: Set[str] = {
     "ModuleApplyFunction", "NamedModuleApplyFunction",
     "SharedModuleApplyFunction", "NamedSharedModuleApplyFunction",
 }
+
+# nn subpackage allowlists (refined after first-stage "nn" classification).
+# Order in classify_nn_subpackage matters: keep → container → options → modules → functions.
+NN_CONTAINER_NAMES: Set[str] = {
+    "SequentialImpl", "SequentialImplCloneable",
+    "ModuleListImpl", "ModuleListImplCloneable",
+    "ModuleDictImpl", "ModuleDictImplCloneable",
+    "ParameterDictImpl", "ParameterDictImplCloneable",
+    "ParameterListImpl", "ParameterListImplCloneable",
+    "AnyModule", "AnyModuleVector", "AnyValue",
+    "SharedModuleVector",
+    "StringAnyModuleDict", "StringAnyModuleDictItem",
+    "StringAnyModuleDictItemVector", "StringAnyModulePair",
+    "StringAnyModuleVector",
+    "StringSharedModuleDict", "StringSharedModuleDictItem",
+    "StringSharedModuleDictItemVector", "StringSharedModulePair",
+    "StringSharedModuleVector",
+}
+
+NN_FUNCTIONS_NAMES: Set[str] = {
+    "FunctionCrossMapLRN2d",
+}
+
+# Explicit core nn types that must stay in org.bytedeco.pytorch.nn
+# (not modules/options/container). Includes hand-written Parameter.
+NN_KEEP_NAMES: Set[str] = {
+    "Module", "ModuleHolder", "Cloneable", "Functional",
+    "ModuleApplyFunction", "NamedModuleApplyFunction",
+    "SharedModuleApplyFunction", "NamedSharedModuleApplyFunction",
+    "module_iterator", "module_list",
+    "named_module_iterator", "named_module_list",
+    "NamedAnyModule",
+    "ASMoutput", "PackedSequence",
+    "T_PackedSequenceT_TensorTensor_T_T", "T_PackedSequenceTensor_T",
+    "Parameter",
+}
+
+NN_OPTIONS_SUFFIXES = ("Options", "FuncOptions", "OptionsBase")
+NN_IMPL_SUFFIXES = ("Impl", "ImplBase", "ImplBaseBase", "ImplCloneable")
 
 OPTIM_NAMES: Set[str] = {
     "Optimizer", "OptimizerOptions", "OptimizerParamState", "OptimizerParamGroup",
@@ -221,6 +314,8 @@ DISTRIBUTED_NAMES: Set[str] = {
 INDUCTOR_NAMES: Set[str] = {
     "AOTIModelContainerRunner", "AOTIModelContainerRunnerCpu",
     "AOTIModelContainerRunnerCuda",
+    "AOTIModelContainerRunnerMps",
+    "AOTIModelContainerRunnerXpu",
     "AOTIModelPackageLoader",
 }
 
@@ -260,6 +355,22 @@ ENUMTYPE_NAMES: Set[str] = {
     "Nonlinearity", "FanModeType", "LossReduction", "kLossReduction",
     "ConvPaddingMode", "Conv1dPadding", "Conv2dPadding", "Conv3dPadding",
     "EmbeddingBagMode", "PaddingMode", "TransformerActivation",
+}
+
+# at:: quantizer hierarchy (ATen/core/QuantizerBase.h + ATen/quantized/Quantizer.h).
+# User-facing short names (PerTensorQuantizer / StaticQuantizer / …) do not exist
+# in ATen; the real peers are the Affine* leaves listed here.
+QUANTIZER_NAMES: Set[str] = {
+    "Quantizer",
+    "UnknownQuantizer",
+    "UniformQuantizer",
+    "NonUniformQuantizer",
+    "AffineQuantizer",
+    "PerTensorAffineQuantizer",
+    "PerChannelAffineQuantizer",
+    "PerChannelAffineFloatQParamsQuantizer",
+    # Hand-written Python-style AMP context (src/main/.../quantizer/AutocastContext.java)
+    "AutocastContext",
 }
 
 # Hot-path c10 types that must remain in org.bytedeco.pytorch (root).
@@ -327,9 +438,10 @@ C10_KEEP_ROOT: Set[str] = {
     "DDPLoggingData",
 }
 
-# Names that look like nn/data/… but must stay in root
+# Names that look like nn/data/… but must stay in root.
+# Note: JitModule / NamedJitModule / BuiltinModule intentionally go to .jit
+# (torch::jit::Module peers), not root — see classify_by_simple_name.
 ROOT_FORCE: Set[str] = {
-    "JitModule", "NamedJitModule", "BuiltinModule",
     "ModuleInstanceInfo", "ModuleInstanceInfoOptional", "ModulePolicy",
     "DataPtr", "DataPtrVector",
     # AnomalyMetadata / InputMetadata* are torch::autograd → .autograd
@@ -373,6 +485,10 @@ def classify_by_name_attr(text: str, simple: str) -> Optional[str]:
     """
     if simple in ROOT_FORCE or simple in C10_KEEP_ROOT:
         return "root"
+    # Quantizer hierarchy is at:: but may carry c10::make_intrusive @Name
+    # annotations — force .quantizer before the c10:: token walk below.
+    if simple in QUANTIZER_NAMES:
+        return "quantizer"
     names = NAME_ATTR_RE.findall(text)
     namespaces = re.findall(r'@Namespace\s*\(\s*"([^"]+)"\s*\)', text)
     tokens = names + namespaces
@@ -424,6 +540,7 @@ def classify_by_name_attr(text: str, simple: str) -> Optional[str]:
                 or n.startswith("c10_complex"):
             return "c10"
         # at:: core types stay in root (Generator, Tensor hooks, …).
+        # (at::Quantizer hierarchy is handled via QUANTIZER_NAMES early return above.)
         if n.startswith("at::") or n == "at":
             return "root"
         # caffe2::serialize is used both by torch::data chunk loaders
@@ -445,7 +562,9 @@ def classify_by_simple_name(simple: str) -> Optional[str]:
         return "root"
 
     # Hand-written ModuleApply* → nn; JitModuleApplyFunction → jit
-    if simple == "JitModuleApplyFunction":
+    # JitModule / NamedJitModule / BuiltinModule are torch::jit peers → jit
+    # (also usually caught by @Name/@Namespace torch::jit::…, but keep explicit).
+    if simple in ("JitModule", "NamedJitModule", "BuiltinModule", "JitModuleApplyFunction"):
         return "jit"
     if simple in (
         "ModuleApplyFunction", "NamedModuleApplyFunction",
@@ -487,6 +606,9 @@ def classify_by_simple_name(simple: str) -> Optional[str]:
     if simple in AUTOGRAD_NAMES:
         return "autograd"
 
+    if simple in QUANTIZER_NAMES:
+        return "quantizer"
+
     if simple in PROFILER_NAMES:
         return "profiler"
 
@@ -512,12 +634,81 @@ def classify_by_simple_name(simple: str) -> Optional[str]:
     return None
 
 
+def classify_nn_subpackage(simple: str) -> str:
+    """Refine a first-stage 'nn' classification into nn / options / modules / container / functions.
+
+    Order matters: keep → container → options → modules → functions → default nn.
+    """
+    if simple in NN_KEEP_NAMES:
+        return "nn"
+    if simple in NN_CONTAINER_NAMES:
+        return "nn_container"
+    # Options family (includes *FuncOptions / *OptionsBase / Detail*Options)
+    if simple.endswith(NN_OPTIONS_SUFFIXES) or (
+        simple.startswith("Detail") and simple.endswith("Options")
+    ):
+        return "nn_options"
+    if simple.endswith(NN_IMPL_SUFFIXES):
+        return "nn_modules"
+    if simple in NN_FUNCTIONS_NAMES or (
+        simple.startswith("Function") and simple not in NN_KEEP_NAMES
+    ):
+        return "nn_functions"
+    return "nn"
+
+
+def classify_data_subpackage(simple: str, text: str = "") -> str:
+    """Refine a first-stage 'data' classification into data subpackages.
+
+    Order matters: options → sampler → dataloader → transforms → datasets → core data.
+
+    Target packages:
+      data_options    → org.bytedeco.pytorch.data.options  (DataLoader/Chunk *Options)
+      data_sampler    → org.bytedeco.pytorch.data.sampler
+      data_dataloader → org.bytedeco.pytorch.data.dataloader
+      data_transforms → org.bytedeco.pytorch.data.transforms
+      data_datasets   → org.bytedeco.pytorch.data.datasets
+      data            → org.bytedeco.pytorch.data (Dataset, Example*, BatchSize, …)
+    """
+    if simple in DATA_KEEP_NAMES:
+        return "data"
+    if simple in DATA_OPTIONS_NAMES or (
+        simple.endswith("Options") and simple in DATA_NAMES
+    ) or simple.endswith(("DataLoaderOptions", "DatasetOptions")):
+        return "data_options"
+    if simple in DATA_SAMPLER_NAMES or simple.endswith("Sampler"):
+        return "data_sampler"
+    # DataLoader before Dataset: MNISTRandomDataLoader / ChunkRandomDataLoader
+    if "DataLoader" in simple:
+        return "data_dataloader"
+    if simple in DATA_TRANSFORMS_NAMES or simple.endswith((
+        "Transform", "Lambda", "Collation", "Stack",
+    )) or simple == "Normalize":
+        return "data_transforms"
+    # datasets: *Dataset*, readers, MNIST, NoTarget, javacpp Dataset adapters
+    if (
+        simple in ("MNIST", "NoTarget", "ChunkDataReader", "ChunkTensorDataReader",
+                   "ChunkRecordIterator")
+        or "Dataset" in simple
+        or simple.endswith("DataReader")
+        or "torch::data::datasets" in text
+        or "javacpp::Dataset" in text
+        or "javacpp::StreamDataset" in text
+        or "javacpp::StatefulDataset" in text
+    ):
+        return "data_datasets"
+    return "data"
+
+
 def classify_file(path: Path, text: str) -> Optional[str]:
     simple = path.stem
     by_attr = classify_by_name_attr(text, simple)
-    if by_attr:
-        return by_attr
-    return classify_by_simple_name(simple)
+    kind = by_attr if by_attr else classify_by_simple_name(simple)
+    if kind == "nn":
+        return classify_nn_subpackage(simple)
+    if kind == "data":
+        return classify_data_subpackage(simple, text)
+    return kind
 
 
 def collect_java_files(root: Path) -> List[Path]:
@@ -540,7 +731,16 @@ def collect_java_files(root: Path) -> List[Path]:
 def kind_to_pkg(kind: str) -> Optional[str]:
     return {
         "data": DATA_PKG,
+        "data_datasets": DATA_DATASETS_PKG,
+        "data_dataloader": DATA_DATALOADER_PKG,
+        "data_sampler": DATA_SAMPLER_PKG,
+        "data_transforms": DATA_TRANSFORMS_PKG,
+        "data_options": DATA_OPTIONS_PKG,
         "nn": NN_PKG,
+        "nn_options": NN_OPTIONS_PKG,
+        "nn_modules": NN_MODULES_PKG,
+        "nn_container": NN_CONTAINER_PKG,
+        "nn_functions": NN_FUNCTIONS_PKG,
         "jit": JIT_PKG,
         "optim": OPTIM_PKG,
         "serialize": SERIALIZE_PKG,
@@ -548,6 +748,7 @@ def kind_to_pkg(kind: str) -> Optional[str]:
         "inductor": INDUCTOR_PKG,
         "profiler": PROFILER_PKG,
         "enumtype": ENUMTYPE_PKG,
+        "quantizer": QUANTIZER_PKG,
         "c10": C10_PKG,
         "autograd": AUTOGRAD_PKG,
         "root": ROOT_PKG,
@@ -669,16 +870,35 @@ def needed_star_imports(new_pkg: str, text: str) -> List[str]:
         extras.append(f"import {ROOT_PKG}.*;")
 
     checks = [
-        (DATA_PKG, r'\b(Example|MNIST|Sampler|DataLoaderOptions|ChunkDataset|TensorExample)\b'),
-        (NN_PKG, r'\b(Module|LinearImpl|AnyModule|SequentialImpl|ModuleApplyFunction|SharedModuleApplyFunction)\b'),
+        # data core (Dataset, Example*, BatchSize, …)
+        (DATA_PKG, r'\b(Dataset|Example|ExampleOptional|ExampleVector|ExampleIterator|ExampleVectorIterator|ExampleVectorOptional|TensorExample|TensorExampleOptional|TensorExampleVector|TensorExampleIterator|TensorExampleVectorIterator|TensorExampleVectorOptional|BatchSize|BatchSizeOptional|CustomBatchRequest|WorkerException|NoTarget)\b'),
+        # Exclude bare "Dataset" (lives in data root); match *Dataset* compound names.
+        (DATA_DATASETS_PKG, r'\b(?:\w+Dataset\w*|Dataset\w+|\w+Dataset|MNIST|ChunkDataReader|ChunkTensorDataReader|ChunkRecordIterator)\b'),
+        (DATA_DATALOADER_PKG, r'\b\w*DataLoader(?:Base)?\b'),
+        (DATA_SAMPLER_PKG, r'\b\w*Sampler\b'),
+        (DATA_TRANSFORMS_PKG, r'\b(?:\w*(?:Transform|Lambda|Collation|Stack)|Normalize)\b'),
+        (DATA_OPTIONS_PKG, r'\b(?:DataLoaderOptions|FullDataLoaderOptions|ChunkDatasetOptions)\b'),
+        # nn core
+        (NN_PKG, r'\b(Module|ModuleHolder|ModuleApplyFunction|NamedModuleApplyFunction|SharedModuleApplyFunction|NamedSharedModuleApplyFunction|Parameter|PackedSequence|ASMoutput|Cloneable|Functional)\b'),
+        # nn.options — *Options / *FuncOptions / *OptionsBase
+        (NN_OPTIONS_PKG, r'\b\w+(?:Func)?Options(?:Base)?\b'),
+        # nn.modules — *Impl family excluding containers (containers handled separately)
+        (NN_MODULES_PKG, r'\b(?!Sequential|ModuleList|ModuleDict|ParameterDict|ParameterList)\w+Impl(?:Base|BaseBase|Cloneable)?\b'),
+        # nn.modules.container
+        (NN_CONTAINER_PKG, r'\b(SequentialImpl|SequentialImplCloneable|ModuleListImpl|ModuleListImplCloneable|ModuleDictImpl|ModuleDictImplCloneable|ParameterDictImpl|ParameterDictImplCloneable|ParameterListImpl|ParameterListImplCloneable|AnyModule|AnyModuleVector|AnyValue|SharedModuleVector|StringAnyModule\w*|StringSharedModule\w*)\b'),
+        # nn.functions
+        (NN_FUNCTIONS_PKG, r'\b(FunctionCrossMapLRN2d)\b'),
         # Value is the main short name that breaks hand-written helpers (ValueMapper).
         (JIT_PKG, r'\b(JitModule|Graph|ScriptModule|TypePtr|JitModuleApplyFunction|JitObject|Value)\b'),
         (OPTIM_PKG, r'\b(Optimizer|SGD|Adam|AdamW|Adagrad|LBFGS|RMSprop|LRScheduler|StepLR)\b'),
         (SERIALIZE_PKG, r'\b(InputArchive|OutputArchive)\b'),
         (DISTRIBUTED_PKG, r'\b(ProcessGroup|Store|TCPStore|FileStore|HashStore|PrefixStore|Work|ReduceOp|Backend|Reducer)\b'),
-        (INDUCTOR_PKG, r'\b(AOTIModelContainerRunner|AOTIModelContainerRunnerCuda|AOTIModelPackageLoader)\b'),
+        (INDUCTOR_PKG, r'\b(AOTIModelContainerRunner(?:Cpu|Cuda|Mps|Xpu)?|AOTIModelPackageLoader)\b'),
         (PROFILER_PKG, r'\b(ProfilerConfig|ExperimentalConfig|ActivityTypeSet|ITraceActivity)\b'),
         (ENUMTYPE_PKG, r'\b(kLinear|kReLU|kGELU|kNone|kMean|kSum|kBilinear|kNearest|GridSampleMode|InterpolateMode)\b'),
+        # Concrete quantizer peers + hand-written AutocastContext.
+        # Negative lookahead keeps QuantizerType* in .c10.
+        (QUANTIZER_PKG, r'\b(?:UnknownQuantizer|UniformQuantizer|NonUniformQuantizer|AffineQuantizer|PerTensorAffineQuantizer|PerChannelAffineQuantizer|PerChannelAffineFloatQParamsQuantizer|AutocastContext|Quantizer(?!Type))\b'),
         # Obj is c10::ivalue::Object — critical for JitObject / ObjLoader.
         (C10_PKG, r'\b(AliasInfo|FunctionSchema|OperatorHandle|Dispatcher|SymNode|Future|GenericDict|GenericList|Obj)\b'),
         (AUTOGRAD_PKG, r'\b(Edge|Node|AnomalyMode|AnomalyMetadata|AutogradContext|FunctionPreHook|FunctionPostHook|InputMetadata|SavedVariableHooks|ForwardGrad|VariableInfo)\b'),
@@ -788,6 +1008,36 @@ def scan_existing_package_index(roots: List[Path]) -> Dict[str, str]:
     return idx
 
 
+# Nested peer types that JavaCPP sometimes emits unqualified when the outer
+# class lives in another package (e.g. rpc files referencing Type.TypePtr).
+# Map bare simple name → qualified form. Only applied outside the outer class
+# file itself (Type.java may use bare TypePtr inside the nested class body).
+NESTED_TYPE_FIXES: Dict[str, str] = {
+    "TypePtr": "Type.TypePtr",
+}
+
+
+def fix_nested_type_refs(path: Path, text: str) -> str:
+    """Qualify bare nested-type names (TypePtr → Type.TypePtr) outside their outer class."""
+    simple = path.stem
+    for bare, qualified in NESTED_TYPE_FIXES.items():
+        # Outer class file (Type.java) legitimately uses bare TypePtr inside
+        # the nested class; leave it alone.
+        if simple == qualified.split(".", 1)[0]:
+            continue
+        if bare not in text:
+            continue
+        # Word-boundary, not already qualified (no preceding '.' / C++ '::'),
+        # not part of a longer identifier (AnyTypePtr / TypePtrOptional / …).
+        # Exclude ':' so @Name("c10::TypePtr") stays a C++ token.
+        text = re.sub(
+            rf'(?<![\w.:]){re.escape(bare)}(?![\w])',
+            qualified,
+            text,
+        )
+    return text
+
+
 def rewrite_references_everywhere(
     roots: List[Path],
     renames: Dict[str, str],
@@ -811,8 +1061,12 @@ def rewrite_references_everywhere(
         for path in collect_java_files(root):
             text0 = read_text(path)
             text = apply_renames_in_text(text0, renames)
+            # Qualify bare nested types (TypePtr → Type.TypePtr) outside Type.java
+            text = fix_nested_type_refs(path, text)
 
-            # Update `import org.bytedeco.pytorch.Foo;` when Foo moved
+            # Update single-type imports when Foo moved, covering both root and
+            # managed subpackages (e.g. org.bytedeco.pytorch.nn.LinearImpl →
+            # org.bytedeco.pytorch.nn.modules.LinearImpl after nn split).
             def repl_import(m: re.Match) -> str:
                 name = m.group(1)
                 pkg = left_root.get(name)
@@ -826,6 +1080,48 @@ def rewrite_references_everywhere(
                 text,
                 flags=re.MULTILINE,
             )
+            # Rewrite imports under any managed subpackage (including nested
+            # nn.options / nn.modules / …) when the simple name has moved.
+            for sub in ALL_SUBPKGS:
+                text = re.sub(
+                    rf'^import {re.escape(sub)}\.(\w+);',
+                    repl_import,
+                    text,
+                    flags=re.MULTILINE,
+                )
+
+            # Rewrite fully-qualified type names in source bodies when a type left root
+            # or moved deeper under nn (e.g. after JitModule → jit, or LinearImpl
+            # → nn.modules). Only two old homes are rewritten to keep this O(names):
+            #   org.bytedeco.pytorch.Name
+            #   org.bytedeco.pytorch.nn.Name   (if final pkg is a nn subpackage)
+            for name, pkg in left_root.items():
+                if pkg == ROOT_PKG:
+                    continue
+                correct = f"{pkg}.{name}"
+                wrong_root = f"{ROOT_PKG}.{name}"
+                if wrong_root != correct and wrong_root in text:
+                    text = re.sub(
+                        rf'(?<![\w.]){re.escape(wrong_root)}\b',
+                        correct,
+                        text,
+                    )
+                if pkg.startswith(NN_PKG + "."):
+                    wrong_nn = f"{NN_PKG}.{name}"
+                    if wrong_nn != correct and wrong_nn in text:
+                        text = re.sub(
+                            rf'(?<![\w.]){re.escape(wrong_nn)}\b',
+                            correct,
+                            text,
+                        )
+                if pkg.startswith(DATA_PKG + ".") or pkg == DATA_OPTIONS_PKG:
+                    wrong_data = f"{DATA_PKG}.{name}"
+                    if wrong_data != correct and wrong_data in text:
+                        text = re.sub(
+                            rf'(?<![\w.]){re.escape(wrong_data)}\b',
+                            correct,
+                            text,
+                        )
 
             # Ensure star-imports for subpackages when short names from those pkgs are used
             pkg_m = PACKAGE_RE.search(text)

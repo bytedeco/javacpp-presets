@@ -53,7 +53,7 @@ public class RRefContext extends Pointer {
   //  generate a globally unique ID
   public native @ByVal GloballyUniqueId genGloballyUniqueId();
 
-  public native @SharedPtr RpcAgent agent();
+  public native @Const @SharedPtr("torch::distributed::rpc::RpcAgent") @ByRef RpcAgent agent();
 
   // create a ``UserRRef`` owned by the worker ``ownerId``
   
@@ -69,7 +69,7 @@ public class RRefContext extends Pointer {
   //    ``PYTHON_REMOTE_CALL``.
   // 2. when unpickling ``OwnerRRef``.
   // What's common in these two cases are, 1) the RRefId is already generated
-  // 2) the TypePtr is presented. So it can always create the ``OwnerRRef`` if
+  // 2) the Type.TypePtr is presented. So it can always create the ``OwnerRRef`` if
   // it is not yet available.
   
 
@@ -78,11 +78,11 @@ public class RRefContext extends Pointer {
   // 1) ``rpc.RRef(obj)``
   // 2) create the ``OwnerRRef`` on `rpc.remote()` caller side.
   // What's common in these two cases are, 1) the RRefId hasn't been generated
-  // 2) the TypePtr is presented.
+  // 2) the Type.TypePtr is presented.
   
 
   // Returns a Future of the OwnerRRef, which will be marked completed when
-  // ``OwnerRRef`` is created. This method is used when the TypePtr is not
+  // ``OwnerRRef`` is created. This method is used when the Type.TypePtr is not
   // available, e.g., when processing to_here(). The forceCreated flag can be
   // used to ensure that the rref is created on the owner, otherwise throw in
   // cases where the user of this API expects this to return a completed future.
@@ -104,7 +104,7 @@ public class RRefContext extends Pointer {
   // and this could happen before the self remote call finishes. To prevent
   // that, this API adds the RRefId as a ForkId, which will then delete the
   // ForkId when the self remote is done.
-  public native void addSelfAsFork(@IntrusivePtr("torch::distributed::rpc::OwnerRRef") OwnerRRef rref);
+  public native void addSelfAsFork(@IntrusivePtr("torch::distributed::rpc::OwnerRRef") @ByRef OwnerRRef rref);
 
   // Register a fork of the ``OwnerRRef``, and inserts a intrusive_ptr of the
   // ``OwnerRRef`` in a map to keep it alive.
@@ -122,19 +122,19 @@ public class RRefContext extends Pointer {
   // py::object, deleting it require GIL. The call site should guarded it with
   // a GIL and reset the shared_ptr. The GIL-guarded deletion is intentionally
   // left out of this function to avoid creating dependency on pybind.
-  public native @IntrusivePtr("torch::distributed::rpc::RRef") RRef delForkOfOwner(
+  public native @IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef delForkOfOwner(
         @Cast("const torch::distributed::rpc::RRefId*") @ByRef GloballyUniqueId rrefId,
         @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId);
 
   // Invoked when pickling an RRef to setup child/fork properly
-  public native @ByVal RRefForkData prepareChildFork(@IntrusivePtr("torch::distributed::rpc::RRef") RRef rref);
+  public native @ByVal RRefForkData prepareChildFork(@IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef rref);
   // Invoked when unpickling an RRef to send RREF_FORK_REQUEST to owner and
   // send RREF_CHILD_ACCEPT to the parent.
   // NB: forkId is necessary here as the rref could be an OwnerRRef
   public native void notifyOwnerAndParentOfFork(
         @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId,
         short parent,
-        @IntrusivePtr("torch::distributed::rpc::RRef") RRef rref);
+        @IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef rref);
 
   // When a UserRRef is forked to another worker (user or owner), it is added
   // into pendingChildren_ to be held alive until it receives RREF_CHILD_ACCEPT
@@ -146,22 +146,22 @@ public class RRefContext extends Pointer {
   // soon.
   public native void addPendingChild(
         @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId,
-        @IntrusivePtr("torch::distributed::rpc::RRef") RRef rref);
+        @IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef rref);
   public native void delPendingChild(@Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId);
 
   // When a UserRRef is created, it is added into pendingUsers_ to be held alive
   // until it receives RREF_USER_ACCEPT from the owner.
   public native void addPendingUser(
         @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId,
-        @IntrusivePtr("torch::distributed::rpc::RRef") RRef rref);
+        @IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef rref);
   public native void delPendingUser(@Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId);
   public native void addConfirmedUser(
         @Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId,
-        @IntrusivePtr("torch::distributed::rpc::RRef") RRef rref);
+        @IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef rref);
 
   // Retrieve a pending user given the fork ID. Throws if the user has already
   // been confirmed (i.e. is no longer in the pendingUsers_ map).
-  public native @IntrusivePtr("torch::distributed::rpc::RRef") RRef getPendingUser(@Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId);
+  public native @IntrusivePtr("torch::distributed::rpc::RRef") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::RRef>&"}) RRef getPendingUser(@Cast("const torch::distributed::rpc::ForkId*") @ByRef GloballyUniqueId forkId);
 
   // Start recording new pending UserRRefs. All pending UserRRefs introduced
   // after this point will be put into the thread_local userTable_, which will

@@ -350,15 +350,15 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
             .put(new Info("utils.h").linePatterns(".*").skip())
         ;
 
-        //--- getCurrentRpcAgent / setCurrentRpcAgent (free function, std::shared_ptr<RpcAgent>)
-        infoMap.put(new Info("torch::distributed::rpc::getCurrentRpcAgent").javaText(
-            "public static native @Name(\"torch::distributed::rpc::getCurrentRpcAgent\") "
-                + "@SharedPtr @Cast(\"std::shared_ptr<torch::distributed::rpc::RpcAgent>\") RpcAgent getCurrentRpcAgent();"
-        ));
-        infoMap.put(new Info("torch::distributed::rpc::setCurrentRpcAgent").javaText(
-            "public static native @Name(\"torch::distributed::rpc::setCurrentRpcAgent\") "
-                + "void setCurrentRpcAgent(@SharedPtr @Cast(\"std::shared_ptr<torch::distributed::rpc::RpcAgent>\") RpcAgent agent);"
-        ));
+        //--- RpcAgent as std::shared_ptr handle (static get/setCurrentRpcAgent)
+        // These are static members of RpcAgent (not free functions). Register the
+        // shared_ptr peer type; leave the static methods to the parser so @Name
+        // stays as RpcAgent::getCurrentRpcAgent (no double-namespace mangling).
+        infoMap.put(new Info(
+                "std::shared_ptr<torch::distributed::rpc::RpcAgent>",
+                "std::weak_ptr<torch::distributed::rpc::RpcAgent>"
+            ).annotations("@SharedPtr(\"torch::distributed::rpc::RpcAgent\")")
+             .pointerTypes("RpcAgent"));
 
         //--- Message + RpcCommandBase family -------------------------------------
         infoMap
@@ -380,8 +380,10 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
                           // vector which we don't bind.
                           "torch::distributed::rpc::Message::withStorages").skip())
 
+            // No virtualize: toMessageImpl returns intrusive_ptr<Message> by value
+            // (Cast& vs by-value conflict on @Virtual override signatures).
             .put(new Info("torch::distributed::rpc::RpcCommandBase")
-                    .purify().pointerTypes("RpcCommandBase").virtualize())
+                    .purify().pointerTypes("RpcCommandBase"))
             .put(new Info("torch::distributed::rpc::ScriptCall").purify().pointerTypes("ScriptCall"))
             .put(new Info("torch::distributed::rpc::ScriptRemoteCall").purify().pointerTypes("ScriptRemoteCall"))
             .put(new Info("torch::distributed::rpc::ScriptResp").purify().pointerTypes("ScriptResp"))
@@ -401,22 +403,29 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
         ;
 
         //--- Request callback ----------------------------------------------------
+        // No class-level virtualize: processMessage / process*Call return
+        // c10::intrusive_ptr<JitFuture> by value. JavaCPP valueTypes use
+        // "...&" for IValue-style disambiguation; that leaks into @Virtual
+        // override signatures as intrusive_ptr& and fails to override
+        // (same trap as Quantizer::equalTo / RpcAgent::send).
+        // Expose as pure handles so C++ implementations remain callable.
         infoMap
             .put(new Info("torch::distributed::rpc::RequestCallback")
-                    .purify().pointerTypes("RequestCallback").virtualize())
-            .put(new Info("torch::distributed::rpc::RequestCallback::processMessage").virtualize())
+                    .purify().pointerTypes("RequestCallback"))
             .put(new Info("torch::distributed::rpc::RequestCallbackNoPython")
-                    .purify().pointerTypes("RequestCallbackNoPython").virtualize())
+                    .purify().pointerTypes("RequestCallbackNoPython"))
             .put(new Info("torch::distributed::rpc::RequestCallbackImpl").purify().pointerTypes("RequestCallbackImpl"))
             .put(new Info("torch::distributed::rpc::RequestCallback::operator ()").skip())
         ;
 
         //--- RRef runtime --------------------------------------------------------
+        // UserRRef / OwnerRRef are `final` in C++ — cannot subclass / virtualize.
+        // RRef / RRefInterface: handle-only (no Java-overridable proxies).
         infoMap
-            .put(new Info("c10::RRefInterface").purify().pointerTypes("RRefInterface").virtualize())
-            .put(new Info("torch::distributed::rpc::RRef").purify().pointerTypes("RRef").virtualize())
-            .put(new Info("torch::distributed::rpc::UserRRef").purify().pointerTypes("UserRRef").virtualize())
-            .put(new Info("torch::distributed::rpc::OwnerRRef").purify().pointerTypes("OwnerRRef").virtualize())
+            .put(new Info("c10::RRefInterface").purify().pointerTypes("RRefInterface"))
+            .put(new Info("torch::distributed::rpc::RRef").purify().pointerTypes("RRef"))
+            .put(new Info("torch::distributed::rpc::UserRRef").purify().pointerTypes("UserRRef"))
+            .put(new Info("torch::distributed::rpc::OwnerRRef").purify().pointerTypes("OwnerRRef"))
             .put(new Info("torch::distributed::rpc::RRef::operator <<").skip())
             // Skip the constructors / factories that take c10::TypePtr — the
             // Java-side equivalent goes through Module factories in torch,
@@ -431,7 +440,7 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
             .put(new Info("torch::distributed::rpc::RRefContext::createUserRRef").skip())
             .put(new Info("torch::distributed::rpc::RRefContext::getOrCreateOwnerRRef").skip())
             .put(new Info("torch::distributed::rpc::RRefContext::createOwnerRRef").skip())
-            .put(new Info("torch::distributed::rpc::RRefContext").purify().pointerTypes("RRefContext").virtualize())
+            .put(new Info("torch::distributed::rpc::RRefContext").purify().pointerTypes("RRefContext"))
             // destroyInstance returns std::vector<c10::intrusive_ptr<RRef>>; we
             // don't bind vector-of-intrusive_ptr combinations, skip the helper.
             // Match the parser's normalized key (templates stripped, const stripped).
@@ -445,27 +454,27 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
         ;
 
         //--- RpcAgent hierarchy --------------------------------------------------
+        // No class-level virtualize: send() returns intrusive_ptr<JitFuture> by
+        // value (Cast& vs by-value conflict). getWorkerInfo() no-arg is non-virtual
+        // in C++ but name-matched method virtualize would force a bad override.
+        // Call through as native methods; don't generate JavaCPP proxy subclasses.
         infoMap
-            .put(new Info("torch::distributed::rpc::RpcAgent").purify().pointerTypes("RpcAgent").virtualize())
+            .put(new Info("torch::distributed::rpc::RpcAgent").purify().pointerTypes("RpcAgent"))
             .put(new Info("torch::distributed::rpc::RpcAgent::RpcAgent").skip())     // protected
-            // send: do not virtualize — intrusive_ptr by-value + JavaCPP Cast& conflict
-            // .put(new Info("torch::distributed::rpc::RpcAgent::send").virtualize())
-            .put(new Info("torch::distributed::rpc::RpcAgent::getWorkerInfo",
-                          "torch::distributed::rpc::RpcAgent::getWorkerInfoByName",
-                          "torch::distributed::rpc::RpcAgent::getWorkerInfos",
-                          "torch::distributed::rpc::RpcAgent::join",
-                          "torch::distributed::rpc::RpcAgent::sync",
-                          "torch::distributed::rpc::RpcAgent::startImpl",
-                          "torch::distributed::rpc::RpcAgent::shutdownImpl",
-                          "torch::distributed::rpc::RpcAgent::getMetrics",
-                          "torch::distributed::rpc::RpcAgent::getDebugInfo",
-                          "torch::distributed::rpc::RpcAgent::getDeviceMap",
-                          "torch::distributed::rpc::RpcAgent::getDevices",
-                          "torch::distributed::rpc::RpcAgent::addGilWaitTime").virtualize())
 
             .put(new Info("torch::distributed::rpc::TensorPipeAgent")
-                    .purify().pointerTypes("TensorPipeAgent").virtualize())
+                    .purify().pointerTypes("TensorPipeAgent"))
             .put(new Info("torch::distributed::rpc::TensorPipeAgent::TensorPipeAgent").skip())
+            // getStore returns const c10::intrusive_ptr<::c10d::Store>; partial
+            // InfoMap match can wrongly pick Message's IntrusivePtr annotation.
+            .put(new Info(
+                    "torch::distributed::rpc::TensorPipeAgent::getStore",
+                    "torch::distributed::rpc::TensorPipeAgent::getStore()"
+                ).javaText(
+                    "public native @IntrusivePtr(\"c10d::Store\") "
+                  + "@Cast({\"\", \"c10::intrusive_ptr<c10d::Store>&\"}) "
+                  + "org.bytedeco.pytorch.distributed.Store getStore();\n"
+                ))
             // updateGroupMembership uses `std::unordered_map<std::string, rpc::DeviceMap>`
             // which we don't bind.
             .put(new Info("torch::distributed::rpc::TensorPipeAgent::updateGroupMembership").skip())
@@ -480,17 +489,41 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
                           "torch::distributed::rpc::TensorPipeAgent::getSrcOrDstRank").skip())
         ;
 
-        //--- intrusive_ptr<...> for RPC classes ---------------------------------
-        new PointerInfo("torch::distributed::rpc::RpcCommandBase")
-                .javaBaseName("RpcCommandBase").makeIntrusive(infoMap);
+        //--- intrusive_ptr peers ------------------------------------------------
+        // RpcCommandBase is NOT an intrusive_ptr_target — never makeIntrusive it.
+        // Message / RRef hierarchy are CustomClassHolder / RRefInterface
+        // (→ intrusive_ptr_target). Register each handle type explicitly so
+        // IntrusivePtrAdapter uses the right T (RRef* vs RpcCommandBase*).
+        // c10::RRefInterface is already makeIntrusive'd in torch.java.
         new PointerInfo("torch::distributed::rpc::Message").makeIntrusive(infoMap);
+        new PointerInfo("torch::distributed::rpc::RRef").javaBaseName("RRef").makeIntrusive(infoMap);
+        new PointerInfo("torch::distributed::rpc::OwnerRRef").javaBaseName("OwnerRRef").makeIntrusive(infoMap);
+        new PointerInfo("torch::distributed::rpc::UserRRef").javaBaseName("UserRRef").makeIntrusive(infoMap);
+        // Abstract / protected ctors — never make_intrusive on these bases.
+        infoMap.put(new Info("torch::distributed::rpc::RRef::RRef").skip())
+               .put(new Info("c10::RRefInterface::RRefInterface").skip());
+        // Re-assert Store handle (also with leading ::) so TensorPipeAgent::getStore
+        // does not fall through to Message's IntrusivePtr annotation.
+        infoMap.put(new Info(
+                   "c10::intrusive_ptr<c10d::Store>",
+                   "c10::intrusive_ptr<::c10d::Store>",
+                   "c10::weak_intrusive_ptr<c10d::Store>",
+                   "c10::weak_intrusive_ptr<::c10d::Store>"
+               ).annotations("@IntrusivePtr(\"c10d::Store\")")
+                .pointerTypes("org.bytedeco.pytorch.distributed.Store")
+                .valueTypes("@Cast({\"\", \"c10::intrusive_ptr<c10d::Store>&\"}) org.bytedeco.pytorch.distributed.Store"));
 
         //--- Skip tensorpipe internals (heavy template metaprogramming) ---------
         infoMap
+            // ChannelRegistration::channel is shared_ptr<tensorpipe::channel::Context>
+            // which we do not bind (tensorpipe types are opaque/skipped).
+            .put(new Info("torch::distributed::rpc::ChannelRegistration::channel").skip())
             .put(new Info("tensorpipe::Error",
                           "tensorpipe::Listener",
                           "tensorpipe::Pipe",
                           "tensorpipe::Context",
+                          "tensorpipe::channel::Context",
+                          "tensorpipe::transport::Context",
                           "tensorpipe::Context::join",
                           "tensorpipe::Context::listen",
                           "tensorpipe::Context::connect",

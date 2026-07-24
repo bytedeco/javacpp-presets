@@ -23,7 +23,6 @@ public class TransportRegistration extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransportRegistration(Pointer p) { super(p); }
 
-  // skipped: incomplete tensorpipe type — public native @SharedPtr Context transport(); public native TransportRegistration transport(Context setter);
   public native @Cast("int64_t") long priority(); public native TransportRegistration priority(long setter);
   public native @StdString @Name("address") BytePointer _address(); public native TransportRegistration _address(BytePointer setter);
 }

@@ -3,6 +3,7 @@
 package org.bytedeco.pytorch;
 import org.bytedeco.pytorch.data.*;
 import org.bytedeco.pytorch.jit.*;
+import org.bytedeco.pytorch.quantizer.*;
 import org.bytedeco.pytorch.autograd.*;
 
 import org.bytedeco.pytorch.Allocator;

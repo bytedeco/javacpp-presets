@@ -25,7 +25,7 @@ import static org.bytedeco.javacpp.global.chrono.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// This structure represents all notional booking entities in a class attribute: name, kind (see: AttributeKind), and type (see: TypePtr).
+// This structure represents all notional booking entities in a class attribute: name, kind (see: AttributeKind), and type (see: Type.TypePtr).
 // Note: This structure does not represent the value of the attribute.
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ClassAttribute extends Pointer {

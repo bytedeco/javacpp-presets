@@ -4,6 +4,8 @@ package org.bytedeco.pytorch.nn;
 
 import org.bytedeco.pytorch.jit.*;
 
+import org.bytedeco.pytorch.nn.options.*;
+
 import org.bytedeco.pytorch.*;
 
 import org.bytedeco.pytorch.Allocator;

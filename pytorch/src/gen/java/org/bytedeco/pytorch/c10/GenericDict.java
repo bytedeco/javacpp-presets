@@ -165,8 +165,8 @@ public class GenericDict extends Pointer {
    */
   public native @Cast("bool") boolean is(@Const @ByRef GenericDict rhs);
 
-  // private API for now because the return type will change to TypePtr
-  // instead of std::optional<TypePtr> once types are mandatory.
+  // private API for now because the return type will change to Type.TypePtr
+  // instead of std::optional<Type.TypePtr> once types are mandatory.
   public native @ByVal Type.TypePtr keyType();
   public native @ByVal Type.TypePtr valueType();
 

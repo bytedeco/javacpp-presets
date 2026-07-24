@@ -6,6 +6,8 @@ import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.pytorch.nn.*;
 
+import org.bytedeco.pytorch.data.transforms.*;
+
 import org.bytedeco.pytorch.*;
 
 import org.bytedeco.pytorch.Allocator;

@@ -6,6 +6,10 @@ import org.bytedeco.pytorch.serialize.*;
 
 import org.bytedeco.pytorch.jit.*;
 
+import org.bytedeco.pytorch.nn.modules.container.*;
+
+import org.bytedeco.pytorch.nn.modules.*;
+
 import org.bytedeco.pytorch.*;
 
 import org.bytedeco.pytorch.Allocator;

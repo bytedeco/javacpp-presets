@@ -210,7 +210,8 @@ public class RRef extends RRefInterface {
   // 1, Python GC decides end of UserRRef lifetime, calling destructor.
   // 2, RPC module graceful shutdown calls it on all UserRRefs tracked
   //    in the RRefContext.
-  @Virtual public native void tryDel();
+  public native void tryDel();
 
-  @Virtual public native @ByVal @Const({false, false, true}) RRefForkData fork();
+  // javacpp: made public for JNI virtualization
+  public native @ByVal RRefForkData fork();
 }

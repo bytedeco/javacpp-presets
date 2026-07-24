@@ -2,7 +2,16 @@
 
 package org.bytedeco.pytorch.global;
 import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.data.datasets.*;
+import org.bytedeco.pytorch.data.dataloader.*;
+import org.bytedeco.pytorch.data.sampler.*;
+import org.bytedeco.pytorch.data.transforms.*;
+import org.bytedeco.pytorch.data.options.*;
 import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.options.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
+import org.bytedeco.pytorch.nn.functions.*;
 import org.bytedeco.pytorch.jit.*;
 import org.bytedeco.pytorch.optim.*;
 import org.bytedeco.pytorch.serialize.*;
@@ -10,6 +19,7 @@ import org.bytedeco.pytorch.distributed.*;
 import org.bytedeco.pytorch.inductor.*;
 import org.bytedeco.pytorch.profiler.*;
 import org.bytedeco.pytorch.enumtype.*;
+import org.bytedeco.pytorch.quantizer.*;
 import org.bytedeco.pytorch.c10.*;
 import org.bytedeco.pytorch.autograd.*;
 
@@ -10122,6 +10132,94 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
 
 
+// Parsed from ATen/quantized/Quantizer.h
+
+// #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+// #pragma once
+
+// #include <c10/core/QScheme.h>
+// #include <c10/core/MemoryFormat.h>
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <c10/core/ScalarType.h>
+// #include <c10/core/TensorOptions.h>
+
+// #include <ATen/Tensor.h>
+// #include <ATen/TensorUtils.h>
+
+// #include <ATen/core/QuantizerBase.h>
+
+// #include <cmath>
+// #include <memory>
+// #include <utility>
+// Targeting ../UnknownQuantizer.java
+
+
+// Targeting ../UniformQuantizer.java
+
+
+// Targeting ../NonUniformQuantizer.java
+
+
+// Targeting ../AffineQuantizer.java
+
+
+// Targeting ../PerTensorAffineQuantizer.java
+
+
+// Targeting ../PerChannelAffineQuantizer.java
+
+
+// Targeting ../PerChannelAffineFloatQParamsQuantizer.java
+
+
+
+// This is an internal utility function for getting at the QTensorImpl,
+// You should only use this for writing low level
+// setters/getters for QTensorImpl fields; otherwise, you should use
+// the low level setters/getters that were implemented using this.
+// This may be called repeatedly, so make sure it's pretty cheap.
+@Namespace("at") public static native QTensorImpl get_qtensorimpl(@Const @ByRef TensorBase self);
+
+// double and int64_t are because of the native function API, we only have these
+// argument types right now in native functions
+@Namespace("at") public static native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer make_per_tensor_affine_quantizer(
+    double scale, @Cast("int64_t") long zero_point, ScalarType scalar_type);
+
+@Namespace("at") public static native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer make_per_channel_affine_quantizer(
+    @Const @ByRef Tensor scales,
+    @Const @ByRef Tensor zero_points,
+    @Cast("int64_t") long axis,
+    ScalarType scalar_type);
+
+@Namespace("at") public static native @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer make_unknown_quantizer(ScalarType scalar_type);
+
+// Create a Quantized Tensor given arguments for normal Tensor and a quantizer
+@Namespace("at") public static native @ByVal Tensor new_qtensor(
+    @ByVal LongArrayRef sizes,
+    @Const @ByRef TensorOptions options,
+    @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer quantizer);
+@Namespace("at") public static native @ByVal Tensor new_qtensor(
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @Const @ByRef TensorOptions options,
+    @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer quantizer);
+
+@Namespace("at") public static native void set_quantizer_(@Const @ByRef Tensor self, @IntrusivePtr("at::Quantizer") @Cast({"", "c10::intrusive_ptr<at::Quantizer>&"}) Quantizer quantizer);
+
+
+
+
+
+
+
+ // namespace at
+
+// #else
+// #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
+// #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
+
 // Parsed from ATen/core/TensorAccessor.h
 
 // #if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
@@ -14281,7 +14379,7 @@ public static final byte min_lookups = min_lookups();
 
 
 
-// Shim for compatibility with code that uses TypePtr.
+// Shim for compatibility with code that uses Type.TypePtr.
 @Namespace("c10") public static native @StdString BytePointer toString(@Const @ByRef Type.TypePtr typePtr);
 
 @Namespace("c10") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Type lhs, @Const @ByRef Type rhs);
@@ -87130,6 +87228,53 @@ in Python API, we skip std::nullopt values when serializing the param state. */
 // #else
 // #error "This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined."
 // #endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)
+
+
+// Parsed from aoti_model_container_runner_mps_java.h
+
+/*
+ * JavaCPP parse shim for torch::inductor::AOTIModelContainerRunnerMps.
+ *
+ * The real header is guarded with `#if defined(__APPLE__)` which the JavaCPP
+ * Parser may not define. This shim re-declares the class so it is always parsed
+ * into org.bytedeco.pytorch.inductor. JNI still includes / links the real
+ * implementation from libtorch on Apple platforms (dynamic_lookup elsewhere).
+ */
+// #pragma once
+
+// #include <torch/csrc/inductor/aoti_runner/model_container_runner.h>
+// Targeting ../AOTIModelContainerRunnerMps.java
+
+
+
+ // namespace torch::inductor
+
+
+// Parsed from aoti_model_container_runner_xpu_java.h
+
+/*
+ * JavaCPP parse shim for torch::inductor::AOTIModelContainerRunnerXpu.
+ *
+ * The real header (torch/csrc/inductor/aoti_runner/model_container_runner_xpu.h)
+ * pulls c10/xpu/XPUStream.h → SYCL types, which are not available when parsing
+ * the common torch preset (macOS / CPU). This shim re-declares the class surface
+ * that we can bind without SYCL:
+ *   - constructors / destructor
+ * and deliberately omits:
+ *   - run_impl (already skipped on the base class; needs AtenTensorHandle)
+ *   - run_with_xpu_stream (needs at::xpu::XPUStream / SYCL)
+ *
+ * JNI still links against the real libtorch symbol when present; on platforms
+ * without XPU the class is parse-only (dynamic_lookup).
+ */
+// #pragma once
+
+// #include <torch/csrc/inductor/aoti_runner/model_container_runner.h>
+// Targeting ../AOTIModelContainerRunnerXpu.java
+
+
+
+ // namespace torch::inductor
 
 
 // Parsed from torch/csrc/distributed/c10d/Store.hpp

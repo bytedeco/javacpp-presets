@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch;
+import org.bytedeco.pytorch.data.transforms.*;
 import org.bytedeco.pytorch.data.*;
 
 import org.bytedeco.javacpp.FunctionPointer;

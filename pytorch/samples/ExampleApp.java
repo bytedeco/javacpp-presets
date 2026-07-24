@@ -2,6 +2,8 @@
 
 import org.bytedeco.javacpp.*;
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.jit.*;
+
 import static org.bytedeco.pytorch.global.torch.*;
 
 // Ported from C++ code at https://pytorch.org/tutorials/advanced/cpp_export.html

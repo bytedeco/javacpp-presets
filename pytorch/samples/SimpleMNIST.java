@@ -8,6 +8,16 @@ import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.optim.*;
 import org.bytedeco.pytorch.serialize.*;
 
+import org.bytedeco.pytorch.nn.modules.*;
+
+import org.bytedeco.pytorch.data.datasets.*;
+import org.bytedeco.pytorch.data.dataloader.*;
+import org.bytedeco.pytorch.data.sampler.*;
+import org.bytedeco.pytorch.data.transforms.*;
+import org.bytedeco.pytorch.options.*;
+
+import org.bytedeco.pytorch.data.options.*;
+
 import static org.bytedeco.pytorch.global.torch.*;
 
 public class SimpleMNIST {

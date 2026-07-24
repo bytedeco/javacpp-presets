@@ -60,7 +60,7 @@ public class Resolver extends Pointer {
         @ByRef GraphFunction m,
         @Const @ByRef SourceRange loc);
 
-  // Resolve `name` to a TypePtr.
+  // Resolve `name` to a Type.TypePtr.
   public native @ByVal Type.TypePtr resolveType(@StdString BytePointer name, @Const @ByRef SourceRange loc);
   public native @ByVal Type.TypePtr resolveType(@StdString String name, @Const @ByRef SourceRange loc);
 }

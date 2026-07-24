@@ -8,6 +8,8 @@ import org.bytedeco.pytorch.c10.*;
 
 import org.bytedeco.pytorch.nn.*;
 
+import org.bytedeco.pytorch.data.transforms.*;
+
 import org.bytedeco.pytorch.data.*;
 
 import org.bytedeco.pytorch.*;

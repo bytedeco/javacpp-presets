@@ -6,6 +6,8 @@ import org.bytedeco.pytorch.serialize.*;
 
 import org.bytedeco.pytorch.jit.*;
 
+import org.bytedeco.pytorch.nn.options.*;
+
 import org.bytedeco.pytorch.nn.*;
 
 import org.bytedeco.pytorch.*;

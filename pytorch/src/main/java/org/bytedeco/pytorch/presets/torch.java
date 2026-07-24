@@ -67,10 +67,16 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/torch.h",
                 "torch/script.h",
                 "ATen/autocast_mode.h",
+                // Concrete quantizer peers (PerTensorAffineQuantizer, …).
+                // Base Quantizer is already pulled via QuantizerBase.h / TensorBody.
+                "ATen/quantized/Quantizer.h",
                 // CUDA AOTI runner lives in torch_cuda (needs cuda_runtime_api.h).
-                // Keep only CPU AOTI headers on the common torch preset so macOS/CPU
-                // builds do not pull CUDA headers into jnitorch.
+                // CPU AOTI on the common torch preset. MPS / XPU use parse/JNI
+                // shims (real MPS header is #if __APPLE__; real XPU header pulls
+                // SYCL via c10/xpu/XPUStream). CUDA stays on torch_cuda (-gpu).
                 "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h",
+                "aoti_model_container_runner_mps_java.h",
+                "aoti_model_container_runner_xpu_java.h",
                 "torch/csrc/inductor/aoti_package/model_package_loader.h",
                 "torch/csrc/distributed/c10d/ProcessGroupGloo.hpp",
                 "torch/csrc/distributed/c10d/PrefixStore.hpp",
@@ -1155,7 +1161,8 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         /* We cannot define an adapter working like SharedPtrAdapter since there is no public constructor of
           intrusive_ptr<T> taking a T*. */
         for (PointerInfo pi : new PointerInfo[]{
-            new PointerInfo("at::Quantizer"),
+            // at::Quantizer is abstract — do NOT makeIntrusive (would emit
+            // c10::make_intrusive<at::Quantizer>). Handle type registered below.
             new PointerInfo("c10::GeneratorImpl"),
             new PointerInfo("c10::ivalue::Tuple"),
             new PointerInfo("c10::ivalue::Future", "at::ivalue::Future", "torch::distributed::rpc::JitFuture"),
@@ -1199,6 +1206,39 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             "torch::autograd::TraceableFunction", "torch::jit::Instruction", "torch::jit::Method", "torch::jit::ModuleInstanceInfo",
             "torch::jit::Object::Property", "torch::jit::OperatorSet", "torch::jit::SourceRangePickler", "torch::jit::Unpickler",
             "torch::jit::Operator").purify());
+
+        // Quantizer hierarchy (ATen/quantized/Quantizer.h). Pure virtual base +
+        // intermediate bases need purify; leafs keep their explicit ctors.
+        // All relocate into org.bytedeco.pytorch.quantizer (see relocate_packages.py).
+        // No virtualize: we use these as intrusive_ptr handles (Tensor.quantizer()),
+        // not as Java-overridable C++ proxies.
+        //
+        // makeIntrusive must NOT be used on at::Quantizer: the abstract base has
+        // a public ctor that would be annotated c10::make_intrusive<at::Quantizer>
+        // → "allocating an object of abstract class type 'at::Quantizer'".
+        // Register only the handle type (same pattern as other intrusive peers).
+        // valueTypes keep the trailing "&" so JNI call sites cast
+        // IntrusivePtrAdapter → intrusive_ptr& (unambiguous); by-value casts
+        // hit ambiguous conversion between T* ctor and copy ctor.
+        infoMap.put(new Info(
+                   "c10::intrusive_ptr<at::Quantizer>",
+                   "c10::weak_intrusive_ptr<at::Quantizer>"
+               ).annotations("@IntrusivePtr(\"at::Quantizer\")")
+                .pointerTypes("Quantizer")
+                .valueTypes("@Cast({\"\", \"c10::intrusive_ptr<at::Quantizer>&\"}) Quantizer"))
+               .put(new Info("at::Quantizer").pointerTypes("Quantizer").purify())
+               .put(new Info("at::UniformQuantizer").pointerTypes("UniformQuantizer").purify())
+               .put(new Info("at::NonUniformQuantizer").pointerTypes("NonUniformQuantizer").purify())
+               .put(new Info("at::AffineQuantizer").pointerTypes("AffineQuantizer").purify())
+               .put(new Info("at::UnknownQuantizer").pointerTypes("UnknownQuantizer"))
+               .put(new Info("at::PerTensorAffineQuantizer").pointerTypes("PerTensorAffineQuantizer"))
+               .put(new Info("at::PerChannelAffineQuantizer").pointerTypes("PerChannelAffineQuantizer"))
+               .put(new Info("at::PerChannelAffineFloatQParamsQuantizer").pointerTypes("PerChannelAffineFloatQParamsQuantizer"))
+               // from_blob_* take std::function deleter — skip (no clean FunctionPointer mapping).
+               .put(new Info(
+                   "at::from_blob_quantized_per_tensor_affine",
+                   "at::from_blob_quantized_per_channel_affine"
+               ).skip());
 
 
         /// Classes skipped for various non-investigated reasons
@@ -1673,18 +1713,20 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info(
                 "torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >"
             ).pointerTypes("ExampleTransform").purify().virtualize())
+            // purify: C++ has no default ctor (only FunctionType). Without purify,
+            // JavaCPP emits allocate()/allocateArray() that fail to compile in jnitorch.
             .put(new Info(
                 "torch::data::transforms::BatchLambda<std::vector<torch::data::Example<torch::Tensor,torch::Tensor> >,torch::data::Example<torch::Tensor,torch::Tensor> >"
-            ).pointerTypes("ExampleBatchLambda"))
+            ).pointerTypes("ExampleBatchLambda").purify())
             .put(new Info(
                 "torch::data::transforms::Lambda<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >"
-            ).pointerTypes("ExampleLambda"))
+            ).pointerTypes("ExampleLambda").purify())
             .put(new Info(
                 "torch::data::transforms::TensorTransform<torch::Tensor>"
             ).pointerTypes("TensorTransform").purify().virtualize())
             .put(new Info(
                 "torch::data::transforms::TensorLambda<torch::Tensor>"
-            ).pointerTypes("TensorLambda"))
+            ).pointerTypes("TensorLambda").purify())
             .put(new Info(
                 "torch::data::transforms::Normalize<torch::Tensor>"
             ).pointerTypes("Normalize"))
@@ -1712,14 +1754,39 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
                 "torch::data::transforms::TensorLambda<torch::Tensor>::TensorLambda(std::function<torch::Tensor(torch::Tensor)>)",
                 "torch::data::transforms::TensorLambda<torch::Tensor>::TensorLambda(torch::data::transforms::TensorLambda<torch::Tensor>::FunctionType)"
             ).skip())
-            // ArrayRef ctor also emits a double[]/@StdVector overload that redeclares
-            // the same native signature — skip the vector form / keep one via javaText.
+            // ArrayRef maps to both DoubleArrayRef and double[]/@StdVector adapters.
+            // The dual native allocate() produces two C++ ctors with the same
+            // (ArrayRef, ArrayRef) signature in the JNI virtualization subclass
+            // → "constructor cannot be redeclared".
+            //
+            // Do NOT use skip() here: for constructors, Parser returns early on
+            // info.skip and never applies javaText. Match the constructor Info
+            // (bare name + full signature forms) and replace with a single
+            // DoubleArrayRef allocate via javaText; the overload loop then
+            // breaks on the second iteration (first=false).
+            //
+            // Parser resolves bare ArrayRef via using-namespace / InfoMap to
+            // torch::ArrayRef / c10::ArrayRef / at::ArrayRef depending on context.
             .put(new Info(
+                // Bare constructor name (Parser fallback when signature match fails):
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize",
+                // Signature forms (param type as resolved by qualify / InfoMap):
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(ArrayRef<double>,ArrayRef<double>)",
                 "torch::data::transforms::Normalize<torch::Tensor>::Normalize(c10::ArrayRef<double>,c10::ArrayRef<double>)",
-                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(c10::ArrayRef<double>, c10::ArrayRef<double>)"
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(c10::ArrayRef<double>, c10::ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(at::ArrayRef<double>,at::ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(at::ArrayRef<double>, at::ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(torch::ArrayRef<double>,torch::ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize(torch::ArrayRef<double>, torch::ArrayRef<double>)",
+                // When TemplateMap is active, templateArgs is re-appended after constructorName():
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize<torch::Tensor>",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize<torch::Tensor>(ArrayRef<double>,ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize<torch::Tensor>(c10::ArrayRef<double>,c10::ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize<torch::Tensor>(at::ArrayRef<double>,at::ArrayRef<double>)",
+                "torch::data::transforms::Normalize<torch::Tensor>::Normalize<torch::Tensor>(torch::ArrayRef<double>,torch::ArrayRef<double>)"
             ).javaText(
-                "public Normalize(@Const @ByRef DoubleArrayRef mean, @Const @ByRef DoubleArrayRef stddev) { super((Pointer)null); allocate(mean, stddev); }\n" +
-                "private native void allocate(@Const @ByRef DoubleArrayRef mean, @Const @ByRef DoubleArrayRef stddev);\n"
+                "public Normalize(@ByVal DoubleArrayRef mean, @ByVal DoubleArrayRef stddev) { super((Pointer)null); allocate(mean, stddev); }\n" +
+                "private native void allocate(@ByVal DoubleArrayRef mean, @ByVal DoubleArrayRef stddev);\n"
             ))
             // Tensor-only (NoTarget) variants
             .put(new Info(
@@ -2132,6 +2199,10 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             // from torch_cuda_include.h (torch_cuda target → jnitorch_cuda / -gpu).
             // Keeping it out of torch_include.h is what keeps jnitorch (CPU) clean.
             "torch::inductor::AOTIModelContainerRunner::run_impl",
+            // XPU-only surface (SYCL / XPUStream). Omitted from the parse shim; skip
+            // defensively if the real header is ever re-enabled on a platform with SYCL.
+            "torch::inductor::AOTIModelContainerRunnerXpu::run_impl",
+            "torch::inductor::AOTIModelContainerRunnerXpu::run_with_xpu_stream",
 
             "torch::Library::def",
 

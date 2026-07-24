@@ -26,5 +26,5 @@ public class TypeSupplier extends FunctionPointer {
 
     private native void allocate();
 
-    public native @ByVal TypePtr call();
+    public native @ByVal Type.TypePtr call();
 }

@@ -23,6 +23,6 @@ public class ChannelRegistration extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChannelRegistration(Pointer p) { super(p); }
 
-  // skipped: incomplete tensorpipe type — public native @SharedPtr Context channel(); public native ChannelRegistration channel(Context setter);
+  
   public native @Cast("int64_t") long priority(); public native ChannelRegistration priority(long setter);
 }

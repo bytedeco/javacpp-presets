@@ -37,15 +37,19 @@ public class TensorPipeAgent extends RpcAgent {
   public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future send(
         @Const @ByRef WorkerInfo to,
         @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message message,
-        @Const float rpcTimeoutSeconds/*=torch::distributed::rpc::kUnsetRpcTimeout*/,
+        float rpcTimeoutSeconds/*=torch::distributed::rpc::kUnsetRpcTimeout*/,
         @Cast("const torch::distributed::rpc::DeviceMap*") @ByRef(nullValue = "torch::distributed::rpc::DeviceMap{}") HashAliasedIValueMap deviceMap);
+  public native @IntrusivePtr("c10::ivalue::Future") @Cast({"", "c10::intrusive_ptr<c10::ivalue::Future>&"}) Future send(
+        @Const @ByRef WorkerInfo to,
+        @IntrusivePtr("torch::distributed::rpc::Message") @Cast({"", "c10::intrusive_ptr<torch::distributed::rpc::Message>&"}) Message message);
 
   // join() and sync() would be deprecated -
   // https://github.com/pytorch/pytorch/issues/27647
-  @Virtual public native void join(@Cast("bool") boolean shutdown/*=false*/, float timeout/*=0*/);
-  @Virtual public native void sync();
-  @Virtual public native void startImpl();
-  @Virtual public native void shutdownImpl();
+  public native void join(@Cast("bool") boolean shutdown/*=false*/, float timeout/*=0*/);
+  public native void join();
+  public native void sync();
+  public native void startImpl();
+  public native void shutdownImpl();
 
   public native @Const @ByRef WorkerInfo getWorkerInfo(@StdString BytePointer workerName);
   public native @Const @ByRef WorkerInfo getWorkerInfo(@StdString String workerName);
@@ -53,13 +57,13 @@ public class TensorPipeAgent extends RpcAgent {
   public native @StdVector WorkerInfo getWorkerInfos();
   
 
-  @Virtual public native @ByVal ExtraFilesMap getMetrics();
+  public native @ByVal ExtraFilesMap getMetrics();
 
-  @Virtual public native void addGilWaitTime(@Const @ByVal Microseconds gilWaitTime);
+  public native void addGilWaitTime(@Const @ByVal Microseconds gilWaitTime);
 
   public native @ByVal TensorPipeRpcBackendOptions getBackendOptions();
 
-  public native @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store getStore();
+  public native @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) org.bytedeco.pytorch.distributed.Store getStore();
 
   public native @ByVal @Cast("torch::distributed::rpc::DeviceMap*") HashAliasedIValueMap getDeviceMap(@Const @ByRef WorkerInfo dest);
 

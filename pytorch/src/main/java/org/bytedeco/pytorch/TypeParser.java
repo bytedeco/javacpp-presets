@@ -27,5 +27,5 @@ public class TypeParser extends FunctionPointer {
     private native void allocate();
 
     // std::function<c10::TypePtr(const std::string&)>
-    public native @ByVal TypePtr call(@Const @StdString BytePointer s);
+    public native @ByVal Type.TypePtr call(@Const @StdString BytePointer s);
 }
