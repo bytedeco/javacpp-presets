@@ -51,7 +51,7 @@ import org.bytedeco.javacpp.tools.*;
             link = { "c10", "torch", "c10_cuda", "torch_cuda", "nccl" }
         )
     },
-    target = "org.bytedeco.pytorch.nccl",
+    target = "org.bytedeco.pytorch.distributed",
     global = "org.bytedeco.pytorch.global.torch_nccl"
 )
 public class torch_nccl implements LoadEnabled, InfoMapper {
@@ -124,6 +124,8 @@ public class torch_nccl implements LoadEnabled, InfoMapper {
 
         //// No way to map
         infoMap
+            .put(new Info("c10d::CUDAEventCache", "at::cuda::CUDAEvent",
+                          "std::shared_ptr<at::cuda::CUDAEvent>").skip())
             .put(new Info("c10d::ProcessGroupNCCL::initIntraNodeComm",
                           "std::optional<std::function<std::string()> >",
                           "std::optional<std::function<void(std::function<void(const std::string&)>)> >").skip())

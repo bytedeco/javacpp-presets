@@ -29,7 +29,6 @@ import org.bytedeco.pytorch.GlooDeviceVector;
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorVector;
-import org.bytedeco.pytorch.nccl.ProcessGroupNCCL;
 
 import java.util.Collections;
 import java.util.List;

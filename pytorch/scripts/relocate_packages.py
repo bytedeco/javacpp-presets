@@ -38,7 +38,7 @@ Rules
     JavaXxx -> Xxx in both the file and all references across the gen tree.
 13. Manual helpers under src/main/java are also moved/rewritten.
 14. Already-relocated files are left alone except for rename/import rewrites.
-15. Preserved subpackages (cuda/nccl/gloo/rpc/onnx/global) are never collapsed.
+15. Preserved subpackages (cuda/gloo/rpc/onnx/global) are never collapsed.
 
 Usage
 -----
@@ -779,10 +779,10 @@ def plan_moves(gen_root: Path, main_root: Optional[Path]) -> Tuple[Dict[Path, Tu
         existing_by_root[root] = names
 
     # Existing module packages that this script must never collapse into root
-    # (cuda/nccl/gloo/rpc/onnx/global are separate presets / targets).
+    # (cuda/gloo/rpc/onnx/global are separate presets / targets).
     preserved_subpkgs = {
         f"{ROOT_PKG}.cuda",
-        f"{ROOT_PKG}.nccl",
+        # f"{ROOT_PKG}.nccl",  # torch_nccl target is now .distributed
         f"{ROOT_PKG}.gloo",
         f"{ROOT_PKG}.rpc",
         f"{ROOT_PKG}.onnx",
@@ -828,7 +828,7 @@ def plan_moves(gen_root: Path, main_root: Optional[Path]) -> Tuple[Dict[Path, Tu
                 ):
                     pkg_kind = "inductor"
                 else:
-                    # Leave cuda/nccl/gloo/rpc/onnx/global alone entirely.
+                    # Leave cuda/gloo/rpc/onnx/global alone entirely.
                     # Especially: do not pull rpc types into .distributed.
                     continue
 
@@ -978,7 +978,7 @@ def scan_existing_package_index(roots: List[Path]) -> Dict[str, str]:
     blindly. We only index managed subpackages + root.
     """
     preserved = {
-        f"{ROOT_PKG}.cuda", f"{ROOT_PKG}.nccl", f"{ROOT_PKG}.gloo",
+        f"{ROOT_PKG}.cuda", f"{ROOT_PKG}.gloo",
         f"{ROOT_PKG}.rpc", f"{ROOT_PKG}.onnx", f"{ROOT_PKG}.global",
     }
     idx: Dict[str, str] = {}
@@ -1053,7 +1053,7 @@ def rewrite_references_everywhere(
     # Names that collide with types inside preserved packages (gloo.Store).
     # When adding star-imports, skip names that equal the current file's stem.
     preserved_prefixes = (
-        f"{ROOT_PKG}.cuda", f"{ROOT_PKG}.nccl", f"{ROOT_PKG}.gloo",
+        f"{ROOT_PKG}.cuda", f"{ROOT_PKG}.gloo",
         f"{ROOT_PKG}.rpc", f"{ROOT_PKG}.onnx", f"{ROOT_PKG}.global",
     )
 
@@ -1177,7 +1177,7 @@ def rewrite_references_everywhere(
                 if not uses_pkg(sub):
                     continue
                 # gloo must never star-import distributed (Store name clash).
-                # Other preserved packages (nccl/rpc) legitimately need it.
+                # Other preserved packages (rpc) legitimately need it.
                 if in_preserved and current_pkg.startswith(f"{ROOT_PKG}.gloo") \
                         and sub == DISTRIBUTED_PKG:
                     continue

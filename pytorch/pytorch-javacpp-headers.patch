@@ -1,0 +1,277 @@
+diff --git a/torch/csrc/api/include/torch/nn/module.h b/torch/csrc/api/include/torch/nn/module.h
+--- a/torch/csrc/api/include/torch/nn/module.h
++++ b/torch/csrc/api/include/torch/nn/module.h
+@@ -15,9 +15,13 @@
+ #include <memory>
+ #include <string>
+ #include <type_traits>
++#include <tuple>
+ 
++
+ namespace torch::nn {
++struct TORCH_API ASMoutput;
+ 
++
+ /// The base class for all modules in PyTorch.
+ ///
+ /// \rst
+@@ -129,6 +133,17 @@
+   ///    });
+   ///
+   /// \endrst
++  // JavaCPP multi-arg forward shims (non-virtual - no vtable impact).
++  Tensor forward(const Tensor& input) { return forward_tensor(input); }
++  Tensor forward(const Tensor& input1, const Tensor& input2) { return forward_tensor2(input1, input2); }
++  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3) { return forward_tensor3(input1, input2, input3); }
++  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4) { return forward_tensor4(input1, input2, input3, input4); }
++  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6) { return forward_tensor6(input1, input2, input3, input4, input5, input6); }
++  Tensor forward(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6, const Tensor& input7, const Tensor& input8) { return forward_tensor8(input1, input2, input3, input4, input5, input6, input7, input8); }
++  Tensor forward(const Tensor& input, std::optional<at::IntArrayRef> output_size) { return forward_tensor_output_size(input, output_size); }
++  Tensor forward(const Tensor& input, const Tensor& indices, std::optional<std::vector<int64_t>> output_size) { return forward_tensor_indices_output_size(input, indices, output_size); }
++  size_t javacpp_module_object_id() const noexcept { return reinterpret_cast<size_t>(this); }
++
+   void apply(const ModuleApplyFunction& function);
+ 
+   /// Applies the `function` to the `Module` and recursively to every submodule.
+@@ -596,7 +611,28 @@
+ 
+   /// Used in the implementation of `Cloneable`.
+   virtual void clone_(Module& other, const std::optional<Device>& device);
++
++ public:
++  // JavaCPP multi-arity forward virtuals (appended AFTER all stock virtuals so
++  // peer vtables keep stock is_training/to/train/... slots ABI-compatible with
++  // prebuilt libtorch_cpu). Must be public: JavaCPP peers override them.
++  virtual Tensor forward_tensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tensor(input) is not implemented for ", name()); }
++  virtual Tensor forward_tensor2(const Tensor& input1, const Tensor& input2) { TORCH_CHECK(false, "Module::forward_tensor2(input1, input2) is not implemented for ", name()); }
++  virtual Tensor forward_tensor3(const Tensor& input1, const Tensor& input2, const Tensor& input3) { TORCH_CHECK(false, "Module::forward_tensor3(input1, input2, input3) is not implemented for ", name()); }
++  virtual Tensor forward_tensor4(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4) { TORCH_CHECK(false, "Module::forward_tensor4(input1, input2, input3, input4) is not implemented for ", name()); }
++  virtual Tensor forward_tensor6(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6) { TORCH_CHECK(false, "Module::forward_tensor6(input1..input6) is not implemented for ", name()); }
++  virtual Tensor forward_tensor8(const Tensor& input1, const Tensor& input2, const Tensor& input3, const Tensor& input4, const Tensor& input5, const Tensor& input6, const Tensor& input7, const Tensor& input8) { TORCH_CHECK(false, "Module::forward_tensor8(input1..input8) is not implemented for ", name()); }
++  virtual Tensor forward_tensor_output_size(const Tensor& input, std::optional<at::IntArrayRef> output_size) { TORCH_CHECK(false, "Module::forward_tensor_output_size(input, output_size) is not implemented for ", name()); }
++  virtual Tensor forward_tensor_indices_output_size(const Tensor& input, const Tensor& indices, std::optional<std::vector<int64_t>> output_size) { TORCH_CHECK(false, "Module::forward_tensor_indices_output_size(input, indices, output_size) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, std::tuple<Tensor, Tensor>> forward_tuple_tensor_t_tensortensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tuple_tensor_t_tensortensor(input) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, std::tuple<Tensor, Tensor>> forward_tuple_tensor_t_tensortensor_opt(const Tensor& input, std::optional<std::tuple<Tensor, Tensor>> hx_opt) { TORCH_CHECK(false, "Module::forward_tuple_tensor_t_tensortensor_opt(input, hx_opt) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor(const Tensor& input) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor(input) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor2(const Tensor& input1, const Tensor& input2) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor2(input1, input2) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor3(const Tensor& input1, const Tensor& input2, const Tensor& input3) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor3(input1, input2, input3) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor_opt(const Tensor& input, std::optional<std::tuple<Tensor, Tensor>> hx_opt) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor_opt(input, hx_opt) is not implemented for ", name()); }
++  virtual std::tuple<Tensor, Tensor> forward_tuple_tensor_tensor_attn(const Tensor& query, const Tensor& key, const Tensor& value, const Tensor& key_padding_mask, bool need_weights, const Tensor& attn_mask, bool average_attn_weights) { TORCH_CHECK(false, "Module::forward_tuple_tensor_tensor_attn(query, key, value, ...) is not implemented for ", name()); }
+ 
++
+   /// The implementation of the various `to()` methods.
+   template <typename... Ts>
+   void to_impl(Ts&&... ts);
+@@ -627,7 +663,9 @@
+   /// Whether the module is in training mode.
+   bool is_training_{true};
+ };
++TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);
+ 
++
+ /// Serialize a `Module` pointer into an `OutputArchive`.
+ TORCH_API serialize::OutputArchive& operator<<(
+     serialize::OutputArchive& archive,
+diff --git a/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h b/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+--- a/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
++++ b/torch/csrc/api/include/torch/nn/modules/container/any_module_holder.h
+@@ -61,12 +61,37 @@
+ 
+   /// \internal
+   struct InvokeForward {
++    // JavaCPP captured-forward-dispatch fix.
++    // For concrete *Impl classes we capture &ModuleType::forward once at
++    // construction time so dispatch goes through (module_.get()->*forward_)(...)
++    // - this bypasses both the C++ name-hiding trap on derived forward(Tensor)
++    // and the throwing Module::forward_tensorN virtuals that *Impl classes
++    // never override. Module::forward is an overloaded set so we explicitly
++    // specialise forward_member_ptr_t for it instead of writing &Module::forward.
++    // For the Module base class the dispatch path uses module_->forward_tensor
++    // directly via virtual dispatch (so we do not need to take the
++    // address of Module::forward_tensor, which would force any_module_holder.h
++    // to see Module full definition).
++    template <typename T> struct forward_member_ptr_t { using type = decltype(&T::forward); };
++    template <> struct forward_member_ptr_t<torch::nn::Module> { using type = Tensor (torch::nn::Module::*)(const Tensor&); };
++    template <typename T>
++    using forward_member_ptr = typename forward_member_ptr_t<std::remove_cv_t<std::remove_reference_t<T>>>::type;
++    InvokeForward(std::shared_ptr<ModuleType>& m) : module_(m) {
++      if constexpr (!std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, torch::nn::Module>) {
++        forward_ = &ModuleType::forward;
++      }
++    }
+     template <typename... Ts>
+     AnyValue operator()(Ts&&... ts) {
+-      return AnyValue(module_->forward(std::forward<Ts>(ts)...));
++      if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, torch::nn::Module>) {
++        return AnyValue(module_->forward_tensor(std::forward<Ts>(ts)...));
++      } else {
++        return AnyValue((module_.get()->*forward_)(std::forward<Ts>(ts)...));
++      }
+     }
+     // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
+     std::shared_ptr<ModuleType>& module_;
++    forward_member_ptr<ModuleType> forward_;
+   };
+ 
+   /// Constructs the `AnyModuleHolder` from a concrete module.
+@@ -76,7 +101,7 @@
+   /// Calls `forward()` on the underlying module, casting each `AnyValue` in the
+   /// argument vector to a concrete value.
+   AnyValue forward(std::vector<AnyValue>&& arguments) override {
+-    if (module->_forward_has_default_args()) {
++    if (false && module->_forward_has_default_args()) {
+       TORCH_CHECK(
+           arguments.size() >= module->_forward_num_required_args() &&
+               arguments.size() <= sizeof...(ArgumentTypes),
+diff --git a/torch/csrc/api/include/torch/nn/modules/container/any.h b/torch/csrc/api/include/torch/nn/modules/container/any.h
+--- a/torch/csrc/api/include/torch/nn/modules/container/any.h
++++ b/torch/csrc/api/include/torch/nn/modules/container/any.h
+@@ -175,6 +175,16 @@
+   bool is_empty() const noexcept;
+ 
+  private:
++  template <typename ModuleType>
++  static auto forward_method() {
++    using M = std::remove_cv_t<std::remove_reference_t<ModuleType>>;
++    if constexpr (std::is_same_v<M, Module>) {
++      return static_cast<Tensor (M::*)(const Tensor&)>(&M::forward_tensor);
++    } else {
++      return &M::forward;
++    }
++  }
++
+   /// Creates a `unique_ptr<AnyModulePlaceholder>` pointing to a
+   /// `AnyModuleHolder` of the correct type. This method is used to deduce the
+   /// arguments of the module's `forward()` method.
+@@ -206,7 +216,7 @@
+ AnyModule::AnyModule(std::shared_ptr<ModuleType> module)
+     : content_(make_holder(
+           std::move(module),
+-          &std::remove_reference_t<ModuleType>::forward)) {
++          forward_method<ModuleType>())) {
+   // `AnyModule` can only store an `nn::Module` subclass object that provides
+   // a `forward()` method that has a non-templatized return type.
+   // (e.g. `AnyModule` cannot store `nn::Sequential`, because `nn::Sequential`'s
+@@ -215,7 +225,7 @@
+       torch::detail::is_module<ModuleType>::value,
+       "Can only store object derived from nn::Module into AnyModule");
+   static_assert(
+-      torch::detail::has_forward<ModuleType>::value,
++      torch::detail::has_forward<ModuleType>::value || std::is_same_v<std::remove_cv_t<std::remove_reference_t<ModuleType>>, Module>,
+       "Can only store module with a forward() method that has a non-templatized"
+       " argument type and return type into AnyModule (e.g. we cannot store nn::Sequential"
+       "into AnyModule, because its forward() method's argument type and return type are templatized."
+@@ -339,9 +349,9 @@
+ ModuleType& AnyModule::get_() const {
+   using M = std::remove_reference_t<ModuleType>;
+   static_assert(
+-      torch::detail::has_forward<M>::value,
++      torch::detail::has_forward<M>::value || std::is_same_v<M, Module>,
+       "Can only call AnyModule::get<T> with a type T that has a forward method");
+-  return get_(&M::forward);
++  return get_(forward_method<ModuleType>());
+ }
+ 
+ template <typename ModuleType, typename ReturnType, typename... ArgumentTypes>
+diff --git a/torch/csrc/api/include/torch/nn/modules/container/sequential.h b/torch/csrc/api/include/torch/nn/modules/container/sequential.h
+--- a/torch/csrc/api/include/torch/nn/modules/container/sequential.h
++++ b/torch/csrc/api/include/torch/nn/modules/container/sequential.h
+@@ -100,8 +100,32 @@
+   explicit SequentialImpl(Modules&&... modules) {
+     modules_.reserve(sizeof...(Modules));
+     push_back(std::forward<Modules>(modules)...);
++  }
++
++  // JavaCPP OrderedDict<AnyModule> lvalue ctor
++  explicit SequentialImpl(
++      torch::OrderedDict<std::string, AnyModule>& ordered_dict) {
++    modules_.reserve(ordered_dict.size());
++    for (auto& item : ordered_dict) {
++      push_back(item.key(), item.value());
++    }
++  }
++
++  // JavaCPP OrderedDict<shared_ptr<Module>> ctor
++  explicit SequentialImpl(torch::OrderedDict<std::string, std::shared_ptr<Module>>& ordered_dict) {
++    modules_.reserve(ordered_dict.size());
++    for (auto& item : ordered_dict) {
++      push_back(item.key(), item.value());
++    }
+   }
+ 
++  explicit SequentialImpl(torch::OrderedDict<std::string, std::shared_ptr<Module>>&& ordered_dict) {
++    modules_.reserve(ordered_dict.size());
++    for (auto& item : ordered_dict) {
++      push_back(item.key(), std::move(item.value()));
++    }
++  }
++
+   /// Constructs the `Sequential` from an `OrderedDict` of named `AnyModule`s.
+   explicit SequentialImpl(
+       torch::OrderedDict<std::string, AnyModule>&& ordered_dict) {
+diff --git a/torch/csrc/api/include/torch/nn/modules/embedding.h b/torch/csrc/api/include/torch/nn/modules/embedding.h
+--- a/torch/csrc/api/include/torch/nn/modules/embedding.h
++++ b/torch/csrc/api/include/torch/nn/modules/embedding.h
+@@ -49,6 +49,10 @@
+ 
+   /// The embedding table.
+   Tensor weight;
++
++  // JavaCPP from_pretrained adapters
++  static std::shared_ptr<EmbeddingImpl> from_pretrained(
++      const Tensor& embeddings, const EmbeddingFromPretrainedOptions& options = {});
+ };
+ 
+ /// A `ModuleHolder` subclass for `EmbeddingImpl`.
+@@ -84,6 +88,11 @@
+   }
+ };
+ 
++inline std::shared_ptr<EmbeddingImpl> EmbeddingImpl::from_pretrained(
++    const Tensor& embeddings, const EmbeddingFromPretrainedOptions& options) {
++  return Embedding::from_pretrained(embeddings, options).ptr();
++}
++
+ // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EmbeddingBag
+ // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+@@ -119,6 +128,12 @@
+   /// The embedding table.
+   Tensor weight;
+ 
++
++  // JavaCPP from_pretrained adapters
++  static std::shared_ptr<EmbeddingBagImpl> from_pretrained(
++      const Tensor& embeddings, const EmbeddingBagFromPretrainedOptions& options = {});
++  Tensor forward_with_offsets(const Tensor& input, const Tensor& offsets);
++
+   Tensor forward(
+       const Tensor& input,
+       const Tensor& offsets = {},
+@@ -162,4 +177,14 @@
+     return embeddingbag;
+   }
+ };
++
++inline std::shared_ptr<EmbeddingBagImpl> EmbeddingBagImpl::from_pretrained(
++    const Tensor& embeddings, const EmbeddingBagFromPretrainedOptions& options) {
++  return EmbeddingBag::from_pretrained(embeddings, options).ptr();
++}
++
++inline Tensor EmbeddingBagImpl::forward_with_offsets(
++    const Tensor& input, const Tensor& offsets) {
++  return forward(input, offsets, Tensor{});
++}
+ } // namespace torch::nn
+diff --git a/torch/csrc/api/include/torch/nn/modules/container/moduledict.h b/torch/csrc/api/include/torch/nn/modules/container/moduledict.h
+--- a/torch/csrc/api/include/torch/nn/modules/container/moduledict.h
++++ b/torch/csrc/api/include/torch/nn/modules/container/moduledict.h
+@@ -234,7 +234,7 @@
+     }
+   }
+ 
+- private:
++ public:
+   /// Private `OrderedDict` holding the key-Module pairs.
+   torch::OrderedDict<std::string, std::shared_ptr<Module>> modules_;
+ 

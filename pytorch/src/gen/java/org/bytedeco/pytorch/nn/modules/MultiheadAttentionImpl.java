@@ -53,6 +53,11 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
   public MultiheadAttentionImpl(@Const @ByRef MultiheadAttentionOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::MultiheadAttentionImpl>") private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
 
+  /** Note: C++ {@code forward} is exposed under a distinct Java name because
+   *  {@link org.bytedeco.pytorch.nn.Module} already owns Tensor-returning
+   *  {@code forward(...)} overloads of the same arity (Java forbids same
+   *  name+arity with a different return type). Call the method below, or
+   *  the matching forwardT_* / forwardASMoutput name on Module. */
   public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(
         @Const @ByRef Tensor query,
         @Const @ByRef Tensor key,
@@ -61,6 +66,20 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
         @Cast("bool") boolean need_weights/*=true*/,
         @Const @ByRef(nullValue = "torch::Tensor{}") Tensor attn_mask,
         @Cast("bool") boolean average_attn_weights/*=true*/);
+
+  /** Convenience alias for {@link #forwardT_TensorTensor_T(Tensor, Tensor, Tensor, Tensor, boolean, Tensor, boolean)}.
+   *  Restores the original C++ {@code forward(...)} name for the full 7-arg form
+   *  (unique arity - does not clash with {@link org.bytedeco.pytorch.nn.Module#forward}). */
+  public @ByVal T_TensorTensor_T forward(
+        @Const @ByRef Tensor query,
+        @Const @ByRef Tensor key,
+        @Const @ByRef Tensor value,
+        @Const @ByRef Tensor key_padding_mask,
+        @Cast("bool") boolean need_weights,
+        @Const @ByRef Tensor attn_mask,
+        @Cast("bool") boolean average_attn_weights) {
+    return forwardT_TensorTensor_T(query, key, value, key_padding_mask, need_weights, attn_mask, average_attn_weights);
+  }
   public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(
         @Const @ByRef Tensor query,
         @Const @ByRef Tensor key,

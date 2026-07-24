@@ -80,13 +80,28 @@ git submodule foreach --recursive 'git reset --hard'
 
 # https://github.com/pytorch/pytorch/pull/158184
 # https://github.com/pytorch/pytorch/pull/159869
+# (Python 3.14 / dynamo fixes - not required for libtorch C++ API build on 2.13)
 #patch -Np1 < ../../../pytorch.patch
 
 # https://github.com/pytorch/pytorch/pull/164570
 #patch -Np1 < ../../../pytorch-cuda.patch
 
 # https://github.com/pytorch/pytorch/pull/189704
-patch -Np1 < ../../../pytorch-macosx.patch
+# macOS-only install_name_tool rpath fix; ignore if already applied / non-mac.
+if [[ "$PLATFORM" == macosx* ]]; then
+    patch -Np1 -N < ../../../pytorch-macosx.patch || true
+fi
+
+# JavaCPP Module / AnyModule / Sequential / Embedding header patches
+# (ABI-safe forward_tensor* after clone_, captured-forward InvokeForward,
+#  Sequential OrderedDict ctors, Embedding from_pretrained adapters).
+# Applied on ALL platforms so linux/windows/macosx produce the same headers.
+# -N ignores already-applied patches; script below is idempotent insurance.
+if [[ -f ../../../pytorch-javacpp-headers.patch ]]; then
+    # -N: skip already-applied hunks; -r -: discard .rej; || true: first clean
+    # apply is exit 0, re-apply after re-checkout of same tree may be exit 1.
+    patch -Np1 -N -r - < ../../../pytorch-javacpp-headers.patch || true
+fi
 
 CPYTHON_HOST_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/host/"
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
@@ -234,11 +249,16 @@ sedinplace '/using ExampleType = ExampleType_;/a\
   using BatchType = ChunkType;\
   using DataType = ExampleType;\
 ' torch/csrc/api/include/torch/data/datasets/chunk.h
-sedinplace '/^};/a\
+# operator<< is already in pytorch-javacpp-headers.patch / patch_module_headers.sh;
+# keep a guarded fallback for trees that only got partial sed fixes.
+if ! grep -q 'operator<<(std::ostream& stream, const nn::Module& module)' torch/csrc/api/include/torch/nn/module.h; then
+    sedinplace '/^};/a\
 TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
 ' torch/csrc/api/include/torch/nn/module.h
+fi
 
-# JavaCPP Module/AnyModule/Sequential/Embedding header patches
+# Idempotent re-apply (script is the source of truth if patch is missing/stale).
+# Safe on already-patched trees; needed when include is a symlink to external libtorch.
 if [[ -x ../../../scripts/patch_module_headers.sh ]]; then
     bash ../../../scripts/patch_module_headers.sh .
 elif [[ -f ../../../scripts/patch_module_headers.sh ]]; then

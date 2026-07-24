@@ -54,6 +54,11 @@ public class LSTMImpl extends LSTMImplBase {
   public LSTMImpl(@Const @ByRef LSTMOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::LSTMImpl>") private native void allocate(@Const @ByRef LSTMOptions options_);
 
+  /** Note: C++ {@code forward} is exposed under a distinct Java name because
+   *  {@link org.bytedeco.pytorch.nn.Module} already owns Tensor-returning
+   *  {@code forward(...)} overloads of the same arity (Java forbids same
+   *  name+arity with a different return type). Call the method below, or
+   *  the matching forwardT_* / forwardASMoutput name on Module. */
   public native @ByVal @Name("forward") T_TensorT_TensorTensor_T_T forwardT_TensorT_TensorTensor_T_T(
         @Const @ByRef Tensor input,
         @Optional T_TensorTensor_T hx_opt/*={}*/);
@@ -62,6 +67,14 @@ public class LSTMImpl extends LSTMImplBase {
   public native @ByVal T_PackedSequenceT_TensorTensor_T_T forward_with_packed_input(
         @Const @ByRef PackedSequence packed_input,
         @Optional T_TensorTensor_T hx_opt/*={}*/);
+
+  /** Convenience alias for {@link #forwardT_TensorT_TensorTensor_T_T(Tensor, T_TensorTensor_TOptional)}.
+   *  Optional-hx arity does not clash with Module.forward(Tensor, Tensor). */
+  public @ByVal T_TensorT_TensorTensor_T_T forward(
+        @Const @ByRef Tensor input,
+        @Optional T_TensorTensor_T hx_opt) {
+    return forwardT_TensorT_TensorTensor_T_T(input, hx_opt);
+  }
   public native @ByVal T_PackedSequenceT_TensorTensor_T_T forward_with_packed_input(
         @Const @ByRef PackedSequence packed_input);
 

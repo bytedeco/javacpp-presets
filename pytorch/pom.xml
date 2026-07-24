@@ -202,6 +202,40 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Class-Path>javacpp.jar</Class-Path>
+                  <Implementation-Title>${project.name}</Implementation-Title>
+                  <Implementation-Vendor>Bytedeco</Implementation-Vendor>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Specification-Title>${project.name}</Specification-Title>
+                  <Specification-Vendor>Bytedeco</Specification-Vendor>
+                  <Specification-Version>${project.version}</Specification-Version>
+                  <Multi-Release>true</Multi-Release>
+                </manifestEntries>
+              </archive>
+              <includes>
+                <include>org/bytedeco/${javacpp.packageName}/**</include>
+              </includes>
+              <excludes>
+                <!-- Parent already drops include/; also drop presets glue headers
+                     (torch_include.h etc.) — they are only needed at parse/build
+                     time and must not ship inside the Java jar. -->
+                <exclude>org/bytedeco/${javacpp.packageName}/include/</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/presets/**/*.h</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/presets/*.h</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>

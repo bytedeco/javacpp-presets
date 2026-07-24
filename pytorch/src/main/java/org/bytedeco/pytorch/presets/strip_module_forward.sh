@@ -278,6 +278,127 @@ for BASE in LossImplBase; do
         inject_tostring "$BJ" LossPrinter
     fi
 done
+# 4) Restore convenience forward() wrappers on modules whose C++ forward
+#    was renamed to forwardT_* / forwardASMoutput to avoid Java return-type
+#    clashes with Module.forward(Tensor...).
+#
+#    Java forbids a subclass method with the same name+arity but a different
+#    return type than a parent method. Module already exposes
+#        Tensor forward(Tensor)
+#        Tensor forward(Tensor, Tensor)
+#        Tensor forward(Tensor, Tensor, Tensor)
+#    so RNN/GRU/LSTM/MHA(3-arg)/AdaptiveLogSoftmax cannot reclaim the plain
+#    name "forward" for their tuple/ASMoutput overloads. What we CAN do:
+#      - MultiheadAttentionImpl 7-arg (unique arity) -> public forward(...)
+#      - LSTM/LSTMCell (Tensor, Optional) if no Module Tensor clash -> forward
+#    The forwardT_* / forwardASMoutput natives stay as the primary API (and
+#    match Module's own tuple-forward naming). Wrappers are idempotent.
+if command -v python3 >/dev/null 2>&1; then
+python3 - <<'PYW' "$GEN_DIR"
+import re, sys
+from pathlib import Path
+root = Path(sys.argv[1])
+
+def find_cls(name):
+    hits = list(root.rglob(name + ".java"))
+    return hits[0] if hits else None
+
+def inject_after_natives(path, needle, block, tag):
+    t = path.read_text()
+    if tag in t:
+        return False
+    idx = t.rfind(needle)
+    if idx < 0:
+        return False
+    semi = t.find(';', idx)
+    if semi < 0:
+        return False
+    insert_at = semi + 1
+    if insert_at < len(t) and t[insert_at] == '\n':
+        insert_at += 1
+    path.write_text(t[:insert_at] + "\n" + block + t[insert_at:])
+    return True
+
+# MultiheadAttentionImpl: 7-arg has no Module.forward clash
+mha = find_cls("MultiheadAttentionImpl")
+if mha:
+    block = (
+        "  /** Convenience alias for {@link #forwardT_TensorTensor_T(Tensor, Tensor, Tensor, Tensor, boolean, Tensor, boolean)}.\n"
+        "   *  Restores the original C++ {@code forward(...)} name for the full 7-arg form\n"
+        "   *  (unique arity - does not clash with {@link org.bytedeco.pytorch.nn.Module#forward}). */\n"
+        "  public @ByVal T_TensorTensor_T forward(\n"
+        "        @Const @ByRef Tensor query,\n"
+        "        @Const @ByRef Tensor key,\n"
+        "        @Const @ByRef Tensor value,\n"
+        "        @Const @ByRef Tensor key_padding_mask,\n"
+        "        @Cast(\"bool\") boolean need_weights,\n"
+        "        @Const @ByRef Tensor attn_mask,\n"
+        "        @Cast(\"bool\") boolean average_attn_weights) {\n"
+        "    return forwardT_TensorTensor_T(query, key, value, key_padding_mask, need_weights, attn_mask, average_attn_weights);\n"
+        "  }\n"
+    )
+    ok = inject_after_natives(
+        mha,
+        'boolean average_attn_weights/*=true*/);',
+        block,
+        'Restores the original C++')
+    print("MHA 7-arg wrapper: %s" % ok)
+
+# LSTMImpl / LSTMCellImpl: (Tensor, Optional) is distinct from Module.forward(Tensor,Tensor)
+for cls, ret, native in [
+    ("LSTMImpl", "T_TensorT_TensorTensor_T_T", "forwardT_TensorT_TensorTensor_T_T"),
+    ("LSTMCellImpl", "T_TensorTensor_T", "forwardT_TensorTensor_T"),
+]:
+    f = find_cls(cls)
+    if not f:
+        print("%s: not found" % cls); continue
+    t = f.read_text()
+    if "Optional-hx arity does not clash" in t:
+        print("%s: already has wrappers" % cls); continue
+    block = (
+        "  /** Convenience alias for {@link #%s(Tensor, T_TensorTensor_TOptional)}.\n"
+        "   *  Optional-hx arity does not clash with Module.forward(Tensor, Tensor). */\n"
+        "  public @ByVal %s forward(\n"
+        "        @Const @ByRef Tensor input,\n"
+        "        @Optional T_TensorTensor_T hx_opt) {\n"
+        "    return %s(input, hx_opt);\n"
+        "  }\n"
+    ) % (native, ret, native)
+    needle = '@Optional T_TensorTensor_T hx_opt/*={}*/);'
+    if needle not in t:
+        m = re.search(r'@Optional T_TensorTensor_T hx_opt[^;]*\);', t)
+        if m:
+            needle = m.group(0)
+        else:
+            print("%s: no Optional hx anchor" % cls); continue
+    ok = inject_after_natives(f, needle, block, "Optional-hx arity does not clash")
+    print("%s Optional-hx wrapper: %s" % (cls, ok))
+
+# Annotate renames with a one-line JavaDoc if missing
+for cls in ["RNNImpl", "GRUImpl", "MultiheadAttentionImpl", "AdaptiveLogSoftmaxWithLossImpl", "LSTMImpl", "LSTMCellImpl"]:
+    f = find_cls(cls)
+    if not f:
+        continue
+    t = f.read_text()
+    if "C++ {@code forward} is exposed under a distinct Java name" in t:
+        print("%s: doc already present" % cls); continue
+    t2, n = re.subn(
+        r'(  public native @ByVal @Name\("forward"\))',
+        r'  /** Note: C++ {@code forward} is exposed under a distinct Java name because\n'
+        r'   *  {@link org.bytedeco.pytorch.nn.Module} already owns Tensor-returning\n'
+        r'   *  {@code forward(...)} overloads of the same arity (Java forbids same\n'
+        r'   *  name+arity with a different return type). Call the method below, or\n'
+        r'   *  the matching forwardT_* / forwardASMoutput name on Module. */\n\1',
+        t, count=1)
+    if n:
+        f.write_text(t2)
+        print("%s: added clash JavaDoc" % cls)
+    else:
+        print("%s: no native forward to annotate" % cls)
+print("done wrappers")
+PYW
+fi
+
 # 3) Package-relocation FQCN fixup: Module/helpers live in split packages.
 #    After inject_tostring and parser javaText, rewrite bare helper names and
 #    ensure moduleObjectId is public for cross-package ModuleAsHelper access.

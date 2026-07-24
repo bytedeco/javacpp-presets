@@ -142,22 +142,8 @@ public class Module extends Pointer {
    *     });
    * 
    *  \endrst */
-  public native @ByVal Tensor forward_tensor(@Const @ByRef Tensor input);
-  public native @ByVal Tensor forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
-  public native @ByVal Tensor forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
-  public native @ByVal Tensor forward_tensor4(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
-  public native @ByVal Tensor forward_tensor6(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
-  public native @ByVal Tensor forward_tensor8(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
-  public native @ByVal Tensor forward_tensor_output_size(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size);
-  public native @ByVal Tensor forward_tensor_output_size(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
-  public native @ByVal Tensor forward_tensor_indices_output_size(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @ByVal LongVectorOptional output_size);
-  public native @ByVal T_TensorT_TensorTensor_T_T forward_tuple_tensor_t_tensortensor(@Const @ByRef Tensor input);
-  public native @ByVal T_TensorT_TensorTensor_T_T forward_tuple_tensor_t_tensortensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
-  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor(@Const @ByRef Tensor input);
-  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
-  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
-  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
-  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_attn(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
+
+  // JavaCPP multi-arg forward shims (non-virtual — no vtable impact).
   private native @ByVal @Name("forward_tensor") @Virtual(method="forward") Tensor _forward_tensor(@Const @ByRef Tensor input);
   public @ByVal Tensor forward(@Const @ByRef Tensor input) { Module m = org.bytedeco.pytorch.nn.ModuleAsHelper.recover(this); return org.bytedeco.pytorch.nn.ModuleAsHelper.hasForwardOverride(m, Tensor.class) ? m.forward(input) : _forward_tensor(input); }
   private native @ByVal @Name("forward_tensor2")  Tensor _forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
@@ -1653,6 +1639,62 @@ public class Module extends Pointer {
         @Cast("std::ostream*") @ByRef Pointer stream,
         @Const @ByRef Module module);
   public Pointer shiftLeft(Pointer stream) { return shiftLeft(stream, this); }
+  // JavaCPP multi-arity forward virtuals (appended AFTER all stock virtuals so
+  // peer vtables keep stock is_training/to/train/... slots ABI-compatible with
+  // prebuilt libtorch_cpu). Must be public: JavaCPP peers override them.
+  public native @ByVal Tensor forward_tensor(@Const @ByRef Tensor input);
+  public native @ByVal Tensor forward_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public native @ByVal Tensor forward_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public native @ByVal Tensor forward_tensor4(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4);
+  public native @ByVal Tensor forward_tensor6(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6);
+  public native @ByVal Tensor forward_tensor8(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3, @Const @ByRef Tensor input4, @Const @ByRef Tensor input5, @Const @ByRef Tensor input6, @Const @ByRef Tensor input7, @Const @ByRef Tensor input8);
+  public native @ByVal Tensor forward_tensor_output_size(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size);
+  public native @ByVal Tensor forward_tensor_output_size(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
+  public native @ByVal Tensor forward_tensor_indices_output_size(@Const @ByRef Tensor input, @Const @ByRef Tensor indices, @ByVal LongVectorOptional output_size);
+  public native @ByVal T_TensorT_TensorTensor_T_T forward_tuple_tensor_t_tensortensor(@Const @ByRef Tensor input);
+  public native @ByVal T_TensorT_TensorTensor_T_T forward_tuple_tensor_t_tensortensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor(@Const @ByRef Tensor input);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor2(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor3(@Const @ByRef Tensor input1, @Const @ByRef Tensor input2, @Const @ByRef Tensor input3);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_opt(@Const @ByRef Tensor input, @Optional T_TensorTensor_T hx_opt);
+  public native @ByVal T_TensorTensor_T forward_tuple_tensor_tensor_attn(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef Tensor key_padding_mask, @Cast("bool") boolean need_weights, @Const @ByRef Tensor attn_mask, @Cast("bool") boolean average_attn_weights);
+
+
+  /** The implementation of the various {@code to()} methods. */
+
+  /** Implements pretty printing the module hierarchy. */
+  public native void pretty_print_recursive(
+        @Cast("std::ostream*") @ByRef Pointer stream,
+        @StdString BytePointer indentation);
+  public native void pretty_print_recursive(
+        @Cast("std::ostream*") @ByRef Pointer stream,
+        @StdString String indentation);
+
+  /** Applies the {@code function} to every submodule recursively, starting at this
+   *  {@code Module}'s children (thus not including the module itself). */
+  public native void apply_to_submodules(
+        @Const @ByRef NamedSharedModuleApplyFunction function,
+        @StdString BytePointer name_prefix/*=std::string()*/);
+  public native void apply_to_submodules(
+        @Const @ByRef NamedSharedModuleApplyFunction function);
+  public native void apply_to_submodules(
+        @Const @ByRef NamedSharedModuleApplyFunction function,
+        @StdString String name_prefix/*=std::string()*/);
+
+  /** Returns a shared_ptr to {@code this} in a safe (checked) way. */
+  public native @SharedPtr("torch::nn::Module") @ByVal Module shared_from_this_checked();
+
+  /** The registered buffers of this {@code Module}. */
+  public native @ByRef StringTensorDict buffers_(); public native Module buffers_(StringTensorDict setter);
+
+  /** The registered (direct) submodules of this {@code Module}. */
+  public native @ByRef StringSharedModuleDict children_(); public native Module children_(StringSharedModuleDict setter);
+
+  /** The module's name (e.g. "LSTM"). */
+  public native @ByRef StringOptional name_(); public native Module name_(StringOptional setter);
+
+  /** Whether the module is in training mode. */
+  public native @Cast("bool") boolean is_training_(); public native Module is_training_(boolean setter);
 
   /** Debug-friendly string representation, mirroring Python PyTorch's
    *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.nn.ModulePrinter}. */

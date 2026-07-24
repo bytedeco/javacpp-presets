@@ -54,6 +54,11 @@ public class GRUImpl extends GRUImplBase {
   public GRUImpl(@Const @ByRef GRUOptions options_) { super((Pointer)null); allocate(options_); }
   @SharedPtr @Name("std::make_shared<torch::nn::GRUImpl>") private native void allocate(@Const @ByRef GRUOptions options_);
 
+  /** Note: C++ {@code forward} is exposed under a distinct Java name because
+   *  {@link org.bytedeco.pytorch.nn.Module} already owns Tensor-returning
+   *  {@code forward(...)} overloads of the same arity (Java forbids same
+   *  name+arity with a different return type). Call the method below, or
+   *  the matching forwardT_* / forwardASMoutput name on Module. */
   public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
   public native @ByVal @Name("forward") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor input);
   public native @ByVal T_PackedSequenceTensor_T forward_with_packed_input(
