@@ -6,7 +6,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.ByVal;
 
-
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class VoidTensorHook extends FunctionPointer {
     static {

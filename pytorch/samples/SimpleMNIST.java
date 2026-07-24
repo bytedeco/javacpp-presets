@@ -2,7 +2,12 @@
 
 import org.bytedeco.javacpp.*;
 import org.bytedeco.pytorch.*;
-import org.bytedeco.pytorch.Module;
+import org.bytedeco.pytorch.data.*;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.optim.*;
+import org.bytedeco.pytorch.serialize.*;
+
 import static org.bytedeco.pytorch.global.torch.*;
 
 public class SimpleMNIST {

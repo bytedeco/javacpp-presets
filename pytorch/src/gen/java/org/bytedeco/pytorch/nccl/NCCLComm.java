@@ -3,7 +3,7 @@
 package org.bytedeco.pytorch.nccl;
 
 import org.bytedeco.pytorch.Allocator;
-import org.bytedeco.pytorch.Backend;
+import org.bytedeco.pytorch.distributed.Backend;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;

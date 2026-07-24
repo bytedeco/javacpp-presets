@@ -31,4 +31,5 @@
 #include "ATen/cudnn/Descriptors.h"
 #include "ATen/cuda/CUDAEvent.h"
 #include "ATen/cuda/MemPool.h"
+// Generated under torch_cuda target (jnitorch_cuda). Skipped natively on non-gpu.
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h"

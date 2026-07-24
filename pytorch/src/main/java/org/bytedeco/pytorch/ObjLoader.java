@@ -1,9 +1,11 @@
 package org.bytedeco.pytorch;
+import org.bytedeco.pytorch.c10.*;
 
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.*;
+import org.bytedeco.pytorch.c10.Obj;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ObjLoader extends FunctionPointer {

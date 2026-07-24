@@ -56,7 +56,9 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cuda/CUDAEvent.h",
                 "ATen/cuda/MemPool.h",
-                "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
+                // CPU-only parse still sees this header for type completeness on
+                // non-gpu platforms; actual AOTI CUDA peer is generated under -gpu.
+//                "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h",
                 "ATen/cuda/CUDAGeneratorImpl.h",
                 // Types referenced by torch.java / torch_nccl even on CPU parse:
                 "c10/core/CachingDeviceAllocator.h",
@@ -106,13 +108,27 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
     public void init(ClassProperties properties) {
         // Always load torch_cuda_include.h so CUDA Java types (DeviceStats,
         // MemPool, CUDAAllocator, ...) are generated on every platform.
-        // But only keep platform.library for -gpu builds; otherwise javacpp
-        // tries to compile jnitorch_cuda and fails without cudnn.h on macOS CPU.
+        //
+        // On non-gpu builds we must prevent native jnitorch_cuda compilation:
+        // clearing platform.library alone is not enough, because generated
+        // CUDA peer classes (@Properties(inherit = torch_cuda.class)) re-set
+        // platform.library from the last global target ("jnitorch_cuda") when
+        // the property is empty. Setting a dummy platform.executable makes
+        // Builder skip library generation for those classes (see Builder:
+        // "has executables -> skip over default libraryName").
         torch.initIncludes(getClass(), properties);
         String extension = properties.getProperty("platform.extension");
         if (extension == null || !extension.endsWith("-gpu")) {
+            // Skip native library generation entirely on CPU builds (macOS etc.).
+            // Dummy platform.executable makes Builder take the "has executables"
+            // branch and never add jnitorch_cuda to libraryMap — even when child
+            // peer classes re-set platform.library from the global target name.
+            // Keep platform.include so Java peer classes are still parsed/generated.
             properties.setProperty("platform.library", "");
             properties.put("platform.link", new java.util.ArrayList<String>());
+            java.util.ArrayList<String> skipNative = new java.util.ArrayList<String>();
+            skipNative.add("__skip_native_library__");
+            properties.put("platform.executable", skipNative);
         }
     }
 

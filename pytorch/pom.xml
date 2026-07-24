@@ -14,6 +14,11 @@
   <version>2.13.0-${project.parent.version}</version>
   <name>JavaCPP Presets for PyTorch</name>
 
+  <properties>
+    <!-- Set -Dpytorch.relocate.skip=true to skip post-parse package relocation -->
+    <pytorch.relocate.skip>false</pytorch.relocate.skip>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -129,6 +134,39 @@
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/lib/</linkResource>
           </linkResources>
         </configuration>
+      </plugin>
+      <!-- Post-parse package relocation (scripts/relocate_packages.py).
+           JavaCPP Parser always emits peers into the single @Properties(target=…)
+           package; this step moves torch::{data,nn,jit,optim,serialize,inductor,
+           profiler,enumtype}, c10d, and uncommon c10 types into subpackages so
+           every `mvn install` (including -Djavacpp.cppbuild.skip=true) yields the
+           same layout. Bound to process-sources: after generate-sources parse,
+           before compile. Skip with -Dpytorch.relocate.skip=true if needed. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <id>relocate-packages</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <skip>${pytorch.relocate.skip}</skip>
+              <executable>python3</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>${project.basedir}/scripts/relocate_packages.py</argument>
+                <argument>--gen-dir</argument>
+                <argument>${project.basedir}/src/gen/java</argument>
+                <argument>--main-dir</argument>
+                <argument>${project.basedir}/src/main/java</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

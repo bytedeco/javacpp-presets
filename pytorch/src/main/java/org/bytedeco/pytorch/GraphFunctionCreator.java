@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch;
+import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;

@@ -1482,6 +1482,9 @@
 #include "torch/csrc/inductor/aoti_runner/model_container_runner.h"
 #include "torch/csrc/inductor/aoti_runner/model_container_runner_cpu.h"
 #include "torch/csrc/inductor/aoti_package/model_package_loader.h"
+// CUDA AOTI runner needs cuda_runtime_api.h — parsed only via torch_cuda_include.h (-gpu).
+// #include "torch/csrc/inductor/aoti_runner/model_container_runner_cuda.h"
+
 
 #include "torch/csrc/distributed/c10d/Store.hpp"
 #include "torch/csrc/distributed/c10d/Types.hpp"

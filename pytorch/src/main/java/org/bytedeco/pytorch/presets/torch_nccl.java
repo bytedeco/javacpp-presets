@@ -67,8 +67,14 @@ public class torch_nccl implements LoadEnabled, InfoMapper {
         boolean nativeNccl = platform != null && platform.startsWith("linux")
                 && extension != null && extension.endsWith("-gpu");
         if (!nativeNccl) {
+            // Clearing platform.library alone is insufficient: generated NCCL peer
+            // classes re-set it from the last global target. A dummy executable
+            // makes Builder skip native library generation entirely.
             properties.setProperty("platform.library", "");
             properties.put("platform.link", new java.util.ArrayList<String>());
+            java.util.ArrayList<String> skipNative = new java.util.ArrayList<String>();
+            skipNative.add("__skip_native_library__");
+            properties.put("platform.executable", skipNative);
         }
     }
 
@@ -90,7 +96,7 @@ public class torch_nccl implements LoadEnabled, InfoMapper {
 
         infoMap
             .put(new Info().javaText("import org.bytedeco.pytorch.Allocator;"))
-            .put(new Info().javaText("import org.bytedeco.pytorch.Backend;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.distributed.Backend;"))
             .put(new Info("(defined(IS_NCCLX) || defined(USE_ROCM)) && defined(NCCL_COMM_DUMP)").define(false))
             .put(new Info("std::map<at::ScalarType,ncclDataType_t>").pointerTypes("ScalaTypeDataTypeMap").define())
             .put(new Info("std::unordered_map<std::string,std::shared_ptr<c10d::NCCLComm> >").pointerTypes("StringNCCLCommMap").define())

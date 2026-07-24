@@ -21,8 +21,12 @@
  */
 package org.bytedeco.pytorch.presets;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -34,13 +38,11 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
  * JavaCPP preset binding the {@code torch::distributed::rpc} C++ module
  * (PyTorch's RPC framework).
  *
- * <p>This preset inherits from {@link torch} so all the parentInfo mappings
- * (intrusive_ptr, std::optional, std::vector, IValue, ...) are inherited, then
- * layers the RPC-specific bindings.</p>
- *
- * <p>Header {@code torch/csrc/distributed/rpc/rpc.h} and the {@code python_*}
- * family (which require a live Python interpreter via pybind11) are excluded:
- * they are pybind glue, not native C++ APIs.</p>
+ * <p>{@link torch::distributed::rpc::RequestCallbackImpl} depends on
+ * {@code torch/csrc/jit/python/pybind.h} (Python.h + pybind11). We parse a
+ * lightweight shim ({@code request_callback_impl_java.h}) so Java peer classes
+ * are generated without walking the entire pybind stack, then swap in the real
+ * header at JNI compile time with Python include/link paths.
  *
  * @author Hervé Guillemet
  */
@@ -49,6 +51,9 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
     value = @Platform(
         value = {"linux", "macosx", "windows"},
         compiler = "cpp20",
+        // Match libtorch's Caffe2Targets.cmake INTERFACE_COMPILE_DEFINITIONS
+        // so tensorpipe_agent.h / USE_RPC surfaces are visible at JNI compile.
+        define = { "USE_RPC", "USE_TENSORPIPE", "USE_DISTRIBUTED", "USE_C10D_GLOO" },
         include = {
             // Ordered so headers with fewer dependencies come first.
             //
@@ -65,7 +70,9 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
             "torch/csrc/distributed/rpc/message.h",
             "torch/csrc/distributed/rpc/request_callback.h",
             "torch/csrc/distributed/rpc/request_callback_no_python.h",
-            "torch/csrc/distributed/rpc/request_callback_impl.h",
+            // Parse-time shim (no Python.h). init() swaps this for the real
+            // request_callback_impl.h when compiling jnitorch_rpc.
+            "request_callback_impl_java.h",
             "torch/csrc/distributed/rpc/rref_proto.h",
             "torch/csrc/distributed/rpc/rref_impl.h",
             "torch/csrc/distributed/rpc/rref_context.h",
@@ -75,12 +82,17 @@ import org.bytedeco.pytorch.presets.torch.PointerInfo;
             "torch/csrc/distributed/rpc/rpc_agent.h",
             "torch/csrc/distributed/rpc/tensorpipe_agent.h",
         },
-        link = { "c10", "torch", "torch_cpu" }
+        // RequestCallbackImpl symbols live in libtorch_python on many builds;
+        // torch_cpu also exports some. Link both + CPython.
+        link = { "c10", "torch", "torch_cpu", "torch_python", "python3.14" }
     ),
     target = "org.bytedeco.pytorch.rpc",
     global = "org.bytedeco.pytorch.global.torch_rpc"
 )
 public class torch_rpc implements LoadEnabled, InfoMapper {
+
+    private static final String SHIM = "request_callback_impl_java.h";
+    private static final String REAL = "torch/csrc/distributed/rpc/request_callback_impl.h";
 
     @Override
     public void init(ClassProperties properties) {
@@ -93,6 +105,122 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
         // torch.sharedMap(...) is still applied during map(...) below so the
         // parent InfoMappings (intrusive_ptr, std::optional, IValue, ...) are
         // available while parsing.
+        addPythonPaths(properties);
+
+        boolean parsing = false;
+        try {
+            Class<?> caller = Loader.getCallerClass(5);
+            parsing = caller != null
+                    && "org.bytedeco.javacpp.tools.Parser".equals(caller.getName());
+        } catch (Throwable ignored) {
+            // fall through — treat as compile/load
+        }
+
+        List<String> includes = properties.get("platform.include");
+        if (includes == null) {
+            return;
+        }
+        if (parsing) {
+            // Ensure shim is present and real header is not (avoids pybind parse).
+            includes.remove(REAL);
+            if (!includes.contains(SHIM)) {
+                int idx = includes.indexOf("torch/csrc/distributed/rpc/request_callback_no_python.h");
+                if (idx >= 0) {
+                    includes.add(idx + 1, SHIM);
+                } else {
+                    includes.add(SHIM);
+                }
+            }
+        } else {
+            // JNI compile: use the real header so the TU sees the complete type
+            // (including runPythonFunction) matching libtorch_python's definition.
+            includes.remove(SHIM);
+            if (!includes.contains(REAL)) {
+                int idx = includes.indexOf("torch/csrc/distributed/rpc/request_callback_no_python.h");
+                if (idx >= 0) {
+                    includes.add(idx + 1, REAL);
+                } else {
+                    includes.add(REAL);
+                }
+            }
+        }
+    }
+
+    /**
+     * Locate CPython headers ({@code Python.h}) and libraries for compiling
+     * sources that include {@code torch/csrc/jit/python/pybind.h}.
+     *
+     * <p>Search order: existing include paths, python3-config, common
+     * framework/homebrew paths, local cpython cppbuild.
+     */
+    static void addPythonPaths(ClassProperties properties) {
+        List<String> candidates = new ArrayList<>();
+
+        // Prefer paths already configured by pom / parent presets.
+        for (String root : properties.get("platform.includepath")) {
+            if (root == null) continue;
+            candidates.add(root);
+            candidates.add(root + "/python3.14");
+            candidates.add(root + "/python3.13");
+            candidates.add(root + "/python3.12");
+            candidates.add(root + "/python3.11");
+        }
+
+        // python3-config --includes (first -I entries first)
+        try {
+            Process p = new ProcessBuilder("python3-config", "--includes")
+                    .redirectErrorStream(true).start();
+            String out = new String(p.getInputStream().readAllBytes());
+            p.waitFor();
+            for (String tok : out.trim().split("\\s+")) {
+                if (tok.startsWith("-I") && tok.length() > 2) {
+                    candidates.add(0, tok.substring(2));
+                }
+            }
+        } catch (Exception ignored) { }
+
+        candidates.add("../cpython/cppbuild/" + properties.getProperty("platform") + "/include");
+        candidates.add("../cpython/cppbuild/" + properties.getProperty("platform") + "/include/python3.14");
+        candidates.add("/Library/Frameworks/Python.framework/Versions/3.14/include/python3.14");
+        candidates.add("/Library/Frameworks/Python.framework/Versions/Current/include/python3.14");
+        candidates.add("/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/include/python3.14");
+        candidates.add("/usr/local/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/include/python3.14");
+        candidates.add("/usr/include/python3.14");
+        candidates.add("/usr/include/python3.12");
+        candidates.add("/usr/include/python3.11");
+
+        for (String c : candidates) {
+            if (c == null || c.isEmpty()) continue;
+            File py = new File(c, "Python.h");
+            File pyNested = new File(c, "python3.14/Python.h");
+            if (py.isFile()) {
+                properties.addAll("platform.includepath", c);
+                break;
+            } else if (pyNested.isFile()) {
+                properties.addAll("platform.includepath", c);
+                properties.addAll("platform.includepath", c + "/python3.14");
+                break;
+            }
+        }
+
+        // Link path for libpython
+        List<String> libCandidates = new ArrayList<>();
+        for (String root : properties.get("platform.linkpath")) {
+            if (root != null) libCandidates.add(root);
+        }
+        libCandidates.add("/Library/Frameworks/Python.framework/Versions/3.14/lib");
+        libCandidates.add("/opt/homebrew/opt/python@3.14/Frameworks/Python.framework/Versions/3.14/lib");
+        libCandidates.add("../cpython/cppbuild/" + properties.getProperty("platform") + "/lib");
+        for (String c : libCandidates) {
+            if (c == null) continue;
+            if (new File(c, "libpython3.14.dylib").isFile()
+                    || new File(c, "libpython3.14.so").isFile()
+                    || new File(c, "libpython3.14.a").isFile()
+                    || new File(c, "python3.14.lib").isFile()) {
+                properties.addAll("platform.linkpath", c);
+                break;
+            }
+        }
     }
 
     @Override
@@ -112,6 +240,12 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
                           "torch::jit::TypeAttr::ConstructorType",
                           "torch::jit::TypeAttr::ValueType")
                     .pointerTypes("Type.TypePtr"))
+        ;
+
+        //--- pybind11 / Python types (not mapped; skip methods that need them) -
+        infoMap
+            .put(new Info("pybind11::object", "py::object", "PyObject").skip())
+            .put(new Info("torch::distributed::rpc::RequestCallbackImpl::runPythonFunction").skip())
         ;
 
         //--- Scalar id types -------------------------------------------------------
@@ -204,10 +338,6 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
                 + "  @Override public String toString() { return intern().name(); }\n"
                 + "}"
             ))
-
-            // RequestCallbackImpl::runPythonFunction references pybind11::object
-            // (the `object` parameter); pybind is out of scope here.
-            .put(new Info("torch::distributed::rpc::RequestCallbackImpl::runPythonFunction").skip())
         ;
 
         //--- Skip transitive free functions from utils.h / agent_utils.h --------
@@ -318,7 +448,8 @@ public class torch_rpc implements LoadEnabled, InfoMapper {
         infoMap
             .put(new Info("torch::distributed::rpc::RpcAgent").purify().pointerTypes("RpcAgent").virtualize())
             .put(new Info("torch::distributed::rpc::RpcAgent::RpcAgent").skip())     // protected
-            .put(new Info("torch::distributed::rpc::RpcAgent::send").virtualize())
+            // send: do not virtualize — intrusive_ptr by-value + JavaCPP Cast& conflict
+            // .put(new Info("torch::distributed::rpc::RpcAgent::send").virtualize())
             .put(new Info("torch::distributed::rpc::RpcAgent::getWorkerInfo",
                           "torch::distributed::rpc::RpcAgent::getWorkerInfoByName",
                           "torch::distributed::rpc::RpcAgent::getWorkerInfos",

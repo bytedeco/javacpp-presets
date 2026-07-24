@@ -40,7 +40,7 @@ public:
         this->ptr = ptr;
         this->size = size;
         this->owner = owner;
-        this->intrusivePtr = owner != NULL && owner != ptr ? *(I*)owner : I((T*)ptr);
+        this->intrusivePtr = owner != NULL && owner != ptr ? *(I*)owner : I::unsafe_steal_from_new((T*)ptr);
     }
     static void deallocate(void* owner) { delete (I*)owner; }
 
