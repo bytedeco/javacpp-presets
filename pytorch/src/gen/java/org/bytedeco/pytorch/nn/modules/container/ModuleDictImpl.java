@@ -181,6 +181,12 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
 
   /** Insert a key-module pair by overwriting existing keys,
    *  and register or replace the {@code Module}. */
-  public native void insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module module);
-  public native void insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  private native @Name("insert") void _insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public void insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByVal Module module) { org.bytedeco.pytorch.nn.ModuleAsHelper.remember(module); _insert(key, module); }
+  private native @Name("insert") void _insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public void insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByVal Module module) { org.bytedeco.pytorch.nn.ModuleAsHelper.remember(module); _insert(key, module); }
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.nn.ModulePrinter}. */
+  @Override public String toString() { return org.bytedeco.pytorch.nn.ModulePrinter.format(this); }
 }

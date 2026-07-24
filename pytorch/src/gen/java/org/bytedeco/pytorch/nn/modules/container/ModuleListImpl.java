@@ -96,7 +96,8 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** Pretty prints the {@code ModuleList} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
-  public native void push_back(@SharedPtr("torch::nn::Module") @ByVal Module module);
+  private native @Name("push_back") void _push_back(@SharedPtr("torch::nn::Module") @ByVal Module module);
+  public void push_back(@SharedPtr("torch::nn::Module") @ByVal Module module) { org.bytedeco.pytorch.nn.ModuleAsHelper.remember(module); _push_back(module); }
 
   /** Adds a new {@code Module} to the {@code ModuleList} container, moving or copying
    *  it into a {@code shared_ptr} internally. This method allows passing value types,
@@ -143,7 +144,8 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** True if there are no modules in the {@code ModuleList}. */
   public native @Cast("bool") @NoException(true) boolean is_empty();
 
-  public native void insert(@Cast("size_t") long index, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  private native @Name("insert") void _insert(@Cast("size_t") long index, @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public void insert(@Cast("size_t") long index, @SharedPtr("torch::nn::Module") @ByVal Module module) { org.bytedeco.pytorch.nn.ModuleAsHelper.remember(module); _insert(index, module); }
 
   /** Unwraps the contained module of a {@code ModuleHolder} and inserts it in the
    *  {@code ModuleList}. */
@@ -151,4 +153,8 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** inserts a new {@code Module} to the {@code ModuleList} container, moving or copying
    *  it into a {@code shared_ptr} internally. This method allows passing value types,
    *  and letting the container deal with the boxing. */
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.nn.ModulePrinter}. */
+  @Override public String toString() { return org.bytedeco.pytorch.nn.ModulePrinter.format(this); }
 }

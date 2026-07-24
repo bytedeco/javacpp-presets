@@ -2,6 +2,10 @@
 
 import org.bytedeco.javacpp.*;
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
+import org.bytedeco.pytorch.nn.options.*;
 import org.bytedeco.pytorch.jit.*;
 
 import static org.bytedeco.pytorch.global.torch.*;

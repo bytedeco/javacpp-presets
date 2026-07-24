@@ -99,4 +99,8 @@ public class ParameterListImpl extends ParameterListImplCloneable {
   public native @Cast("bool") @NoException(true) boolean is_empty();
 
   /** Overload the +=, so that two ParameterList could be incrementally added */
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.nn.ModulePrinter}. */
+  @Override public String toString() { return org.bytedeco.pytorch.nn.ModulePrinter.format(this); }
 }

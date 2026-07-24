@@ -66,4 +66,7 @@ public class SmoothL1LossOptions extends Pointer {
   private native void allocate(@ByVal kSum reduction);
   public native @ByRef @NoException(true) LossReduction reduction();
   public native @ByRef @NoException(true) DoubleOptional beta();
+
+  public native @ByRef @NoException(true) SmoothL1LossOptions reduction(@ByVal LossReduction setter);
+  public native @ByRef @NoException(true) SmoothL1LossOptions beta(@ByVal DoubleOptional setter);
 }

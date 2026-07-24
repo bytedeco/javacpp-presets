@@ -82,4 +82,8 @@ public class Optimizer extends Pointer {
 
   /** Deserializes the optimizer state from the given {@code archive}. */
   public native void load(@ByRef InputArchive archive);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.OptimizerPrinter}. */
+  @Override public String toString() { return org.bytedeco.pytorch.OptimizerPrinter.format(this); }
 }

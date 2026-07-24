@@ -45,4 +45,7 @@ public class UnflattenOptions extends Pointer {
   private native void allocate(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes);
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim();
   public native @Cast("std::vector<int64_t>*") @ByRef @NoException(true) LongVector sizes();
+
+  public native @ByRef @NoException(true) UnflattenOptions dim(@Cast("int64_t") long setter);
+  public native @ByRef @NoException(true) UnflattenOptions sizes(@Cast("std::vector<int64_t>*") @ByVal LongVector setter);
 }

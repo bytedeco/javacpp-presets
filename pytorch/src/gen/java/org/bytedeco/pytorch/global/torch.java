@@ -75322,6 +75322,7 @@ apis for specific fusers.
 // #include <memory>
 // #include <string>
 // #include <type_traits>
+// #include <tuple>
 // Targeting ../Module.java
 
 
@@ -82146,6 +82147,8 @@ body of your function, only data pointers.
  *  provides, and examples of how to use {@code Embedding} with
  *  {@code torch::nn::EmbeddingOptions}. See the documentation for {@code ModuleHolder} to
  *  learn about PyTorch's module storage semantics. */
+
+
 // Targeting ../EmbeddingBagImpl.java
 
 
@@ -82155,6 +82158,10 @@ body of your function, only data pointers.
  *  provides, and examples of how to use {@code EmbeddingBag} with
  *  {@code torch::nn::EmbeddingBagOptions}. See the documentation for {@code ModuleHolder}
  *  to learn about PyTorch's module storage semantics. */
+
+
+
+
  // namespace torch::nn
 
 // #else

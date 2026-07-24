@@ -455,7 +455,11 @@ public class AnyModule extends Pointer {
 
   /** Returns a {@code std::shared_ptr} whose dynamic type is that of the underlying
    *  module. */
+  public AnyModule(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module) { super((Pointer)null); allocate(module); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  public static AnyModule from_module(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module) { return new AnyModule(module); }
   public native @SharedPtr("torch::nn::Module") @ByVal Module ptr();
+  public Module toModule() { return org.bytedeco.pytorch.nn.ModuleAsHelper.recover(ptr()); }
 
   /** Like {@code ptr()}, but casts the pointer to the given type. */
 

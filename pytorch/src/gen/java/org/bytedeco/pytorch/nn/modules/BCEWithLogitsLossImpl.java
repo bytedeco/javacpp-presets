@@ -75,4 +75,8 @@ public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
 
   /** A weight of positive examples. */
   public native @ByRef Tensor pos_weight(); public native BCEWithLogitsLossImpl pos_weight(Tensor setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.LossPrinter}. */
+  @Override public String toString() { return org.bytedeco.pytorch.LossPrinter.format(this); }
 }

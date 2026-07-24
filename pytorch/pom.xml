@@ -166,6 +166,38 @@
               </arguments>
             </configuration>
           </execution>
+          <!-- Fluent chain setters on *Options.java (after relocate so paths exist). -->
+          <execution>
+            <id>generate-nn-option-setters</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${java.home}/bin/java</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>${project.basedir}/src/main/java/org/bytedeco/pytorch/presets/NNOptionsFluentSetterGenerator.java</argument>
+                <argument>${project.basedir}/src/gen/java</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <!-- Strip multi-arg @Virtual(method="forward") on Module; inject toString. -->
+          <execution>
+            <id>strip-forward-virtual-annotations</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>/bin/sh</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>${project.basedir}/src/main/java/org/bytedeco/pytorch/presets/strip_module_forward.sh</argument>
+                <argument>${project.basedir}/src/gen/java</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>

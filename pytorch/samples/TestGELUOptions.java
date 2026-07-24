@@ -2,6 +2,13 @@
 // This demonstrates the fix for issue #1730
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.nn.modules.container.*;
+import org.bytedeco.pytorch.nn.options.*;
+import org.bytedeco.pytorch.nn.*;
+import org.bytedeco.pytorch.nn.options.*;
+
 import static org.bytedeco.pytorch.global.torch.*;
 
 public class TestGELUOptions {

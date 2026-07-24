@@ -237,6 +237,13 @@ sedinplace '/using ExampleType = ExampleType_;/a\
 sedinplace '/^};/a\
 TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
 ' torch/csrc/api/include/torch/nn/module.h
+
+# JavaCPP Module/AnyModule/Sequential/Embedding header patches
+if [[ -x ../../../scripts/patch_module_headers.sh ]]; then
+    bash ../../../scripts/patch_module_headers.sh .
+elif [[ -f ../../../scripts/patch_module_headers.sh ]]; then
+    bash ../../../scripts/patch_module_headers.sh .
+fi
 sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
 # some windows header defines a macro named "interface"
@@ -268,6 +275,12 @@ if [[ ! -e torch/include/gloo ]]; then
     ln -sf ../../third_party/gloo/gloo torch/include
 fi
 ln -sf pytorch/torch/include ../include
+# Re-apply patches on the installed include tree (symlinked above).
+if [[ -x ../../../scripts/patch_module_headers.sh ]]; then
+    # resolve symlink target
+    INC_REAL=$(cd ../include && pwd -P)
+    bash ../../../scripts/patch_module_headers.sh "$INC_REAL"
+fi
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
 rm -f ../lib/libomp.dylib

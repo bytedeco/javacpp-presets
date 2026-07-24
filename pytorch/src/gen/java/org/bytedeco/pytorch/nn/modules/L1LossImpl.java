@@ -65,4 +65,8 @@ public class L1LossImpl extends L1LossImplCloneable {
 
   /** The options with which this {@code Module} was constructed. */
   public native @ByRef L1LossOptions options(); public native L1LossImpl options(L1LossOptions setter);
+
+  /** Debug-friendly string representation, mirroring Python PyTorch's
+   *  {@code print(...)} behavior. See {@link org.bytedeco.pytorch.LossPrinter}. */
+  @Override public String toString() { return org.bytedeco.pytorch.LossPrinter.format(this); }
 }
