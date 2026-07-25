@@ -36,9 +36,9 @@ public class NodeCall extends Pointer {
   public native @IntrusivePtr("torch::autograd::Node") @Cast({"", "c10::intrusive_ptr<torch::autograd::Node>&"}) Node node(); public native NodeCall node(Node setter);
   public native @ByRef IntPairVector tensor_pre_hooks(); public native NodeCall tensor_pre_hooks(IntPairVector setter);
   public native @ByRef IntPairVector cpp_tensor_pre_hooks(); public native NodeCall cpp_tensor_pre_hooks(IntPairVector setter);
-  public native @StdVector IntPointer pre_hooks(); public native NodeCall pre_hooks(IntPointer setter);
-  public native @StdVector IntPointer post_hooks(); public native NodeCall post_hooks(IntPointer setter);
-  public native @StdVector IntPointer post_acc_grad_hooks(); public native NodeCall post_acc_grad_hooks(IntPointer setter);
+  public native @ByRef @Cast("std::vector<int>*") IntVector pre_hooks(); public native NodeCall pre_hooks(IntVector setter);
+  public native @ByRef @Cast("std::vector<int>*") IntVector post_hooks(); public native NodeCall post_hooks(IntVector setter);
+  public native @ByRef @Cast("std::vector<int>*") IntVector post_acc_grad_hooks(); public native NodeCall post_acc_grad_hooks(IntVector setter);
   public native @ByRef IntPairVector graph_output(); public native NodeCall graph_output(IntPairVector setter);
   public native @Cast("bool") boolean needed(); public native NodeCall needed(boolean setter);
 }

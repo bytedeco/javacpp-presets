@@ -337,6 +337,88 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
     }
 
     /**
+     * Loads a text resource that lives next to this preset on the classpath
+     * (src/main/resources/org/bytedeco/pytorch/presets/&lt;name&gt;).
+     * Used to feed multi-kilobyte cppText/javaText payloads into the
+     * Info.cppText(...) / Info.javaText(...) builders without bloating this
+     * source file with embedded string literals.
+     */
+    static String readPresetResource(String name) {
+        String path = "org/bytedeco/pytorch/presets/" + name;
+        try (InputStream in = torch.class.getClassLoader().getResourceAsStream(path)) {
+            if (in == null) {
+                throw new IllegalStateException("Missing preset resource: " + path);
+            }
+            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+            StringBuilder sb = new StringBuilder();
+            char[] buf = new char[8192];
+            int n;
+            while ((n = r.read(buf)) >= 0) sb.append(buf, 0, n);
+            return sb.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read preset resource " + path, e);
+        }
+    }
+
+    /**
+     * Registers 70 Info entries (one per (dim, type, hasOptions) tuple) for the
+     * multi-dimensional {@code at::detail::tensor_md_*} overloads declared and
+     * defined inline in {@code pytorch_adapters.h}.
+     *
+     * <p>Each entry supplies {@code javaText} containing BOTH:
+     * <ul>
+     *   <li>the {@code public static native} declaration for {@code tensor_md_*}, and</li>
+     *   <li>the user-facing {@code tensor(T[][]...)} overload that builds nested
+     *       {@code *Vector*} and calls that native.</li>
+     * </ul>
+     * JavaCPP's {@code javaText} <em>replaces</em> the whole function emission, so
+     * the native must be included in the payload (see {@code asModuleUnchecked}).
+     * C++ bodies live in adapters.h — we do not inject {@code cppText}.
+     *
+     * <p>Payload {@code multi_dim_tensor_java.txt} is split on {@code // ---}.
+     */
+    static void buildMultiDimTensorInfo(InfoMap infoMap) {
+        String javaPayload = readPresetResource("multi_dim_tensor_java.txt");
+
+        java.util.LinkedHashMap<String, String> javaByFunc = new java.util.LinkedHashMap<>();
+        StringBuilder current = new StringBuilder();
+        for (String line : javaPayload.split("\n", -1)) {
+            // Header comments + block separators — never part of a method body.
+            if (line.startsWith("//")) {
+                registerMdJavaBlock(javaByFunc, current);
+                current.setLength(0);
+                continue;
+            }
+            current.append(line).append('\n');
+        }
+        registerMdJavaBlock(javaByFunc, current);
+
+        if (javaByFunc.size() != 70) {
+            throw new IllegalStateException(
+                "expected 70 multi-dim tensor java wrappers, got " + javaByFunc.size()
+                    + ": " + javaByFunc.keySet());
+        }
+        for (java.util.Map.Entry<String, String> e : javaByFunc.entrySet()) {
+            // Match adapters.h inline function; javaText replaces its Java emission.
+            infoMap.put(new Info("at::detail::" + e.getKey()).javaText(e.getValue()));
+        }
+    }
+
+    /** Flush a java wrapper block into the map, keyed by the native function it calls. */
+    private static void registerMdJavaBlock(java.util.Map<String, String> javaByFunc, StringBuilder current) {
+        String javaText = current.toString().trim();
+        if (javaText.isEmpty()) return;
+        int returnIdx = javaText.indexOf("return tensor_md_");
+        if (returnIdx < 0) return;
+        int parenStart = javaText.indexOf('(', returnIdx);
+        // "return tensor_md_2d_uint8(outer)" or "return tensor_md_2d_uint8_opt(outer, options)"
+        // The function name is already complete in the return statement (including _opt).
+        String funcName = javaText.substring(returnIdx + "return ".length(), parenStart).trim();
+        if (!javaText.endsWith("\n")) javaText = javaText + "\n";
+        javaByFunc.put(funcName, javaText);
+    }
+
+    /**
      * Fully qualified C++ class names of all built-in {@code *Impl} layers
      * that the generic {@code push_back(Module)} can dispatch to via
      * {@code dynamic_cast}. Add new entries here when the preset learns
@@ -878,9 +960,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<bool>").pointerTypes("BoolVector").define())
             .put(new Info("std::vector<uint8_t>", "std::vector<char>").pointerTypes("ByteVector").define().cast()) // cast to accomodate sign/unsigned
             .put(new Info("std::vector<const char*>").pointerTypes("BytePointerVector").define())
-//            .put(new Info("std::vector<int>").pointerTypes("IntVector").define())
+            .put(new Info("std::vector<int16_t>").pointerTypes("ShortVector").define())
+            .put(new Info("std::vector<int32_t>", "std::vector<int>").pointerTypes("IntVector").define().cast())
             .put(new Info("std::vector<int64_t>", "std::tuple<std::vector<int64_t>,std::vector<int64_t> >").cast().pointerTypes("LongVector").define())
             .put(new Info("std::vector<double>").cast().pointerTypes("DoubleVector").define())
+            .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
             .put(new Info("std::vector<size_t>").cast().pointerTypes("SizeTVector").define())
             .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
             .put(new Info("std::vector<c10::string_view>", "std::vector<std::string_view>").pointerTypes("StringViewVector").define())
@@ -938,6 +1022,56 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("std::vector<at::Tag>").pointerTypes("TagVector").define())
             .put(new Info("std::vector<std::shared_ptr<caffe2::serialize::ReadAdapterInterface> >").pointerTypes("ReadAdapterInterfaceVector").define())
             .put(new Info("std::vector<std::vector<size_t> >").pointerTypes("SizeTVectorVector").define())
+            // Nested std::vector wrappers used by at::tensor() multi-dimensional overloads (2D..6D).
+            // Inner element types are registered above (BoolVector / ByteVector / ShortVector /
+            // IntVector / LongVector / DoubleVector); we add the *VectorVector entries here so
+            // JavaCPP emits wrapper classes that accept nested Java arrays via Java overloads.
+            // .cast() on Byte* aliases uint8_t/char (and Int* aliases int32_t/int) the same way
+            // 1D ByteVector does — without it multi_get(vector<vector<char>>) fails to compile.
+            .put(new Info("std::vector<std::vector<uint8_t> >", "std::vector<std::vector<char> >").pointerTypes("ByteVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<int8_t> >").pointerTypes("SByteVectorVector").define())
+            .put(new Info("std::vector<std::vector<int16_t> >").pointerTypes("ShortVectorVector").define())
+            .put(new Info("std::vector<std::vector<int32_t> >", "std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<int64_t> >").pointerTypes("LongVectorVector").define())
+            .put(new Info("std::vector<std::vector<float> >").pointerTypes("FloatVectorVector").define())
+            .put(new Info("std::vector<std::vector<double> >").pointerTypes("DoubleVectorVector").define())
+            .put(new Info("std::vector<std::vector<bool> >").pointerTypes("BoolVectorVector").define())
+            // 3D nested vectors (used by tensor_md_3d_*)
+            .put(new Info("std::vector<std::vector<std::vector<uint8_t> > >", "std::vector<std::vector<std::vector<char> > >").pointerTypes("ByteVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<int8_t> > >").pointerTypes("SByteVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<int16_t> > >").pointerTypes("ShortVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<int32_t> > >", "std::vector<std::vector<std::vector<int> > >").pointerTypes("IntVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<int64_t> > >").pointerTypes("LongVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<float> > >").pointerTypes("FloatVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<double> > >").pointerTypes("DoubleVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<bool> > >").pointerTypes("BoolVectorVectorVector").define())
+            // 4D nested vectors (used by tensor_md_4d_*)
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<uint8_t> > > >", "std::vector<std::vector<std::vector<std::vector<char> > > >").pointerTypes("ByteVectorVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<int8_t> > > >").pointerTypes("SByteVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<int16_t> > > >").pointerTypes("ShortVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<int32_t> > > >", "std::vector<std::vector<std::vector<std::vector<int> > > >").pointerTypes("IntVectorVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<int64_t> > > >").pointerTypes("LongVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<float> > > >").pointerTypes("FloatVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<double> > > >").pointerTypes("DoubleVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<bool> > > >").pointerTypes("BoolVectorVectorVectorVector").define())
+            // 5D nested vectors (used by tensor_md_5d_*)
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t> > > > >", "std::vector<std::vector<std::vector<std::vector<std::vector<char> > > > >").pointerTypes("ByteVectorVectorVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<int8_t> > > > >").pointerTypes("SByteVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<int16_t> > > > >").pointerTypes("ShortVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<int32_t> > > > >", "std::vector<std::vector<std::vector<std::vector<std::vector<int> > > > >").pointerTypes("IntVectorVectorVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<int64_t> > > > >").pointerTypes("LongVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > >").pointerTypes("FloatVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > >").pointerTypes("DoubleVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<bool> > > > >").pointerTypes("BoolVectorVectorVectorVectorVector").define())
+            // 6D nested vectors (used by tensor_md_6d_*)
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t> > > > > >", "std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<char> > > > > >").pointerTypes("ByteVectorVectorVectorVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int8_t> > > > > >").pointerTypes("SByteVectorVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int16_t> > > > > >").pointerTypes("ShortVectorVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int32_t> > > > > >", "std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int> > > > > >").pointerTypes("IntVectorVectorVectorVectorVectorVector").define().cast())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int64_t> > > > > >").pointerTypes("LongVectorVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >").pointerTypes("FloatVectorVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > > >").pointerTypes("DoubleVectorVectorVectorVectorVectorVector").define())
+            .put(new Info("std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<bool> > > > > >").pointerTypes("BoolVectorVectorVectorVectorVectorVector").define())
             .put(new Info("std::vector<c10::ArrayRef<int64_t> >", "std::vector<c10::IntArrayRef>").pointerTypes("LongArrayRefVector").define())
             .put(new Info("std::vector<c10::intrusive_ptr<c10::ivalue::Future> >").pointerTypes("FutureVector").define())
             .put(new Info("std::vector<c10::intrusive_ptr<c10::SymNodeImpl> >").pointerTypes("SymNodeVector").define())
@@ -2042,8 +2176,12 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
             .put(new Info("torch::nn::FractionalMaxPoolOptions<3>", "torch::nn::functional::FractionalMaxPool3dFuncOptions").pointerTypes("FractionalMaxPool3dOptions"))
             .put(new Info("torch::nn::LPPoolOptions<1>", "torch::nn::functional::LPPool1dFuncOptions").pointerTypes("LPPool1dOptions"))
             .put(new Info("torch::nn::LPPoolOptions<2>", "torch::nn::functional::LPPool2dFuncOptions").pointerTypes("LPPool2dOptions"))
-            .put(new Info("torch::nn::LPPoolOptions<3>", "torch::nn::functional::LPPool3dFuncOptions").pointerTypes("LPPool3dOptions"))
-        ;
+            .put(new Info("torch::nn::LPPoolOptions<3>", "torch::nn::functional::LPPool3dFuncOptions").pointerTypes("LPPool3dOptions"));
+            // Multi-dimensional at::tensor() support (2D..6D).
+            // Each function declared in pytorch_adapters.h is matched by an Info entry here
+            // that provides the cppText (inline body) and javaText (Java wrapper).
+            // See buildMultiDimTensorInfo(InfoMap) for the 70 entries (5 dims × 7 types × 2).
+            buildMultiDimTensorInfo(infoMap);
 
         //// Modules
         infoMap
@@ -3137,6 +3275,11 @@ public class torch implements LoadEnabled, InfoMapper, BuildEnabled {
         //// c10::string_view
         infoMap.put(new Info("c10::basic_string_view<char>", "c10::string_view").annotations("@StringView").valueTypes("BytePointer", "String"));
         infoMap.put(new Info("std::string_view").annotations("@StringView").valueTypes("@Cast(\"const char*\") BytePointer", "String").pointerTypes("@Cast({\"const char*\", \"c10::string_view*\"}) BytePointer"));
+
+        // C++-only @Adapter helpers from pytorch_adapters.h — never emit Java classes for them.
+        // StringViewAdapter's operator c10::string_view&() would otherwise generate a bogus
+        // `string_view` return type (c10::string_view is mapped as @StringView BytePointer/String).
+        infoMap.put(new Info("StringViewAdapter", "IntrusivePtrAdapter", "WeakPtrAdapter").skip());
 
         // Registries.
         // Skipped them for now. Much burden with variadic args and creator function pointers.

@@ -110,12 +110,12 @@ public class ProcessGroupGloo extends Backend {
 // #ifdef GLOO_STORE_HAS_STORE_V2
     public native @Cast("bool") boolean has_v2_support();
 
-    public native @Cast("std::vector<char>*") @StdVector ByteVector multi_get(
+    public native @ByVal @Cast("std::vector<std::vector<char> >*") ByteVectorVector multi_get(
             @Const @ByRef StringVector keys);
 
     public native void multi_set(
             @Const @ByRef StringVector keys,
-            @Cast("std::vector<char>*") @StdVector ByteVector values);
+            @Cast("const std::vector<std::vector<char> >*") @ByRef ByteVectorVector values);
 
     public native void append(@StdString BytePointer key, @Cast("const std::vector<char>*") @ByRef ByteVector value);
     public native void append(@StdString String key, @Cast("const std::vector<char>*") @ByRef ByteVector value);
@@ -307,15 +307,7 @@ public class ProcessGroupGloo extends Backend {
 
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
         @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
-        @StdVector IntPointer ranks,
-        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
-        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
-        @StdVector IntBuffer ranks,
-        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
-        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
-        @StdVector int[] ranks,
+        @Cast("const std::vector<int>*") @ByRef IntVector ranks,
         @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
 
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend merge(

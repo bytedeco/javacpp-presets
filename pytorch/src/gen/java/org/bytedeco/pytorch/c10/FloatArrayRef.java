@@ -66,6 +66,8 @@ public class FloatArrayRef extends FloatHeaderOnlyArrayRef {
    *  copy-construct an ArrayRef.
    *  NOTE: this is the only constructor that is not inherited from
    *  HeaderOnlyArrayRef. */
+  public FloatArrayRef(@ByRef FloatVector vec) { super((Pointer)null); allocate(vec); }
+  private native void allocate(@ByRef FloatVector vec);
 
   /** \}
    *  \name Simple Operations, mostly inherited from HeaderOnlyArrayRef

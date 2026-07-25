@@ -305,15 +305,7 @@ public class Backend extends CustomClassHolder {
 
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
         @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
-        @StdVector IntPointer ranks,
-        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
-        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
-        @StdVector IntBuffer ranks,
-        @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
-  public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend split(
-        @IntrusivePtr("c10d::Store") @Cast({"", "c10::intrusive_ptr<c10d::Store>&"}) Store store,
-        @StdVector int[] ranks,
+        @Cast("const std::vector<int>*") @ByRef IntVector ranks,
         @IntrusivePtr("c10d::Backend::Options") @Cast({"", "c10::intrusive_ptr<c10d::Backend::Options>&"}) Backend.Options opts);
 
   public native @IntrusivePtr("c10d::Backend") @Cast({"", "c10::intrusive_ptr<c10d::Backend>&"}) Backend merge(

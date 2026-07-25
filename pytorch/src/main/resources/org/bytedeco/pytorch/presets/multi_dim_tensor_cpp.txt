@@ -1,97 +1,7 @@
-class JavaCPP_hidden StringViewAdapter final {
-    public:
-        // Use size_t directly instead of type alias to avoid JavaCPP cast issues with "::"
-        using SizeT = typename std::basic_string<char>::size_type;
-        StringViewAdapter(const c10::string_view &sv) : ptr(sv.data()), size(sv.size()), svRef((c10::string_view &)sv) {}
-        StringViewAdapter(      c10::string_view &sv) : ptr(sv.data()), size(sv.size()), svRef(sv) {}
-        StringViewAdapter(const unsigned char *p, size_t s, void *o) : ptr((const char *) p), size(s > 0 ? s : strlen(ptr)), sv(ptr, size), svRef(sv) { }
-        StringViewAdapter(      unsigned char *p, size_t s, void *o) : ptr((const char *) p), size(s > 0 ? s : strlen(ptr)), sv(ptr, size), svRef(sv) { }
-        StringViewAdapter(const   signed char *p, size_t s, void *o) : ptr((const char *) p), size(s > 0 ? s : strlen(ptr)), sv(ptr, size), svRef(sv) { }
-        StringViewAdapter(        signed char *p, size_t s, void *o) : ptr((const char *) p), size(s > 0 ? s : strlen(ptr)), sv(ptr, size), svRef(sv) { }
-        StringViewAdapter(const          char *p, size_t s, void *o) : ptr(               p), size(s > 0 ? s : strlen(ptr)), sv(ptr, size), svRef(sv) { }
-        StringViewAdapter(               char *p, size_t s, void *o) : ptr((const char *) p), size(s > 0 ? s : strlen(ptr)), sv(ptr, size), svRef(sv) { }
-        static void deallocate(void *owner) { }
-        operator signed char *() { return (signed char *) ptr; }
-        operator const char *() { return ptr; }
-        operator c10::string_view&() { return svRef; }
-        operator c10::string_view*() { return &svRef; }
-        const char *ptr;
-        size_t size;
-        c10::string_view sv;
-        c10::string_view &svRef;
-        void *owner = NULL;
-};
-
-template<class T, class NullType = c10::detail::intrusive_target_default_null_type<T>> class IntrusivePtrAdapter {
-    public:
-    typedef c10::intrusive_ptr<T,NullType> I;
-    IntrusivePtrAdapter(const T* ptr, size_t size, void* owner) : ptr((T*)ptr), size(size), owner(owner),
-            intrusivePtr2(owner != NULL && owner != ptr ? *(I*)owner : I::unsafe_steal_from_new((T*)ptr)), intrusivePtr(intrusivePtr2) { }
-    IntrusivePtrAdapter(const I& intrusivePtr) : ptr(0), size(0), owner(0), intrusivePtr2(intrusivePtr), intrusivePtr(intrusivePtr2) { }
-    IntrusivePtrAdapter(      I& intrusivePtr) : ptr(0), size(0), owner(0), intrusivePtr(intrusivePtr) { }
-    IntrusivePtrAdapter(const I* intrusivePtr) : ptr(0), size(0), owner(0), intrusivePtr(*(I*)intrusivePtr) { }
-    IntrusivePtrAdapter(c10::weak_intrusive_ptr<T> wp) : ptr(0), size(0), owner(0), intrusivePtr2(wp.lock()), intrusivePtr(intrusivePtr2) { }
-    void assign(T* ptr, size_t size, void* owner) {
-        this->ptr = ptr; this->size = size; this->owner = owner;
-        this->intrusivePtr = owner != NULL && owner != ptr ? *(I*)owner : I::unsafe_steal_from_new((T*)ptr);
-    }
-    static void deallocate(void* owner) { delete (I*)owner; }
-    operator T*() {
-        ptr = intrusivePtr.get();
-        if (owner == NULL || owner == ptr) { owner = new I(intrusivePtr); }
-        return ptr;
-    }
-    operator T&() {
-        ptr = intrusivePtr.get();
-        if (owner == NULL || owner == ptr) { owner = new I(intrusivePtr); }
-        return *ptr;
-    }
-    operator std::optional<I>() { return std::optional(intrusivePtr); }
-    operator I&() { return intrusivePtr; }
-    operator I*() { return &intrusivePtr; }
-    T* ptr; size_t size; void* owner; I intrusivePtr2; I& intrusivePtr;
-};
-
-template<class T> class WeakPtrAdapter {
-    public:
-    typedef std::shared_ptr<T> S;
-    typedef std::weak_ptr<T> W;
-    WeakPtrAdapter(const T* ptr, size_t size, void* owner) : ptr((T*)ptr), size(size), owner(owner),
-            sharedPtr2(owner != NULL && owner != ptr ? *(S*)owner : S((T*)ptr)), sharedPtr(sharedPtr2) { }
-    WeakPtrAdapter(const W& weakPtr) : ptr(0), size(0), owner(0), sharedPtr2(weakPtr.lock()), sharedPtr(sharedPtr2) { }
-    WeakPtrAdapter(      W& weakPtr) : ptr(0), size(0), owner(0), sharedPtr2(weakPtr.lock()), sharedPtr(sharedPtr2) { }
-    WeakPtrAdapter(const W* weakPtr) : ptr(0), size(0), owner(0), sharedPtr2((*weakPtr).lock()), sharedPtr(sharedPtr2) { }
-    void assign(T* ptr, size_t size, void* owner) {
-        this->ptr = ptr; this->size = size; this->owner = owner;
-        this->sharedPtr = owner != NULL && owner != ptr ? *(S*)owner : S((T*)ptr);
-    }
-    static void deallocate(void* owner) { delete (S*)owner; }
-    operator typename std::remove_const<T>::type*() {
-        ptr = sharedPtr.get();
-        if (owner == NULL || owner == ptr) { owner = new S(sharedPtr);; }
-        return (typename std::remove_const<T>::type*)ptr;;
-    }
-    operator W() { return W(sharedPtr); }
-    T* ptr; size_t size; void* owner; S sharedPtr2; S& sharedPtr;
-};
-
-// ============================================================================
-// Multi-dimensional at::tensor() support (2D..6D, 70 explicit functions)
-// Naming: tensor_md_<D>d_<Type>       = no TensorOptions
-//          tensor_md_<D>d_<Type>_opt   = with TensorOptions
-// Full inline bodies live here so JNI can call them without a separate .cpp.
-// Java wrappers (tensor(T[][]...)) are injected via Info.javaText from
-// multi_dim_tensor_java.txt (see buildMultiDimTensorInfo in presets/torch.java).
-// Each javaText block includes the native declaration + public overload
-// (javaText replaces the whole function emission).
-// IMPORTANT: always pass TensorOptions().dtype(kX) — empty TensorOptions{}
-// does NOT infer dtype from ArrayRef element type (defaults to float).
-// Regenerate with: python3 scripts/gen_multi_dim_tensor.py
-// ============================================================================
 namespace at {
 namespace detail {
 
-inline Tensor tensor_md_2d_uint8(const std::vector<std::vector<uint8_t> >& values) {
+inline Tensor tensor_md_2d_uint8(const std::vector<std::vector<uint8_t>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<uint8_t> flat;
@@ -100,7 +10,7 @@ inline Tensor tensor_md_2d_uint8(const std::vector<std::vector<uint8_t> >& value
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_uint8_opt(const std::vector<std::vector<uint8_t> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_uint8_opt(const std::vector<std::vector<uint8_t>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<uint8_t> flat;
@@ -110,7 +20,7 @@ inline Tensor tensor_md_2d_uint8_opt(const std::vector<std::vector<uint8_t> >& v
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_int16(const std::vector<std::vector<int16_t> >& values) {
+inline Tensor tensor_md_2d_int16(const std::vector<std::vector<int16_t>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<int16_t> flat;
@@ -119,7 +29,7 @@ inline Tensor tensor_md_2d_int16(const std::vector<std::vector<int16_t> >& value
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_int16_opt(const std::vector<std::vector<int16_t> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_int16_opt(const std::vector<std::vector<int16_t>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<int16_t> flat;
@@ -129,7 +39,7 @@ inline Tensor tensor_md_2d_int16_opt(const std::vector<std::vector<int16_t> >& v
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_int32(const std::vector<std::vector<int32_t> >& values) {
+inline Tensor tensor_md_2d_int32(const std::vector<std::vector<int32_t>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<int32_t> flat;
@@ -138,7 +48,7 @@ inline Tensor tensor_md_2d_int32(const std::vector<std::vector<int32_t> >& value
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_int32_opt(const std::vector<std::vector<int32_t> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_int32_opt(const std::vector<std::vector<int32_t>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<int32_t> flat;
@@ -148,7 +58,7 @@ inline Tensor tensor_md_2d_int32_opt(const std::vector<std::vector<int32_t> >& v
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_int64(const std::vector<std::vector<int64_t> >& values) {
+inline Tensor tensor_md_2d_int64(const std::vector<std::vector<int64_t>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<int64_t> flat;
@@ -157,7 +67,7 @@ inline Tensor tensor_md_2d_int64(const std::vector<std::vector<int64_t> >& value
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_int64_opt(const std::vector<std::vector<int64_t> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_int64_opt(const std::vector<std::vector<int64_t>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<int64_t> flat;
@@ -167,7 +77,7 @@ inline Tensor tensor_md_2d_int64_opt(const std::vector<std::vector<int64_t> >& v
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_float(const std::vector<std::vector<float> >& values) {
+inline Tensor tensor_md_2d_float(const std::vector<std::vector<float>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<float> flat;
@@ -176,7 +86,7 @@ inline Tensor tensor_md_2d_float(const std::vector<std::vector<float> >& values)
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_float_opt(const std::vector<std::vector<float> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_float_opt(const std::vector<std::vector<float>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<float> flat;
@@ -186,7 +96,7 @@ inline Tensor tensor_md_2d_float_opt(const std::vector<std::vector<float> >& val
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_double(const std::vector<std::vector<double> >& values) {
+inline Tensor tensor_md_2d_double(const std::vector<std::vector<double>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<double> flat;
@@ -195,7 +105,7 @@ inline Tensor tensor_md_2d_double(const std::vector<std::vector<double> >& value
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_double_opt(const std::vector<std::vector<double> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_double_opt(const std::vector<std::vector<double>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<double> flat;
@@ -205,7 +115,7 @@ inline Tensor tensor_md_2d_double_opt(const std::vector<std::vector<double> >& v
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_bool(const std::vector<std::vector<bool> >& values) {
+inline Tensor tensor_md_2d_bool(const std::vector<std::vector<bool>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<uint8_t> flat;
@@ -214,7 +124,7 @@ inline Tensor tensor_md_2d_bool(const std::vector<std::vector<bool> >& values) {
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(at::kBool).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_2d_bool_opt(const std::vector<std::vector<bool> >& values, const TensorOptions& options) {
+inline Tensor tensor_md_2d_bool_opt(const std::vector<std::vector<bool>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     std::vector<uint8_t> flat;
@@ -225,7 +135,7 @@ inline Tensor tensor_md_2d_bool_opt(const std::vector<std::vector<bool> >& value
     return at::tensor(flat, TensorOptions(opts).dtype(at::kByte)).to(opts).reshape({d0, d1});
 }
 
-inline Tensor tensor_md_3d_uint8(const std::vector<std::vector<std::vector<uint8_t> > >& values) {
+inline Tensor tensor_md_3d_uint8(const std::vector<std::vector<std::vector<uint8_t>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -235,7 +145,7 @@ inline Tensor tensor_md_3d_uint8(const std::vector<std::vector<std::vector<uint8
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_uint8_opt(const std::vector<std::vector<std::vector<uint8_t> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_uint8_opt(const std::vector<std::vector<std::vector<uint8_t>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -246,7 +156,7 @@ inline Tensor tensor_md_3d_uint8_opt(const std::vector<std::vector<std::vector<u
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_int16(const std::vector<std::vector<std::vector<int16_t> > >& values) {
+inline Tensor tensor_md_3d_int16(const std::vector<std::vector<std::vector<int16_t>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -256,7 +166,7 @@ inline Tensor tensor_md_3d_int16(const std::vector<std::vector<std::vector<int16
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_int16_opt(const std::vector<std::vector<std::vector<int16_t> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_int16_opt(const std::vector<std::vector<std::vector<int16_t>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -267,7 +177,7 @@ inline Tensor tensor_md_3d_int16_opt(const std::vector<std::vector<std::vector<i
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_int32(const std::vector<std::vector<std::vector<int32_t> > >& values) {
+inline Tensor tensor_md_3d_int32(const std::vector<std::vector<std::vector<int32_t>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -277,7 +187,7 @@ inline Tensor tensor_md_3d_int32(const std::vector<std::vector<std::vector<int32
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_int32_opt(const std::vector<std::vector<std::vector<int32_t> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_int32_opt(const std::vector<std::vector<std::vector<int32_t>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -288,7 +198,7 @@ inline Tensor tensor_md_3d_int32_opt(const std::vector<std::vector<std::vector<i
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_int64(const std::vector<std::vector<std::vector<int64_t> > >& values) {
+inline Tensor tensor_md_3d_int64(const std::vector<std::vector<std::vector<int64_t>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -298,7 +208,7 @@ inline Tensor tensor_md_3d_int64(const std::vector<std::vector<std::vector<int64
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_int64_opt(const std::vector<std::vector<std::vector<int64_t> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_int64_opt(const std::vector<std::vector<std::vector<int64_t>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -309,7 +219,7 @@ inline Tensor tensor_md_3d_int64_opt(const std::vector<std::vector<std::vector<i
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_float(const std::vector<std::vector<std::vector<float> > >& values) {
+inline Tensor tensor_md_3d_float(const std::vector<std::vector<std::vector<float>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -319,7 +229,7 @@ inline Tensor tensor_md_3d_float(const std::vector<std::vector<std::vector<float
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_float_opt(const std::vector<std::vector<std::vector<float> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_float_opt(const std::vector<std::vector<std::vector<float>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -330,7 +240,7 @@ inline Tensor tensor_md_3d_float_opt(const std::vector<std::vector<std::vector<f
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_double(const std::vector<std::vector<std::vector<double> > >& values) {
+inline Tensor tensor_md_3d_double(const std::vector<std::vector<std::vector<double>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -340,7 +250,7 @@ inline Tensor tensor_md_3d_double(const std::vector<std::vector<std::vector<doub
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_double_opt(const std::vector<std::vector<std::vector<double> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_double_opt(const std::vector<std::vector<std::vector<double>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -351,7 +261,7 @@ inline Tensor tensor_md_3d_double_opt(const std::vector<std::vector<std::vector<
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_bool(const std::vector<std::vector<std::vector<bool> > >& values) {
+inline Tensor tensor_md_3d_bool(const std::vector<std::vector<std::vector<bool>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -361,7 +271,7 @@ inline Tensor tensor_md_3d_bool(const std::vector<std::vector<std::vector<bool> 
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(at::kBool).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_3d_bool_opt(const std::vector<std::vector<std::vector<bool> > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_3d_bool_opt(const std::vector<std::vector<std::vector<bool>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -373,7 +283,7 @@ inline Tensor tensor_md_3d_bool_opt(const std::vector<std::vector<std::vector<bo
     return at::tensor(flat, TensorOptions(opts).dtype(at::kByte)).to(opts).reshape({d0, d1, d2});
 }
 
-inline Tensor tensor_md_4d_uint8(const std::vector<std::vector<std::vector<std::vector<uint8_t> > > >& values) {
+inline Tensor tensor_md_4d_uint8(const std::vector<std::vector<std::vector<std::vector<uint8_t>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -384,7 +294,7 @@ inline Tensor tensor_md_4d_uint8(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_uint8_opt(const std::vector<std::vector<std::vector<std::vector<uint8_t> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_uint8_opt(const std::vector<std::vector<std::vector<std::vector<uint8_t>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -396,7 +306,7 @@ inline Tensor tensor_md_4d_uint8_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_int16(const std::vector<std::vector<std::vector<std::vector<int16_t> > > >& values) {
+inline Tensor tensor_md_4d_int16(const std::vector<std::vector<std::vector<std::vector<int16_t>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -407,7 +317,7 @@ inline Tensor tensor_md_4d_int16(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_int16_opt(const std::vector<std::vector<std::vector<std::vector<int16_t> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_int16_opt(const std::vector<std::vector<std::vector<std::vector<int16_t>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -419,7 +329,7 @@ inline Tensor tensor_md_4d_int16_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_int32(const std::vector<std::vector<std::vector<std::vector<int32_t> > > >& values) {
+inline Tensor tensor_md_4d_int32(const std::vector<std::vector<std::vector<std::vector<int32_t>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -430,7 +340,7 @@ inline Tensor tensor_md_4d_int32(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_int32_opt(const std::vector<std::vector<std::vector<std::vector<int32_t> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_int32_opt(const std::vector<std::vector<std::vector<std::vector<int32_t>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -442,7 +352,7 @@ inline Tensor tensor_md_4d_int32_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_int64(const std::vector<std::vector<std::vector<std::vector<int64_t> > > >& values) {
+inline Tensor tensor_md_4d_int64(const std::vector<std::vector<std::vector<std::vector<int64_t>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -453,7 +363,7 @@ inline Tensor tensor_md_4d_int64(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_int64_opt(const std::vector<std::vector<std::vector<std::vector<int64_t> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_int64_opt(const std::vector<std::vector<std::vector<std::vector<int64_t>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -465,7 +375,7 @@ inline Tensor tensor_md_4d_int64_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_float(const std::vector<std::vector<std::vector<std::vector<float> > > >& values) {
+inline Tensor tensor_md_4d_float(const std::vector<std::vector<std::vector<std::vector<float>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -476,7 +386,7 @@ inline Tensor tensor_md_4d_float(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_float_opt(const std::vector<std::vector<std::vector<std::vector<float> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_float_opt(const std::vector<std::vector<std::vector<std::vector<float>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -488,7 +398,7 @@ inline Tensor tensor_md_4d_float_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_double(const std::vector<std::vector<std::vector<std::vector<double> > > >& values) {
+inline Tensor tensor_md_4d_double(const std::vector<std::vector<std::vector<std::vector<double>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -499,7 +409,7 @@ inline Tensor tensor_md_4d_double(const std::vector<std::vector<std::vector<std:
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_double_opt(const std::vector<std::vector<std::vector<std::vector<double> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_double_opt(const std::vector<std::vector<std::vector<std::vector<double>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -511,7 +421,7 @@ inline Tensor tensor_md_4d_double_opt(const std::vector<std::vector<std::vector<
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_bool(const std::vector<std::vector<std::vector<std::vector<bool> > > >& values) {
+inline Tensor tensor_md_4d_bool(const std::vector<std::vector<std::vector<std::vector<bool>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -522,7 +432,7 @@ inline Tensor tensor_md_4d_bool(const std::vector<std::vector<std::vector<std::v
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(at::kBool).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_4d_bool_opt(const std::vector<std::vector<std::vector<std::vector<bool> > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_4d_bool_opt(const std::vector<std::vector<std::vector<std::vector<bool>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -535,7 +445,7 @@ inline Tensor tensor_md_4d_bool_opt(const std::vector<std::vector<std::vector<st
     return at::tensor(flat, TensorOptions(opts).dtype(at::kByte)).to(opts).reshape({d0, d1, d2, d3});
 }
 
-inline Tensor tensor_md_5d_uint8(const std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t> > > > >& values) {
+inline Tensor tensor_md_5d_uint8(const std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -547,7 +457,7 @@ inline Tensor tensor_md_5d_uint8(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_uint8_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_uint8_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -560,7 +470,7 @@ inline Tensor tensor_md_5d_uint8_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_int16(const std::vector<std::vector<std::vector<std::vector<std::vector<int16_t> > > > >& values) {
+inline Tensor tensor_md_5d_int16(const std::vector<std::vector<std::vector<std::vector<std::vector<int16_t>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -572,7 +482,7 @@ inline Tensor tensor_md_5d_int16(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_int16_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<int16_t> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_int16_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<int16_t>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -585,7 +495,7 @@ inline Tensor tensor_md_5d_int16_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_int32(const std::vector<std::vector<std::vector<std::vector<std::vector<int32_t> > > > >& values) {
+inline Tensor tensor_md_5d_int32(const std::vector<std::vector<std::vector<std::vector<std::vector<int32_t>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -597,7 +507,7 @@ inline Tensor tensor_md_5d_int32(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_int32_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<int32_t> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_int32_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<int32_t>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -610,7 +520,7 @@ inline Tensor tensor_md_5d_int32_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_int64(const std::vector<std::vector<std::vector<std::vector<std::vector<int64_t> > > > >& values) {
+inline Tensor tensor_md_5d_int64(const std::vector<std::vector<std::vector<std::vector<std::vector<int64_t>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -622,7 +532,7 @@ inline Tensor tensor_md_5d_int64(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_int64_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<int64_t> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_int64_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<int64_t>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -635,7 +545,7 @@ inline Tensor tensor_md_5d_int64_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_float(const std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > >& values) {
+inline Tensor tensor_md_5d_float(const std::vector<std::vector<std::vector<std::vector<std::vector<float>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -647,7 +557,7 @@ inline Tensor tensor_md_5d_float(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_float_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_float_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<float>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -660,7 +570,7 @@ inline Tensor tensor_md_5d_float_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_double(const std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > >& values) {
+inline Tensor tensor_md_5d_double(const std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -672,7 +582,7 @@ inline Tensor tensor_md_5d_double(const std::vector<std::vector<std::vector<std:
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_double_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_double_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -685,7 +595,7 @@ inline Tensor tensor_md_5d_double_opt(const std::vector<std::vector<std::vector<
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_bool(const std::vector<std::vector<std::vector<std::vector<std::vector<bool> > > > >& values) {
+inline Tensor tensor_md_5d_bool(const std::vector<std::vector<std::vector<std::vector<std::vector<bool>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -697,7 +607,7 @@ inline Tensor tensor_md_5d_bool(const std::vector<std::vector<std::vector<std::v
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(at::kBool).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_5d_bool_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<bool> > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_5d_bool_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<bool>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -711,7 +621,7 @@ inline Tensor tensor_md_5d_bool_opt(const std::vector<std::vector<std::vector<st
     return at::tensor(flat, TensorOptions(opts).dtype(at::kByte)).to(opts).reshape({d0, d1, d2, d3, d4});
 }
 
-inline Tensor tensor_md_6d_uint8(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t> > > > > >& values) {
+inline Tensor tensor_md_6d_uint8(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -724,7 +634,7 @@ inline Tensor tensor_md_6d_uint8(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_uint8_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_uint8_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<uint8_t>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -738,7 +648,7 @@ inline Tensor tensor_md_6d_uint8_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(opts).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_int16(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int16_t> > > > > >& values) {
+inline Tensor tensor_md_6d_int16(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int16_t>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -751,7 +661,7 @@ inline Tensor tensor_md_6d_int16(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_int16_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int16_t> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_int16_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int16_t>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -765,7 +675,7 @@ inline Tensor tensor_md_6d_int16_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kShort)).to(opts).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_int32(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int32_t> > > > > >& values) {
+inline Tensor tensor_md_6d_int32(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int32_t>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -778,7 +688,7 @@ inline Tensor tensor_md_6d_int32(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_int32_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int32_t> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_int32_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int32_t>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -792,7 +702,7 @@ inline Tensor tensor_md_6d_int32_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kInt)).to(opts).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_int64(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int64_t> > > > > >& values) {
+inline Tensor tensor_md_6d_int64(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int64_t>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -805,7 +715,7 @@ inline Tensor tensor_md_6d_int64(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_int64_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int64_t> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_int64_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<int64_t>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -819,7 +729,7 @@ inline Tensor tensor_md_6d_int64_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kLong)).to(opts).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_float(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >& values) {
+inline Tensor tensor_md_6d_float(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -832,7 +742,7 @@ inline Tensor tensor_md_6d_float(const std::vector<std::vector<std::vector<std::
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_float_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_float_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -846,7 +756,7 @@ inline Tensor tensor_md_6d_float_opt(const std::vector<std::vector<std::vector<s
     return at::tensor(flat, TensorOptions().dtype(at::kFloat)).to(opts).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_double(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > > >& values) {
+inline Tensor tensor_md_6d_double(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -859,7 +769,7 @@ inline Tensor tensor_md_6d_double(const std::vector<std::vector<std::vector<std:
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_double_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_double_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -873,7 +783,7 @@ inline Tensor tensor_md_6d_double_opt(const std::vector<std::vector<std::vector<
     return at::tensor(flat, TensorOptions().dtype(at::kDouble)).to(opts).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_bool(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<bool> > > > > >& values) {
+inline Tensor tensor_md_6d_bool(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<bool>>>>>>& values) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();
@@ -886,7 +796,7 @@ inline Tensor tensor_md_6d_bool(const std::vector<std::vector<std::vector<std::v
     return at::tensor(flat, TensorOptions().dtype(at::kByte)).to(at::kBool).reshape({d0, d1, d2, d3, d4, d5});
 }
 
-inline Tensor tensor_md_6d_bool_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<bool> > > > > >& values, const TensorOptions& options) {
+inline Tensor tensor_md_6d_bool_opt(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<bool>>>>>>& values, const TensorOptions& options) {
     int64_t d0 = (int64_t)values.size();
     int64_t d1 = values.empty() ? 0 : (int64_t)values[0].size();
     int64_t d2 = (d1 == 0) ? 0 : (int64_t)values[0][0].size();

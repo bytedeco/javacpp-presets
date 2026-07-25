@@ -55,7 +55,7 @@ public class ReduceLROnPlateauScheduler extends Pointer {
         double threshold/*=1e-4*/,
         ThresholdMode threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
         int cooldown/*=0*/,
-        @StdVector FloatPointer min_lr/*=std::vector<float>()*/,
+        @Const @ByRef(nullValue = "std::vector<float>()") FloatVector min_lr,
         double eps/*=1e-8*/,
         @Cast("bool") boolean verbose/*=false*/) { super((Pointer)null); allocate(optimizer, mode, factor, patience, threshold, threshold_mode, cooldown, min_lr, eps, verbose); }
   private native void allocate(
@@ -66,7 +66,7 @@ public class ReduceLROnPlateauScheduler extends Pointer {
         double threshold/*=1e-4*/,
         ThresholdMode threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
         int cooldown/*=0*/,
-        @StdVector FloatPointer min_lr/*=std::vector<float>()*/,
+        @Const @ByRef(nullValue = "std::vector<float>()") FloatVector min_lr,
         double eps/*=1e-8*/,
         @Cast("bool") boolean verbose/*=false*/);
   public ReduceLROnPlateauScheduler(
@@ -81,7 +81,7 @@ public class ReduceLROnPlateauScheduler extends Pointer {
         double threshold/*=1e-4*/,
         @Cast("torch::optim::ReduceLROnPlateauScheduler::ThresholdMode") int threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
         int cooldown/*=0*/,
-        @StdVector FloatBuffer min_lr/*=std::vector<float>()*/,
+        @Const @ByRef(nullValue = "std::vector<float>()") FloatVector min_lr,
         double eps/*=1e-8*/,
         @Cast("bool") boolean verbose/*=false*/) { super((Pointer)null); allocate(optimizer, mode, factor, patience, threshold, threshold_mode, cooldown, min_lr, eps, verbose); }
   private native void allocate(
@@ -92,95 +92,7 @@ public class ReduceLROnPlateauScheduler extends Pointer {
         double threshold/*=1e-4*/,
         @Cast("torch::optim::ReduceLROnPlateauScheduler::ThresholdMode") int threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
         int cooldown/*=0*/,
-        @StdVector FloatBuffer min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/);
-  public ReduceLROnPlateauScheduler(
-        @ByRef Optimizer optimizer,
-        SchedulerMode mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        ThresholdMode threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector float[] min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/) { super((Pointer)null); allocate(optimizer, mode, factor, patience, threshold, threshold_mode, cooldown, min_lr, eps, verbose); }
-  private native void allocate(
-        @ByRef Optimizer optimizer,
-        SchedulerMode mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        ThresholdMode threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector float[] min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/);
-  public ReduceLROnPlateauScheduler(
-        @ByRef Optimizer optimizer,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::SchedulerMode") int mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::ThresholdMode") int threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector FloatPointer min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/) { super((Pointer)null); allocate(optimizer, mode, factor, patience, threshold, threshold_mode, cooldown, min_lr, eps, verbose); }
-  private native void allocate(
-        @ByRef Optimizer optimizer,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::SchedulerMode") int mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::ThresholdMode") int threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector FloatPointer min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/);
-  public ReduceLROnPlateauScheduler(
-        @ByRef Optimizer optimizer,
-        SchedulerMode mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        ThresholdMode threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector FloatBuffer min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/) { super((Pointer)null); allocate(optimizer, mode, factor, patience, threshold, threshold_mode, cooldown, min_lr, eps, verbose); }
-  private native void allocate(
-        @ByRef Optimizer optimizer,
-        SchedulerMode mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        ThresholdMode threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector FloatBuffer min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/);
-  public ReduceLROnPlateauScheduler(
-        @ByRef Optimizer optimizer,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::SchedulerMode") int mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::ThresholdMode") int threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector float[] min_lr/*=std::vector<float>()*/,
-        double eps/*=1e-8*/,
-        @Cast("bool") boolean verbose/*=false*/) { super((Pointer)null); allocate(optimizer, mode, factor, patience, threshold, threshold_mode, cooldown, min_lr, eps, verbose); }
-  private native void allocate(
-        @ByRef Optimizer optimizer,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::SchedulerMode") int mode/*=torch::optim::ReduceLROnPlateauScheduler::min*/,
-        float factor/*=0.1*/,
-        int patience/*=10*/,
-        double threshold/*=1e-4*/,
-        @Cast("torch::optim::ReduceLROnPlateauScheduler::ThresholdMode") int threshold_mode/*=torch::optim::ReduceLROnPlateauScheduler::rel*/,
-        int cooldown/*=0*/,
-        @StdVector float[] min_lr/*=std::vector<float>()*/,
+        @Const @ByRef(nullValue = "std::vector<float>()") FloatVector min_lr,
         double eps/*=1e-8*/,
         @Cast("bool") boolean verbose/*=false*/);
 

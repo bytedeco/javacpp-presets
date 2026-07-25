@@ -1528,3 +1528,4 @@
 #include "torch/csrc/distributed/c10d/logger.hpp"
 
 #include "datasets.h"
+#include "pytorch_adapters.h"

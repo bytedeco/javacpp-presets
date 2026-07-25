@@ -143,7 +143,7 @@ private native void allocate();
    *  \{ */
   
   ///
-  public native @StdVector FloatPointer vec();
+  public native @ByVal FloatVector vec();
 
   /** \}
    *  \name Equality operators

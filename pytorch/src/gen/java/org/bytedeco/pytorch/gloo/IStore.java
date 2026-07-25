@@ -45,12 +45,12 @@ public class IStore extends Pointer {
   // Extended 2.0 API support
   public native @Cast("bool") boolean has_v2_support();
 
-  public native @Cast("std::vector<char>*") @StdVector ByteVector multi_get(
+  public native @ByVal @Cast("std::vector<std::vector<char> >*") ByteVectorVector multi_get(
         @Const @ByRef StringVector keys);
 
   public native void multi_set(
         @Const @ByRef StringVector keys,
-        @Cast("std::vector<char>*") @StdVector ByteVector values);
+        @Cast("const std::vector<std::vector<char> >*") @ByRef ByteVectorVector values);
 
   public native void append(
         @StdString BytePointer key,

@@ -442,40 +442,14 @@ public class ProcessGroup extends CustomClassHolder {
   // This creates a new subgroup using the specified ranks.
   // The current rank must be included in the list of new_ranks.
   public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
-        @StdVector IntPointer ranks,
+        @Cast("const std::vector<int>*") @ByRef IntVector ranks,
         @Optional Milliseconds timeout,
         @Const @ByRef BackendOptionsOptional opts,
         @Const @ByRef StringOptional name,
         @Const @ByRef StringOptional groupDesc,
         @Optional DeviceVector devices/*=std::nullopt*/);
   public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
-        @StdVector IntPointer ranks,
-        @Optional Milliseconds timeout,
-        @Const @ByRef BackendOptionsOptional opts,
-        @Const @ByRef StringOptional name,
-        @Const @ByRef StringOptional groupDesc);
-  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
-        @StdVector IntBuffer ranks,
-        @Optional Milliseconds timeout,
-        @Const @ByRef BackendOptionsOptional opts,
-        @Const @ByRef StringOptional name,
-        @Const @ByRef StringOptional groupDesc,
-        @Optional DeviceVector devices/*=std::nullopt*/);
-  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
-        @StdVector IntBuffer ranks,
-        @Optional Milliseconds timeout,
-        @Const @ByRef BackendOptionsOptional opts,
-        @Const @ByRef StringOptional name,
-        @Const @ByRef StringOptional groupDesc);
-  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
-        @StdVector int[] ranks,
-        @Optional Milliseconds timeout,
-        @Const @ByRef BackendOptionsOptional opts,
-        @Const @ByRef StringOptional name,
-        @Const @ByRef StringOptional groupDesc,
-        @Optional DeviceVector devices/*=std::nullopt*/);
-  public native @IntrusivePtr("c10d::ProcessGroup") @Cast({"", "c10::intrusive_ptr<c10d::ProcessGroup>&"}) ProcessGroup splitGroup(
-        @StdVector int[] ranks,
+        @Cast("const std::vector<int>*") @ByRef IntVector ranks,
         @Optional Milliseconds timeout,
         @Const @ByRef BackendOptionsOptional opts,
         @Const @ByRef StringOptional name,

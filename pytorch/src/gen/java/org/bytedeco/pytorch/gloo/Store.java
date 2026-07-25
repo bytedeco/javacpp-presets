@@ -40,12 +40,12 @@ public class Store extends IStore {
 
   public native @Cast("bool") boolean has_v2_support();
 
-  public native @Cast("std::vector<char>*") @StdVector ByteVector multi_get(
+  public native @ByVal @Cast("std::vector<std::vector<char> >*") ByteVectorVector multi_get(
         @Const @ByRef StringVector arg0);
 
   public native void multi_set(
         @Const @ByRef StringVector arg0,
-        @Cast("std::vector<char>*") @StdVector ByteVector arg1);
+        @Cast("const std::vector<std::vector<char> >*") @ByRef ByteVectorVector arg1);
 
   public native void append(
         @StdString BytePointer key,

@@ -107,28 +107,12 @@ public class UnboundBuffer extends Pointer {
         @Cast("uint64_t") long slot);
 
   public native void recv(
-        @StdVector IntPointer srcRanks,
+        @ByVal @Cast("std::vector<int>*") IntVector srcRanks,
         @Cast("uint64_t") long slot,
         @Cast("size_t") long offset/*=0*/,
         @Cast("size_t") long nbytes/*=gloo::transport::UnboundBuffer::kUnspecifiedByteCount*/);
   public native void recv(
-        @StdVector IntPointer srcRanks,
-        @Cast("uint64_t") long slot);
-  public native void recv(
-        @StdVector IntBuffer srcRanks,
-        @Cast("uint64_t") long slot,
-        @Cast("size_t") long offset/*=0*/,
-        @Cast("size_t") long nbytes/*=gloo::transport::UnboundBuffer::kUnspecifiedByteCount*/);
-  public native void recv(
-        @StdVector IntBuffer srcRanks,
-        @Cast("uint64_t") long slot);
-  public native void recv(
-        @StdVector int[] srcRanks,
-        @Cast("uint64_t") long slot,
-        @Cast("size_t") long offset/*=0*/,
-        @Cast("size_t") long nbytes/*=gloo::transport::UnboundBuffer::kUnspecifiedByteCount*/);
-  public native void recv(
-        @StdVector int[] srcRanks,
+        @ByVal @Cast("std::vector<int>*") IntVector srcRanks,
         @Cast("uint64_t") long slot);
 
   public native @UniquePtr RemoteKey getRemoteKey();

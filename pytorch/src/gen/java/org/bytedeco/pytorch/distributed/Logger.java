@@ -37,42 +37,14 @@ public class Logger extends Pointer {
   // construction time.
   public native void set_construction_data_and_log(
         @StdString BytePointer module_name,
-        @StdVector IntPointer device_ids,
+        @Cast("const std::vector<int>*") @ByRef IntVector device_ids,
         int output_device,
         @Cast("bool") boolean broadcast_buffers,
         @Cast("bool") boolean has_sync_bn,
         @Cast("bool") boolean static_graph);
   public native void set_construction_data_and_log(
         @StdString String module_name,
-        @StdVector IntBuffer device_ids,
-        int output_device,
-        @Cast("bool") boolean broadcast_buffers,
-        @Cast("bool") boolean has_sync_bn,
-        @Cast("bool") boolean static_graph);
-  public native void set_construction_data_and_log(
-        @StdString BytePointer module_name,
-        @StdVector int[] device_ids,
-        int output_device,
-        @Cast("bool") boolean broadcast_buffers,
-        @Cast("bool") boolean has_sync_bn,
-        @Cast("bool") boolean static_graph);
-  public native void set_construction_data_and_log(
-        @StdString String module_name,
-        @StdVector IntPointer device_ids,
-        int output_device,
-        @Cast("bool") boolean broadcast_buffers,
-        @Cast("bool") boolean has_sync_bn,
-        @Cast("bool") boolean static_graph);
-  public native void set_construction_data_and_log(
-        @StdString BytePointer module_name,
-        @StdVector IntBuffer device_ids,
-        int output_device,
-        @Cast("bool") boolean broadcast_buffers,
-        @Cast("bool") boolean has_sync_bn,
-        @Cast("bool") boolean static_graph);
-  public native void set_construction_data_and_log(
-        @StdString String module_name,
-        @StdVector int[] device_ids,
+        @Cast("const std::vector<int>*") @ByRef IntVector device_ids,
         int output_device,
         @Cast("bool") boolean broadcast_buffers,
         @Cast("bool") boolean has_sync_bn,
