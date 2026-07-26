@@ -44,7 +44,8 @@ import org.bytedeco.openvino.presets.*;
         @Platform(
             value = {"linux", "macosx", "windows"},
             compiler = "cpp17",
-            define = {"GENERIC_EXCEPTION_CLASS Ort::Exception", "GENERIC_EXCEPTION_TOSTRING what()"},
+            define = {"GENERIC_EXCEPTION_CLASS Ort::Exception", "GENERIC_EXCEPTION_TOSTRING what()",
+                      "ENABLE_TRAINING", "ENABLE_TRAINING_APIS"},
             include = {
                 "onnxruntime/core/session/onnxruntime_error_code.h",
                 "onnxruntime/core/session/onnxruntime_env_config_keys.h",
