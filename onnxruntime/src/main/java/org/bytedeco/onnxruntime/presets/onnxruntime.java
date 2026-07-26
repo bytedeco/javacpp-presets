@@ -46,6 +46,10 @@ import org.bytedeco.openvino.presets.*;
             compiler = "cpp17",
             define = {"GENERIC_EXCEPTION_CLASS Ort::Exception", "GENERIC_EXCEPTION_TOSTRING what()"},
             include = {
+                "onnxruntime/core/session/onnxruntime_error_code.h",
+                "onnxruntime/core/session/onnxruntime_env_config_keys.h",
+                "onnxruntime/core/session/onnxruntime_session_options_config_keys.h",
+                "onnxruntime/core/session/onnxruntime_run_options_config_keys.h",
                 "onnxruntime/core/session/onnxruntime_c_api.h",
                 "onnxruntime/core/session/onnxruntime_ep_c_api.h",
                 "onnxruntime/core/session/onnxruntime_cxx_api.h",
