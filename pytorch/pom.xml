@@ -35,6 +35,198 @@
       <version>13.3-9.24-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
+    <!-- Parquet I/O: local InputFile/OutputFile path (no Hadoop runtime required).
+         hadoop-common is only on the compile classpath because parquet-hadoop
+         types still reference Configuration / Path in signatures. -->
+    <dependency>
+      <groupId>org.apache.parquet</groupId>
+      <artifactId>parquet-avro</artifactId>
+      <version>1.17.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-mapreduce-client-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-common</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Hadoop common: needed at runtime for ORC local FS; parquet itself uses pure-Java I/O. -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>3.4.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-yarn-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-yarn-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop.thirdparty</groupId>
+          <artifactId>hadoop-shaded-protobuf_3_25</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.kerby</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.zookeeper</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.protobuf</groupId>
+          <artifactId>protobuf-java</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-mapreduce-client-core</artifactId>
+      <version>3.4.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+      <!-- compile-only stubs sometimes referenced by orc; runtime not required for local FS -->
+      <scope>provided</scope>
+    </dependency>
+    <!-- Codecs used by parquet (ZSTD/snappy) -->
+    <dependency>
+      <groupId>org.xerial.snappy</groupId>
+      <artifactId>snappy-java</artifactId>
+      <version>1.1.10.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.luben</groupId>
+      <artifactId>zstd-jni</artifactId>
+      <version>1.5.7-3</version>
+    </dependency>
+    <!-- Arrow IPC / Feather v2 I/O (pure Java); 18.3.0 aligned with org.lance:lance-core -->
+    <dependency>
+      <groupId>org.apache.arrow</groupId>
+      <artifactId>arrow-vector</artifactId>
+      <version>18.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.arrow</groupId>
+      <artifactId>arrow-memory-netty</artifactId>
+      <version>18.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.arrow</groupId>
+      <artifactId>arrow-c-data</artifactId>
+      <version>18.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.arrow</groupId>
+      <artifactId>arrow-dataset</artifactId>
+      <version>18.3.0</version>
+    </dependency>
+    <!-- Excel (.xlsx/.xls) via Apache POI -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>5.4.1</version>
+    </dependency>
+    <!-- Embedded SQLite for DataFrame SQL I/O; other DBs via caller-provided JDBC -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.49.1.0</version>
+    </dependency>
+    <!-- Pure-Java HDF5 reader/writer (pandas/h5py interop layouts) -->
+    <dependency>
+      <groupId>io.jhdf</groupId>
+      <artifactId>jhdf</artifactId>
+      <version>0.9.0</version>
+    </dependency>
+    <!-- Avro data files (parquet-avro may already transitively pull this) -->
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <version>1.12.0</version>
+    </dependency>
+    <!-- ORC columnar files (local FS) -->
+    <dependency>
+      <groupId>org.apache.orc</groupId>
+      <artifactId>orc-core</artifactId>
+      <version>2.1.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-common</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-mapreduce-client-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- VectorizedRowBatch used by ORC reader/writer -->
+    <dependency>
+      <groupId>org.apache.hive</groupId>
+      <artifactId>hive-storage-api</artifactId>
+      <version>2.8.1</version>
+    </dependency>
+    <!-- ORC footer / PhysicalFsWriter protobuf messages -->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.25.5</version>
+    </dependency>
+    <!-- Official DuckDB JDBC (embedded OLAP; reads parquet/csv/json/orc natively) -->
+    <dependency>
+      <groupId>org.duckdb</groupId>
+      <artifactId>duckdb_jdbc</artifactId>
+      <version>1.5.5.0</version>
+    </dependency>
+    <!-- Official Lance format Java API (multimodal vector lakehouse; Arrow IPC interop) -->
+    <dependency>
+      <groupId>org.lance</groupId>
+      <artifactId>lance-core</artifactId>
+      <version>10.0.0-beta.5</version>
+    </dependency>
+    <!-- FFmpeg JavaCPP: video / audio decode-encode via libav -->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>ffmpeg</artifactId>
+      <version>8.1.1-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>ffmpeg-platform</artifactId>
+      <version>8.1.1-${project.parent.version}</version>
+    </dependency>
+    <!-- OpenCV JavaCPP: image I/O, transforms, computer vision -->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>opencv-platform</artifactId>
+      <version>4.13.0-${project.parent.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -44,6 +236,20 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!-- DataFrame / feature / ML stack uses records, sealed types, pattern matching, switch expressions. -->
+          <source>17</source>
+          <target>17</target>
+          <release>17</release>
+          <!-- Demo *Test classes under main use JUnit without a compile dependency; keep them out of main compile. -->
+          <excludes>
+            <exclude>**/geometric/demo/**/*Test.java</exclude>
+            <exclude>**/geometric/demo/**/*Benchmark*.java</exclude>
+            <exclude>**/rl/*Test.java</exclude>
+            <!-- FFmpeg glue currently targets an older JavaCPP FFmpeg API surface; keep out of main compile until rewritten. -->
+            <exclude>**/utils/ffmpeg/**/*.java</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
@@ -70,6 +276,16 @@
             <version>3.14.5-${project.parent.version}</version>
             <classifier>${os.name}-${os.arch}</classifier>
           </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>ffmpeg-platform</artifactId>
+            <version>8.1.1-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencv-platform</artifactId>
+            <version>4.13.0-${project.parent.version}</version>
+          </dependency>
         </dependencies>
         <configuration>
           <classPaths>
@@ -89,6 +305,8 @@
             <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../ffmpeg/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/torch/csrc/api/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
@@ -97,12 +315,16 @@
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../ffmpeg/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../ffmpeg/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
@@ -134,6 +356,30 @@
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/lib/</linkResource>
           </linkResources>
         </configuration>
+        <executions>
+          <!-- Parent binds javacpp-compiler at process-classes and scans
+               org.bytedeco.pytorch.**. Pure-Java helpers (parquet/orc/dataframe/…)
+               are loaded during that scan, so compile deps must be on the classpath.
+               Keep this off the plugin-global classPaths: validate runs earlier and
+               dependency/ may not exist yet. -->
+          <execution>
+            <id>javacpp-compiler</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <classPaths>
+                <classPath>${basedir}/../openblas/target/classes/</classPath>
+                <classPath>${basedir}/../cpython/target/classes/</classPath>
+                <classPath>${basedir}/../numpy/target/classes/</classPath>
+                <classPath>${basedir}/../cuda/target/classes/</classPath>
+                <classPath>${project.build.outputDirectory}</classPath>
+                <classPath>${project.build.directory}/dependency/*</classPath>
+              </classPaths>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <!-- Post-parse package relocation (scripts/relocate_packages.py).
            JavaCPP Parser always emits peers into the single @Properties(target=…)
@@ -243,6 +489,20 @@
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-compile-deps-for-javacpp</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+              <includeScope>compile</includeScope>
+              <excludeTransitive>false</excludeTransitive>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>

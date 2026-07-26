@@ -1,0 +1,80 @@
+package org.bytedeco.pytorch.data.dataframe.feature.base;
+
+import org.bytedeco.pytorch.data.dataframe.Column;
+import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.DataValues;
+
+import java.io.Serializable;
+import java.util.*;
+
+/**
+ * Abstract classifier base: dual API for {@code double[][]} and {@link DataFrame}.
+ */
+public abstract class BaseClassifier implements BaseEstimator, Serializable {
+    private static final long serialVersionUID = 1L;
+    protected boolean fitted = false;
+
+    public abstract BaseClassifier fit(double[][] X, double[] y);
+
+    public abstract double[] predict(double[][] X);
+
+    public BaseClassifier fit(DataFrame X, String[] featureCols, String labelCol) {
+        return fit(extractMatrix(X, featureCols), extractLabels(X, labelCol));
+    }
+
+    /** Predict and append results as a new FLOAT64 column. */
+    public DataFrame predict(DataFrame X, String[] featureCols, String outputCol) {
+        double[] preds = predict(extractMatrix(X, featureCols));
+        DataFrame out = X.copy();
+        if (out.hasColumn(outputCol)) out.removeColumn(outputCol);
+        out.addColumn(outputCol, Column.DType.FLOAT64);
+        Column c = out.column(outputCol);
+        while (c.size() < out.rowCount()) c.add(null);
+        for (int i = 0; i < preds.length; i++) c.set(i, preds[i]);
+        return out;
+    }
+
+    public double[][] predictProba(double[][] X) {
+        throw new UnsupportedOperationException(
+            "predictProba() not supported by " + getClass().getSimpleName());
+    }
+
+    public double score(double[][] X, double[] y) {
+        double[] preds = predict(X);
+        int correct = 0;
+        for (int i = 0; i < y.length; i++) if (preds[i] == y[i]) correct++;
+        return y.length == 0 ? 0.0 : (double) correct / y.length;
+    }
+
+    public static double[][] extractMatrix(DataFrame df, String[] cols) {
+        int n = df.rowCount();
+        double[][] X = new double[n][cols.length];
+        for (int j = 0; j < cols.length; j++) {
+            Column col = df.column(cols[j]);
+            for (int i = 0; i < n; i++) {
+                double v = DataValues.asDouble(col.get(i));
+                X[i][j] = Double.isNaN(v) ? 0.0 : v;
+            }
+        }
+        return X;
+    }
+
+    protected double[] extractLabels(DataFrame df, String col) {
+        int n = df.rowCount();
+        double[] y = new double[n];
+        Column c = df.column(col);
+        for (int i = 0; i < n; i++) {
+            double v = DataValues.asDouble(c.get(i));
+            y[i] = Double.isNaN(v) ? 0.0 : v;
+        }
+        return y;
+    }
+
+    public boolean isFitted() { return fitted; }
+
+    @Override
+    public Map<String, Object> getParams() { return new LinkedHashMap<>(); }
+
+    @Override
+    public void setParams(Map<String, Object> params) {}
+}

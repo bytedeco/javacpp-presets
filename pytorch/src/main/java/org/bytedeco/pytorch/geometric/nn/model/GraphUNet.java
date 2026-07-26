@@ -1,0 +1,51 @@
+package org.bytedeco.pytorch.geometric.nn.model;
+
+import org.bytedeco.pytorch.*;
+//import org.gnn.framework.layers.org.bytedeco.pytorch.geometric.nn.conv.GCNConv;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.pytorch.geometric.nn.pooling.TopKPooling;
+import org.bytedeco.pytorch.global.torch;
+import org.bytedeco.pytorch.geometric.nn.conv.GCNConv;
+
+public class GraphUNet extends Module {
+    private GCNConv downConv1, downConv2;
+    private TopKPooling pool1;
+    private GCNConv upConv1;
+
+    public GraphUNet(long inChan, long hiddenChan, long outChan, double poolRatio) {
+        downConv1 = new GCNConv(inChan, hiddenChan);
+        pool1 = new TopKPooling(hiddenChan, poolRatio);
+        downConv2 = new GCNConv(hiddenChan, hiddenChan);
+        upConv1 = new GCNConv(hiddenChan * 2, outChan); // Concat skip connection
+
+        register_module("downConv1", downConv1);
+        register_module("pool1", pool1);
+        register_module("downConv2", downConv2);
+        register_module("upConv1", upConv1);
+    }
+
+    public Tensor forward(Tensor x, Tensor edge_index) {
+        // 1. Down
+        x = downConv1.forward(x, edge_index).relu();
+        Tensor x1 = x; // Skip connection
+
+        Tensor[] poolRet = pool1.topk(x, edge_index, (Tensor)null);
+        Tensor xPool = poolRet[0];
+        Tensor edgePool = poolRet[1];
+        Tensor perm = poolRet[3]; // Indices for unpooling
+
+        // 2. Bottom
+        xPool = downConv2.forward(xPool, edgePool).relu();
+
+        // 3. Up (Unpooling)
+        // Unpool logic: Create zero tensor [N, C], scatter xPool back using perm
+        Tensor xUp = torch.zeros_like(x1); // [N, hidden]
+        xUp.index_put_(new TensorIndexVector(perm), xPool);
+
+        // Skip connection (Concat or Add)
+        xUp = torch.cat(new TensorVector(xUp, x1), 1);
+
+        // 4. Output
+        return upConv1.forward(xUp, edge_index);
+    }
+}

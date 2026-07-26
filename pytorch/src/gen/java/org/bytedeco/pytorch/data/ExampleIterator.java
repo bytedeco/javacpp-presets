@@ -2,25 +2,11 @@
 
 package org.bytedeco.pytorch.data;
 
-import org.bytedeco.pytorch.jit.*;
-
-import org.bytedeco.pytorch.nn.*;
-
-import org.bytedeco.pytorch.*;
-
-import org.bytedeco.pytorch.Allocator;
-import org.bytedeco.pytorch.jit.Function;
-import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.javacpp.annotation.Cast;
-import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.javacpp.presets.javacpp.*;
-import static org.bytedeco.openblas.global.openblas_nolapack.*;
-import static org.bytedeco.openblas.global.openblas.*;
-import org.bytedeco.javacpp.chrono.*;
-import static org.bytedeco.javacpp.global.chrono.*;
+import org.bytedeco.pytorch.utils.spacy.Example;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace detail
@@ -39,7 +25,7 @@ public class ExampleIterator extends Pointer {
 
   /** Returns the current batch.
    *  Only permitted for valid iterators (not past the end). */
-  public native @ByRef @Name("operator *") Example multiply();
+  public native @ByRef @Name("operator *") org.bytedeco.pytorch.utils.spacy.Example multiply();
 
   /** Returns a pointer to the current batch.
    *  Only permitted for valid iterators (not past the end). */

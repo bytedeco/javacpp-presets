@@ -2,25 +2,10 @@
 
 package org.bytedeco.pytorch.data;
 
-import org.bytedeco.pytorch.jit.*;
-
-import org.bytedeco.pytorch.nn.*;
-
 import org.bytedeco.pytorch.*;
 
-import org.bytedeco.pytorch.Allocator;
-import org.bytedeco.pytorch.jit.Function;
-import org.bytedeco.pytorch.nn.Module;
-import org.bytedeco.javacpp.annotation.Cast;
-import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
-
-import static org.bytedeco.javacpp.presets.javacpp.*;
-import static org.bytedeco.openblas.global.openblas_nolapack.*;
-import static org.bytedeco.openblas.global.openblas.*;
-import org.bytedeco.javacpp.chrono.*;
-import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -36,11 +21,11 @@ public class Example extends Pointer {
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public Example(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public Example position(long position) {
-        return (Example)super.position(position);
+    @Override public org.bytedeco.pytorch.utils.spacy.Example position(long position) {
+        return (org.bytedeco.pytorch.utils.spacy.Example)super.position(position);
     }
-    @Override public Example getPointer(long i) {
-        return new Example((Pointer)this).offsetAddress(i);
+    @Override public org.bytedeco.pytorch.utils.spacy.Example getPointer(long i) {
+        return new org.bytedeco.pytorch.utils.spacy.Example((Pointer)this).offsetAddress(i);
     }
 
 
@@ -49,6 +34,6 @@ public class Example extends Pointer {
   public Example(@ByVal Tensor data, @ByVal Tensor target) { super((Pointer)null); allocate(data, target); }
   private native void allocate(@ByVal Tensor data, @ByVal Tensor target);
 
-  public native @ByRef Tensor data(); public native Example data(Tensor setter);
-  public native @ByRef Tensor target(); public native Example target(Tensor setter);
+  public native @ByRef Tensor data(); public native org.bytedeco.pytorch.utils.spacy.Example data(Tensor setter);
+  public native @ByRef Tensor target(); public native org.bytedeco.pytorch.utils.spacy.Example target(Tensor setter);
 }

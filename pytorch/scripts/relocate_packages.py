@@ -615,8 +615,11 @@ def classify_by_simple_name(simple: str) -> Optional[str]:
     if simple in NN_NAMES:
         return "nn"
     if simple.endswith(NN_NAME_SUFFIXES):
-        # Avoid data-side *Options that aren't nn
-        if simple in ("ChunkDatasetOptions", "DataLoaderOptions", "FullDataLoaderOptions"):
+        # Avoid data-side *Options that aren't nn (hand-written dataframe/json I/O etc.)
+        if simple in (
+            "ChunkDatasetOptions", "DataLoaderOptions", "FullDataLoaderOptions",
+            "CsvOptions", "JsonOptions", "JsonReadOptions", "JsonWriteOptions",
+        ):
             return "data"
         # Optimizer / c10d option class names
         if simple.startswith(("Adagrad", "Adam", "AdamW", "LBFGS", "RMSprop", "SGD",
@@ -702,6 +705,19 @@ def classify_data_subpackage(simple: str, text: str = "") -> str:
 
 def classify_file(path: Path, text: str) -> Optional[str]:
     simple = path.stem
+    # Hand-written data I/O option classes: pin exact packages so a previous
+    # mis-classification into nn.options can be corrected on re-run.
+    handwritten_option_pkg = {
+        "CsvOptions": f"{DATA_PKG}.dataframe.csv",
+        "JsonOptions": f"{DATA_PKG}.dataframe.json",
+        "JsonReadOptions": f"{DATA_PKG}.json",
+        "JsonWriteOptions": f"{DATA_PKG}.json",
+        # Distribution bijective maps (not torch::data::transforms)
+        "Transform": f"{ROOT_PKG}.distribution.transforms",
+    }
+    if simple in handwritten_option_pkg:
+        return f"handwritten:{handwritten_option_pkg[simple]}"
+
     by_attr = classify_by_name_attr(text, simple)
     kind = by_attr if by_attr else classify_by_simple_name(simple)
     if kind == "nn":
@@ -729,6 +745,8 @@ def collect_java_files(root: Path) -> List[Path]:
 
 
 def kind_to_pkg(kind: str) -> Optional[str]:
+    if kind and kind.startswith("handwritten:"):
+        return kind.split(":", 1)[1]
     return {
         "data": DATA_PKG,
         "data_datasets": DATA_DATASETS_PKG,
@@ -789,6 +807,21 @@ def plan_moves(gen_root: Path, main_root: Optional[Path]) -> Tuple[Dict[Path, Tu
         f"{ROOT_PKG}.global",
     }
 
+    # Hand-written pure-Java packages under src/main (dataframe, json I/O, parquet, …).
+    # These are never produced by JavaCPP parse and must not be reclassified by
+    # simple-name heuristics (e.g. *Options → nn.options).
+    handwritten_data_prefixes = (
+        f"{DATA_PKG}.dataframe",
+        f"{DATA_PKG}.json",
+        f"{DATA_PKG}.parquet",
+        f"{DATA_PKG}.arrow",
+        f"{DATA_PKG}.numpy",
+        f"{DATA_PKG}.pickle",
+        f"{DATA_PKG}.safetensors",
+        f"{DATA_PKG}.gguf",
+        f"{ROOT_PKG}.distribution",
+    )
+
     for root in roots:
         existing = existing_by_root.get(root, set())
         for path in collect_java_files(root):
@@ -818,6 +851,13 @@ def plan_moves(gen_root: Path, main_root: Optional[Path]) -> Tuple[Dict[Path, Tu
             in_preserved = current_pkg in preserved_subpkgs or any(
                 current_pkg.startswith(p + ".") for p in preserved_subpkgs
             )
+
+            # Hand-written data helpers (dataframe/json/parquet/…) — leave alone.
+            if any(
+                current_pkg == p or current_pkg.startswith(p + ".")
+                for p in handwritten_data_prefixes
+            ):
+                continue
 
             if in_preserved:
                 # Exception: torch::inductor AOTI* peers may be emitted under
@@ -881,7 +921,9 @@ def needed_star_imports(new_pkg: str, text: str) -> List[str]:
         # nn core
         (NN_PKG, r'\b(Module|ModuleHolder|ModuleApplyFunction|NamedModuleApplyFunction|SharedModuleApplyFunction|NamedSharedModuleApplyFunction|Parameter|PackedSequence|ASMoutput|Cloneable|Functional)\b'),
         # nn.options — *Options / *FuncOptions / *OptionsBase
-        (NN_OPTIONS_PKG, r'\b\w+(?:Func)?Options(?:Base)?\b'),
+        # Exclude hand-written data I/O option classes (Csv/Json*) that live under
+        # data.dataframe / data.json — they also end with Options.
+        (NN_OPTIONS_PKG, r'\b(?!CsvOptions|JsonOptions|JsonReadOptions|JsonWriteOptions)\w+(?:Func)?Options(?:Base)?\b'),
         # nn.modules — *Impl family excluding containers (containers handled separately)
         (NN_MODULES_PKG, r'\b(?!Sequential|ModuleList|ModuleDict|ParameterDict|ParameterList)\w+Impl(?:Base|BaseBase|Cloneable)?\b'),
         # nn.modules.container
@@ -1056,10 +1098,33 @@ def rewrite_references_everywhere(
         f"{ROOT_PKG}.cuda", f"{ROOT_PKG}.gloo",
         f"{ROOT_PKG}.rpc", f"{ROOT_PKG}.onnx", f"{ROOT_PKG}.global",
     )
+    handwritten_data_prefixes = (
+        f"{DATA_PKG}.dataframe",
+        f"{DATA_PKG}.json",
+        f"{DATA_PKG}.parquet",
+        f"{DATA_PKG}.arrow",
+        f"{DATA_PKG}.numpy",
+        f"{DATA_PKG}.pickle",
+        f"{DATA_PKG}.safetensors",
+        f"{DATA_PKG}.gguf",
+        f"{ROOT_PKG}.distribution",
+    )
 
     for root in roots:
         for path in collect_java_files(root):
             text0 = read_text(path)
+            # Skip hand-written pure-Java data helpers — never inject nn/jit star-imports.
+            try:
+                rel = path.relative_to(root)
+                cur_pkg = ".".join(rel.parts[:-1]) if len(rel.parts) > 1 else ROOT_PKG
+            except ValueError:
+                cur_pkg = ROOT_PKG
+            if any(
+                cur_pkg == p or cur_pkg.startswith(p + ".")
+                for p in handwritten_data_prefixes
+            ):
+                continue
+
             text = apply_renames_in_text(text0, renames)
             # Qualify bare nested types (TypePtr → Type.TypePtr) outside Type.java
             text = fix_nested_type_refs(path, text)
