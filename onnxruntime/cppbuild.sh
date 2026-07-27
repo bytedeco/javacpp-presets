@@ -28,7 +28,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda --nvcc_threads 1"
 fi
 
-ONNXRUNTIME=1.27.1
+ONNXRUNTIME=1.28.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -133,6 +133,7 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's/-Xcompiler \/Zc:__cplusplus/-Xcompiler \/Zc:__cplusplus -Xcompiler \/Zc:preprocessor/g' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
+sedinplace 's/cublas cudnn_frontend/cublas CUDNN::cudnn_all cudnn_frontend/g' cmake/onnxruntime_providers_cuda.cmake
 sedinplace '/CXX>:\/permissive/a\
       "$<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>"
 ' cmake/onnxruntime_providers_cuda.cmake cmake/onnxruntime_providers_cuda_plugin.cmake
