@@ -283,6 +283,7 @@ public final class PandasDataFramePickle {
         if (v instanceof LocalDate) return v.toString();
         if (v instanceof LocalDateTime) return v.toString();
         if (v instanceof Instant) return v.toString();
+        // Preserve nested structures as List/Map for round-trip of LIST/VECTOR/MAP/STRUCT
         if (v instanceof float[]) {
             float[] f = (float[]) v;
             List<Double> list = new ArrayList<>(f.length);
@@ -294,6 +295,44 @@ public final class PandasDataFramePickle {
             List<Double> list = new ArrayList<>(d.length);
             for (double x : d) list.add(x);
             return list;
+        }
+        if (v instanceof int[]) {
+            int[] a = (int[]) v;
+            List<Long> list = new ArrayList<>(a.length);
+            for (int x : a) list.add((long) x);
+            return list;
+        }
+        if (v instanceof long[]) {
+            long[] a = (long[]) v;
+            List<Long> list = new ArrayList<>(a.length);
+            for (long x : a) list.add(x);
+            return list;
+        }
+        if (v instanceof boolean[]) {
+            boolean[] a = (boolean[]) v;
+            List<Boolean> list = new ArrayList<>(a.length);
+            for (boolean x : a) list.add(x);
+            return list;
+        }
+        if (v instanceof Object[]) {
+            Object[] a = (Object[]) v;
+            List<Object> list = new ArrayList<>(a.length);
+            for (Object o : a) list.add(normalizeForPickle(o));
+            return list;
+        }
+        if (v instanceof List) {
+            List<?> src = (List<?>) v;
+            List<Object> list = new ArrayList<>(src.size());
+            for (Object o : src) list.add(normalizeForPickle(o));
+            return list;
+        }
+        if (v instanceof Map) {
+            Map<?, ?> src = (Map<?, ?>) v;
+            Map<String, Object> out = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> e : src.entrySet()) {
+                out.put(String.valueOf(e.getKey()), normalizeForPickle(e.getValue()));
+            }
+            return out;
         }
         if (v instanceof byte[]) {
             return Base64.getEncoder().encodeToString((byte[]) v);

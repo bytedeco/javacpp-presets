@@ -83,7 +83,8 @@ public final class SentenceTransformer extends Module {
         this.normalizeEmbeddings = normalizeEmbeddings;
         this.pooling = pooling == null ? PoolingStrategy.MEAN : pooling;
         this.embedding = register_module("emb", new EmbeddingImpl(vocabSize, hiddenSize));
-        LongVector shape = new LongVector(hiddenSize);
+        // LongVector(long) is a SIZE ctor (n zeros) — put the single normalized dim.
+        LongVector shape = new LongVector().put((long) hiddenSize);
         this.norm = register_module("norm", new LayerNormImpl(shape));
         this.projection = register_module("proj", new LinearImpl(hiddenSize, embedDim));
     }

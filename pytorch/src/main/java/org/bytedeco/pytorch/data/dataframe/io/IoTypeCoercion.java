@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,10 +47,23 @@ public final class IoTypeCoercion {
         if (v instanceof LocalDate) return Column.DType.DATE;
         if (v instanceof LocalDateTime || v instanceof Instant) return Column.DType.DATETIME;
         if (v instanceof LocalTime) return Column.DType.TIME;
-        if (v instanceof float[]) return Column.DType.VECTOR;
-        if (v instanceof double[]) return Column.DType.VECTOR;
+        if (v instanceof float[] || v instanceof double[]) return Column.DType.VECTOR;
+        if (v instanceof int[] || v instanceof long[] || v instanceof boolean[]) return Column.DType.LIST;
         if (v instanceof byte[]) return Column.DType.BINARY;
-        if (v instanceof CharSequence) return Column.DType.STRING;
+        if (v instanceof Map) return Column.DType.MAP;
+        if (v instanceof List || v instanceof Collection) {
+            // Delegate nested list inference to ComplexCellCodec (VECTOR vs LIST)
+            return ComplexCellCodec.inferComplex(v);
+        }
+        if (v instanceof CharSequence) {
+            // Detect JSON-encoded nested cells stored as text
+            Column.DType nested = ComplexCellCodec.inferComplex(v);
+            if (nested == Column.DType.LIST || nested == Column.DType.MAP
+                || nested == Column.DType.VECTOR || nested == Column.DType.JSON) {
+                return nested;
+            }
+            return Column.DType.STRING;
+        }
         return Column.DType.STRING;
     }
 
@@ -116,27 +130,25 @@ public final class IoTypeCoercion {
             case STRING:
                 return String.valueOf(raw);
             case VECTOR:
-                if (raw instanceof float[]) return raw;
-                if (raw instanceof double[]) {
-                    double[] d = (double[]) raw;
-                    float[] f = new float[d.length];
-                    for (int i = 0; i < d.length; i++) f[i] = (float) d[i];
-                    return f;
-                }
-                if (raw instanceof List) {
-                    List<?> list = (List<?>) raw;
-                    float[] f = new float[list.size()];
-                    for (int i = 0; i < list.size(); i++) {
-                        Object o = list.get(i);
-                        f[i] = o == null ? Float.NaN : ((Number) o).floatValue();
-                    }
-                    return f;
-                }
-                return parseVector(String.valueOf(raw).trim());
+            case EMBEDDING:
+                return ComplexCellCodec.coerceComplex(raw, Column.DType.VECTOR);
+            case LIST:
+                return ComplexCellCodec.coerceComplex(raw, Column.DType.LIST);
+            case MAP:
+            case STRUCT:
+                return ComplexCellCodec.coerceComplex(raw, dtype);
+            case JSON:
+                return ComplexCellCodec.coerceComplex(raw, Column.DType.JSON);
             case BINARY:
                 if (raw instanceof byte[]) return raw;
                 return String.valueOf(raw).getBytes(java.nio.charset.StandardCharsets.UTF_8);
             default:
+                // Keep already-materialized nested values as-is.
+                if (raw instanceof Map || raw instanceof List || raw instanceof Collection
+                    || raw instanceof float[] || raw instanceof double[]
+                    || raw instanceof int[] || raw instanceof long[]) {
+                    return raw;
+                }
                 return raw;
         }
     }

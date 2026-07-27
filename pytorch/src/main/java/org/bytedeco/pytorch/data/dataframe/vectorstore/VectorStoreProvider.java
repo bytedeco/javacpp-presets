@@ -7,12 +7,22 @@ import java.util.Map;
  *
  * <p>Register via {@code META-INF/services/org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStoreProvider}:
  * <pre>
- * com.example.JedisVectorStoreProvider
+ * com.example.OfficialMilvusVectorStoreProvider
  * </pre>
  *
- * <p>Then open with {@code VectorStores.open("redis-jedis", config)}.
- * Built-in pure-protocol adapters do <em>not</em> need a provider —
+ * <p>A provider whose {@link #name()} matches a built-in scheme
+ * ({@code milvus}, {@code opensearch}, {@code mongo}, {@code pgvector}, {@code redis}, …)
+ * <b>overrides</b> the pure-protocol adapter when {@link VectorStores#open(String, Map)}
+ * is called — enabling seamless switch to an official SDK without changing call sites.
+ *
+ * <p>You may also register under a distinct name (e.g. {@code "milvus-sdk"}) and open
+ * that scheme explicitly. Built-in pure-protocol adapters do <em>not</em> need a provider —
  * use {@link VectorStores#qdrant}, {@link VectorStores#redis}, …
+ *
+ * <p>Prefer also implementing the client-level SPI
+ * ({@code MilvusBackend}, {@code OpenSearchBackend}, {@code MongoBackend},
+ * {@code PgVectorBackend}) so {@code Milvus.connect} / {@code OpenSearch.connect} /
+ * … resolve to the same official wrapper.
  */
 public interface VectorStoreProvider {
 

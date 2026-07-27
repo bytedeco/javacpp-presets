@@ -1,13 +1,17 @@
 package org.bytedeco.pytorch.data.orc;
 
 /**
- * Options for ORC read/write.
+ * Options for ORC read/write (shared by legacy DuckDB and pure-Java format paths).
  *
- * <p>After Hadoop/ORC-core removal: {@link #maxRows()} is honored on
- * {@link LocalOrcReader}; {@link #compress()}, {@link #stripeSize()} and
- * {@link #batchSize()} are retained for API stability but ignored on the
- * DuckDB {@code read_orc} path. {@link LocalOrcWriter} may fail-fast when
- * DuckDB cannot {@code COPY ... FORMAT ORC} — use Parquet instead.
+ * <p><b>Legacy DuckDB</b> ({@link LocalOrcReader}/{@link LocalOrcWriter}):
+ * {@link #maxRows()} is honored on read; {@link #compress()}, {@link #stripeSize()}
+ * and {@link #batchSize()} are retained for API stability but ignored on
+ * {@code read_orc}. Write may fail-fast when DuckDB cannot {@code COPY FORMAT ORC}.
+ *
+ * <p><b>Pure-Java orc-format</b> ({@link LocalOrcFormatReader}/{@link LocalOrcFormatWriter}):
+ * honors {@link #maxRows()}, {@link #overwrite()}, {@link #compress()} (NONE/ZLIB;
+ * SNAPPY/LZ4/ZSTD soft-fallback to ZLIB), {@link #stripeSize()} and {@link #batchSize()}
+ * as soft stripe targets. No Hadoop / no orc-core.
  */
 public final class OrcOptions {
     public enum Compress { NONE, ZLIB, SNAPPY, LZ4, ZSTD }

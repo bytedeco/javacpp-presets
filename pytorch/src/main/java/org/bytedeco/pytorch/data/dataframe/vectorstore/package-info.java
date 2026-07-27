@@ -9,9 +9,18 @@
  *   <li><b>Uniform SPI</b> — {@link org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore}
  *       for upsert / delete / knn search / drop; factory via
  *       {@link org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores}.</li>
- *   <li><b>Optional plugins</b> — implement {@link org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStoreProvider}
- *       and register via {@code META-INF/services} if you prefer a full vendor SDK
- *       (Jedis, milvus-sdk-java, …) without bloating this preset.</li>
+ *   <li><b>Full clients (Redis-style)</b> — also see
+ *       {@link org.bytedeco.pytorch.data.dataframe.milvus.Milvus},
+ *       {@link org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch},
+ *       {@link org.bytedeco.pytorch.data.dataframe.mongo.Mongo},
+ *       {@link org.bytedeco.pytorch.data.dataframe.pgvector.PgVector}
+ *       for official-package-shaped APIs + DataFrame to/read.</li>
+ *   <li><b>Optional plugins</b> — implement
+ *       {@link org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStoreProvider}
+ *       (and/or client-level {@code *Backend} SPIs) and register via
+ *       {@code META-INF/services}. A provider whose name matches a built-in scheme
+ *       <b>overrides</b> the pure-protocol adapter — seamless official-SDK switch
+ *       without changing call sites.</li>
  *   <li><b>In-process default</b> —
  *       {@link org.bytedeco.pytorch.data.dataframe.vectorstore.memory.InMemoryVectorStore}
  *       wraps the pure-Java {@code HnswIndex}.</li>

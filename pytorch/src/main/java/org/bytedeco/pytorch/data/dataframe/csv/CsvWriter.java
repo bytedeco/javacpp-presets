@@ -1,5 +1,6 @@
 package org.bytedeco.pytorch.data.dataframe.csv;
 import org.bytedeco.pytorch.data.dataframe.Column;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 
 import java.io.*;
@@ -79,39 +80,30 @@ public final class CsvWriter {
 
     private static String typeToken(Column c) {
         Column.DType dt = c.dtype();
-        if (dt == Column.DType.VECTOR) {
+        if (dt == Column.DType.VECTOR || dt == Column.DType.EMBEDDING) {
             int dim = -1;
             for (int i = 0; i < c.size(); i++) {
                 Object v = c.get(i);
                 if (v instanceof float[]) { dim = ((float[]) v).length; break; }
                 if (v instanceof double[]) { dim = ((double[]) v).length; break; }
             }
-            return dim > 0 ? "VECTOR(" + dim + ")" : "VECTOR";
+            String base = dt == Column.DType.EMBEDDING ? "EMBEDDING" : "VECTOR";
+            return dim > 0 ? base + "(" + dim + ")" : base;
         }
         return dt.name();
     }
 
     private static String formatValue(Object v, Column.DType dtype, String nullTok) {
         if (v == null) return nullTok;
-        if (dtype == Column.DType.VECTOR || v instanceof float[] || v instanceof double[]) {
-            if (v instanceof float[]) {
-                float[] a = (float[]) v;
-                StringBuilder sb = new StringBuilder("[");
-                for (int i = 0; i < a.length; i++) {
-                    if (i > 0) sb.append(',');
-                    sb.append(a[i]);
-                }
-                return sb.append(']').toString();
-            }
-            if (v instanceof double[]) {
-                double[] a = (double[]) v;
-                StringBuilder sb = new StringBuilder("[");
-                for (int i = 0; i < a.length; i++) {
-                    if (i > 0) sb.append(',');
-                    sb.append(a[i]);
-                }
-                return sb.append(']').toString();
-            }
+        // Native complex cells → canonical JSON text
+        if (ComplexCellCodec.isComplex(dtype) || ComplexCellCodec.isListLike(dtype)
+            || ComplexCellCodec.isMapLike(dtype)
+            || v instanceof float[] || v instanceof double[]
+            || v instanceof int[] || v instanceof long[]
+            || v instanceof boolean[]
+            || v instanceof java.util.Map || v instanceof java.util.List) {
+            String encoded = ComplexCellCodec.encodeText(v);
+            return encoded == null ? nullTok : encoded;
         }
         return String.valueOf(v);
     }

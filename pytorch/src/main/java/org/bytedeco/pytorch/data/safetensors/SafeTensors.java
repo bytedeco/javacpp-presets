@@ -9,6 +9,9 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
+import org.bytedeco.pytorch.StringTensorDict;
+import org.bytedeco.pytorch.StringTensorDictItem;
+import org.bytedeco.pytorch.data.serialize.WeightBagModule;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.nn.modules.LinearImpl;
 import org.bytedeco.pytorch.nn.modules.EmbeddingImpl;
@@ -25,8 +28,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,10 +44,18 @@ import java.util.regex.Pattern;
  *   u64 header_len | utf-8 JSON header | raw little-endian tensor bytes
  * </pre>
  *
- * <p>Zero-copy Module load:
+ * <p>Load paths:
  * <pre>
+ *   // A) inject into an existing architecture-aware Module
  *   Map&lt;String, Tensor&gt; weights = SafeTensors.loadAsTensors(file, true);
  *   SafeTensors.loadIntoModule(module, weights, true);
+ *
+ *   // B) build a trainable typed Module from arbitrary safetensors (no Java
+ *   //    architecture class required — Linear/Embedding/LayerNorm/… inferred)
+ *   WeightBagModule bag = SafeTensors.toModule(file);
+ *   bag.freezePrefix("embedding_layer.");
+ *   Adam opt = new Adam(bag.parameters(), new AdamOptions(1e-4));
+ *   bag.saveSafetensors(new File("finetuned.safetensors"));
  * </pre>
  */
 public final class SafeTensors {
@@ -179,13 +192,27 @@ public final class SafeTensors {
     }
 
     public static void save(Map<String, Tensor> tensors, File file, Map<String, String> metadata) throws IOException {
-        // Materialize contiguous CPU copies and compute offsets
+        // Materialize contiguous CPU copies and compute offsets.
+        // Defensive: skip null / undefined / dangling @ByRef handles so a single
+        // bad leaf (e.g. BatchNorm num_batches_tracked after retain failed) does
+        // not SIGSEGV the whole save.
         Map<String, byte[]> payloads = new LinkedHashMap<>();
         Map<String, TensorMeta> metas = new LinkedHashMap<>();
         long offset = 0;
         for (Map.Entry<String, Tensor> e : tensors.entrySet()) {
             String name = e.getKey();
-            Tensor t = e.getValue().contiguous().cpu();
+            Tensor src = e.getValue();
+            if (src == null || src.isNull()) continue;
+            Tensor t;
+            try {
+                if (!src.defined()) continue;
+                // Retain first so contiguous()/cpu() can't race a temporary ByRef.
+                t = new Tensor(src).contiguous().cpu();
+            } catch (Throwable ex) {
+                System.err.println("SafeTensors.save: skip '" + name + "': " + ex);
+                continue;
+            }
+            if (t == null || t.isNull() || !t.defined()) continue;
             SafeDType dtype = SafeDType.fromTorch(t.scalar_type());
             long[] shape = shapeOf(t);
             byte[] raw = tensorToBytes(t, dtype);
@@ -193,6 +220,9 @@ public final class SafeTensors {
             offset += raw.length;
             payloads.put(name, raw);
             metas.put(name, new TensorMeta(dtype.typeName(), shape, offs));
+        }
+        if (payloads.isEmpty()) {
+            throw new IOException("SafeTensors.save: no valid tensors to write for " + file);
         }
 
         String headerJson = buildHeaderJson(metas, metadata);
@@ -212,20 +242,99 @@ public final class SafeTensors {
         }
     }
 
+    // ---- state-dict → trainable Module (arbitrary safetensors) ------------------
+
+    /**
+     * Build a trainable typed {@link WeightBagModule} from a safetensors file.
+     * Reads {@code module_structure} metadata when present so ReLU/Dropout are exact.
+     */
+    public static WeightBagModule toModule(File file) throws IOException {
+        return WeightBagModule.fromSafetensors(file, true);
+    }
+
+    /**
+     * @param requiresGrad set requires_grad on every parameter
+     * @param zeroCopy     when loading the file, prefer mmap/from_blob for large
+     *                     tensors (still cloned into the bag when requiresGrad)
+     */
+    public static WeightBagModule toModule(File file, boolean requiresGrad, boolean zeroCopy)
+            throws IOException {
+        // zeroCopy is honored inside fromSafetensors via loadAsTensors(true) by default;
+        // for explicit control, load then build:
+        Map<String, Tensor> weights = loadAsTensors(file, zeroCopy);
+        Map<String, String> meta = readMetadata(file);
+        Map<String, String> structure = null;
+        if (meta != null) {
+            String enc = meta.get("module_structure");
+            if (enc == null) enc = meta.get("structure");
+            if (enc != null && !enc.isEmpty()) {
+                structure = org.bytedeco.pytorch.data.serialize.StateDictModuleBuilder
+                        .decodeStructureMeta(enc);
+            }
+        }
+        return new WeightBagModule(weights, requiresGrad, true, true, structure);
+    }
+
+    public static WeightBagModule toModule(String path) throws IOException {
+        return toModule(new File(path));
+    }
+
+    /**
+     * Build a trainable typed {@link WeightBagModule} from an in-memory state-dict.
+     * Clones tensors so the bag owns storage; infers Linear/Embedding/… leaves
+     * and Sequential gap-fill for ReLU/Dropout.
+     */
+    public static WeightBagModule toModule(Map<String, Tensor> weights) {
+        return toModule(weights, true);
+    }
+
+    public static WeightBagModule toModule(Map<String, Tensor> weights, boolean requiresGrad) {
+        return WeightBagModule.fromTyped(weights, requiresGrad);
+    }
+
+    /**
+     * Save a live Module's {@code named_parameters(true)} to safetensors.
+     *
+     * @return number of tensors written
+     */
+    public static int saveModule(Module module, File file) throws IOException {
+        return saveModule(module, file, null);
+    }
+
+    public static int saveModule(Module module, File file, Map<String, String> metadata)
+            throws IOException {
+        if (module == null) throw new IllegalArgumentException("module required");
+        Map<String, Tensor> sd = collectNamedParameters(module);
+        if (sd.isEmpty()) {
+            throw new IOException("module has no named_parameters to save: " + module);
+        }
+        save(sd, file, metadata);
+        return sd.size();
+    }
+
+    // ---- inject into existing Module ----------------------------------------
+
     /**
      * Copy matching named parameters from {@code weights} into {@code module}.
-     * Keys are matched against {@code named_parameters()} keys (exact, then
-     * with/without {@code .weight}/{@code .bias} suffixes stripped).
      *
-     * @param strict if true, missing keys throw; if false, skip quietly
+     * <p>Primary path: {@code module.named_parameters(true)} exact key match,
+     * then loose suffix / prefix variants. Falls back to Linear/Embedding
+     * typed walk when named_parameters is empty (rare).
+     *
+     * @param strict if true, missing module keys or shape mismatches throw
      * @return number of parameters written
      */
     public static int loadIntoModule(Module module, Map<String, Tensor> weights, boolean strict) {
-        if (module == null || weights == null) return 0;
+        if (module == null || weights == null || weights.isEmpty()) return 0;
+
+        Map<String, Tensor> params = collectNamedParameters(module);
+        if (!params.isEmpty()) {
+            return loadIntoNamedParameters(params, weights, strict);
+        }
+
+        // Fallback for modules that don't surface named_parameters yet
         int written = 0;
         try {
-            // Walk named_parameters via Module API
-            // StringTensorDict may not exist — use parameters + children fallback
             written += loadIntoModuleRecursive(module, "", weights, strict);
         } catch (RuntimeException e) {
             if (strict) throw e;
@@ -236,16 +345,123 @@ public final class SafeTensors {
     /**
      * Zero-copy convenience: load safetensors and inject into a Module.
      */
-    public static int loadModuleFromFile(Module module, File file, boolean zeroCopy, boolean strict) throws IOException {
+    public static int loadModuleFromFile(Module module, File file, boolean zeroCopy, boolean strict)
+            throws IOException {
         Map<String, Tensor> weights = loadAsTensors(file, zeroCopy);
         return loadIntoModule(module, weights, strict);
     }
 
-    // ---- recursive parameter injection --------------------------------------
+    /**
+     * Collect {@code module.named_parameters(recurse=true)} as a Java map.
+     */
+    public static Map<String, Tensor> collectNamedParameters(Module module) {
+        Map<String, Tensor> out = new LinkedHashMap<>();
+        if (module == null) return out;
+        try {
+            StringTensorDict dict = module.named_parameters(/*recurse=*/true);
+            if (dict == null || dict.isNull()) return out;
+            long n = dict.size();
+            for (long i = 0; i < n; i++) {
+                StringTensorDictItem item = dict.get(i);
+                if (item == null || item.isNull()) continue;
+                String key = item.key() != null ? item.key().getString() : null;
+                Tensor val = item.value();
+                if (key == null || val == null) continue;
+                out.put(key, val);
+            }
+        } catch (Throwable ignored) {
+            // return whatever we have
+        }
+        return out;
+    }
 
-    private static int loadIntoModuleRecursive(Module m, String prefix, Map<String, Tensor> weights, boolean strict) {
+    // ---- named_parameters injection -----------------------------------------
+
+    private static int loadIntoNamedParameters(Map<String, Tensor> params,
+                                               Map<String, Tensor> weights,
+                                               boolean strict) {
+        int written = 0;
+        List<String> missing = new ArrayList<>();
+        List<String> shapeMismatch = new ArrayList<>();
+        Set<String> used = new LinkedHashSet<>();
+
+        for (Map.Entry<String, Tensor> pe : params.entrySet()) {
+            String key = pe.getKey();
+            Tensor dest = pe.getValue();
+            if (dest == null || !dest.defined()) {
+                missing.add(key);
+                continue;
+            }
+            Tensor src = weights.get(key);
+            if (src == null) src = findLoose(weights, key);
+            if (src == null || !src.defined()) {
+                missing.add(key);
+                continue;
+            }
+            if (!shapesEqual(src, dest)) {
+                shapeMismatch.add(key + " src=" + shapeStr(src) + " dest=" + shapeStr(dest));
+                continue;
+            }
+            try (org.bytedeco.pytorch.NoGradGuard guard = new org.bytedeco.pytorch.NoGradGuard()) {
+                dest.copy_(src);
+            }
+            written++;
+            used.add(key);
+        }
+
+        if (strict) {
+            if (!missing.isEmpty() || !shapeMismatch.isEmpty()) {
+                throw new IllegalStateException(
+                        "loadIntoModule strict failure: missing=" + missing
+                                + " shapeMismatch=" + shapeMismatch
+                                + " written=" + written);
+            }
+        }
+        return written;
+    }
+
+    private static Tensor findLoose(Map<String, Tensor> weights, String key) {
+        if (weights.containsKey(key)) return weights.get(key);
+        // strip common wrappers
+        String[] strips = {"module.", "model.", "net.", "state_dict."};
+        for (String s : strips) {
+            if (key.startsWith(s) && weights.containsKey(key.substring(s.length()))) {
+                return weights.get(key.substring(s.length()));
+            }
+            String with = s + key;
+            if (weights.containsKey(with)) return weights.get(with);
+        }
+        for (Map.Entry<String, Tensor> e : weights.entrySet()) {
+            String k = e.getKey();
+            if (k.equals(key) || k.endsWith("." + key) || key.endsWith("." + k)) {
+                return e.getValue();
+            }
+        }
+        return null;
+    }
+
+    private static boolean shapesEqual(Tensor a, Tensor b) {
+        if (a.dim() != b.dim()) return false;
+        for (int i = 0; i < a.dim(); i++) {
+            if (a.sizes().get(i) != b.sizes().get(i)) return false;
+        }
+        return true;
+    }
+
+    private static String shapeStr(Tensor t) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < t.dim(); i++) {
+            if (i > 0) sb.append(',');
+            sb.append(t.sizes().get(i));
+        }
+        return sb.append(']').toString();
+    }
+
+    // ---- recursive Linear/Embedding fallback --------------------------------
+
+    private static int loadIntoModuleRecursive(Module m, String prefix,
+                                               Map<String, Tensor> weights, boolean strict) {
         int n = 0;
-        // Linear / Embedding common cases via typed as*()
         try {
             LinearImpl lin = m.asLinear();
             if (lin != null && !lin.isNull()) {
@@ -264,7 +480,6 @@ public final class SafeTensors {
             }
         } catch (Throwable ignored) {}
 
-        // Generic: named_children recursion
         try {
             org.bytedeco.pytorch.nn.modules.container.StringSharedModuleDict kids = m.named_children();
             if (kids != null && !kids.isNull() && kids.size() > 0) {
@@ -285,32 +500,16 @@ public final class SafeTensors {
     private static int copyParam(Map<String, Tensor> weights, String key, Tensor dest, boolean strict) {
         if (dest == null || !dest.defined()) return 0;
         Tensor src = weights.get(key);
-        // try without trailing dot-parts variants
-        if (src == null) {
-            // strip leading module name variants: "model." prefix etc.
-            for (Map.Entry<String, Tensor> e : weights.entrySet()) {
-                if (e.getKey().endsWith(key) || e.getKey().equals(key)) {
-                    src = e.getValue();
-                    break;
-                }
-            }
-        }
+        if (src == null) src = findLoose(weights, key);
         if (src == null) {
             if (strict) throw new IllegalStateException("Missing weight key: " + key);
             return 0;
         }
-        // shape check
-        if (src.dim() != dest.dim()) {
-            if (strict) throw new IllegalStateException("Shape rank mismatch for " + key);
+        if (!shapesEqual(src, dest)) {
+            if (strict) throw new IllegalStateException("Shape mismatch for " + key
+                    + " src=" + shapeStr(src) + " dest=" + shapeStr(dest));
             return 0;
         }
-        for (int i = 0; i < src.dim(); i++) {
-            if (src.sizes().get(i) != dest.sizes().get(i)) {
-                if (strict) throw new IllegalStateException("Shape mismatch for " + key);
-                return 0;
-            }
-        }
-        // Parameter tensors require grad — in-place copy_ needs no_grad (or data()).
         try (org.bytedeco.pytorch.NoGradGuard guard = new org.bytedeco.pytorch.NoGradGuard()) {
             dest.copy_(src);
         }
@@ -386,6 +585,15 @@ public final class SafeTensors {
                 Tensor t = torch.tensor(data);
                 Tensor out = shape.length > 0 ? t.reshape(shape) : t;
                 return out.to(dtype.toTorch());
+            }
+            case F8_E4M3:
+            case F8_E5M2: {
+                // raw bytes → UInt8 view → cast to Float8 torch dtype
+                byte[] data = new byte[(int) n];
+                buf.get(data);
+                Tensor t = torch.tensor(data).to(torch.kByte());
+                if (shape.length > 0) t = t.reshape(shape);
+                return t.view(dtype.toTorch());
             }
             case I8:
             case U8: {
@@ -503,6 +711,56 @@ public final class SafeTensors {
         String json = new String(hdr.array(), StandardCharsets.UTF_8);
         long dataOffset = 8 + headerLen;
         return new HeaderInfo(json, dataOffset);
+    }
+
+    /**
+     * Read {@code __metadata__} string map from a safetensors header
+     * (no tensor payloads loaded). Used for {@code module_structure} etc.
+     */
+    public static Map<String, String> readMetadata(File file) throws IOException {
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r");
+             FileChannel ch = raf.getChannel()) {
+            HeaderInfo hi = readHeader(ch);
+            return parseMetadata(hi.json);
+        }
+    }
+
+    /**
+     * Parse {@code "__metadata__":{...}} from a safetensors header JSON.
+     * Values may contain {@code ;} / {@code =} (structure meta encoding).
+     */
+    static Map<String, String> parseMetadata(String json) {
+        Map<String, String> out = new LinkedHashMap<>();
+        if (json == null) return out;
+        int idx = json.indexOf("\"__metadata__\"");
+        if (idx < 0) return out;
+        int brace = json.indexOf('{', idx);
+        if (brace < 0) return out;
+        // scan matching brace (no nested objects expected in our metadata values)
+        int depth = 0;
+        int end = -1;
+        for (int i = brace; i < json.length(); i++) {
+            char c = json.charAt(i);
+            if (c == '{') depth++;
+            else if (c == '}') {
+                depth--;
+                if (depth == 0) { end = i; break; }
+            }
+        }
+        if (end < 0) return out;
+        String body = json.substring(brace + 1, end);
+        // Match "key":"value" with escaped quotes
+        Pattern p = Pattern.compile("\"((?:\\\\.|[^\"\\\\])*)\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
+        Matcher m = p.matcher(body);
+        while (m.find()) {
+            out.put(unescapeJson(m.group(1)), unescapeJson(m.group(2)));
+        }
+        return out;
+    }
+
+    private static String unescapeJson(String s) {
+        if (s == null) return null;
+        return s.replace("\\\"", "\"").replace("\\\\", "\\");
     }
 
     private static Map<String, TensorMeta> parseHeader(String json) {

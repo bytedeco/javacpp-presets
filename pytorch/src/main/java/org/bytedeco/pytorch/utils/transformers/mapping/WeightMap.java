@@ -166,7 +166,8 @@ public final class WeightMap {
         for (Rule r : rules) {
             if (!r.regex) {
                 if (r.hf.equals(hfKey) || r.hf.equals(key)) {
-                    return new Mapped(r.module, r.transform);
+                    // Always normalize layers.0 → layers/0 for Java module names
+                    return new Mapped(dotBeforeDigitToSlash(r.module), r.transform);
                 }
             } else {
                 Pattern pat = Pattern.compile(r.hf);
@@ -176,7 +177,10 @@ public final class WeightMap {
                     for (int g = 1; g <= m.groupCount(); g++) {
                         repl = repl.replace("$" + g, m.group(g));
                     }
-                    return new Mapped(repl, r.transform);
+                    // Critical for Qwen3-VL: rule rewrites
+                    // model.language_model.layers.0.* → model.layers.0.*
+                    // but Module registers layers/0 — convert before bind.
+                    return new Mapped(dotBeforeDigitToSlash(repl), r.transform);
                 }
             }
         }

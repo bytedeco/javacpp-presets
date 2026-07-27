@@ -44,7 +44,7 @@ import java.util.Objects;
 public final class PretrainedConfig {
 
     public enum ModelType {
-        GPT2, LLAMA, QWEN, MISTRAL, BERT, GENERIC
+        GPT2, LLAMA, QWEN, MISTRAL, GLM, BERT, GENERIC
     }
 
     private final ModelType modelType;
@@ -249,10 +249,50 @@ public final class PretrainedConfig {
         if (json == null || json.isBlank()) return tinyGpt2();
         try {
             Map<String, Object> m = Json.decodeObject(json);
+            // Multimodal VL configs nest LM hyperparams under text_config (Qwen2-VL / Qwen3-VL).
+            m = flattenTextConfig(m);
             return fromMap(m);
         } catch (IOException e) {
             throw new IllegalArgumentException("Invalid config.json: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Promote nested {@code text_config} fields to the top level so
+     * {@link #fromMap} can read hidden_size / layers / heads for VL models
+     * ({@code qwen3_vl}, {@code qwen2_vl}, …). Top-level keys win on conflict.
+     */
+    @SuppressWarnings("unchecked")
+    static Map<String, Object> flattenTextConfig(Map<String, Object> m) {
+        if (m == null) return m;
+        Object tc = m.get("text_config");
+        if (!(tc instanceof Map<?, ?> raw)) return m;
+        Map<String, Object> text = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> e : raw.entrySet()) {
+            if (e.getKey() != null) text.put(String.valueOf(e.getKey()), e.getValue());
+        }
+        if (text.isEmpty()) return m;
+        Map<String, Object> out = new LinkedHashMap<>(text);
+        // Preserve original top-level (architectures, vision_*, tokens, …) over text defaults
+        out.putAll(m);
+        // Prefer text model_type when top is a VL umbrella type
+        Object topMt = m.get("model_type");
+        Object textMt = text.get("model_type");
+        if (topMt != null && textMt != null) {
+            String t = String.valueOf(topMt).toLowerCase(Locale.ROOT);
+            if (t.contains("_vl") || t.contains("vl_") || t.equals("multi_modality")
+                    || t.contains("conditional")) {
+                out.put("model_type", textMt);
+                out.put("vl_model_type", topMt);
+            }
+        }
+        // dtype often only on text_config as "dtype" not "torch_dtype"
+        if (!out.containsKey("torch_dtype") || out.get("torch_dtype") == null) {
+            Object d = text.get("dtype");
+            if (d == null) d = text.get("torch_dtype");
+            if (d != null) out.put("torch_dtype", d);
+        }
+        return out;
     }
 
     public static PretrainedConfig fromFile(Path path) throws IOException {
@@ -332,6 +372,7 @@ public final class PretrainedConfig {
         if (t.contains("llama")) return ModelType.LLAMA;
         if (t.contains("qwen")) return ModelType.QWEN;
         if (t.contains("mistral") || t.contains("mixtral")) return ModelType.MISTRAL;
+        if (t.contains("glm") || t.contains("chatglm")) return ModelType.GLM;
         if (t.contains("bert")) return ModelType.BERT;
         try {
             return ModelType.valueOf(t.toUpperCase(Locale.ROOT));

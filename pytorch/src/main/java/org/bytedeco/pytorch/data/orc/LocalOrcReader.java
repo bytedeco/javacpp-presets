@@ -4,11 +4,14 @@ import org.bytedeco.pytorch.data.dataframe.DataFrame;
 import org.bytedeco.pytorch.utils.duckdb.DuckDB;
 
 /**
- * Local-filesystem ORC reader → {@link DataFrame}.
+ * <b>Legacy</b> local-filesystem ORC reader → {@link DataFrame} via DuckDB
+ * {@code read_orc} (no Hadoop / orc-core runtime).
  *
- * <p>Uses DuckDB {@code read_orc} (no Hadoop / orc-core runtime).
- * {@link OrcOptions#batchSize()}, {@link OrcOptions#compress()} and
- * {@link OrcOptions#stripeSize()} are ignored on the read path (API-stable).
+ * <p>For pure-Java read based on {@code orc-format} (protobuf only), use
+ * {@link LocalOrcFormatReader} / {@link DataFrame#readOrcFormat(String)}.
+ *
+ * <p>{@link OrcOptions#batchSize()}, {@link OrcOptions#compress()} and
+ * {@link OrcOptions#stripeSize()} are ignored on the DuckDB read path (API-stable).
  */
 public final class LocalOrcReader {
     private LocalOrcReader() {}

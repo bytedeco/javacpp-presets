@@ -20,7 +20,6 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.hub;
-import org.bytedeco.pytorch.distributed.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

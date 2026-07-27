@@ -4,6 +4,7 @@ import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 import org.bytedeco.pytorch.data.dataframe.hdf5.internal.Hdf5ReaderCore;
 import org.bytedeco.pytorch.data.dataframe.hdf5.internal.Hdf5WriterCore;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 import org.bytedeco.pytorch.data.dataframe.io.IoTypeCoercion;
 
 import java.nio.file.Path;
@@ -112,7 +113,17 @@ public final class Hdf5Reader {
                 if (!colData.containsKey(name)) continue;
                 Object v = colData.get(name)[r];
                 try {
-                    df.set(ri, name, v == null ? null : IoTypeCoercion.coerce(v, dtypes.get(name)));
+                    Object coerced = null;
+                    if (v != null) {
+                        Column.DType dt = dtypes.get(name);
+                        if (v instanceof String && (ComplexCellCodec.isComplex(dt)
+                            || ComplexCellCodec.isListLike(dt) || ComplexCellCodec.isMapLike(dt))) {
+                            coerced = ComplexCellCodec.decodeText((String) v, dt);
+                        } else {
+                            coerced = IoTypeCoercion.coerce(v, dt);
+                        }
+                    }
+                    df.set(ri, name, coerced);
                 } catch (Exception ex) {
                     df.set(ri, name, v == null ? null : String.valueOf(v));
                 }

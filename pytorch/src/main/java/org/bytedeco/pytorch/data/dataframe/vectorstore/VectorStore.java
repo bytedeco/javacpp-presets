@@ -286,7 +286,7 @@ public interface VectorStore extends AutoCloseable {
         return df;
     }
 
-    static float[] toFloatArray(Object cell) {
+    public static float[] toFloatArray(Object cell) {
         if (cell == null) return null;
         if (cell instanceof float[] f) return f;
         if (cell instanceof double[] d) {

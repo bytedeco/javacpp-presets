@@ -311,6 +311,34 @@ public final class DuckDB implements Closeable {
         }
     }
 
+    public void exportJson(DataFrame df, String path) throws Exception {
+        String tmp = "_df_export_" + System.nanoTime();
+        try {
+            register(tmp, df);
+            exportJson(tmp, path);
+        } finally {
+            try { unregister(tmp); } catch (SQLException ignored) {}
+        }
+    }
+
+    /** Write DataFrame into a named table of this DuckDB instance. */
+    public void writeTable(String table, DataFrame df) throws Exception {
+        register(table, df);
+    }
+
+    /** Write DataFrame into a named table with SqlOptions (REPLACE/APPEND/FAIL). */
+    public void writeTable(String table, DataFrame df,
+                           org.bytedeco.pytorch.data.dataframe.sql.SqlOptions options) throws Exception {
+        Objects.requireNonNull(table, "table");
+        Objects.requireNonNull(df, "df");
+        df.toSql(connection, table, options == null
+                ? org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.builder()
+                    .ifExists(org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.IfExists.REPLACE)
+                    .build()
+                : options);
+        registered.put(table, "dataframe rows=" + df.rowCount());
+    }
+
     // ---- catalog helpers -------------------------------------------------
 
     public List<String> tables() throws SQLException {

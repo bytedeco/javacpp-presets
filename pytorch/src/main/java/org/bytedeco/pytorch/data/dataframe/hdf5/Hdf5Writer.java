@@ -1,6 +1,7 @@
 package org.bytedeco.pytorch.data.dataframe.hdf5;
 
 import org.bytedeco.pytorch.data.dataframe.Column;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 import org.bytedeco.pytorch.data.dataframe.hdf5.internal.Hdf5WriterCore;
 
@@ -134,11 +135,39 @@ public final class Hdf5Writer {
                 }
                 return a;
             }
+            case VECTOR:
+            case EMBEDDING: {
+                // store as JSON text of float arrays (portable); dense 2-D optional later
+                String[] a = new String[n];
+                for (int i = 0; i < n; i++) {
+                    Object v = col.get(i);
+                    a[i] = v == null ? "" : ComplexCellCodec.encodeText(v);
+                }
+                return a;
+            }
+            case LIST:
+            case MAP:
+            case STRUCT:
+            case JSON:
+            case TENSOR:
+            case BINARY:
             default: {
                 String[] a = new String[n];
                 for (int i = 0; i < n; i++) {
                     Object v = col.get(i);
-                    a[i] = v == null ? "" : String.valueOf(v);
+                    if (v == null) {
+                        a[i] = "";
+                    } else if (v instanceof String) {
+                        a[i] = (String) v;
+                    } else if (ComplexCellCodec.isComplex(col.dtype())
+                        || ComplexCellCodec.isListLike(col.dtype())
+                        || ComplexCellCodec.isMapLike(col.dtype())
+                        || v instanceof java.util.Map || v instanceof java.util.List
+                        || v.getClass().isArray()) {
+                        a[i] = ComplexCellCodec.encodeText(v);
+                    } else {
+                        a[i] = String.valueOf(v);
+                    }
                 }
                 return a;
             }

@@ -20,7 +20,6 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.lance;
-import org.bytedeco.pytorch.data.*;
 
 import org.apache.arrow.memory.BufferAllocator;
 import org.apache.arrow.memory.RootAllocator;
@@ -30,24 +29,29 @@ import org.apache.arrow.vector.types.pojo.Schema;
 import org.bytedeco.pytorch.data.arrow.ArrowBridge;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 import org.lance.Dataset;
+import org.lance.Tag;
+import org.lance.Version;
 import org.lance.WriteParams;
+import org.lance.compaction.CompactionOptions;
 import org.lance.index.DistanceType;
+import org.lance.index.Index;
+import org.lance.index.OptimizeOptions;
+import org.lance.ipc.ApproxMode;
+import org.lance.ipc.FullTextQuery;
 import org.lance.ipc.LanceScanner;
 import org.lance.ipc.Query;
 import org.lance.ipc.ScanOptions;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -58,21 +62,21 @@ import java.util.stream.Collectors;
  * {@link ArrowBridge} (DataFrame ↔ Arrow IPC ↔ Lance).
  *
  * <pre>{@code
- * // write
- * try (Lance ds = Lance.write(df, "clips.lance")) {
- *     System.out.println(ds.countRows());
+ * // write (default DataFrame path)
+ * df.writeLance("clips.lance");
+ * // open + ANN + index
+ * try (Lance ds = Lance.open("clips.lance")) {
+ *     ds.createVectorIndex("emb", LanceIndex.ivfHnswPq(32, 16, 100, "cosine"));
+ *     DataFrame hits = ds.search("emb", query, 10, SearchOptions.cosine().ef(64));
+ *     ds.tag("v1");
  * }
  * // read
  * DataFrame back = Lance.readDataFrame("clips.lance");
- * // ANN search
- * try (Lance ds = Lance.open("clips.lance")) {
- *     DataFrame hits = ds.search("embedding", query, 10);
- * }
  * }</pre>
  *
  * <p>Also interoperates with the pure-Java training dataset under
  * {@link org.bytedeco.pytorch.data.dataframe.lance.LanceDataset} (different on-disk layout —
- * use {@link #isOfficialLance(String)} to detect the native format).
+ * use {@link #isOfficialLance(String)} / {@link #isPureJavaLance(String)} to detect).
  */
 public final class Lance implements Closeable {
 
@@ -93,16 +97,36 @@ public final class Lance implements Closeable {
     // ---- open / write ----------------------------------------------------
 
     public static Lance open(String path) throws Exception {
-        return open(Path.of(path));
+        return open(Path.of(path), null);
     }
 
     public static Lance open(Path path) throws Exception {
+        return open(path, null);
+    }
+
+    /**
+     * Open with optional version / tag (time travel via {@link LanceReadOptions}).
+     */
+    public static Lance open(String path, LanceReadOptions opts) throws Exception {
+        return open(Path.of(path), opts);
+    }
+
+    public static Lance open(Path path, LanceReadOptions opts) throws Exception {
         Objects.requireNonNull(path, "path");
         String uri = toFileUri(path);
         BufferAllocator alloc = new RootAllocator();
         try {
             Dataset ds = Dataset.open(uri, alloc);
-            return new Lance(ds, alloc, true, uri);
+            Lance lance = new Lance(ds, alloc, true, uri);
+            if (opts != null) {
+                if (opts.version() != null) {
+                    return lance.checkoutVersion(opts.version());
+                }
+                if (opts.tag() != null && !opts.tag().isBlank()) {
+                    return lance.checkoutTag(opts.tag());
+                }
+            }
+            return lance;
         } catch (Throwable t) {
             alloc.close();
             throw t;
@@ -115,17 +139,25 @@ public final class Lance implements Closeable {
      * @param mode CREATE / OVERWRITE / APPEND
      */
     public static Lance write(DataFrame df, String path, WriteParams.WriteMode mode) throws Exception {
-        return write(df, Path.of(path), mode == null ? WriteParams.WriteMode.CREATE : mode);
+        return write(df, Path.of(path),
+            mode == null
+                ? LanceWriteOptions.create()
+                : LanceWriteOptions.defaults().mode(mode));
     }
 
     public static Lance write(DataFrame df, String path) throws Exception {
-        return write(df, path, WriteParams.WriteMode.CREATE);
+        return write(df, path, LanceWriteOptions.defaults());
     }
 
-    public static Lance write(DataFrame df, Path path, WriteParams.WriteMode mode) throws Exception {
+    public static Lance write(DataFrame df, String path, LanceWriteOptions options) throws Exception {
+        return write(df, Path.of(path), options);
+    }
+
+    public static Lance write(DataFrame df, Path path, LanceWriteOptions options) throws Exception {
         Objects.requireNonNull(df, "df");
         Objects.requireNonNull(path, "path");
-        WriteParams.WriteMode m = mode == null ? WriteParams.WriteMode.CREATE : mode;
+        LanceWriteOptions opts = options == null ? LanceWriteOptions.defaults() : options;
+        WriteParams.WriteMode m = opts.mode() == null ? WriteParams.WriteMode.CREATE : opts.mode();
         if (m == WriteParams.WriteMode.CREATE && Files.exists(path)) {
             // prefer overwrite when path exists to avoid hard failures in benchmarks
             m = WriteParams.WriteMode.OVERWRITE;
@@ -138,13 +170,22 @@ public final class Lance implements Closeable {
         ArrowReader reader = null;
         try {
             reader = ArrowBridge.toArrowReader(df, alloc);
-            Dataset ds = Dataset.write()
+            var builder = Dataset.write()
                     .allocator(alloc)
                     .reader(reader)
                     .uri(uri)
-                    .mode(m)
-                    .execute();
-            // reader is consumed; close it
+                    .mode(m);
+            if (opts.maxRowsPerFile() != null) builder.maxRowsPerFile(opts.maxRowsPerFile());
+            if (opts.maxRowsPerGroup() != null) builder.maxRowsPerGroup(opts.maxRowsPerGroup());
+            if (opts.maxBytesPerFile() != null) builder.maxBytesPerFile(opts.maxBytesPerFile());
+            if (opts.stableRowIds() != null) builder.enableStableRowIds(opts.stableRowIds());
+            if (opts.dataStorageVersion() != null && !opts.dataStorageVersion().isBlank()) {
+                builder.dataStorageVersion(opts.dataStorageVersion());
+            }
+            if (opts.storageOptions() != null && !opts.storageOptions().isEmpty()) {
+                builder.storageOptions(new LinkedHashMap<>(opts.storageOptions()));
+            }
+            Dataset ds = builder.execute();
             try { reader.close(); } catch (Exception ignored) {}
             reader = null;
             return new Lance(ds, alloc, true, uri);
@@ -159,12 +200,12 @@ public final class Lance implements Closeable {
 
     /** Overwrite convenience. */
     public static Lance overwrite(DataFrame df, String path) throws Exception {
-        return write(df, path, WriteParams.WriteMode.OVERWRITE);
+        return write(df, path, LanceWriteOptions.overwrite());
     }
 
     /** Append rows to an existing dataset. */
     public static Lance append(DataFrame df, String path) throws Exception {
-        return write(df, path, WriteParams.WriteMode.APPEND);
+        return write(df, path, LanceWriteOptions.append());
     }
 
     /** Read entire dataset into a DataFrame (static one-shot). */
@@ -180,6 +221,12 @@ public final class Lance implements Closeable {
         }
     }
 
+    public static DataFrame readDataFrame(String path, LanceReadOptions opts) throws Exception {
+        try (Lance ds = open(path, opts)) {
+            return ds.scan(opts);
+        }
+    }
+
     /**
      * Heuristic: official Lance datasets have a {@code _versions} / {@code data} layout with
      * manifest binaries; our pure-Java training layout uses {@code _manifest.json}.
@@ -189,10 +236,9 @@ public final class Lance implements Closeable {
         if (Files.isRegularFile(p.resolve("_manifest.json"))) {
             return false; // pure-Java training layout
         }
-        // official lance typically has _versions directory or *.manifest
         return Files.isDirectory(p.resolve("_versions"))
                 || Files.isDirectory(p.resolve("data"))
-                || Files.exists(p);
+                || (Files.isDirectory(p) && Files.exists(p));
     }
 
     public static boolean isPureJavaLance(String path) {
@@ -237,6 +283,23 @@ public final class Lance implements Closeable {
         return m;
     }
 
+    public long version() {
+        return dataset.version();
+    }
+
+    public Version getVersion() {
+        return dataset.getVersion();
+    }
+
+    public List<Version> listVersions() {
+        List<Version> v = dataset.listVersions();
+        return v == null ? List.of() : v;
+    }
+
+    public long latestVersion() {
+        return dataset.latestVersion();
+    }
+
     /** Full table scan → DataFrame. */
     public DataFrame toDataFrame() throws Exception {
         return scan(null, null, -1);
@@ -267,6 +330,27 @@ public final class Lance implements Closeable {
         }
     }
 
+    public DataFrame scan(LanceReadOptions opts) throws Exception {
+        if (opts == null) return toDataFrame();
+        ScanOptions.Builder b = new ScanOptions.Builder();
+        if (opts.columns() != null && !opts.columns().isEmpty()) {
+            b.columns(opts.columns());
+        }
+        if (opts.filter() != null && !opts.filter().isBlank()) {
+            b.filter(opts.filter());
+        }
+        if (opts.limit() > 0) b.limit(opts.limit());
+        if (opts.offset() > 0) b.offset(opts.offset());
+        if (opts.batchSize() > 0) b.batchSize(opts.batchSize());
+        if (opts.withRowId()) b.withRowId(true);
+        if (opts.withRowAddress()) b.withRowAddress(true);
+        b.useScalarIndex(opts.useScalarIndex());
+        try (LanceScanner scanner = dataset.newScan(b.build());
+             ArrowReader reader = scanner.scanBatches()) {
+            return ArrowBridge.fromArrowReader(reader);
+        }
+    }
+
     public DataFrame head(int n) throws Exception {
         return scan(null, null, n);
     }
@@ -288,40 +372,304 @@ public final class Lance implements Closeable {
      * @param metric       L2 / Cosine / Dot / Hamming (case-insensitive); null = L2
      */
     public DataFrame search(String vectorColumn, float[] query, int k, String metric) throws Exception {
+        return search(vectorColumn, query, k,
+            SearchOptions.defaults().metric(metric == null ? "L2" : metric));
+    }
+
+    public DataFrame search(String vectorColumn, float[] query, int k) throws Exception {
+        return search(vectorColumn, query, k, SearchOptions.l2());
+    }
+
+    /**
+     * ANN search with full {@link SearchOptions} (ef / nprobes / refine / hybrid filter).
+     */
+    public DataFrame search(String vectorColumn, float[] query, int k, SearchOptions options)
+            throws Exception {
         Objects.requireNonNull(vectorColumn, "vectorColumn");
         Objects.requireNonNull(query, "query");
         if (k <= 0) throw new IllegalArgumentException("k must be > 0");
-        DistanceType dt = parseDistance(metric);
-        Query nearest = new Query.Builder()
+        SearchOptions opts = options == null ? SearchOptions.defaults() : options;
+        DistanceType dt = parseDistance(opts.metric());
+
+        Query.Builder qb = new Query.Builder()
                 .setColumn(vectorColumn)
                 .setKey(query)
                 .setK(k)
-                .setDistanceType(dt)
-                .build();
-        ScanOptions options = new ScanOptions.Builder()
+                .setDistanceType(dt);
+        if (opts.ef() != null) qb.setEf(opts.ef());
+        if (opts.minimumNprobes() != null) qb.setMinimumNprobes(opts.minimumNprobes());
+        if (opts.maximumNprobes() != null) qb.setMaximumNprobes(opts.maximumNprobes());
+        if (opts.refineFactor() != null) qb.setRefineFactor(opts.refineFactor());
+        if (opts.useIndex() != null) qb.setUseIndex(opts.useIndex());
+        if (opts.queryParallelism() != null) qb.setQueryParallelism(opts.queryParallelism());
+        if (opts.approxMode() != null && !opts.approxMode().isBlank()) {
+            try {
+                qb.setApproxMode(ApproxMode.valueOf(opts.approxMode()));
+            } catch (Exception ignored) {
+                // keep default approx mode if enum name doesn't match
+            }
+        }
+        Query nearest = qb.build();
+
+        ScanOptions.Builder sb = new ScanOptions.Builder()
                 .nearest(nearest)
-                .prefilter(true)
-                .batchSize(Math.max(k, 64))
-                .build();
-        try (LanceScanner scanner = dataset.newScan(options);
+                .prefilter(opts.prefilter());
+        if (opts.filter() != null && !opts.filter().isBlank()) {
+            sb.filter(opts.filter());
+        }
+        if (opts.columns() != null && !opts.columns().isEmpty()) {
+            sb.columns(opts.columns());
+        }
+        long bs = opts.batchSize() > 0 ? opts.batchSize() : Math.max(k, 64);
+        sb.batchSize(bs);
+
+        try (LanceScanner scanner = dataset.newScan(sb.build());
              ArrowReader reader = scanner.scanBatches()) {
             return ArrowBridge.fromArrowReader(reader);
         }
     }
 
-    public DataFrame search(String vectorColumn, float[] query, int k) throws Exception {
-        return search(vectorColumn, query, k, "L2");
+    /**
+     * Full-text search (requires an inverted / FTS index on the column).
+     */
+    public DataFrame fullTextSearch(String column, String query, int limit) throws Exception {
+        Objects.requireNonNull(column, "column");
+        Objects.requireNonNull(query, "query");
+        // FullTextQuery.match(queryText, column) — query first, then column
+        FullTextQuery ftq = FullTextQuery.match(query, column);
+        ScanOptions.Builder b = new ScanOptions.Builder()
+                .fullTextQuery(ftq);
+        if (limit > 0) b.limit(limit);
+        b.batchSize(Math.max(limit, 64));
+        try (LanceScanner scanner = dataset.newScan(b.build());
+             ArrowReader reader = scanner.scanBatches()) {
+            return ArrowBridge.fromArrowReader(reader);
+        }
+    }
+
+    public DataFrame fullTextPhrase(String column, String phrase, int limit) throws Exception {
+        Objects.requireNonNull(column, "column");
+        Objects.requireNonNull(phrase, "phrase");
+        // FullTextQuery.phrase(queryText, column)
+        FullTextQuery ftq = FullTextQuery.phrase(phrase, column);
+        ScanOptions.Builder b = new ScanOptions.Builder().fullTextQuery(ftq);
+        if (limit > 0) b.limit(limit);
+        try (LanceScanner scanner = dataset.newScan(b.build());
+             ArrowReader reader = scanner.scanBatches()) {
+            return ArrowBridge.fromArrowReader(reader);
+        }
+    }
+
+    /** Take rows by row id. */
+    public DataFrame take(List<Long> rowIds, List<String> columns) throws Exception {
+        try (ArrowReader reader = dataset.take(rowIds, columns)) {
+            return ArrowBridge.fromArrowReader(reader);
+        }
+    }
+
+    public DataFrame take(List<Long> rowIds) throws Exception {
+        return take(rowIds, null);
+    }
+
+    /** Random sample of {@code n} rows. */
+    public DataFrame sample(long n, List<String> columns) throws Exception {
+        try (ArrowReader reader = dataset.sample(n, columns)) {
+            return ArrowBridge.fromArrowReader(reader);
+        }
+    }
+
+    public DataFrame sample(long n) throws Exception {
+        return sample(n, null);
+    }
+
+    // ---- indexes ---------------------------------------------------------
+
+    /**
+     * Create a vector index on {@code column}.
+     *
+     * @return true if the call completed without throwing
+     */
+    public boolean createVectorIndex(String column, LanceIndex index) {
+        return createVectorIndex(column, index, true);
+    }
+
+    public boolean createVectorIndex(String column, LanceIndex index, boolean replace) {
+        Objects.requireNonNull(column, "column");
+        Objects.requireNonNull(index, "index");
+        try {
+            createIndex(List.of(column), index, replace);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     /**
-     * Create a vector index on {@code column} (best-effort; index params depend on lance version).
+     * Convenience: IVF-HNSW-PQ with reasonable defaults for the given metric.
      * Returns true if the call completed without throwing.
      */
     public boolean createVectorIndex(String column, String indexName, String metric) {
-        // Index creation APIs evolve across lance betas; keep a soft hook for callers/benchmarks.
-        // Full IVF-PQ / HNSW builder wiring can be layered on without changing this facade.
         Objects.requireNonNull(column, "column");
-        return false; // not forced — ANN still works via brute force / existing indices
+        // Small defaults suitable for smoke tests / moderate data; tune via LanceIndex factories.
+        LanceIndex idx = LanceIndex.ivfHnswPq(4, 16, 50, metric == null ? "L2" : metric)
+                .named(indexName);
+        return createVectorIndex(column, idx, true);
+    }
+
+    public boolean createScalarIndex(String column, LanceIndex index) {
+        return createScalarIndex(column, index, true);
+    }
+
+    public boolean createScalarIndex(String column, LanceIndex index, boolean replace) {
+        Objects.requireNonNull(column, "column");
+        Objects.requireNonNull(index, "index");
+        try {
+            createIndex(List.of(column), index, replace);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /** Create a full-text inverted index on a text column. */
+    public boolean createFtsIndex(String column) {
+        return createFtsIndex(column, null, true);
+    }
+
+    public boolean createFtsIndex(String column, String indexName, boolean replace) {
+        LanceIndex idx = LanceIndex.fts();
+        if (indexName != null) idx = idx.named(indexName);
+        return createScalarIndex(column, idx, replace);
+    }
+
+    /**
+     * Low-level index creation — throws on failure.
+     */
+    public Index createIndex(List<String> columns, LanceIndex index, boolean replace) {
+        Objects.requireNonNull(columns, "columns");
+        Objects.requireNonNull(index, "index");
+        if (columns.isEmpty()) throw new IllegalArgumentException("columns must not be empty");
+        Optional<String> name = Optional.ofNullable(index.name());
+        return dataset.createIndex(columns, index.indexType(), name, index.indexParams(), replace);
+    }
+
+    public Index createIndex(String column, LanceIndex index) {
+        return createIndex(List.of(column), index, true);
+    }
+
+    public void dropIndex(String indexName) {
+        dataset.dropIndex(indexName);
+    }
+
+    public List<String> listIndexes() {
+        List<String> names = dataset.listIndexes();
+        return names == null ? List.of() : names;
+    }
+
+    public List<Index> getIndexes() {
+        List<Index> idx = dataset.getIndexes();
+        return idx == null ? List.of() : idx;
+    }
+
+    public Map<String, Object> getIndexStatistics(String indexName) {
+        Map<String, Object> m = dataset.getIndexStatistics(indexName);
+        return m == null ? Map.of() : m;
+    }
+
+    public void optimizeIndices() {
+        dataset.optimizeIndices(OptimizeOptions.builder().build());
+    }
+
+    public void optimizeIndices(OptimizeOptions options) {
+        dataset.optimizeIndices(options == null
+            ? OptimizeOptions.builder().build()
+            : options);
+    }
+
+    // ---- versioning / tags / branches ------------------------------------
+
+    /**
+     * Checkout a historical version. Returns a new {@link Lance} wrapping the checked-out
+     * dataset; the previous handle remains open until closed by the caller.
+     */
+    public Lance checkoutVersion(long version) {
+        Dataset ds = dataset.checkoutVersion(version);
+        // checkout returns a new Dataset; keep sharing allocator ownership with this wrapper
+        return new Lance(ds, allocator, false, uri);
+    }
+
+    public Lance checkoutTag(String tag) {
+        Dataset ds = dataset.checkoutTag(tag);
+        return new Lance(ds, allocator, false, uri);
+    }
+
+    public void checkoutLatest() {
+        dataset.checkoutLatest();
+    }
+
+    public void restore() {
+        dataset.restore();
+    }
+
+    /** Create a tag at the current version. */
+    public void tag(String name) {
+        dataset.tags().create(name, dataset.version());
+    }
+
+    public void tag(String name, long version) {
+        dataset.tags().create(name, version);
+    }
+
+    public void deleteTag(String name) {
+        dataset.tags().delete(name);
+    }
+
+    public void updateTag(String name, long version) {
+        dataset.tags().update(name, version);
+    }
+
+    public List<Tag> listTags() {
+        List<Tag> t = dataset.tags().list();
+        return t == null ? List.of() : t;
+    }
+
+    public long tagVersion(String name) {
+        return dataset.tags().getVersion(name);
+    }
+
+    public List<String> listBranches() {
+        var branches = dataset.branches().list();
+        if (branches == null) return List.of();
+        List<String> names = new ArrayList<>();
+        for (var b : branches) {
+            try {
+                names.add(String.valueOf(b));
+            } catch (Exception e) {
+                names.add(b == null ? "null" : b.getClass().getSimpleName());
+            }
+        }
+        return names;
+    }
+
+    // ---- mutation --------------------------------------------------------
+
+    /** Delete rows matching a Lance filter predicate. */
+    public void delete(String predicate) {
+        Objects.requireNonNull(predicate, "predicate");
+        dataset.delete(predicate);
+    }
+
+    public void truncateTable() {
+        dataset.truncateTable();
+    }
+
+    public void compact() {
+        dataset.compact();
+    }
+
+    public void compact(CompactionOptions options) {
+        if (options == null) dataset.compact();
+        else dataset.compact(options);
     }
 
     public Map<String, Object> info() {
@@ -332,6 +680,11 @@ public final class Lance implements Closeable {
         m.put("schema", schemaMap());
         m.put("lanceVersion", VERSION);
         m.put("official", true);
+        try { m.put("version", version()); } catch (Throwable ignored) {}
+        try { m.put("latestVersion", latestVersion()); } catch (Throwable ignored) {}
+        try { m.put("indexes", listIndexes()); } catch (Throwable ignored) {}
+        try { m.put("fragments", dataset.getFragments() == null ? 0 : dataset.getFragments().size()); }
+        catch (Throwable ignored) {}
         return m;
     }
 
@@ -352,18 +705,25 @@ public final class Lance implements Closeable {
     // ---- DataFrame extension-style helpers -------------------------------
 
     /**
-     * Write DataFrame via official Lance and return path. Prefer this over the pure-Java
-     * {@code DataFrame.writeLance} when native lance-core is on the classpath.
+     * Write DataFrame via official Lance and return path.
+     * Prefer this (or {@link DataFrame#writeLance(String)}) for production datasets.
      */
     public static String writeDataFrame(DataFrame df, String path) throws Exception {
-        try (Lance ignored = write(df, path, WriteParams.WriteMode.OVERWRITE)) {
+        try (Lance ignored = write(df, path, LanceWriteOptions.overwrite())) {
+            return path;
+        }
+    }
+
+    public static String writeDataFrame(DataFrame df, String path, LanceWriteOptions options)
+            throws Exception {
+        try (Lance ignored = write(df, path, options == null ? LanceWriteOptions.overwrite() : options)) {
             return path;
         }
     }
 
     /**
-     * Dual-read: try official Lance first; fall back to pure-Java
-     * {@link org.bytedeco.pytorch.data.dataframe.lance.LanceDataset} when {@code _manifest.json} is present.
+     * Dual-read: pure-Java training layout when {@code _manifest.json} is present;
+     * otherwise official Lance.
      */
     public static DataFrame readAuto(String path) throws Exception {
         if (isPureJavaLance(path)) {
@@ -381,6 +741,13 @@ public final class Lance implements Closeable {
         }
     }
 
+    public static DataFrame readAuto(String path, LanceReadOptions opts) throws Exception {
+        if (isPureJavaLance(path)) {
+            return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.read(path);
+        }
+        return readDataFrame(path, opts);
+    }
+
     // ---- helpers ---------------------------------------------------------
 
     static String toFileUri(Path path) {
@@ -390,14 +757,6 @@ public final class Lance implements Closeable {
     }
 
     static DistanceType parseDistance(String metric) {
-        if (metric == null || metric.isBlank()) return DistanceType.L2;
-        String m = metric.trim().toLowerCase(Locale.ROOT);
-        return switch (m) {
-            case "cosine", "cos" -> DistanceType.Cosine;
-            case "dot", "ip", "inner_product" -> DistanceType.Dot;
-            case "hamming" -> DistanceType.Hamming;
-            case "l2", "euclidean", "euclid" -> DistanceType.L2;
-            default -> DistanceType.L2;
-        };
+        return LanceIndex.parseDistance(metric);
     }
 }

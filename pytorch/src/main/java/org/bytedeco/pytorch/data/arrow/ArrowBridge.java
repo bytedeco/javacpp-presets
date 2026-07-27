@@ -66,7 +66,8 @@ public final class ArrowBridge {
         JvmModuleSupport.ensureNioBufferAccess();
         List<Field> fields = new ArrayList<>();
         for (Column c : df.columns()) {
-            fields.add(ArrowSchemaMapper.toField(c.name(), c.dtype()));
+            // Sample VECTOR dim / STRUCT keys so Lance gets FixedSizeList / native Struct.
+            fields.add(ArrowSchemaMapper.toField(c));
         }
         Schema schema = new Schema(fields);
         VectorSchemaRoot root = VectorSchemaRoot.create(schema, allocator);
@@ -171,80 +172,12 @@ public final class ArrowBridge {
     }
 
     private static Object getValue(FieldVector vec, int i) {
-        if (vec.isNull(i)) return null;
-        if (vec instanceof IntVector v) return v.get(i);
-        if (vec instanceof BigIntVector v) return v.get(i);
-        if (vec instanceof Float4Vector v) return v.get(i);
-        if (vec instanceof Float8Vector v) return v.get(i);
-        if (vec instanceof BitVector v) return v.get(i) == 1;
-        if (vec instanceof VarCharVector v) {
-            byte[] b = v.get(i);
-            return b == null ? null : new String(b, StandardCharsets.UTF_8);
-        }
-        // fallback
-        Object o = vec.getObject(i);
-        return o == null ? null : o.toString();
+        Column.DType dt = ArrowSchemaMapper.fromField(vec.getField());
+        return ArrowComplexVectors.readValue(vec, i, dt);
     }
 
     static void fillVector(FieldVector vec, Column col, int n) {
-        vec.setInitialCapacity(n);
-        vec.allocateNew();
-        if (vec instanceof IntVector v) {
-            for (int i = 0; i < n; i++) {
-                Object val = col.get(i);
-                if (val == null) v.setNull(i);
-                else v.setSafe(i, ((Number) val).intValue());
-            }
-        } else if (vec instanceof BigIntVector v) {
-            for (int i = 0; i < n; i++) {
-                Object val = col.get(i);
-                if (val == null) v.setNull(i);
-                else if (val instanceof Duration d) v.setSafe(i, d.toMillis());
-                else v.setSafe(i, ((Number) val).longValue());
-            }
-        } else if (vec instanceof Float4Vector v) {
-            for (int i = 0; i < n; i++) {
-                Object val = col.get(i);
-                if (val == null) v.setNull(i);
-                else v.setSafe(i, ((Number) val).floatValue());
-            }
-        } else if (vec instanceof Float8Vector v) {
-            for (int i = 0; i < n; i++) {
-                Object val = col.get(i);
-                if (val == null) v.setNull(i);
-                else v.setSafe(i, ((Number) val).doubleValue());
-            }
-        } else if (vec instanceof BitVector v) {
-            for (int i = 0; i < n; i++) {
-                Object val = col.get(i);
-                if (val == null) v.setNull(i);
-                else {
-                    boolean b = val instanceof Boolean bo ? bo
-                            : val instanceof Number num && num.intValue() != 0;
-                    v.setSafe(i, b ? 1 : 0);
-                }
-            }
-        } else if (vec instanceof VarCharVector v) {
-            for (int i = 0; i < n; i++) {
-                Object val = col.get(i);
-                if (val == null) v.setNull(i);
-                else {
-                    byte[] bytes = String.valueOf(val).getBytes(StandardCharsets.UTF_8);
-                    v.setSafe(i, bytes);
-                }
-            }
-        } else {
-            // best-effort string
-            if (vec instanceof org.apache.arrow.vector.DateDayVector v) {
-                for (int i = 0; i < n; i++) {
-                    Object val = col.get(i);
-                    if (val == null) v.setNull(i);
-                    else if (val instanceof Number num) v.setSafe(i, num.intValue());
-                    else if (val instanceof LocalDate ld) v.setSafe(i, (int) ld.toEpochDay());
-                    else v.setNull(i);
-                }
-            }
-        }
-        vec.setValueCount(n);
+        ArrowComplexVectors.fillVector(vec, col, n);
     }
 }
+

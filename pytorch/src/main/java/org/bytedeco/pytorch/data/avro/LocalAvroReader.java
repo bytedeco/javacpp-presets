@@ -9,6 +9,7 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 import org.bytedeco.pytorch.data.dataframe.io.IoTypeCoercion;
 
 import java.io.File;
@@ -89,6 +90,8 @@ public final class LocalAvroReader {
                 if (s.getLogicalType() != null && "date".equals(s.getLogicalType().getName())) {
                     return Column.DType.DATE;
                 }
+                // also honor prop-style logicalType used by our writer
+                if ("date".equals(s.getProp("logicalType"))) return Column.DType.DATE;
                 return Column.DType.INT32;
             }
             case LONG: {
@@ -102,6 +105,10 @@ public final class LocalAvroReader {
                         return Column.DType.TIME;
                     }
                 }
+                String prop = s.getProp("logicalType");
+                if ("timestamp-millis".equals(prop) || "timestamp-micros".equals(prop)) {
+                    return Column.DType.DATETIME;
+                }
                 return Column.DType.INT64;
             }
             case FLOAT: return Column.DType.FLOAT32;
@@ -109,13 +116,20 @@ public final class LocalAvroReader {
             case BYTES:
             case FIXED:
                 return Column.DType.BINARY;
+            case ARRAY: {
+                Schema elem = unwrapNullable(s.getElementType());
+                // array<float|double> → VECTOR; otherwise LIST
+                if (elem.getType() == Schema.Type.FLOAT || elem.getType() == Schema.Type.DOUBLE) {
+                    return Column.DType.VECTOR;
+                }
+                return Column.DType.LIST;
+            }
+            case MAP:
+                return Column.DType.MAP;
+            case RECORD:
+                return Column.DType.STRUCT;
             default:
                 if (s.getLogicalType() != null && "date".equals(s.getLogicalType().getName())) {
-                    return Column.DType.DATE;
-                }
-                // Avro INT with logicalType date handled above via getLogicalType on INT
-                if (s.getType() == Schema.Type.INT && s.getLogicalType() != null
-                    && "date".equals(s.getLogicalType().getName())) {
                     return Column.DType.DATE;
                 }
                 return Column.DType.STRING;
@@ -131,8 +145,37 @@ public final class LocalAvroReader {
             bb.get(bytes);
             raw = bytes;
         }
-        if (schema != null && schema.getLogicalType() != null) {
-            String ln = schema.getLogicalType().getName();
+        // GenericData.Array / Collection / Map from Avro nested types
+        if (raw instanceof org.apache.avro.generic.GenericData.Array) {
+            List<Object> list = new ArrayList<>();
+            for (Object o : (org.apache.avro.generic.GenericData.Array<?>) raw) {
+                list.add(unwrapAvroScalar(o));
+            }
+            raw = list;
+        } else if (raw instanceof Collection && !(raw instanceof List)) {
+            raw = new ArrayList<>((Collection<?>) raw);
+        }
+        if (raw instanceof org.apache.avro.generic.GenericRecord) {
+            org.apache.avro.generic.GenericRecord rec = (org.apache.avro.generic.GenericRecord) raw;
+            Map<String, Object> m = new LinkedHashMap<>();
+            for (Schema.Field f : rec.getSchema().getFields()) {
+                m.put(f.name(), unwrapAvroScalar(rec.get(f.name())));
+            }
+            raw = m;
+        } else if (raw instanceof Map) {
+            Map<?, ?> src = (Map<?, ?>) raw;
+            Map<String, Object> m = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> e : src.entrySet()) {
+                Object k = e.getKey();
+                if (k instanceof Utf8) k = k.toString();
+                m.put(String.valueOf(k), unwrapAvroScalar(e.getValue()));
+            }
+            raw = m;
+        }
+
+        if (schema != null) {
+            String ln = schema.getLogicalType() != null ? schema.getLogicalType().getName()
+                : schema.getProp("logicalType");
             if ("date".equals(ln) && raw instanceof Number) {
                 return LocalDate.ofEpochDay(((Number) raw).intValue());
             }
@@ -145,9 +188,51 @@ public final class LocalAvroReader {
             }
         }
         try {
+            if (ComplexCellCodec.isComplex(dtype) || ComplexCellCodec.isListLike(dtype)
+                || ComplexCellCodec.isMapLike(dtype)) {
+                return ComplexCellCodec.coerceComplex(raw, dtype);
+            }
             return IoTypeCoercion.coerce(raw, dtype);
         } catch (Exception e) {
             return raw instanceof byte[] ? raw : String.valueOf(raw);
         }
     }
+
+    private static Object unwrapAvroScalar(Object o) {
+        if (o == null) return null;
+        if (o instanceof Utf8) return o.toString();
+        if (o instanceof ByteBuffer) {
+            ByteBuffer bb = ((ByteBuffer) o).duplicate();
+            byte[] bytes = new byte[bb.remaining()];
+            bb.get(bytes);
+            return bytes;
+        }
+        if (o instanceof org.apache.avro.generic.GenericData.Array) {
+            List<Object> list = new ArrayList<>();
+            for (Object x : (org.apache.avro.generic.GenericData.Array<?>) o) {
+                list.add(unwrapAvroScalar(x));
+            }
+            return list;
+        }
+        if (o instanceof org.apache.avro.generic.GenericRecord) {
+            org.apache.avro.generic.GenericRecord rec = (org.apache.avro.generic.GenericRecord) o;
+            Map<String, Object> m = new LinkedHashMap<>();
+            for (Schema.Field f : rec.getSchema().getFields()) {
+                m.put(f.name(), unwrapAvroScalar(rec.get(f.name())));
+            }
+            return m;
+        }
+        if (o instanceof Map) {
+            Map<?, ?> src = (Map<?, ?>) o;
+            Map<String, Object> m = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> e : src.entrySet()) {
+                Object k = e.getKey();
+                if (k instanceof Utf8) k = k.toString();
+                m.put(String.valueOf(k), unwrapAvroScalar(e.getValue()));
+            }
+            return m;
+        }
+        return o;
+    }
 }
+

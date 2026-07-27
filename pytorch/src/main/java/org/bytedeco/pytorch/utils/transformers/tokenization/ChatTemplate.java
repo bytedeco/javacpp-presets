@@ -40,12 +40,13 @@ import java.util.Objects;
  * <ul>
  *   <li>{@code qwen} — ChatML {@code <|im_start|>role\n…<|im_end|>}</li>
  *   <li>{@code llama3} — Llama-3 header style</li>
+ *   <li>{@code glm} — GLM-Edge {@code <|system|>}/{@code <|user|>}/{@code <|assistant|>}</li>
  *   <li>{@code raw} — concatenate content only</li>
  * </ul>
  */
 public final class ChatTemplate {
 
-    public enum Flavor { QWEN, LLAMA3, MISTRAL, RAW }
+    public enum Flavor { QWEN, LLAMA3, MISTRAL, GLM, RAW }
 
     private final Flavor flavor;
 
@@ -56,6 +57,7 @@ public final class ChatTemplate {
     public static ChatTemplate qwen() { return new ChatTemplate(Flavor.QWEN); }
     public static ChatTemplate llama3() { return new ChatTemplate(Flavor.LLAMA3); }
     public static ChatTemplate mistral() { return new ChatTemplate(Flavor.MISTRAL); }
+    public static ChatTemplate glm() { return new ChatTemplate(Flavor.GLM); }
     public static ChatTemplate raw() { return new ChatTemplate(Flavor.RAW); }
 
     public static ChatTemplate forModelType(PretrainedConfig.ModelType type) {
@@ -64,6 +66,7 @@ public final class ChatTemplate {
             case QWEN -> qwen();
             case LLAMA -> llama3();
             case MISTRAL -> mistral();
+            case GLM -> glm();
             default -> raw();
         };
     }
@@ -79,12 +82,13 @@ public final class ChatTemplate {
                 if (ct != null) {
                     String s = String.valueOf(ct).toLowerCase(Locale.ROOT);
                     if (s.contains("im_start") || s.contains("chatml")) return qwen();
+                    if (s.contains("<|user|>") || s.contains("<|assistant|>") || s.contains("glm")) return glm();
                     if (s.contains("start_header_id") || s.contains("llama")) return llama3();
                     if (s.contains("[INST]") || s.contains("mistral")) return mistral();
                 }
             } catch (IOException ignored) {}
         }
-        return forModelType(cfg.modelType());
+        return forModelType(cfg == null ? null : cfg.modelType());
     }
 
     /**
@@ -97,6 +101,7 @@ public final class ChatTemplate {
             case QWEN -> applyQwen(messages, addGenerationPrompt);
             case LLAMA3 -> applyLlama3(messages, addGenerationPrompt);
             case MISTRAL -> applyMistral(messages, addGenerationPrompt);
+            case GLM -> applyGlm(messages, addGenerationPrompt);
             case RAW -> applyRaw(messages);
         };
     }
@@ -164,6 +169,28 @@ public final class ChatTemplate {
             }
         }
         // addGen: mistral expects model to continue after [/INST]
+        return sb.toString();
+    }
+
+    /**
+     * GLM-Edge / ChatGLM chat format from tokenizer chat_template:
+     * {@code <|system|>\n…\n<|user|>\n…\n<|assistant|>\n…}
+     */
+    private static String applyGlm(List<Map<String, String>> messages, boolean addGen) {
+        StringBuilder sb = new StringBuilder();
+        for (Map<String, String> msg : messages) {
+            String role = roleOf(msg);
+            String tag = switch (role) {
+                case "system" -> "<|system|>";
+                case "assistant" -> "<|assistant|>";
+                case "observation" -> "<|observation|>";
+                default -> "<|user|>";
+            };
+            sb.append(tag).append('\n').append(contentOf(msg));
+        }
+        if (addGen) {
+            sb.append("<|assistant|>\n");
+        }
         return sb.toString();
     }
 

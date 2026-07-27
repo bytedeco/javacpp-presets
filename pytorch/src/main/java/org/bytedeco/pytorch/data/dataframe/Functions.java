@@ -230,5 +230,34 @@ public final class Functions {
     public static Expression lead(Expression e, int n, Object defaultValue) {
         return Expression.windowFn(WindowFunction.lead(e, n, defaultValue));
     }
+
+    // ---- advanced free functions (Polars) ----
+
+    /** First non-null among expressions (SQL/Polars {@code coalesce}). */
+    public static Expression coalesce(Expression first, Object... others) {
+        return first.coalesce(others);
+    }
+
+    /** Row-wise max across columns. */
+    public static Expression maxHorizontal(Expression... exprs) {
+        return Expression.maxHorizontal(exprs);
+    }
+
+    /** Row-wise min across columns. */
+    public static Expression minHorizontal(Expression... exprs) {
+        return Expression.minHorizontal(exprs);
+    }
+
+    /** Row-wise sum across columns. */
+    public static Expression sumHorizontal(Expression... exprs) {
+        return Expression.sumHorizontal(exprs);
+    }
+
+    /** Integer range as list literal helper (Polars {@code int_ranges} light form). */
+    public static Expression intRanges(int start, int end) {
+        java.util.List<Integer> list = new java.util.ArrayList<>();
+        for (int i = start; i < end; i++) list.add(i);
+        return lit(list);
+    }
 }
 

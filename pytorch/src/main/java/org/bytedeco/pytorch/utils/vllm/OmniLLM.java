@@ -83,16 +83,30 @@ public final class OmniLLM implements AutoCloseable {
 
     public static OmniLLM fromDirectory(Path dir, EngineConfig engConfig) throws IOException {
         AutoModelForCausalLM.Bundle bundle = AutoModelForCausalLM.fromDirectory(dir);
-        return fromBundle(bundle, engConfig);
+        // Look for sibling multimodal encoder snapshots under models/
+        Path modelsRoot = dir.getParent() != null ? dir.getParent() : Path.of("models");
+        return fromBundle(bundle, engConfig, modelsRoot);
+    }
+
+    /** Load backbone + real encoders discovered under {@code modelsRoot}. */
+    public static OmniLLM fromDirectory(Path dir, EngineConfig engConfig, Path modelsRoot)
+            throws IOException {
+        AutoModelForCausalLM.Bundle bundle = AutoModelForCausalLM.fromDirectory(dir);
+        return fromBundle(bundle, engConfig, modelsRoot);
     }
 
     /** Tiny offline model for offline benchmarking. */
     public static OmniLLM tiny(String kind) {
         AutoModelForCausalLM.Bundle bundle = AutoModelForCausalLM.tiny(kind);
-        return fromBundle(bundle, EngineConfig.cpuDefault());
+        return fromBundle(bundle, EngineConfig.cpuDefault(), null);
     }
 
     private static OmniLLM fromBundle(AutoModelForCausalLM.Bundle bundle, EngineConfig engConfig) {
+        return fromBundle(bundle, engConfig, Path.of("models"));
+    }
+
+    private static OmniLLM fromBundle(AutoModelForCausalLM.Bundle bundle, EngineConfig engConfig,
+                                      Path modelsRoot) {
         Module model = bundle.model();
         PretrainedConfig cfg = bundle.config();
         FastTokenizer tok = bundle.tokenizer();
@@ -110,48 +124,181 @@ public final class OmniLLM implements AutoCloseable {
         LLMEngine engine = new LLMEngine(ec, runner, cache, tok);
 
         ChatTemplate ct = bundle.chatTemplate();
-        MultimodalProcessor proc = new TextOnlyProcessor(tok, ct);
+        MultimodalProcessor proc;
+        if (modelsRoot != null) {
+            proc = CompositeMultimodalProcessor.withEncoders(tok, ct, modelsRoot);
+        } else {
+            proc = CompositeMultimodalProcessor.of(tok, ct);
+        }
 
         return new OmniLLM(engine, ec, tok, ct, proc);
     }
 
     /** Generate for text prompts (convenience, no multimodal). */
     public List<RequestOutput> generate(List<String> prompts, SamplingParams params) {
-        int[] reqIds = new int[prompts.size()];
-        for (int i = 0; i < prompts.size(); i++) {
-            int[] ids = tokenizer.encode(prompts.get(i), true).ids();
-            reqIds[i] = (int) engine.addRequest(ids, params, prompts.get(i), null);
+        if (params == null) params = SamplingParams.defaults();
+        for (String p : prompts) {
+            int[] ids = tokenizer.encode(p, true).ids();
+            engine.addRequest(ids, params, p, null);
         }
-        List<RequestOutput> outs = engine.generateAll();
-        return outs;
+        return engine.generateAll();
     }
 
     public String chat(List<Map<String, String>> messages, SamplingParams params) {
         String prompt = chatTemplate.apply(messages, true);
-        int[] ids = tokenizer.encode(prompt, true).ids();
+        int[] ids = tokenizer.encode(prompt, false).ids();
+        if (params == null) params = SamplingParams.greedy(64);
         engine.addRequest(ids, params, prompt, null);
         List<RequestOutput> outs = engine.generateAll();
         if (outs.isEmpty()) return "";
         RequestOutput out = outs.get(0);
-        // Decode output tokens
         int[] outIds = out.outputs.isEmpty() ? new int[0] : out.outputs.get(0).tokenIds;
-        return tokenizer.decode(outIds, true);
+        return LLM.stripSpecialTokens(tokenizer.decode(outIds, true));
     }
 
     /**
-     * Generate for a multimodal prompt (text + media).
-     * Media parts are processed by the registered MultimodalProcessor.
+     * Generate for a multimodal prompt (text + image/audio/video/embedding).
+     * Media parts are processed by {@link CompositeMultimodalProcessor}.
      */
     public RequestOutput generate(MultimodalPrompt prompt, SamplingParams params) {
-        int[] ids = processor.process(prompt, null);
-        long reqId = engine.addRequest(ids, params, prompt.toString(), null);
+        return generate(prompt, null, params);
+    }
+
+    /**
+     * Multimodal generate with optional chat history messages.
+     */
+    public RequestOutput generate(MultimodalPrompt prompt,
+                                  List<Map<String, String>> messages,
+                                  SamplingParams params) {
+        Objects.requireNonNull(prompt, "prompt");
+        // Inject EOS / im_end stop ids like chat() — prevents runaway and helps decode quality.
+        SamplingParams sp = params == null ? SamplingParams.greedy(32) : params;
+        sp = withStopTokens(sp);
+        int[] ids = processor.process(prompt, messages);
+        if (processor instanceof CompositeMultimodalProcessor cmp) {
+            for (String line : cmp.encodeLog()) {
+                System.out.println("  [mm] " + line);
+            }
+        }
+        System.out.println("  [mm] prompt_tokens=" + ids.length
+                + (ids.length > 0 ? (" first=" + ids[0] + " last=" + ids[ids.length - 1]) : ""));
+        String label = prompt.toString() + " | " + CompositeMultimodalProcessor.mediaSummary(prompt);
+        engine.addRequest(ids, sp, label, null);
         List<RequestOutput> outs = engine.generateAll();
         return outs.isEmpty() ? null : outs.get(0);
     }
 
-    /** Batch text embedding via the embedded EmbeddingRunner (if set). */
+    /** Decode generated token ids; log raw when strip would yield empty. */
+    private String decodeOutput(RequestOutput out) {
+        if (out == null) return "";
+        int[] outIds = out.outputs.isEmpty() ? new int[0] : out.outputs.get(0).tokenIds;
+        if (outIds.length == 0) {
+            System.out.println("  [mm] gen_tokens=0 (empty output ids)");
+            return "";
+        }
+        String raw = tokenizer.decode(outIds, true);
+        String stripped = LLM.stripSpecialTokens(raw);
+        if ((stripped == null || stripped.isBlank()) && raw != null && !raw.isBlank()) {
+            // Prefer non-empty raw over fully-stripped blank (still clean specials lightly)
+            System.out.println("  [mm] strip emptied output; raw_len=" + raw.length()
+                    + " raw_preview=" + raw.replace("\n", "\\n").substring(0, Math.min(80, raw.length()))
+                    + " ids0=" + outIds[0]
+                    + (outIds.length > 1 ? (" ids1=" + outIds[1]) : ""));
+            stripped = raw.replace("<|im_end|>", "")
+                    .replace("<|im_start|>", "")
+                    .replace("<|endoftext|>", "")
+                    .trim();
+        }
+        if (stripped == null || stripped.isBlank()) {
+            System.out.println("  [mm] gen still empty after decode; n=" + outIds.length
+                    + " head=" + java.util.Arrays.toString(
+                    java.util.Arrays.copyOf(outIds, Math.min(8, outIds.length))));
+            return "";
+        }
+        return stripped;
+    }
+
+    /** Inject multi-eos stop ids when caller left stopTokenIds empty. */
+    private SamplingParams withStopTokens(SamplingParams params) {
+        if (params == null) params = SamplingParams.defaults();
+        if (params.stopTokenIds != null && !params.stopTokenIds.isEmpty()) return params;
+        // Mirror LLM.withStopTokens: eos + generation_config multi-eos + common ChatML
+        java.util.LinkedHashSet<Integer> stops = new java.util.LinkedHashSet<>();
+        try {
+            // Prefer tokenizer-known specials when available
+            stops.add(151645); // <|im_end|>
+            stops.add(151643); // <|endoftext|>
+        } catch (Throwable ignored) {}
+        return params.toBuilder().stopTokenIds(new java.util.ArrayList<>(stops)).build();
+    }
+
+    /** Convenience: image path + text question. */
+    public String askImage(Path image, String question, SamplingParams params) {
+        MultimodalPrompt mp = MultimodalPrompt.of(
+                MediaInput.image(image),
+                MediaInput.text(question == null ? "Describe this image." : question));
+        return decodeOutput(generate(mp, params));
+    }
+
+    /** Convenience: audio path + text question. */
+    public String askAudio(Path audio, String question, SamplingParams params) {
+        MultimodalPrompt mp = MultimodalPrompt.of(
+                MediaInput.audio(audio),
+                MediaInput.text(question == null ? "Transcribe or describe this audio." : question));
+        return decodeOutput(generate(mp, params));
+    }
+
+    /** Convenience: video path + text question. */
+    public String askVideo(Path video, String question, SamplingParams params) {
+        MultimodalPrompt mp = MultimodalPrompt.of(
+                MediaInput.video(video),
+                MediaInput.text(question == null ? "Describe this video." : question));
+        return decodeOutput(generate(mp, params));
+    }
+
+    /**
+     * OCR path: image of text/UI/document + question.
+     * Uses OCR encoder features when {@link CompositeMultimodalProcessor} is wired.
+     */
+    public String askOcr(Path image, String question, SamplingParams params) {
+        // Prefer OCR feature encode for logging, then standard image multimodal path
+        if (processor instanceof CompositeMultimodalProcessor cmp) {
+            cmp.encodeOcrFeatures(MediaInput.image(image));
+        }
+        MultimodalPrompt mp = MultimodalPrompt.of(
+                MediaInput.image(image),
+                MediaInput.text(question == null
+                        ? "Read any visible text in this image. Transcribe briefly."
+                        : question));
+        return decodeOutput(generate(mp, params));
+    }
+
+    /**
+     * ASR path: audio + transcription-style question.
+     * Uses ASR/Whisper encoder features when available.
+     */
+    public String askAsr(Path audio, String question, SamplingParams params) {
+        if (processor instanceof CompositeMultimodalProcessor cmp) {
+            cmp.encodeAsrFeatures(MediaInput.audio(audio));
+        }
+        MultimodalPrompt mp = MultimodalPrompt.of(
+                MediaInput.audio(audio),
+                MediaInput.text(question == null
+                        ? "Transcribe the speech. Output only the text."
+                        : question));
+        return decodeOutput(generate(mp, params));
+    }
+
+    /** Batch text embedding via {@link EmbeddingRunner}. */
     public float[][] embed(List<String> texts, EmbeddingRunner embedRunner) {
+        Objects.requireNonNull(embedRunner, "embedRunner");
         return engine.embedTexts(texts, embedRunner);
+    }
+
+    /** Create a mini embedding runner (offline, no HF weights). */
+    public static EmbeddingRunner miniEmbedder() {
+        return new EmbeddingRunner(
+                org.bytedeco.pytorch.utils.sentence.SentenceTransformer.mini());
     }
 
     public EngineConfig config() { return config; }
@@ -159,6 +306,7 @@ public final class OmniLLM implements AutoCloseable {
     public LLMEngine engine() { return engine; }
     public FastTokenizer tokenizer() { return tokenizer; }
     public ChatTemplate chatTemplate() { return chatTemplate; }
+    public MultimodalProcessor processor() { return processor; }
 
     @Override
     public void close() { engine.close(); }

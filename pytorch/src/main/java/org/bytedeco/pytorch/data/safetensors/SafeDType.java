@@ -12,6 +12,10 @@ public enum SafeDType {
     F32("F32", 4, ScalarType.Float),
     F16("F16", 2, ScalarType.Half),
     BF16("BF16", 2, ScalarType.BFloat16),
+    /** FP8 E4M3 (safetensors name {@code F8_E4M3}); maps to torch Float8_e4m3fn. */
+    F8_E4M3("F8_E4M3", 1, ScalarType.Float8_e4m3fn),
+    /** FP8 E5M2 (safetensors name {@code F8_E5M2}). */
+    F8_E5M2("F8_E5M2", 1, ScalarType.Float8_e5m2),
     I64("I64", 8, ScalarType.Long),
     I32("I32", 4, ScalarType.Int),
     I16("I16", 2, ScalarType.Short),
@@ -36,7 +40,7 @@ public enum SafeDType {
     /**
      * Whether on-disk little-endian layout matches torch storage so
      * {@code from_blob} can share the mapping without conversion.
-     * F16/BF16 are native; BOOL is not (torch may pack differently).
+     * F16/BF16/FP8 are native 1:1; BOOL is not (torch may pack differently).
      */
     public boolean isNativeLayout() {
         return this != BOOL;
@@ -49,6 +53,8 @@ public enum SafeDType {
             case "F32": case "FLOAT32": case "FLOAT": return F32;
             case "F16": case "FLOAT16": case "HALF": return F16;
             case "BF16": case "BFLOAT16": return BF16;
+            case "F8_E4M3": case "F8E4M3": case "FLOAT8_E4M3FN": case "FLOAT8_E4M3": return F8_E4M3;
+            case "F8_E5M2": case "F8E5M2": case "FLOAT8_E5M2": return F8_E5M2;
             case "I64": case "INT64": case "LONG": return I64;
             case "I32": case "INT32": case "INT": return I32;
             case "I16": case "INT16": case "SHORT": return I16;
@@ -78,6 +84,8 @@ public enum SafeDType {
             case Float: return F32;
             case Half: return F16;
             case BFloat16: return BF16;
+            case Float8_e4m3fn: return F8_E4M3;
+            case Float8_e5m2: return F8_E5M2;
             case Long: return I64;
             case Int: return I32;
             case Short: return I16;

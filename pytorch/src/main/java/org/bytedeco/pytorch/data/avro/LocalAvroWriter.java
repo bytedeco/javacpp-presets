@@ -9,6 +9,7 @@ import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -18,7 +19,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Write a {@link DataFrame} as an Avro data file (nullable unions by default).
@@ -104,6 +107,35 @@ public final class LocalAvroWriter {
                 s.addProp("logicalType", "timestamp-millis");
                 return s;
             }
+            case VECTOR:
+            case EMBEDDING:
+                // dense float vectors as array<float>
+                return Schema.createArray(Schema.create(Schema.Type.FLOAT));
+            case LIST:
+                // heterogeneous / item sequences: array of JSON-encoded strings is too lossy;
+                // use array of long by default (item ids); wider types go through union below
+                // Prefer array<string> for general lists — values are JSON-text of element when nested
+                // Better: array of nullable union of primitives + string for nested
+                return Schema.createArray(Schema.createUnion(List.of(
+                    Schema.create(Schema.Type.NULL),
+                    Schema.create(Schema.Type.LONG),
+                    Schema.create(Schema.Type.DOUBLE),
+                    Schema.create(Schema.Type.STRING),
+                    Schema.create(Schema.Type.BOOLEAN)
+                )));
+            case MAP:
+            case STRUCT:
+                // map<string, string> with JSON-encoded nested values for portability
+                // Prefer map of nullable string (JSON text of value)
+                return Schema.createMap(Schema.createUnion(List.of(
+                    Schema.create(Schema.Type.NULL),
+                    Schema.create(Schema.Type.STRING),
+                    Schema.create(Schema.Type.LONG),
+                    Schema.create(Schema.Type.DOUBLE),
+                    Schema.create(Schema.Type.BOOLEAN)
+                )));
+            case JSON:
+                return Schema.create(Schema.Type.STRING);
             default:
                 return Schema.create(Schema.Type.STRING);
         }
@@ -140,8 +172,84 @@ public final class LocalAvroWriter {
             case BINARY:
                 if (val instanceof byte[]) return ByteBuffer.wrap((byte[]) val);
                 return ByteBuffer.wrap(String.valueOf(val).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            case VECTOR:
+            case EMBEDDING: {
+                List<Object> elems = ComplexCellCodec.asObjectList(val);
+                if (elems == null) return null;
+                List<Float> out = new ArrayList<>(elems.size());
+                for (Object o : elems) {
+                    if (o == null) out.add(Float.NaN);
+                    else if (o instanceof Number) out.add(((Number) o).floatValue());
+                    else out.add(Float.parseFloat(String.valueOf(o)));
+                }
+                return out;
+            }
+            case LIST: {
+                List<Object> elems = ComplexCellCodec.asObjectList(val);
+                if (elems == null) return null;
+                List<Object> out = new ArrayList<>(elems.size());
+                for (Object o : elems) {
+                    out.add(toAvroListElement(o));
+                }
+                return out;
+            }
+            case MAP:
+            case STRUCT: {
+                Map<String, Object> m = ComplexCellCodec.asStringMap(val);
+                if (m == null) return null;
+                Map<String, Object> out = new LinkedHashMap<>();
+                for (Map.Entry<String, Object> e : m.entrySet()) {
+                    out.put(e.getKey(), toAvroMapValue(e.getValue()));
+                }
+                return out;
+            }
+            case JSON:
+                return ComplexCellCodec.encodeText(val);
             default:
+                // TENSOR / GRAPH / media etc. → JSON text for portability
+                if (ComplexCellCodec.isComplex(dtype)
+                    || val instanceof Map || val instanceof List
+                    || val instanceof float[] || val instanceof double[]
+                    || val instanceof int[] || val instanceof long[]) {
+                    return ComplexCellCodec.encodeText(val);
+                }
                 return String.valueOf(val);
         }
     }
+
+    /** Encode a LIST element into the Avro union (null/long/double/string/boolean). */
+    private static Object toAvroListElement(Object o) {
+        if (o == null) return null;
+        if (o instanceof Boolean) return o;
+        if (o instanceof Integer || o instanceof Long || o instanceof Short || o instanceof Byte) {
+            return ((Number) o).longValue();
+        }
+        if (o instanceof Float || o instanceof Double) {
+            return ((Number) o).doubleValue();
+        }
+        if (o instanceof Number) return ((Number) o).longValue();
+        // nested list/map/array → JSON string
+        if (o instanceof Map || o instanceof List || o.getClass().isArray()) {
+            return ComplexCellCodec.encodeText(o);
+        }
+        return String.valueOf(o);
+    }
+
+    /** Encode a MAP/STRUCT value into the Avro map value union. */
+    private static Object toAvroMapValue(Object o) {
+        if (o == null) return null;
+        if (o instanceof Boolean) return o;
+        if (o instanceof Integer || o instanceof Long || o instanceof Short || o instanceof Byte) {
+            return ((Number) o).longValue();
+        }
+        if (o instanceof Float || o instanceof Double) {
+            return ((Number) o).doubleValue();
+        }
+        if (o instanceof Number) return ((Number) o).doubleValue();
+        if (o instanceof Map || o instanceof List || o.getClass().isArray()) {
+            return ComplexCellCodec.encodeText(o);
+        }
+        return String.valueOf(o);
+    }
 }
+

@@ -243,6 +243,7 @@ public final class JsonWriter {
                 }
                 return JsonValue.of(String.valueOf(v));
             case VECTOR:
+            case EMBEDDING:
                 if (v instanceof float[]) {
                     JsonValue arr = JsonValue.array();
                     for (float x : (float[]) v) arr.add(JsonValue.of(x));
@@ -252,6 +253,28 @@ public final class JsonWriter {
                     JsonValue arr = JsonValue.array();
                     for (double x : (double[]) v) arr.add(JsonValue.of(x));
                     return arr;
+                }
+                if (v instanceof int[] || v instanceof long[] || v instanceof List) {
+                    return JsonValue.fromJava(v);
+                }
+                return JsonValue.fromJava(v);
+            case LIST:
+                if (v instanceof int[] || v instanceof long[] || v instanceof float[]
+                    || v instanceof double[] || v instanceof boolean[]
+                    || v instanceof List || v instanceof Object[]) {
+                    return JsonValue.fromJava(v);
+                }
+                if (v instanceof String) {
+                    try { return org.bytedeco.pytorch.data.json.JsonParser.parse((String) v); }
+                    catch (Exception e) { return JsonValue.of((String) v); }
+                }
+                return JsonValue.fromJava(v);
+            case MAP:
+            case STRUCT:
+                if (v instanceof Map) return JsonValue.fromJava(v);
+                if (v instanceof String) {
+                    try { return org.bytedeco.pytorch.data.json.JsonParser.parse((String) v); }
+                    catch (Exception e) { return JsonValue.of((String) v); }
                 }
                 return JsonValue.fromJava(v);
             case JSON:

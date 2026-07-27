@@ -37,6 +37,8 @@ import org.bytedeco.pytorch.utils.vllm.runner.ModelRunner;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -139,21 +141,83 @@ public final class LLM implements AutoCloseable {
         return generate(prompts, SamplingParams.greedy(maxTokens));
     }
 
-    /** Chat (Instruct models). */
+    /** Chat (Instruct models). Injects multi-eos stop ids from the bundle when present. */
     public String chat(List<Map<String, String>> messages, SamplingParams params) {
         String prompt = chatTemplate.apply(messages, true);
         // Chat templates already embed BOS/specials; avoid double-adding via post-processor.
         Encoding enc = tokenizer.encode(prompt, false);
-        engine.addRequest(enc.ids(), params != null ? params : SamplingParams.greedy(64), prompt, null);
+        SamplingParams sp = withStopTokens(params != null ? params : SamplingParams.greedy(64));
+        engine.addRequest(enc.ids(), sp, prompt, null);
         List<RequestOutput> outs = engine.generateAll();
         if (outs.isEmpty()) return "";
         RequestOutput out = outs.get(0);
         int[] outIds = out.outputs.isEmpty() ? new int[0] : out.outputs.get(0).tokenIds;
-        return tokenizer.decode(outIds, true);
+        String text = tokenizer.decode(outIds, true);
+        return stripSpecialTokens(text);
     }
 
     public String chat(List<Map<String, String>> messages) {
         return chat(messages, null);
+    }
+
+    /**
+     * Merge model EOS / generation_config stop ids into sampling params when the
+     * caller did not already set them (fixes trailing {@code <|im_end|>} / multi-eos).
+     */
+    public SamplingParams withStopTokens(SamplingParams params) {
+        if (params == null) params = SamplingParams.defaults();
+        if (params.stopTokenIds != null && !params.stopTokenIds.isEmpty()) return params;
+        List<Integer> stops = new ArrayList<>();
+        if (bundle != null && bundle.config() != null) {
+            stops.add(bundle.config().eosTokenId());
+            Object eos = bundle.config().extra().get("eos_token_id");
+            if (eos instanceof List<?> list) {
+                for (Object o : list) {
+                    if (o instanceof Number n) stops.add(n.intValue());
+                }
+            }
+        }
+        if (bundle != null && bundle.generationConfig() != null) {
+            for (int id : bundle.generationConfig().eosTokenIds) stops.add(id);
+        }
+        if (stops.isEmpty()) return params;
+        // de-dupe while preserving order
+        LinkedHashSet<Integer> uniq = new LinkedHashSet<>(stops);
+        return params.toBuilder().stopTokenIds(new ArrayList<>(uniq)).build();
+    }
+
+    /**
+     * Strip common chat special tokens that leak into decoded text when stop
+     * handling is partial (Qwen ChatML, GLM role tags, Llama headers).
+     */
+    public static String stripSpecialTokens(String text) {
+        if (text == null || text.isEmpty()) return text == null ? "" : text;
+        String s = text;
+        // Qwen / ChatML
+        s = s.replace("<|im_end|>", "")
+             .replace("<|im_start|>", "")
+             .replace("</|im_end|>", "")
+             .replace("</|im_start|>", "")
+             .replace("</think>", "")
+             .replace("<think>", "");
+        // GLM-Edge role tags that should not appear mid-reply
+        s = s.replace("<|user|>", "")
+             .replace("<|assistant|>", "")
+             .replace("<|system|>", "")
+             .replace("<|observation|>", "")
+             .replace("<|endoftext|>", "")
+             .replace("<eop>", "")
+             .replace("<sop>", "");
+        // Llama-3
+        s = s.replace("<|eot_id|>", "")
+             .replace("<|end_of_text|>", "")
+             .replace("<|start_header_id|>", "")
+             .replace("<|end_header_id|>", "");
+        // collapse leftover role labels like "assistant\n" after tag strip
+        s = s.replaceAll("(?m)^\\s*assistant\\s*$", "");
+        // trim repeated whitespace / blank lines
+        s = s.replaceAll("[ \\t]+\\n", "\n").replaceAll("\\n{3,}", "\n\n").trim();
+        return s;
     }
 
     // ---- embedding API ----

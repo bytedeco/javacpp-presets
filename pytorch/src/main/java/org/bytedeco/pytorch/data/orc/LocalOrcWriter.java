@@ -7,13 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * ORC write entry point.
+ * <b>Legacy</b> ORC write entry point via DuckDB {@code COPY ... (FORMAT ORC)}.
  *
- * <p>Hadoop / {@code orc-core} have been removed from this build. Writing tries
- * DuckDB {@code COPY ... (FORMAT ORC)} when available; otherwise fails fast with
- * guidance to use Parquet ({@code DataFrame.toParquet} / {@link DuckDB#exportParquet}).
+ * <p>Hadoop / {@code orc-core} are intentionally not used. DuckDB may not support
+ * reliable {@code COPY TO ORC} in this build — then this path fails fast.
  *
- * <p>Reading existing ORC files remains supported via {@link LocalOrcReader}.
+ * <p>For reliable pure-Java ORC write (based on {@code orc-format} only), use
+ * {@link LocalOrcFormatWriter} / {@link DataFrame#toOrcFormat(String)}.
+ *
+ * <p>Legacy reading remains supported via {@link LocalOrcReader}.
  */
 public final class LocalOrcWriter {
     private LocalOrcWriter() {}
@@ -58,10 +60,11 @@ public final class LocalOrcWriter {
     }
 
     private static UnsupportedOperationException unsupported(String path, Throwable cause) {
-        String msg = "DataFrame.toOrc/LocalOrcWriter: ORC write is not supported after "
-            + "Hadoop/ORC-core removal. DuckDB provides read_orc but not reliable COPY TO ORC "
-            + "in this build. Use DataFrame.toParquet(\"" + path + "\") or DuckDB.exportParquet(...). "
-            + "Reading existing ORC files remains supported via DataFrame.readOrc / read_orc.";
+        String msg = "DataFrame.toOrc/LocalOrcWriter (legacy DuckDB): ORC write is not supported — "
+            + "DuckDB provides read_orc but not reliable COPY TO ORC in this build. "
+            + "Use DataFrame.toOrcFormat(\"" + path + "\") for pure-Java orc-format write "
+            + "(no Hadoop/orc-core), or DataFrame.toParquet(...). "
+            + "Legacy read remains via DataFrame.readOrc; pure-Java read via readOrcFormat.";
         return cause == null
             ? new UnsupportedOperationException(msg)
             : new UnsupportedOperationException(msg, cause);

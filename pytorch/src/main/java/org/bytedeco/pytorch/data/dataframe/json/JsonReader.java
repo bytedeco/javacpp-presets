@@ -1,5 +1,6 @@
 package org.bytedeco.pytorch.data.dataframe.json;
 import org.bytedeco.pytorch.data.dataframe.Column;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 import org.bytedeco.pytorch.data.json.*;
 
@@ -631,42 +632,31 @@ public final class JsonReader {
                     }
                     return parseDateTime(String.valueOf(raw));
                 case VECTOR:
-                    if (raw instanceof float[]) return raw;
-                    if (raw instanceof double[]) {
-                        double[] d = (double[]) raw;
-                        float[] f = new float[d.length];
-                        for (int i = 0; i < d.length; i++) f[i] = (float) d[i];
-                        return f;
-                    }
-                    if (raw instanceof List) {
-                        List<?> list = (List<?>) raw;
-                        float[] f = new float[list.size()];
-                        for (int i = 0; i < list.size(); i++) {
-                            Object x = list.get(i);
-                            f[i] = x instanceof Number ? ((Number) x).floatValue()
-                                : Float.parseFloat(String.valueOf(x));
-                        }
-                        return f;
+                case EMBEDDING:
+                    return ComplexCellCodec.coerceComplex(raw, Column.DType.VECTOR);
+                case LIST:
+                    return ComplexCellCodec.coerceComplex(raw, Column.DType.LIST);
+                case MAP:
+                case STRUCT:
+                    return ComplexCellCodec.coerceComplex(raw, dtype);
+                case JSON:
+                    if (raw instanceof Map || raw instanceof List || raw instanceof JsonValue) {
+                        return raw instanceof JsonValue ? ((JsonValue) raw).toJava() : raw;
                     }
                     if (raw instanceof String) {
-                        String s = ((String) raw).trim();
-                        if (s.startsWith("[")) {
-                            JsonValue arr = JsonParser.parse(s);
-                            if (arr.isArray()) {
-                                float[] f = new float[arr.size()];
-                                for (int i = 0; i < arr.size(); i++) f[i] = (float) arr.get(i).asDouble();
-                                return f;
-                            }
-                        }
+                        try { return JsonParser.parse((String) raw).toJava(); }
+                        catch (Exception e) { return raw; }
                     }
                     return raw;
-                case JSON:
-                    return String.valueOf(raw);
                 case STRING:
                 default:
                     if (raw instanceof String) return raw;
-                    if (raw instanceof Map || raw instanceof List) {
-                        return Json.stringify(JsonValue.fromJava(raw));
+                    if (raw instanceof Map || raw instanceof List || raw.getClass().isArray()) {
+                        // Keep structured values when present; stringify only for pure STRING columns
+                        if (dtype == Column.DType.STRING) {
+                            return Json.stringify(JsonValue.fromJava(raw));
+                        }
+                        return raw;
                     }
                     return String.valueOf(raw);
             }
@@ -690,6 +680,10 @@ public final class JsonReader {
         if (v instanceof LocalDate) return Column.DType.DATE;
         if (v instanceof LocalDateTime) return Column.DType.DATETIME;
         if (v instanceof float[] || v instanceof double[]) return Column.DType.VECTOR;
+        if (v instanceof int[] || v instanceof long[] || v instanceof boolean[]) return Column.DType.LIST;
+        if (v instanceof Map) return Column.DType.MAP;
+        if (v instanceof List) return ComplexCellCodec.inferComplex(v);
+        if (v instanceof JsonValue) return ComplexCellCodec.inferComplex(v);
         return Column.DType.STRING;
     }
 

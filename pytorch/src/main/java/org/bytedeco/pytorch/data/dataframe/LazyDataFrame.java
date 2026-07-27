@@ -33,7 +33,8 @@ public final class LazyDataFrame {
 
     sealed interface LazyOp permits
         SelectNames, SelectExprs, WithColumn, Filter, Sort, Limit, Head, Tail,
-        Drop, Rename, Unique, TopK, DropNulls, Concat, Cache, SetSorted, GroupByAgg {
+        Drop, Rename, Unique, TopK, DropNulls, Concat, Cache, SetSorted, GroupByAgg,
+        OptimizationToggle, GroupByHead, GroupByTail, MapBatches {
         String describe();
         DataFrame apply(DataFrame df) throws Exception;
         default Set<String> producedColumns() { return Set.of(); }
@@ -173,15 +174,71 @@ public final class LazyDataFrame {
         }
     }
 
+    /** Plan marker: when enabled=false, collect() skips LazyOptimizer. */
+    record OptimizationToggle(boolean enabled) implements LazyOp {
+        @Override public String describe() {
+            return "OPTIMIZATION_TOGGLE " + (enabled ? "ON" : "OFF");
+        }
+        @Override public DataFrame apply(DataFrame df) { return df; }
+    }
+
+    record GroupByHead(String[] keys, int n) implements LazyOp {
+        @Override public String describe() {
+            return "GROUP_BY " + Arrays.toString(keys) + " HEAD " + n;
+        }
+        @Override public DataFrame apply(DataFrame df) {
+            return df.groupBy(keys).head(n);
+        }
+        @Override public Set<String> referencedColumns() {
+            return new LinkedHashSet<>(Arrays.asList(keys));
+        }
+    }
+
+    record GroupByTail(String[] keys, int n) implements LazyOp {
+        @Override public String describe() {
+            return "GROUP_BY " + Arrays.toString(keys) + " TAIL " + n;
+        }
+        @Override public DataFrame apply(DataFrame df) {
+            return df.groupBy(keys).tail(n);
+        }
+        @Override public Set<String> referencedColumns() {
+            return new LinkedHashSet<>(Arrays.asList(keys));
+        }
+    }
+
+    /**
+     * Polars {@code map_batches} — apply a batch UDF to the whole frame (or
+     * streaming chunks when collected with streaming=true).
+     */
+    record MapBatches(java.util.function.Function<DataFrame, DataFrame> fn, String label) implements LazyOp {
+        @Override public String describe() {
+            return "MAP_BATCHES" + (label == null || label.isEmpty() ? "" : " " + label);
+        }
+        @Override public DataFrame apply(DataFrame df) {
+            DataFrame out = fn.apply(df);
+            return out == null ? DataFrame.create() : out;
+        }
+    }
+
     // ---- public API ----
 
     public DataFrame collect() { return collect(true); }
 
     public DataFrame collect(boolean optimize) {
         try {
-            List<LazyOp> ops = optimize ? LazyOptimizer.optimize(plan) : plan;
-            DataFrame df = source.copy();
+            boolean doOpt = optimize;
+            // honor last OptimizationToggle in plan
+            for (LazyOp op : plan) {
+                if (op instanceof OptimizationToggle t) doOpt = t.enabled();
+            }
+            List<LazyOp> ops = doOpt ? LazyOptimizer.optimize(plan) : plan;
+            // strip toggle markers before apply
+            List<LazyOp> runnable = new ArrayList<>(ops.size());
             for (LazyOp op : ops) {
+                if (!(op instanceof OptimizationToggle)) runnable.add(op);
+            }
+            DataFrame df = source.copy();
+            for (LazyOp op : runnable) {
                 df = op.apply(df);
             }
             return df;
@@ -192,9 +249,76 @@ public final class LazyDataFrame {
         }
     }
 
+    /** Polars {@code collect_no_optimization()} — force logical plan execution. */
+    public DataFrame collectNoOptimization() { return collect(false); }
+
+    /**
+     * Polars {@code collect(streaming=True)} analogue.
+     * When {@code streaming} is true and the plan is a pure projection/filter/limit
+     * chain, processes the source in row batches of {@code batchRows} to bound peak heap.
+     * Complex plans (join/groupby) fall back to regular {@link #collect()}.
+     */
+    public DataFrame collect(boolean optimize, boolean streaming, int batchRows) {
+        if (!streaming || !isStreamingFriendly()) return collect(optimize);
+        int batch = Math.max(1, batchRows);
+        try {
+            boolean doOpt = optimize;
+            for (LazyOp op : plan) {
+                if (op instanceof OptimizationToggle t) doOpt = t.enabled();
+            }
+            List<LazyOp> ops = doOpt ? LazyOptimizer.optimize(plan) : plan;
+            List<LazyOp> runnable = new ArrayList<>(ops.size());
+            for (LazyOp op : ops) {
+                if (!(op instanceof OptimizationToggle)) runnable.add(op);
+            }
+            List<DataFrame> parts = new ArrayList<>();
+            int n = source.rowCount();
+            for (int start = 0; start < n; start += batch) {
+                int end = Math.min(n, start + batch);
+                int[] idx = new int[end - start];
+                for (int i = 0; i < idx.length; i++) idx[i] = start + i;
+                DataFrame chunk = source.loc(idx);
+                for (LazyOp op : runnable) chunk = op.apply(chunk);
+                if (chunk.rowCount() > 0) parts.add(chunk);
+            }
+            if (parts.isEmpty()) return DataFrame.create();
+            if (parts.size() == 1) return parts.get(0);
+            return DataFrame.vstack(parts);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Lazy streaming collect failed: " + e.getMessage(), e);
+        }
+    }
+
+    public DataFrame collectStreaming(int batchRows) {
+        return collect(true, true, batchRows);
+    }
+
+    private boolean isStreamingFriendly() {
+        for (LazyOp op : plan) {
+            if (op instanceof GroupByAgg || op instanceof Concat || op instanceof Sort
+                || op instanceof TopK || op instanceof GroupByHead || op instanceof GroupByTail) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public LazyDataFrame select(String... cols) { return append(new SelectNames(cols)); }
     public LazyDataFrame select(Expression... exprs) { return append(new SelectExprs(exprs)); }
     public LazyDataFrame withColumn(String name, Expression expr) { return append(new WithColumn(name, expr)); }
+
+    /** Polars {@code with_columns} — add/replace multiple expression columns. */
+    public LazyDataFrame withColumns(Expression... exprs) {
+        LazyDataFrame cur = this;
+        if (exprs == null) return cur;
+        for (Expression e : exprs) {
+            cur = cur.withColumn(e.suggestedName(), e);
+        }
+        return cur;
+    }
+
     public LazyDataFrame filter(Expression condition) { return append(new Filter(condition)); }
     public LazyDataFrame sort(Expression... by) { return append(new Sort(by, null, null)); }
     public LazyDataFrame sort(Expression by, boolean nullsLast, boolean maintainOrder) {
@@ -221,6 +345,29 @@ public final class LazyDataFrame {
     public LazyDataFrame dropNulls() { return append(new DropNulls()); }
     public LazyDataFrame concat(LazyDataFrame... others) { return append(new Concat(others)); }
 
+    /**
+     * Polars {@code optimization_toggle} analogue — when {@code enabled=false},
+     * subsequent {@link #collect()} skips the optimizer (same as {@link #collectNoOptimization()}).
+     * Stored as a no-op plan marker for explain() visibility.
+     */
+    public LazyDataFrame optimizationToggle(boolean enabled) {
+        return append(new OptimizationToggle(enabled));
+    }
+
+    /**
+     * Polars {@code map_batches(function)} — lazy batch UDF.
+     * When collected with {@link #collectStreaming(int)}, the UDF is applied
+     * per streaming chunk (true batch map); otherwise once on the full frame.
+     */
+    public LazyDataFrame mapBatches(java.util.function.Function<DataFrame, DataFrame> fn) {
+        return mapBatches(fn, null);
+    }
+
+    public LazyDataFrame mapBatches(java.util.function.Function<DataFrame, DataFrame> fn, String label) {
+        Objects.requireNonNull(fn, "fn");
+        return append(new MapBatches(fn, label));
+    }
+
     /** Start a lazy group-by; call {@link LazyGroupBy#agg(Expression...)} to append plan op. */
     public LazyGroupBy groupBy(String... keys) {
         return new LazyGroupBy(this, keys);
@@ -235,6 +382,13 @@ public final class LazyDataFrame {
         }
         public LazyDataFrame agg(Expression... aggs) {
             return parent.append(new GroupByAgg(keys, aggs));
+        }
+        /** Polars {@code group_by().head(n)} — materializes via eager GroupedDataFrame. */
+        public LazyDataFrame head(int n) {
+            return parent.append(new GroupByHead(keys, n));
+        }
+        public LazyDataFrame tail(int n) {
+            return parent.append(new GroupByTail(keys, n));
         }
     }
 
@@ -252,6 +406,26 @@ public final class LazyDataFrame {
             sb.append("  ").append(++i).append(". ").append(op.describe()).append('\n');
         }
         return sb.toString();
+    }
+
+    /** JSON-ish plan dump (Polars {@code explain(format="json")} light analogue). */
+    public String explainJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"source_rows\":").append(source.rowCount())
+          .append(",\"source_cols\":").append(source.columnCount())
+          .append(",\"ops\":[");
+        for (int i = 0; i < plan.size(); i++) {
+            if (i > 0) sb.append(',');
+            sb.append("{\"i\":").append(i)
+              .append(",\"op\":\"").append(escapeJson(plan.get(i).describe())).append("\"}");
+        }
+        sb.append("]}");
+        return sb.toString();
+    }
+
+    private static String escapeJson(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
     }
 
     /** Expose plan size for tests. */

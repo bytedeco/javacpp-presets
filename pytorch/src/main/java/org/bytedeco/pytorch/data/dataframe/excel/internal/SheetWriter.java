@@ -2,6 +2,7 @@ package org.bytedeco.pytorch.data.dataframe.excel.internal;
 
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -125,8 +126,26 @@ public final class SheetWriter {
                     else writeStringCell(w, ref, String.valueOf(val), sst);
                     break;
                 }
+                case VECTOR:
+                case EMBEDDING:
+                case LIST:
+                case MAP:
+                case STRUCT:
+                case JSON:
+                case BINARY:
+                case TENSOR:
+                    writeStringCell(w, ref, ComplexCellCodec.encodeText(val), sst);
+                    break;
                 default:
-                    writeStringCell(w, ref, String.valueOf(val), sst);
+                    // Nested Java values without typed dtype still JSON-encode
+                    if (val instanceof java.util.Map || val instanceof java.util.List
+                        || val instanceof float[] || val instanceof double[]
+                        || val instanceof int[] || val instanceof long[]
+                        || val instanceof boolean[]) {
+                        writeStringCell(w, ref, ComplexCellCodec.encodeText(val), sst);
+                    } else {
+                        writeStringCell(w, ref, String.valueOf(val), sst);
+                    }
             }
         } catch (Exception ex) {
             writeStringCell(w, ref, String.valueOf(val), sst);

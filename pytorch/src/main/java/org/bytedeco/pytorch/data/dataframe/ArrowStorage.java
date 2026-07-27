@@ -21,6 +21,7 @@ import org.apache.arrow.vector.IntVector;
 import org.apache.arrow.vector.TimeMilliVector;
 import org.apache.arrow.vector.TimeStampMilliVector;
 import org.apache.arrow.vector.VarCharVector;
+import org.bytedeco.pytorch.data.arrow.ArrowComplexVectors;
 
 /**
  * Zero-copy Arrow-backed column storage. Mutations trigger copy-on-write into {@link ListStorage}.
@@ -110,44 +111,7 @@ public final class ArrowStorage implements ColumnStorage {
     }
 
     public static Object readValue(FieldVector vec, int index, Column.DType dtype) {
-        if (vec instanceof IntVector v) return v.get(index);
-        if (vec instanceof BigIntVector v) return v.get(index);
-        if (vec instanceof Float4Vector v) return v.get(index);
-        if (vec instanceof Float8Vector v) return v.get(index);
-        if (vec instanceof BitVector v) return v.get(index) == 1;
-        if (vec instanceof VarCharVector v) {
-            byte[] b = v.get(index);
-            return b == null ? null : new String(b, StandardCharsets.UTF_8);
-        }
-        if (vec instanceof DateDayVector v) {
-            return LocalDate.ofEpochDay(v.get(index));
-        }
-        if (vec instanceof TimeStampMilliVector v) {
-            return Instant.ofEpochMilli(v.get(index));
-        }
-        if (vec instanceof TimeMilliVector v) {
-            int millis = v.get(index);
-            return LocalTime.ofNanoOfDay(millis * 1_000_000L);
-        }
-        Object o = vec.getObject(index);
-        if (o == null) return null;
-        return switch (dtype) {
-            case DATE -> {
-                if (o instanceof LocalDate ld) yield ld;
-                if (o instanceof Number n) yield LocalDate.ofEpochDay(n.intValue());
-                yield LocalDate.parse(o.toString());
-            }
-            case DATETIME -> {
-                if (o instanceof Instant in) yield in;
-                if (o instanceof LocalDateTime ldt) yield ldt.toInstant(ZoneOffset.UTC);
-                if (o instanceof Number n) yield Instant.ofEpochMilli(n.longValue());
-                yield Instant.parse(o.toString());
-            }
-            case TIME -> {
-                if (o instanceof LocalTime lt) yield lt;
-                yield LocalTime.parse(o.toString());
-            }
-            default -> o;
-        };
+        // Nested-aware path (LIST / MAP / STRUCT / VECTOR / BINARY / …)
+        return ArrowComplexVectors.readValue(vec, index, dtype);
     }
 }

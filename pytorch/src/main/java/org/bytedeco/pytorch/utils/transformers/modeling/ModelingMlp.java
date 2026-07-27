@@ -38,6 +38,7 @@ import static org.bytedeco.pytorch.global.torch.silu;
  *
  * <ul>
  *   <li>{@link SwiGLU} — Llama / Qwen2 / Mistral ({@code gate_proj}, {@code up_proj}, {@code down_proj})</li>
+ *   <li>{@link FusedSwiGLU} — GLM-Edge ({@code gate_up_proj}, {@code down_proj})</li>
  *   <li>{@link GeluMlp} — GPT-2 style ({@code c_fc}, {@code c_proj})</li>
  * </ul>
  */
@@ -68,6 +69,42 @@ public final class ModelingMlp {
         @Override
         public Tensor forward(Tensor x) {
             return down_proj.forward(silu(gate_proj.forward(x)).mul(up_proj.forward(x)));
+        }
+    }
+
+    /**
+     * Fused SwiGLU used by GLM-Edge / some ChatGLM exports.
+     *
+     * <p>HF name: {@code gate_up_proj} with shape {@code [2*intermediate, hidden]}
+     * (Linear weight layout), followed by {@code down_proj}.
+     * Forward: split gate/up along last dim, then {@code down(silu(gate)*up)}.
+     */
+    @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+    public static class FusedSwiGLU extends Module {
+        static { Loader.load(org.bytedeco.pytorch.presets.torch.class); }
+
+        public final LinearImpl gate_up_proj;
+        public final LinearImpl down_proj;
+        private final long intermediateSize;
+
+        public FusedSwiGLU(long hiddenSize, long intermediateSize) {
+            super("FusedSwiGLU");
+            this.intermediateSize = intermediateSize;
+            this.gate_up_proj = register_module("gate_up_proj",
+                    new LinearImpl(new LinearOptions(hiddenSize, 2L * intermediateSize).bias(false)));
+            this.down_proj = register_module("down_proj",
+                    new LinearImpl(new LinearOptions(intermediateSize, hiddenSize).bias(false)));
+        }
+
+        @Override
+        public Tensor forward(Tensor x) {
+            Tensor gu = gate_up_proj.forward(x); // [..., 2*I]
+            long last = gu.dim() - 1;
+            Tensor gate = gu.slice(last, new org.bytedeco.pytorch.LongOptional(0),
+                    new org.bytedeco.pytorch.LongOptional(intermediateSize), 1);
+            Tensor up = gu.slice(last, new org.bytedeco.pytorch.LongOptional(intermediateSize),
+                    new org.bytedeco.pytorch.LongOptional(2L * intermediateSize), 1);
+            return down_proj.forward(silu(gate).mul(up));
         }
     }
 

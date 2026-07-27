@@ -25,8 +25,10 @@ import org.bytedeco.pytorch.jit.*;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.utils.transformers.CausalLM;
 import org.bytedeco.pytorch.utils.transformers.PretrainedConfig;
+import org.bytedeco.pytorch.utils.transformers.modeling.GlmForCausalLM;
 import org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM;
 import org.bytedeco.pytorch.utils.transformers.modeling.Qwen2ForCausalLM;
+import org.bytedeco.pytorch.utils.transformers.modeling.Qwen3ForCausalLM;
 
 import java.util.Locale;
 import java.util.Map;
@@ -51,8 +53,14 @@ public final class ModelRegistry {
     static {
         register("qwen2", Qwen2ForCausalLM::fromConfig, WeightMaps.qwen2());
         register("qwen", Qwen2ForCausalLM::fromConfig, WeightMaps.qwen2());
+        // Qwen3 (+ VL text tower): QK-norm, no attention bias, optional language_model. prefix
+        register("qwen3", Qwen3ForCausalLM::fromConfig, WeightMaps.qwen3());
+        register("qwen3_vl_text", Qwen3ForCausalLM::fromConfig, WeightMaps.qwen3Vl());
+        register("qwen3_vl", Qwen3ForCausalLM::fromConfig, WeightMaps.qwen3Vl());
         register("llama", LlamaForCausalLM::fromConfig, WeightMaps.llama());
         register("mistral", LlamaForCausalLM::fromConfig, WeightMaps.mistral());
+        register("glm", GlmForCausalLM::fromConfig, WeightMaps.glm());
+        register("chatglm", GlmForCausalLM::fromConfig, WeightMaps.glm());
         // GPT-2 / generic fall back to the original CausalLM teaching model
         register("gpt2", CausalLM::fromConfig, WeightMaps.gpt2());
         register("gpt", CausalLM::fromConfig, WeightMaps.gpt2());
@@ -76,15 +84,39 @@ public final class ModelRegistry {
         Object archs = config.extra().get("architectures");
         if (archs instanceof java.util.List<?> list && !list.isEmpty()) {
             String a = String.valueOf(list.get(0)).toLowerCase(Locale.ROOT);
+            // Qwen3 / Qwen3-VL before generic qwen2 (QK-norm + no bias)
+            if (a.contains("qwen3")) {
+                if (a.contains("vl") || a.contains("conditional")) return must("qwen3_vl");
+                return must("qwen3");
+            }
             if (a.contains("qwen2")) return must("qwen2");
+            if (a.contains("glm") || a.contains("chatglm")) return must("glm");
             if (a.contains("llama")) return must("llama");
             if (a.contains("mistral")) return must("mistral");
             if (a.contains("gpt2")) return must("gpt2");
         }
+        // Prefer flattened model_type string from extra (qwen3_vl_text etc.)
+        Object rawMt = config.extra().get("model_type");
+        if (rawMt != null) {
+            String s = String.valueOf(rawMt).toLowerCase(Locale.ROOT);
+            Entry byRaw = REGISTRY.get(s);
+            if (byRaw != null) return byRaw;
+            if (s.contains("qwen3")) {
+                if (s.contains("vl")) return must("qwen3_vl");
+                return must("qwen3");
+            }
+        }
+        if (config.isQwen3()) {
+            Object vl = config.extra().get("vl_model_type");
+            if (vl != null && String.valueOf(vl).toLowerCase(Locale.ROOT).contains("vl")) {
+                return must("qwen3_vl");
+            }
+            return must("qwen3");
+        }
         String mt = config.modelType() == null
                 ? "generic"
                 : config.modelType().name().toLowerCase(Locale.ROOT);
-        // QWEN enum → qwen2 implementation
+        // QWEN enum → qwen2 implementation (plain Qwen2)
         if ("qwen".equals(mt)) mt = "qwen2";
         Entry e = REGISTRY.get(mt);
         if (e == null) e = REGISTRY.get("generic");

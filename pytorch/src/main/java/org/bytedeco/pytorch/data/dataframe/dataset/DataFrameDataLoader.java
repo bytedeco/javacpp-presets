@@ -13,6 +13,22 @@ import org.bytedeco.pytorch.global.torch;
  * <p>Parameters mirror PyTorch DataLoader: batch_size, shuffle, drop_last, seed.
  * Each {@link Batch} exposes stacked feature tensors and labels ready for training.
  *
+ * <p><b>Memory / PointerScope (critical for long training runs):</b>
+ * {@link #collate(int[])} allocates several native {@link Tensor}s per batch
+ * ({@code torch.tensor(...)} for each feature + labels). JavaCPP attaches newly
+ * created Pointers to the <em>current</em> {@link org.bytedeco.javacpp.PointerScope}.
+ * If you call {@code iterator().next()} <em>outside</em> a per-batch scope, those
+ * tensors never get released → progressive native/MPS memory growth and training
+ * that gets slower every step. Always do:
+ * <pre>
+ *   try (PointerScope scope = new PointerScope()) {
+ *       Batch batch = it.next(); // collate tensors attach here
+ *       // forward / backward ...
+ *   } // all collate + intermediate tensors freed
+ * </pre>
+ * Model weights / optimizer state must be allocated <em>outside</em> the per-batch
+ * scope so {@code scope.close()} does not free them.
+ *
  * <p>For native C++ DataLoader interop use {@link #toRandomDataLoader()} /
  * {@link #toSequentialDataLoader()} (via {@link DataFrameNativeDataset}) or
  * {@link DataFrameDataset#nativeDataLoader()}.

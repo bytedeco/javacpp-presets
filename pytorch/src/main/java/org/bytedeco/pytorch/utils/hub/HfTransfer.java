@@ -20,7 +20,6 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.hub;
-import org.bytedeco.pytorch.c10.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

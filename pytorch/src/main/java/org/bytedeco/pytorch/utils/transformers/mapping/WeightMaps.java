@@ -40,11 +40,43 @@ public final class WeightMaps {
         return WeightMap.identity();
     }
 
+    /** Plain Qwen3 text LM — HF keys already match {@link org.bytedeco.pytorch.utils.transformers.modeling.Qwen3ForCausalLM}. */
+    public static WeightMap qwen3() {
+        return WeightMap.identity();
+    }
+
+    /**
+     * Qwen3-VL / Qwen2-VL language tower: HF stores text under
+     * {@code model.language_model.*} while our module is {@code model.*}.
+     * Strip the {@code language_model.} segment after {@code model.}.
+     */
+    public static WeightMap qwen3Vl() {
+        return WeightMap.builder()
+                // model.language_model.X → model.X  (embed_tokens / layers / norm)
+                .rule(new WeightMap.Rule(
+                        "^model\\.language_model\\.(.+)$",
+                        "model.$1", true, WeightMap.Transform.NONE))
+                // lm_head stays as-is
+                .rule(new WeightMap.Rule(
+                        "^lm_head\\.(.+)$",
+                        "lm_head.$1", true, WeightMap.Transform.NONE))
+                .build();
+    }
+
     public static WeightMap llama() {
         return WeightMap.identity();
     }
 
     public static WeightMap mistral() {
+        return WeightMap.identity();
+    }
+
+    /**
+     * GLM-Edge / ChatGLM: HF names already match {@link org.bytedeco.pytorch.utils.transformers.modeling.GlmForCausalLM}
+     * ({@code model.layers.N.*}, fused {@code gate_up_proj}). Identity map converts
+     * {@code layers.0} → {@code layers/0} via {@link WeightMap#dotBeforeDigitToSlash}.
+     */
+    public static WeightMap glm() {
         return WeightMap.identity();
     }
 
@@ -102,8 +134,11 @@ public final class WeightMaps {
         }
         return switch (t) {
             case "qwen2", "qwen" -> qwen2();
+            case "qwen3" -> qwen3();
+            case "qwen3_vl", "qwen3_vl_text", "qwen2_vl", "qwen2_vl_text" -> qwen3Vl();
             case "llama", "llama2", "llama3" -> llama();
             case "mistral" -> mistral();
+            case "glm", "chatglm", "glm-edge" -> glm();
             case "gpt2", "gpt" -> gpt2();
             default -> identity();
         };

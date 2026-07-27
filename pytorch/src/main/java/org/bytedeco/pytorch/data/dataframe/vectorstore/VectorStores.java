@@ -146,7 +146,12 @@ public final class VectorStores {
      * <p>Built-in schemes: {@code memory}, {@code qdrant}, {@code redis},
      * {@code milvus}, {@code opensearch}, {@code pgvector}/{@code postgres},
      * {@code mongo}/{@code mongodb}/{@code atlas}.
-     * Anything else is resolved via {@link VectorStoreProvider} plugins.
+     *
+     * <p><b>SPI override:</b> a {@link VectorStoreProvider} registered under the
+     * same scheme name (e.g. {@code "milvus"}) takes precedence over the built-in
+     * pure-protocol adapter — enabling seamless switch to an official SDK wrapper
+     * without changing call sites. Register via {@code META-INF/services} or
+     * {@link #registerProvider(VectorStoreProvider)}.
      */
     public static VectorStore open(String scheme, Map<String, Object> config) {
         if (scheme == null || scheme.isBlank()) {
@@ -154,6 +159,12 @@ public final class VectorStores {
         }
         String s = scheme.toLowerCase(Locale.ROOT).trim();
         Map<String, Object> cfg = config == null ? Map.of() : config;
+
+        // Plugin override wins for any scheme (including built-ins).
+        VectorStoreProvider plugin = PLUGINS.get(s);
+        if (plugin != null) {
+            return plugin.open(cfg);
+        }
 
         return switch (s) {
             case "memory", "hnsw", "local" -> openMemory(cfg);
@@ -163,16 +174,10 @@ public final class VectorStores {
             case "opensearch", "elasticsearch", "es" -> openOpenSearch(cfg);
             case "pgvector", "postgres", "postgresql", "pg" -> openPg(cfg);
             case "mongo", "mongodb", "atlas", "mongoatlas" -> openMongo(cfg);
-            default -> {
-                VectorStoreProvider p = PLUGINS.get(s);
-                if (p == null) {
-                    throw new VectorStoreException(
-                        "Unknown vector store scheme '" + scheme
-                            + "'. Built-ins: memory, qdrant, redis, milvus, opensearch, pgvector, mongo. "
-                            + "Or register a VectorStoreProvider SPI plugin.");
-                }
-                yield p.open(cfg);
-            }
+            default -> throw new VectorStoreException(
+                "Unknown vector store scheme '" + scheme
+                    + "'. Built-ins: memory, qdrant, redis, milvus, opensearch, pgvector, mongo. "
+                    + "Or register a VectorStoreProvider SPI plugin.");
         };
     }
 
@@ -279,7 +284,7 @@ public final class VectorStores {
     }
 
     private static VectorStore openRedis(Map<String, Object> cfg) {
-        return RedisVectorStore.builder()
+        RedisVectorStore.Builder b = RedisVectorStore.builder()
             .host(strVal(cfg, "host", "127.0.0.1"))
             .port(intVal(cfg, "port", 6379))
             .username(strVal(cfg, "username", null))
@@ -292,8 +297,16 @@ public final class VectorStores {
             .algorithm(strVal(cfg, "algorithm", "HNSW"))
             .M(intVal(cfg, "M", 16))
             .efConstruction(intVal(cfg, "efConstruction", 200))
-            .timeout(durationVal(cfg))
-            .build();
+            .timeout(durationVal(cfg));
+        // optional default TTL for doc keys on upsert
+        Object ttlObj = cfg.get("ttl");
+        if (ttlObj == null) ttlObj = cfg.get("ttlSeconds");
+        if (ttlObj instanceof Duration d) b.ttl(d);
+        else if (ttlObj instanceof Number n) b.ttlSeconds(n.longValue());
+        else if (ttlObj instanceof String s) {
+            try { b.ttlSeconds(Long.parseLong(s.trim())); } catch (Exception ignored) {}
+        }
+        return b.build();
     }
 
     private static VectorStore openMilvus(Map<String, Object> cfg) {

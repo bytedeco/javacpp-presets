@@ -2,6 +2,7 @@ package org.bytedeco.pytorch.data.dataframe.io;
 
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
@@ -11,14 +12,14 @@ import java.util.Locale;
  * <p>Supported extensions grow with the I/O stack:
  * {@code .csv .tsv .json .jsonl .ndjson .parquet .arrow .feather .ipc
  * .pkl .pickle .xlsx .xls .h5 .hdf5 .hdf .avro .orc .npz .npy
- * .safetensors .gguf}.
+ * .safetensors .gguf .lance}.
  */
 public final class FormatDetect {
     private FormatDetect() {}
 
     public enum Format {
         CSV, TSV, JSON, JSONL, PARQUET, ARROW, FEATHER, PICKLE,
-        EXCEL, HDF5, AVRO, ORC, NPZ, NPY, SAFETENSORS, GGUF, UNKNOWN
+        EXCEL, HDF5, AVRO, ORC, NPZ, NPY, SAFETENSORS, GGUF, LANCE, UNKNOWN
     }
 
     public static Format detect(String path) {
@@ -30,6 +31,24 @@ public final class FormatDetect {
 
         if (lower.endsWith(".safetensors")) return Format.SAFETENSORS;
         if (lower.endsWith(".jsonl") || lower.endsWith(".ndjson")) return Format.JSONL;
+        if (lower.endsWith(".lance")) return Format.LANCE;
+
+        // Directory heuristics for Lance datasets (no file extension required)
+        try {
+            Path p = Path.of(path);
+            if (Files.isDirectory(p)) {
+                if (Files.isRegularFile(p.resolve("_manifest.json"))
+                    || Files.isDirectory(p.resolve("_versions"))
+                    || (Files.isDirectory(p.resolve("data"))
+                        && (Files.isDirectory(p.resolve("_versions"))
+                            || Files.isDirectory(p.resolve("indices"))
+                            || Files.isDirectory(p.resolve("vectors"))))) {
+                    return Format.LANCE;
+                }
+            }
+        } catch (Exception ignored) {
+            // fall through to extension switch
+        }
 
         int dot = lower.lastIndexOf('.');
         if (dot < 0 || dot == lower.length() - 1) return Format.UNKNOWN;
@@ -49,6 +68,7 @@ public final class FormatDetect {
             case "npz": return Format.NPZ;
             case "npy": return Format.NPY;
             case "gguf": return Format.GGUF;
+            case "lance": return Format.LANCE;
             default: return Format.UNKNOWN;
         }
     }
@@ -106,11 +126,13 @@ public final class FormatDetect {
                 return DataFrame.readAvro(path);
             case ORC:
                 return DataFrame.readOrc(path);
+            case LANCE:
+                return DataFrame.readLance(path);
             default:
                 throw new IllegalArgumentException(
                     "Cannot auto-detect DataFrame format for path: " + path
                         + " (supported: csv,tsv,json,jsonl,parquet,arrow,feather,ipc,"
-                        + "pkl,xlsx,xls,h5,hdf5,avro,orc,npz,npy,safetensors,gguf;"
+                        + "pkl,xlsx,xls,h5,hdf5,avro,orc,npz,npy,safetensors,gguf,lance;"
                         + " also magic-byte sniff for PAR1/ARROW1/NUMPY/ORC/HDF/Avro/JSON)");
         }
     }

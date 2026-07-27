@@ -263,6 +263,28 @@ public final class AutoModelForCausalLM {
                 report = new WeightLoader.LoadReport(
                         List.of(), List.of("(no safetensors)"), List.of(), List.of(), 0, 0, bindMode);
             }
+            // Always print bind stats — silent miss + tie_word_embeddings (strict off)
+            // previously left Qwen3-VL on random weights producing garbage tokens.
+            System.out.println("[AutoModelForCausalLM] " + report
+                    + " map=" + (map == null ? "null" : map.getClass().getSimpleName())
+                    + " model=" + model.getClass().getSimpleName()
+                    + " type=" + cfg.modelType()
+                    + " d=" + cfg.hiddenSize()
+                    + " L=" + cfg.numHiddenLayers()
+                    + " H=" + cfg.numAttentionHeads()
+                    + " headDim=" + cfg.headDim()
+                    + " rope=" + cfg.ropeTheta());
+            if (report.matchedCount() == 0) {
+                throw new IllegalStateException(
+                        "Weight bind matched 0 parameters for " + dir
+                                + " — check WeightMap / language_model prefix / layers.N→layers/N. "
+                                + report);
+            }
+            // Soft guard: language towers should match most module params
+            if (report.matchedCount() < 50 && report.missing.size() > report.matchedCount()) {
+                System.out.println("[AutoModelForCausalLM] WARNING low match rate — missing e.g. "
+                        + (report.missing.isEmpty() ? "[]" : report.missing.subList(0, Math.min(5, report.missing.size()))));
+            }
             // After weight load, re-apply tie_word_embeddings.
             // ZERO_COPY rebinds wte/embed storage; COPY replaces values — both break a
             // constructor-time set_() share, so always re-tie when requested.
@@ -271,12 +293,28 @@ public final class AutoModelForCausalLM {
                     if (model instanceof CausalLM clm) {
                         clm.retieWordEmbeddings();
                         System.out.println("[DEBUG] Re-tied CausalLM lm_head ← wte");
+                    } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.GlmForCausalLM glm) {
+                        if (glm.retieWordEmbeddings()) {
+                            System.out.println("[DEBUG] Re-tied Glm lm_head ← embed_tokens");
+                        }
                     } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.Qwen2ForCausalLM qwen) {
+                        try {
+                            qwen.lmHead().weight().requires_grad_(false);
+                            qwen.model().embed_tokens.weight().requires_grad_(false);
+                        } catch (Throwable ignored) {}
                         qwen.lmHead().weight().set_(qwen.model().embed_tokens.weight());
                         System.out.println("[DEBUG] Re-tied Qwen2 lm_head ← embed_tokens");
-                    } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM llama) {
-                        // best-effort: Llama layouts that expose lmHead/embed
+                    } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.Qwen3ForCausalLM qwen3) {
                         try {
+                            qwen3.lmHead().weight().requires_grad_(false);
+                            qwen3.model().embed_tokens.weight().requires_grad_(false);
+                        } catch (Throwable ignored) {}
+                        qwen3.lmHead().weight().set_(qwen3.model().embed_tokens.weight());
+                        System.out.println("[DEBUG] Re-tied Qwen3 lm_head ← embed_tokens");
+                    } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM llama) {
+                        try {
+                            llama.lmHead().weight().requires_grad_(false);
+                            llama.model().embed_tokens.weight().requires_grad_(false);
                             llama.lmHead().weight().set_(llama.model().embed_tokens.weight());
                             System.out.println("[DEBUG] Re-tied Llama lm_head ← embed_tokens");
                         } catch (Throwable ignore) {

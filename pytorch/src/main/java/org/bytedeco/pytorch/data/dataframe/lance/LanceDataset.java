@@ -18,7 +18,14 @@ import org.bytedeco.pytorch.data.dataframe.dtype.EmbeddingData;
 import org.bytedeco.pytorch.data.dataframe.ai.EmbeddingMath;
 
 /**
- * Lance-inspired vector dataset: versioned directory layout for multimodal
+ * Pure-Java <b>training</b> vector dataset layout for multimodal DataFrames with
+ * first-class embedding columns + optional local HNSW.
+ *
+ * <p><b>Not</b> byte-compatible with lance-rs / official {@code org.lance:lance-core}.
+ * Prefer {@link org.bytedeco.pytorch.data.dataframe.DataFrame#writeLance(String)} for
+ * official Lance, or {@code writeLanceTraining}/{@code readLanceTraining} for this layout.
+ *
+ * <p>Original: Lance-inspired vector dataset: versioned directory layout for multimodal
  * DataFrames with first-class embedding columns + optional HNSW index.
  *
  * <p>Layout:

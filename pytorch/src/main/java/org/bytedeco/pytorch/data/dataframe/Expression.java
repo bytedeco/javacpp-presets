@@ -335,6 +335,98 @@ public class Expression {
         return new CutExpr(this, bins, labels);
     }
 
+    /**
+     * Equal-frequency binning (Pandas {@code qcut} / Polars {@code qcut}).
+     * @param quantiles number of quantile bins (e.g. 4 = quartiles)
+     */
+    public Expression qcut(int quantiles) {
+        return new QcutExpr(this, quantiles);
+    }
+
+    /**
+     * Fill nulls with a strategy: {@code "forward"} / {@code "backward"} / {@code "mean"} /
+     * {@code "min"} / {@code "max"} / {@code "zero"} / {@code "one"}.
+     */
+    public Expression fillNull(String strategy) {
+        return new FillNullStrategyExpr(this, strategy == null ? "forward" : strategy);
+    }
+
+    /** Hash of the value (seeded). Polars {@code hash}. */
+    public Expression hash(long seed) { return new HashExpr(this, seed); }
+    public Expression hash() { return hash(0L); }
+
+    /** Mark duplicate elements (first occurrence false). Polars {@code is_duplicated}. */
+    public Expression isDuplicated() { return new IsDuplicatedExpr(this); }
+
+    /** True on the first occurrence of each distinct value. Polars {@code is_first_distinct}. */
+    public Expression isFirstDistinct() { return new IsFirstDistinctExpr(this, true); }
+
+    /** True on the last occurrence of each distinct value. Polars {@code is_last_distinct}. */
+    public Expression isLastDistinct() { return new IsFirstDistinctExpr(this, false); }
+
+    /**
+     * Shrink numeric dtype to the smallest that can hold all values
+     * (Polars {@code shrink_dtype}). Evaluates to the same values; cast is advisory
+     * via {@link #suggestedName()} — prefer {@link DataFrame} level for real cast.
+     */
+    public Expression shrinkDtype() { return new ShrinkDtypeExpr(this); }
+
+    /** Dense rank alias (method=dense). */
+    public Expression rankDense() { return rank("dense", true); }
+
+    /** Exponentially weighted moving mean (Polars {@code ewm_mean}). */
+    public Expression ewmMean(double alpha) { return new EwmMeanExpr(this, alpha); }
+
+    /**
+     * Element-wise UDF (Polars {@code map_elements}). Applied row by row;
+     * return type inferred from first non-null result (default STRING).
+     */
+    public Expression mapElements(java.util.function.Function<Object, Object> fn) {
+        return new MapElementsExpr(this, fn);
+    }
+
+    /**
+     * Cumulative count of non-null values (optionally reverse).
+     * Polars {@code cum_count}.
+     */
+    public Expression cumCount() { return cumCount(false); }
+    public Expression cumCount(boolean reverse) { return new CumCountExpr(this, reverse); }
+
+    /**
+     * Round to {@code n} significant figures (Polars {@code round_sig_figs}).
+     */
+    public Expression roundSigFigs(int n) { return new RoundSigFigsExpr(this, n); }
+
+    /**
+     * Window convenience: {@code expr.over("g1","g2")} partitions by columns
+     * with default whole-partition frame.
+     */
+    public Expression over(String... partitionBy) {
+        return over(org.bytedeco.pytorch.data.dataframe.window.WindowSpec.empty()
+            .partitionBy(partitionBy));
+    }
+
+    // ---- list / struct namespaces (Polars) ----
+
+    /** Polars-style list namespace: {@code col("tags").list().first()}. */
+    public ListNameSpace list() { return new ListNameSpace(this); }
+
+    /** Polars-style struct namespace: {@code col("meta").struct().field("k")}. */
+    public StructNameSpace struct() { return new StructNameSpace(this); }
+
+    // ---- horizontal (static multi-column) ----
+
+    /** Row-wise max across expressions (Polars {@code max_horizontal}). */
+    public static Expression maxHorizontal(Expression... exprs) {
+        return new HorizontalExpr(HorizontalOp.MAX, exprs);
+    }
+    public static Expression minHorizontal(Expression... exprs) {
+        return new HorizontalExpr(HorizontalOp.MIN, exprs);
+    }
+    public static Expression sumHorizontal(Expression... exprs) {
+        return new HorizontalExpr(HorizontalOp.SUM, exprs);
+    }
+
     // ================================================================
     // Meta
     // ================================================================
@@ -1956,6 +2048,677 @@ public class Expression {
             return "dt_" + op.name().toLowerCase() + "(" + child.suggestedName() + ")";
         }
         @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    // ================================================================
+    // List / Struct namespaces (Polars advanced nested)
+    // ================================================================
+
+    /** Polars {@code Expr.list.*} namespace over list-typed cells. */
+    public static final class ListNameSpace {
+        private final Expression parent;
+        ListNameSpace(Expression parent) { this.parent = parent; }
+
+        public Expression first()  { return new ListExpr(parent, ListOp.FIRST, null, 0, 0); }
+        public Expression last()   { return new ListExpr(parent, ListOp.LAST, null, 0, 0); }
+        public Expression get(int index) { return new ListExpr(parent, ListOp.GET, null, index, 0); }
+        public Expression slice(int offset, int length) {
+            return new ListExpr(parent, ListOp.SLICE, null, offset, length);
+        }
+        public Expression join(String separator) {
+            return new ListExpr(parent, ListOp.JOIN, separator == null ? "," : separator, 0, 0);
+        }
+        public Expression contains(Object item) {
+            return new ListExpr(parent, ListOp.CONTAINS, item, 0, 0);
+        }
+        public Expression unique() { return new ListExpr(parent, ListOp.UNIQUE, null, 0, 0); }
+        public Expression sort()   { return new ListExpr(parent, ListOp.SORT, null, 0, 0); }
+        public Expression lengths(){ return new ListExpr(parent, ListOp.LENGTHS, null, 0, 0); }
+        public Expression len()    { return lengths(); }
+        public Expression reverse(){ return new ListExpr(parent, ListOp.REVERSE, null, 0, 0); }
+        public Expression sum()    { return new ListExpr(parent, ListOp.SUM, null, 0, 0); }
+        public Expression mean()   { return new ListExpr(parent, ListOp.MEAN, null, 0, 0); }
+        public Expression min()    { return new ListExpr(parent, ListOp.MIN, null, 0, 0); }
+        public Expression max()    { return new ListExpr(parent, ListOp.MAX, null, 0, 0); }
+
+        /**
+         * Evaluate an expression over list elements. For each row, materializes a
+         * one-column mini-frame of list items named {@code "item"} and evaluates
+         * {@code expr} row-wise, collecting results back into a list.
+         * <p>Example: {@code col("nums").list().eval(col("item").multiply(2))}
+         */
+        public Expression eval(Expression expr) {
+            return new ListEvalExpr(parent, expr);
+        }
+    }
+
+    /** Polars {@code Expr.struct.*} namespace over struct/map cells. */
+    public static final class StructNameSpace {
+        private final Expression parent;
+        StructNameSpace(Expression parent) { this.parent = parent; }
+
+        /** Extract a named field from struct/map cell. */
+        public Expression field(String name) {
+            return new StructFieldExpr(parent, name);
+        }
+
+        /**
+         * Unnest is a table-level op; as expression, returns the struct itself
+         * (use {@link DataFrame#unnest(String)} for multi-column expand).
+         */
+        public Expression unnest() {
+            return parent;
+        }
+    }
+
+    enum ListOp {
+        FIRST, LAST, GET, SLICE, JOIN, CONTAINS, UNIQUE, SORT,
+        LENGTHS, REVERSE, SUM, MEAN, MIN, MAX
+    }
+
+    static final class ListExpr extends Expression {
+        final Expression child;
+        final ListOp op;
+        final Object arg;
+        final int i0, i1;
+        ListExpr(Expression child, ListOp op, Object arg, int i0, int i1) {
+            this.child = child; this.op = op; this.arg = arg; this.i0 = i0; this.i1 = i1;
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            Object v = child.eval(row, df);
+            List<?> list = asList(v);
+            if (list == null) return null;
+            return switch (op) {
+                case FIRST -> list.isEmpty() ? null : list.get(0);
+                case LAST  -> list.isEmpty() ? null : list.get(list.size() - 1);
+                case GET -> {
+                    int idx = i0 >= 0 ? i0 : list.size() + i0;
+                    yield (idx >= 0 && idx < list.size()) ? list.get(idx) : null;
+                }
+                case SLICE -> {
+                    int from = Math.max(0, i0);
+                    int to = Math.min(list.size(), from + Math.max(0, i1));
+                    if (from >= list.size()) yield List.of();
+                    yield new ArrayList<>(list.subList(from, to));
+                }
+                case JOIN -> {
+                    String sep = arg == null ? "," : arg.toString();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < list.size(); i++) {
+                        if (i > 0) sb.append(sep);
+                        Object e = list.get(i);
+                        if (e != null) sb.append(e);
+                    }
+                    yield sb.toString();
+                }
+                case CONTAINS -> {
+                    for (Object e : list) if (Objects.equals(e, arg)) yield true;
+                    yield false;
+                }
+                case UNIQUE -> {
+                    LinkedHashSet<Object> set = new LinkedHashSet<>(list);
+                    yield new ArrayList<>(set);
+                }
+                case SORT -> {
+                    List<Object> copy = new ArrayList<>(list);
+                    copy.sort((a, b) -> compareVals(a, b));
+                    yield copy;
+                }
+                case LENGTHS -> list.size();
+                case REVERSE -> {
+                    List<Object> copy = new ArrayList<>(list);
+                    Collections.reverse(copy);
+                    yield copy;
+                }
+                case SUM, MEAN, MIN, MAX -> {
+                    double sum = 0; int cnt = 0;
+                    double min = Double.POSITIVE_INFINITY, max = Double.NEGATIVE_INFINITY;
+                    for (Object e : list) {
+                        Double d = toDouble(e);
+                        if (d == null || Double.isNaN(d)) continue;
+                        sum += d; cnt++;
+                        if (d < min) min = d;
+                        if (d > max) max = d;
+                    }
+                    if (cnt == 0) yield null;
+                    yield switch (op) {
+                        case SUM -> sum;
+                        case MEAN -> sum / cnt;
+                        case MIN -> min;
+                        case MAX -> max;
+                        default -> null;
+                    };
+                }
+            };
+        }
+
+        @Override public String suggestedName() {
+            return "list_" + op.name().toLowerCase() + "(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class ListEvalExpr extends Expression {
+        final Expression child;
+        final Expression inner;
+        ListEvalExpr(Expression child, Expression inner) {
+            this.child = child; this.inner = inner;
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            Object v = child.eval(row, df);
+            List<?> list = asList(v);
+            if (list == null) return null;
+            // mini one-col frame
+            DataFrame mini = DataFrame.create();
+            mini.addColumn("item", Column.DType.STRING);
+            // better: infer from first non-null
+            Column.DType dt = Column.DType.STRING;
+            for (Object e : list) {
+                if (e != null) { dt = inferDType(e); break; }
+            }
+            DataFrame m = DataFrame.create();
+            m.addColumn("item", dt);
+            for (Object e : list) {
+                int ri = m.addEmptyRow();
+                m.set(ri, "item", e);
+            }
+            List<Object> out = new ArrayList<>(list.size());
+            for (int i = 0; i < m.rowCount(); i++) {
+                out.add(inner.eval(i, m));
+            }
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "list_eval(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class StructFieldExpr extends Expression {
+        final Expression child;
+        final String field;
+        StructFieldExpr(Expression child, String field) {
+            this.child = child; this.field = field;
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            Object v = child.eval(row, df);
+            if (v == null) return null;
+            if (v instanceof Map<?, ?> map) return map.get(field);
+            if (v instanceof org.bytedeco.pytorch.data.dataframe.dtype.StructData sd) {
+                return sd.getFieldValue(field);
+            }
+            // try ComplexCellCodec map view
+            Map<String, Object> m =
+                org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.asStringMap(v);
+            return m == null ? null : m.get(field);
+        }
+
+        @Override public String suggestedName() {
+            return child.suggestedName() + "." + field;
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    // ---- advanced expr nodes ----
+
+    static final class QcutExpr extends Expression {
+        final Expression child;
+        final int quantiles;
+        QcutExpr(Expression child, int quantiles) {
+            this.child = child; this.quantiles = Math.max(2, quantiles);
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            // evaluate whole-column once via evaluate()
+            return null; // overridden
+        }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            double[] vals = new double[n];
+            boolean[] valid = new boolean[n];
+            List<Double> sorted = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                Double d = toDouble(child.eval(i, df));
+                if (d == null || Double.isNaN(d)) { valid[i] = false; }
+                else { vals[i] = d; valid[i] = true; sorted.add(d); }
+            }
+            Collections.sort(sorted);
+            Column out = new Column(suggestedName(), Column.DType.INT32);
+            if (sorted.isEmpty()) {
+                for (int i = 0; i < n; i++) out.add(null);
+                return out;
+            }
+            double[] edges = new double[quantiles + 1];
+            edges[0] = sorted.get(0);
+            edges[quantiles] = sorted.get(sorted.size() - 1);
+            for (int q = 1; q < quantiles; q++) {
+                double pos = (sorted.size() - 1) * (q / (double) quantiles);
+                int lo = (int) Math.floor(pos), hi = (int) Math.ceil(pos);
+                edges[q] = lo == hi ? sorted.get(lo)
+                    : sorted.get(lo) * (1 - (pos - lo)) + sorted.get(hi) * (pos - lo);
+            }
+            for (int i = 0; i < n; i++) {
+                if (!valid[i]) { out.add(null); continue; }
+                int bin = quantiles - 1;
+                for (int q = 0; q < quantiles; q++) {
+                    boolean last = q == quantiles - 1;
+                    if (last) {
+                        if (vals[i] >= edges[q] && vals[i] <= edges[q + 1]) { bin = q; break; }
+                    } else if (vals[i] >= edges[q] && vals[i] < edges[q + 1]) {
+                        bin = q; break;
+                    }
+                }
+                out.add(bin);
+            }
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "qcut(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class FillNullStrategyExpr extends Expression {
+        final Expression child;
+        final String strategy;
+        FillNullStrategyExpr(Expression child, String strategy) {
+            this.child = child; this.strategy = strategy.toLowerCase(Locale.ROOT);
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            return null;
+        }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            Object[] vals = new Object[n];
+            for (int i = 0; i < n; i++) vals[i] = child.eval(i, df);
+
+            switch (strategy) {
+                case "forward", "ffill" -> {
+                    Object last = null;
+                    for (int i = 0; i < n; i++) {
+                        if (vals[i] == null) vals[i] = last;
+                        else last = vals[i];
+                    }
+                }
+                case "backward", "bfill" -> {
+                    Object next = null;
+                    for (int i = n - 1; i >= 0; i--) {
+                        if (vals[i] == null) vals[i] = next;
+                        else next = vals[i];
+                    }
+                }
+                case "zero" -> {
+                    for (int i = 0; i < n; i++) if (vals[i] == null) vals[i] = 0;
+                }
+                case "one" -> {
+                    for (int i = 0; i < n; i++) if (vals[i] == null) vals[i] = 1;
+                }
+                case "mean", "min", "max" -> {
+                    double sum = 0, min = Double.POSITIVE_INFINITY, max = Double.NEGATIVE_INFINITY;
+                    int cnt = 0;
+                    for (Object v : vals) {
+                        Double d = toDouble(v);
+                        if (d == null || Double.isNaN(d)) continue;
+                        sum += d; cnt++;
+                        if (d < min) min = d;
+                        if (d > max) max = d;
+                    }
+                    Object fill = null;
+                    if (cnt > 0) {
+                        fill = switch (strategy) {
+                            case "mean" -> sum / cnt;
+                            case "min" -> min;
+                            case "max" -> max;
+                            default -> null;
+                        };
+                    }
+                    for (int i = 0; i < n; i++) if (vals[i] == null) vals[i] = fill;
+                }
+                default -> { /* leave nulls */ }
+            }
+            Column out = new Column(suggestedName(), Column.DType.FLOAT64);
+            // refine dtype from first non-null
+            Column.DType dt = Column.DType.FLOAT64;
+            for (Object v : vals) {
+                if (v != null) { dt = inferDType(v); break; }
+            }
+            out = new Column(suggestedName(), dt);
+            for (Object v : vals) out.add(v);
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "fill_null(" + child.suggestedName() + "," + strategy + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class HashExpr extends Expression {
+        final Expression child;
+        final long seed;
+        HashExpr(Expression child, long seed) { this.child = child; this.seed = seed; }
+
+        @Override public Object eval(int row, DataFrame df) {
+            Object v = child.eval(row, df);
+            long h = seed;
+            if (v != null) {
+                h ^= v.hashCode() * 0x9E3779B97F4A7C15L;
+                h = Long.rotateLeft(h, 13);
+            }
+            return h;
+        }
+
+        @Override public String suggestedName() {
+            return "hash(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class IsDuplicatedExpr extends Expression {
+        final Expression child;
+        IsDuplicatedExpr(Expression child) { this.child = child; }
+
+        @Override public Object eval(int row, DataFrame df) { return null; }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            Map<Object, Integer> first = new HashMap<>();
+            boolean[] dup = new boolean[n];
+            for (int i = 0; i < n; i++) {
+                Object v = child.eval(i, df);
+                Integer prev = first.putIfAbsent(v, i);
+                if (prev != null) {
+                    dup[i] = true;
+                    dup[prev] = true; // all occurrences marked
+                }
+            }
+            Column out = new Column(suggestedName(), Column.DType.BOOLEAN);
+            for (boolean b : dup) out.add(b);
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "is_duplicated(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class IsFirstDistinctExpr extends Expression {
+        final Expression child;
+        final boolean first;
+        IsFirstDistinctExpr(Expression child, boolean first) {
+            this.child = child; this.first = first;
+        }
+
+        @Override public Object eval(int row, DataFrame df) { return null; }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            boolean[] mark = new boolean[n];
+            if (first) {
+                Set<Object> seen = new HashSet<>();
+                for (int i = 0; i < n; i++) {
+                    Object v = child.eval(i, df);
+                    mark[i] = seen.add(v);
+                }
+            } else {
+                Set<Object> seen = new HashSet<>();
+                for (int i = n - 1; i >= 0; i--) {
+                    Object v = child.eval(i, df);
+                    mark[i] = seen.add(v);
+                }
+            }
+            Column out = new Column(suggestedName(), Column.DType.BOOLEAN);
+            for (boolean b : mark) out.add(b);
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return (first ? "is_first_distinct(" : "is_last_distinct(") + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class ShrinkDtypeExpr extends Expression {
+        final Expression child;
+        ShrinkDtypeExpr(Expression child) { this.child = child; }
+
+        @Override public Object eval(int row, DataFrame df) {
+            return child.eval(row, df);
+        }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            Object[] vals = new Object[n];
+            boolean allInt = true;
+            long min = Long.MAX_VALUE, max = Long.MIN_VALUE;
+            for (int i = 0; i < n; i++) {
+                Object v = child.eval(i, df);
+                vals[i] = v;
+                if (v == null) continue;
+                if (!(v instanceof Number)) { allInt = false; }
+                else {
+                    double d = ((Number) v).doubleValue();
+                    if (d != Math.rint(d) || d < Long.MIN_VALUE || d > Long.MAX_VALUE) allInt = false;
+                    else {
+                        long lv = ((Number) v).longValue();
+                        if (lv < min) min = lv;
+                        if (lv > max) max = lv;
+                    }
+                }
+            }
+            Column.DType dt;
+            if (allInt) {
+                if (min >= Integer.MIN_VALUE && max <= Integer.MAX_VALUE) dt = Column.DType.INT32;
+                else dt = Column.DType.INT64;
+            } else {
+                dt = Column.DType.FLOAT64;
+            }
+            Column out = new Column(suggestedName(), dt);
+            for (Object v : vals) {
+                if (v == null) { out.add(null); continue; }
+                if (dt == Column.DType.INT32) out.add(((Number) v).intValue());
+                else if (dt == Column.DType.INT64) out.add(((Number) v).longValue());
+                else out.add(v instanceof Number ? ((Number) v).doubleValue() : v);
+            }
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "shrink(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class EwmMeanExpr extends Expression {
+        final Expression child;
+        final double alpha;
+        EwmMeanExpr(Expression child, double alpha) {
+            this.child = child;
+            this.alpha = alpha <= 0 || alpha > 1 ? 0.5 : alpha;
+        }
+
+        @Override public Object eval(int row, DataFrame df) { return null; }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            Column out = new Column(suggestedName(), Column.DType.FLOAT64);
+            Double prev = null;
+            for (int i = 0; i < n; i++) {
+                Double d = toDouble(child.eval(i, df));
+                if (d == null || Double.isNaN(d)) {
+                    out.add(prev);
+                } else if (prev == null) {
+                    prev = d;
+                    out.add(d);
+                } else {
+                    prev = alpha * d + (1 - alpha) * prev;
+                    out.add(prev);
+                }
+            }
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "ewm_mean(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class MapElementsExpr extends Expression {
+        final Expression child;
+        final java.util.function.Function<Object, Object> fn;
+        MapElementsExpr(Expression child, java.util.function.Function<Object, Object> fn) {
+            this.child = child; this.fn = fn;
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            return fn.apply(child.eval(row, df));
+        }
+
+        @Override public String suggestedName() {
+            return "map(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class CumCountExpr extends Expression {
+        final Expression child;
+        final boolean reverse;
+        CumCountExpr(Expression child, boolean reverse) {
+            this.child = child; this.reverse = reverse;
+        }
+
+        @Override public Object eval(int row, DataFrame df) { return null; }
+
+        @Override public Column evaluate(DataFrame df) {
+            int n = df.rowCount();
+            Column out = new Column(suggestedName(), Column.DType.INT64);
+            long[] vals = new long[n];
+            if (!reverse) {
+                long c = 0;
+                for (int i = 0; i < n; i++) {
+                    if (child.eval(i, df) != null) c++;
+                    vals[i] = c;
+                }
+            } else {
+                long c = 0;
+                for (int i = n - 1; i >= 0; i--) {
+                    if (child.eval(i, df) != null) c++;
+                    vals[i] = c;
+                }
+            }
+            for (long v : vals) out.add(v);
+            return out;
+        }
+
+        @Override public String suggestedName() {
+            return "cum_count(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    static final class RoundSigFigsExpr extends Expression {
+        final Expression child;
+        final int n;
+        RoundSigFigsExpr(Expression child, int n) {
+            this.child = child; this.n = Math.max(1, n);
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            Double d = toDouble(child.eval(row, df));
+            if (d == null || Double.isNaN(d) || d == 0.0) return d;
+            double order = Math.floor(Math.log10(Math.abs(d)));
+            double factor = Math.pow(10, n - 1 - order);
+            return Math.round(d * factor) / factor;
+        }
+
+        @Override public String suggestedName() {
+            return "round_sig(" + child.suggestedName() + ")";
+        }
+        @Override public Set<String> referencedColumns() { return child.referencedColumns(); }
+    }
+
+    enum HorizontalOp { MAX, MIN, SUM }
+
+    static final class HorizontalExpr extends Expression {
+        final HorizontalOp op;
+        final Expression[] exprs;
+        HorizontalExpr(HorizontalOp op, Expression[] exprs) {
+            this.op = op;
+            this.exprs = exprs == null ? new Expression[0] : exprs;
+        }
+
+        @Override public Object eval(int row, DataFrame df) {
+            if (exprs.length == 0) return null;
+            if (op == HorizontalOp.SUM) {
+                double s = 0; boolean any = false;
+                for (Expression e : exprs) {
+                    Double d = toDouble(e.eval(row, df));
+                    if (d != null && !Double.isNaN(d)) { s += d; any = true; }
+                }
+                return any ? s : null;
+            }
+            Double best = null;
+            for (Expression e : exprs) {
+                Double d = toDouble(e.eval(row, df));
+                if (d == null || Double.isNaN(d)) continue;
+                if (best == null) best = d;
+                else if (op == HorizontalOp.MAX && d > best) best = d;
+                else if (op == HorizontalOp.MIN && d < best) best = d;
+            }
+            return best;
+        }
+
+        @Override public String suggestedName() {
+            return op.name().toLowerCase() + "_horizontal";
+        }
+
+        @Override public Set<String> referencedColumns() {
+            Set<String> s = new LinkedHashSet<>();
+            for (Expression e : exprs) s.addAll(e.referencedColumns());
+            return s;
+        }
+    }
+
+    /** Coerce cell value to a List view (supports List, arrays, ListViewData). */
+    @SuppressWarnings("unchecked")
+    static List<?> asList(Object v) {
+        if (v == null) return null;
+        if (v instanceof List<?> l) return l;
+        if (v instanceof org.bytedeco.pytorch.data.dataframe.dtype.ListViewData lvd) {
+            return lvd.getViewElements();
+        }
+        if (v instanceof int[] a) {
+            List<Object> out = new ArrayList<>(a.length);
+            for (int x : a) out.add(x);
+            return out;
+        }
+        if (v instanceof long[] a) {
+            List<Object> out = new ArrayList<>(a.length);
+            for (long x : a) out.add(x);
+            return out;
+        }
+        if (v instanceof float[] a) {
+            List<Object> out = new ArrayList<>(a.length);
+            for (float x : a) out.add(x);
+            return out;
+        }
+        if (v instanceof double[] a) {
+            List<Object> out = new ArrayList<>(a.length);
+            for (double x : a) out.add(x);
+            return out;
+        }
+        if (v instanceof Object[] a) return Arrays.asList(a);
+        return null;
     }
 }
 

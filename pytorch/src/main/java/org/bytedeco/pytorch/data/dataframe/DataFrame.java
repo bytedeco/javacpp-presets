@@ -234,10 +234,32 @@ public final class DataFrame implements AutoCloseable, Serializable {
         return df;
     }
 
+    /**
+     * Multi-worker Parquet read with optional row budget (heap-safe when combined with
+     * {@link #streamParquet(String, int, java.util.function.Consumer)}).
+     */
+    public static DataFrame readParquet(String path, int workers) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.readParquet(path, workers);
+    }
+
+    /**
+     * Stream Parquet in fixed-size batches without materialising the whole file.
+     * Peak heap ≈ one batch. Returns total rows delivered.
+     */
+    public static long streamParquet(String path, int batchRows,
+                                     java.util.function.Consumer<DataFrame> consumer) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.streamParquet(path, batchRows, consumer);
+    }
+
     public void writeParquet(String path) throws Exception {
         org.apache.parquet.schema.MessageType schema = buildParquetSchema();
+        // Dictionary off: nested LIST/VECTOR columns can trip parquet-column
+        // "writing empty page" on flush when dictionary pages are empty.
+        // Larger page size keeps fixed-size list elements in fewer pages.
         try (LocalParquetWriter w = LocalParquetWriter.builder(path, schema)
             .withCompression(org.apache.parquet.hadoop.metadata.CompressionCodecName.ZSTD)
+            .withDictionary(false)
+            .withPageSize(8 * 1024 * 1024)
             .build()) {
             for (int i = 0; i < rowCount; i++) {
                 org.apache.parquet.example.data.simple.SimpleGroup g = w.makeGroup();
@@ -478,64 +500,139 @@ public final class DataFrame implements AutoCloseable, Serializable {
         return df;
     }
 
-    // ---- I/O: Lance vector dataset ----
+    // ---- I/O: Lance (official org.lance:lance-core by default) ----
 
     /**
-     * Write this DataFrame as a pure-Java Lance-style vector dataset
-     * (Daft {@code write_lance}). Embedding/VECTOR columns are stored as dense f32
-     * matrices with optional HNSW index.
+     * Write this DataFrame as an <b>official</b> Lance dataset
+     * ({@code org.lance:lance-core} via Arrow IPC). Overwrites if the path exists.
      *
-     * <p>For the <b>official</b> native Lance format ({@code org.lance:lance-core}),
-     * use {@link #writeLanceOfficial(String)} / {@link org.bytedeco.pytorch.utils.lance.Lance}.
+     * <p>For the pure-Java training layout ({@code _manifest.json} + local HNSW),
+     * use {@link #writeLanceTraining(String, String...)}.
+     *
+     * @param path dataset directory (created if missing)
+     */
+    public void writeLance(String path) throws Exception {
+        org.bytedeco.pytorch.utils.lance.Lance.writeDataFrame(this, path);
+    }
+
+    /**
+     * Write as official Lance with {@link org.bytedeco.pytorch.utils.lance.LanceWriteOptions}
+     * (mode, maxRowsPerFile, stableRowIds, …).
+     */
+    public void writeLance(String path,
+                           org.bytedeco.pytorch.utils.lance.LanceWriteOptions options) throws Exception {
+        org.bytedeco.pytorch.utils.lance.Lance.writeDataFrame(this, path, options);
+    }
+
+    /**
+     * Pure-Java training layout (Daft-style {@code write_lance}): dense f32 vector matrices
+     * + optional local HNSW. <b>Not</b> byte-compatible with lance-rs / official Lance.
      *
      * @param path       dataset directory (created if missing)
      * @param vectorCols explicit vector column names; empty → auto-detect EMBEDDING/VECTOR/TENSOR
      */
-    public void writeLance(String path, String... vectorCols) throws Exception {
+    public void writeLanceTraining(String path, String... vectorCols) throws Exception {
         org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.write(this, path, vectorCols);
     }
 
-    public void writeLance(String path,
-                           org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.WriteOptions opts,
-                           String... vectorCols) throws Exception {
+    public void writeLanceTraining(String path,
+                                   org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.WriteOptions opts,
+                                   String... vectorCols) throws Exception {
         org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.write(
             this, java.nio.file.Path.of(path), opts, vectorCols);
     }
 
     /**
-     * Write via official {@code org.lance:lance-core} (Arrow IPC → native Lance dataset).
-     * Overwrites if the path already exists.
+     * @deprecated Use {@link #writeLance(String)} (now official) or
+     * {@link #writeLanceTraining(String, String...)} for the pure-Java layout.
+     * Kept for binary compatibility: when {@code vectorCols} is empty this delegates to
+     * official write; otherwise to training write.
      */
-    public void writeLanceOfficial(String path) throws Exception {
-        org.bytedeco.pytorch.utils.lance.Lance.writeDataFrame(this, path);
-    }
-
-    /** Daft {@code read_lance} — pure-Java training layout ({@code _manifest.json}). */
-    public static DataFrame readLance(String path) throws Exception {
-        return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.read(path);
+    @Deprecated
+    public void writeLance(String path, String... vectorCols) throws Exception {
+        if (vectorCols == null || vectorCols.length == 0) {
+            writeLance(path);
+        } else {
+            writeLanceTraining(path, vectorCols);
+        }
     }
 
     /**
-     * Read a Lance dataset: official native format first, then pure-Java fallback.
+     * @deprecated Use {@link #writeLanceTraining(String, org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.WriteOptions, String...)}.
+     */
+    @Deprecated
+    public void writeLance(String path,
+                           org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.WriteOptions opts,
+                           String... vectorCols) throws Exception {
+        writeLanceTraining(path, opts, vectorCols);
+    }
+
+    /** Alias of {@link #writeLance(String)} — official Lance. */
+    public void writeLanceOfficial(String path) throws Exception {
+        writeLance(path);
+    }
+
+    /**
+     * Read a Lance dataset. Auto-detects pure-Java training layout
+     * ({@code _manifest.json}); otherwise uses official {@code org.lance:lance-core}.
+     *
      * @see org.bytedeco.pytorch.utils.lance.Lance#readAuto(String)
      */
-    public static DataFrame readLanceAuto(String path) throws Exception {
+    public static DataFrame readLance(String path) throws Exception {
         return org.bytedeco.pytorch.utils.lance.Lance.readAuto(path);
     }
 
-    /** Read via official {@code org.lance:lance-core}. */
+    /**
+     * Read official Lance with column projection / filter / limit / version.
+     * Falls back to full pure-Java read when {@code _manifest.json} is present
+     * (options other than path are ignored for the training layout).
+     */
+    public static DataFrame readLance(String path,
+                                      org.bytedeco.pytorch.utils.lance.LanceReadOptions options)
+            throws Exception {
+        return org.bytedeco.pytorch.utils.lance.Lance.readAuto(path, options);
+    }
+
+    /** Force pure-Java training layout read. */
+    public static DataFrame readLanceTraining(String path) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.read(path);
+    }
+
+    /** @deprecated Prefer {@link #readLance(String)} which already auto-detects. */
+    @Deprecated
+    public static DataFrame readLanceAuto(String path) throws Exception {
+        return readLance(path);
+    }
+
+    /** Alias of {@link #readLance(String)} for official-only callers; still auto-falls-back. */
     public static DataFrame readLanceOfficial(String path) throws Exception {
         return org.bytedeco.pytorch.utils.lance.Lance.readDataFrame(path);
     }
 
-    /** Open a pure-Java Lance dataset for ANN search without fully materializing vectors as columns. */
-    public static org.bytedeco.pytorch.data.dataframe.lance.LanceDataset openLance(String path) throws Exception {
+    /**
+     * Open an official native Lance dataset for ANN search, indexing, versioning, etc.
+     *
+     * @see org.bytedeco.pytorch.utils.lance.Lance
+     */
+    public static org.bytedeco.pytorch.utils.lance.Lance openLance(String path) throws Exception {
+        return org.bytedeco.pytorch.utils.lance.Lance.open(path);
+    }
+
+    public static org.bytedeco.pytorch.utils.lance.Lance openLance(
+            String path, org.bytedeco.pytorch.utils.lance.LanceReadOptions options) throws Exception {
+        return org.bytedeco.pytorch.utils.lance.Lance.open(path, options);
+    }
+
+    /** Open pure-Java training dataset (local HNSW, not official format). */
+    public static org.bytedeco.pytorch.data.dataframe.lance.LanceDataset openLanceTraining(String path)
+            throws Exception {
         return org.bytedeco.pytorch.data.dataframe.lance.LanceDataset.open(path);
     }
 
-    /** Open an official native Lance dataset ({@code org.lance.Dataset}). */
+    /** @deprecated Use {@link #openLance(String)} (official). */
+    @Deprecated
     public static org.bytedeco.pytorch.utils.lance.Lance openLanceOfficial(String path) throws Exception {
-        return org.bytedeco.pytorch.utils.lance.Lance.open(path);
+        return openLance(path);
     }
 
     // ---- I/O: DuckDB (official org.duckdb:duckdb_jdbc) ----
@@ -543,6 +640,10 @@ public final class DataFrame implements AutoCloseable, Serializable {
     /**
      * Scan a file with embedded DuckDB ({@code read_parquet} / {@code read_csv_auto} /
      * {@code read_json_auto} / {@code read_orc} auto-detected by extension).
+     *
+     * @see #readDuckDBParquet(String)
+     * @see #readDuckDBCsv(String)
+     * @see #readDuckDBJson(String)
      */
     public static DataFrame readDuckDB(String path) throws Exception {
         try (org.bytedeco.pytorch.utils.duckdb.DuckDB db =
@@ -552,9 +653,53 @@ public final class DataFrame implements AutoCloseable, Serializable {
         }
     }
 
+    /** DuckDB {@code read_parquet(path)} → DataFrame. */
+    public static DataFrame readDuckDBParquet(String path) throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.scanParquet(path);
+    }
+
+    /** DuckDB {@code read_csv_auto(path)} → DataFrame. */
+    public static DataFrame readDuckDBCsv(String path) throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.scanCsv(path);
+    }
+
+    /** DuckDB {@code read_json_auto(path)} → DataFrame. */
+    public static DataFrame readDuckDBJson(String path) throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.scanJson(path);
+    }
+
+    /** DuckDB {@code read_orc(path)} → DataFrame. */
+    public static DataFrame readDuckDBOrc(String path) throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.scanOrc(path);
+    }
+
     /** Run arbitrary DuckDB SQL in an in-memory session → DataFrame. */
     public static DataFrame readDuckDBSql(String sql) throws Exception {
         return org.bytedeco.pytorch.utils.duckdb.DuckDB.scanSql(sql);
+    }
+
+    /**
+     * Open a persistent DuckDB database file and read a table (or run SQL).
+     * If {@code tableOrSql} looks like SQL ({@code SELECT}/{@code WITH}/…), it is executed
+     * as a query; otherwise it is treated as a table name.
+     */
+    public static DataFrame readDuckDB(java.nio.file.Path dbFile, String tableOrSql) throws Exception {
+        try (org.bytedeco.pytorch.utils.duckdb.DuckDB db =
+                     org.bytedeco.pytorch.utils.duckdb.DuckDB.open(dbFile)) {
+            String s = tableOrSql == null ? "" : tableOrSql.trim();
+            String lower = s.toLowerCase(java.util.Locale.ROOT);
+            if (lower.startsWith("select") || lower.startsWith("with") || lower.startsWith("from")
+                    || lower.startsWith("describe") || lower.startsWith("show")
+                    || lower.startsWith("summarize") || s.contains(" ")) {
+                return db.query(s);
+            }
+            return db.tableToDataFrame(s);
+        }
+    }
+
+    /** Read a named table from a persistent DuckDB database file. */
+    public static DataFrame readDuckDBTable(String dbPath, String table) throws Exception {
+        return readDuckDB(java.nio.file.Path.of(dbPath), table);
     }
 
     /** Export this DataFrame to Parquet via DuckDB {@code COPY ... TO}. */
@@ -565,6 +710,53 @@ public final class DataFrame implements AutoCloseable, Serializable {
         }
     }
 
+    /** Export this DataFrame to CSV via DuckDB {@code COPY ... TO (FORMAT CSV)}. */
+    public void writeDuckDBCsv(String path) throws Exception {
+        try (org.bytedeco.pytorch.utils.duckdb.DuckDB db =
+                     org.bytedeco.pytorch.utils.duckdb.DuckDB.inMemory()) {
+            db.exportCsv(this, path);
+        }
+    }
+
+    /** Export this DataFrame to JSON via DuckDB {@code COPY ... TO (FORMAT JSON)}. */
+    public void writeDuckDBJson(String path) throws Exception {
+        try (org.bytedeco.pytorch.utils.duckdb.DuckDB db =
+                     org.bytedeco.pytorch.utils.duckdb.DuckDB.inMemory()) {
+            db.exportJson(this, path);
+        }
+    }
+
+    /**
+     * Persist this DataFrame as a table inside a DuckDB database file
+     * (creates the file / parent dirs if missing). Default {@code if_exists=REPLACE}.
+     */
+    public void toDuckDB(String dbPath, String table) throws Exception {
+        toDuckDB(java.nio.file.Path.of(dbPath), table,
+                org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.builder()
+                        .ifExists(org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.IfExists.REPLACE)
+                        .build());
+    }
+
+    /**
+     * Persist this DataFrame as a table inside a DuckDB database file with write options.
+     */
+    public void toDuckDB(java.nio.file.Path dbFile, String table,
+                         org.bytedeco.pytorch.data.dataframe.sql.SqlOptions options) throws Exception {
+        try (org.bytedeco.pytorch.utils.duckdb.DuckDB db =
+                     org.bytedeco.pytorch.utils.duckdb.DuckDB.open(dbFile)) {
+            if (options == null) {
+                db.register(table, this);
+            } else {
+                toSql(db.connection(), table, options);
+            }
+        }
+    }
+
+    /** Alias of {@link #toDuckDB(String, String)}. */
+    public void writeDuckDB(String dbPath, String table) throws Exception {
+        toDuckDB(dbPath, table);
+    }
+
     /** Register this DataFrame as a DuckDB table and run {@code sql} (may reference table name). */
     public DataFrame duckDBQuery(String tableName, String sql) throws Exception {
         try (org.bytedeco.pytorch.utils.duckdb.DuckDB db =
@@ -572,6 +764,25 @@ public final class DataFrame implements AutoCloseable, Serializable {
             db.register(tableName, this);
             return db.query(sql);
         }
+    }
+
+    /**
+     * Open a short-lived DuckDB handle. Caller owns the resource and must {@code close()}.
+     *
+     * @see org.bytedeco.pytorch.utils.duckdb.DuckDB#inMemory()
+     * @see org.bytedeco.pytorch.utils.duckdb.DuckDB#open(java.nio.file.Path)
+     */
+    public static org.bytedeco.pytorch.utils.duckdb.DuckDB openDuckDB() throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.inMemory();
+    }
+
+    public static org.bytedeco.pytorch.utils.duckdb.DuckDB openDuckDB(String dbPath) throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.open(java.nio.file.Path.of(dbPath));
+    }
+
+    public static org.bytedeco.pytorch.utils.duckdb.DuckDB openDuckDB(java.nio.file.Path dbFile)
+            throws Exception {
+        return org.bytedeco.pytorch.utils.duckdb.DuckDB.open(dbFile);
     }
 
     // ---- AI batch embedding façade ----
@@ -703,6 +914,48 @@ public final class DataFrame implements AutoCloseable, Serializable {
 
     public static DataFrame readCsv(java.io.InputStream in, CsvOptions options) throws Exception {
         return CsvReader.read(in, options);
+    }
+
+    /**
+     * Multi-worker CSV read. Splits the file on newline boundaries across
+     * {@code workers} threads; never loads the whole file as one String.
+     * Peak heap ≈ {@code workers × chunkBytes} parse buffers + merged frame.
+     * <pre>
+     *   DataFrame df = DataFrame.readCsvParallel("big.csv", 8);
+     * </pre>
+     */
+    public static DataFrame readCsvParallel(String path, int workers) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.readCsv(path, workers);
+    }
+
+    public static DataFrame readCsvParallel(String path) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.readCsv(path);
+    }
+
+    public static DataFrame readCsvParallel(String path,
+                                            org.bytedeco.pytorch.data.dataframe.io.ParallelReader.Options opt)
+            throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.readCsv(path, opt);
+    }
+
+    /**
+     * Stream CSV in chunks with multi-worker parse. Consumer receives each chunk;
+     * prior chunks are not retained — use this for multi-GB files that must not
+     * blow the JVM heap.
+     * @return total rows delivered
+     */
+    public static long streamCsv(String path, int workers, long maxChunkBytes,
+                                 java.util.function.Consumer<DataFrame> consumer) throws Exception {
+        var opt = org.bytedeco.pytorch.data.dataframe.io.ParallelReader.Options.defaults()
+            .workers(workers)
+            .maxChunkBytes(maxChunkBytes);
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.streamCsv(path, opt, consumer);
+    }
+
+    public static long streamCsv(String path, java.util.function.Consumer<DataFrame> consumer)
+            throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParallelReader.streamCsv(
+            path, org.bytedeco.pytorch.data.dataframe.io.ParallelReader.Options.defaults(), consumer);
     }
 
     public void toCsv(String path) throws Exception {
@@ -1123,6 +1376,85 @@ public final class DataFrame implements AutoCloseable, Serializable {
         }
     }
 
+    // ---- I/O: SQLite (dedicated, pandas read_sql / to_sql style) ----
+
+    /**
+     * Read a SQLite table into a DataFrame (opens {@code sqlitePath}, SELECT * FROM table).
+     *
+     * @see #readSqlite(String, String)
+     * @see #toSqlite(String, String)
+     */
+    public static DataFrame readSqliteTable(String sqlitePath, String table) throws Exception {
+        try (java.sql.Connection c = org.bytedeco.pytorch.data.dataframe.sql.Sqlite.open(sqlitePath)) {
+            return readSqlTable(c, table);
+        }
+    }
+
+    /**
+     * Run SQL against a SQLite database file → DataFrame.
+     * Alias of {@link #readSql(String, String)} with a clearer name.
+     */
+    public static DataFrame readSqlite(String sqlitePath, String sql) throws Exception {
+        return readSql(sqlitePath, sql);
+    }
+
+    /**
+     * Read SQLite with options (fetch size, dtype overrides, …).
+     */
+    public static DataFrame readSqlite(String sqlitePath, String sql,
+                                       org.bytedeco.pytorch.data.dataframe.sql.SqlOptions options)
+            throws Exception {
+        try (java.sql.Connection c = org.bytedeco.pytorch.data.dataframe.sql.Sqlite.open(sqlitePath)) {
+            return readSql(c, sql, options);
+        }
+    }
+
+    /**
+     * Write this DataFrame into a SQLite table (default {@code if_exists=REPLACE}).
+     *
+     * <pre>{@code
+     * df.toSqlite("data.db", "people");
+     * DataFrame back = DataFrame.readSqliteTable("data.db", "people");
+     * }</pre>
+     */
+    public void toSqlite(String sqlitePath, String table) throws Exception {
+        toSqlite(sqlitePath, table,
+                org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.builder()
+                        .ifExists(org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.IfExists.REPLACE)
+                        .build());
+    }
+
+    /**
+     * Write this DataFrame into a SQLite table with {@link org.bytedeco.pytorch.data.dataframe.sql.SqlOptions}.
+     */
+    public void toSqlite(String sqlitePath, String table,
+                         org.bytedeco.pytorch.data.dataframe.sql.SqlOptions options) throws Exception {
+        try (java.sql.Connection c = org.bytedeco.pytorch.data.dataframe.sql.Sqlite.open(sqlitePath)) {
+            toSql(c, table, options == null
+                    ? org.bytedeco.pytorch.data.dataframe.sql.SqlOptions.defaults()
+                    : options);
+        }
+    }
+
+    /** Alias of {@link #toSqlite(String, String)}. */
+    public void writeSqlite(String sqlitePath, String table) throws Exception {
+        toSqlite(sqlitePath, table);
+    }
+
+    public void writeSqlite(String sqlitePath, String table,
+                            org.bytedeco.pytorch.data.dataframe.sql.SqlOptions options) throws Exception {
+        toSqlite(sqlitePath, table, options);
+    }
+
+    /** Open a SQLite connection (caller owns / must close). */
+    public static java.sql.Connection openSqlite(String path) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.sql.Sqlite.open(path);
+    }
+
+    public static java.sql.Connection openSqliteInMemory() throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.sql.Sqlite.openInMemory();
+    }
+
     public void toSql(java.sql.Connection c, String table) throws Exception {
         org.bytedeco.pytorch.data.dataframe.sql.SqlWriter.write(this, c, table);
     }
@@ -1137,6 +1469,163 @@ public final class DataFrame implements AutoCloseable, Serializable {
         try (java.sql.Connection c = org.bytedeco.pytorch.data.dataframe.sql.Sqlite.open(sqlitePath)) {
             toSql(c, table, options);
         }
+    }
+
+    /** Convenience: write to SQLite path with default REPLACE (pandas-style). */
+    public void toSql(String sqlitePath, String table) throws Exception {
+        toSqlite(sqlitePath, table);
+    }
+
+    // ---- I/O: Redis (pure RESP via dataframe.redis.Redis — no Jedis) ----
+
+    /**
+     * Open a Redis connection (caller owns / must {@code close()}).
+     *
+     * @see org.bytedeco.pytorch.data.dataframe.redis.Redis#connect(String, int)
+     */
+    public static org.bytedeco.pytorch.data.dataframe.redis.Redis openRedis() {
+        return org.bytedeco.pytorch.data.dataframe.redis.Redis.connect();
+    }
+
+    public static org.bytedeco.pytorch.data.dataframe.redis.Redis openRedis(String host, int port) {
+        return org.bytedeco.pytorch.data.dataframe.redis.Redis.connect(host, port);
+    }
+
+    public static org.bytedeco.pytorch.data.dataframe.redis.Redis openRedis(
+            String host, int port, String password) {
+        return org.bytedeco.pytorch.data.dataframe.redis.Redis.connect(host, port, password);
+    }
+
+    /** Parse {@code redis://[:password@]host:port[/db]}. */
+    public static org.bytedeco.pytorch.data.dataframe.redis.Redis openRedis(String uri) {
+        return org.bytedeco.pytorch.data.dataframe.redis.Redis.connectUri(uri);
+    }
+
+    /**
+     * Write this DataFrame to Redis using {@link org.bytedeco.pytorch.data.dataframe.redis.RedisOptions}
+     * (HASH / JSON / FRAME_JSON + optional TTL).
+     *
+     * <pre>{@code
+     * try (Redis r = DataFrame.openRedis("127.0.0.1", 6379)) {
+     *     df.toRedis(r, RedisOptions.hash("df:people:", Duration.ofHours(1)));
+     * }
+     * }</pre>
+     *
+     * @return number of keys written
+     */
+    public int toRedis(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                       org.bytedeco.pytorch.data.dataframe.redis.RedisOptions options) {
+        return redis.writeDataFrame(this, options);
+    }
+
+    /** HASH layout: one Redis hash per row under {@code prefix + id}. */
+    public int toRedis(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String prefix) {
+        return toRedis(redis, org.bytedeco.pytorch.data.dataframe.redis.RedisOptions.hash(prefix));
+    }
+
+    /**
+     * HASH layout with TTL on every row key.
+     *
+     * @param ttl row-key expiry; {@code null} = no expiry
+     */
+    public int toRedis(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                       String prefix, java.time.Duration ttl) {
+        return toRedis(redis, org.bytedeco.pytorch.data.dataframe.redis.RedisOptions.hash(prefix, ttl));
+    }
+
+    /**
+     * HASH layout with explicit id column + TTL.
+     */
+    public int toRedisHash(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                           String prefix, String idColumn, java.time.Duration ttl) {
+        return redis.writeHash(this, prefix, idColumn, ttl);
+    }
+
+    public int toRedisHash(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String prefix) {
+        return toRedisHash(redis, prefix, null, null);
+    }
+
+    public int toRedisHash(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                           String prefix, java.time.Duration ttl) {
+        return toRedisHash(redis, prefix, null, ttl);
+    }
+
+    /** Per-row JSON strings ({@code SET prefix{id} json [EX ttl]}). */
+    public int toRedisJson(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                           String prefix, String idColumn, java.time.Duration ttl) {
+        return redis.writeJson(this, prefix, idColumn, ttl);
+    }
+
+    public int toRedisJson(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String prefix) {
+        return toRedisJson(redis, prefix, null, null);
+    }
+
+    /** Entire frame as one JSON array key. */
+    public int toRedisFrame(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                            String key, java.time.Duration ttl) {
+        return redis.writeFrame(this, key, ttl);
+    }
+
+    public int toRedisFrame(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String key) {
+        return toRedisFrame(redis, key, null);
+    }
+
+    /**
+     * Connect, write, disconnect — one-shot convenience.
+     * URI examples: {@code 127.0.0.1:6379}, {@code redis://:pass@host:6379/0}.
+     */
+    public int toRedis(String redisUri, org.bytedeco.pytorch.data.dataframe.redis.RedisOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.redis.Redis r =
+                     org.bytedeco.pytorch.data.dataframe.redis.Redis.connectUri(redisUri)) {
+            return toRedis(r, options);
+        }
+    }
+
+    public int toRedis(String redisUri, String prefix, java.time.Duration ttl) {
+        return toRedis(redisUri, org.bytedeco.pytorch.data.dataframe.redis.RedisOptions.hash(prefix, ttl));
+    }
+
+    /** Read DataFrame previously stored with {@link #toRedis}. */
+    public static DataFrame readRedis(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                                      org.bytedeco.pytorch.data.dataframe.redis.RedisOptions options) {
+        return redis.readDataFrame(options);
+    }
+
+    public static DataFrame readRedis(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String prefix) {
+        return redis.readHash(prefix);
+    }
+
+    public static DataFrame readRedisHash(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String prefix) {
+        return redis.readHash(prefix);
+    }
+
+    public static DataFrame readRedisJson(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String prefix) {
+        return redis.readJsonRows(prefix);
+    }
+
+    public static DataFrame readRedisFrame(org.bytedeco.pytorch.data.dataframe.redis.Redis redis, String key) {
+        return redis.readFrame(key);
+    }
+
+    /** One-shot: connect → read → close. */
+    public static DataFrame readRedis(String redisUri,
+                                      org.bytedeco.pytorch.data.dataframe.redis.RedisOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.redis.Redis r =
+                     org.bytedeco.pytorch.data.dataframe.redis.Redis.connectUri(redisUri)) {
+            return readRedis(r, options);
+        }
+    }
+
+    public static DataFrame readRedis(String redisUri, String prefix) {
+        return readRedis(redisUri, org.bytedeco.pytorch.data.dataframe.redis.RedisOptions.hash(prefix));
+    }
+
+    /**
+     * Read specific Redis hash keys into a DataFrame (order preserved).
+     */
+    public static DataFrame readRedisKeys(org.bytedeco.pytorch.data.dataframe.redis.Redis redis,
+                                          java.util.Collection<String> keys) {
+        return redis.readHashes(keys);
     }
 
     public static DataFrame readHdf(String path, String key) throws Exception {
@@ -1174,21 +1663,59 @@ public final class DataFrame implements AutoCloseable, Serializable {
         org.bytedeco.pytorch.data.avro.LocalAvroWriter.write(this, path, options);
     }
 
+    /**
+     * Read ORC via legacy DuckDB {@code read_orc}.
+     * @see #readOrcFormat(String) pure-Java orc-format path
+     */
     public static DataFrame readOrc(String path) throws Exception {
         return org.bytedeco.pytorch.data.orc.LocalOrcReader.read(path);
     }
 
+    /** @see #readOrc(String) */
     public static DataFrame readOrc(String path,
             org.bytedeco.pytorch.data.orc.OrcOptions options) throws Exception {
         return org.bytedeco.pytorch.data.orc.LocalOrcReader.read(path, options);
     }
 
+    /**
+     * Write ORC via legacy DuckDB {@code COPY ... FORMAT ORC} (may be unsupported).
+     * @see #toOrcFormat(String) pure-Java orc-format path (reliable write)
+     */
     public void toOrc(String path) throws Exception {
         org.bytedeco.pytorch.data.orc.LocalOrcWriter.write(this, path);
     }
 
+    /** @see #toOrc(String) */
     public void toOrc(String path, org.bytedeco.pytorch.data.orc.OrcOptions options) throws Exception {
         org.bytedeco.pytorch.data.orc.LocalOrcWriter.write(this, path, options);
+    }
+
+    /**
+     * Read ORC with the pure-Java {@code orc-format} backend (no Hadoop / no orc-core).
+     * @see #readOrc(String) legacy DuckDB backend
+     */
+    public static DataFrame readOrcFormat(String path) throws Exception {
+        return org.bytedeco.pytorch.data.orc.LocalOrcFormatReader.read(path);
+    }
+
+    /** @see #readOrcFormat(String) */
+    public static DataFrame readOrcFormat(String path,
+            org.bytedeco.pytorch.data.orc.OrcOptions options) throws Exception {
+        return org.bytedeco.pytorch.data.orc.LocalOrcFormatReader.read(path, options);
+    }
+
+    /**
+     * Write ORC with the pure-Java {@code orc-format} backend (no Hadoop / no orc-core).
+     * Preferred when reliable local ORC write is required.
+     * @see #toOrc(String) legacy DuckDB backend
+     */
+    public void toOrcFormat(String path) throws Exception {
+        org.bytedeco.pytorch.data.orc.LocalOrcFormatWriter.write(this, path);
+    }
+
+    /** @see #toOrcFormat(String) */
+    public void toOrcFormat(String path, org.bytedeco.pytorch.data.orc.OrcOptions options) throws Exception {
+        org.bytedeco.pytorch.data.orc.LocalOrcFormatWriter.write(this, path, options);
     }
 
     // ---- I/O: Tensor (rank-aware 0–4+) ----
@@ -1703,6 +2230,81 @@ public final class DataFrame implements AutoCloseable, Serializable {
 
     public DataFrame join(DataFrame other, String on, String how) throws Exception {
         return merge(other, on, on, how);
+    }
+
+    /**
+     * Join with how = {@code "semi"} / {@code "anti"} / {@code "cross"} / {@code "asof"}
+     * or standard {@code inner}/{@code left}/{@code right}/{@code outer}.
+     */
+    public DataFrame join(DataFrame other, String on, String how, String direction) throws Exception {
+        String h = how == null ? "inner" : how.toLowerCase(Locale.ROOT);
+        return switch (h) {
+            case "semi" -> AdvancedOps.joinSemi(this, other, on);
+            case "anti" -> AdvancedOps.joinAnti(this, other, on);
+            case "cross" -> AdvancedOps.joinCross(this, other);
+            case "asof" -> AdvancedOps.joinAsof(this, other, on, on, direction, null);
+            default -> merge(other, on, on, h);
+        };
+    }
+
+    /** Polars {@code join_asof} / Pandas {@code merge_asof}. Frames must be sorted by key. */
+    public DataFrame joinAsof(DataFrame other, String on) throws Exception {
+        return AdvancedOps.joinAsof(this, other, on);
+    }
+
+    public DataFrame joinAsof(DataFrame other, String leftOn, String rightOn,
+                              String strategy, Double tolerance) throws Exception {
+        return AdvancedOps.joinAsof(this, other, leftOn, rightOn, strategy, tolerance);
+    }
+
+    public static DataFrame mergeAsof(DataFrame left, DataFrame right, String on) throws Exception {
+        return AdvancedOps.joinAsof(left, right, on);
+    }
+
+    public static DataFrame mergeAsof(DataFrame left, DataFrame right,
+                                      String leftOn, String rightOn,
+                                      String direction, Double tolerance) throws Exception {
+        return AdvancedOps.mergeAsof(left, right, leftOn, rightOn, direction, tolerance);
+    }
+
+    /**
+     * Full Pandas {@code merge_asof} with {@code by} group keys and {@code allow_exact_matches}.
+     */
+    public static DataFrame mergeAsof(DataFrame left, DataFrame right,
+                                      String leftOn, String rightOn,
+                                      String direction, Double tolerance,
+                                      String[] by, boolean allowExactMatches) throws Exception {
+        return AdvancedOps.mergeAsof(left, right, leftOn, rightOn, direction, tolerance, by, allowExactMatches);
+    }
+
+    public DataFrame joinAsof(DataFrame other, String leftOn, String rightOn,
+                              String strategy, Double tolerance,
+                              String[] by, boolean allowExactMatches) throws Exception {
+        return AdvancedOps.joinAsof(this, other, leftOn, rightOn, strategy, tolerance, by, allowExactMatches);
+    }
+
+    public DataFrame joinSemi(DataFrame other, String on) {
+        return AdvancedOps.joinSemi(this, other, on);
+    }
+
+    public DataFrame joinAnti(DataFrame other, String on) {
+        return AdvancedOps.joinAnti(this, other, on);
+    }
+
+    public DataFrame joinCross(DataFrame other) throws Exception {
+        return AdvancedOps.joinCross(this, other);
+    }
+
+    public DataFrame setDifference(DataFrame other) {
+        return AdvancedOps.setDifference(this, other);
+    }
+
+    public DataFrame setIntersection(DataFrame other) {
+        return AdvancedOps.setIntersection(this, other);
+    }
+
+    public DataFrame setUnion(DataFrame other) throws Exception {
+        return AdvancedOps.setUnion(this, other);
     }
 
     // ---- concat ----
@@ -2831,6 +3433,278 @@ public final class DataFrame implements AutoCloseable, Serializable {
         return sample(n, seed);
     }
 
+    /**
+     * Weighted sample (Pandas {@code sample(n, weights=...)}).
+     * @param weights per-row weights (length = rowCount); null = uniform
+     * @param replace with-replacement if true
+     */
+    public DataFrame sample(int n, double[] weights, boolean replace, Long seed) {
+        return AdvancedOps.sampleWeighted(this, n, weights, replace, seed);
+    }
+
+    /** Pandas {@code DataFrame.pipe(func)} — chain external function. */
+    public <R> R pipe(java.util.function.Function<DataFrame, R> func) {
+        return AdvancedOps.pipe(this, func);
+    }
+
+    /** Pandas {@code DataFrame.take(indices)} — positional row selection. */
+    public DataFrame take(int... indices) {
+        return AdvancedOps.take(this, indices);
+    }
+
+    /** Pandas {@code mask(cond, other)} — replace where boolean column is true. */
+    public DataFrame mask(String boolCol, Object other) {
+        return AdvancedOps.mask(this, boolCol, other);
+    }
+
+    /** Pandas {@code where(cond, other)} — keep where boolean column is true, else other. */
+    public DataFrame whereMask(String boolCol, Object other) {
+        return AdvancedOps.where(this, boolCol, other);
+    }
+
+    /** Pandas {@code combine_first(other)}. */
+    public DataFrame combineFirst(DataFrame other) throws Exception {
+        return AdvancedOps.combineFirst(this, other);
+    }
+
+    /** Pandas {@code combine(other, func)}. */
+    public DataFrame combine(DataFrame other, java.util.function.BiFunction<Object, Object, Object> func)
+            throws Exception {
+        return AdvancedOps.combine(this, other, func);
+    }
+
+    /**
+     * Pandas {@code reindex(labels)} on a key column with optional fill method
+     * ({@code null}/ {@code "ffill"}/ {@code "bfill"}).
+     */
+    public DataFrame reindex(String keyCol, List<?> labels, String method) throws Exception {
+        return AdvancedOps.reindex(this, keyCol, labels, method);
+    }
+
+    public DataFrame reindex(String keyCol, List<?> labels) throws Exception {
+        return reindex(keyCol, labels, null);
+    }
+
+    /** Pandas {@code Series.searchsorted}. Column must be sorted ascending. */
+    public int[] searchsorted(String col, Object[] values, String side) {
+        return AdvancedOps.searchsorted(this, col, values, side);
+    }
+
+    public int[] searchsorted(String col, Object... values) {
+        return searchsorted(col, values, "left");
+    }
+
+    /**
+     * Interpolate nulls in a numeric column.
+     * Methods: {@code "linear"}, {@code "ffill"}, {@code "bfill"}, {@code "nearest"}.
+     */
+    public DataFrame interpolate(String col, String method) {
+        return AdvancedOps.interpolate(this, col, method);
+    }
+
+    public DataFrame interpolate(String col) {
+        return interpolate(col, "linear");
+    }
+
+    /** Pandas {@code qcut} — equal-frequency binning; adds {@code col_qcut} column. */
+    public DataFrame qcut(String col, int q) {
+        return AdvancedOps.qcut(this, col, q);
+    }
+
+    public DataFrame qcut(String col, int q, String[] labels, String duplicates) {
+        return AdvancedOps.qcut(this, col, q, labels, duplicates);
+    }
+
+    public boolean isMonotonicIncreasing(String col) {
+        return AdvancedOps.isMonotonicIncreasing(this, col);
+    }
+
+    public boolean isMonotonicDecreasing(String col) {
+        return AdvancedOps.isMonotonicDecreasing(this, col);
+    }
+
+    public boolean isUnique(String col) {
+        return AdvancedOps.isUnique(this, col);
+    }
+
+    /** Per-column memory usage in bytes (deep string accounting if {@code deep}). */
+    public Map<String, Long> memoryUsage(boolean deep) {
+        return AdvancedOps.memoryUsage(this, deep);
+    }
+
+    public Map<String, Long> memoryUsage() {
+        return memoryUsage(true);
+    }
+
+    /** Polars {@code estimate_size()} — total estimated bytes. */
+    public long estimateSize() {
+        return AdvancedOps.estimateSize(this);
+    }
+
+    /**
+     * Unnest a STRUCT/MAP column into top-level columns (Polars {@code unnest} /
+     * {@code struct.unnest}). Field names become column names; conflicts get {@code _1} suffix.
+     */
+    public DataFrame unnest(String structCol) {
+        Column src = column(structCol);
+        // collect union of field names in order of first appearance
+        LinkedHashSet<String> fields = new LinkedHashSet<>();
+        List<Map<String, Object>> maps = new ArrayList<>(rowCount);
+        for (int i = 0; i < rowCount; i++) {
+            Object v = src.get(i);
+            Map<String, Object> m = null;
+            if (v instanceof Map<?, ?> raw) {
+                m = new LinkedHashMap<>();
+                for (Map.Entry<?, ?> e : raw.entrySet()) {
+                    m.put(String.valueOf(e.getKey()), e.getValue());
+                }
+            } else if (v instanceof org.bytedeco.pytorch.data.dataframe.dtype.StructData sd) {
+                m = new LinkedHashMap<>(sd.getFieldValues());
+            } else if (v != null) {
+                m = org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.asStringMap(v);
+            }
+            if (m == null) m = Map.of();
+            fields.addAll(m.keySet());
+            maps.add(m);
+        }
+        DataFrame result = DataFrame.create();
+        for (Column c : columns) {
+            if (!c.name().equals(structCol)) result.addColumn(c.copy());
+        }
+        for (String f : fields) {
+            String name = f;
+            if (result.hasColumn(name) || name.equals(structCol)) name = f + "_1";
+            result.addColumn(name, Column.DType.STRING);
+            Column out = result.column(name);
+            for (int i = 0; i < rowCount; i++) {
+                Object val = maps.get(i).get(f);
+                out.add(val);
+            }
+        }
+        result.syncRowCountPublic();
+        return result;
+    }
+
+    // ================================================================
+    // MultiIndex-style level ops / resample / query-eval / advanced IO
+    // ================================================================
+
+    /** Pandas {@code swaplevel(i, j)} on named level columns. */
+    public DataFrame swaplevel(int i, int j, String... levels) {
+        return MultiIndexOps.swaplevel(this, i, j, levels);
+    }
+
+    public DataFrame swaplevel(String levelA, String levelB, String... levels) {
+        return MultiIndexOps.swaplevel(this, levelA, levelB, levels);
+    }
+
+    /** Pandas {@code reorder_levels}. */
+    public DataFrame reorderLevels(String[] order, String... levels) {
+        return MultiIndexOps.reorderLevels(this, order, levels);
+    }
+
+    /** Pandas {@code droplevel}. */
+    public DataFrame droplevel(Object level, String... levels) {
+        return MultiIndexOps.droplevel(this, level, levels);
+    }
+
+    /**
+     * Pandas {@code stack} analogue — melt value columns while keeping id levels.
+     */
+    public DataFrame stackLevels(List<String> idLevels, List<String> valueVars,
+                                 String varName, String valueName) {
+        return MultiIndexOps.stack(this, idLevels, valueVars, varName, valueName);
+    }
+
+    /** Pandas {@code unstack} analogue — pivot levelCol values into columns. */
+    public DataFrame unstack(String levelCol, String valueCol) throws Exception {
+        return MultiIndexOps.unstack(this, levelCol, valueCol);
+    }
+
+    public DataFrame unstack(List<String> indexCols, String levelCol, String valueCol,
+                             Object fillValue) throws Exception {
+        return MultiIndexOps.unstack(this, indexCols, levelCol, valueCol, fillValue);
+    }
+
+    /**
+     * Pandas {@code resample(rule, on=...)}.
+     * @param on time/key column (numeric epoch millis or temporal)
+     * @param rule e.g. {@code "5s"}, {@code "1h"}, {@code "1d"}, or raw millis string
+     */
+    public Resampler resample(String on, String rule) {
+        return Resampler.of(this, on, rule);
+    }
+
+    public Resampler resample(String on, String rule, String origin, long offsetMillis) {
+        return Resampler.of(this, on, rule, origin, offsetMillis);
+    }
+
+    /** Pandas {@code DataFrame.query(expr)}. */
+    public DataFrame query(String expr) {
+        return QueryEval.query(this, expr);
+    }
+
+    public DataFrame query(String expr, Map<String, Object> localDict) {
+        return QueryEval.query(this, expr, localDict);
+    }
+
+    /**
+     * Pandas {@code DataFrame.eval}. Supports {@code "z = x + y"} assignment form
+     * or bare expression → column {@code "result"}.
+     */
+    public DataFrame eval(String expr) {
+        return QueryEval.eval(this, expr);
+    }
+
+    public DataFrame eval(String expr, Map<String, Object> localDict) {
+        return QueryEval.eval(this, expr, localDict);
+    }
+
+    /**
+     * Polars {@code map_batches} eager form — apply a batch UDF to this frame.
+     * Prefer {@code lazy().mapBatches(fn).collect()} for pipeline composition.
+     */
+    public DataFrame mapBatches(java.util.function.Function<DataFrame, DataFrame> fn) {
+        return fn.apply(this);
+    }
+
+    /** Advanced Parquet read: column projection + optional row filter + row-group parallel. */
+    public static DataFrame readParquetAdvanced(String path,
+            org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.ReadOptions opt) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.read(path, opt);
+    }
+
+    public static DataFrame readParquet(String path, String... columns) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.read(path,
+            org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.ReadOptions.defaults()
+                .columns(columns));
+    }
+
+    /**
+     * Hive-style partitioned parquet write:
+     * {@code root/key=val/.../part-N.parquet}.
+     */
+    public void writeParquetPartitioned(String root, String... partitionBy) throws Exception {
+        org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.writePartitioned(this, root, partitionBy);
+    }
+
+    /** Scan Hive-partitioned parquet directory tree. */
+    public static DataFrame readParquetHive(String root, String... partitionKeys) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.scanHive(root, partitionKeys);
+    }
+
+    public static DataFrame readParquetHive(String root, String[] partitionKeys,
+            org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.ReadOptions opt) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.scanHive(root, partitionKeys, opt);
+    }
+
+    /** Stream advanced parquet batches (column prune + filter). */
+    public static long streamParquetAdvanced(String path,
+            org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.ReadOptions opt,
+            java.util.function.Consumer<DataFrame> consumer) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.ParquetAdvanced.stream(path, opt, consumer);
+    }
+
     /** Distinct rows across all columns (or subset). */
     public DataFrame unique(String... subset) {
         return dropDuplicates(subset == null || subset.length == 0 ? null : subset, "first");
@@ -3774,6 +4648,493 @@ public final class DataFrame implements AutoCloseable, Serializable {
         return vectorSearch(store, query, topK);
     }
 
+    // ---- Vector store: dedicated per-backend convenience (memory / qdrant / redis / …) ----
+
+    /**
+     * Open a vector store by scheme + free-form config (same as {@link
+     * org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores#open(String, java.util.Map)}).
+     */
+    public static org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore openVectorStore(
+            String scheme, java.util.Map<String, Object> config) {
+        return org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(scheme, config);
+    }
+
+    /**
+     * Open a vector store from a URI:
+     * {@code qdrant://localhost:6333/clips?dim=768&metric=cosine}.
+     */
+    public static org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore openVectorStore(String uri) {
+        return org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(uri);
+    }
+
+    /**
+     * Create (or open) an in-process HNSW store, ensure collection, upsert this DataFrame,
+     * and return the open store (caller must {@code close()}).
+     *
+     * <pre>{@code
+     * try (VectorStore vs = df.toMemoryVectorStore("docs", "id", "emb", 384, VectorMetric.COSINE, "title")) {
+     *     DataFrame hits = DataFrame.vectorSearch(vs, query, 5);
+     * }
+     * }</pre>
+     */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toMemoryVectorStore(
+            String name, String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.memory(
+                        name, dim, metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toMemoryVectorStore(
+            String name, String idCol, String vectorCol, int dim, String... payloadCols) {
+        return toMemoryVectorStore(name, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, payloadCols);
+    }
+
+    /**
+     * Upsert into Qdrant (HTTP REST, no SDK). Opens store, ensures collection, upserts, returns it.
+     * Caller must {@code close()}.
+     */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toQdrant(
+            String url, String collection, String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.qdrant(
+                        url, collection, dim, metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toQdrant(
+            String url, String collection, String idCol, String vectorCol, int dim,
+            String... payloadCols) {
+        return toQdrant(url, collection, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, payloadCols);
+    }
+
+    /** Upsert into Redis / RediSearch (RESP, no Jedis). Caller must {@code close()}. */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toRedisVectorStore(
+            String host, int port, String index, String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        return toRedisVectorStore(host, port, index, idCol, vectorCol, dim, metric, null, payloadCols);
+    }
+
+    /**
+     * Upsert into Redis / RediSearch with per-doc TTL ({@code EXPIRE} on {@code doc:{id}}).
+     * Caller must {@code close()}.
+     *
+     * @param ttl document key expiry; {@code null} = no expiry
+     */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toRedisVectorStore(
+            String host, int port, String index, String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            java.time.Duration ttl, String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.redis.RedisVectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.redis.RedisVectorStore.builder()
+                        .host(host).port(port)
+                        .index(index).dim(dim)
+                        .metric(metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric)
+                        .ttl(ttl)
+                        .build();
+        vs.ensureCollection();
+        if (ttl != null && !ttl.isZero() && !ttl.isNegative()) {
+            vs.upsertDataFrame(this, idCol, vectorCol, ttl, payloadCols);
+        } else {
+            vs.upsertDataFrame(this, idCol, vectorCol, payloadCols);
+        }
+        return vs;
+    }
+
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toRedisVectorStore(
+            String host, int port, String index, String idCol, String vectorCol, int dim,
+            String... payloadCols) {
+        return toRedisVectorStore(host, port, index, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, payloadCols);
+    }
+
+    /**
+     * Upsert into Redis / RediSearch with TTL (default COSINE metric).
+     */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toRedisVectorStore(
+            String host, int port, String index, String idCol, String vectorCol, int dim,
+            java.time.Duration ttl, String... payloadCols) {
+        return toRedisVectorStore(host, port, index, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, ttl, payloadCols);
+    }
+
+    /**
+     * Upsert this DataFrame's vectors into an existing {@link
+     * org.bytedeco.pytorch.data.dataframe.vectorstore.redis.RedisVectorStore} with TTL.
+     */
+    public void toRedisVectorStore(
+            org.bytedeco.pytorch.data.dataframe.vectorstore.redis.RedisVectorStore store,
+            String idCol, String vectorCol, java.time.Duration ttl, String... payloadCols) {
+        store.upsertDataFrame(this, idCol, vectorCol, ttl, payloadCols);
+    }
+
+    /** Upsert into Milvus REST v2 (no milvus-sdk-java). Caller must {@code close()}. */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toMilvus(
+            String url, String collection, String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.milvus(
+                        url, collection, dim, metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toMilvus(
+            String url, String collection, String idCol, String vectorCol, int dim,
+            String... payloadCols) {
+        return toMilvus(url, collection, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, payloadCols);
+    }
+
+    /** Upsert into OpenSearch k-NN (HTTP, no opensearch-java). Caller must {@code close()}. */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toOpenSearch(
+            String url, String index, String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.openSearch(
+                        url, index, dim, metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toOpenSearch(
+            String url, String index, String idCol, String vectorCol, int dim,
+            String... payloadCols) {
+        return toOpenSearch(url, index, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, payloadCols);
+    }
+
+    /** Upsert into pgvector via JDBC (driver on app classpath). Caller must {@code close()}. */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toPgVector(
+            String jdbcUrl, String user, String password, String table,
+            String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.pgvector(
+                        jdbcUrl, user, password, table, dim, metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toPgVector(
+            String jdbcUrl, String user, String password, String table,
+            String idCol, String vectorCol, int dim, String... payloadCols) {
+        return toPgVector(jdbcUrl, user, password, table, idCol, vectorCol, dim,
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE, payloadCols);
+    }
+
+    /** Upsert into Mongo Atlas Vector Search (Data API). Caller must {@code close()}. */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toMongoAtlas(
+            String dataApiUrl, String apiKey, String dataSource, String database, String collection,
+            String idCol, String vectorCol, int dim,
+            org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric metric,
+            String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.mongoAtlas(
+                        dataApiUrl, apiKey, dataSource, database, collection, dim, metric == null
+                                ? org.bytedeco.pytorch.data.dataframe.vectorstore.VectorMetric.COSINE
+                                : metric);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    /**
+     * Generic write: open store by scheme/config, ensure collection, upsert this DataFrame.
+     * Returns the open store — caller must {@code close()}.
+     *
+     * <pre>{@code
+     * try (VectorStore vs = df.toVectorStore("memory",
+     *         Map.of("name","docs","dim",384,"metric","cosine"),
+     *         "id", "emb", "title")) {
+     *     ...
+     * }
+     * }</pre>
+     */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toVectorStore(
+            String scheme, java.util.Map<String, Object> config,
+            String idCol, String vectorCol, String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(scheme, config);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    /**
+     * Generic write via URI (e.g. {@code memory://x/docs?dim=384&metric=cosine}).
+     * Returns the open store — caller must {@code close()}.
+     */
+    public org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore toVectorStore(
+            String uri, String idCol, String vectorCol, String... payloadCols) {
+        org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(uri);
+        vs.ensureCollection();
+        toVectorStore(vs, idCol, vectorCol, payloadCols);
+        return vs;
+    }
+
+    /** Read all (or up to limit) points from a scheme/config store into a DataFrame. */
+    public static DataFrame readVectorStore(String scheme, java.util.Map<String, Object> config)
+            throws Exception {
+        try (org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                     org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(scheme, config)) {
+            return vs.toDataFrame();
+        }
+    }
+
+    public static DataFrame readVectorStore(String scheme, java.util.Map<String, Object> config, int limit)
+            throws Exception {
+        try (org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                     org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(scheme, config)) {
+            return vs.toDataFrame(limit);
+        }
+    }
+
+    public static DataFrame readVectorStore(String uri) throws Exception {
+        try (org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                     org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(uri)) {
+            return vs.toDataFrame();
+        }
+    }
+
+    public static DataFrame readVectorStore(String uri, int limit) throws Exception {
+        try (org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                     org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(uri)) {
+            return vs.toDataFrame(limit);
+        }
+    }
+
+    /** k-NN search against a scheme/config store → hit DataFrame (store is opened and closed). */
+    public static DataFrame searchVectorStore(
+            String scheme, java.util.Map<String, Object> config, float[] query, int topK)
+            throws Exception {
+        try (org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                     org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(scheme, config)) {
+            return vs.search(query, topK).toDataFrame();
+        }
+    }
+
+    public static DataFrame searchVectorStore(String uri, float[] query, int topK) throws Exception {
+        try (org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStore vs =
+                     org.bytedeco.pytorch.data.dataframe.vectorstore.VectorStores.open(uri)) {
+            return vs.search(query, topK).toDataFrame();
+        }
+    }
+
+    // ---- Milvus / OpenSearch / Mongo / PgVector full-client DataFrame I/O ----
+
+    /**
+     * Write this DataFrame via the full {@link org.bytedeco.pytorch.data.dataframe.milvus.Milvus}
+     * client (REST v2, no milvus-sdk-java). Mirrors Redis-style {@code toRedis}.
+     */
+    public int toMilvus(org.bytedeco.pytorch.data.dataframe.milvus.Milvus milvus,
+                       org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions options) {
+        return milvus.writeDataFrame(this, options);
+    }
+
+    public int toMilvus(org.bytedeco.pytorch.data.dataframe.milvus.Milvus milvus, String collection) {
+        return toMilvus(milvus, org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions.collection(collection));
+    }
+
+    /** One-shot: connect URI → write → close. */
+    public int toMilvus(String milvusUri,
+                        org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.milvus.Milvus m =
+                     org.bytedeco.pytorch.data.dataframe.milvus.Milvus.connectUri(milvusUri)) {
+            return toMilvus(m, options);
+        }
+    }
+
+    public static DataFrame readMilvus(org.bytedeco.pytorch.data.dataframe.milvus.Milvus milvus,
+                                       org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions options) {
+        return milvus.readDataFrame(options);
+    }
+
+    public static DataFrame readMilvus(org.bytedeco.pytorch.data.dataframe.milvus.Milvus milvus,
+                                       String collection) {
+        return readMilvus(milvus, org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions.collection(collection));
+    }
+
+    public static DataFrame readMilvus(String milvusUri,
+                                       org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.milvus.Milvus m =
+                     org.bytedeco.pytorch.data.dataframe.milvus.Milvus.connectUri(milvusUri)) {
+            return readMilvus(m, options);
+        }
+    }
+
+    public static DataFrame searchMilvus(org.bytedeco.pytorch.data.dataframe.milvus.Milvus milvus,
+                                         float[] query, int topK,
+                                         org.bytedeco.pytorch.data.dataframe.milvus.MilvusOptions options) {
+        return milvus.searchDataFrame(query, topK, options);
+    }
+
+    /**
+     * Write via full {@link org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch} client
+     * (REST + _bulk, no opensearch-java).
+     */
+    public int toOpenSearch(org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch client,
+                            org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions options) {
+        return client.writeDataFrame(this, options);
+    }
+
+    public int toOpenSearch(org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch client, String index) {
+        return toOpenSearch(client, org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions.index(index));
+    }
+
+    public int toOpenSearch(String openSearchUri,
+                            org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch os =
+                     org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch.connectUri(openSearchUri)) {
+            return toOpenSearch(os, options);
+        }
+    }
+
+    public static DataFrame readOpenSearch(org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch client,
+                                           org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions options) {
+        return client.readDataFrame(options);
+    }
+
+    public static DataFrame readOpenSearch(org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch client,
+                                           String index) {
+        return readOpenSearch(client, org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions.index(index));
+    }
+
+    public static DataFrame readOpenSearch(String openSearchUri,
+                                           org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch os =
+                     org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch.connectUri(openSearchUri)) {
+            return readOpenSearch(os, options);
+        }
+    }
+
+    public static DataFrame searchOpenSearch(org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearch client,
+                                             float[] query, int topK,
+                                             org.bytedeco.pytorch.data.dataframe.opensearch.OpenSearchOptions options) {
+        return client.searchDataFrame(query, topK, options);
+    }
+
+    /**
+     * Write via full {@link org.bytedeco.pytorch.data.dataframe.mongo.Mongo} client
+     * (Atlas Data API; official driver via {@code MongoBackend} SPI).
+     */
+    public int toMongo(org.bytedeco.pytorch.data.dataframe.mongo.Mongo mongo,
+                       org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions options) {
+        return mongo.writeDataFrame(this, options);
+    }
+
+    public int toMongo(org.bytedeco.pytorch.data.dataframe.mongo.Mongo mongo,
+                       String database, String collection) {
+        return toMongo(mongo, org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions.collection(database, collection));
+    }
+
+    public int toMongo(String mongoUri,
+                       org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.mongo.Mongo m =
+                     org.bytedeco.pytorch.data.dataframe.mongo.Mongo.connectUri(mongoUri)) {
+            return toMongo(m, options);
+        }
+    }
+
+    public static DataFrame readMongo(org.bytedeco.pytorch.data.dataframe.mongo.Mongo mongo,
+                                      org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions options) {
+        return mongo.readDataFrame(options);
+    }
+
+    public static DataFrame readMongo(org.bytedeco.pytorch.data.dataframe.mongo.Mongo mongo,
+                                      String database, String collection) {
+        return readMongo(mongo, org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions.collection(database, collection));
+    }
+
+    public static DataFrame readMongo(String mongoUri,
+                                      org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.mongo.Mongo m =
+                     org.bytedeco.pytorch.data.dataframe.mongo.Mongo.connectUri(mongoUri)) {
+            return readMongo(m, options);
+        }
+    }
+
+    public static DataFrame searchMongo(org.bytedeco.pytorch.data.dataframe.mongo.Mongo mongo,
+                                        float[] query, int topK,
+                                        org.bytedeco.pytorch.data.dataframe.mongo.MongoOptions options) {
+        return mongo.searchDataFrame(query, topK, options);
+    }
+
+    /**
+     * Write via full {@link org.bytedeco.pytorch.data.dataframe.pgvector.PgVector} client
+     * (JDBC + pgvector; driver on app classpath).
+     */
+    public int toPgVector(org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg,
+                          org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions options) {
+        return pg.writeDataFrame(this, options);
+    }
+
+    public int toPgVector(org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg, String table) {
+        return toPgVector(pg, org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions.table(table));
+    }
+
+    public int toPgVector(String jdbcUri,
+                          org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg =
+                     org.bytedeco.pytorch.data.dataframe.pgvector.PgVector.connectUri(jdbcUri)) {
+            return toPgVector(pg, options);
+        }
+    }
+
+    public static DataFrame readPgVector(org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg,
+                                         org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions options) {
+        return pg.readDataFrame(options);
+    }
+
+    public static DataFrame readPgVector(org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg,
+                                         String table) {
+        return readPgVector(pg, org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions.table(table));
+    }
+
+    public static DataFrame readPgVector(String jdbcUri,
+                                         org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions options) {
+        try (org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg =
+                     org.bytedeco.pytorch.data.dataframe.pgvector.PgVector.connectUri(jdbcUri)) {
+            return readPgVector(pg, options);
+        }
+    }
+
+    public static DataFrame searchPgVector(org.bytedeco.pytorch.data.dataframe.pgvector.PgVector pg,
+                                           float[] query, int topK,
+                                           org.bytedeco.pytorch.data.dataframe.pgvector.PgVectorOptions options) {
+        return pg.searchDataFrame(query, topK, options);
+    }
+
     // ---- private helpers ----
 
     void syncRowCount() {
@@ -4386,28 +5747,99 @@ public final class DataFrame implements AutoCloseable, Serializable {
     private static void writeGroupField(org.apache.parquet.example.data.simple.SimpleGroup g,
                                         String name, Column.DType dtype, Object val) {
         if (val == null) return;
-        try {
-            switch (dtype) {
-                case INT32:    g.add(name, ((Number) val).intValue()); break;
-                case INT64:    g.add(name, ((Number) val).longValue()); break;
-                case FLOAT32:  g.add(name, ((Number) val).floatValue()); break;
-                case FLOAT64:  g.add(name, ((Number) val).doubleValue()); break;
-                case BOOLEAN:  g.add(name, (Boolean) val); break;
-                case LIST:
-                case VECTOR:
-                case EMBEDDING:
+        switch (dtype) {
+            case INT32:    g.add(name, ((Number) val).intValue()); break;
+            case INT64:    g.add(name, ((Number) val).longValue()); break;
+            case FLOAT32:  g.add(name, ((Number) val).floatValue()); break;
+            case FLOAT64:  g.add(name, ((Number) val).doubleValue()); break;
+            case BOOLEAN:  g.add(name, (Boolean) val); break;
+            case LIST:
+            case VECTOR:
+            case EMBEDDING:
+                writeListField(g, name, val);
+                break;
+            case MAP:
+                writeMapField(g, name, val);
+                break;
+            case STRUCT:
+                writeStructField(g, name, val);
+                break;
+            case JSON:
+                // JSON logical annotation on BINARY/UTF8
+                g.add(name, val instanceof String ? (String) val
+                    : org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.encodeText(val));
+                break;
+            default:
+                if (val instanceof long[] || val instanceof int[] || val instanceof float[]
+                    || val instanceof double[] || val instanceof List) {
                     writeListField(g, name, val);
-                    break;
-                default:
-                    if (val instanceof long[] || val instanceof int[] || val instanceof float[]
-                        || val instanceof double[] || val instanceof List) {
-                        writeListField(g, name, val);
-                    } else {
-                        g.add(name, val.toString());
-                    }
-                    break;
+                } else if (val instanceof java.util.Map) {
+                    writeMapField(g, name, val);
+                } else {
+                    g.add(name, val.toString());
+                }
+                break;
+        }
+    }
+
+    /**
+     * Write a MAP cell into standard Parquet MAP encoding:
+     *   optional group name (MAP) {
+     *     repeated group key_value { required binary key (STRING); optional binary value (STRING); }
+     *   }
+     * Nested values are JSON-encoded as strings for portability.
+     */
+    private static void writeMapField(org.apache.parquet.example.data.simple.SimpleGroup g,
+                                      String name, Object val) {
+        org.apache.parquet.example.data.simple.SimpleGroup mapOuter =
+            (org.apache.parquet.example.data.simple.SimpleGroup) g.addGroup(name);
+        if (val == null) return;
+        java.util.Map<String, Object> map =
+            org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.asStringMap(val);
+        if (map == null) return;
+        for (java.util.Map.Entry<String, Object> e : map.entrySet()) {
+            org.apache.parquet.example.data.simple.SimpleGroup kv =
+                (org.apache.parquet.example.data.simple.SimpleGroup) mapOuter.addGroup(0);
+            kv.add(0, e.getKey() == null ? "" : e.getKey());
+            Object v = e.getValue();
+            if (v == null) continue;
+            if (v instanceof Number || v instanceof Boolean || v instanceof String) {
+                kv.add(1, String.valueOf(v));
+            } else {
+                kv.add(1, org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.encodeText(v));
             }
-        } catch (Exception e) { /* skip malformed value */ }
+        }
+    }
+
+    /**
+     * Write a STRUCT cell as a group of string fields (values JSON-encoded when nested).
+     * Schema uses optional binary (STRING) children named by map keys from first non-null sample
+     * when building schema; at write time unknown keys are skipped if not in schema — we write
+     * all keys present in the group type.
+     */
+    private static void writeStructField(org.apache.parquet.example.data.simple.SimpleGroup g,
+                                         String name, Object val) {
+        org.apache.parquet.example.data.simple.SimpleGroup st =
+            (org.apache.parquet.example.data.simple.SimpleGroup) g.addGroup(name);
+        if (val == null) return;
+        java.util.Map<String, Object> map =
+            org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.asStringMap(val);
+        if (map == null) return;
+        org.apache.parquet.schema.GroupType gt = st.getType();
+        for (int i = 0; i < gt.getFieldCount(); i++) {
+            String fname = gt.getType(i).getName();
+            if (!map.containsKey(fname)) continue;
+            Object v = map.get(fname);
+            if (v == null) continue;
+            if (v instanceof Number || v instanceof Boolean || v instanceof String) {
+                st.add(fname, String.valueOf(v));
+            } else {
+                st.add(fname, org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.encodeText(v));
+            }
+        }
+        // If schema is empty (flexible struct), add all keys as string fields dynamically —
+        // SimpleGroup requires schema fields; keys not in schema are ignored above.
+        // When schema was built with all union keys, they are present.
     }
 
     /**
@@ -4497,6 +5929,15 @@ public final class DataFrame implements AutoCloseable, Serializable {
             case VECTOR:
             case EMBEDDING:
                 return parquetListField(name, inferListElementPrimitive(c));
+            case MAP:
+                return parquetMapField(name);
+            case STRUCT:
+                return parquetStructField(name, c);
+            case JSON:
+                return org.apache.parquet.schema.Types.optional(
+                        org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY)
+                    .as(org.apache.parquet.schema.LogicalTypeAnnotation.jsonType())
+                    .named(name);
             case BINARY:
                 return org.apache.parquet.schema.Types.optional(
                     org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY).named(name);
@@ -4507,6 +5948,58 @@ public final class DataFrame implements AutoCloseable, Serializable {
                     .as(org.apache.parquet.schema.LogicalTypeAnnotation.stringType())
                     .named(name);
         }
+    }
+
+    /**
+     * Standard MAP:
+     *   optional group name (MAP) {
+     *     repeated group key_value {
+     *       required binary key (STRING);
+     *       optional binary value (STRING);
+     *     }
+     *   }
+     */
+    private static org.apache.parquet.schema.Type parquetMapField(String name) {
+        return org.apache.parquet.schema.Types.optionalMap()
+            .key(org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY)
+            .value(org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY,
+                org.apache.parquet.schema.Type.Repetition.OPTIONAL)
+            .named(name);
+    }
+
+    /**
+     * STRUCT as group of optional string fields. Field names are the union of keys
+     * observed in the column samples (LinkedHashMap order of first row that has each key).
+     */
+    private static org.apache.parquet.schema.Type parquetStructField(String name, Column c) {
+        java.util.LinkedHashSet<String> keys = new java.util.LinkedHashSet<>();
+        for (int i = 0; i < c.size(); i++) {
+            Object v = c.get(i);
+            if (v == null) continue;
+            java.util.Map<String, Object> m =
+                org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec.asStringMap(v);
+            if (m != null) keys.addAll(m.keySet());
+            if (keys.size() > 64) break; // cap width
+        }
+        if (keys.isEmpty()) {
+            // empty struct placeholder with a dummy optional string field
+            return org.apache.parquet.schema.Types.buildGroup(
+                    org.apache.parquet.schema.Type.Repetition.OPTIONAL)
+                .optional(org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY)
+                    .as(org.apache.parquet.schema.LogicalTypeAnnotation.stringType())
+                    .named("_empty")
+                .named(name);
+        }
+        org.apache.parquet.schema.Types.GroupBuilder<org.apache.parquet.schema.GroupType> gb =
+            org.apache.parquet.schema.Types.buildGroup(
+                org.apache.parquet.schema.Type.Repetition.OPTIONAL);
+        for (String k : keys) {
+            String fieldName = k == null || k.isEmpty() ? "_k" : k;
+            gb = gb.optional(org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY)
+                .as(org.apache.parquet.schema.LogicalTypeAnnotation.stringType())
+                .named(fieldName);
+        }
+        return gb.named(name);
     }
 
     /** Infer primitive element type of a LIST/VECTOR column from the first non-null cell. */

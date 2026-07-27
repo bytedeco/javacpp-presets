@@ -2,54 +2,42 @@ package org.bytedeco.pytorch.data.parquet;
 
 import java.io.IOException;
 
-import org.apache.parquet.column.ParquetProperties;
-import org.apache.parquet.conf.PlainParquetConfiguration;
 import org.apache.parquet.example.data.Group;
 import org.apache.parquet.example.data.simple.SimpleGroup;
-import org.apache.parquet.hadoop.ParquetWriter;
-import org.apache.parquet.hadoop.example.ExampleParquetWriter;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
-import org.apache.parquet.io.OutputFile;
 import org.apache.parquet.schema.MessageType;
 
 /**
- * Local-only Parquet row-writer (no Hadoop Path / FileSystem / UGI).
+ * Local-only Parquet row-writer facade over pure-Java {@link ParquetOutputFormat}.
+ * No Hadoop / {@code parquet-hadoop}.
  *
- * <p>Builds a parquet file row-by-row from {@link Group} objects:
  * <pre>
  *   MessageType schema = SchemaBuilder.builder()
  *       .requiredInt64("id")
  *       .optionalString("name")
- *       .requiredFloat("emb")
  *       .build();
- *
  *   try (LocalParquetWriter w = LocalParquetWriter.builder(path, schema)
  *           .withCompression(CompressionCodecName.ZSTD)
- *           .withBlockSize(128 * 1024 * 1024)
  *           .build()) {
- *       for (MyRow r : rows) {
- *           SimpleGroup g = w.makeGroup();
- *           g.add("id", r.id());
- *           g.add("name", r.name());
- *           g.add("emb", r.emb());
- *           w.write(g);
- *       }
+ *       SimpleGroup g = w.makeGroup();
+ *       g.add("id", 1L);
+ *       g.add("name", "alice");
+ *       w.write(g);
  *   }
  * </pre>
  *
- * <p>Compression uses {@link ZstdCodecFactory} (zstd-jni / snappy-java).
+ * <p>{@link CompressionCodecName} lives in {@code parquet-common} (package name only;
+ * not the {@code parquet-hadoop} artifact).
  */
 public final class LocalParquetWriter implements AutoCloseable {
 
-    /** Fluent builder for {@link LocalParquetWriter}. */
     public static class Builder {
         private final String path;
         private final MessageType schema;
         private CompressionCodecName codec = CompressionCodecName.UNCOMPRESSED;
         private int blockSize = 128 * 1024 * 1024;
-        private int pageSize = ParquetProperties.DEFAULT_PAGE_SIZE;
-        private boolean enableDictionary = ParquetProperties.DEFAULT_IS_DICTIONARY_ENABLED;
-        private boolean enableValidation = false;
+        private int pageSize = 1024 * 1024;
+        private boolean enableDictionary = true;
 
         public Builder(String path, MessageType schema) {
             this.path = path;
@@ -57,33 +45,27 @@ public final class LocalParquetWriter implements AutoCloseable {
         }
 
         public Builder withCompression(CompressionCodecName codec) {
-            this.codec = codec;
+            this.codec = codec == null ? CompressionCodecName.UNCOMPRESSED : codec;
             return this;
         }
 
-        /** Set block/row-group size in bytes. Default: 128 MiB. */
         public Builder withBlockSize(int bytes) {
             this.blockSize = bytes;
             return this;
         }
 
-        /** Set page size in bytes. Default: 1 MiB. */
         public Builder withPageSize(int bytes) {
             this.pageSize = bytes;
             return this;
         }
 
-        /** Enable dictionary encoding. Default: true. */
         public Builder withDictionary(boolean enabled) {
             this.enableDictionary = enabled;
             return this;
         }
 
-        /** Enable validation. Default: false. */
-        public Builder withValidation(boolean enabled) {
-            this.enableValidation = enabled;
-            return this;
-        }
+        /** Retained for API compatibility; validation is always off in pure-Java path. */
+        public Builder withValidation(boolean enabled) { return this; }
 
         public LocalParquetWriter build() throws IOException {
             return new LocalParquetWriter(this);
@@ -94,54 +76,35 @@ public final class LocalParquetWriter implements AutoCloseable {
         return new Builder(path, schema);
     }
 
-    // ---- internal state ----
-
-    private final ParquetWriter<Group> writer;
+    private final ParquetOutputFormat out;
     private final MessageType schema;
-
     private long rowCount;
 
     private LocalParquetWriter(Builder b) throws IOException {
         this.schema = b.schema;
-        OutputFile outputFile = new LocalOutputFile(b.path);
-        // Pure-Java conf + codecs — no Hadoop Configuration / UGI / client-runtime.
-        @SuppressWarnings("unchecked")
-        ParquetWriter<Group> w = (ParquetWriter<Group>)
-            ExampleParquetWriter.builder(outputFile)
-                .withType(b.schema)
-                .withConf(new PlainParquetConfiguration())
-                .withCodecFactory(ZstdCodecFactory.INSTANCE)
-                .withCompressionCodec(b.codec)
-                .withRowGroupSize(b.blockSize)
-                .withPageSize(b.pageSize)
-                .withDictionaryEncoding(b.enableDictionary)
-                .withValidation(b.enableValidation)
-                .build();
-        this.writer = w;
+        this.out = ParquetOutputFormat.builder(b.path, b.schema)
+            .withCompression(b.codec)
+            .withRowGroupSize(b.blockSize)
+            .withPageSize(b.pageSize)
+            .withDictionary(b.enableDictionary)
+            .build();
     }
 
-    /**
-     * Returns a fresh {@link SimpleGroup} for this schema.
-     * Populate it with {@code g.add(fieldName, value)} then pass to {@link #write(Group)}.
-     */
     public SimpleGroup makeGroup() {
-        return new SimpleGroup(schema);
+        return out.makeGroup();
     }
 
-    /**
-     * Write one row. Rows are buffered into row-groups internally; flushing happens
-     * automatically when the current row-group reaches its size limit.
-     */
     public void write(Group row) throws IOException {
-        writer.write(row);
+        out.write(row);
         rowCount++;
     }
 
-    /** Number of rows written so far. */
     public long getRowCount() { return rowCount; }
+
+    public MessageType getSchema() { return schema; }
 
     @Override
     public void close() throws IOException {
-        writer.close();
+        out.close();
     }
 }

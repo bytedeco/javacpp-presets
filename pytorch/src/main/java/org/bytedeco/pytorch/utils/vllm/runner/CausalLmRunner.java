@@ -25,8 +25,10 @@ import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.pytorch.utils.transformers.PretrainedConfig;
 import org.bytedeco.pytorch.utils.transformers.modeling.CachedForwardResult;
+import org.bytedeco.pytorch.utils.transformers.modeling.GlmForCausalLM;
 import org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM;
 import org.bytedeco.pytorch.utils.transformers.modeling.Qwen2ForCausalLM;
+import org.bytedeco.pytorch.utils.transformers.modeling.Qwen3ForCausalLM;
 import org.bytedeco.pytorch.utils.vllm.Sequence;
 import org.bytedeco.pytorch.utils.vllm.cache.CacheEngine;
 
@@ -36,7 +38,7 @@ import java.util.List;
 import static org.bytedeco.pytorch.global.torch.tensor;
 
 /**
- * Executes {@code Qwen2ForCausalLM} / {@code LlamaForCausalLM} with incremental KV cache.
+ * Executes Qwen2 / Qwen3 / Llama / GLM causal LMs with incremental KV cache.
  *
  * <p>Prefill: runs full prompt once, stores K/V per token into {@link CacheEngine}.
  * Decode: gathers past K/V, runs T=1 forward on the last generated token, appends new K/V.
@@ -58,17 +60,26 @@ public final class CausalLmRunner implements ModelRunner {
 
     @Override
     public Tensor forwardOne(Sequence seq, long cacheSeqId) {
-        if (model instanceof Qwen2ForCausalLM qwen) {
-            return forwardOneQwen(seq, cacheSeqId, qwen);
+        if (model instanceof Qwen3ForCausalLM qwen3) {
+            return forwardCached(seq, cacheSeqId, qwen3::forwardCached);
+        } else if (model instanceof Qwen2ForCausalLM qwen) {
+            return forwardCached(seq, cacheSeqId, qwen::forwardCached);
         } else if (model instanceof LlamaForCausalLM llama) {
-            return forwardOneLlama(seq, cacheSeqId, llama);
+            return forwardCached(seq, cacheSeqId, llama::forwardCached);
+        } else if (model instanceof GlmForCausalLM glm) {
+            return forwardCached(seq, cacheSeqId, glm::forwardCached);
         } else {
             throw new UnsupportedOperationException(
-                    "Model not Qwen2/Llama: " + model.getClass().getName());
+                    "Model not Qwen3/Qwen2/Llama/GLM: " + model.getClass().getName());
         }
     }
 
-    private Tensor forwardOneQwen(Sequence seq, long cacheSeqId, Qwen2ForCausalLM qwen) {
+    @FunctionalInterface
+    private interface CachedForward {
+        CachedForwardResult apply(Tensor input, long positionOffset, Tensor[] pastKs, Tensor[] pastVs);
+    }
+
+    private Tensor forwardCached(Sequence seq, long cacheSeqId, CachedForward fn) {
         int[] inputIds = nextInputIds(seq);
         int computed = seq.numComputedTokens();
         int T = inputIds.length;
@@ -82,35 +93,12 @@ public final class CausalLmRunner implements ModelRunner {
             pastVs[l] = kv[1];
         }
 
-        CachedForwardResult result = qwen.forwardCached(input, computed, pastKs, pastVs);
+        CachedForwardResult result = fn.apply(input, computed, pastKs, pastVs);
         appendNewKv(cacheSeqId, inputIds, result);
-        // Mark these tokens as computed so next schedule sees prefill done / decode phase.
         seq.setNumComputedTokens(computed + T);
 
         Tensor logits = result.logits(); // [1, T, V]
         return logits.select(1, logits.size(1) - 1).squeeze(0); // [V]
-    }
-
-    private Tensor forwardOneLlama(Sequence seq, long cacheSeqId, LlamaForCausalLM llama) {
-        int[] inputIds = nextInputIds(seq);
-        int computed = seq.numComputedTokens();
-        int T = inputIds.length;
-        Tensor input = tensor(inputIds).unsqueeze(0);
-
-        Tensor[] pastKs = new Tensor[config.numHiddenLayers()];
-        Tensor[] pastVs = new Tensor[config.numHiddenLayers()];
-        for (int l = 0; l < config.numHiddenLayers(); l++) {
-            Tensor[] kv = cache.gather(cacheSeqId, l);
-            pastKs[l] = kv[0];
-            pastVs[l] = kv[1];
-        }
-
-        CachedForwardResult result = llama.forwardCached(input, computed, pastKs, pastVs);
-        appendNewKv(cacheSeqId, inputIds, result);
-        seq.setNumComputedTokens(computed + T);
-
-        Tensor logits = result.logits();
-        return logits.select(1, logits.size(1) - 1).squeeze(0);
     }
 
     /**

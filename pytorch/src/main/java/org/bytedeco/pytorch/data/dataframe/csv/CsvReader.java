@@ -1,6 +1,7 @@
 package org.bytedeco.pytorch.data.dataframe.csv;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.io.ComplexCellCodec;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -173,6 +174,7 @@ public final class CsvReader {
         Column.DType[] out = new Column.DType[numCols];
         for (int c = 0; c < numCols; c++) {
             boolean canBool = true, canLong = true, canDouble = true, canDate = true, canDateTime = true, canVector = true;
+            boolean canList = true, canMap = true;
             int nonNull = 0;
             int limit = Math.min(sample, rows.size());
             for (int r = 0; r < limit; r++) {
@@ -187,6 +189,22 @@ public final class CsvReader {
                 if (canDate && !isDate(t)) canDate = false;
                 if (canDateTime && !isDateTime(t)) canDateTime = false;
                 if (canVector && !isVector(t)) canVector = false;
+                // JSON array that is not a pure numeric vector → LIST
+                if (canList) {
+                    if (!(t.startsWith("[") && t.endsWith("]"))) canList = false;
+                    else if (isVector(t)) { /* numeric vector preferred */ }
+                    else {
+                        try { ComplexCellCodec.decodeText(t, Column.DType.LIST); }
+                        catch (Exception e) { canList = false; }
+                    }
+                }
+                if (canMap) {
+                    if (!(t.startsWith("{") && t.endsWith("}"))) canMap = false;
+                    else {
+                        try { ComplexCellCodec.decodeText(t, Column.DType.MAP); }
+                        catch (Exception e) { canMap = false; }
+                    }
+                }
             }
             if (nonNull == 0) {
                 out[c] = Column.DType.STRING;
@@ -202,6 +220,10 @@ public final class CsvReader {
                 out[c] = Column.DType.DATE;
             } else if (canVector) {
                 out[c] = Column.DType.VECTOR;
+            } else if (canList) {
+                out[c] = Column.DType.LIST;
+            } else if (canMap) {
+                out[c] = Column.DType.MAP;
             } else {
                 out[c] = Column.DType.STRING;
             }
@@ -299,9 +321,24 @@ public final class CsvReader {
                     }
                     throw new CsvParseException("Cannot parse DATETIME", line, field, s);
                 case VECTOR:
+                case EMBEDDING:
                     return parseVector(s, vectorDim, line, field);
+                case LIST:
+                case MAP:
+                case STRUCT:
+                case JSON:
+                    return ComplexCellCodec.decodeText(s, dtype);
                 case STRING:
                 default:
+                    // Auto-detect JSON nested cells when stored as text without type header
+                    if (s != null) {
+                        String t = s.trim();
+                        if ((t.startsWith("[") && t.endsWith("]")) || (t.startsWith("{") && t.endsWith("}"))) {
+                            try {
+                                return ComplexCellCodec.decodeText(t, ComplexCellCodec.inferComplex(t));
+                            } catch (Exception ignored) { /* plain string */ }
+                        }
+                    }
                     return raw; // keep original (no trim for strings)
             }
         } catch (CsvParseException e) {
@@ -385,7 +422,13 @@ public final class CsvReader {
             case "TIME": return Column.DType.TIME;
             case "DURATION": return Column.DType.DURATION;
             case "TENSOR": return Column.DType.TENSOR;
-            case "VECTOR": case "EMBEDDING": return Column.DType.VECTOR;
+            case "VECTOR": return Column.DType.VECTOR;
+            case "EMBEDDING": return Column.DType.EMBEDDING;
+            case "LIST": case "LIST_VIEW": return Column.DType.LIST;
+            case "MAP": case "MAP_VIEW": case "DICT": return Column.DType.MAP;
+            case "STRUCT": case "RECORD": return Column.DType.STRUCT;
+            case "JSON": return Column.DType.JSON;
+            case "BINARY": case "BYTES": return Column.DType.BINARY;
             default: return Column.DType.STRING;
         }
     }

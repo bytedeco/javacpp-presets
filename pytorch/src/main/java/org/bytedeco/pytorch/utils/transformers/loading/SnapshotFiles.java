@@ -237,8 +237,14 @@ public final class SnapshotFiles {
      */
     public static Map<String, Tensor> loadAllWeights(Path dir, boolean zeroCopy) throws IOException {
         List<Path> files = weightFiles(dir);
+        // Fallback: Python torch.save .pth/.pt when no safetensors present
         if (files.isEmpty()) {
-            throw new IOException("No .safetensors weight files in " + dir);
+            System.out.println("[SnapshotFiles] no .safetensors — trying Python .pth/.pt via ModelWeights");
+            Map<String, Tensor> fromPth =
+                org.bytedeco.pytorch.data.serialize.ModelWeights.loadFromDirectory(dir, true);
+            System.out.println("[SnapshotFiles] loaded " + fromPth.size()
+                + " tensors from torch .pth (auto-converted cache may be written as .safetensors)");
+            return fromPth;
         }
         Map<String, Tensor> all = new LinkedHashMap<>();
         int shardIdx = 0;
@@ -259,6 +265,8 @@ public final class SnapshotFiles {
         }
         System.out.println("[SnapshotFiles] merged " + all.size() + " tensors from "
                 + files.size() + " shard(s)");
+        // HF FP8 (e.g. Qwen3-VL-*-FP8): dequantize F8_E4M3 weights with weight_scale_inv
+        all = Fp8WeightDequant.dequantizeInPlace(all);
         return all;
     }
 

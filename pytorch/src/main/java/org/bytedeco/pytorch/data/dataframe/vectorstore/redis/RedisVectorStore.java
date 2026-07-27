@@ -62,6 +62,8 @@ public final class RedisVectorStore implements VectorStore {
     private final boolean ownClient;
     private final List<PayloadField> payloadFields;
     private final int pipelineBatch;
+    /** Default TTL applied to each doc key on upsert; null / non-positive = no expiry. */
+    private final Duration defaultTtl;
 
     private RedisVectorStore(Builder b) {
         this.index = Objects.requireNonNull(b.index, "index");
@@ -74,6 +76,7 @@ public final class RedisVectorStore implements VectorStore {
         this.efConstruction = b.efConstruction;
         this.payloadFields = List.copyOf(b.payloadFields);
         this.pipelineBatch = Math.max(1, b.pipelineBatch);
+        this.defaultTtl = b.ttl;
         if (b.client != null) {
             this.client = b.client;
             this.ownClient = false;
@@ -190,22 +193,168 @@ public final class RedisVectorStore implements VectorStore {
 
     @Override
     public void upsert(Collection<VectorRecord> records) {
+        upsert(records, defaultTtl);
+    }
+
+    /**
+     * Upsert with a per-call TTL override applied to every {@code doc:{id}} key
+     * via pipelined {@code EXPIRE}/{@code PEXPIRE}. {@code null} TTL means
+     * "use builder default"; non-positive / zero means "no expiry for this call".
+     */
+    public void upsert(Collection<VectorRecord> records, Duration ttl) {
         if (records == null || records.isEmpty()) return;
+        Duration effective = ttl != null ? ttl : defaultTtl;
         List<Object[]> pipeline = new ArrayList<>(Math.min(records.size(), pipelineBatch));
-        int n = 0;
+        List<String> keysForTtl = (effective != null && !effective.isZero() && !effective.isNegative())
+                ? new ArrayList<>(Math.min(records.size(), pipelineBatch))
+                : null;
         for (VectorRecord r : records) {
             if (dim > 0 && r.vector().length != dim) {
                 throw new VectorStoreException(
                     "dim mismatch: got " + r.vector().length + ", expected " + dim, -1, backend());
             }
+            String key = prefix + r.resolvedId();
             pipeline.add(hsetArgs(r));
-            n++;
+            if (keysForTtl != null) keysForTtl.add(key);
             if (pipeline.size() >= pipelineBatch) {
                 client.pipeline(pipeline);
                 pipeline.clear();
+                if (keysForTtl != null && !keysForTtl.isEmpty()) {
+                    expireKeys(keysForTtl, effective);
+                    keysForTtl.clear();
+                }
             }
         }
         if (!pipeline.isEmpty()) client.pipeline(pipeline);
+        if (keysForTtl != null && !keysForTtl.isEmpty()) {
+            expireKeys(keysForTtl, effective);
+        }
+    }
+
+    /** Upsert a single record with TTL (null → builder default). */
+    public void upsert(VectorRecord record, Duration ttl) {
+        if (record != null) upsert(List.of(record), ttl);
+    }
+
+    /**
+     * DataFrame upsert with TTL on every {@code doc:{id}} key.
+     * Builds {@link VectorRecord}s then {@link #upsert(Collection, Duration)} so
+     * HSET + EXPIRE share the same pipeline batches.
+     */
+    public void upsertDataFrame(org.bytedeco.pytorch.data.dataframe.DataFrame df,
+                                String idCol, String vectorCol, Duration ttl,
+                                String... payloadCols) {
+        Objects.requireNonNull(df, "df");
+        Objects.requireNonNull(vectorCol, "vectorCol");
+        org.bytedeco.pytorch.data.dataframe.Column vcol = df.column(vectorCol);
+        org.bytedeco.pytorch.data.dataframe.Column icol =
+                idCol == null ? null : df.column(idCol);
+        if (vcol.dtype() == org.bytedeco.pytorch.data.dataframe.Column.DType.TENSOR) {
+            throw new VectorStoreException(
+                    "vectorCol '" + vectorCol + "' is TENSOR (multi-dim).", -1, backend());
+        }
+        List<String> payloadNames = new ArrayList<>();
+        if (payloadCols == null || payloadCols.length == 0) {
+            for (int c = 0; c < df.columnCount(); c++) {
+                String n = df.column(c).name();
+                if (!n.equals(vectorCol) && (idCol == null || !n.equals(idCol))) {
+                    payloadNames.add(n);
+                }
+            }
+        } else {
+            for (String p : payloadCols) {
+                if (p != null && !p.isEmpty()) payloadNames.add(p);
+            }
+        }
+        List<VectorRecord> batch = new ArrayList<>(df.rowCount());
+        for (int r = 0; r < df.rowCount(); r++) {
+            float[] vec = VectorStore.toFloatArray(vcol.get(r));
+            if (vec == null) continue;
+            VectorRecord.Builder b = VectorRecord.builder().vector(vec);
+            if (icol != null) {
+                Object idv = icol.get(r);
+                if (idv instanceof Number n) b.id(n.longValue());
+                else if (idv != null) b.id(String.valueOf(idv));
+                else b.id((long) r);
+            } else {
+                b.id((long) r);
+            }
+            if (!payloadNames.isEmpty()) {
+                Map<String, Object> payload = new LinkedHashMap<>();
+                for (String pn : payloadNames) payload.put(pn, df.get(r, pn));
+                b.payload(payload);
+            }
+            batch.add(b.build());
+        }
+        if (!batch.isEmpty()) upsert(batch, ttl);
+    }
+
+    /**
+     * Apply / refresh TTL on existing document keys (prefix + id).
+     *
+     * @return number of keys that received a TTL (EXPIRE returned 1)
+     */
+    public long expire(Collection<String> ids, Duration ttl) {
+        if (ids == null || ids.isEmpty() || ttl == null || ttl.isZero() || ttl.isNegative()) {
+            return 0L;
+        }
+        List<String> keys = new ArrayList<>(ids.size());
+        for (String id : ids) {
+            if (id != null) keys.add(prefix + id);
+        }
+        return expireKeys(keys, ttl);
+    }
+
+    public long expire(Duration ttl, String... ids) {
+        if (ids == null || ids.length == 0) return 0L;
+        return expire(List.of(ids), ttl);
+    }
+
+    /** Remove TTL from document keys ({@code PERSIST}). */
+    public long persist(Collection<String> ids) {
+        if (ids == null || ids.isEmpty()) return 0L;
+        List<Object[]> cmds = new ArrayList<>(ids.size());
+        for (String id : ids) {
+            if (id != null) cmds.add(new Object[]{"PERSIST", prefix + id});
+        }
+        if (cmds.isEmpty()) return 0L;
+        List<Object> replies = client.pipeline(cmds);
+        long n = 0;
+        for (Object r : replies) {
+            if (r instanceof Number num && num.longValue() == 1L) n++;
+        }
+        return n;
+    }
+
+    /** TTL seconds for a document id, or Redis semantics (-1 no expire, -2 missing). */
+    public long ttl(String id) {
+        return client.callLong("TTL", prefix + id);
+    }
+
+    public Duration defaultTtl() {
+        return defaultTtl;
+    }
+
+    private long expireKeys(List<String> keys, Duration ttl) {
+        if (keys == null || keys.isEmpty() || ttl == null || ttl.isZero() || ttl.isNegative()) {
+            return 0L;
+        }
+        long ms = ttl.toMillis();
+        boolean useMillis = ms > 0 && (ms < 1000 || ms % 1000 != 0);
+        List<Object[]> cmds = new ArrayList<>(keys.size());
+        for (String key : keys) {
+            if (useMillis) {
+                cmds.add(new Object[]{"PEXPIRE", key, String.valueOf(ms)});
+            } else {
+                cmds.add(new Object[]{"EXPIRE", key, String.valueOf(Math.max(1L, ttl.getSeconds()))});
+            }
+        }
+        List<Object> replies = client.pipeline(cmds);
+        long n = 0;
+        for (Object r : replies) {
+            if (r instanceof Number num && num.longValue() == 1L) n++;
+        }
+        return n;
     }
 
     private Object[] hsetArgs(VectorRecord r) {
@@ -520,6 +669,7 @@ public final class RedisVectorStore implements VectorStore {
         private int efConstruction = 200;
         private final List<PayloadField> payloadFields = new ArrayList<>();
         private int pipelineBatch = 256;
+        private Duration ttl;
 
         public Builder host(String h) { this.host = h; return this; }
         public Builder port(int p) { this.port = p; return this; }
@@ -536,6 +686,16 @@ public final class RedisVectorStore implements VectorStore {
         public Builder M(int m) { this.M = m; return this; }
         public Builder efConstruction(int ef) { this.efConstruction = ef; return this; }
         public Builder pipelineBatch(int n) { this.pipelineBatch = n; return this; }
+
+        /**
+         * Default TTL applied to every {@code doc:{id}} key on upsert
+         * ({@code EXPIRE}/{@code PEXPIRE}). {@code null} = no expiry.
+         */
+        public Builder ttl(Duration d) { this.ttl = d; return this; }
+        public Builder ttlSeconds(long seconds) {
+            this.ttl = seconds <= 0 ? null : Duration.ofSeconds(seconds);
+            return this;
+        }
 
         public Builder payloadField(PayloadField f) {
             if (f != null) payloadFields.add(f);
