@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 package org.bytedeco.pytorch.utils.vllm;
-import org.bytedeco.pytorch.data.sampler.*;
-import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.utils.tokenizers.FastTokenizer;

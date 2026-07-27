@@ -3,15 +3,29 @@
 package org.bytedeco.pytorch.data.datasets;
 import org.bytedeco.pytorch.c10.*;
 
+import org.bytedeco.pytorch.jit.*;
+
+import org.bytedeco.pytorch.nn.*;
+
 import org.bytedeco.pytorch.data.transforms.*;
+
+import org.bytedeco.pytorch.data.*;
 
 import org.bytedeco.pytorch.*;
 
+import org.bytedeco.pytorch.Allocator;
+import org.bytedeco.pytorch.jit.Function;
+import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import org.bytedeco.pytorch.utils.spacy.Example;
+import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace detail
@@ -29,7 +43,7 @@ public class MNISTMapDataset extends MNISTMapBatchDataset {
 
   /** Gets a batch from the source dataset and applies the transform to it,
    *  returning the result. */
-  public native @Name("get_batch") @ByVal org.bytedeco.pytorch.utils.spacy.Example get_batch_example(@ByVal SizeTArrayRef indices);
+  public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal SizeTArrayRef indices);
   public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector long... indices);
 
   /** Returns the size of the source dataset. */

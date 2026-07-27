@@ -21,19 +21,38 @@
  */
 package org.bytedeco.pytorch.distribution.transforms;
 
-import org.bytedeco.pytorch.data.transforms.*;
-
-import org.bytedeco.pytorch.data.*;
-
-import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.Tensor;
 
 /**
- * torchaudio-style transform: {@code output = transform(input)}.
- * Same contract as {@link org.bytedeco.pytorch.data.transforms.Transform}.
+ * Invertible (or half-invertible) map used by
+ * {@link org.bytedeco.pytorch.distribution.TransformedDistribution}.
  *
- * @param <T> input type
- * @param <R> output type
+ * <p>Mirrors {@code torch.distributions.transforms.Transform}: {@code forward},
+ * {@code inverse}, and {@code logAbsDetJacobian}, plus {@code eventDim} for
+ * event-shape reductions.
  */
-@FunctionalInterface
-public interface Transform<T, R> extends org.bytedeco.pytorch.data.transforms.Transform<T, R> {
+public abstract class Transform implements AutoCloseable {
+
+    /** Number of rightmost event dims this transform operates on. */
+    public abstract int eventDim();
+
+    /** Forward map {@code Y = T(X)}. */
+    public abstract Tensor forward(Tensor x);
+
+    /** Inverse map {@code X = T^{-1}(Y)} (may be a right-inverse if not bijective). */
+    public abstract Tensor inverse(Tensor y);
+
+    /** {@code log |det dy/dx|} evaluated at {@code (x, y=T(x))}. */
+    public abstract Tensor logAbsDetJacobian(Tensor x, Tensor y);
+
+    /** Whether {@code inverse} is a true two-sided inverse. Default {@code true}. */
+    public boolean bijective() {
+        return true;
+    }
+
+    /** Release owned tensors; default no-op. */
+    @Override
+    public void close() {
+        // subclasses with owned state override
+    }
 }

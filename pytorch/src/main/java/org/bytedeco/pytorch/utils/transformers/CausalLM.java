@@ -114,8 +114,46 @@ public class CausalLM extends Module {
             blocks.add(register_module("h/" + i, b));
         }
         this.finalNorm = register_module("ln_f", new LayerNormImpl(normShape));
-        this.lmHead = register_module("lm_head",
-                new LinearImpl(config.hiddenSize(), config.vocabSize()));
+        // HF GPT-2 ties lm_head.weight to wte.weight and has no lm_head bias.
+        if (config.tieWordEmbeddings()) {
+            this.lmHead = register_module("lm_head",
+                    new LinearImpl(new org.bytedeco.pytorch.nn.options.LinearOptions(
+                            config.hiddenSize(), config.vocabSize()).bias(false)));
+            // actual share happens in retieWordEmbeddings() after weights load
+        } else {
+            this.lmHead = register_module("lm_head",
+                    new LinearImpl(config.hiddenSize(), config.vocabSize()));
+        }
+    }
+
+    /**
+     * Re-apply HF-style weight tying after load (ZERO_COPY rebinds {@code wte},
+     * so constructor-time share is not enough).
+     *
+     * @return true if lm_head.weight now aliases or copies wte.weight
+     */
+    public boolean retieWordEmbeddings() {
+        if (!config.tieWordEmbeddings() || lmHead == null || tokEmbed == null) return false;
+        try {
+            Tensor dest = lmHead.weight();
+            Tensor src = tokEmbed.weight();
+            if (dest == null || src == null || !dest.defined() || !src.defined()) return false;
+            // leaf params require grad=false before in-place set_
+            try { dest.requires_grad_(false); } catch (Throwable ignored) {}
+            try { src.requires_grad_(false); } catch (Throwable ignored) {}
+            dest.set_(src);
+            return true;
+        } catch (Throwable t) {
+            // fallback: value copy (inference-ok, not shared for training)
+            try {
+                lmHead.weight().copy_(tokEmbed.weight());
+                System.out.println("[DEBUG] CausalLM retie used copy_ fallback: " + t.getMessage());
+                return true;
+            } catch (Throwable t2) {
+                System.out.println("[DEBUG] CausalLM.retieWordEmbeddings failed: " + t2.getMessage());
+                return false;
+            }
+        }
     }
 
     public static CausalLM fromConfig(PretrainedConfig config) {

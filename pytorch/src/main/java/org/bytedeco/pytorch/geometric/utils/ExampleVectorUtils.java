@@ -1,7 +1,8 @@
 package org.bytedeco.pytorch.geometric.utils;
+import org.bytedeco.pytorch.data.*;
 
 import org.bytedeco.javacpp.PointerScope;
-import org.bytedeco.pytorch.utils.spacy.Example;
+import org.bytedeco.pytorch.data.Example;
 import org.bytedeco.pytorch.data.ExampleVector;
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.global.torch;

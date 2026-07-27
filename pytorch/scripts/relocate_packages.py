@@ -712,11 +712,38 @@ def classify_file(path: Path, text: str) -> Optional[str]:
         "JsonOptions": f"{DATA_PKG}.dataframe.json",
         "JsonReadOptions": f"{DATA_PKG}.json",
         "JsonWriteOptions": f"{DATA_PKG}.json",
-        # Distribution bijective maps (not torch::data::transforms)
-        "Transform": f"{ROOT_PKG}.distribution.transforms",
+        "AvroOptions": f"{DATA_PKG}.avro",
+        "OrcOptions": f"{DATA_PKG}.orc",
+        # spaCy pure-Java impls (must never land in nn.modules via *Impl heuristic)
+        "DocImpl": f"{ROOT_PKG}.utils.spacy.impl",
+        "TokenImpl": f"{ROOT_PKG}.utils.spacy.impl",
+        "SpanImpl": f"{ROOT_PKG}.utils.spacy.impl",
+        "LanguageImpl": f"{ROOT_PKG}.utils.spacy.impl",
     }
     if simple in handwritten_option_pkg:
         return f"handwritten:{handwritten_option_pkg[simple]}"
+
+    # Multiple pure-Java Transform types share the simple name "Transform".
+    # Pin by path / content — do NOT force all of them into
+    # distribution.transforms (that previously ate audio/data Transform).
+    if simple == "Transform":
+        posix = path.as_posix()
+        if "/distribution/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.distribution.transforms"
+        if "/utils/audio/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.utils.audio.transforms"
+        if "/utils/vision/transforms/" in posix:
+            return f"handwritten:{ROOT_PKG}.utils.vision.transforms"
+        if "/data/transforms/" in posix:
+            return f"handwritten:{DATA_PKG}.transforms"
+        # abstract bijector API (torch.distributions.transforms)
+        if "eventDim" in text and "logAbsDetJacobian" in text:
+            return f"handwritten:{ROOT_PKG}.distribution.transforms"
+        # generic functional interface used by vision/audio/dataset pipelines
+        if "@FunctionalInterface" in text:
+            if "audio" in text.lower():
+                return f"handwritten:{ROOT_PKG}.utils.audio.transforms"
+            return f"handwritten:{DATA_PKG}.transforms"
 
     by_attr = classify_by_name_attr(text, simple)
     kind = by_attr if by_attr else classify_by_simple_name(simple)
@@ -807,19 +834,34 @@ def plan_moves(gen_root: Path, main_root: Optional[Path]) -> Tuple[Dict[Path, Tu
         f"{ROOT_PKG}.global",
     }
 
-    # Hand-written pure-Java packages under src/main (dataframe, json I/O, parquet, …).
+    # Hand-written pure-Java packages under src/main (dataframe, utils, json I/O, …).
     # These are never produced by JavaCPP parse and must not be reclassified by
-    # simple-name heuristics (e.g. *Options → nn.options).
+    # simple-name heuristics (e.g. *Options → nn.options, *Impl → nn.modules,
+    # *Sampler → data.sampler). Losing these packages silently drops whole
+    # modules (especially dataframe + utils) from the install jar.
     handwritten_data_prefixes = (
         f"{DATA_PKG}.dataframe",
         f"{DATA_PKG}.json",
         f"{DATA_PKG}.parquet",
         f"{DATA_PKG}.arrow",
+        f"{DATA_PKG}.avro",
+        f"{DATA_PKG}.orc",
         f"{DATA_PKG}.numpy",
         f"{DATA_PKG}.pickle",
         f"{DATA_PKG}.safetensors",
         f"{DATA_PKG}.gguf",
+        # NOTE: do NOT blanket-skip data.transforms — it mixes JavaCPP peers
+        # (Normalize, *Lambda, …) with one pure-Java Transform<T,R>. The latter
+        # is pinned in classify_file(); gen peers still need import rewrites.
         f"{ROOT_PKG}.distribution",
+        f"{ROOT_PKG}.utils",
+        f"{ROOT_PKG}.rl",
+        f"{ROOT_PKG}.llm",
+        f"{ROOT_PKG}.geometric",
+        f"{ROOT_PKG}.kvcache",
+        f"{ROOT_PKG}.amp",
+        f"{ROOT_PKG}.info",
+        f"{ROOT_PKG}.quantization",
     )
 
     for root in roots:
@@ -923,9 +965,9 @@ def needed_star_imports(new_pkg: str, text: str) -> List[str]:
         # nn.options — *Options / *FuncOptions / *OptionsBase
         # Exclude hand-written data I/O option classes (Csv/Json*) that live under
         # data.dataframe / data.json — they also end with Options.
-        (NN_OPTIONS_PKG, r'\b(?!CsvOptions|JsonOptions|JsonReadOptions|JsonWriteOptions)\w+(?:Func)?Options(?:Base)?\b'),
-        # nn.modules — *Impl family excluding containers (containers handled separately)
-        (NN_MODULES_PKG, r'\b(?!Sequential|ModuleList|ModuleDict|ParameterDict|ParameterList)\w+Impl(?:Base|BaseBase|Cloneable)?\b'),
+        (NN_OPTIONS_PKG, r'\b(?!CsvOptions|JsonOptions|JsonReadOptions|JsonWriteOptions|AvroOptions|OrcOptions)\w+(?:Func)?Options(?:Base)?\b'),
+        # nn.modules — *Impl family excluding containers + spaCy pure-Java *Impl
+        (NN_MODULES_PKG, r'\b(?!Sequential|ModuleList|ModuleDict|ParameterDict|ParameterList|DocImpl|TokenImpl|SpanImpl|LanguageImpl)\w+Impl(?:Base|BaseBase|Cloneable)?\b'),
         # nn.modules.container
         (NN_CONTAINER_PKG, r'\b(SequentialImpl|SequentialImplCloneable|ModuleListImpl|ModuleListImplCloneable|ModuleDictImpl|ModuleDictImplCloneable|ParameterDictImpl|ParameterDictImplCloneable|ParameterListImpl|ParameterListImplCloneable|AnyModule|AnyModuleVector|AnyValue|SharedModuleVector|StringAnyModule\w*|StringSharedModule\w*)\b'),
         # nn.functions
@@ -1103,11 +1145,22 @@ def rewrite_references_everywhere(
         f"{DATA_PKG}.json",
         f"{DATA_PKG}.parquet",
         f"{DATA_PKG}.arrow",
+        f"{DATA_PKG}.avro",
+        f"{DATA_PKG}.orc",
         f"{DATA_PKG}.numpy",
         f"{DATA_PKG}.pickle",
         f"{DATA_PKG}.safetensors",
         f"{DATA_PKG}.gguf",
+        # data.transforms mixed gen+handwritten — do not blanket-skip (see plan_moves).
         f"{ROOT_PKG}.distribution",
+        f"{ROOT_PKG}.utils",
+        f"{ROOT_PKG}.rl",
+        f"{ROOT_PKG}.llm",
+        f"{ROOT_PKG}.geometric",
+        f"{ROOT_PKG}.kvcache",
+        f"{ROOT_PKG}.amp",
+        f"{ROOT_PKG}.info",
+        f"{ROOT_PKG}.quantization",
     )
 
     for root in roots:

@@ -235,20 +235,26 @@ public final class Pickle {
                         String s = readLine();
                         if ("01".equals(s)) stack.add(Boolean.TRUE);
                         else if ("00".equals(s)) stack.add(Boolean.FALSE);
-                        else stack.add(Long.parseLong(s));
+                        else {
+                            // Prefer Integer when value fits int32 (Java fidelity for dumps(Integer)).
+                            long v = Long.parseLong(s);
+                            stack.add(boxIntOrLong(v));
+                        }
                         break;
                     }
-                    case BININT:
+                    case BININT: {
                         // pickle BININT is little-endian; DataInputStream.readInt is big-endian
-                        stack.add((long) Integer.reverseBytes(in.readInt()));
+                        int v = Integer.reverseBytes(in.readInt());
+                        stack.add(Integer.valueOf(v));
                         break;
+                    }
                     case BININT1:
-                        stack.add((long) in.readUnsignedByte());
+                        stack.add(Integer.valueOf(in.readUnsignedByte()));
                         break;
                     case BININT2: {
                         int lo = in.readUnsignedByte();
                         int hi = in.readUnsignedByte();
-                        stack.add((long) (lo | (hi << 8)));
+                        stack.add(Integer.valueOf(lo | (hi << 8)));
                         break;
                     }
                     case LONG1: {
@@ -346,7 +352,7 @@ public final class Pickle {
                             dict.put(stack.get(i), stack.get(i + 1));
                         }
                         stack.subList(start, stack.size()).clear();
-                        stack.add(dict);
+                        stack.add(unwrapJavaMarker(dict));
                         break;
                     }
                     case TUPLE: {
@@ -395,6 +401,11 @@ public final class Pickle {
                         @SuppressWarnings("unchecked")
                         Map<Object, Object> dict = (Map<Object, Object>) stack.get(stack.size() - 1);
                         dict.put(k, v);
+                        // unwrap Java-typed markers when the dict is complete
+                        Object unwrapped = unwrapJavaMarker(dict);
+                        if (unwrapped != dict) {
+                            stack.set(stack.size() - 1, unwrapped);
+                        }
                         break;
                     }
                     case SETITEMS: {
@@ -405,6 +416,10 @@ public final class Pickle {
                             dict.put(stack.get(i), stack.get(i + 1));
                         }
                         stack.subList(start, stack.size()).clear();
+                        Object unwrapped = unwrapJavaMarker(dict);
+                        if (unwrapped != dict) {
+                            stack.set(start - 1, unwrapped);
+                        }
                         break;
                     }
                     case BINPUT: {
@@ -462,6 +477,59 @@ public final class Pickle {
         }
     }
 
+    /** Prefer Integer when value fits int32 (Java fidelity for dumps(Integer)). */
+    private static Number boxIntOrLong(long v) {
+        if (v >= Integer.MIN_VALUE && v <= Integer.MAX_VALUE) return Integer.valueOf((int) v);
+        return Long.valueOf(v);
+    }
+
+    /**
+     * Unwrap Java-typed pickle markers written by {@link Pickler}:
+     * <ul>
+     *   <li>{@code {__jlong__: v}} → Long</li>
+     *   <li>{@code {__jfloat__: v}} → Float</li>
+     *   <li>{@code {__jdouble_array__: list}} → double[]</li>
+     *   <li>{@code {__jlong_array__: list}} → long[]</li>
+     * </ul>
+     */
+    @SuppressWarnings("unchecked")
+    private static Object unwrapJavaMarker(Map<Object, Object> dict) {
+        if (dict == null || dict.size() != 1) return dict;
+        if (dict.containsKey("__jlong__")) {
+            Object v = dict.get("__jlong__");
+            if (v instanceof Number) return Long.valueOf(((Number) v).longValue());
+        }
+        if (dict.containsKey("__jfloat__")) {
+            Object v = dict.get("__jfloat__");
+            if (v instanceof Number) return Float.valueOf(((Number) v).floatValue());
+        }
+        if (dict.containsKey("__jdouble_array__")) {
+            Object v = dict.get("__jdouble_array__");
+            if (v instanceof List) {
+                List<?> list = (List<?>) v;
+                double[] a = new double[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    Object e = list.get(i);
+                    a[i] = e instanceof Number ? ((Number) e).doubleValue() : Double.NaN;
+                }
+                return a;
+            }
+        }
+        if (dict.containsKey("__jlong_array__")) {
+            Object v = dict.get("__jlong_array__");
+            if (v instanceof List) {
+                List<?> list = (List<?>) v;
+                long[] a = new long[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    Object e = list.get(i);
+                    a[i] = e instanceof Number ? ((Number) e).longValue() : 0L;
+                }
+                return a;
+            }
+        }
+        return dict;
+    }
+
     // ---- pickler ------------------------------------------------------------
 
     private static final class Pickler {
@@ -489,9 +557,11 @@ public final class Pickle {
             } else if (obj instanceof Integer) {
                 writeLong(((Integer) obj).longValue());
             } else if (obj instanceof Long) {
-                writeLong((Long) obj);
+                // Always mark Long so unpickle restores Long (not Integer for small values).
+                writeMarkedRawLong("__jlong__", (Long) obj);
             } else if (obj instanceof Float) {
-                writeDouble(((Float) obj).doubleValue());
+                // Mark Float; pickle only has BINFLOAT (double).
+                writeMarkedRawDouble("__jfloat__", ((Float) obj).doubleValue());
             } else if (obj instanceof Double) {
                 writeDouble((Double) obj);
             } else if (obj instanceof String) {
@@ -499,20 +569,10 @@ public final class Pickle {
             } else if (obj instanceof byte[]) {
                 writeBytes((byte[]) obj);
             } else if (obj instanceof double[]) {
-                // store as list of floats for portability
-                double[] arr = (double[]) obj;
-                out.writeByte(EMPTY_LIST);
-                memoize();
-                out.writeByte(MARK);
-                for (double v : arr) writeDouble(v);
-                out.writeByte(APPENDS);
+                // Mark so unpickle restores double[] (not List).
+                writeMarkedDoubleArray((double[]) obj);
             } else if (obj instanceof long[]) {
-                long[] arr = (long[]) obj;
-                out.writeByte(EMPTY_LIST);
-                memoize();
-                out.writeByte(MARK);
-                for (long v : arr) writeLong(v);
-                out.writeByte(APPENDS);
+                writeMarkedLongArray((long[]) obj);
             } else if (obj instanceof List) {
                 out.writeByte(EMPTY_LIST);
                 memoize();
@@ -546,6 +606,51 @@ public final class Pickle {
             } else {
                 throw new IOException("cannot pickle type: " + obj.getClass().getName());
             }
+        }
+
+        /** Write {@code {key: longValue}} without re-entering Long marking. */
+        private void writeMarkedRawLong(String key, long value) throws IOException {
+            out.writeByte(EMPTY_DICT);
+            memoize();
+            out.writeByte(MARK);
+            writeUnicode(key);
+            writeLong(value); // raw int/long opcodes — no marker
+            out.writeByte(SETITEMS);
+        }
+
+        private void writeMarkedRawDouble(String key, double value) throws IOException {
+            out.writeByte(EMPTY_DICT);
+            memoize();
+            out.writeByte(MARK);
+            writeUnicode(key);
+            writeDouble(value);
+            out.writeByte(SETITEMS);
+        }
+
+        private void writeMarkedDoubleArray(double[] arr) throws IOException {
+            out.writeByte(EMPTY_DICT);
+            memoize();
+            out.writeByte(MARK);
+            writeUnicode("__jdouble_array__");
+            out.writeByte(EMPTY_LIST);
+            memoize();
+            out.writeByte(MARK);
+            for (double v : arr) writeDouble(v);
+            out.writeByte(APPENDS);
+            out.writeByte(SETITEMS);
+        }
+
+        private void writeMarkedLongArray(long[] arr) throws IOException {
+            out.writeByte(EMPTY_DICT);
+            memoize();
+            out.writeByte(MARK);
+            writeUnicode("__jlong_array__");
+            out.writeByte(EMPTY_LIST);
+            memoize();
+            out.writeByte(MARK);
+            for (long v : arr) writeLong(v);
+            out.writeByte(APPENDS);
+            out.writeByte(SETITEMS);
         }
 
         private void writeLong(long v) throws IOException {

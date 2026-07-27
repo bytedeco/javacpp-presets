@@ -19,7 +19,6 @@ import org.bytedeco.pytorch.data.safetensors.SafeTensors;
 import org.bytedeco.pytorch.data.gguf.GGUFReader;
 import org.bytedeco.pytorch.data.parquet.LocalParquetReader;
 import org.bytedeco.pytorch.data.parquet.LocalParquetWriter;
-import org.bytedeco.pytorch.data.parquet.SchemaBuilder;
 import org.bytedeco.pytorch.data.dataframe.csv.CsvOptions;
 import org.bytedeco.pytorch.data.dataframe.csv.CsvReader;
 import org.bytedeco.pytorch.data.dataframe.csv.CsvWriter;
@@ -69,6 +68,9 @@ public final class DataFrame implements AutoCloseable, Serializable {
     public List<Column> columns() { return new ArrayList<>(columns); }
     public int columnCount() { return columns.size(); }
     public int rowCount() { return rowCount; }
+
+    /** Spark-style row count alias of {@link #rowCount()}. */
+    public long countRows() { return rowCount; }
     public int[] shape() { return new int[]{rowCount, columns.size()}; }
 
     public Column column(String name) {
@@ -1035,11 +1037,26 @@ public final class DataFrame implements AutoCloseable, Serializable {
     // ---- I/O: auto-detect ----
 
     /**
-     * Read a DataFrame by file extension (csv/tsv/json/parquet/arrow/feather/pkl/…).
+     * Read a DataFrame by file extension (csv/tsv/json/parquet/arrow/feather/pkl/…),
+     * with magic-byte fallback when the extension is missing or wrong.
      * @see FormatDetect#read(String)
+     * @see org.bytedeco.pytorch.data.dataframe.io.SchemaInfer
      */
     public static DataFrame read(String path) throws Exception {
         return FormatDetect.read(path);
+    }
+
+    /**
+     * Infer column schema for a dataset path without necessarily loading all rows
+     * (parquet reads footer only; other formats may load once).
+     */
+    public static Schema inferSchema(String path) throws Exception {
+        return org.bytedeco.pytorch.data.dataframe.io.SchemaInfer.infer(path);
+    }
+
+    /** Print inferred schema for a path (Spark-style). */
+    public static void printSchema(String path) throws Exception {
+        org.bytedeco.pytorch.data.dataframe.io.SchemaInfer.print(inferSchema(path));
     }
 
     // ---- I/O: Excel / SQL / HDF5 / Avro / ORC (delegating packages) ----
@@ -1958,10 +1975,61 @@ public final class DataFrame implements AutoCloseable, Serializable {
         }
     }
 
+    /**
+     * Print column names and dtypes (Spark / Polars style).
+     * Nested LIST/VECTOR/MAP/STRUCT columns are labelled with their cell runtime shape when available.
+     */
+    public void printSchema() {
+        System.out.println("root");
+        System.out.println(" |-- " + rowCount + " rows x " + columnCount() + " columns");
+        for (Column c : columns) {
+            String extra = schemaHint(c);
+            System.out.printf(" |-- %s: %s%s%n", c.name(), c.dtype().name(), extra);
+        }
+    }
+
+    private static String schemaHint(Column c) {
+        if (c.size() == 0) return "";
+        Object sample = null;
+        for (int i = 0; i < c.size(); i++) {
+            sample = c.get(i);
+            if (sample != null) break;
+        }
+        if (sample == null) return " (nullable)";
+        if (sample instanceof long[]) return " (long[" + ((long[]) sample).length + "])";
+        if (sample instanceof int[]) return " (int[" + ((int[]) sample).length + "])";
+        if (sample instanceof float[]) return " (float[" + ((float[]) sample).length + "])";
+        if (sample instanceof double[]) return " (double[" + ((double[]) sample).length + "])";
+        if (sample instanceof List) return " (List, len=" + ((List<?>) sample).size() + ")";
+        if (sample instanceof Map) return " (Map, size=" + ((Map<?, ?>) sample).size() + ")";
+        return "";
+    }
+
+    /** Print the first 20 rows to stdout (Pandas / Spark {@code show()}). */
+    public void show() { show(20); }
+
+    /** Print the first {@code n} rows to stdout. */
+    public void show(int n) {
+        System.out.print(toString(n));
+        if (n >= rowCount) {
+            System.out.printf("[%d rows x %d columns]%n", rowCount, columnCount());
+        }
+    }
+
+    /**
+     * Print a Pandas-style numeric summary ({@link #describeFrame()}) to stdout.
+     * Returns the summary DataFrame for further use.
+     */
+    public DataFrame describeAndShow() {
+        DataFrame d = describeFrame();
+        d.show(d.rowCount());
+        return d;
+    }
+
     public String toString() { return toString(20); }
 
     public String toString(int maxRows) {
-        if (rowCount == 0) return "Empty DataFrame";
+        if (rowCount == 0) return "Empty DataFrame\n";
         StringBuilder sb = new StringBuilder();
         int[] widths = new int[columnCount()];
         for (int i = 0; i < columnCount(); i++) {
@@ -1969,10 +2037,7 @@ public final class DataFrame implements AutoCloseable, Serializable {
             widths[i] = Math.min(50, Math.max(
                 columns.get(i).name().length(),
                 IntStream.range(0, Math.min(maxRows, rowCount))
-                    .map(r -> {
-                        Object v = columns.get(colIdx).get(r);
-                        return v != null ? v.toString().length() : 4;
-                    })
+                    .map(r -> formatCell(columns.get(colIdx).get(r)).length())
                     .max().orElse(0)));
         }
         for (int i = 0; i < columnCount(); i++) {
@@ -1990,14 +2055,33 @@ public final class DataFrame implements AutoCloseable, Serializable {
         for (int r = 0; r < show; r++) {
             for (int c = 0; c < columnCount(); c++) {
                 if (c > 0) sb.append(" | ");
-                Object v = columns.get(c).get(r);
-                String s = v != null ? v.toString() : "null";
+                String s = formatCell(columns.get(c).get(r));
                 sb.append(String.format("%-" + widths[c] + "s", s.substring(0, Math.min(s.length(), widths[c]))));
             }
             sb.append("\n");
         }
         if (rowCount > maxRows) sb.append(String.format("[%d rows total]%n", rowCount));
         return sb.toString();
+    }
+
+    /** Human-readable cell for tables (arrays / lists expand; no {@code [J@hash}). */
+    static String formatCell(Object v) {
+        if (v == null) return "null";
+        if (v instanceof long[]) return Arrays.toString((long[]) v);
+        if (v instanceof int[]) return Arrays.toString((int[]) v);
+        if (v instanceof short[]) return Arrays.toString((short[]) v);
+        if (v instanceof byte[]) {
+            byte[] b = (byte[]) v;
+            // short binary preview
+            if (b.length > 16) return "bytes[" + b.length + "]";
+            return Arrays.toString(b);
+        }
+        if (v instanceof float[]) return Arrays.toString((float[]) v);
+        if (v instanceof double[]) return Arrays.toString((double[]) v);
+        if (v instanceof boolean[]) return Arrays.toString((boolean[]) v);
+        if (v instanceof Object[]) return Arrays.deepToString((Object[]) v);
+        if (v instanceof List || v instanceof Map) return String.valueOf(v);
+        return v.toString();
     }
 
     public DataFrame copy() {
@@ -3028,6 +3112,114 @@ public final class DataFrame implements AutoCloseable, Serializable {
         return new org.bytedeco.pytorch.data.dataframe.feature.pipeline.DataFramePipeline(this);
     }
 
+    // ---- structural ops: split / cat / stack / expand / compress / train_test_split ----
+
+    /** Split into {@code n} roughly equal row chunks. */
+    public DataFrame[] splitRows(int n) { return DataFrameOps.splitRows(this, n); }
+
+    /** Split rows at exclusive cut indices. */
+    public DataFrame[] splitRowsAt(int... indices) { return DataFrameOps.splitRowsAt(this, indices); }
+
+    /** Split into {@code n} roughly equal column chunks. */
+    public DataFrame[] splitCols(int n) { return DataFrameOps.splitCols(this, n); }
+
+    /** Split columns by named groups. */
+    public DataFrame[] splitColsByName(String[]... groups) {
+        return DataFrameOps.splitColsByName(this, groups);
+    }
+
+    /** Vertical concat alias of {@link #vstack(DataFrame...)}. */
+    public static DataFrame cat(DataFrame... frames) throws Exception {
+        return DataFrameOps.cat(frames);
+    }
+
+    /** Horizontal stack with collision rename. */
+    public static DataFrame stack(DataFrame... frames) throws Exception {
+        return DataFrameOps.stack(frames);
+    }
+
+    /** Expand a LIST/VECTOR column into wide scalar columns {@code col_0..N}. */
+    public DataFrame expand(String listCol) { return DataFrameOps.expand(this, listCol); }
+
+    public DataFrame expand(String listCol, int maxWidth, boolean dropOriginal, String prefix) {
+        return DataFrameOps.expand(this, listCol, maxWidth, dropOriginal, prefix);
+    }
+
+    /** Compress wide columns into one LIST column. */
+    public DataFrame compress(String outCol, String... sourceCols) {
+        return DataFrameOps.compress(this, outCol, sourceCols);
+    }
+
+    public DataFrame compressPrefix(String outCol, String prefix, int width) {
+        return DataFrameOps.compressPrefix(this, outCol, prefix, width);
+    }
+
+    /** Random train/test split (testSize as fraction or absolute count if ≥1). */
+    public DataFrameOps.TrainTestSplit trainTestSplit(double testSize) {
+        return DataFrameOps.trainTestSplit(this, testSize);
+    }
+
+    public DataFrameOps.TrainTestSplit trainTestSplit(double testSize, long seed) {
+        return DataFrameOps.trainTestSplit(this, testSize, seed);
+    }
+
+    public DataFrameOps.TrainTestSplit trainTestSplit(double testSize, boolean shuffle,
+                                                      Long seed, String stratifyCol) {
+        return DataFrameOps.trainTestSplit(this, testSize, shuffle, seed, stratifyCol);
+    }
+
+    /**
+     * Select feature columns + label columns.
+     * <pre>
+     *   var fl = df.featureLabel(
+     *       new String[]{"user_id","item_id","likes_level","views_level","item_seq"},
+     *       "label");
+     *   DataFrameDataset ds = fl.toDataset();
+     * </pre>
+     */
+    public DataFrameOps.FeatureLabelSplit featureLabel(String[] featureCols, String... labelCols) {
+        return DataFrameOps.featureLabel(this, featureCols, labelCols);
+    }
+
+    /** Features = all columns except labels. */
+    public DataFrameOps.FeatureLabelSplit featureLabelExclude(String... labelCols) {
+        return DataFrameOps.featureLabelExclude(this, labelCols);
+    }
+
+    /**
+     * Build a {@link org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset}
+     * with optional feature-engineering pipeline.
+     *
+     * <pre>
+     *   DataFrameDataset ds = df.toDataset()
+     *       .features("user_id", "item_id", "likes_level", "views_level")
+     *       .sequenceFeature("item_seq")
+     *       .labels("label")
+     *       .pipeline(pipe)   // optional
+     *       .build();
+     *   DataFrameDataLoader loader = ds.dataloader().batchSize(256).shuffle(true).build();
+     * </pre>
+     */
+    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset.Builder toDataset() {
+        return org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset.builder(this);
+    }
+
+    /**
+     * One-shot dataset: all non-label columns as features (LIST/VECTOR → sequence),
+     * with optional pipeline.
+     */
+    public org.bytedeco.pytorch.data.dataframe.dataset.DataFrameDataset toDataset(
+            String[] featureCols, String[] sequenceCols, String[] labelCols,
+            org.bytedeco.pytorch.data.dataframe.feature.pipeline.DataFramePipeline pipe)
+            throws Exception {
+        var b = toDataset();
+        if (featureCols != null) b.features(featureCols);
+        if (sequenceCols != null) b.sequenceFeatures(sequenceCols);
+        if (labelCols != null) b.labels(labelCols);
+        if (pipe != null) b.pipeline(pipe);
+        return b.build();
+    }
+
     // ---- preprocessing operators (chainable) ----
 
     /** Rename columns: {@code df.rename(Map.of("old","new"))}. Returns a copy. */
@@ -3823,30 +4015,372 @@ public final class DataFrame implements AutoCloseable, Serializable {
                 case FLOAT -> Column.DType.FLOAT32;
                 case DOUBLE -> Column.DType.FLOAT64;
                 case BOOLEAN -> Column.DType.BOOLEAN;
+                case BINARY, FIXED_LEN_BYTE_ARRAY -> {
+                    org.apache.parquet.schema.LogicalTypeAnnotation lta = ft.getLogicalTypeAnnotation();
+                    if (lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.StringLogicalTypeAnnotation
+                        || lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.EnumLogicalTypeAnnotation
+                        || lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.JsonLogicalTypeAnnotation) {
+                        yield Column.DType.STRING;
+                    }
+                    yield Column.DType.BINARY;
+                }
                 default -> Column.DType.STRING;
             };
         }
+        // Nested group: LIST / MAP / STRUCT (e.g. item_seq: list<int64>)
+        org.apache.parquet.schema.LogicalTypeAnnotation lta = ft.getLogicalTypeAnnotation();
+        if (lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.ListLogicalTypeAnnotation
+            || isLegacyRepeatedList(ft)) {
+            // float/double lists → VECTOR (ANN/HNSW embeddings); int/string/nested → LIST
+            Column.DType elem = parquetListElementDType(ft);
+            if (elem == Column.DType.FLOAT32 || elem == Column.DType.FLOAT64) {
+                return Column.DType.VECTOR;
+            }
+            return Column.DType.LIST;
+        }
+        if (lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.MapLogicalTypeAnnotation
+            || lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.MapKeyValueTypeAnnotation) {
+            return Column.DType.MAP;
+        }
+        return Column.DType.STRUCT;
+    }
+
+    /** True for pre-parquet-format-2.0 "repeated primitive/group" list encoding. */
+    private static boolean isLegacyRepeatedList(org.apache.parquet.schema.Type ft) {
+        return !ft.isPrimitive()
+            && ft.getRepetition() == org.apache.parquet.schema.Type.Repetition.REPEATED;
+    }
+
+    /** Infer element dtype of a LIST (or legacy repeated) field for VECTOR vs LIST choice. */
+    private static Column.DType parquetListElementDType(org.apache.parquet.schema.Type ft) {
+        try {
+            org.apache.parquet.schema.GroupType gt = ft.asGroupType();
+            if (gt.getFieldCount() == 0) return Column.DType.STRING;
+            org.apache.parquet.schema.Type mid = gt.getType(0);
+            // 3-level LIST: group list { repeated group list { optional T item } }
+            if (!mid.isPrimitive()) {
+                org.apache.parquet.schema.GroupType midG = mid.asGroupType();
+                if (midG.getFieldCount() > 0) {
+                    org.apache.parquet.schema.Type elem = midG.getType(0);
+                    if (elem.isPrimitive()) return parquetTypeToDType(elem);
+                    // nested list → LIST
+                    return Column.DType.LIST;
+                }
+            } else {
+                // 2-level / legacy: repeated T element
+                return parquetTypeToDType(mid);
+            }
+        } catch (Exception ignored) { /* fall through */ }
         return Column.DType.STRING;
     }
 
     private static Object readGroupValue(org.apache.parquet.example.data.Group row,
                                          String field, org.apache.parquet.schema.Type ft) {
-        if (ft.isPrimitive()) {
-            org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName ptn =
-                ft.asPrimitiveType().getPrimitiveTypeName();
-            int idx = ft.getRepetition() == org.apache.parquet.schema.Type.Repetition.REPEATED ? 1 : 0;
-            try {
-                return switch (ptn) {
-                    case INT32 -> row.getInteger(field, idx);
-                    case INT64 -> row.getLong(field, idx);
-                    case FLOAT -> Float.valueOf(row.getFloat(field, idx));
-                    case DOUBLE -> row.getDouble(field, idx);
-                    case BOOLEAN -> Boolean.valueOf(row.getBoolean(field, idx));
-                    default -> row.getString(field, idx);
-                };
-            } catch (Exception e) { return row.getString(field, idx); }
+        int fieldIndex;
+        try {
+            fieldIndex = row.getType().getFieldIndex(field);
+        } catch (Exception e) {
+            return null;
         }
-        return row.getString(field, 0);
+        int n = row.getFieldRepetitionCount(fieldIndex);
+        if (n == 0) return null; // optional / missing
+
+        if (ft.isPrimitive()) {
+            // REPEATED primitive at this level → materialize as dense array / List (legacy list encoding)
+            if (ft.getRepetition() == org.apache.parquet.schema.Type.Repetition.REPEATED) {
+                List<Object> out = new ArrayList<>(n);
+                for (int i = 0; i < n; i++) out.add(readPrimitiveAt(row, fieldIndex, i, ft));
+                return densifyNumericList(out, parquetTypeToDType(ft));
+            }
+            return readPrimitiveAt(row, fieldIndex, 0, ft);
+        }
+
+        // Nested group field
+        org.apache.parquet.schema.LogicalTypeAnnotation lta = ft.getLogicalTypeAnnotation();
+        if (lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.ListLogicalTypeAnnotation
+            || isLegacyRepeatedList(ft)) {
+            return readParquetList(row, fieldIndex, ft);
+        }
+        if (lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.MapLogicalTypeAnnotation
+            || lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.MapKeyValueTypeAnnotation) {
+            return readParquetMap(row, fieldIndex, ft);
+        }
+        // STRUCT: single group (or first if repeated)
+        org.apache.parquet.example.data.Group g = row.getGroup(fieldIndex, 0);
+        return readParquetStruct(g);
+    }
+
+    private static Object readPrimitiveAt(org.apache.parquet.example.data.Group row,
+                                          int fieldIndex, int idx,
+                                          org.apache.parquet.schema.Type ft) {
+        org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName ptn =
+            ft.asPrimitiveType().getPrimitiveTypeName();
+        try {
+            return switch (ptn) {
+                case INT32 -> row.getInteger(fieldIndex, idx);
+                case INT64 -> row.getLong(fieldIndex, idx);
+                case FLOAT -> Float.valueOf(row.getFloat(fieldIndex, idx));
+                case DOUBLE -> row.getDouble(fieldIndex, idx);
+                case BOOLEAN -> Boolean.valueOf(row.getBoolean(fieldIndex, idx));
+                case BINARY, FIXED_LEN_BYTE_ARRAY -> {
+                    org.apache.parquet.schema.LogicalTypeAnnotation lta = ft.getLogicalTypeAnnotation();
+                    org.apache.parquet.io.api.Binary bin = row.getBinary(fieldIndex, idx);
+                    if (lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.StringLogicalTypeAnnotation
+                        || lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.EnumLogicalTypeAnnotation
+                        || lta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.JsonLogicalTypeAnnotation
+                        || lta == null) {
+                        // UTF8 string annotation, or unannotated binary often used as string by writers
+                        if (lta != null
+                            || looksLikeUtf8(bin)) {
+                            yield bin.toStringUsingUTF8();
+                        }
+                        yield bin.getBytes();
+                    }
+                    yield bin.getBytes();
+                }
+                case INT96 -> row.getInt96(fieldIndex, idx).toStringUsingUTF8();
+                default -> row.getValueToString(fieldIndex, idx);
+            };
+        } catch (Exception e) {
+            try { return row.getValueToString(fieldIndex, idx); }
+            catch (Exception e2) { return null; }
+        }
+    }
+
+    private static boolean looksLikeUtf8(org.apache.parquet.io.api.Binary bin) {
+        if (bin == null || bin.length() == 0) return true;
+        try {
+            String s = bin.toStringUsingUTF8();
+            return s != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Materialize a Parquet LIST field.
+     * Standard 3-level encoding (Arrow / Spark / fixed_size_list on disk):
+     *   optional group item_seq (LIST) {
+     *     repeated group list { optional int64 item; }
+     *   }
+     * Also supports:
+     *   - 2-level: optional group X (LIST) { repeated T element; }
+     *   - legacy REPEATED primitive at the parent (handled in {@link #readGroupValue})
+     *   - legacy REPEATED group { T item } at this field
+     * Numeric lists densify to long[] / int[] / float[] / double[] when homogeneous;
+     * otherwise {@code List<Object>}. Empty list → empty array of inferred element type
+     * when known, else empty List.
+     */
+    private static Object readParquetList(org.apache.parquet.example.data.Group row,
+                                          int fieldIndex,
+                                          org.apache.parquet.schema.Type ft) {
+        org.apache.parquet.schema.GroupType listType = ft.asGroupType();
+        // Outer may be optional group with 0/1 occurrence; elements live one level down.
+        if (row.getFieldRepetitionCount(fieldIndex) == 0) return null;
+
+        // Legacy: this field itself is REPEATED group (not the standard LIST annotation outer).
+        // Each repetition is one list element (struct, or single-child wrapper around a primitive).
+        if (ft.getRepetition() == org.apache.parquet.schema.Type.Repetition.REPEATED) {
+            int n = row.getFieldRepetitionCount(fieldIndex);
+            List<Object> elems = new ArrayList<>(n);
+            for (int i = 0; i < n; i++) {
+                org.apache.parquet.example.data.Group g = row.getGroup(fieldIndex, i);
+                if (listType.getFieldCount() == 1) {
+                    org.apache.parquet.schema.Type child = listType.getType(0);
+                    if (child.isPrimitive()) {
+                        if (g.getFieldRepetitionCount(0) == 0) elems.add(null);
+                        else elems.add(readPrimitiveAt(g, 0, 0, child));
+                    } else {
+                        org.apache.parquet.schema.LogicalTypeAnnotation cl =
+                            child.getLogicalTypeAnnotation();
+                        if (cl instanceof org.apache.parquet.schema.LogicalTypeAnnotation.ListLogicalTypeAnnotation
+                            || isLegacyRepeatedList(child)) {
+                            elems.add(readParquetList(g, 0, child));
+                        } else {
+                            elems.add(readParquetStruct(g));
+                        }
+                    }
+                } else {
+                    elems.add(readParquetStruct(g));
+                }
+            }
+            return densifyNumericList(elems, parquetListElementDType(ft));
+        }
+
+        org.apache.parquet.example.data.Group listGroup = row.getGroup(fieldIndex, 0);
+        if (listType.getFieldCount() == 0) {
+            return densifyNumericList(Collections.emptyList(), parquetListElementDType(ft));
+        }
+        org.apache.parquet.schema.Type mid = listType.getType(0);
+        int midIndex = 0;
+        int midCount = listGroup.getFieldRepetitionCount(midIndex);
+
+        // 3-level: mid is repeated group "list" with one child element
+        if (!mid.isPrimitive()) {
+            org.apache.parquet.schema.GroupType midG = mid.asGroupType();
+            org.apache.parquet.schema.Type elemType =
+                midG.getFieldCount() > 0 ? midG.getType(0) : null;
+            List<Object> elems = new ArrayList<>(midCount);
+            for (int i = 0; i < midCount; i++) {
+                org.apache.parquet.example.data.Group elemGroup = listGroup.getGroup(midIndex, i);
+                if (elemType == null) {
+                    elems.add(readParquetStruct(elemGroup));
+                    continue;
+                }
+                // empty element group / missing optional item
+                if (elemGroup.getType().getFieldCount() == 0
+                    || elemGroup.getFieldRepetitionCount(0) == 0) {
+                    elems.add(null);
+                    continue;
+                }
+                if (elemType.isPrimitive()) {
+                    elems.add(readPrimitiveAt(elemGroup, 0, 0, elemType));
+                } else {
+                    // nested list/struct element
+                    org.apache.parquet.schema.LogicalTypeAnnotation elLta =
+                        elemType.getLogicalTypeAnnotation();
+                    if (elLta instanceof org.apache.parquet.schema.LogicalTypeAnnotation.ListLogicalTypeAnnotation
+                        || isLegacyRepeatedList(elemType)) {
+                        elems.add(readParquetList(elemGroup, 0, elemType));
+                    } else if (elemType.isPrimitive()) {
+                        elems.add(readPrimitiveAt(elemGroup, 0, 0, elemType));
+                    } else {
+                        // struct element: the child group itself is the struct
+                        elems.add(readParquetStruct(elemGroup.getGroup(0, 0)));
+                    }
+                }
+            }
+            return densifyNumericList(elems, parquetListElementDType(ft));
+        }
+
+        // 2-level: mid is repeated primitive element
+        List<Object> elems = new ArrayList<>(midCount);
+        for (int i = 0; i < midCount; i++) {
+            elems.add(readPrimitiveAt(listGroup, midIndex, i, mid));
+        }
+        return densifyNumericList(elems, parquetListElementDType(ft));
+    }
+
+    /** Convert homogeneous numeric List → primitive array for LIST/VECTOR cells. */
+    private static Object densifyNumericList(List<Object> elems) {
+        return densifyNumericList(elems, null);
+    }
+
+    private static Object densifyNumericList(List<Object> elems, Column.DType preferred) {
+        if (elems == null) return null;
+        if (elems.isEmpty()) {
+            // Prefer typed empty arrays so schema remains stable for fixed-size-list columns.
+            if (preferred == Column.DType.INT64) return new long[0];
+            if (preferred == Column.DType.INT32) return new int[0];
+            if (preferred == Column.DType.FLOAT32) return new float[0];
+            if (preferred == Column.DType.FLOAT64) return new double[0];
+            return elems;
+        }
+        boolean allLong = true, allInt = true, allFloat = true, allDouble = true;
+        for (Object o : elems) {
+            if (o == null) {
+                allLong = allInt = allFloat = allDouble = false;
+                break;
+            }
+            if (!(o instanceof Number)) {
+                allLong = allInt = allFloat = allDouble = false;
+                break;
+            }
+            if (!(o instanceof Long) && !(o instanceof Integer) && !(o instanceof Short) && !(o instanceof Byte))
+                allLong = false;
+            if (!(o instanceof Integer) && !(o instanceof Short) && !(o instanceof Byte))
+                allInt = false;
+            if (!(o instanceof Float)) allFloat = false;
+            if (!(o instanceof Double) && !(o instanceof Float)) allDouble = false;
+        }
+        // Prefer preferred dtype when it matches (e.g. INT64 lists stay long[] even if all values fit int)
+        if (preferred == Column.DType.INT64 && allLong) {
+            long[] a = new long[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).longValue();
+            return a;
+        }
+        if (preferred == Column.DType.FLOAT32 && (allFloat || allDouble || allLong || allInt)) {
+            float[] a = new float[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).floatValue();
+            return a;
+        }
+        if (preferred == Column.DType.FLOAT64 && (allDouble || allFloat || allLong || allInt)) {
+            double[] a = new double[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).doubleValue();
+            return a;
+        }
+        if (allInt) {
+            int[] a = new int[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).intValue();
+            return a;
+        }
+        if (allLong) {
+            long[] a = new long[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).longValue();
+            return a;
+        }
+        if (allFloat) {
+            float[] a = new float[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).floatValue();
+            return a;
+        }
+        if (allDouble) {
+            double[] a = new double[elems.size()];
+            for (int i = 0; i < elems.size(); i++) a[i] = ((Number) elems.get(i)).doubleValue();
+            return a;
+        }
+        return elems;
+    }
+
+    private static Map<String, Object> readParquetMap(org.apache.parquet.example.data.Group row,
+                                                      int fieldIndex,
+                                                      org.apache.parquet.schema.Type ft) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        if (row.getFieldRepetitionCount(fieldIndex) == 0) return map;
+        org.apache.parquet.example.data.Group mapGroup = row.getGroup(fieldIndex, 0);
+        // MAP: optional group X (MAP) { repeated group key_value { required K key; optional V value; } }
+        if (mapGroup.getType().getFieldCount() == 0) return map;
+        int kvIndex = 0;
+        int n = mapGroup.getFieldRepetitionCount(kvIndex);
+        org.apache.parquet.schema.GroupType kvType = mapGroup.getType().getType(kvIndex).asGroupType();
+        org.apache.parquet.schema.Type keyType = kvType.getType(0);
+        org.apache.parquet.schema.Type valType = kvType.getFieldCount() > 1 ? kvType.getType(1) : null;
+        for (int i = 0; i < n; i++) {
+            org.apache.parquet.example.data.Group kv = mapGroup.getGroup(kvIndex, i);
+            Object key = keyType.isPrimitive()
+                ? readPrimitiveAt(kv, 0, 0, keyType)
+                : readParquetStruct(kv.getGroup(0, 0));
+            Object val = null;
+            if (valType != null && kv.getFieldRepetitionCount(1) > 0) {
+                if (valType.isPrimitive()) val = readPrimitiveAt(kv, 1, 0, valType);
+                else {
+                    org.apache.parquet.schema.LogicalTypeAnnotation vl =
+                        valType.getLogicalTypeAnnotation();
+                    if (vl instanceof org.apache.parquet.schema.LogicalTypeAnnotation.ListLogicalTypeAnnotation)
+                        val = readParquetList(kv, 1, valType);
+                    else
+                        val = readParquetStruct(kv.getGroup(1, 0));
+                }
+            }
+            map.put(String.valueOf(key), val);
+        }
+        return map;
+    }
+
+    private static Map<String, Object> readParquetStruct(org.apache.parquet.example.data.Group g) {
+        Map<String, Object> out = new LinkedHashMap<>();
+        if (g == null) return out;
+        org.apache.parquet.schema.GroupType st = g.getType();
+        for (int i = 0; i < st.getFieldCount(); i++) {
+            org.apache.parquet.schema.Type child = st.getType(i);
+            String name = child.getName();
+            if (g.getFieldRepetitionCount(i) == 0) {
+                out.put(name, null);
+                continue;
+            }
+            out.put(name, readGroupValue(g, name, child));
+        }
+        return out;
     }
 
     private static void writeGroupField(org.apache.parquet.example.data.simple.SimpleGroup g,
@@ -3859,24 +4393,160 @@ public final class DataFrame implements AutoCloseable, Serializable {
                 case FLOAT32:  g.add(name, ((Number) val).floatValue()); break;
                 case FLOAT64:  g.add(name, ((Number) val).doubleValue()); break;
                 case BOOLEAN:  g.add(name, (Boolean) val); break;
-                default:       g.add(name, val.toString()); break;
+                case LIST:
+                case VECTOR:
+                case EMBEDDING:
+                    writeListField(g, name, val);
+                    break;
+                default:
+                    if (val instanceof long[] || val instanceof int[] || val instanceof float[]
+                        || val instanceof double[] || val instanceof List) {
+                        writeListField(g, name, val);
+                    } else {
+                        g.add(name, val.toString());
+                    }
+                    break;
             }
         } catch (Exception e) { /* skip malformed value */ }
     }
 
-    private org.apache.parquet.schema.MessageType buildParquetSchema() {
-        SchemaBuilder sb = SchemaBuilder.builder("root");
-        for (Column c : columns) {
-            switch (c.dtype()) {
-                case INT32:    sb.optionalInt32(c.name()); break;
-                case INT64:    sb.optionalInt64(c.name()); break;
-                case FLOAT32:  sb.optionalFloat(c.name()); break;
-                case FLOAT64:  sb.optionalDouble(c.name()); break;
-                case BOOLEAN:  sb.optionalBoolean(c.name()); break;
-                case VECTOR:   // store as string serialization for parquet fallback
-                default:      sb.optionalString(c.name()); break;
+    /**
+     * Write a LIST/VECTOR cell into a 3-level Parquet LIST group:
+     *   optional group name (LIST) { repeated group list { optional T item; } }
+     */
+    private static void writeListField(org.apache.parquet.example.data.simple.SimpleGroup g,
+                                       String name, Object val) {
+        org.apache.parquet.example.data.simple.SimpleGroup listOuter =
+            (org.apache.parquet.example.data.simple.SimpleGroup) g.addGroup(name);
+        if (val instanceof long[]) {
+            long[] a = (long[]) val;
+            for (long v : a) {
+                org.apache.parquet.example.data.simple.SimpleGroup mid =
+                    (org.apache.parquet.example.data.simple.SimpleGroup) listOuter.addGroup(0);
+                mid.add(0, v);
+            }
+            return;
+        }
+        if (val instanceof int[]) {
+            int[] a = (int[]) val;
+            for (int v : a) {
+                org.apache.parquet.example.data.simple.SimpleGroup mid =
+                    (org.apache.parquet.example.data.simple.SimpleGroup) listOuter.addGroup(0);
+                mid.add(0, v);
+            }
+            return;
+        }
+        if (val instanceof float[]) {
+            float[] a = (float[]) val;
+            for (float v : a) {
+                org.apache.parquet.example.data.simple.SimpleGroup mid =
+                    (org.apache.parquet.example.data.simple.SimpleGroup) listOuter.addGroup(0);
+                mid.add(0, v);
+            }
+            return;
+        }
+        if (val instanceof double[]) {
+            double[] a = (double[]) val;
+            for (double v : a) {
+                org.apache.parquet.example.data.simple.SimpleGroup mid =
+                    (org.apache.parquet.example.data.simple.SimpleGroup) listOuter.addGroup(0);
+                mid.add(0, v);
+            }
+            return;
+        }
+        if (val instanceof List) {
+            for (Object o : (List<?>) val) {
+                org.apache.parquet.example.data.simple.SimpleGroup mid =
+                    (org.apache.parquet.example.data.simple.SimpleGroup) listOuter.addGroup(0);
+                if (o == null) continue;
+                if (o instanceof Number) {
+                    Number n = (Number) o;
+                    // Prefer widest write; schema decides actual type
+                    if (o instanceof Double || o instanceof Float) mid.add(0, n.doubleValue());
+                    else mid.add(0, n.longValue());
+                } else {
+                    mid.add(0, String.valueOf(o));
+                }
             }
         }
-        return sb.build();
+    }
+
+    private org.apache.parquet.schema.MessageType buildParquetSchema() {
+        // Build MessageType with proper LIST logical types for LIST/VECTOR columns.
+        List<org.apache.parquet.schema.Type> fields = new ArrayList<>();
+        for (Column c : columns) {
+            fields.add(parquetFieldForColumn(c));
+        }
+        return new org.apache.parquet.schema.MessageType("root", fields);
+    }
+
+    private static org.apache.parquet.schema.Type parquetFieldForColumn(Column c) {
+        String name = c.name();
+        switch (c.dtype()) {
+            case INT32:   return org.apache.parquet.schema.Types.optional(
+                org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT32).named(name);
+            case INT64:   return org.apache.parquet.schema.Types.optional(
+                org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT64).named(name);
+            case FLOAT32: return org.apache.parquet.schema.Types.optional(
+                org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.FLOAT).named(name);
+            case FLOAT64: return org.apache.parquet.schema.Types.optional(
+                org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.DOUBLE).named(name);
+            case BOOLEAN: return org.apache.parquet.schema.Types.optional(
+                org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BOOLEAN).named(name);
+            case LIST:
+            case VECTOR:
+            case EMBEDDING:
+                return parquetListField(name, inferListElementPrimitive(c));
+            case BINARY:
+                return org.apache.parquet.schema.Types.optional(
+                    org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY).named(name);
+            default:
+                // STRING and fallbacks
+                return org.apache.parquet.schema.Types.optional(
+                        org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BINARY)
+                    .as(org.apache.parquet.schema.LogicalTypeAnnotation.stringType())
+                    .named(name);
+        }
+    }
+
+    /** Infer primitive element type of a LIST/VECTOR column from the first non-null cell. */
+    private static org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
+            inferListElementPrimitive(Column c) {
+        for (int i = 0; i < c.size(); i++) {
+            Object v = c.get(i);
+            if (v == null) continue;
+            if (v instanceof int[]) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT32;
+            if (v instanceof long[]) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT64;
+            if (v instanceof float[]) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.FLOAT;
+            if (v instanceof double[]) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.DOUBLE;
+            if (v instanceof List && !((List<?>) v).isEmpty()) {
+                Object e = ((List<?>) v).get(0);
+                if (e instanceof Integer) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT32;
+                if (e instanceof Long) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT64;
+                if (e instanceof Float) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.FLOAT;
+                if (e instanceof Double) return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.DOUBLE;
+            }
+            break;
+        }
+        // default: INT64 for LIST (item sequences), FLOAT for VECTOR/EMBEDDING
+        if (c.dtype() == Column.DType.VECTOR || c.dtype() == Column.DType.EMBEDDING) {
+            return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.FLOAT;
+        }
+        return org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT64;
+    }
+
+    /**
+     * Standard 3-level LIST:
+     *   optional group name (LIST) {
+     *     repeated group list {
+     *       optional T item;
+     *     }
+     *   }
+     */
+    private static org.apache.parquet.schema.Type parquetListField(
+            String name, org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName elem) {
+        return org.apache.parquet.schema.Types.optionalList()
+            .element(elem, org.apache.parquet.schema.Type.Repetition.OPTIONAL)
+            .named(name);
     }
 }

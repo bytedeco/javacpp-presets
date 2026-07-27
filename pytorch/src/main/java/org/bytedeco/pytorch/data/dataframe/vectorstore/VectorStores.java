@@ -316,7 +316,7 @@ public final class VectorStores {
             .dim(intVal(cfg, "dim", 0))
             .metric(metricVal(cfg))
             .vectorField(strVal(cfg, "vectorField", "vector"))
-            .engine(strVal(cfg, "engine", "nmslib"))
+            .engine(strVal(cfg, "engine", "faiss"))
             .timeout(durationVal(cfg));
         String user = strVal(cfg, "username", strVal(cfg, "user", null));
         if (user != null) b.basicAuth(user, strVal(cfg, "password", ""));

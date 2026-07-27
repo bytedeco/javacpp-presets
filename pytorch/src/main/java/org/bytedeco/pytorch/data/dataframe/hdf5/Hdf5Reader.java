@@ -1,24 +1,29 @@
 package org.bytedeco.pytorch.data.dataframe.hdf5;
 
-import io.jhdf.HdfFile;
-import io.jhdf.api.Attribute;
-import io.jhdf.api.Dataset;
-import io.jhdf.api.Group;
-import io.jhdf.api.Node;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.hdf5.internal.Hdf5ReaderCore;
+import org.bytedeco.pytorch.data.dataframe.hdf5.internal.Hdf5WriterCore;
 import org.bytedeco.pytorch.data.dataframe.io.IoTypeCoercion;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * HDF5 reader supporting:
+ * HDF5-family reader for the minimal pure-Java layout written by {@link Hdf5Writer}.
+ *
  * <ul>
- *   <li>Our columnar layout (group + 1-D datasets per column)</li>
+ *   <li>Columnar layout (group + 1-D datasets per column)</li>
  *   <li>Plain 1-D / 2-D numeric datasets</li>
- *   <li>Best-effort pandas fixed-style groups when recognizable</li>
+ *   <li>Matrix layout ({@code values} 2-D dataset)</li>
  * </ul>
+ *
+ * <p>Does not depend on jhdf. Chunked/compressed third-party files are not supported.
  */
 public final class Hdf5Reader {
     private Hdf5Reader() {}
@@ -29,63 +34,39 @@ public final class Hdf5Reader {
 
     public static DataFrame read(String path, String key, Hdf5Options options) throws Exception {
         Hdf5Options opt = options == null ? Hdf5Options.defaults() : options;
-        String k = normalizeKey(key);
-        try (HdfFile file = new HdfFile(Path.of(path))) {
-            Node node = resolve(file, k);
-            if (node == null) {
-                throw new IllegalArgumentException("HDF5 key not found: " + key);
-            }
-            if (node instanceof Dataset) {
-                return fromDataset((Dataset) node, leafName(k), opt);
-            }
-            if (node instanceof Group) {
-                return fromGroup((Group) node, opt);
-            }
-            throw new IllegalArgumentException("Unsupported HDF5 node type at " + key + ": " + node.getType());
+        Hdf5ReaderCore.Node root = Hdf5ReaderCore.open(Path.of(path));
+        Hdf5ReaderCore.Node node = Hdf5ReaderCore.resolve(root, key);
+        if (node == null) {
+            throw new IllegalArgumentException("HDF5 key not found: " + key);
         }
+        if (!node.group) {
+            return fromDataset(node, leafName(key), opt);
+        }
+        return fromGroup(node, opt);
     }
 
-    private static Node resolve(HdfFile file, String key) {
-        if (key == null || key.isEmpty() || "/".equals(key)) return file;
-        String path = key.startsWith("/") ? key.substring(1) : key;
-        if (path.isEmpty()) return file;
-        try {
-            return file.getByPath(path);
-        } catch (Exception e) {
-            // try dataset path API
-            try {
-                return file.getDatasetByPath(path);
-            } catch (Exception e2) {
-                return null;
-            }
-        }
-    }
-
-    private static DataFrame fromGroup(Group group, Hdf5Options opt) {
-        // Detect format attribute
-        String format = attrString(group, "format");
-        if (format == null) format = attrString(group, "pandas_type");
-
-        // Column order from attribute if present
+    private static DataFrame fromGroup(Hdf5ReaderCore.Node group, Hdf5Options opt) {
         List<String> ordered = null;
-        Object colNamesAttr = attrData(group, "column_names");
+        Object colNamesAttr = group.attrs.get("column_names");
         if (colNamesAttr instanceof String[]) {
             ordered = Arrays.asList((String[]) colNamesAttr);
-        } else if (colNamesAttr instanceof Object[]) {
-            ordered = new ArrayList<>();
-            for (Object o : (Object[]) colNamesAttr) ordered.add(String.valueOf(o));
         }
 
-        Map<String, Node> children = group.getChildren();
         List<String> names = new ArrayList<>();
         if (ordered != null) {
-            for (String n : ordered) if (children.containsKey(n)) names.add(n);
-            for (String n : children.keySet()) if (!names.contains(n) && children.get(n) instanceof Dataset) names.add(n);
-        } else {
-            for (Map.Entry<String, Node> e : children.entrySet()) {
-                if (e.getValue() instanceof Dataset) names.add(e.getKey());
+            for (String n : ordered) {
+                if (group.children.containsKey(n) || group.children.containsKey(Hdf5WriterCore.sanitize(n))) {
+                    String key = group.children.containsKey(n) ? n : Hdf5WriterCore.sanitize(n);
+                    if (!names.contains(key)) names.add(key);
+                }
             }
-            // stable-ish order
+            for (String n : group.children.keySet()) {
+                if (!names.contains(n) && !group.children.get(n).group) names.add(n);
+            }
+        } else {
+            for (Map.Entry<String, Hdf5ReaderCore.Node> e : group.children.entrySet()) {
+                if (!e.getValue().group) names.add(e.getKey());
+            }
             Collections.sort(names);
         }
 
@@ -94,38 +75,41 @@ public final class Hdf5Reader {
         }
 
         if (names.isEmpty()) {
-            // maybe nested values dataset (pandas-ish)
-            if (children.containsKey("values") && children.get("values") instanceof Dataset) {
-                return fromDataset((Dataset) children.get("values"), "values", opt);
+            if (group.children.containsKey("values") && !group.children.get("values").group) {
+                return fromDataset(group.children.get("values"), "values", opt);
             }
             return DataFrame.create();
         }
 
-        // Read each 1-D dataset as a column
         Map<String, Object[]> colData = new LinkedHashMap<>();
         Map<String, Column.DType> dtypes = new LinkedHashMap<>();
         int rowCount = -1;
         for (String name : names) {
-            Dataset ds = (Dataset) children.get(name);
-            Object[] values = flattenDataset(ds);
+            Hdf5ReaderCore.Node child = group.children.get(name);
+            if (child == null || child.group) continue;
+            Object decoded = Hdf5ReaderCore.decodeToJava(child.dataset);
+            Object[] values = Hdf5ReaderCore.toObjectArray(decoded);
             if (opt.maxRows() >= 0 && values.length > opt.maxRows()) {
                 values = Arrays.copyOf(values, opt.maxRows());
             }
             if (rowCount < 0) rowCount = values.length;
             else if (values.length != rowCount) {
-                // pad / truncate
                 values = Arrays.copyOf(values, rowCount);
             }
-            Column.DType dt = inferDType(ds, values, opt, name);
+            Column.DType dt = inferDType(name, child.dataset, values, opt, group.attrs);
             colData.put(name, values);
             dtypes.put(name, dt);
         }
 
+        if (rowCount < 0) return DataFrame.create();
         DataFrame df = DataFrame.create();
-        for (String name : names) df.addColumn(name, dtypes.get(name));
+        for (String name : names) {
+            if (dtypes.containsKey(name)) df.addColumn(name, dtypes.get(name));
+        }
         for (int r = 0; r < rowCount; r++) {
             int ri = df.addEmptyRow();
             for (String name : names) {
+                if (!colData.containsKey(name)) continue;
                 Object v = colData.get(name)[r];
                 try {
                     df.set(ri, name, v == null ? null : IoTypeCoercion.coerce(v, dtypes.get(name)));
@@ -137,54 +121,27 @@ public final class Hdf5Reader {
         return df;
     }
 
-    private static DataFrame fromDataset(Dataset ds, String name, Hdf5Options opt) {
-        int[] dims = ds.getDimensions();
-        if (dims == null || dims.length == 0) {
-            // scalar
-            DataFrame df = DataFrame.create();
-            Object data = ds.getData();
-            Column.DType dt = javaToDType(ds.getJavaType(), data);
-            df.addColumn(name, dt);
-            int ri = df.addEmptyRow();
-            df.set(ri, name, boxScalar(data));
-            return df;
-        }
-        if (dims.length == 1) {
-            Object[] values = flattenDataset(ds);
-            if (opt.maxRows() >= 0 && values.length > opt.maxRows()) {
-                values = Arrays.copyOf(values, opt.maxRows());
-            }
-            Column.DType dt = inferDType(ds, values, opt, name);
-            DataFrame df = DataFrame.create();
-            df.addColumn(name, dt);
-            for (Object v : values) {
-                int ri = df.addEmptyRow();
-                df.set(ri, name, v);
-            }
-            return df;
-        }
-        if (dims.length == 2) {
-            // rows x cols matrix
-            Object raw = ds.getData();
-            int rows = dims[0];
-            int cols = dims[1];
+    private static DataFrame fromDataset(Hdf5ReaderCore.Node node, String name, Hdf5Options opt) {
+        Hdf5WriterCore.EncodedData ds = node.dataset;
+        Object decoded = Hdf5ReaderCore.decodeToJava(ds);
+        if (ds.rank == 2 && decoded instanceof double[][]) {
+            double[][] m = (double[][]) decoded;
+            int rows = m.length;
+            int cols = rows == 0 ? 0 : m[0].length;
             if (opt.maxRows() >= 0) rows = Math.min(rows, opt.maxRows());
             DataFrame df = DataFrame.create();
-            Column.DType dt = javaToDType(ds.getJavaType(), null);
-            for (int c = 0; c < cols; c++) df.addColumn("col_" + c, dt);
-            // raw is typically multi-dim array
+            for (int c = 0; c < cols; c++) df.addColumn("col_" + c, Column.DType.FLOAT64);
             for (int r = 0; r < rows; r++) {
                 int ri = df.addEmptyRow();
-                for (int c = 0; c < cols; c++) {
-                    Object v = matrixGet(raw, r, c, dims);
-                    df.set(ri, "col_" + c, v);
-                }
+                for (int c = 0; c < cols; c++) df.set(ri, "col_" + c, m[r][c]);
             }
             return df;
         }
-        // higher rank → flatten
-        Object[] values = flattenDataset(ds);
-        Column.DType dt = inferDType(ds, values, opt, name);
+        Object[] values = Hdf5ReaderCore.toObjectArray(decoded);
+        if (opt.maxRows() >= 0 && values.length > opt.maxRows()) {
+            values = Arrays.copyOf(values, opt.maxRows());
+        }
+        Column.DType dt = inferDType(name, ds, values, opt, Map.of());
         DataFrame df = DataFrame.create();
         df.addColumn(name, dt);
         for (Object v : values) {
@@ -194,108 +151,30 @@ public final class Hdf5Reader {
         return df;
     }
 
-    private static Object[] flattenDataset(Dataset ds) {
-        Object flat = null;
-        try {
-            flat = ds.getDataFlat();
-        } catch (Exception ignored) {}
-        if (flat == null) flat = ds.getData();
-        return toObjectArray(flat);
-    }
-
-    private static Object[] toObjectArray(Object data) {
-        if (data == null) return new Object[0];
-        if (data instanceof Object[]) {
-            Object[] arr = (Object[]) data;
-            // nested?
-            if (arr.length > 0 && arr[0] != null && arr[0].getClass().isArray()) {
-                List<Object> out = new ArrayList<>();
-                flattenInto(arr, out);
-                return out.toArray();
-            }
-            return arr;
-        }
-        if (data instanceof double[]) {
-            double[] a = (double[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = a[i];
-            return o;
-        }
-        if (data instanceof float[]) {
-            float[] a = (float[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = a[i];
-            return o;
-        }
-        if (data instanceof long[]) {
-            long[] a = (long[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = a[i];
-            return o;
-        }
-        if (data instanceof int[]) {
-            int[] a = (int[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = (long) a[i];
-            return o;
-        }
-        if (data instanceof short[]) {
-            short[] a = (short[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = (long) a[i];
-            return o;
-        }
-        if (data instanceof byte[]) {
-            byte[] a = (byte[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = (long) a[i];
-            return o;
-        }
-        if (data instanceof boolean[]) {
-            boolean[] a = (boolean[]) data;
-            Object[] o = new Object[a.length];
-            for (int i = 0; i < a.length; i++) o[i] = a[i];
-            return o;
-        }
-        if (data instanceof String[]) return (String[]) data;
-        if (data.getClass().isArray()) {
-            int n = java.lang.reflect.Array.getLength(data);
-            Object[] o = new Object[n];
-            for (int i = 0; i < n; i++) o[i] = java.lang.reflect.Array.get(data, i);
-            return o;
-        }
-        return new Object[]{data};
-    }
-
-    private static void flattenInto(Object arr, List<Object> out) {
-        if (arr == null) { out.add(null); return; }
-        if (!arr.getClass().isArray()) { out.add(arr); return; }
-        if (arr instanceof Object[]) {
-            for (Object o : (Object[]) arr) flattenInto(o, out);
-            return;
-        }
-        int n = java.lang.reflect.Array.getLength(arr);
-        for (int i = 0; i < n; i++) out.add(java.lang.reflect.Array.get(arr, i));
-    }
-
-    private static Object matrixGet(Object raw, int r, int c, int[] dims) {
-        if (raw == null) return null;
-        if (raw instanceof Object[]) {
-            Object row = ((Object[]) raw)[r];
-            if (row == null) return null;
-            if (row.getClass().isArray()) return java.lang.reflect.Array.get(row, c);
-            return row;
-        }
-        // flat primitive
-        int idx = r * dims[1] + c;
-        Object[] flat = toObjectArray(raw);
-        return idx < flat.length ? flat[idx] : null;
-    }
-
-    private static Column.DType inferDType(Dataset ds, Object[] values, Hdf5Options opt, String name) {
+    private static Column.DType inferDType(String name, Hdf5WriterCore.EncodedData ds,
+                                           Object[] values, Hdf5Options opt,
+                                           Map<String, Object> attrs) {
         if (opt.schema() != null && opt.schema().containsKey(name)) return opt.schema().get(name);
-        Column.DType fromJava = javaToDType(ds.getJavaType(), values.length > 0 ? values[0] : null);
-        if (fromJava != Column.DType.STRING) return fromJava;
+        Object dtypesAttr = attrs.get("dtypes");
+        Object namesAttr = attrs.get("column_names");
+        if (dtypesAttr instanceof String[] && namesAttr instanceof String[]) {
+            String[] dn = (String[]) dtypesAttr;
+            String[] cn = (String[]) namesAttr;
+            for (int i = 0; i < cn.length && i < dn.length; i++) {
+                if (name.equals(cn[i]) || Hdf5WriterCore.sanitize(cn[i]).equals(name)) {
+                    try { return Column.DType.valueOf(dn[i]); } catch (Exception ignored) {}
+                }
+            }
+        }
+        switch (ds.dtypeCode) {
+            case 1: return Column.DType.INT32;
+            case 2: return Column.DType.INT64;
+            case 3: return Column.DType.FLOAT32;
+            case 4: return Column.DType.FLOAT64;
+            case 5: return Column.DType.BOOLEAN;
+            case 6: return Column.DType.STRING;
+            default: break;
+        }
         Column.DType acc = null;
         int sample = Math.min(1000, values.length);
         for (int i = 0; i < sample; i++) {
@@ -306,52 +185,10 @@ public final class Hdf5Reader {
         return acc == null ? Column.DType.STRING : acc;
     }
 
-    private static Column.DType javaToDType(Class<?> cls, Object sample) {
-        if (cls == null && sample != null) cls = sample.getClass();
-        if (cls == null) return Column.DType.STRING;
-        if (cls == boolean.class || cls == Boolean.class || cls == boolean[].class) return Column.DType.BOOLEAN;
-        if (cls == int.class || cls == Integer.class || cls == int[].class) return Column.DType.INT32;
-        if (cls == long.class || cls == Long.class || cls == long[].class) return Column.DType.INT64;
-        if (cls == short.class || cls == Short.class || cls == byte.class || cls == Byte.class
-            || cls == short[].class || cls == byte[].class) return Column.DType.INT64;
-        if (cls == float.class || cls == Float.class || cls == float[].class) return Column.DType.FLOAT32;
-        if (cls == double.class || cls == Double.class || cls == double[].class) return Column.DType.FLOAT64;
-        if (cls == String.class || cls == String[].class) return Column.DType.STRING;
-        return Column.DType.STRING;
-    }
-
-    private static Object boxScalar(Object data) {
-        if (data == null) return null;
-        if (data.getClass().isArray() && java.lang.reflect.Array.getLength(data) == 1) {
-            return java.lang.reflect.Array.get(data, 0);
-        }
-        return data;
-    }
-
-    private static String attrString(Node node, String name) {
-        Object d = attrData(node, name);
-        return d == null ? null : String.valueOf(d instanceof Object[] ? ((Object[]) d)[0] : d);
-    }
-
-    private static Object attrData(Node node, String name) {
-        try {
-            Attribute a = node.getAttribute(name);
-            return a == null ? null : a.getData();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private static String normalizeKey(String key) {
-        if (key == null || key.isEmpty()) return "/";
-        if (!key.startsWith("/")) return "/" + key;
-        return key;
-    }
-
     private static String leafName(String key) {
-        String k = normalizeKey(key);
-        int idx = k.lastIndexOf('/');
-        String leaf = idx >= 0 ? k.substring(idx + 1) : k;
-        return leaf.isEmpty() ? "data" : leaf;
+        if (key == null || key.isEmpty() || "/".equals(key)) return "value";
+        int slash = key.lastIndexOf('/');
+        String leaf = slash >= 0 ? key.substring(slash + 1) : key;
+        return leaf.isEmpty() ? "value" : leaf;
     }
 }

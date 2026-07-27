@@ -43,7 +43,7 @@ public enum SafeDType {
     }
 
     public static SafeDType fromString(String s) {
-        if (s == null) return F32;
+        if (s == null) return null;
         switch (s.toUpperCase(Locale.ROOT)) {
             case "F64": case "FLOAT64": case "DOUBLE": return F64;
             case "F32": case "FLOAT32": case "FLOAT": return F32;
@@ -55,7 +55,7 @@ public enum SafeDType {
             case "I8": case "INT8": return I8;
             case "U8": case "UINT8": return U8;
             case "BOOL": case "BOOLEAN": return BOOL;
-            default: return F32;
+            default: return null;
         }
     }
 

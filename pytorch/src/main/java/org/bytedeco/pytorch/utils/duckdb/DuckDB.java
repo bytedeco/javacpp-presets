@@ -396,7 +396,8 @@ public final class DuckDB implements Closeable {
             @Override public String tableFunction(String path) {
                 return "read_orc('" + escapePath(path) + "')";
             }
-            @Override String copyOptions() { return "FORMAT PARQUET"; } // ORC write via parquet fallback
+            /** DuckDB reliably reads ORC; COPY TO ORC is not universally available. */
+            @Override String copyOptions() { return "FORMAT ORC"; }
         },
         ARROW {
             @Override public String tableFunction(String path) {

@@ -46,9 +46,11 @@ import java.util.Set;
  *
  * <p>Supports:
  * <ul>
- *   <li>single {@code model.safetensors} / {@code model.fp32.safetensors}</li>
+ *   <li>single {@code model.safetensors} / dtype-tagged alternates</li>
  *   <li>sharded {@code model.safetensors.index.json} + listed shards</li>
- *   <li>any {@code *.safetensors} fallback scan</li>
+ *   <li>numbered shards {@code model-00001-of-000NN.safetensors} without index</li>
+ *   <li>files larger than ~2 GiB via per-tensor mmap in {@link SafeTensors}</li>
+ *   <li>any remaining {@code *.safetensors} fallback scan (skips {@code *.partial})</li>
  * </ul>
  */
 public final class SnapshotFiles {
@@ -98,32 +100,98 @@ public final class SnapshotFiles {
 
     /**
      * Ordered list of safetensors files to open for this snapshot.
+     *
+     * <p>Resolution order:
+     * <ol>
+     *   <li>{@code model.safetensors.index.json} weight_map (HF multi-shard)</li>
+     *   <li>legacy {@code pytorch_model.bin.index.json} when it points at {@code *.safetensors}</li>
+     *   <li>single {@code model.safetensors}</li>
+     *   <li>HF-style shards {@code model-00001-of-000NN.safetensors} (sorted), even without index</li>
+     *   <li>other named single-file alternates</li>
+     *   <li>any remaining {@code *.safetensors} (ignores {@code *.partial})</li>
+     * </ol>
      */
     public static List<Path> weightFiles(Path dir) throws IOException {
         Objects.requireNonNull(dir, "dir");
         if (!Files.isDirectory(dir)) {
             throw new IOException("Not a directory: " + dir);
         }
+
+        // 1) Official HF index (preferred for multi-shard)
         Path index = dir.resolve("model.safetensors.index.json");
         if (Files.isRegularFile(index)) {
             return shardsFromIndex(dir, index);
         }
+        // some older dumps use pytorch_model.bin.index.json but store safetensors shards
+        Path legacyIndex = dir.resolve("pytorch_model.bin.index.json");
+        if (Files.isRegularFile(legacyIndex)) {
+            List<Path> fromLegacy = shardsFromIndex(dir, legacyIndex);
+            if (!fromLegacy.isEmpty() && fromLegacy.stream().allMatch(p ->
+                    p.getFileName().toString().endsWith(".safetensors"))) {
+                return fromLegacy;
+            }
+        }
+
+        // 2) Single-file checkpoint
         Path single = dir.resolve("model.safetensors");
-        if (Files.isRegularFile(single)) {
+        if (Files.isRegularFile(single) && isUsableWeightFile(single)) {
             return List.of(single);
         }
-        // common alternates
+
+        // 3) HF multi-shard naming without index: model-00001-of-00010.safetensors
+        List<Path> numbered = discoverNumberedShards(dir);
+        if (!numbered.isEmpty()) {
+            return numbered;
+        }
+
+        // 4) common alternates
         for (String name : new String[]{
                 "model.fp16.safetensors", "model.bf16.safetensors",
                 "pytorch_model.safetensors", "adapter_model.safetensors"
         }) {
             Path p = dir.resolve(name);
-            if (Files.isRegularFile(p)) return List.of(p);
+            if (Files.isRegularFile(p) && isUsableWeightFile(p)) return List.of(p);
         }
+
+        // 5) fallback scan — skip incomplete downloads / partials
         List<Path> found = new ArrayList<>();
         try (DirectoryStream<Path> ds = Files.newDirectoryStream(dir, "*.safetensors")) {
             for (Path p : ds) {
-                if (Files.isRegularFile(p)) found.add(p);
+                if (Files.isRegularFile(p) && isUsableWeightFile(p)) found.add(p);
+            }
+        }
+        found.sort(Path::compareTo);
+        return found;
+    }
+
+    /** Skip incomplete downloads and empty stubs. */
+    static boolean isUsableWeightFile(Path p) {
+        if (p == null) return false;
+        String name = p.getFileName().toString();
+        if (name.endsWith(".partial") || name.contains(".partial.") || name.endsWith(".chunk")) {
+            return false;
+        }
+        try {
+            return Files.size(p) > 1024L; // ignore empty/tiny stubs
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Discover {@code model-0000N-of-0000M.safetensors} (or {@code pytorch_model-...}) shards
+     * when the index json is missing. Sorted lexicographically so 00001..0000N stay ordered.
+     */
+    static List<Path> discoverNumberedShards(Path dir) throws IOException {
+        List<Path> found = new ArrayList<>();
+        try (DirectoryStream<Path> ds = Files.newDirectoryStream(dir, "*.safetensors")) {
+            for (Path p : ds) {
+                if (!Files.isRegularFile(p) || !isUsableWeightFile(p)) continue;
+                String n = p.getFileName().toString();
+                // model-00001-of-00010.safetensors  OR  pytorch_model-00001-of-00010.safetensors
+                if (n.matches("(?i)(model|pytorch_model)-\\d{5}-of-\\d{5}\\.safetensors")) {
+                    found.add(p);
+                }
             }
         }
         found.sort(Path::compareTo);
@@ -147,16 +215,25 @@ public final class SnapshotFiles {
             if (!Files.isRegularFile(p)) {
                 throw new IOException("Shard listed in index but missing: " + p);
             }
+            if (!isUsableWeightFile(p)) {
+                throw new IOException("Shard listed in index is incomplete/unusable: " + p);
+            }
             out.add(p);
         }
         if (out.isEmpty()) {
             throw new IOException("Empty weight_map in " + index);
         }
+        // Stable order: prefer numbered shard order, else insertion order from weight_map
+        out.sort(Path::compareTo);
         return out;
     }
 
     /**
      * Load and merge all weight tensors from the snapshot (mmap when {@code zeroCopy}).
+     *
+     * <p>Multi-shard: each {@code model-XXXXX-of-YYYYY.safetensors} (or index-listed
+     * shard) is opened via {@link SafeTensors#loadAsTensors}; keys are merged.
+     * Files larger than ~2 GiB use per-tensor mmap inside SafeTensors.
      */
     public static Map<String, Tensor> loadAllWeights(Path dir, boolean zeroCopy) throws IOException {
         List<Path> files = weightFiles(dir);
@@ -164,15 +241,24 @@ public final class SnapshotFiles {
             throw new IOException("No .safetensors weight files in " + dir);
         }
         Map<String, Tensor> all = new LinkedHashMap<>();
+        int shardIdx = 0;
         for (Path f : files) {
+            shardIdx++;
+            long sz = Files.size(f);
+            System.out.println("[SnapshotFiles] loading shard " + shardIdx + "/" + files.size()
+                    + " " + f.getFileName() + " (" + String.format(java.util.Locale.ROOT, "%.2f", sz / 1e9)
+                    + " GB) zeroCopy=" + zeroCopy);
             Map<String, Tensor> part = SafeTensors.loadAsTensors(f.toFile(), zeroCopy);
             for (Map.Entry<String, Tensor> e : part.entrySet()) {
                 if (all.containsKey(e.getKey())) {
-                    throw new IOException("Duplicate tensor key across shards: " + e.getKey());
+                    throw new IOException("Duplicate tensor key across shards: " + e.getKey()
+                            + " (file=" + f.getFileName() + ")");
                 }
                 all.put(e.getKey(), e.getValue());
             }
         }
+        System.out.println("[SnapshotFiles] merged " + all.size() + " tensors from "
+                + files.size() + " shard(s)");
         return all;
     }
 

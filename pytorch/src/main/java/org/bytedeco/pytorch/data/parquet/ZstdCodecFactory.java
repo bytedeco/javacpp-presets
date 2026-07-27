@@ -10,9 +10,10 @@ import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.xerial.snappy.Snappy;
 
 /**
- * Pure-Java CompressionCodecFactory (no Hadoop).
- * Supports ZSTD (via zstd-jni) and SNAPPY (via snappy-java) decompression.
- * Write/compress throws {@link UnsupportedOperationException}.
+ * Pure-Java {@link CompressionCodecFactory} (no Hadoop codecs).
+ * Supports UNCOMPRESSED / ZSTD (zstd-jni) / SNAPPY (snappy-java) for both
+ * compress and decompress so {@link LocalParquetWriter} can drop
+ * {@code hadoop-client-runtime}.
  */
 public final class ZstdCodecFactory implements CompressionCodecFactory {
 
@@ -22,13 +23,19 @@ public final class ZstdCodecFactory implements CompressionCodecFactory {
     private ZstdCodecFactory() {}
 
     @Override
-    public CompressionCodecFactory.BytesInputCompressor getCompressor(CompressionCodecName codecName) {
-        throw new UnsupportedOperationException(
-            "Compression not supported in pure-Java codec factory: " + codecName);
+    public BytesInputCompressor getCompressor(CompressionCodecName codecName) {
+        switch (codecName) {
+            case UNCOMPRESSED: return NoopCompressor.INSTANCE;
+            case ZSTD:         return ZstdCompressor.INSTANCE;
+            case SNAPPY:       return SnappyCompressor.INSTANCE;
+            default:
+                throw new UnsupportedOperationException(
+                    "Unsupported codec for pure-Java compress (no Hadoop): " + codecName);
+        }
     }
 
     @Override
-    public CompressionCodecFactory.BytesInputDecompressor getDecompressor(CompressionCodecName codecName) {
+    public BytesInputDecompressor getDecompressor(CompressionCodecName codecName) {
         switch (codecName) {
             case UNCOMPRESSED: return NoopDecompressor.INSTANCE;
             case ZSTD:         return ZstdDecompressor.INSTANCE;
@@ -44,8 +51,15 @@ public final class ZstdCodecFactory implements CompressionCodecFactory {
 
     // ---- Noop ----------------------------------------------------------------
 
-    public static final class NoopDecompressor
-            implements CompressionCodecFactory.BytesInputDecompressor {
+    public static final class NoopCompressor implements BytesInputCompressor {
+        static final NoopCompressor INSTANCE = new NoopCompressor();
+        private NoopCompressor() {}
+        @Override public BytesInput compress(BytesInput bytes) { return bytes; }
+        @Override public CompressionCodecName getCodecName() { return CompressionCodecName.UNCOMPRESSED; }
+        @Override public void release() {}
+    }
+
+    public static final class NoopDecompressor implements BytesInputDecompressor {
         static final NoopDecompressor INSTANCE = new NoopDecompressor();
         private NoopDecompressor() {}
         @Override public BytesInput decompress(BytesInput bytes, int uncompressedSize) { return bytes; }
@@ -61,8 +75,23 @@ public final class ZstdCodecFactory implements CompressionCodecFactory {
 
     // ---- ZSTD ----------------------------------------------------------------
 
-    public static final class ZstdDecompressor
-            implements CompressionCodecFactory.BytesInputDecompressor {
+    public static final class ZstdCompressor implements BytesInputCompressor {
+        static final ZstdCompressor INSTANCE = new ZstdCompressor();
+        private ZstdCompressor() {}
+        @Override public BytesInput compress(BytesInput bytes) throws IOException {
+            byte[] in = bytes.toByteArray();
+            long max = Zstd.compressBound(in.length);
+            byte[] out = new byte[(int) max];
+            // zstd-jni: compress(dst, src, level)
+            long n = Zstd.compress(out, in, 3);
+            if (Zstd.isError(n)) throw new IOException("ZSTD compress error: " + Zstd.getErrorName(n));
+            return BytesInput.from(out, 0, (int) n);
+        }
+        @Override public CompressionCodecName getCodecName() { return CompressionCodecName.ZSTD; }
+        @Override public void release() {}
+    }
+
+    public static final class ZstdDecompressor implements BytesInputDecompressor {
         static final ZstdDecompressor INSTANCE = new ZstdDecompressor();
         private ZstdDecompressor() {}
         @Override public BytesInput decompress(BytesInput bytes, int uncompressedSize) throws IOException {
@@ -87,8 +116,19 @@ public final class ZstdCodecFactory implements CompressionCodecFactory {
 
     // ---- SNAPPY --------------------------------------------------------------
 
-    public static final class SnappyDecompressor
-            implements CompressionCodecFactory.BytesInputDecompressor {
+    public static final class SnappyCompressor implements BytesInputCompressor {
+        static final SnappyCompressor INSTANCE = new SnappyCompressor();
+        private SnappyCompressor() {}
+        @Override public BytesInput compress(BytesInput bytes) throws IOException {
+            byte[] in = bytes.toByteArray();
+            byte[] out = Snappy.compress(in);
+            return BytesInput.from(out);
+        }
+        @Override public CompressionCodecName getCodecName() { return CompressionCodecName.SNAPPY; }
+        @Override public void release() {}
+    }
+
+    public static final class SnappyDecompressor implements BytesInputDecompressor {
         static final SnappyDecompressor INSTANCE = new SnappyDecompressor();
         private SnappyDecompressor() {}
         @Override public BytesInput decompress(BytesInput bytes, int uncompressedSize) throws IOException {
@@ -112,7 +152,6 @@ public final class ZstdCodecFactory implements CompressionCodecFactory {
             byte[] outArr = new byte[outputLen];
             Snappy.uncompress(inArr, 0, inArr.length, outArr, 0);
             output.put(outArr);
-            output.position(output.position() + outputLen);
         }
         @Override public void release() {}
     }

@@ -48,12 +48,45 @@ public final class WeightMaps {
         return WeightMap.identity();
     }
 
-    /** GPT-2: transpose Conv1D weights to Linear layout. */
+    /**
+     * GPT-2 HF → CausalLM module keys.
+     *
+     * <p>HF uses Conv1D layout {@code [in, out]} and names
+     * {@code h.N.attn.c_attn} / {@code h.N.mlp.c_fc} / {@code h.N.mlp.c_proj}.
+     * Our {@code CausalLM} registers {@code h/N.attn.c_attn},
+     * {@code h/N.mlp.fc_in}, {@code h/N.mlp.fc_out} as Linear {@code [out, in]}.
+     *
+     * <p>Rules must rewrite both the layer-index slash and the MLP names;
+     * a bare {@code $1} keep-HF-key rule leaves dots and never matches modules.
+     */
     public static WeightMap gpt2() {
         return WeightMap.builder()
-                .rule(new WeightMap.Rule("^(.*\\.c_attn\\.weight)$", "$1", true, WeightMap.Transform.TRANSPOSE))
-                .rule(new WeightMap.Rule("^(.*\\.c_proj\\.weight)$", "$1", true, WeightMap.Transform.TRANSPOSE))
-                .rule(new WeightMap.Rule("^(.*\\.c_fc\\.weight)$", "$1", true, WeightMap.Transform.TRANSPOSE))
+                // attention qkv / out (Conv1D → Linear transpose)
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.attn\\.c_attn\\.weight$",
+                        "h/$1.attn.c_attn.weight", true, WeightMap.Transform.TRANSPOSE))
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.attn\\.c_attn\\.bias$",
+                        "h/$1.attn.c_attn.bias", true, WeightMap.Transform.NONE))
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.attn\\.c_proj\\.weight$",
+                        "h/$1.attn.c_proj.weight", true, WeightMap.Transform.TRANSPOSE))
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.attn\\.c_proj\\.bias$",
+                        "h/$1.attn.c_proj.bias", true, WeightMap.Transform.NONE))
+                // MLP: HF c_fc/c_proj → module fc_in/fc_out
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.mlp\\.c_fc\\.weight$",
+                        "h/$1.mlp.fc_in.weight", true, WeightMap.Transform.TRANSPOSE))
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.mlp\\.c_fc\\.bias$",
+                        "h/$1.mlp.fc_in.bias", true, WeightMap.Transform.NONE))
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.mlp\\.c_proj\\.weight$",
+                        "h/$1.mlp.fc_out.weight", true, WeightMap.Transform.TRANSPOSE))
+                .rule(new WeightMap.Rule(
+                        "^h\\.(\\d+)\\.mlp\\.c_proj\\.bias$",
+                        "h/$1.mlp.fc_out.bias", true, WeightMap.Transform.NONE))
                 .build();
     }
 

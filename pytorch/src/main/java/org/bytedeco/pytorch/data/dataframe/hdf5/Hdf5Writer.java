@@ -1,26 +1,22 @@
 package org.bytedeco.pytorch.data.dataframe.hdf5;
 
-import io.jhdf.HdfFile;
-import io.jhdf.WritableHdfFile;
-import io.jhdf.api.WritableGroup;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
+import org.bytedeco.pytorch.data.dataframe.hdf5.internal.Hdf5WriterCore;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Write a {@link DataFrame} as HDF5 using jhdf's {@link WritableHdfFile}.
+ * Write a {@link DataFrame} as a minimal HDF5-family file (pure Java, no jhdf).
  *
  * <p>Default layout is <em>columnar</em>: group at {@code key} with one 1-D dataset
  * per column, plus attributes {@code format}, {@code column_names}, {@code dtypes}
- * for round-trip and h5py visibility.
+ * for round-trip.
  */
 public final class Hdf5Writer {
     private Hdf5Writer() {}
@@ -46,63 +42,41 @@ public final class Hdf5Writer {
             if (parent != null) Files.createDirectories(parent);
         }
 
-        try (WritableHdfFile file = HdfFile.write(p)) {
-            WritableGroup target = ensureGroup(file, key);
-            target.putAttribute("format", "columnar");
-            target.putAttribute("created_by", "org.bytedeco.pytorch.data.dataframe");
-
-            List<String> names = new ArrayList<>();
-            List<String> dtypeNames = new ArrayList<>();
-            for (int i = 0; i < df.columnCount(); i++) {
-                Column col = df.column(i);
-                if (opt.columns() != null && !opt.columns().isEmpty()
-                    && !opt.columns().contains(col.name())) {
-                    continue;
-                }
-                names.add(col.name());
-                dtypeNames.add(col.dtype().name());
+        List<String> names = new ArrayList<>();
+        List<String> dtypeNames = new ArrayList<>();
+        for (int i = 0; i < df.columnCount(); i++) {
+            Column col = df.column(i);
+            if (opt.columns() != null && !opt.columns().isEmpty()
+                && !opt.columns().contains(col.name())) {
+                continue;
             }
-            target.putAttribute("column_names", names.toArray(new String[0]));
-            target.putAttribute("dtypes", dtypeNames.toArray(new String[0]));
-            target.putAttribute("nrows", df.rowCount());
-
-            if (opt.format() == Hdf5Options.Format.MATRIX) {
-                writeMatrix(target, df, names);
-            } else {
-                for (String name : names) {
-                    Column col = df.column(name);
-                    Object data = columnToArray(col);
-                    target.putDataset(sanitize(name), data);
-                }
-            }
-            // WritableHdfFile flushes on close()
+            names.add(col.name());
+            dtypeNames.add(col.dtype().name());
         }
+
+        Map<String, Object> attrs = new LinkedHashMap<>();
+        attrs.put("format", opt.format() == Hdf5Options.Format.MATRIX ? "matrix" : "columnar");
+        attrs.put("created_by", "org.bytedeco.pytorch.data.dataframe");
+        attrs.put("column_names", names.toArray(new String[0]));
+        attrs.put("dtypes", dtypeNames.toArray(new String[0]));
+        attrs.put("nrows", df.rowCount());
+
+        LinkedHashMap<String, Hdf5WriterCore.EncodedData> columns = new LinkedHashMap<>();
+        if (opt.format() == Hdf5Options.Format.MATRIX) {
+            columns.put("values", Hdf5WriterCore.encodeData(toMatrix(df, names)));
+        } else {
+            for (String name : names) {
+                Column col = df.column(name);
+                columns.put(Hdf5WriterCore.sanitize(name), Hdf5WriterCore.encodeData(columnToArray(col)));
+            }
+        }
+
+        Hdf5WriterCore.write(p, key, attrs, columns);
     }
 
-    private static WritableGroup ensureGroup(WritableHdfFile file, String key) {
-        String path = key.startsWith("/") ? key.substring(1) : key;
-        if (path.isEmpty()) return file;
-        String[] parts = path.split("/");
-        WritableGroup cur = file;
-        for (String part : parts) {
-            if (part.isEmpty()) continue;
-            // putGroup may fail if exists — try getChild first
-            try {
-                var child = cur.getChild(part);
-                if (child instanceof WritableGroup) {
-                    cur = (WritableGroup) child;
-                    continue;
-                }
-            } catch (Exception ignored) {}
-            cur = cur.putGroup(part);
-        }
-        return cur;
-    }
-
-    private static void writeMatrix(WritableGroup target, DataFrame df, List<String> names) {
+    private static double[][] toMatrix(DataFrame df, List<String> names) {
         int rows = df.rowCount();
         int cols = names.size();
-        // only numeric → double matrix; mixed falls back to columnar caller shouldn't use MATRIX
         double[][] matrix = new double[rows][cols];
         for (int c = 0; c < cols; c++) {
             Column col = df.column(names.get(c));
@@ -113,8 +87,7 @@ public final class Hdf5Writer {
                 else matrix[r][c] = Double.NaN;
             }
         }
-        target.putDataset("values", matrix);
-        target.putAttribute("format", "matrix");
+        return matrix;
     }
 
     private static Object columnToArray(Column col) {
@@ -157,46 +130,7 @@ public final class Hdf5Writer {
                 for (int i = 0; i < n; i++) {
                     Object v = col.get(i);
                     a[i] = v instanceof Boolean ? (Boolean) v
-                        : v instanceof Number && ((Number) v).intValue() != 0;
-                }
-                return a;
-            }
-            case DATE: {
-                // store as epoch days int
-                int[] a = new int[n];
-                for (int i = 0; i < n; i++) {
-                    Object v = col.get(i);
-                    if (v instanceof LocalDate) a[i] = (int) ((LocalDate) v).toEpochDay();
-                    else a[i] = 0;
-                }
-                return a;
-            }
-            case DATETIME: {
-                long[] a = new long[n];
-                for (int i = 0; i < n; i++) {
-                    Object v = col.get(i);
-                    if (v instanceof LocalDateTime) {
-                        a[i] = ((LocalDateTime) v).toInstant(ZoneOffset.UTC).toEpochMilli();
-                    } else if (v instanceof Instant) {
-                        a[i] = ((Instant) v).toEpochMilli();
-                    } else if (v instanceof Number) {
-                        a[i] = ((Number) v).longValue();
-                    } else {
-                        a[i] = 0L;
-                    }
-                }
-                return a;
-            }
-            case BINARY: {
-                // variable-length bytes not uniformly supported — store as UTF-8 strings of base64-ish hex
-                String[] a = new String[n];
-                for (int i = 0; i < n; i++) {
-                    Object v = col.get(i);
-                    if (v instanceof byte[]) {
-                        a[i] = java.util.Base64.getEncoder().encodeToString((byte[]) v);
-                    } else {
-                        a[i] = v == null ? "" : String.valueOf(v);
-                    }
+                        : v != null && Boolean.parseBoolean(String.valueOf(v));
                 }
                 return a;
             }
@@ -209,10 +143,5 @@ public final class Hdf5Writer {
                 return a;
             }
         }
-    }
-
-    private static String sanitize(String name) {
-        // HDF5 link names: avoid slashes
-        return name.replace('/', '_').replace('\0', '_');
     }
 }

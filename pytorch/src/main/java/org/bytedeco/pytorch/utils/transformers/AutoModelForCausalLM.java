@@ -263,13 +263,26 @@ public final class AutoModelForCausalLM {
                 report = new WeightLoader.LoadReport(
                         List.of(), List.of("(no safetensors)"), List.of(), List.of(), 0, 0, bindMode);
             }
-            // After COPY mode loading with tie_word_embeddings, re-apply the tie
-            // because COPY mode creates new tensors breaking the constructor's set_() binding
-            if (cfg.tieWordEmbeddings() && bindMode == WeightLoader.BindMode.COPY) {
-                System.out.println("[DEBUG] Re-applying tie_word_embeddings after COPY load");
+            // After weight load, re-apply tie_word_embeddings.
+            // ZERO_COPY rebinds wte/embed storage; COPY replaces values — both break a
+            // constructor-time set_() share, so always re-tie when requested.
+            if (cfg.tieWordEmbeddings()) {
                 try {
-                    var qwen = (org.bytedeco.pytorch.utils.transformers.modeling.Qwen2ForCausalLM) model;
-                    qwen.lmHead().weight().set_(qwen.model().embed_tokens.weight());
+                    if (model instanceof CausalLM clm) {
+                        clm.retieWordEmbeddings();
+                        System.out.println("[DEBUG] Re-tied CausalLM lm_head ← wte");
+                    } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.Qwen2ForCausalLM qwen) {
+                        qwen.lmHead().weight().set_(qwen.model().embed_tokens.weight());
+                        System.out.println("[DEBUG] Re-tied Qwen2 lm_head ← embed_tokens");
+                    } else if (model instanceof org.bytedeco.pytorch.utils.transformers.modeling.LlamaForCausalLM llama) {
+                        // best-effort: Llama layouts that expose lmHead/embed
+                        try {
+                            llama.lmHead().weight().set_(llama.model().embed_tokens.weight());
+                            System.out.println("[DEBUG] Re-tied Llama lm_head ← embed_tokens");
+                        } catch (Throwable ignore) {
+                            // Llama may already share via constructor
+                        }
+                    }
                 } catch (Throwable t) {
                     System.out.println("[DEBUG] Failed to re-apply tie: " + t.getMessage());
                 }

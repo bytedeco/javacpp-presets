@@ -19,13 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bytedeco.pytorch.nn.modules;
-
-import org.bytedeco.pytorch.nn.*;
-
-import org.bytedeco.pytorch.data.*;
-
-import org.bytedeco.pytorch.*;
+package org.bytedeco.pytorch.utils.spacy.impl;
 
 import org.bytedeco.pytorch.utils.spacy.Doc;
 import org.bytedeco.pytorch.utils.spacy.Language;
@@ -33,7 +27,7 @@ import org.bytedeco.pytorch.utils.spacy.PipelineComponent;
 import org.bytedeco.pytorch.utils.spacy.pipeline.Matcher;
 import org.bytedeco.pytorch.utils.spacy.pipeline.Sentencizer;
 import org.bytedeco.pytorch.utils.spacy.tokenizer.SimpleTokenizer;
-import org.bytedeco.pytorch.utils.spacy.train.Example;
+import org.bytedeco.pytorch.utils.spacy.Example;
 import org.bytedeco.pytorch.utils.spacy.vocab.Vocab;
 
 import java.nio.file.Files;

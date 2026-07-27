@@ -1,4 +1,6 @@
 package org.bytedeco.pytorch.rl.agent;
+import org.bytedeco.pytorch.data.transforms.*;
+import org.bytedeco.pytorch.optim.*;
 
 import org.bytedeco.pytorch.MemoryFormatOptional;
 import org.bytedeco.pytorch.Scalar;

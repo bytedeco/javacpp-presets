@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.rl.agent;
+import org.bytedeco.pytorch.optim.*;
 
 import org.bytedeco.pytorch.optim.Optimizer;
 import org.bytedeco.pytorch.rl.ReplayBuffer;

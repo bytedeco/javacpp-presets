@@ -2,11 +2,27 @@
 
 package org.bytedeco.pytorch.data.transforms;
 
+import org.bytedeco.pytorch.jit.*;
+
+import org.bytedeco.pytorch.nn.*;
+
+import org.bytedeco.pytorch.data.*;
+
+import org.bytedeco.pytorch.*;
+
+import org.bytedeco.pytorch.Allocator;
+import org.bytedeco.pytorch.jit.Function;
+import org.bytedeco.pytorch.nn.Module;
 import org.bytedeco.javacpp.annotation.Cast;
+import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import org.bytedeco.pytorch.utils.spacy.Example;
+import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -23,5 +39,5 @@ public class ExampleLambda extends ExampleTransform {
   
 
   /** Applies the user-provided function object to the {@code input}. */
-  public native @ByVal @Cast("torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*") org.bytedeco.pytorch.utils.spacy.Example apply(@ByVal @Cast("torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*") Example input);
+  public native @ByVal @Cast("torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::OutputType*") Example apply(@ByVal @Cast("torch::data::transforms::Transform<torch::data::Example<torch::Tensor,torch::Tensor>,torch::data::Example<torch::Tensor,torch::Tensor> >::InputType*") Example input);
 }

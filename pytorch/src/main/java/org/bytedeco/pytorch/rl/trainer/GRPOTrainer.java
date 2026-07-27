@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.rl.trainer;
+import org.bytedeco.pytorch.optim.*;
 
 import org.bytedeco.pytorch.Tensor;
 import org.bytedeco.pytorch.distribution.Distribution;

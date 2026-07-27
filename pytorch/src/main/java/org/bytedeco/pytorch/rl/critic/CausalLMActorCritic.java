@@ -1,4 +1,6 @@
 package org.bytedeco.pytorch.rl.critic;
+import org.bytedeco.pytorch.nn.modules.*;
+import org.bytedeco.pytorch.jit.*;
 
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.ScalarOptional;

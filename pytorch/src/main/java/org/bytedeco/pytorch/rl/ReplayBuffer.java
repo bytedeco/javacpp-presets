@@ -1,4 +1,5 @@
 package org.bytedeco.pytorch.rl;
+import org.bytedeco.pytorch.data.transforms.*;
 
 import org.bytedeco.pytorch.Scalar;
 import org.bytedeco.pytorch.Tensor;

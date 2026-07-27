@@ -30,6 +30,7 @@ import org.apache.arrow.vector.VectorSchemaRoot;
 import org.apache.arrow.vector.ipc.ArrowFileWriter;
 import org.apache.arrow.vector.types.pojo.Field;
 import org.apache.arrow.vector.types.pojo.Schema;
+import org.bytedeco.pytorch.JvmModuleSupport;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 
@@ -41,6 +42,8 @@ public final class LocalArrowIpcWriter {
     private LocalArrowIpcWriter() {}
 
     public static void write(DataFrame df, String path) throws Exception {
+        // Fail fast with copy-paste JVM flags if java.nio is not open (Arrow MemoryUtil).
+        JvmModuleSupport.ensureNioBufferAccess();
         List<Field> fields = new ArrayList<>();
         for (Column c : df.columns()) {
             fields.add(ArrowSchemaMapper.toField(c.name(), c.dtype()));

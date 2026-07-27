@@ -22,7 +22,7 @@
 package org.bytedeco.pytorch.utils.spacy;
 import org.bytedeco.pytorch.data.*;
 
-import org.bytedeco.pytorch.utils.spacy.train.Example;
+import org.bytedeco.pytorch.utils.spacy.Example;
 import org.bytedeco.pytorch.utils.spacy.vocab.Vocab;
 
 import java.nio.file.Path;

@@ -53,6 +53,14 @@ public final class SafeTensors {
     private static final long LARGE_MMAP_THRESHOLD = 1L * 1024 * 1024; // 1 MiB
 
     /**
+     * {@link FileChannel#map} size argument is effectively limited to
+     * {@link Integer#MAX_VALUE} (~2 GiB) on HotSpot. Whole-file maps for
+     * single-shard models like Llama-1B (~2.5 GiB) fail with
+     * {@code Size exceeds Integer.MAX_VALUE}; map per-tensor (or chunk) instead.
+     */
+    private static final long MAX_MAP_BYTES = Integer.MAX_VALUE;
+
+    /**
      * Strong references to mmap buffers that back zero-copy tensors. Without
      * this, the GC can reclaim a {@link MappedByteBuffer} while a
      * {@code from_blob} Tensor still points into it.
@@ -81,13 +89,13 @@ public final class SafeTensors {
             Map<String, TensorMeta> meta = parseHeader(hi.json);
             Map<String, Tensor> out = new LinkedHashMap<>();
 
-            // Single mmap for the whole data region when zero-copy is requested
-            MappedByteBuffer wholeMap = null;
             long dataLen = ch.size() - hi.dataOffset;
-            if (zeroCopy && dataLen > 0) {
+            // Whole-file mmap only when the data region fits in one map (≤ ~2 GiB).
+            // Larger single-shard checkpoints (e.g. Llama-1B) use per-tensor maps.
+            MappedByteBuffer wholeMap = null;
+            if (zeroCopy && dataLen > 0 && dataLen <= MAX_MAP_BYTES) {
                 wholeMap = ch.map(FileChannel.MapMode.READ_ONLY, hi.dataOffset, dataLen);
                 wholeMap.order(ByteOrder.LITTLE_ENDIAN);
-                // Pin so from_blob tensors outlive this method / GC
                 PINNED_MAPS.add(wholeMap);
             }
 
@@ -95,24 +103,48 @@ public final class SafeTensors {
                 String name = e.getKey();
                 TensorMeta m = e.getValue();
                 SafeDType dtype = SafeDType.fromString(m.dtype);
+                if (dtype == null) {
+                    throw new IOException("unknown safetensors dtype: " + m.dtype + " for tensor " + name);
+                }
                 long start = m.dataOffsets[0];
                 long end = m.dataOffsets[1];
                 long nbytes = end - start;
                 long[] shape = m.shape;
 
                 Tensor t;
-                if (zeroCopy && wholeMap != null && nbytes >= LARGE_MMAP_THRESHOLD
+                if (zeroCopy && nbytes >= LARGE_MMAP_THRESHOLD
                         && start >= 0 && start + nbytes <= dataLen
-                        && dtype.isNativeLayout()) {
-                    t = fromMappedRegion(wholeMap, start, nbytes, shape, dtype);
+                        && dtype.isNativeLayout()
+                        && nbytes <= MAX_MAP_BYTES) {
+                    if (wholeMap != null) {
+                        t = fromMappedRegion(wholeMap, start, nbytes, shape, dtype);
+                    } else {
+                        // Per-tensor mmap — works for files larger than Integer.MAX_VALUE.
+                        MappedByteBuffer slice = ch.map(
+                                FileChannel.MapMode.READ_ONLY,
+                                hi.dataOffset + start,
+                                nbytes);
+                        slice.order(ByteOrder.LITTLE_ENDIAN);
+                        PINNED_MAPS.add(slice);
+                        t = fromMappedRegion(slice, 0, nbytes, shape, dtype);
+                    }
                 } else {
                     if (nbytes > Integer.MAX_VALUE) {
                         throw new IOException("tensor too large to copy: " + name + " (" + nbytes + " bytes)");
                     }
+                    // FileChannel.read may return partial; loop until full or EOF.
                     ByteBuffer buf = ByteBuffer.allocateDirect((int) nbytes).order(ByteOrder.LITTLE_ENDIAN);
                     ch.position(hi.dataOffset + start);
-                    int read = ch.read(buf);
-                    if (read != nbytes) throw new EOFException("short read for " + name);
+                    int got = 0;
+                    while (buf.hasRemaining()) {
+                        int n = ch.read(buf);
+                        if (n < 0) {
+                            throw new EOFException("short read for " + name
+                                    + " got=" + got + " need=" + nbytes
+                                    + " (file may be truncated)");
+                        }
+                        got += n;
+                    }
                     buf.flip();
                     t = copyBufferToTensor(buf, shape, dtype);
                 }
@@ -278,7 +310,10 @@ public final class SafeTensors {
                 return 0;
             }
         }
-        dest.copy_(src);
+        // Parameter tensors require grad — in-place copy_ needs no_grad (or data()).
+        try (org.bytedeco.pytorch.NoGradGuard guard = new org.bytedeco.pytorch.NoGradGuard()) {
+            dest.copy_(src);
+        }
         return 1;
     }
 

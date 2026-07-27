@@ -2,10 +2,25 @@
 
 package org.bytedeco.pytorch.data;
 
+import org.bytedeco.pytorch.jit.*;
+
+import org.bytedeco.pytorch.nn.*;
+
+import org.bytedeco.pytorch.*;
+
+import org.bytedeco.pytorch.Allocator;
+import org.bytedeco.pytorch.jit.Function;
+import org.bytedeco.pytorch.nn.Module;
+import org.bytedeco.javacpp.annotation.Cast;
+import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import org.bytedeco.pytorch.utils.spacy.Example;
+import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.javacpp.chrono.*;
+import static org.bytedeco.javacpp.global.chrono.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
@@ -14,14 +29,14 @@ public class ExampleOptional extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExampleOptional(Pointer p) { super(p); }
-    public ExampleOptional(org.bytedeco.pytorch.utils.spacy.Example value) { this(); put(value); }
+    public ExampleOptional(Example value) { this(); put(value); }
     public ExampleOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef ExampleOptional put(@ByRef ExampleOptional x);
 
     public native boolean has_value();
     public native void reset();
-    public native @Name("value") @ByRef org.bytedeco.pytorch.utils.spacy.Example get();
+    public native @Name("value") @ByRef Example get();
     @ValueSetter public native ExampleOptional put(@ByRef Example value);
 }
 

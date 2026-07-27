@@ -3,6 +3,7 @@ package org.bytedeco.pytorch.data.parquet;
 import java.io.IOException;
 
 import org.apache.parquet.column.ParquetProperties;
+import org.apache.parquet.conf.PlainParquetConfiguration;
 import org.apache.parquet.example.data.Group;
 import org.apache.parquet.example.data.simple.SimpleGroup;
 import org.apache.parquet.hadoop.ParquetWriter;
@@ -103,11 +104,13 @@ public final class LocalParquetWriter implements AutoCloseable {
     private LocalParquetWriter(Builder b) throws IOException {
         this.schema = b.schema;
         OutputFile outputFile = new LocalOutputFile(b.path);
-        // ExampleParquetWriter.Builder is public; .build() returns ParquetWriter<Group>
+        // Pure-Java conf + codecs — no Hadoop Configuration / UGI / client-runtime.
         @SuppressWarnings("unchecked")
         ParquetWriter<Group> w = (ParquetWriter<Group>)
             ExampleParquetWriter.builder(outputFile)
                 .withType(b.schema)
+                .withConf(new PlainParquetConfiguration())
+                .withCodecFactory(ZstdCodecFactory.INSTANCE)
                 .withCompressionCodec(b.codec)
                 .withRowGroupSize(b.blockSize)
                 .withPageSize(b.pageSize)

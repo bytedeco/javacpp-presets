@@ -1,10 +1,4 @@
-package org.bytedeco.pytorch.nn.options;
-
-import org.bytedeco.pytorch.nn.*;
-
-import org.bytedeco.pytorch.data.*;
-
-import org.bytedeco.pytorch.*;
+package org.bytedeco.pytorch.data.avro;
 
 import org.bytedeco.pytorch.data.dataframe.Column;
 

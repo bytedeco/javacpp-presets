@@ -14,6 +14,7 @@ import org.apache.arrow.vector.VectorSchemaRoot;
 import org.apache.arrow.vector.ipc.ArrowFileReader;
 import org.apache.arrow.vector.ipc.ArrowStreamReader;
 import org.apache.arrow.vector.util.TransferPair;
+import org.bytedeco.pytorch.JvmModuleSupport;
 import org.bytedeco.pytorch.data.dataframe.ArrowStorage;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
@@ -27,6 +28,7 @@ public final class LocalArrowIpcReader {
     private LocalArrowIpcReader() {}
 
     public static DataFrame read(String path) throws Exception {
+        JvmModuleSupport.ensureNioBufferAccess();
         try {
             return readFile(path);
         } catch (Exception fileEx) {

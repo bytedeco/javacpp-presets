@@ -7,6 +7,7 @@ import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.ShortPointer;
 import org.bytedeco.pytorch.Tensor;
+import org.bytedeco.pytorch.TensorOptions;
 import org.bytedeco.pytorch.global.torch;
 import org.bytedeco.pytorch.global.torch.ScalarType;
 
@@ -955,6 +956,27 @@ public final class NP {
                 for (int i = 0; i < a.size; i++) as2d[0][i] = a.getLong(i) != 0;
                 return torch.tensor(as2d).reshape(shape.length > 0 ? shape : new long[]{a.size});
             }
+            case COMPLEX64: {
+                // Interleaved real/imag → complex float tensor via empty + buffer
+                long[] sh = shape.length > 0 ? shape : new long[]{a.size};
+                Tensor t = torch.empty(sh, new TensorOptions(ScalarType.ComplexFloat), null);
+                java.nio.FloatBuffer buf = t.createBuffer();
+                for (int i = 0; i < a.size; i++) {
+                    buf.put((float) a.getReal(i));
+                    buf.put((float) a.getImag(i));
+                }
+                return t;
+            }
+            case COMPLEX128: {
+                long[] sh = shape.length > 0 ? shape : new long[]{a.size};
+                Tensor t = torch.empty(sh, new TensorOptions(ScalarType.ComplexDouble), null);
+                java.nio.DoubleBuffer buf = t.createBuffer();
+                for (int i = 0; i < a.size; i++) {
+                    buf.put(a.getReal(i));
+                    buf.put(a.getImag(i));
+                }
+                return t;
+            }
             default:
                 throw new IllegalArgumentException("Unsupported dtype: " + a.dtype);
         }
@@ -1010,6 +1032,24 @@ public final class NP {
             case BOOL: {
                 Tensor flat = c.reshape(n);
                 for (int i = 0; i < n; i++) a.setLong(i, flat.get((long) i).item_bool() ? 1 : 0);
+                break;
+            }
+            case COMPLEX64: {
+                java.nio.FloatBuffer buf = c.createBuffer();
+                for (int i = 0; i < n; i++) {
+                    float re = buf.get();
+                    float im = buf.get();
+                    a.setComplex(i, re, im);
+                }
+                break;
+            }
+            case COMPLEX128: {
+                java.nio.DoubleBuffer buf = c.createBuffer();
+                for (int i = 0; i < n; i++) {
+                    double re = buf.get();
+                    double im = buf.get();
+                    a.setComplex(i, re, im);
+                }
                 break;
             }
             default:

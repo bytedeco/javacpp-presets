@@ -19,12 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bytedeco.pytorch.nn.modules;
-import org.bytedeco.pytorch.jit.*;
-
-import org.bytedeco.pytorch.nn.*;
-
-import org.bytedeco.pytorch.*;
+package org.bytedeco.pytorch.utils.spacy.impl;
 
 import org.bytedeco.pytorch.utils.spacy.Doc;
 import org.bytedeco.pytorch.utils.spacy.Span;

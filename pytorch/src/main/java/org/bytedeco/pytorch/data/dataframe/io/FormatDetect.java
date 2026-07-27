@@ -58,11 +58,22 @@ public final class FormatDetect {
     }
 
     /**
-     * Load a DataFrame by file extension.
+     * Detect format by extension, falling back to magic-byte sniff
+     * ({@link SchemaInfer#sniff(String)}) when the extension is unknown.
+     * Use this for robust multi-format loading.
+     */
+    public static Format detectRobust(String path) {
+        Format fmt = detect(path);
+        if (fmt != Format.UNKNOWN) return fmt;
+        return SchemaInfer.sniff(path);
+    }
+
+    /**
+     * Load a DataFrame by file extension (with magic-byte fallback).
      * HDF5 auto-read uses default key {@code /df}.
      */
     public static DataFrame read(String path) throws Exception {
-        Format fmt = detect(path);
+        Format fmt = detectRobust(path);
         switch (fmt) {
             case CSV:
                 return DataFrame.readCsv(path);
@@ -99,7 +110,8 @@ public final class FormatDetect {
                 throw new IllegalArgumentException(
                     "Cannot auto-detect DataFrame format for path: " + path
                         + " (supported: csv,tsv,json,jsonl,parquet,arrow,feather,ipc,"
-                        + "pkl,xlsx,xls,h5,hdf5,avro,orc,npz,npy,safetensors,gguf)");
+                        + "pkl,xlsx,xls,h5,hdf5,avro,orc,npz,npy,safetensors,gguf;"
+                        + " also magic-byte sniff for PAR1/ARROW1/NUMPY/ORC/HDF/Avro/JSON)");
         }
     }
 }

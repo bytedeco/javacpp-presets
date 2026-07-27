@@ -58,7 +58,8 @@ public final class OpenSearchVectorStore implements VectorStore {
         this.dim = b.dim;
         this.metric = b.metric == null ? VectorMetric.L2 : b.metric;
         this.vectorField = b.vectorField == null ? "vector" : b.vectorField;
-        this.engine = b.engine == null ? "nmslib" : b.engine;
+        // OpenSearch 3.0+ rejects nmslib for new indexes; faiss is the supported default.
+        this.engine = b.engine == null ? "faiss" : b.engine;
         this.m = b.m;
         this.efConstruction = b.efConstruction;
         this.payloadFields = List.copyOf(b.payloadFields);
@@ -397,7 +398,7 @@ public final class OpenSearchVectorStore implements VectorStore {
         private int dim;
         private VectorMetric metric = VectorMetric.L2;
         private String vectorField = "vector";
-        private String engine = "nmslib";
+        private String engine = "faiss";
         private int m = 16;
         private int efConstruction = 100;
         private String username;

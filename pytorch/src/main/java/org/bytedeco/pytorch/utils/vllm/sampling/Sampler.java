@@ -19,15 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bytedeco.pytorch.data.sampler;
-
-import org.bytedeco.pytorch.nn.*;
-
-import org.bytedeco.pytorch.nn.options.*;
-
-import org.bytedeco.pytorch.data.*;
-
-import org.bytedeco.pytorch.*;
+package org.bytedeco.pytorch.utils.vllm.sampling;
 
 import org.bytedeco.pytorch.LongOptional;
 import org.bytedeco.pytorch.Scalar;
@@ -37,14 +29,12 @@ import org.bytedeco.pytorch.utils.vllm.Sequence;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.IntConsumer;
 
 import static org.bytedeco.pytorch.global.torch.ScalarType;
 import static org.bytedeco.pytorch.global.torch.argmax;
 import static org.bytedeco.pytorch.global.torch.full;
 import static org.bytedeco.pytorch.global.torch.multinomial;
 import static org.bytedeco.pytorch.global.torch.softmax;
-import static org.bytedeco.pytorch.global.torch.tensor;
 import static org.bytedeco.pytorch.global.torch.topk;
 
 /**
@@ -99,8 +89,6 @@ public final class Sampler {
 
         return nextToken;
     }
-
-    // ---- repetition penalty ----
 
     private static Tensor applyRepetitionPenalty(Tensor logits, java.util.List<Integer> seq,
                                                   double penalty) {

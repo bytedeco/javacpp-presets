@@ -36,6 +36,7 @@ import org.apache.arrow.vector.ipc.ArrowStreamReader;
 import org.apache.arrow.vector.ipc.ArrowStreamWriter;
 import org.apache.arrow.vector.types.pojo.Field;
 import org.apache.arrow.vector.types.pojo.Schema;
+import org.bytedeco.pytorch.JvmModuleSupport;
 import org.bytedeco.pytorch.data.dataframe.Column;
 import org.bytedeco.pytorch.data.dataframe.DataFrame;
 
@@ -62,6 +63,7 @@ public final class ArrowBridge {
     public static VectorSchemaRoot toRoot(DataFrame df, BufferAllocator allocator) {
         Objects.requireNonNull(df, "df");
         Objects.requireNonNull(allocator, "allocator");
+        JvmModuleSupport.ensureNioBufferAccess();
         List<Field> fields = new ArrayList<>();
         for (Column c : df.columns()) {
             fields.add(ArrowSchemaMapper.toField(c.name(), c.dtype()));

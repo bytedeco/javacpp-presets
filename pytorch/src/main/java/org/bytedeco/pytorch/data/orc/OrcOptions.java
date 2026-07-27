@@ -1,11 +1,13 @@
-package org.bytedeco.pytorch.nn.options;
-
-import org.bytedeco.pytorch.nn.*;
-
-import org.bytedeco.pytorch.*;
+package org.bytedeco.pytorch.data.orc;
 
 /**
  * Options for ORC read/write.
+ *
+ * <p>After Hadoop/ORC-core removal: {@link #maxRows()} is honored on
+ * {@link LocalOrcReader}; {@link #compress()}, {@link #stripeSize()} and
+ * {@link #batchSize()} are retained for API stability but ignored on the
+ * DuckDB {@code read_orc} path. {@link LocalOrcWriter} may fail-fast when
+ * DuckDB cannot {@code COPY ... FORMAT ORC} — use Parquet instead.
  */
 public final class OrcOptions {
     public enum Compress { NONE, ZLIB, SNAPPY, LZ4, ZSTD }
